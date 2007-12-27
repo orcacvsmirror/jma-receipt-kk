@@ -1,0 +1,12 @@
+name	tochigi;
+
+arraysize	20;
+textsize	400;
+
+bind	"SOKATU0900"	"OpenCOBOL";
+bind	"SOKATU0910"	"OpenCOBOL";
+
+#include "orcadb.inc"
+
+
+

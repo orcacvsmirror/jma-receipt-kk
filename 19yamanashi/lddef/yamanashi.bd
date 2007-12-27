@@ -1,0 +1,9 @@
+name	yamanashi;
+
+arraysize	20;
+textsize	400;
+
+bind    "SOKATU1900"    "OpenCOBOL";
+bind    "SOKATU1910"    "OpenCOBOL";
+
+#include "orcadb.inc"

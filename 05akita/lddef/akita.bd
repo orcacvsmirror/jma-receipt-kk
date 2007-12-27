@@ -1,0 +1,10 @@
+name    akita;
+
+arraysize       20;
+textsize        400;
+
+bind    "SOKATU0520"    "OpenCOBOL";
+bind    "SEIKYU0503"    "OpenCOBOL";
+bind    "SEIKYU0505"    "OpenCOBOL";
+
+#include "orcadb.inc"

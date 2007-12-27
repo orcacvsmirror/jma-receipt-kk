@@ -1,0 +1,11 @@
+name	fukushima;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU0707"	"OpenCOBOL";
+bind	"SEIKYU0709"	"OpenCOBOL";
+bind	"SOKATU0700"	"OpenCOBOL";
+bind	"SOKATU0710"	"OpenCOBOL";
+
+#include "orcadb.inc"

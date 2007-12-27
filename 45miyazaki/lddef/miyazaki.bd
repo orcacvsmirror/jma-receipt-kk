@@ -1,0 +1,13 @@
+name	miyazaki;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU4503"	"OpenCOBOL";
+bind	"SEIKYU4505"	"OpenCOBOL";
+bind	"SEIKYU4507"	"OpenCOBOL";
+bind	"SOKATU4500"	"OpenCOBOL";
+bind	"SOKATU4510"	"OpenCOBOL";
+bind	"SOKATU4520"	"OpenCOBOL";
+
+#include "orcadb.inc"

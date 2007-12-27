@@ -1,0 +1,38 @@
+      *******************************************************************
+      * Project code name "ORCA"
+      * 日医標準レセプトソフト（JMA standard receipt software）
+      * Copyright(C) 2002 JMA (Japan Medical Association)
+      *
+      * This program is part of "JMA standard receipt software".
+      *
+      *     This program is distributed in the hope that it will be useful
+      * for further advancement in medical care, according to JMA Open
+      * Source License, but WITHOUT ANY WARRANTY.
+      *     Everyone is granted permission to use, copy, modify and
+      * redistribute this program, but only under the conditions described
+      * in the JMA Open Source License. You should have received a copy of
+      * this license along with this program. If not, stop using this
+      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
+      * 113-8621, Japan.
+      ********************************************************************
+      ************************************************************
+      *    総括表一時ファイル                                    *
+      ************************************************************
+       01  SKT1000TMP-REC.
+           03  SKT1000TMP-KEY.
+               05  SKT1000TMP-SRYYM          PIC  X(06).
+               05  SKT1000TMP-PREFKBN        PIC  9(01).
+               05  SKT1000TMP-KUMIAIKBN      PIC  X(01).
+               05  SKT1000TMP-HKNJANUM       PIC  X(08).
+               05  SKT1000TMP-ZAITAKU        PIC  X(01).
+               05  SKT1000TMP-SYUBETU        PIC  9(01).
+               05  SKT1000TMP-JYUNJO         PIC  9(02).
+               05  SKT1000TMP-KBN            PIC  9(01).
+               05  SKT1000TMP-KYURATE        PIC  9(02).
+           03  SKT1000TMP-DATA.
+               05  SKT1000TMP-KENSU          PIC  9(06).
+               05  SKT1000TMP-KKENSU         PIC  9(06).
+               05  SKT1000TMP-FKENSU         PIC  9(06).
+               05  SKT1000TMP-TENSU          PIC  9(10).
+               05  SKT1000TMP-NYUGAIKBN      PIC  9(01).
+      *

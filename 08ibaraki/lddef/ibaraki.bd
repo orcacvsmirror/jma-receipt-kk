@@ -1,0 +1,11 @@
+name	ibaraki;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU0811"	"OpenCOBOL";
+bind	"SOKATU0800"	"OpenCOBOL";
+bind	"SOKATU0810"	"OpenCOBOL";
+
+
+#include "orcadb.inc"

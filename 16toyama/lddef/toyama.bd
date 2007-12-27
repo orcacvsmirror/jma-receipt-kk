@@ -1,0 +1,11 @@
+name	toyama;
+
+arraysize	20;
+textsize	400;
+
+bind	"SOKATU1610"	"OpenCOBOL";
+
+#include "orcadb.inc"
+
+
+

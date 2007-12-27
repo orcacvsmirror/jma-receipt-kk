@@ -1,0 +1,15 @@
+name	chiba;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU1203"	"OpenCOBOL";
+bind	"SEIKYU1204"	"OpenCOBOL";
+bind	"SEIKYU1207"	"OpenCOBOL";
+bind	"SEIKYU1209"	"OpenCOBOL";
+bind	"SOKATU1200"	"OpenCOBOL";
+bind	"SOKATU1210"	"OpenCOBOL";
+
+#include "orcadb.inc"
+
+

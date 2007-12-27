@@ -1,0 +1,11 @@
+name	mie;
+
+arraysize	20;
+textsize	400;
+
+bind	"SOKATU2410"	"OpenCOBOL";
+
+#include "orcadb.inc"
+
+
+

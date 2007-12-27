@@ -1,0 +1,11 @@
+name	kagoshima;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU4603"	"OpenCOBOL";
+bind	"SOKATU4600"	"OpenCOBOL";
+bind	"SOKATU4610"	"OpenCOBOL";
+
+
+#include "orcadb.inc"

@@ -1,0 +1,13 @@
+name	yamaguchi;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU3513"	"OpenCOBOL";
+bind	"SEIKYU3515"	"OpenCOBOL";
+bind	"SEIKYU3517"	"OpenCOBOL";
+bind	"SOKATU3500"	"OpenCOBOL";
+bind	"SOKATU3510"	"OpenCOBOL";
+
+
+#include "orcadb.inc"

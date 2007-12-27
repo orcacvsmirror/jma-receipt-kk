@@ -1,0 +1,17 @@
+name	kagawa;
+
+arraysize	20;
+textsize	400;
+
+bind	"SOKATU3700"	"OpenCOBOL";
+bind	"SOKATU3720"	"OpenCOBOL";
+bind	"SOKATU3750"	"OpenCOBOL";
+bind	"SEIKYU3713"	"OpenCOBOL";
+bind	"SEIKYU3715"	"OpenCOBOL";
+bind	"SEIKYU3717"	"OpenCOBOL";
+bind	"SEIKYU3719"	"OpenCOBOL";
+bind	"SEIKYU3721"	"OpenCOBOL";
+bind	"SEIKYU3723"	"OpenCOBOL";
+bind	"SEIKYU3725"	"OpenCOBOL";
+
+#include "orcadb.inc"

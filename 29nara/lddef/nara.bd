@@ -1,0 +1,10 @@
+name	nara;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU2909"	"OpenCOBOL";
+bind	"SOKATU2910"	"OpenCOBOL";
+
+
+#include "orcadb.inc"

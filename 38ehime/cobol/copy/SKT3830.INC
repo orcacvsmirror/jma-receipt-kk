@@ -1,0 +1,93 @@
+      *******************************************************************
+      * Project code name "ORCA"
+      * 日医標準レセプトソフト（JMA standard receipt software）
+      * Copyright(C) 2002 JMA (Japan Medical Association)
+      *
+      * This program is part of "JMA standard receipt software".
+      *
+      *     This program is distributed in the hope that it will be useful
+      * for further advancement in medical care, according to JMA Open
+      * Source License, but WITHOUT ANY WARRANTY.
+      *     Everyone is granted permission to use, copy, modify and
+      * redistribute this program, but only under the conditions described
+      * in the JMA Open Source License. You should have received a copy of
+      * this license along with this program. If not, stop using this
+      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
+      * 113-8621, Japan.
+      ********************************************************************
+       01  SKT3830.
+      *NO
+           03  SKT3830-NO                  PIC  X(04).
+      *診療年月
+           03  SKT3830-SRYYM               PIC  X(16).
+      *請求年月日
+           03  SKT3830-SEIYMD              PIC  X(22).
+      *医療機関コード
+           03  SKT3830-HOSPCD              PIC  X(14).
+      *医療機関住所
+           03  SKT3830-HOSPADRS            PIC  X(100).
+      *医療機関名称
+           03  SKT3830-HOSPNAME            PIC  X(100).
+      *開設者名
+           03  SKT3830-KAISETU             PIC  X(40).
+      *保険者名称
+           03  SKT3830-HKNJANAME           PIC  X(24).
+      *保険者番号
+           03  SKT3830-HKNJANUM            PIC  X(12).
+      *給付割合
+           03  SKT3830-KYURATE             PIC  X(04).
+      *在総診・在医総
+           03  SKT3830-ZAI                 PIC  X(02) OCCURS 2.
+      *療養の給付テーブル
+           03  SKT3830-SEIKYU  OCCURS  2.
+               05  SKT3830-NYUGAI-TBL  OCCURS  2.
+      *件数
+                   07 SKT3830-KENSU        PIC  X(06).
+      *日数
+                   07 SKT3830-NISSU        PIC  X(06).
+      *点数
+                   07 SKT3830-TENSU        PIC  X(10).
+      *一部負担金
+                   07 SKT3830-ITBFTN       PIC  X(09).
+      *公費療養の給付テーブル
+           03  SKT3830-K-SEIKYU  OCCURS  2.
+               05  SKT3830-K-NYUGAI-TBL  OCCURS  2.
+      *件数
+                   07 SKT3830-KKENSU        PIC  X(06).
+      *日数
+                   07 SKT3830-KNISSU        PIC  X(06).
+      *点数
+                   07 SKT3830-KTENSU        PIC  X(10).
+      *一部負担金
+                   07 SKT3830-KITBFTN       PIC  X(09).
+      *長期高額医療
+           03  SKT3830-T-SEIKYU.
+               05  SKT3830-T-NYUGAI-TBL  OCCURS  2.
+      *件数
+                   07 SKT3830-TKENSU        PIC  X(06).
+      *日数
+                   07 SKT3830-TNISSU        PIC  X(06).
+      *点数
+                   07 SKT3830-TTENSU        PIC  X(10).
+      *一部負担金
+      *             07 SKT3830-TITBFTN       PIC  X(07).
+      *食事療養テーブル
+           03  SKT3830-SHOKUJI-TBL OCCURS 2.
+      *食事件数
+               05  SKT3830-S-KENSU         PIC  X(06).
+      *食事日数
+               05  SKT3830-S-NISSU         PIC  X(06).
+      *食事療養費
+               05  SKT3830-S-MONEY         PIC  X(09).
+      *標準負担額
+               05  SKT3830-S-FTNGAKU       PIC  X(09).
+      *公費食事療養テーブル
+           03  SKT3830-K-SHOKUJI-TBL OCCURS 2.
+      *食事件数
+               05  SKT3830-S-KKENSU         PIC  X(06).
+      *食事日数
+               05  SKT3830-S-KNISSU         PIC  X(06).
+      *食事療養費
+               05  SKT3830-S-KMONEY         PIC  X(09).
+      *標準負担額
+               05  SKT3830-S-KFTNGAKU       PIC  X(09).

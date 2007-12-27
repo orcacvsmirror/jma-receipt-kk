@@ -1,0 +1,16 @@
+name	gunma;
+
+arraysize	20;
+textsize	400;
+
+bind	"SEIKYU1003"	"OpenCOBOL";
+bind	"SEIKYU1005"	"OpenCOBOL";
+bind	"SEIKYU1006"	"OpenCOBOL";
+bind	"SEIKYU1009"	"OpenCOBOL";
+bind	"SEIKYU1010"	"OpenCOBOL";
+bind	"SEIKYU1011"	"OpenCOBOL";
+bind	"SEIKYU1012"	"OpenCOBOL";
+bind    "SOKATU1000"    "OpenCOBOL";
+bind    "SOKATU1010"    "OpenCOBOL";
+
+#include "orcadb.inc"

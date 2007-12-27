@@ -1,0 +1,1598 @@
+      *******************************************************************
+      * Project code name "ORCA"
+      * 日医標準レセプトソフト（JMA standard receipt software）
+      * Copyright(C) 2002 JMA (Japan Medical Association)
+      *
+      * This program is part of "JMA standard receipt software".
+      *
+      *     This program is distributed in the hope that it will be useful
+      * for further advancement in medical care, according to JMA Open
+      * Source License, but WITHOUT ANY WARRANTY.
+      *     Everyone is granted permission to use, copy, modify and
+      * redistribute this program, but only under the conditions described
+      * in the JMA Open Source License. You should have received a copy of
+      * this licence along with this program. If not, stop using this
+      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
+      * 113-8621, Japan.
+      ********************************************************************
+       IDENTIFICATION          DIVISION.
+       PROGRAM-ID.             SOKATU2200.
+      *****************************************************************
+      *  システム名        : ＯＲＣＡ
+      *  サブシステム名    : 月次帳票
+      *  コンポーネント名  : 国保・総括表（静岡）用集計処理
+      *  管理者            : 
+      *  作成日付    作業者        記述
+      *  05/05/30    山口          ORCAのバージョンアップ(2.5.0)による再作成
+      *****************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev	作業者　　　日付	      内容
+      * 2.9.0.ver01     　　 2006/05/19   返戻対応
+      *  01.00.01    内田    2006/11/03   前期高齢者７割を８割へ印字修正
+      *  01.00.02    内田    2007/04/07   浜松市政令指定都市対応
+      *  01.00.03    吉川    2007/10/03   日レセver4.0対応
+      *                                   システム管理マスタ「1901」の
+      *                                   医療機関情報を参照
+      *              内田    2007/10/23   合計欄は最終ページのみに合計を印字
+      *  01.00.04    内田    2007/11/16   旧浜松市も浜松市でまとめる
+      *****************************************************************
+      *
+       ENVIRONMENT                 DIVISION.
+       CONFIGURATION               SECTION.
+       INPUT-OUTPUT                SECTION.
+       FILE-CONTROL.
+
+      *    総括表一時ファイル  
+           SELECT  SKT2200TMP-FILE   ASSIGN    SKT2200TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT2200TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT2200.
+      *
+006900*    請求ＤＢ更新用ファイル
+           SELECT  UPD-FILE        ASSIGN  RECEUPD
+                                   FILE    STATUS  IS  STS-RECEUPD.
+      *
+      *    印刷用データ
+           SELECT  PRT-FILE        ASSIGN  HC01PARA
+                                   FILE    STATUS  IS  STS-PARA.
+      *
+006900*    エラーファイル
+           SELECT  RECEERR-FILE    ASSIGN  RECEERR
+                                   FILE    STATUS  IS  STS-RECEERR.
+      *
+       DATA                        DIVISION.
+       FILE                        SECTION.
+      *
+      *    総括表一時ファイル  
+       FD  SKT2200TMP-FILE.
+           COPY    "CPSKT2200TMP.INC".
+      *
+006900*    請求ＤＢ更新用ファイル
+       FD  UPD-FILE.
+           COPY    "CPRCF010.INC"  REPLACING  //RECE10//
+                                   BY         //RECE10X//.
+      *
+      *    印刷用データ
+       FD  PRT-FILE.
+       01  PRT-REC                 PIC X(3000).
+      *
+006900*    エラーファイル
+       FD  RECEERR-FILE.
+       01  RECEERR-REC             PIC X(200). 
+      *
+       WORKING-STORAGE             SECTION.
+      *
+      *    印刷用データ 名称領域 
+           COPY    "CPCOMMONPRT.INC".
+      *
+      *    総括表一時ファイル 名称領域 
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT2200TP//.
+      *
+      *    請求ＤＢ更新用ファイル 名称領域 
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //RECEUPD//.
+           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *
+      *    エラーファイル 名称領域 
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     COPY    "CPCOMMONDAT2.INC"
+      *                             REPLACING  //RECE01PARA//
+      *                             BY         //RECEERR//.
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+                                    BY         //RECEERR//.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *     
+      *    シェル用領域
+           COPY    "CPCOMMONSHELL.INC".
+      *
+      *    印刷用領域
+           COPY    "SKT2200.INC".
+      *
+      *    スパ領域
+       01  STS-AREA.
+           03  STS-PARA            PIC X(02).
+           03  STS-SKT2200         PIC X(02).
+           03  STS-RECE10          PIC X(02).
+           03  STS-RECEERR         PIC X(02).
+           03  STS-RECEUPD         PIC X(02).
+      *
+      *    フラグ領域
+       01  FLG-AREA.
+           03  FLG-END             PIC 9(01).
+           03  FLG-SKT2200TMP      PIC 9(01).
+           03  FLG-SYSKANRI        PIC 9(01).
+           03  FLG-PTINF           PIC 9(01).
+           03  FLG-HKNJAINF        PIC 9(01).
+           03  FLG-UPD             PIC 9(01).
+           03  FLG-UPDFILE         PIC 9(01).
+           03  FLG-SEIKYU          PIC 9(01).
+           03  FLG-PRINT           PIC 9(01).
+      *
+      *    添字領域
+       01  IDX-AREA.
+           03  IDX1                PIC 9(04).
+           03  IDX2                PIC 9(04).
+           03  IDX3                PIC 9(04).
+      *
+      *    システム領域
+       01  SYS-AREA.
+           03  SYS-TIME            PIC 9(08).
+      *
+      *    パラメタ領域
+       01  WRK-PARA.
+           COPY    "CPORCSPRTLNK.INC".
+           03  WRK-PARA-JOBID      PIC 9(07).
+           03  WRK-PARA-SHELLID    PIC X(08).
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     03  WRK-PARA-HOSPID     PIC X(24).
+           03  WRK-PARA-HOSPNUM    PIC 9(02).
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           03  WRK-PARA-PAGE       PIC 9(10).
+      ****2006/05/19 返戻対応
+           03  WRK-PARA-SYOKBN     PIC X(01).
+      ****	       
+      *
+      *    一時領域
+       01  WRK-AREA.
+           03  WRK-SEIYMD        PIC X(08).
+           03  WRK-SEIYMDWH      PIC X(22).
+           03  WRK-SRYYMWH       PIC X(16).
+           03  WRK-SRYYMD        PIC X(08).
+      *  
+           03  WRK-SYMD.
+               05  WRK-SYY           PIC 9(04).
+               05  WRK-SMM           PIC 9(02).
+               05  WRK-SDD           PIC 9(02).
+           03  WRK-HENYMDG           PIC X(22).
+      *
+           03  WRK-Z6                PIC ZZ,ZZZ.
+           03  WRK-Z9                PIC Z,ZZZ,ZZZ.
+           03  WRK-Z10               PIC ZZ,ZZZ,ZZZ.
+      *
+           03  WRK-RECEERR           PIC X(200). 
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
+      *****2006/05/19 返戻対応
+      *     03  WRK-PATH.
+      *         05  FILLER          PIC S9(09)  BINARY.
+      *         05  FILLER          PIC S9(09)  BINARY.
+      *         05  FILLER          PIC S9(09)  BINARY.
+      *****
+           03  WRK-PATH              PIC X(50).
+      *    医療機関情報
+           03  WRK-HOSPNAME          PIC X(100).
+           03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
+               05  WRK-HOSPNAME1     PIC X(50).
+               05  WRK-HOSPNAME2     PIC X(50).
+           03  WRK-HOSPADRS          PIC X(100).
+           03  WRK-HOSPADRS-R        REDEFINES   WRK-HOSPADRS.
+               05  WRK-HOSPADRS1     PIC X(50).
+               05  WRK-HOSPADRS2     PIC X(50).
+           03  WRK-HOSPTEL           PIC X(15).
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
+      *
+      *    カウント領域
+       01  CNT-AREA.
+           03  CNT-PAGE              PIC  9(03).
+           03  CNT-RECE10            PIC  9(06).
+           03  CNT-UPDFILE           PIC  9(06).
+      *
+      *    集計領域
+       01  SUM-AREA.
+           03  SUM-SYOKEI-TBL.
+               05  SUM-TBL          OCCURS   22.
+                   07  SUM-KENSU     PIC  9(06).
+                   07  SUM-TENSU     PIC  9(07).
+           03  SUM-GKENSU            PIC  9(09).
+           03  SUM-GTENSU            PIC  9(10).
+      *
+      *    キー用エリア
+       01  KEY-AREA  VALUE   LOW-VALUE.
+           03  KEY-NEW.
+               05  KEY-N-KBN        PIC  9(01).
+           03  KEY-OLD.
+               05  KEY-O-KBN        PIC  9(01).
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     COPY    "ORCA-DBPATH".
+           COPY    "COMMON-SPA".
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+      *****************************************************************
+      *    ファイルレイアウト
+      *****************************************************************
+      *
+      *    保険者情報
+       01  HKNJAINF-REC.
+           COPY    "CPHKNJAINF.INC".
+      *
+      *    ＪＯＢ管理ＤＢ
+       01  JOBKANRI-REC.
+           COPY    "CPJOBKANRI.INC".
+      *
+      *    ＪＯＢ管理ＤＢ（制御用）
+           COPY    "CPORCSJOBKANRI.INC".
+      *
+      *    システム管理マスタ
+           COPY    "CPSYSKANRI.INC".
+      *
+      *    医療機関情報
+           COPY    "CPSK1001.INC".
+      *
+      *    医療機関情報−所在地、連絡先 
+           COPY    "CPSK1002.INC".
+      *
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
+      *    医療機関編集情報
+           COPY    "CPSK1900.INC".
+      *
+      *    医療機関名称編集情報
+           COPY    "CPSK1901.INC".
+      *
+      *    医療機関住所編集情報
+           COPY    "CPSK1902.INC".
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
+      *
+      *    請求管理情報
+           COPY    "CPRCF010.INC".
+      *
+      ******************************************************************
+      *    サブプロ用  領域
+      *****************************************************************
+      *
+      *   日付変換サブ
+           COPY    "CPORCSDAY.INC".
+           COPY    "CPORCSLNK.INC".
+      *
+      *    共通パラメタ
+           COPY    "MCPAREA".
+      *
+           COPY    "MCPDATA.INC".
+      *
+      *    印刷ＤＢ制御サブ
+           COPY    "CPORCSPRT.INC".
+      *
+      ****************************************************************
+       LINKAGE                 SECTION.
+       01  COMMAND-PARAM.
+           02  FILLER      PIC X(256).
+      ****************************************************************
+       PROCEDURE           DIVISION
+               USING
+           COMMAND-PARAM.
+      *****************************************************************
+      *    主    処理
+      *****************************************************************
+       000-PROC-SEC                SECTION.
+      *
+           PERFORM  100-INIT-SEC
+      *
+           PERFORM  200-MAIN-SEC
+                    UNTIL   FLG-END   =   1
+      *
+           PERFORM  300-END-SEC
+      *
+           STOP     RUN
+           .
+      *
+      *****************************************************************
+      *    初期  処理
+      *****************************************************************
+       100-INIT-SEC                SECTION.
+      *
+           INITIALIZE                   FLG-AREA
+           INITIALIZE                   STS-AREA
+           INITIALIZE                   WRK-AREA
+           INITIALIZE                   CNT-AREA
+           INITIALIZE                   SUM-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           INITIALIZE                   SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           ACCEPT     SYS-TIME          FROM    TIME
+      *
+           PERFORM    100-DBOPEN-SEC
+      *
+           UNSTRING   COMMAND-PARAM    DELIMITED  BY  ","
+                                       INTO    LNK-PRTKANRI-RENNUM
+                                               LNK-PRTKANRI-TBL-KEY
+                                               LNK-PRTKANRI-TBL-GROUP
+                                               LNK-PRTKANRI-SHORI-RENNUM
+                                               LNK-PRTKANRI-SRYYM
+                                               LNK-PRTKANRI-SKYYMD
+                                               LNK-PRTKANRI-SHELLID
+                                               LNK-PRTKANRI-PRIORITY
+                                               LNK-PRTKANRI-TERMID
+                                               LNK-PRTKANRI-OPID
+                                               LNK-PRTKANRI-PRTNM
+      ****2006/05/19 返戻対応
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *                                         WRK-PARA-HOSPID
+                                               WRK-PARA-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+                                               WRK-PARA-JOBID
+                                               WRK-PARA-SHELLID
+                                               WRK-PARA-SYOKBN
+      ****
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+                                               RECEERR
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           END-UNSTRING
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+      *    ステップ開始処理
+           MOVE    "STS"           TO  SJOBKANRI-MODE
+           INITIALIZE                  JOBKANRI-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    SPA-HOSPNUM     TO  JOB-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    WRK-PARA-JOBID  TO  JOB-JOBID
+           MOVE    WRK-PARA-SHELLID
+                                   TO  JOB-SHELLID
+           MOVE    "SOKATU2200"    TO  JOB-PGID
+           MOVE    "国保総括表"    TO  JOB-SHELLMSG
+           CALL    "ORCSJOB"       USING
+                                   ORCSJOBKANRIAREA
+                                   JOBKANRI-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+                                   SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    "SKT2200"         TO  SKT2200TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID     TO  SKT2200TP-TERMID
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    WRK-PARA-HOSPNUM        TO  SKT2200TP-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID     TO  RECEUPD-TERMID
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID     TO  RECEERR-TERMID
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
+           MOVE    "01"                TO  WRK-SRYYMD (7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           MOVE    "01"                TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY2-AREA
+           MOVE    "21"                TO  LNK-DAY2-IRAI
+           MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY2-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY2-AREA
+           IF      STS-DAY-RC1         =   ZERO 
+                   MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
+           END-IF
+      *
+      *    医療機関ＩＤ編集
+           INITIALIZE                     SYS-1001-REC
+           MOVE    "1001"         TO      SYS-1001-KANRICD
+           MOVE    "*"            TO      SYS-1001-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-1001-STYUKYMD(1:6)
+                                          SYS-1001-EDYUKYMD(1:6)
+           MOVE    "01"           TO      SYS-1001-STYUKYMD(7:2)
+                                          SYS-1001-EDYUKYMD(7:2)
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    SPA-HOSPNUM    TO      SYS-1001-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    SYS-1001-REC   TO      MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF     FLG-SYSKANRI        =   ZERO
+                  MOVE    MCPDATA-REC     TO    SYS-1001-REC
+                  IF      SYS-1001-HOSPNAME  =  LOW-VALUE
+                          MOVE    SPACE   TO    SYS-1001-HOSPNAME
+                  END-IF
+                  IF      SYS-1001-KAISETUNAME  =   LOW-VALUE
+                          MOVE    SPACE   TO    SYS-1001-KAISETUNAME
+                  END-IF    
+           ELSE
+                  MOVE    "医療機関情報が取得できませんでした"
+                                          TO    WRK-RECEERR
+                  PERFORM 500-ERR-HENSYU-SEC
+                  MOVE    1               TO    FLG-END
+           END-IF
+      *
+      *    医療機関情報−所在地、連絡先
+           INITIALIZE                     SYS-1002-REC
+           MOVE     "1002"        TO      SYS-1002-KANRICD
+           MOVE     "*"           TO      SYS-1002-KBNCD
+           MOVE     LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-1002-STYUKYMD(1:6)
+                                          SYS-1002-EDYUKYMD(1:6)
+           MOVE     "01"          TO      SYS-1002-STYUKYMD(7:2)
+                                          SYS-1002-EDYUKYMD(7:2)
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    SPA-HOSPNUM    TO      SYS-1002-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE     SYS-1002-REC  TO      MCPDATA-REC
+           PERFORM  900-SYSKANRI-INV-SEC
+           IF       FLG-SYSKANRI       =  ZERO
+                    MOVE    MCPDATA-REC   TO    SYS-1002-REC
+                    IF      SYS-1002-ADRS =     LOW-VALUE
+                            MOVE    SPACE TO    SYS-1002-ADRS
+                    END-IF
+           ELSE
+                    MOVE "医療機関情報（所在地）が取得できませんでした"
+                                          TO    WRK-RECEERR
+                    PERFORM   500-ERR-HENSYU-SEC
+                    MOVE      1           TO    FLG-END
+           END-IF 
+      *
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
+           MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+           MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
+           MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
+      *    医療機関編集情報
+           PERFORM 900-1900-READ-SEC
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
+      *
+           OPEN     OUTPUT  UPD-FILE
+      ****2006/05/19 返戻対応
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "2"
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+                   MOVE    "key37"        TO  WRK-PATH
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+               WHEN    "1"
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+                   MOVE    "key38"        TO  WRK-PATH
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           END-EVALUATE
+      ****
+      *
+           PERFORM  900-SEIKYU-SELECT-SEC
+           .
+       100-INIT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    主    処理
+      *****************************************************************
+       200-MAIN-SEC               SECTION.
+      *
+           OPEN     OUTPUT  SKT2200TMP-FILE
+           CLOSE            SKT2200TMP-FILE
+           OPEN     I-O     SKT2200TMP-FILE
+      *
+           MOVE     ZERO    TO      FLG-END
+           MOVE     ZERO    TO      FLG-UPD
+           INITIALIZE             SUM-AREA
+      *
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+      *
+           CLOSE   UPD-FILE
+           CLOSE   SKT2200TMP-FILE
+      *
+           IF  FLG-UPD   =       1
+               PERFORM   2002-PRINT-SEC
+           END-IF
+           .
+      *
+       200-MAIN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    終了    処理
+      *****************************************************************
+       300-END-SEC                     SECTION.
+      *
+           IF      CNT-RECE10          =   ZERO 
+                   CONTINUE
+           ELSE
+                   IF      FLG-UPD     =   1
+                           PERFORM     3001-SEIKYU-UPDATE-SEC
+                   END-IF
+           END-IF
+           MOVE  CNT-PAGE  TO  WRK-PARA-PAGE
+      *
+           DISPLAY "*** SOKATU2200 IN  "  CNT-RECE10
+           DISPLAY "*** SOKATU2200 END ***"
+      *
+      *    ステップ終了処理
+           MOVE    "STE"           TO  SJOBKANRI-MODE
+           INITIALIZE                  JOBKANRI-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    SPA-HOSPNUM     TO  JOB-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    WRK-PARA-PAGE   TO  JOB-UPDCNT
+           MOVE    WRK-PARA-JOBID  TO  JOB-JOBID
+           MOVE    WRK-PARA-SHELLID
+                                   TO  JOB-SHELLID
+           CALL    "ORCSJOB"       USING
+                                   ORCSJOBKANRIAREA
+                                   JOBKANRI-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+                                   SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           PERFORM 900-DBDISCONNECT-SEC
+           .
+       300-END-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険者番号別集計処理
+      *****************************************************************
+       2001-KOKUHO-SYUKEI-SEC               SECTION.
+      *
+      *TMP-FILE キーセット
+      *
+           INITIALIZE       SKT2200TMP-REC
+      *
+           IF  RECE10-HKNJANUM(7:2)  =     SPACE
+             MOVE  RECE10-HKNJANUM(1:6)  TO  SKT2200TMP-HKNJANUM(1:6)
+           ELSE
+             MOVE  RECE10-HKNJANUM(3:6)  TO  SKT2200TMP-HKNJANUM(1:6)
+           END-IF
+      *
+      *    名古屋市の場合、代表番号セット
+           IF  SKT2200TMP-HKNJANUM (1:3) = "234"
+             MOVE  "234005"  TO  SKT2200TMP-HKNJANUM
+           END-IF
+      *
+      *    静岡市の場合、代表番号セット
+           IF  SKT2200TMP-HKNJANUM (1:3) = "224"
+           OR  SKT2200TMP-HKNJANUM(1:5)  = "22001"
+             MOVE  "224006"  TO  SKT2200TMP-HKNJANUM
+           END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *
+      *    浜松の場合、代表番号セット
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     IF  SKT2200TMP-HKNJANUM (1:3) = "225"
+           IF  SKT2200TMP-HKNJANUM (1:3) = "225"
+           OR  SKT2200TMP-HKNJANUM (1:5) = "22002"
+      *---(01.00.04) LINE ADD END   ------------------------------------
+             MOVE  "225003"  TO  SKT2200TMP-HKNJANUM
+           END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *    県内・県外判定
+             IF    RECE10-PREFKBN    =    "1"
+               MOVE    1    TO    SKT2200TMP-KBN
+             ELSE
+               MOVE    2    TO    SKT2200TMP-KBN
+             END-IF
+             IF    SKT2200TMP-HKNJANUM  =  "133033" OR
+                                           "133264" OR
+                                           "133298" 
+               MOVE    1    TO    SKT2200TMP-KBN
+               MOVE    1    TO    SKT2200TMP-KUMIAI
+             END-IF
+      *
+           PERFORM  800-SKTTMP-READ-SEC
+           PERFORM  220-HKN-SYUKEI-SEC
+      *
+      *    集計の対象にならなかったとき
+           IF     FLG-UPD        =       1
+                  PERFORM   240-UPD-FILE-HENSYU-SEC
+      *
+                  PERFORM   900-SEIKYU-READ-SEC
+           ELSE
+                  MOVE      SPACE TO      WRK-RECEERR
+                  STRING    "集計対象外  患者番号＝"
+                                               DELIMITED  BY  SIZE
+                            RECE10-PTNUM       DELIMITED  BY  SPACE
+                            " 診療年月＝"      DELIMITED  BY  SIZE
+                            RECE10-SRYYM       DELIMITED  BY  SIZE
+                            " レセ種別＝"      DELIMITED  BY  SIZE
+                            RECE10-RECESYUBETU DELIMITED  BY  SIZE
+                         INTO                  WRK-RECEERR
+                  END-STRING
+                  PERFORM   500-ERR-HENSYU-SEC
+                  MOVE      1         TO        FLG-END
+           END-IF
+      *
+           .
+      *
+       2001-KOKUHO-SYUKEI-EXT.
+           EXIT.
+      *****************************************************************
+      *    一般被保険者・退職者(本人・家族)・老人保健分集計処理
+      *****************************************************************
+       220-HKN-SYUKEI-SEC               SECTION.
+      *
+      *    一般か退職者か
+           IF  RECE10-HKNNUM  =  "060"
+      *    年齢チェック
+             EVALUATE  TRUE
+               WHEN  RECE10-AGE  >= 70
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  8
+      *             MOVE  3   TO  IDX1
+      *           ELSE
+      *             MOVE  1   TO  IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  9
+                   MOVE  1   TO  IDX1
+                 ELSE
+                   MOVE  3   TO  IDX1
+                 END-IF
+      *---(01.00.01) LINE ADD END   ------------------------------------
+               WHEN  RECE10-AGE  >  2
+                 MOVE  5     TO  IDX1
+               WHEN  OTHER
+                 MOVE  7     TO  IDX1
+             END-EVALUATE
+           ELSE
+             IF  RECE10-HONKZKKBN  =  "1"
+      *    年齢チェック
+               IF  RECE10-AGE  >=  70
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  8
+      *             MOVE  13  TO  IDX1
+      *           ELSE
+      *             MOVE  11  TO  IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  9
+                   MOVE  11  TO  IDX1
+                 ELSE
+                   MOVE  13  TO  IDX1
+                 END-IF
+      *---(01.00.01) LINE ADD END   ------------------------------------
+               ELSE
+                 MOVE  9     TO  IDX1
+               END-IF
+             ELSE
+               IF  RECE10-AGE  >=  70
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  8
+      *             MOVE  13  TO  IDX1
+      *           ELSE
+      *             MOVE  11  TO  IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  9
+                   MOVE  11  TO  IDX1
+                 ELSE
+                   MOVE  13  TO  IDX1
+                 END-IF
+      *---(01.00.01) LINE ADD START ------------------------------------
+               ELSE
+                 IF RECE10-AGE  >  2
+                    MOVE  15    TO  IDX1
+                 ELSE
+                    MOVE  17    TO  IDX1
+                 END-IF
+               END-IF
+             END-IF
+           END-IF
+      *
+      *    老人保健所持者か
+           IF  RECE10-RJNHKNNUM NOT = SPACE
+             IF  RECE10-KYURATE  =  9
+               MOVE  19      TO  IDX1
+             ELSE
+               MOVE  21      TO  IDX1
+             END-IF
+           END-IF
+      *
+      *    入院／外来
+           IF  RECE10-NYUGAIKBN  =  2
+               ADD   1       TO  IDX1
+           END-IF
+      *
+           PERFORM   2201-HENSYU-SEC
+      *
+           IF      FLG-SKT2200TMP     =          1
+                   WRITE    SKT2200TMP-REC
+           ELSE
+                   REWRITE  SKT2200TMP-REC
+           END-IF
+      *
+           MOVE    1               TO  FLG-UPD 
+      *
+           .
+       220-HKN-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    編集処理
+      *****************************************************************
+       2201-HENSYU-SEC              SECTION.
+      *
+      *   件数
+          ADD  1  TO  SKT2200TMP-KENSU (IDX1)
+      *
+      *   点数
+          COMPUTE  SKT2200TMP-TENSU (IDX1)  =
+                   SKT2200TMP-TENSU (IDX1)  +  RECE10-TOTALTEN (1)
+          .
+      *
+       2201-HENSYU-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求ＤＢ更新用ファイル出力処理
+      *****************************************************************
+       240-UPD-FILE-HENSYU-SEC         SECTION.
+      *
+      *    集計の対象にならなかったとき
+           IF     FLG-UPD   NOT   =       1
+                  MOVE      SPACE TO      WRK-RECEERR
+                  STRING    "集計対象外  患者番号＝"
+                                               DELIMITED  BY  SIZE
+                            RECE10-PTNUM       DELIMITED  BY  SPACE
+                            " 診療年月＝"      DELIMITED  BY  SIZE
+                            RECE10-SRYYM       DELIMITED  BY  SIZE
+                            " レセ種別＝"      DELIMITED  BY  SIZE
+                            RECE10-RECESYUBETU DELIMITED  BY  SIZE
+                         INTO                  WRK-RECEERR
+                  END-STRING                                
+                  PERFORM   500-ERR-HENSYU-SEC
+                  MOVE      1         TO        FLG-END
+                  GO        TO        240-UPD-FILE-HENSYU-EXT 
+           END-IF
+      *
+           MOVE   RECE10-REC          TO        RECE10X-REC
+           WRITE  RECE10X-REC
+      *
+           ADD    1                   TO        CNT-UPDFILE
+           .
+      *
+       240-UPD-FILE-HENSYU-EXT.
+           EXIT.
+      *****************************************************************
+      *    帳票ファイル出力処理                    
+      *****************************************************************
+       2002-PRINT-SEC                          SECTION.
+      *
+           OPEN       INPUT       SKT2200TMP-FILE
+      *
+           MOVE       ZERO        TO        FLG-PRINT
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+           MOVE  KEY-NEW  TO  KEY-OLD
+      *
+           PERFORM  UNTIL  FLG-PRINT  =  1
+      *
+      *    帳票編集<見出し>処理
+               PERFORM  310-HEAD-HEN-SEC
+      *    帳票編集<明細>処理
+               PERFORM  320-BODY-HEN-SEC
+      *    帳票編集<合計>処理
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         PERFORM  325-SUM-HEN-SEC
+               IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+                   PERFORM  325-SUM-HEN-SEC
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *    帳票印刷処理
+               PERFORM  330-PRINT-OUT-SEC
+           END-PERFORM
+      *
+           CLOSE      SKT2200TMP-FILE
+      *
+           .
+       2002-PRINT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理
+      *****************************************************************
+       310-HEAD-HEN-SEC                 SECTION.
+      *
+           INITIALIZE                        SKT2200
+      *
+      *    診療年月
+           MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
+      *
+      *    医療機関住所
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    SYS-1002-ADRS         TO  SKT2200-ADRS
+           MOVE    WRK-HOSPADRS          TO  SKT2200-ADRS
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
+      *
+      *    医療機関名
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    SYS-1001-HOSPNAME     TO  SKT2200-HOSPNAME
+           MOVE    WRK-HOSPNAME          TO  SKT2200-HOSPNAME
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
+      *
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCDN      TO  SKT2200-HOSPCDN
+      *
+      *    点数表区分
+           EVALUATE  SYS-1001-TENHYOKBN
+             WHEN  1     MOVE  "○"      TO  SKT2200-TENHYOKBN (1)
+             WHEN  3     MOVE  "○"      TO  SKT2200-TENHYOKBN (2)
+             WHEN  4     MOVE  "○"      TO  SKT2200-TENHYOKBN (3)
+             WHEN  6     MOVE  "○"      TO  SKT2200-TENHYOKBN (4)
+             WHEN  7     MOVE  "○"      TO  SKT2200-TENHYOKBN (5)
+           END-EVALUATE
+      *
+           .
+       310-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<明細行>処理
+      *****************************************************************
+       320-BODY-HEN-SEC               SECTION.
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     8  OR
+                             KEY-NEW  NOT =  KEY-OLD  OR
+                             FLG-PRINT  =  1
+      *    保険者名
+             PERFORM  920-HKNJAINF-SET-SEC
+      *
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     22
+      *    件数
+               MOVE  SKT2200TMP-KENSU (IDX2)  TO  WRK-Z6
+               MOVE  WRK-Z6  TO  SKT2200-KENSU (IDX1 IDX2)
+      *
+      *    点数
+               MOVE  SKT2200TMP-TENSU (IDX2)  TO  WRK-Z9
+               MOVE  WRK-Z9  TO  SKT2200-TENSU (IDX1 IDX2)
+      *
+      *    小計：件数
+               ADD   SKT2200TMP-KENSU (IDX2)  TO  SUM-KENSU (IDX2)
+      *
+      *    小計：点数
+               ADD   SKT2200TMP-TENSU (IDX2)  TO  SUM-TENSU (IDX2)
+      *
+      *    合計：件数
+               ADD   SKT2200TMP-KENSU (IDX2)  TO  SUM-GKENSU
+      *
+      *    合計：点数
+               ADD   SKT2200TMP-TENSU (IDX2)  TO  SUM-GTENSU
+             END-PERFORM
+      *
+      *    一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           .
+       320-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<合計>処理
+      *****************************************************************
+       325-SUM-HEN-SEC               SECTION.
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     22
+      *    小計：件数
+             MOVE  SUM-KENSU (IDX1)  TO  WRK-Z6
+             MOVE  WRK-Z6            TO  SKT2200-G-KENSU (IDX1)
+      *
+      *    小計：点数
+             MOVE  SUM-TENSU (IDX1)  TO  WRK-Z9
+             MOVE  WRK-Z9            TO  SKT2200-G-TENSU (IDX1)
+           END-PERFORM
+      *
+           INITIALIZE  SUM-SYOKEI-TBL
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *    合計：件数
+             MOVE  SUM-GKENSU          TO  WRK-Z9
+             MOVE  WRK-Z9              TO  SKT2200-GKENSU
+      *    合計：点数
+             MOVE  SUM-GTENSU          TO  WRK-Z10
+             MOVE  WRK-Z10             TO  SKT2200-GTENSU
+      *
+             INITIALIZE  SUM-GKENSU
+             INITIALIZE  SUM-GTENSU
+             MOVE  KEY-NEW  TO  KEY-OLD
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+           .
+       325-SUM-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理
+      *****************************************************************
+       330-PRINT-OUT-SEC                   SECTION.
+      *
+           ADD  1  TO  CNT-PAGE
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT2200.red"        TO  SPRT-PRTID
+           MOVE    "国保総括表"        TO  SPRT-TITLE
+           MOVE    SKT2200             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+                                       SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "帳票ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+      *
+           .
+       330-PRINT-OUT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    エラー出力処理
+      *****************************************************************
+       500-ERR-HENSYU-SEC                SECTION.
+      *
+           OPEN    INPUT   RECEERR-FILE
+           IF      STS-RECEERR         =   ZERO
+               CONTINUE
+           ELSE
+               OPEN    OUTPUT              RECEERR-FILE
+      *
+               MOVE    WRK-RECEERR         TO  RECEERR-REC
+               WRITE   RECEERR-REC
+      *
+      *        ジョブ終了処理
+               MOVE    "JBE"           TO  SJOBKANRI-MODE
+               INITIALIZE                  JOBKANRI-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+               MOVE    SPA-HOSPNUM     TO  JOB-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+               MOVE    WRK-PARA-JOBID  TO  JOB-JOBID
+               MOVE    WRK-PARA-SHELLID
+                                       TO  JOB-SHELLID
+               MOVE    WRK-RECEERR     TO  JOB-YOBI
+               MOVE    "9999"          TO  JOB-ERRCD
+               CALL    "ORCSJOB"       USING
+                                       ORCSJOBKANRIAREA  
+                                       JOBKANRI-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+                                       SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           END-IF
+      *
+           CLOSE   RECEERR-FILE
+      *
+           .
+       500-ERR-HENSYU-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *   請求管理ＤＢ更新処理
+      *****************************************************************
+       3001-SEIKYU-UPDATE-SEC              SECTION.
+      *
+           OPEN     INPUT           UPD-FILE
+      *
+           PERFORM  900-UPD-FILE-READ-SEC
+      *
+           PERFORM  UNTIL   FLG-UPDFILE     =     1
+              MOVE  RECE10X-KEY     TO    RECE10-KEY
+              MOVE  RECE10-REC      TO    MCPDATA-REC
+      *   
+              PERFORM   900-SEIKYU-INV-SEC
+              IF        FLG-SEIKYU  =     ZERO
+                        MOVE     "2"    TO     RECE10-SKYKBN
+                        MOVE     LNK-PRTKANRI-SRYYM
+                                        TO     RECE10-SKYYM
+                        MOVE     LNK-PRTKANRI-SKYYMD
+                                        TO     RECE10-UPDYMD
+                        MOVE     RECE10-REC
+                                        TO     MCPDATA-REC
+                        MOVE     "DBUPDATE"
+                                        TO     MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *                  MOVE     PATH-TBL-SEIKYU-KEY
+      *                                  TO     MCP-PATH
+      *                  CALL     "MCPSUB"      USING
+      *                                         MCPAREA
+      *                                         MCPDATA-REC
+                        MOVE    "tbl_seikyu"    TO  MCP-TABLE
+                        MOVE    "key"           TO  MCP-PATHNAME
+                        CALL    "ORCDBMAIN"     USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+                        IF       MCP-RC =      ZERO
+                                 PERFORM       900-UPD-FILE-READ-SEC
+                        ELSE
+                                 DISPLAY "UPD ERR KEY="  RECE10-KEY 
+                                 MOVE    
+                                "*** SOKATU2200 SEIKYU UPDATE ERROR ***"
+                                           TO  WRK-RECEERR
+                                 MOVE    RECE10-KEY     TO
+                                         WRK-RECEERR(33:)
+                                 PERFORM 500-ERR-HENSYU-SEC
+                                 MOVE    1      TO      FLG-UPDFILE
+                        END-IF
+      *
+              ELSE
+                       DISPLAY "INV ERR KEY="  RECE10-KEY 
+                       MOVE    "*** SOKATU2200 SEIKYU INVALID ***"
+                                           TO  WRK-RECEERR
+                       MOVE    RECE10-KEY     TO  WRK-RECEERR(33:)
+                       PERFORM 500-ERR-HENSYU-SEC
+                       MOVE    1      TO      FLG-UPDFILE
+              END-IF
+           END-PERFORM
+      *
+           CLOSE   UPD-FILE
+      *
+           .
+       3001-SEIKYU-UPDATE-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    西暦日本語変換処理
+      *****************************************************************
+       31012-SEIWA-HEN-SEC        SECTION.
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY2-AREA
+           MOVE    "21"                TO  LNK-DAY2-IRAI
+           MOVE    WRK-SYMD            TO  LNK-DAY2-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY2-AREA
+           MOVE    LNK-DAY2-EDTYMD3    TO  WRK-HENYMDG
+           INSPECT WRK-HENYMDG    REPLACING  ALL "  "  BY  "  "
+           .
+       31012-SEIWA-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *   保険者情報セット
+      *****************************************************************
+       920-HKNJAINF-SET-SEC  SECTION.
+      *
+           INITIALIZE  HKNJAINF-REC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE  SYS-1001-HOSPID             TO  HKNJA-HOSPID
+           MOVE  SPA-HOSPNUM                 TO  HKNJA-HOSPNUM
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE  SKT2200TMP-HKNJANUM         TO  HKNJA-HKNJANUM
+           MOVE  HKNJAINF-REC                TO  MCPDATA-REC
+           MOVE  "DBSELECT"                  TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE  PATH-TBL-HKNJAINF-KEY       TO  MCP-PATH
+      *     CALL  "MCPSUB"             USING
+      *                                MCPAREA
+      *                                MCPDATA-REC
+           MOVE  "tbl_hknjainf"       TO  MCP-TABLE
+           MOVE  "key"                TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           IF  MCP-RC  =  ZERO
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *       MOVE  PATH-TBL-HKNJAINF-KEY      TO  MCP-PATH
+             MOVE  "tbl_hknjainf"       TO  MCP-TABLE
+             MOVE  "key"                TO  MCP-PATHNAME
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+             PERFORM  925-HKNJAINF-READ-SEC
+      *
+      *    静岡市の新しい保険者番号にも静岡市と出るように対応
+             IF  SKT2200TMP-HKNJANUM  =  "224006"  AND
+                 HKNJA-HKNJANAME  =  SPACE
+               MOVE  "静岡市"        TO  HKNJA-HKNJANAME
+             END-IF
+      *
+             MOVE  HKNJA-HKNJANAME   TO  SKT2200-HKNJANAME (IDX1)
+           ELSE
+             DISPLAY  "HKNJAINF SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"            TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE  PATH-TBL-HKNJAINF-KEY      TO  MCP-PATH
+      *     CALL  "MCPSUB"         USING
+      *                            MCPAREA
+      *                            MCPDATA-REC
+           MOVE  "tbl_hknjainf"             TO  MCP-TABLE
+           MOVE  "key"                      TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"                USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           .
+       920-HKNJAINF-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険者情報読込
+      *****************************************************************
+       925-HKNJAINF-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     CALL  "MCPSUB"     USING
+      *                        MCPAREA
+      *                        MCPDATA-REC
+           CALL    "ORCDBMAIN"  USING
+                                MCPAREA
+                                MCPDATA-REC
+                                SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  HKNJAINF-REC
+             MOVE  ZERO         TO  FLG-HKNJAINF
+           ELSE
+             INITIALIZE  HKNJAINF-REC
+             MOVE  1            TO  FLG-HKNJAINF
+           END-IF
+      *
+           .
+       925-HKNJAINF-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求管理読込
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC             SECTION.
+      *
+      *    請求管理ＤＢ検索
+           INITIALIZE         RECE10-REC.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE   SYS-1001-HOSPID          TO    RECE10-HOSPID.
+           MOVE   SPA-HOSPNUM              TO    RECE10-HOSPNUM.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE   LNK-PRTKANRI-SRYYM       TO    RECE10-SKYYM.
+      *
+           MOVE    SPACE                   TO  RECE10-XXSTHKNJANUM
+           MOVE    "99999999"              TO  RECE10-XXEDHKNJANUM
+      *
+           MOVE   RECE10-REC               TO    MCPDATA-REC.
+           MOVE   "DBSELECT"               TO    MCP-FUNC.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *****2006/05/19 返戻対応
+      **     MOVE   PATH-TBL-SEIKYU-KEY4     TO    MCP-PATH.
+      *     MOVE   WRK-PATH              TO  MCP-PATH
+      *****
+      *     CALL   "MCPSUB"           USING
+      *                               MCPAREA
+      *                               MCPDATA-REC.
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    WRK-PATH                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           IF     MCP-RC        =       ZERO
+                  PERFORM  900-SEIKYU-READ-SEC
+           ELSE
+                  MOVE    1    TO      FLG-END
+           END-IF
+           .
+      *
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    総括表一時ファイルＲＥＡＤ処理
+      *****************************************************************
+       800-SKTTMP-READ-SEC                 SECTION.
+      *
+           READ   SKT2200TMP-FILE
+               INVALID    KEY
+                   MOVE   1         TO  FLG-SKT2200TMP
+               NOT INVALID    KEY
+                   MOVE   ZERO      TO  FLG-SKT2200TMP
+           END-READ
+      *
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求マスター読込
+      *****************************************************************
+       900-SEIKYU-READ-SEC           SECTION.
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *****2006/05/19 返戻対応
+      **     MOVE   PATH-TBL-SEIKYU-KEY4     TO    MCP-PATH.
+      *     MOVE   WRK-PATH              TO  MCP-PATH
+      *****
+      *     MOVE   "DBFETCH"              TO    MCP-FUNC
+      *     CALL   "MCPSUB"      USING
+      *                          MCPAREA
+      *                          MCPDATA-REC
+           MOVE     "DBFETCH"             TO  MCP-FUNC
+           MOVE     "tbl_seikyu"          TO  MCP-TABLE
+           MOVE     WRK-PATH              TO  MCP-PATHNAME
+           CALL     "ORCDBMAIN"           USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           IF       MCP-RC  =     ZERO
+                    MOVE    MCPDATA-REC   TO      RECE10-REC
+                    ADD     1             TO      CNT-RECE10
+           ELSE
+                    MOVE    1             TO      FLG-END
+           END-IF
+           .
+      *
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    システム管理マスタ読込
+      *****************************************************************
+       900-SYSKANRI-INV-SEC         SECTION.
+      *
+           MOVE    "DBSELECT"                   TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    PATH-TBL-SYSKANRI-KEY10      TO  MCP-PATH
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC
+           MOVE    "tbl_syskanri"               TO  MCP-TABLE
+           MOVE    "key10"                      TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                  USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"                    TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *         MOVE    PATH-TBL-SYSKANRI-KEY10      TO  MCP-PATH
+      *         CALL    "MCPSUB"             USING
+      *                                      MCPAREA
+      *                                      MCPDATA-REC
+               MOVE    "tbl_syskanri"           TO  MCP-TABLE
+               MOVE    "key10"                  TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"              USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-SYSKANRI
+               ELSE
+                   MOVE    1                   TO  FLG-SYSKANRI
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"              TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    PATH-TBL-SYSKANRI-KEY10      TO  MCP-PATH
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC
+           MOVE    "tbl_syskanri"               TO  MCP-TABLE
+           MOVE    "key10"                      TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                  USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           .
+       900-SYSKANRI-INV-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求管理マスタ読込
+      *****************************************************************
+       900-SEIKYU-INV-SEC             SECTION.
+      *
+           MOVE    "DBSELECT"                 TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    PATH-TBL-SEIKYU-KEY        TO  MCP-PATH
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC
+           MOVE    "tbl_seikyu"               TO  MCP-TABLE
+           MOVE    "key"                      TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"              TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *         MOVE    PATH-TBL-SEIKYU-KEY    TO  MCP-PATH
+      *         CALL    "MCPSUB"             USING
+      *                                      MCPAREA
+      *                                      MCPDATA-REC
+               MOVE    "tbl_seikyu"           TO  MCP-TABLE
+               MOVE    "key"                  TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"            USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-SEIKYU
+                   MOVE    MCPDATA-REC         TO  RECE10-REC
+               ELSE
+                   MOVE    1                   TO  FLG-SEIKYU
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-SEIKYU
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE    PATH-TBL-SEIKYU-KEY        TO  MCP-PATH
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC
+           MOVE    "tbl_seikyu"               TO  MCP-TABLE
+           MOVE    "key"                      TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           .
+       900-SEIKYU-INV-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求管理ＤＢ更新用ファイル読込
+      *****************************************************************
+       900-UPD-FILE-READ-SEC             SECTION.
+      *
+           READ    UPD-FILE
+               AT  END
+                   MOVE    1           TO  FLG-UPDFILE
+               NOT AT  END
+                   MOVE    ZERO        TO  FLG-UPDFILE
+           END-READ
+           .
+       900-UPD-FILE-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT2200TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+               NOT  AT  END
+                   MOVE  SKT2200TMP-KBN  TO  KEY-NEW
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *      
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
+      *****************************************************************
+      *    医療機関編集情報読み込み
+      *****************************************************************
+       900-1900-READ-SEC           SECTION.
+      *
+      *    医療機関編集情報読み込み
+           MOVE    SPACE                   TO  SYS-1900-REC
+           INITIALIZE                          SYS-1900-REC
+           MOVE    "1900"                  TO  SYS-1900-KANRICD
+           MOVE    "*"                     TO  SYS-1900-KBNCD
+           MOVE    SPA-HOSPNUM             TO  SYS-1900-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-STYUKYMD(1:6)
+           MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-EDYUKYMD(1:6)
+           MOVE    "01"                    TO  SYS-1900-EDYUKYMD(7:2)
+           MOVE    SYS-1900-REC            TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-1900-REC
+               IF      SYS-1900-PRTKBN(8) NOT =   SPACE
+      *            医療機関名称編集情報
+                   PERFORM 900-1901-READ-SEC
+      *            医療機関住所編集情報
+                   PERFORM 900-1902-READ-SEC
+               END-IF
+           ELSE
+               INITIALIZE                  SYS-1900-REC
+           END-IF
+           .
+      *
+       900-1900-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関名称編集情報読み込み
+      *****************************************************************
+       900-1901-READ-SEC           SECTION.
+      *
+      *    医療機関名称編集情報読み込み
+           MOVE    SPACE               TO  SYS-1901-REC
+           INITIALIZE                      SYS-1901-REC
+           MOVE    "1901"              TO  SYS-1901-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1901-KBNCD
+           MOVE    SPA-HOSPNUM         TO  SYS-1901-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1901-EDYUKYMD(7:2)
+           MOVE    SYS-1901-REC        TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-1901-REC
+               MOVE    SYS-1901-HOSPNAME1  TO  WRK-HOSPNAME1
+               MOVE    SYS-1901-HOSPNAME2  TO  WRK-HOSPNAME2
+           ELSE
+               INITIALIZE                  SYS-1901-REC
+           END-IF
+           .
+      *
+       900-1901-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1902-READ-SEC           SECTION.
+      *
+      *    医療機関住所編集情報読み込み
+           MOVE    SPACE               TO  SYS-1902-REC
+           INITIALIZE                      SYS-1902-REC
+           MOVE    "1902"              TO  SYS-1902-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1902-KBNCD
+           MOVE    SPA-HOSPNUM         TO  SYS-1902-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1902-EDYUKYMD(7:2)
+           MOVE    SYS-1902-REC        TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1902-REC
+               MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
+               MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+           ELSE
+               INITIALIZE                  SYS-1902-REC
+           END-IF
+           .
+      *
+       900-1902-READ-EXT.
+           EXIT.
+      *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
+      *****************************************************************
+      *    ＤＢ  オープン処理
+      *****************************************************************
+       100-DBOPEN-SEC                SECTION.
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    LOW-VALUE           TO  MCP-TABLE
+                                           MCP-PATHNAME
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    "DBOPEN"            TO  MCP-FUNC.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC.
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    LOW-VALUE           TO  MCP-TABLE
+                                           MCP-PATHNAME
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    "DBSTART"           TO  MCP-FUNC.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC.
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           .
+       100-DBOPEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢ  クローズ処理
+      *****************************************************************
+       900-DBDISCONNECT-SEC            SECTION.
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    LOW-VALUE           TO  MCP-TABLE
+                                           MCP-PATHNAME
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    "DBCOMMIT"          TO  MCP-FUNC.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC.
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+           MOVE    LOW-VALUE           TO  MCP-TABLE
+                                           MCP-PATHNAME
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           MOVE    "DBDISCONNECT"      TO  MCP-FUNC.
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     CALL    "MCPSUB"             USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC.
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *
+           .
+       900-DBDISCONNECT-EXT.
+           EXIT.

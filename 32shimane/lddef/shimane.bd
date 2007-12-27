@@ -1,0 +1,12 @@
+name	shimane;
+
+arraysize	20;
+textsize	400;
+
+bind	"SOKATU3200"	"OpenCOBOL";
+bind	"SOKATU3210"	"OpenCOBOL";
+bind	"SEIKYU3203"	"OpenCOBOL";
+bind	"SEIKYU3205"	"OpenCOBOL";
+bind	"SEIKYU3207"	"OpenCOBOL";
+
+#include "orcadb.inc"
