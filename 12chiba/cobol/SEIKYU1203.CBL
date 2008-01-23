@@ -33,6 +33,8 @@
       *  01.00.02     内田     07/08/29    日レセver4.0対応
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
+      *  01.00.03     内田     08/01/22    帳票様式の変更
+      *                                    入院用帳票の追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -51,6 +53,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    口座情報ファイル
+           SELECT  KOUZA-FILE    ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-KOUZA.
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -61,6 +71,14 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    口座情報ファイル
+       FD  KOUZA-FILE.
+       01  KOUZA-REC.
+           03  FILLER           PIC  X(09).
+           03  KOUZA-DATA       PIC  X(30).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
        WORKING-STORAGE  SECTION.
       *
@@ -80,12 +98,18 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            COPY  "SC1203.INC".
+      *---(01.00.03) LINE ADD START ------------------------------------
+           COPY  "SC1204.INC".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    スパ領域
        01  STS-AREA.
            03  STS-MF100   PIC X(02).
            03  STS-RECE02  PIC X(02).
            03  STS-RECEERR  PIC X(02).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  STS-KOUZA   PIC X(02).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -129,9 +153,20 @@
            03  WRK-DENPPRTYMWH        PIC X(16).
            03  WRK-SYSYMDWH           PIC X(22).
            03  WRK-SRYYM              PIC X(09).
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    ファイル名称用エリア
+           03  FILE-NAME              PIC X(512).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    編集用エリア
            03  WRK-TENSUX      PIC ZZZ,ZZ9.
            03  WRK-YKZFTNX     PIC ZZ,ZZ9.
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  WRK-Z2          PIC ZZ.
+           03  WRK-Z3          PIC ZZZ.
+           03  WRK-Z6          PIC ZZ,ZZZ.
+           03  WRK-Z7          PIC ZZZ,ZZZ.
+           03  WRK-Z9          PIC Z,ZZZ,ZZZ.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    編集用エリア（小計)
            03  WRK-SSEIKYUX	PIC ZZZ,ZZ9.
            03  WRK-SSKJRYOGAKX  PIC ZZ,ZZZ.
@@ -164,6 +199,11 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  WRK-KOUZA-TBL  OCCURS  5.
+               05  WRK-KOUZA-DATA    PIC  X(20).
+           03  WRK-SKJFTN            PIC  9(09).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
        01  SYS-AREA.
            03  SYS-YMD.
@@ -183,6 +223,24 @@
            03  TBL-PARA-OCC    OCCURS  100.
                05  TBL-PARA-HKNJANUM    PIC X(08).
                05  TBL-PARA-PTID        PIC 9(10).
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    合計エリア
+       01  SUM-AREA.
+           03  SUM-TENSU                  PIC  9(09).
+           03  SUM-KAISU                  PIC  9(03).
+           03  SUM-ITBFTN                 PIC  9(09).
+           03  SUM-SKJFTN                 PIC  9(09).
+           03  SUM-BIKO                   PIC  9(09).
+      *    キーエリア
+       01  KEY-AREA.
+           03  KEY-NEW.
+               05  KEY-N-NYUGAIKBN        PIC  9(01).
+               05  KEY-N-SRYYM            PIC  9(06).
+           03  KEY-OLD.
+               05  KEY-O-NYUGAIKBN        PIC  9(01).
+               05  KEY-O-SRYYM            PIC  9(06).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
@@ -249,6 +307,11 @@
       *    共通パラメタ
            COPY  "MCPAREA".
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
       *   日付変換サブ
            COPY    "CPORCSDAY.INC".
            COPY    "CPORCSLNK.INC".      
@@ -289,6 +352,10 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.03) LINE ADD START ------------------------------------
+           INITIALIZE  SUM-AREA
+           INITIALIZE  KEY-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -412,6 +479,10 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+           PERFORM  110-INI-FILE-SEC
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -420,7 +491,42 @@
            .
        100-INIT-EXT.
            EXIT.
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    優先保険者番号INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
       *
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/KOUZA.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+      *
+           INITIALIZE   KOUZA-REC
+      *
+           OPEN  INPUT  KOUZA-FILE
+      *
+           READ KOUZA-FILE
+             AT END
+               INITIALIZE        KOUZA-DATA
+           END-READ
+      *
+           IF  KOUZA-DATA(1:1)  =  "1"
+               PERFORM  VARYING  IDX  FROM  1  BY  1
+                        UNTIL    IDX  >     5
+                   READ  KOUZA-FILE
+                   MOVE  KOUZA-DATA  TO  WRK-KOUZA-DATA (IDX)
+               END-PERFORM
+           END-IF
+      *
+           CLOSE KOUZA-FILE
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    パラメタ編集処理
       *****************************************************************
@@ -591,7 +697,10 @@
            MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE  RECE02-YKZFTNINF   (IDY)  TO  MF100-YKZFTNINF
-           MOVE  RECE02-FTNMONEYINF (IDY)  TO  MF100-FTNMONEYINF
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE  RECE02-FTNMONEYINF (IDY)  TO  MF100-FTNMONEYINF
+           MOVE  RECE02-SHOKUJIINF  (1)    TO  MF100-SHOKUJIINF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    請求金額集計
            MOVE    MF100-KOHNUM    TO    WRK-KOHNUM
@@ -650,12 +759,25 @@
       *
            PERFORM  UNTIL     FLG-PRINT   =  1
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+               IF  MF100-NYUGAIKBN  =  1
       *    帳票編集<見出し>処理
-               PERFORM  310-HEAD-HEN-SEC
+                   PERFORM  311-HEAD-HEN-SEC
       *    帳票編集<明細>処理
-               PERFORM  320-BODY-HEN-SEC
+                   PERFORM  321-BODY-HEN-SEC
       *    帳票印刷処理
-               PERFORM  330-PRINT-OUT-SEC
+                   PERFORM  331-PRINT-OUT-SEC
+               ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *    帳票編集<見出し>処理
+                   PERFORM  310-HEAD-HEN-SEC
+      *    帳票編集<明細>処理
+                   PERFORM  320-BODY-HEN-SEC
+      *    帳票印刷処理
+                   PERFORM  330-PRINT-OUT-SEC
+      *---(01.00.03) LINE ADD START ------------------------------------
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            END-PERFORM
       *
@@ -664,6 +786,186 @@
            .
        2002-PRINT-EXT.
            EXIT.
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理
+      *****************************************************************
+       311-HEAD-HEN-SEC          SECTION.
+      *
+           MOVE  ZERO  TO  CNT-LINE
+           ADD   1     TO  CNT-PAGE
+           MOVE  KEY-NEW  TO  KEY-OLD
+      *
+           INITIALIZE  SC04
+      *
+      *    診療年月
+           MOVE  MF100-SRYYM           TO  WRK-SYMD (1:6)
+           MOVE  "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE  WRK-HENYMDG(1:16)     TO  SC04-PRTYM
+      *
+      *    住所
+           MOVE  WRK-HOSPADRS          TO  SC04-ADRS
+      *
+      *    医療機関名
+           MOVE  WRK-HOSPNAME          TO  SC04-HOSPNAME
+      *
+      *    電話番号
+           MOVE  SYS-1002-TEL          TO  SC04-TEL
+      *
+      *    管理者名
+           MOVE  SYS-1001-KAISETUNAME  TO  SC04-KAISETUNAME
+      *
+           .
+       311-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<明細行>処理
+      *****************************************************************
+       321-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM  UNTIL  FLG-PRINT    =  1
+                    OR     CNT-LINE     =  10
+                    OR     KEY-NEW  NOT =  KEY-OLD
+      *
+             ADD  1  TO  CNT-LINE
+      *
+      *    氏名
+             MOVE  MF100-NAME        TO  SC04-NAME (CNT-LINE)
+      *    受給資格証記号番号（受給者番号）
+             MOVE  MF100-KOHJKYSNUM  TO  SC04-JKYSNUM (CNT-LINE)
+      *    保険区分
+             IF  MF100-HKNNUM = "060" OR "067"
+               MOVE  "  "  TO  SC04-SYAHO  (CNT-LINE)
+               MOVE  "○"  TO  SC04-KOKUHO (CNT-LINE)
+             ELSE
+               MOVE  "○"  TO  SC04-SYAHO  (CNT-LINE)
+               MOVE  "  "  TO  SC04-KOKUHO (CNT-LINE)
+             END-IF
+      *    点数
+             MOVE  MF100-TOTALTEN  TO  WRK-Z7
+             MOVE  WRK-Z7          TO  SC04-TENSU (CNT-LINE)
+      *    個人負担割合
+             MOVE  "  "  TO  SC04-FTN1 (CNT-LINE)
+             MOVE  "  "  TO  SC04-FTN2 (CNT-LINE)
+             MOVE  "  "  TO  SC04-FTN3 (CNT-LINE)
+             EVALUATE  MF100-KYURATE
+                 WHEN  "010"
+                     MOVE  "○"  TO  SC04-FTN1 (CNT-LINE)
+                 WHEN  "020"
+                     MOVE  "○"  TO  SC04-FTN2 (CNT-LINE)
+                 WHEN  "030"
+                     MOVE  "○"  TO  SC04-FTN3 (CNT-LINE)
+             END-EVALUATE
+      *    入院日数
+             MOVE  MF100-JNISSU          TO  WRK-Z3
+             MOVE  WRK-Z3                TO  SC04-NISSU (CNT-LINE)
+      *    負担金
+             MOVE  MF100-FTNMONEY        TO  WRK-Z6
+             MOVE  WRK-Z6                TO  SC04-ITBFTN (CNT-LINE)
+      *    標準負担額
+             MOVE  MF100-SHOKUJIFTN      TO  WRK-Z7
+             MOVE  WRK-Z7                TO  SC04-SKJFTN (CNT-LINE)
+      *
+             COMPUTE  WRK-SKJFTN  =  MF100-SHOKUJIFTN
+                                  /  MF100-SHOKUJINISSU
+             MOVE  WRK-SKJFTN            TO  WRK-Z3
+             MOVE  WRK-Z3                TO  SC04-SKJFTNGK (CNT-LINE)
+      *
+             MOVE  MF100-SHOKUJINISSU    TO  WRK-Z2
+             MOVE  WRK-Z2                TO  SC04-SKJKAISU (CNT-LINE)
+      *
+      *    備考欄
+             IF    MF100-HEIYOU   =  1
+               MOVE    MF100-SEIKYUGK    TO    WRK-SSEIKYUX
+               MOVE    WRK-SSEIKYUX      TO    SC04-BIKO(CNT-LINE)
+             END-IF
+      *
+      *    合計加算
+             ADD  MF100-TOTALTEN         TO  SUM-TENSU
+             ADD  MF100-JNISSU           TO  SUM-KAISU
+             ADD  MF100-FTNMONEY         TO  SUM-ITBFTN
+             ADD  MF100-SHOKUJIFTN       TO  SUM-SKJFTN
+             IF    MF100-HEIYOU   =  1
+               ADD  MF100-SEIKYUGK       TO  SUM-BIKO
+             END-IF
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+      *    合計印字
+           IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+             MOVE  SUM-TENSU               TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SC04-GTENSU
+      *
+             MOVE  SUM-KAISU               TO  WRK-Z3
+             MOVE  WRK-Z3                  TO  SC04-GKAISU
+      *
+             MOVE  SUM-ITBFTN              TO  WRK-Z7
+             MOVE  WRK-Z7                  TO  SC04-GITBFTN
+      *
+             MOVE  SUM-SKJFTN              TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SC04-GSKJFTN
+      *
+             MOVE  SUM-BIKO                TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SC04-GBIKO
+      *
+             INITIALIZE                        SUM-AREA
+           END-IF
+      *    口座情報印字
+           MOVE  WRK-KOUZA-DATA (1)        TO  SC04-BANKNAME
+           MOVE  WRK-KOUZA-DATA (2)        TO  SC04-SITEN
+           MOVE  WRK-KOUZA-DATA (3)        TO  SC04-SITENCD
+           MOVE  WRK-KOUZA-DATA (4)        TO  SC04-KOUZANUM
+           MOVE  WRK-KOUZA-DATA (5)        TO  SC04-MEIGI
+      *
+           .
+       321-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理
+      *****************************************************************
+       331-PRINT-OUT-SEC                SECTION.
+      *
+      *
+           INITIALIZE                  ORCSPRTAREA
+      *
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SC1204.red"         TO  SPRT-PRTID
+           MOVE    "母子(父)家庭医療費総括表"
+                                       TO  SPRT-TITLE
+           MOVE    SC04                TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       331-PRINT-OUT-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    帳票編集<ヘッダー部>処理
@@ -673,11 +975,20 @@
       *
            MOVE  ZERO  TO  CNT-LINE
            ADD   1     TO  CNT-PAGE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           MOVE  KEY-NEW  TO  KEY-OLD
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            INITIALIZE  SC03
       *
       *    印刷日付
-           MOVE  WRK-DENPPRTYMWH(1:16)  TO  SC03-PRTYM
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE  WRK-DENPPRTYMWH(1:16)  TO  SC03-PRTYM
+           MOVE  MF100-SRYYM        TO  WRK-SYMD (1:6)
+           MOVE  "01"               TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE  WRK-HENYMDG(1:16)  TO  SC03-PRTYM
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *---(01.00.02) LINE ADD START ------------------------------------
       *    住所
@@ -691,6 +1002,11 @@
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC03-HOSPNAME
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *
+      *    電話番号
+           MOVE  SYS-1002-TEL   TO  SC03-TEL
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    管理者名
            MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
@@ -708,6 +1024,9 @@
       *
            PERFORM  UNTIL  FLG-PRINT  =  1
                     OR  CNT-LINE    =  10
+      *---(01.00.03) LINE ADD START ------------------------------------
+                    OR  KEY-NEW  NOT =  KEY-OLD
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
              ADD  1  TO  CNT-LINE
       *
@@ -724,11 +1043,12 @@
                MOVE  "  "  TO  SC03-KOKUHO (CNT-LINE)
              END-IF
       *    点数
-             MOVE  MF100-TOTALTEN  TO  WRK-TENSUX
-             MOVE  WRK-TENSUX      TO  SC03-TENSU (CNT-LINE)
-             DISPLAY "MF100-TOTALTEN=" MF100-TOTALTEN
-             DISPLAY "WRK-TENSUX=" WRK-TENSUX
-             DISPLAY "SC03-TENSU (CNT-LINE)=" SC03-TENSU (CNT-LINE)
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *       MOVE  MF100-TOTALTEN  TO  WRK-TENSUX
+      *       MOVE  WRK-TENSUX      TO  SC03-TENSU (CNT-LINE)
+             MOVE  MF100-TOTALTEN  TO  WRK-Z7
+             MOVE  WRK-Z7          TO  SC03-TENSU (CNT-LINE)
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    個人負担割合
              MOVE  "  "  TO  SC03-FTN1 (CNT-LINE)
              MOVE  "  "  TO  SC03-FTN2 (CNT-LINE)
@@ -741,9 +1061,17 @@
                  WHEN  "030"
                      MOVE  "○"  TO  SC03-FTN3 (CNT-LINE)
              END-EVALUATE
+      *---(01.00.03) LINE ADD START ------------------------------------
       *    薬剤負担金
-            MOVE  MF100-YKZFTN  TO  WRK-YKZFTNX
-            MOVE  WRK-YKZFTNX   TO  SC03-YKZFTN (CNT-LINE)
+      *      MOVE  MF100-YKZFTN  TO  WRK-YKZFTNX
+      *      MOVE  WRK-YKZFTNX   TO  SC03-YKZFTN (CNT-LINE)
+      *    通院回数
+             MOVE  MF100-KAISU   TO  WRK-Z3
+             MOVE  WRK-Z3        TO  SC03-KAISU (CNT-LINE)
+      *    負担金
+             MOVE  MF100-FTNMONEY  TO  WRK-Z6
+             MOVE  WRK-Z6          TO  SC03-ITBFTN (CNT-LINE)
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    備考欄
             IF    MF100-HEIYOU   =  1
@@ -751,8 +1079,42 @@
               MOVE    WRK-SSEIKYUX       TO    SC03-BIKO(CNT-LINE)
             END-IF
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    合計加算
+             ADD  MF100-TOTALTEN         TO  SUM-TENSU
+             ADD  MF100-KAISU            TO  SUM-KAISU
+             ADD  MF100-FTNMONEY         TO  SUM-ITBFTN
+             IF    MF100-HEIYOU   =  1
+               ADD  MF100-SEIKYUGK       TO  SUM-BIKO
+             END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
              PERFORM  900-TMP-READ-SEC
            END-PERFORM
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    合計印字
+           IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+             MOVE  SUM-TENSU               TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SC03-GTENSU
+      *
+             MOVE  SUM-KAISU               TO  WRK-Z3
+             MOVE  WRK-Z3                  TO  SC03-GKAISU
+      *
+             MOVE  SUM-ITBFTN              TO  WRK-Z7
+             MOVE  WRK-Z7                  TO  SC03-GITBFTN
+      *
+             MOVE  SUM-BIKO                TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SC03-GBIKO
+      *
+             INITIALIZE                        SUM-AREA
+           END-IF
+      *    口座情報印字
+           MOVE  WRK-KOUZA-DATA (1)        TO  SC03-BANKNAME
+           MOVE  WRK-KOUZA-DATA (2)        TO  SC03-SITEN
+           MOVE  WRK-KOUZA-DATA (3)        TO  SC03-SITENCD
+           MOVE  WRK-KOUZA-DATA (4)        TO  SC03-KOUZANUM
+           MOVE  WRK-KOUZA-DATA (5)        TO  SC03-MEIGI
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            .
        320-BODY-HEN-EXT.
@@ -867,6 +1229,12 @@
              END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *      受給者資格負担金
+             IF  SYU-KOH-HKNNUM (IDX)  =  WRK-KOHNUM
+               ADD  SYU-KOH-COMPFTN (IDX)  TO  MF100-FTNMONEY
+             END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-PERFORM
       *
            IF    FLG-HEIYOU    =    ZERO
@@ -887,7 +1255,10 @@
            END-IF
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
-      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    通院回数
+           ADD  1  TO  MF100-KAISU
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            .
        800-SEIKYU-SEC-EXT.
@@ -1130,6 +1501,10 @@
                    MOVE  1         TO  FLG-PRINT
                NOT  AT  END
                  ADD   1           TO  CNT-MF100
+      *---(01.00.03) LINE ADD START ------------------------------------
+                 MOVE  MF100-NYUGAIKBN  TO  KEY-N-NYUGAIKBN
+                 MOVE  MF100-SRYYM      TO  KEY-N-SRYYM
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-READ
            .
        900-TMP-READ-EXT.
@@ -1211,9 +1586,11 @@
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF
       *
-                   IF  RECE02-NYUGAIKBN = "1"
-                       GO  TO  900-KOHSKY-READ-SEC
-                   END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             IF  RECE02-NYUGAIKBN = "1"
+      *                 GO  TO  900-KOHSKY-READ-SEC
+      *             END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *        個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR

@@ -26,13 +26,15 @@
            03  MF100-KEY.
       *医療機関ＩＤ
       *         05  MF100-HOSPID          PIC  X(24).
-               05  MF100-HOSPNUM         PIC  9(02).
+               05  MF100-HOSPNUM         PIC  X(02).
+      *入外区分
+               05  MF100-NYUGAIKBN       PIC  X(01).
+      *診療年月
+               05  MF100-SRYYM           PIC  X(06).
       *点数表区分
                05  MF100-TENHYOKBN       PIC  X(01).
       *受給者番号
                05  MF100-JKYSNUM         PIC  X(20).
-      *診療年月
-               05  MF100-SRYYM           PIC  X(06).
       *公費−負担者番号
                05  MF100-FTNJANUM        PIC  X(08).
       *患者番号
@@ -43,8 +45,6 @@
                05  MF100-TEKSTYMD        PIC  X(08). 
       *診療科
                05  MF100-SRYKA           PIC  X(02).
-      *入外区分
-               05  MF100-NYUGAIKBN       PIC  X(01).
       *患者ＩＤ
            03  MF100-PTID                PIC  9(10).
       *漢字氏名
@@ -121,6 +121,8 @@
            03  MF100-ETCFTNMONEYINF.
                05  MF100-ETCFTNSU        PIC  9(03).
                05  MF100-ETCFTNMONEY     PIC  9(09).
+      *通院回数
+           03  MF100-KAISU               PIC  9(03).
       *食事療養費情報
            03  MF100-SHOKUJIINF.
       *食事日数
