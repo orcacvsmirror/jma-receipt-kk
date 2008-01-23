@@ -32,12 +32,20 @@
       *  01.00.03    内田     07/08/22    日レセver4.0対応
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
+      *  01.00.04    内田     08/01/22    主科対応でファイル管理の為再作成
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
+      *
+      *    請求書一時ファイル  
+           SELECT  SKT1200TMP-FILE ASSIGN    SKT1200TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT1200TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT1200.
       *
 006900*    請求ＤＢ更新用ファイル
            SELECT  UPD-FILE        ASSIGN  RECEUPD
@@ -50,6 +58,10 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *    請求書一時ファイル
+       FD  SKT1200TMP-FILE.
+           COPY    "CPSKT1200TMP.INC".
+      *
 006900*    請求ＤＢ更新用ファイル
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
@@ -61,6 +73,11 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *    請求書一時ファイル 名称領域 
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT1200TP//.
       *
       *    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -93,6 +110,7 @@
       *    フラグ領域
        01  FLG-AREA.
            03  FLG-END             PIC 9(01).
+           03  FLG-SKT1200TMP      PIC 9(01).
            03  FLG-RECE10          PIC 9(01).
            03  FLG-SYSKANRI        PIC 9(01).
            03  FLG-UPD             PIC 9(01).
@@ -170,13 +188,13 @@
            03  CNT-UPDFILE           PIC 9(06).
       *
       *    集計エリア
-       01  SUM-AREA.
-           03  SUM-SEIKYU-TBL  OCCURS 3.
-               05  SUM-KENSU         PIC 9(06).
-               05  SUM-TENSU         PIC 9(10).
-               05  SUM-SKENSU        PIC 9(06).
-               05  SUM-SKINGK        PIC 9(10).
-               05  SUM-SFTNGK        PIC 9(10).
+      * 01  SUM-AREA.
+      *     03  SUM-SEIKYU-TBL  OCCURS 3.
+      *         05  SUM-KENSU         PIC 9(06).
+      *         05  SUM-TENSU         PIC 9(10).
+      *         05  SUM-SKENSU        PIC 9(06).
+      *         05  SUM-SKINGK        PIC 9(10).
+      *         05  SUM-SFTNGK        PIC 9(10).
       *
            COPY    "CPSHELLTBL.INC".
       *     
@@ -199,6 +217,12 @@
       *
       *    医療機関情報−所在地、連絡先 
            COPY    "CPSK1002.INC".
+      *
+      *    診療科目情報
+           COPY    "CPSK1005.INC".
+      *
+      *    主科設定情報
+           COPY    "CPSK2009.INC".
       *
       *---(01.00.03) LINE ADD START ------------------------------------
       *    医療機関編集情報
@@ -273,7 +297,6 @@
            INITIALIZE                   STS-AREA
            INITIALIZE                   WRK-AREA
            INITIALIZE                   CNT-AREA
-           INITIALIZE                   SUM-AREA
            INITIALIZE                   IDX-AREA
       *
            ACCEPT     SYS-TIME          FROM    TIME     
@@ -330,6 +353,10 @@
       *---(01.00.03) LINE ADD START ------------------------------------
                                    SPA-AREA
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+           MOVE    "SKT1200TP"         TO  SKT1200TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT1200TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT1200TP-HOSPNUM
       *
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
@@ -422,6 +449,22 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *    主科設定情報
+           INITIALIZE                  SYS-2009-REC
+           MOVE    "2009"              TO  SYS-2009-KANRICD
+           MOVE    "*"                 TO  SYS-2009-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2009-STYUKYMD(1:6)
+                                           SYS-2009-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2009-STYUKYMD(7:2)
+                                           SYS-2009-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2009-HOSPNUM
+           MOVE    SYS-2009-REC        TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2009-REC
+           END-IF
+      *
            OPEN     OUTPUT  UPD-FILE
       *  
       ****2006/01/18  onuki INS.
@@ -449,13 +492,17 @@
       *****************************************************************
        200-MAIN-SEC               SECTION.
       *
-           INITIALIZE             SUM-AREA
+           OPEN     OUTPUT  SKT1200TMP-FILE
+           CLOSE            SKT1200TMP-FILE
+           OPEN     I-O     SKT1200TMP-FILE
       *
            MOVE     ZERO    TO        FLG-END
+      *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
            CLOSE   UPD-FILE
+           CLOSE   SKT1200TMP-FILE
       *
            IF      CNT-RECE10  >   ZERO
                    PERFORM   2002-PRINT-SEC
@@ -511,8 +558,21 @@
       *****************************************************************
        2001-KOKUHO-SYUKEI-SEC               SECTION.
       *
+      *TMP-FILE キーセット
       *
-           PERFORM   220-HKN-SYUKEI-SEC
+           INITIALIZE       SKT1200TMP-REC
+      *
+      *    診療科
+           MOVE  RECE10-RECEKA         TO  SKT1200TMP-RECEKA
+      *
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           PERFORM  220-HKN-SYUKEI-SEC
+      *
+      *    全科合計（シス管の主科設定で科別としているなら）
+           IF  SYS-2009-SYUKA-KOKUHO  =  1
+             PERFORM  20011-GOKEI-SET-SEC
+           END-IF
       *
       *    集計の対象にならなかったとき                
            IF     FLG-UPD        =       1
@@ -551,41 +611,66 @@
            END-IF
       *
       *    件数
-           ADD     1                       TO  SUM-KENSU(IDX1)
-                                               SUM-KENSU(3)
+           ADD     1                       TO  SKT1200TMP-KENSU(IDX1)
+                                               SKT1200TMP-KENSU(3)
       *
       *    点数
-           ADD     RECE10-TOTALTEN(1)      TO  SUM-TENSU(IDX1)
-                                               SUM-TENSU(3)
+           ADD     RECE10-TOTALTEN(1)      TO  SKT1200TMP-TENSU(IDX1)
+                                               SKT1200TMP-TENSU(3)
       *
       *    食事療養
            IF      RECE10-SHOKUJINISSU(1)  NOT =   ZERO
       *
       *        件数
-               ADD     1                   TO  SUM-SKENSU(IDX1)
-                                               SUM-SKENSU(3)
+               ADD     1                   TO  SKT1200TMP-SKENSU(IDX1)
+                                               SKT1200TMP-SKENSU(3)
       *---(01.00.02) LINE ADD START ------------------------------------
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    金額
            ADD     RECE10-SHOKUJIRYOYOHI(1)
-                                           TO  SUM-SKINGK(IDX1)
-                                               SUM-SKINGK(3)
+                                           TO  SKT1200TMP-SKINGK(IDX1)
+                                               SKT1200TMP-SKINGK(3)
       *
       *    標準負担額
            ADD     RECE10-SHOKUJIFTN(1)
-                                           TO  SUM-SFTNGK(IDX1)
-                                               SUM-SFTNGK(3)
+                                           TO  SKT1200TMP-SFTNGK(IDX1)
+                                               SKT1200TMP-SFTNGK(3)
       *---(01.00.02) LINE ADD START ------------------------------------
       *     END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+           IF  FLG-SKT1200TMP  =  1
+               WRITE    SKT1200TMP-REC
+           ELSE
+               REWRITE  SKT1200TMP-REC
+           END-IF
       *
            MOVE    1               TO  FLG-UPD 
       *
            .
       *
        220-HKN-SYUKEI-EXT.
+           EXIT.
+      *****************************************************************
+      *    全科合計処理
+      *****************************************************************
+       20011-GOKEI-SET-SEC          SECTION.
+      *
+      *TMP-FILE キーセット
+      *
+           INITIALIZE       SKT1200TMP-REC
+      *
+      *    診療科
+           MOVE  "99"                    TO  SKT1200TMP-RECEKA
+      *
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           PERFORM  220-HKN-SYUKEI-SEC
+      *
+           .
+       20011-GOKEI-SET-EXT.
            EXIT.
       *****************************************************************
       *    請求ＤＢ更新用ファイル出力処理             
@@ -623,14 +708,27 @@
       *****************************************************************
        2002-PRINT-SEC                          SECTION.
       *
+           OPEN     INPUT       SKT1200TMP-FILE
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL  FLG-PRINT  =  1
+      *
       *    帳票編集<見出し>処理
-           PERFORM    310-HEAD-HEN-SEC
+             PERFORM    310-HEAD-HEN-SEC
       *
       *    帳票編集<保険明細>処理
-           PERFORM    320-BODY-HEN-SEC
+             PERFORM    320-BODY-HEN-SEC
       *
       *    帳票印刷処理
-           PERFORM    330-PRINT-OUT-SEC
+             PERFORM    330-PRINT-OUT-SEC
+      *
+      *    一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           CLOSE    SKT1200TMP-FILE
       *
            .
       *
@@ -668,6 +766,27 @@
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT1200-TEL
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *    診療科
+           INITIALIZE                  SYS-1005-REC
+           IF  (SKT1200TMP-RECEKA  NOT =  ZERO)
+           AND (SKT1200TMP-RECEKA  NOT =  "99")
+      *    診療科目情報取得
+             INITIALIZE                SYS-1005-REC
+             MOVE    "1005"            TO  SYS-1005-KANRICD
+             MOVE    SKT1200TMP-RECEKA TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-1005-STYUKYMD(1:6)
+                                           SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"              TO  SYS-1005-STYUKYMD(7:2)
+                                           SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM       TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC      TO  MCPDATA-REC
+             PERFORM 900-SYSKANRI-INV-SEC
+             IF      FLG-SYSKANRI      =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME1 TO  SKT1200-RECEKA
+             END-IF
+           END-IF
       *
            .
       *
@@ -682,23 +801,23 @@
                    UNTIL   IDX1    >       3
       *
       *        件数
-               MOVE    SUM-KENSU(IDX1)         TO  WRK-Z6
+               MOVE    SKT1200TMP-KENSU(IDX1)     TO  WRK-Z6
                MOVE    WRK-Z6      TO  SKT1200-KENSU(IDX1)
       *
       *        点数
-               MOVE    SUM-TENSU(IDX1)         TO  WRK-Z10
+               MOVE    SKT1200TMP-TENSU(IDX1)     TO  WRK-Z10
                MOVE    WRK-Z10     TO  SKT1200-TENSU(IDX1)
       *
       *        食事件数
-               MOVE    SUM-SKENSU(IDX1)         TO  WRK-Z6
+               MOVE    SKT1200TMP-SKENSU(IDX1)    TO  WRK-Z6
                MOVE    WRK-Z6     TO  SKT1200-SKENSU(IDX1)
       *
       *        食事金額
-               MOVE    SUM-SKINGK(IDX1)         TO  WRK-Z10
+               MOVE    SKT1200TMP-SKINGK(IDX1)    TO  WRK-Z10
                MOVE    WRK-Z10     TO  SKT1200-SKINGK(IDX1)
       *
       *        食事標準負担額
-               MOVE    SUM-SFTNGK(IDX1)         TO  WRK-Z9
+               MOVE    SKT1200TMP-SFTNGK(IDX1)    TO  WRK-Z9
                MOVE    WRK-Z9      TO  SKT1200-SFTNGK(IDX1)
       *
            END-PERFORM
@@ -1146,6 +1265,34 @@
            .
       *
        900-SEIKYU-INV-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       900-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT1200TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT1200TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT1200TMP
+           END-READ
+           .
+       900-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT1200TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
            EXIT.
       *****************************************************************
       *    請求管理ＤＢ更新用ファイル読込

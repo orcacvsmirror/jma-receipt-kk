@@ -24,6 +24,7 @@
             03  SKT1220-KAISETUNAME                  PIC X(40).
             03  SKT1220-HKNJANUM                     PIC X(12).
             03  SKT1220-HOSPCD                       PIC X(14).
+            03  SKT1220-RECEKA                       PIC X(20).
             03  SKT1220-KYURATE-TBL                OCCURS  3 TIMES.
               05  SKT1220-KYURATE                    PIC X(02).
             03  SKT1220-ZAI1                         PIC X(02).

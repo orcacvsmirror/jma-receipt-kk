@@ -33,6 +33,7 @@
       *  01.00.04    内田    07/08/27    Ver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.05    内田    08/01/22    主科対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -102,7 +103,7 @@
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
            COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+                                    BY         //RECEERR".
       *---(01.00.04) LINE ADD END   ------------------------------------
       *     
       *    シェル用領域
@@ -304,6 +305,14 @@
       *
       *    医療機関情報−所在地、連絡先 
            COPY    "CPSK1002.INC".
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    診療科目情報
+           COPY    "CPSK1005.INC".
+      *
+      *    主科設定情報
+           COPY    "CPSK2009.INC".
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *    医療機関編集情報
@@ -532,6 +541,24 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    主科設定情報
+           INITIALIZE                  SYS-2009-REC
+           MOVE    "2009"              TO  SYS-2009-KANRICD
+           MOVE    "*"                 TO  SYS-2009-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2009-STYUKYMD(1:6)
+                                           SYS-2009-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2009-STYUKYMD(7:2)
+                                           SYS-2009-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2009-HOSPNUM
+           MOVE    SYS-2009-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2009-REC
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
            PERFORM  110-INI-FILE-SEC
       *
            OPEN    OUTPUT  UPD-FILE
@@ -706,12 +733,24 @@
              END-IF
            END-IF
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    診療科
+           MOVE    RECE10-RECEKA         TO  SKT1210TMP-RECEKA
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    全科合計（シス管の主科設定で科別としているなら）
+           IF  SYS-2009-SYUKA-KOKUHO  =  1
+             PERFORM  20011-GOKEI-SET-SEC
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -1012,6 +1051,77 @@
            .
        220-RKOH-SYUKEI-EXT.
            EXIT.
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    全科合計処理
+      *****************************************************************
+       20011-GOKEI-SET-SEC          SECTION.
+      *
+      *TMP-FILE キーセット
+      *
+           INITIALIZE       SKT1210TMP-REC
+           INITIALIZE       SKT1210TMP-HKNJANUM
+      *
+           IF  RECE10-HKNJANUM(7:2)  =  SPACE
+             MOVE  RECE10-HKNJANUM(1:6)  TO  SKT1210TMP-HKNJANUM(1:6)
+           ELSE
+             MOVE  RECE10-HKNJANUM(3:6)  TO  SKT1210TMP-HKNJANUM(1:6)
+           END-IF
+      *
+      *    千葉市の場合、代表番号セット
+           IF  SKT1210TMP-HKNJANUM (1:3) = "124"
+             MOVE  "124008"  TO  SKT1210TMP-HKNJANUM
+           END-IF
+      *
+      *    入外区分
+           MOVE  RECE10-NYUGAIKBN  TO  SKT1210TMP-NYUGAIKBN
+      *
+      *    給付割合別（老人、高齢者、３歳未満でなく本人で７割以外）
+           IF  RECE10-RJNHKNNUM  =  SPACE
+             IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+               IF  RECE10-HONKZKKBN  =  "1"
+                 IF  RECE10-KYURATE  NOT =  7
+                   IF  SKT1210TMP-HKNJANUM(3:1)  =  "3"
+                     IF  RECE10-KYURATE  =  0
+                       MOVE  10                TO  SKT1210TMP-KYURATE
+                     ELSE
+                       MOVE  RECE10-KYURATE    TO  SKT1210TMP-KYURATE
+                     END-IF
+                   END-IF
+                 END-IF
+               END-IF
+             END-IF
+           END-IF
+      *
+      *    県外保険者→県内扱い全国組合国保→県内保険者→自市町村
+           IF    YUSEN-HKNJANUM     =    SKT1210TMP-HKNJANUM
+             MOVE        9          TO   SKT1210TMP-SYUTURYOKU
+           ELSE
+             IF    RECE10-PREFKBN   =    "1"
+               IF    SKT1210TMP-HKNJANUM(1:2) =  "12"
+                 MOVE    3          TO   SKT1210TMP-SYUTURYOKU
+               ELSE
+                 MOVE    2          TO   SKT1210TMP-SYUTURYOKU
+               END-IF
+             ELSE
+               MOVE      1          TO   SKT1210TMP-SYUTURYOKU
+             END-IF
+           END-IF
+      *
+      *    在宅・在医総
+           MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
+      *
+      *    診療科
+           MOVE  "99"                    TO  SKT1210TMP-RECEKA
+      *
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           PERFORM  210-HKN-SYUKEI-SEC
+      *
+           .
+       20011-GOKEI-SET-EXT.
+           EXIT.
+      *---(01.00.05) LINE ADD END   ------------------------------------
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -1114,13 +1224,36 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT        TO  SKT1210-HOSPCD
       *
-      *
       *    給付割合
            EVALUATE  SKT1210TMP-KYURATE
              WHEN   8    MOVE  "○"  TO  SKT1210-KYURATE (1)
              WHEN   9    MOVE  "○"  TO  SKT1210-KYURATE (2)
              WHEN  10    MOVE  "○"  TO  SKT1210-KYURATE (3)
            END-EVALUATE
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    診療科
+           INITIALIZE                  SYS-1005-REC
+           IF  (SKT1210TMP-RECEKA  NOT =  ZERO)
+           AND (SKT1210TMP-RECEKA  NOT =  "99")
+      *    診療科目情報取得
+             INITIALIZE                  SYS-1005-REC
+             MOVE    "1005"              TO  SYS-1005-KANRICD
+             MOVE    SKT1210TMP-RECEKA   TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                         TO  SYS-1005-STYUKYMD(1:6)
+                                             SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"                TO  SYS-1005-STYUKYMD(7:2)
+                                             SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM         TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC        TO  MCPDATA-REC
+             PERFORM 910-SYSKANRI-INV-SEC
+             IF      FLG-SYSKANRI        =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME1 TO  SKT1210-RECEKA
+             END-IF
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ページ番号
            MOVE    CNT-PAGE              TO  WRK-Z4
@@ -1433,7 +1566,6 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT        TO  SKT1220-HOSPCD
       *
-      *
       *    給付割合
            EVALUATE  SKT1210TMP-KYURATE
              WHEN   8    MOVE  "○"  TO  SKT1220-KYURATE (1)
@@ -1446,6 +1578,29 @@
              MOVE    "◯"                TO  SKT1220-ZAI2
            END-IF
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    診療科
+           INITIALIZE                  SYS-1005-REC
+           IF  (SKT1210TMP-RECEKA  NOT =  ZERO)
+           AND (SKT1210TMP-RECEKA  NOT =  "99")
+      *    診療科目情報取得
+             INITIALIZE                  SYS-1005-REC
+             MOVE    "1005"              TO  SYS-1005-KANRICD
+             MOVE    SKT1210TMP-RECEKA   TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                         TO  SYS-1005-STYUKYMD(1:6)
+                                             SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"                TO  SYS-1005-STYUKYMD(7:2)
+                                             SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM         TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC        TO  MCPDATA-REC
+             PERFORM 910-SYSKANRI-INV-SEC
+             IF      FLG-SYSKANRI        =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME1 TO  SKT1220-RECEKA
+             END-IF
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ページ番号
            MOVE    CNT-PAGE              TO  WRK-Z4

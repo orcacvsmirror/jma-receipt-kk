@@ -27,6 +27,9 @@
                05  SKT1210TMP-HKNJANUM             PIC  X(06).
                05  SKT1210TMP-NYUGAIKBN            PIC  9(01).
                05  SKT1210TMP-KYURATE              PIC  9(03).
+      ***** 08/01/09 ADD
+               05  SKT1210TMP-RECEKA               PIC  X(02).
+      ***** 08/01/09 ADD
                05  SKT1210TMP-ZAITAKU              PIC  X(01).
            03  SKT1210TMP-SEIKYU-TBL     OCCURS  11.
                05  SKT1210TMP-KENSU                PIC  9(06).

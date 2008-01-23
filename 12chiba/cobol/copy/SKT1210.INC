@@ -32,6 +32,8 @@
            03  SKT1210-HKNJANUM             PIC  X(12).
       *    ∞ÂŒ≈µ°¥ÿ•≥°º•…
            03  SKT1210-HOSPCD               PIC  X(14).
+      *    ø«Œ≈≤ 
+           03  SKT1210-RECEKA               PIC  X(20).
       *    µÎ…’≥‰πÁ
            03  SKT1210-KYURATE-TBL  OCCURS  3.
                05  SKT1210-KYURATE          PIC  X(02).
