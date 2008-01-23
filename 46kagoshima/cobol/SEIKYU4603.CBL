@@ -30,6 +30,7 @@
       * Maj/Min/Rev	修正者	日付		内容
       *  01.00.01    内田    07/09/14    日レセver4.0対応
       *                                  Ver4.0からのファイル保存対応
+      *  01.00.02    内田    08/01/09    csvファイル名の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -174,7 +175,7 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH            PIC X(50).
-           03  WRK-FILENAME        PIC X(20).
+           03  WRK-FILENAME        PIC X(40).
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -1264,14 +1265,24 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *     MOVE    "kagoshima_nyu.CSV"
       *                             TO  SFILESV-TO-DATA  (1)
-           STRING  SYS-1001-HOSPCD     DELIMITED  BY  SIZE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     STRING  SYS-1001-HOSPCD     DELIMITED  BY  SIZE
+      *             "-1-"               DELIMITED  BY  SIZE
+      *             LNK-PRTKANRI-SRYYM  DELIMITED  BY  SIZE
+      *             ".CSV"              DELIMITED  BY  SIZE
+      *             INTO                WRK-FILENAME
+      *     END-STRING
+           STRING  SYS-1001-PREFNUM    DELIMITED  BY  SIZE
+                   SYS-1001-TENHYOKBN  DELIMITED  BY  SIZE
+                   SYS-1001-HOSPCD     DELIMITED  BY  SIZE
                    "-1-"               DELIMITED  BY  SIZE
                    LNK-PRTKANRI-SRYYM  DELIMITED  BY  SIZE
                    ".CSV"              DELIMITED  BY  SIZE
                    INTO                WRK-FILENAME
            END-STRING
+      *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE    WRK-FILENAME    TO  SFILESV-TO-DATA  (1)
-      *---(01.00.01) LINE ADD START ------------------------------------
+      *---(01.00.01) LINE ADD END   ------------------------------------
            MOVE    CNT-OUT         TO  SFILESV-CNT-ALL  (1)
            MOVE    "乳幼児ＣＳＶ"  TO  SFILESV-TITLE    (1)
            IF      CNT-OUT         >   ZERO
