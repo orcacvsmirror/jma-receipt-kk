@@ -26,6 +26,7 @@
                05  SKT0810TMP-SYUTURYOKU            PIC  9(01).
                05  SKT0810TMP-HKNJANUM1             PIC  X(06).
                05  SKT0810TMP-KBN                   PIC  X(01).
+               05  SKT0810TMP-PREFKBN               PIC  X(01).
                05  SKT0810TMP-ZAITAKU               PIC  X(01).
            03  SKT0810TMP-HKN-AREA  OCCURS  11.
                05  SKT0810TMP-NYUGAI-TBL  OCCURS  2.

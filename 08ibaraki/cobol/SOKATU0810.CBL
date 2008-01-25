@@ -36,6 +36,8 @@
       *  01.00.06    内田   07/09/02    日レセver4.0対応
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
+      *  01.00.07    内田   08/01/23    ２７老人が県内の場合、
+      *                                 保険が県外でも県内として扱う
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -691,6 +693,23 @@
                MOVE    "2"       TO  SKT0810TMP-KBN
            END-IF
       *****
+      *---(01.00.07) LINE ADD START -----------------------------------
+      *    ２７老人が県内の場合は県内扱い
+           IF  RECE10-RJNHKNNUM  =  SPACE
+               IF    RECE10-PREFKBN  =  "1"
+                   MOVE    "1"      TO    SKT0810TMP-PREFKBN
+               ELSE
+                   MOVE    "2"      TO    SKT0810TMP-PREFKBN
+               END-IF
+           ELSE
+               PERFORM  940-PTKOHINF-READ-SEC
+               IF    PTKOH-FTNJANUM(3:2)   =   "08"
+                   MOVE    "1"      TO    SKT0810TMP-PREFKBN
+               ELSE
+                   MOVE    "2"      TO    SKT0810TMP-PREFKBN
+               END-IF
+           END-IF
+      *---(01.00.07) LINE ADD END   -----------------------------------
       *
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU      TO  SKT0810TMP-ZAITAKU
@@ -2354,6 +2373,59 @@
       *     EXIT.
       *
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START -----------------------------------
+      *****************************************************************
+      *    患者公費情報マスター読み込み
+      *****************************************************************
+       940-PTKOHINF-READ-SEC         SECTION.
+      *
+           INITIALIZE                     PTKOHINF-REC
+           MOVE  SPA-HOSPNUM          TO  PTKOH-HOSPNUM
+           MOVE  RECE10-PTID          TO  PTKOH-PTID
+           MOVE  RECE10-RJNHKNNUM     TO  PTKOH-KOHNUM
+           MOVE  RECE10-SRYYM         TO  PTKOH-TEKEDYMD(1:6)
+           MOVE  "00"                 TO  PTKOH-TEKEDYMD(7:2)
+           MOVE  RECE10-SRYYM         TO  PTKOH-TEKSTYMD(1:6)
+           MOVE  "99"                 TO  PTKOH-TEKSTYMD(7:2)
+      *
+           MOVE  PTKOHINF-REC         TO  MCPDATA-REC
+           MOVE  "DBSELECT"           TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"       TO  MCP-TABLE
+           MOVE  "key6"               TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE  "DBFETCH"            TO  MCP-FUNC
+               MOVE  "tbl_ptkohinf"       TO  MCP-TABLE
+               MOVE  "key6"               TO  MCP-PATHNAME
+               CALL  "ORCDBMAIN"          USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  PTKOHINF-REC
+                   MOVE    ZERO            TO  FLG-PTKOHINF
+               ELSE
+                   MOVE    1               TO  FLG-PTKOHINF
+               END-IF
+           ELSE
+              MOVE    1               TO  FLG-PTKOHINF
+          END-IF
+      *
+           MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"       TO  MCP-TABLE
+           MOVE  "key6"               TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       940-PTKOHINF-READ-EXT.
+           EXIT.
+      *---(01.00.07) LINE ADD END   -----------------------------------
       *****************************************************************
       *    全角変換処理 05/02/16 INS
       *****************************************************************
