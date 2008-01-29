@@ -57,14 +57,14 @@
              05  SC05-KOHFTN        PIC  X(06).
       *自己負担
          03  SC05-ITBFTN-TBL    OCCURS  20.
-             05  SC05-ITBFTN       PIC  X(03).
+             05  SC05-ITBFTN       PIC  X(05).
       *本人家族区分
          03  SC05-HONKZK-TBL    OCCURS 20.
              05  SC05-HONKZKKBN     PIC  X(01).
       *合計
          03  SC05-GOKEI-TBL.
       *合計件数
-             05  SC05-GKENSU        PIC  X(02).
+             05  SC05-GKENSU        PIC  X(03).
       *合計点数
              05  SC05-GTENSU        PIC  X(09).
       *合計公費分患者負担額
@@ -77,4 +77,4 @@
              05  SC05-TOKKI1 OCCURS 2 PIC X(02).
       *  長・公
          03  SC05-TOKKI2-TBL OCCURS 20.
-             05  SC05-TOKKI2 OCCURS 2 PIC X(02).
+             05  SC05-TOKKI2 OCCURS 2 PIC X(04).

@@ -88,14 +88,14 @@
              05  SC03-SMARU        PIC  X(02).
       *結核文字
          03  SC03-KMOJI-TBL    OCCURS  20.
-             05  SC03-KMOJI        PIC  X(02).
+             05  SC03-KMOJI        PIC  X(04).
       *結核○
          03  SC03-KMARU-TBL    OCCURS  20.
              05  SC03-KMARU        PIC  X(02).
       *合計
          03  SC03-GOKEI-TBL.
       *合計件数
-             05  SC03-GKENSU       PIC  X(02).
+             05  SC03-GKENSU       PIC  X(03).
       *合計点数
              05  SC03-GTENSU       PIC  X(09).
       *合計薬剤文字
