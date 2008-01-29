@@ -135,10 +135,14 @@
            03  MF100-KEKKAKUFLG          PIC  9(01).
       *Àº¿À
            03  MF100-SEISHINFLG          PIC  9(01).
+      *³Æ¸øÈñ
+           03  MF100-ETCKOHNUM           PIC  X(03).
       *¤½¤ÎÂ¾¸øÈñ
            03  MF100-ETCKOHFTN           PIC  9(09).
       *Ä¹´ü
            03  MF100-TYOKI               PIC  9(01).
       *ºßÂð
            03  MF100-ZAITAKU             PIC  X(01).
+      *ÆÃµ­»ö¹à¡Ö¸ø¡×
+           03  MF100-TOKKI               PIC  9(01).
 
