@@ -33,6 +33,7 @@
       *                                      システム管理マスタ「1901」の
       *                                      医療機関情報を参照
       *                                      給付割合が異なっても別帳票としない
+      *  01.00.03       内田     08/01/27    一般でも在総診は別帳票とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -135,6 +136,9 @@
            03  FLG-PRINT           PIC 9(01).
            03  FLG-KOH             PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  FLG-SRYACT          PIC 9(01).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -240,6 +244,18 @@
            03  CNT-IN              PIC 9(02).
            03  CNT-KOH             PIC 9(02).
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    固定値
+       01  CONST-AREA.
+      *    在宅総合・在宅末期（在医総）
+           03  CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+           03  CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+           03  CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+           03  CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+           03  CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+           03  CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
            COPY    "CPSHELLTBL.INC".
       *     
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -262,6 +278,12 @@
       *    保険番号
        01  HKNNUM-REC.
            COPY    "CPHKNNUM.INC".
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    診療行為
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    システム管理マスタ
            COPY    "CPSYSKANRI.INC".
@@ -672,6 +694,10 @@
       *    在宅
            MOVE   RECE10-ZAITAKU    TO   SKT2110TMP-ZAITAKU
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    在宅チェック
+           PERFORM  960-SRYACT-SET-SEC
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -1953,7 +1979,98 @@
            .
        955-HKNNUM-READ-EXT.
            EXIT.
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *  診療情報セット
+      *****************************************************************
+       960-SRYACT-SET-SEC  SECTION.
       *
+           INITIALIZE                     SRYACT-REC
+           MOVE  SPA-HOSPNUM          TO  SRY-HOSPNUM
+           MOVE  RECE10-NYUGAIKBN     TO  SRY-NYUGAIKBN
+           MOVE  RECE10-PTID          TO  SRY-PTID
+           MOVE  RECE10-SRYYM         TO  SRY-SRYYM
+           MOVE  SRYACT-REC           TO  MCPDATA-REC
+           MOVE  "DBSELECT"           TO  MCP-FUNC
+           MOVE  "tbl_sryact"         TO  MCP-TABLE
+           MOVE  "key4"               TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF  MCP-RC  =  ZERO
+               PERFORM  965-SRYACT-READ-SEC
+      *    在総診チェック
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  965-ZAISOU-CHK-SEC
+      *
+                 PERFORM  965-SRYACT-READ-SEC
+               END-PERFORM
+           ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE  "tbl_sryact"         TO  MCP-TABLE
+           MOVE  "key4"               TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       960-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       965-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"        TO  MCP-FUNC
+           MOVE  "tbl_sryact"     TO  MCP-TABLE
+           MOVE  "key4"           TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE  MCPDATA-REC  TO  SRYACT-REC
+               MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+               INITIALIZE             SRYACT-REC
+               MOVE  1            TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       965-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    在総診チェック
+      *****************************************************************
+       965-ZAISOU-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL   (IDX4  >     5) OR
+                            (SRY-SRYCD(IDX4)  =  SPACE)
+             IF  SRY-SRYKBN  =  "14"
+               IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
+                                       CONS-ZAITAKU2  OR
+                                       CONS-ZAITAKU3  OR
+                                       CONS-ZAITAKU4  OR
+                                       CONS-ZAITAKU5  OR
+                                       CONS-ZAITAKU6
+                 MOVE  1  TO  SKT2110TMP-ZAITAKU
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       965-ZAISOU-CHK-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    請求管理読込
       *****************************************************************
