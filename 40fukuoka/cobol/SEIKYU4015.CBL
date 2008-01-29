@@ -34,6 +34,7 @@
       *                                   医療機関情報を参照
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
+      *  01.00.03    内田     08/01/27    公費の負担者番号で市の判定をする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -159,6 +160,9 @@
            03  WRK-HKNJANUM          PIC X(05).
            03  WRK-HKNJANAME         PIC X(20).
            03  WRK-KYURATE           PIC 9(02).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  WRK-FTNJANUM2         PIC X(05).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
@@ -1348,9 +1352,23 @@
                    AND     PTINF-TSTPTNUMKBN   =   "1"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF   
+      *---(01.00.03) LINE ADD START ------------------------------------
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1  >  4
+                 IF  RECE02-KOHNUM (IDX1)  =  "180"
+                     MOVE  RECE02-KOHFTNJANUM (IDX1)(1:5)
+                                     TO  WRK-FTNJANUM2
+                     MOVE  4         TO  IDX1
+                 END-IF
+             END-PERFORM
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    老人以外は対象外
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             IF    RECE02-RJNHKNNUM  =  SPACE
+      *               OR  RECE02-RJNFTNJANUM(1:6)  NOT  =  "274050"
                    IF    RECE02-RJNHKNNUM  =  SPACE
-                     OR  RECE02-RJNFTNJANUM(1:6)  NOT  =  "274050"
+                   OR    WRK-FTNJANUM2 (3:3)  NOT =  "405"
+      *---(01.00.03) LINE ADD END   ------------------------------------
                      GO    TO    900-KOHSKY-READ-SEC
                    END-IF
       *

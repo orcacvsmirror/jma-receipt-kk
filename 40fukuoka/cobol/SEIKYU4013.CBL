@@ -34,6 +34,7 @@
       *                                   医療機関情報を参照
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
+      *  01.00.03    内田     08/01/27    公費の負担者番号で市の判定をする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -591,8 +592,12 @@
       *    請求金額集計集計
            MOVE    RECE02-KOHNUM(IDZ)  TO  WRK-KOHNUM
            MOVE    RECE02-KOHID(IDZ)   TO  WRK-KOHID
-           MOVE    RECE02-RJNFTNJANUM(3:5)
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE    RECE02-RJNFTNJANUM(3:5)
+      *                                 TO  WRK-FTNJANUM
+           MOVE    RECE02-KOHFTNJANUM(IDZ)(3:5)
                                        TO  WRK-FTNJANUM
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    ZERO                TO  WRK-SEIKYUGK-G
                                          FLG-TYOKI
       *
@@ -1376,9 +1381,23 @@
                RECE02-KOHNUM (2)  =  "180"  OR
                RECE02-KOHNUM (3)  =  "180"  OR
                RECE02-KOHNUM (4)  =  "180"
+      *---(01.00.03) LINE ADD START ------------------------------------
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1  >  4
+                 IF  RECE02-KOHNUM (IDX1)  =  "180"
+                     MOVE  RECE02-KOHFTNJANUM (IDX1)(1:5)
+                                     TO  WRK-FTNJANUM
+                     MOVE  4         TO  IDX1
+                 END-IF
+             END-PERFORM
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    １８０＋老人のみ対象
-             IF    RECE02-RJNHKNNUM  NOT = SPACE
-               AND  RECE02-RJNFTNJANUM(1:6)  =  "274050"
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *       IF    RECE02-RJNHKNNUM  NOT = SPACE
+      *         AND  RECE02-RJNFTNJANUM(1:6)  =  "274050"
+             IF    RECE02-RJNHKNNUM  NOT =  SPACE
+             AND   WRK-FTNJANUM (3:3)    =  "405"
+      *---(01.00.03) LINE ADD END   ------------------------------------
                MOVE    1    TO    FLG-TYPE
              ELSE
                MOVE    1    TO    FLG-ERR
