@@ -35,6 +35,9 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.04    内田    07/12/11    合計件数のバイト数増加（２→３）
+      *  01.00.05    内田    08/01/27    「表示の確認」欄へ７９等の表示追加
+      *                                  自己負担欄のバイト数増加（３→５）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -135,6 +138,9 @@
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
            03  WRK-Z39               PIC ZZ9.
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  WRK-Z59               PIC Z,ZZ9.
+      *---(01.00.05) LINE ADD END   ------------------------------------
            03  WRK-Z6                PIC ZZ,ZZZ.
            03  WRK-Z69               PIC ZZ,ZZ9.
            03  WRK-Z7                PIC ZZZ,ZZZ.
@@ -262,6 +268,11 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    請求
+           COPY    "CPRCF010.INC".
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    保険組合せ
        01  HKNCOMBI-REC.
@@ -721,6 +732,22 @@
                MOVE    1                   TO  MF100-IPANCD
            END-IF
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *   特記事項チェック
+           PERFORM  900-SEIKYU-SET-SEC
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     5
+               EVALUATE  RECE10-TOKKI(IDX1)
+                 WHEN  "01"
+                   MOVE  1                 TO  MF100-TOKKI
+                 WHEN  "02"
+                   MOVE  1                 TO  MF100-TYOKI
+                 WHEN  "16"
+                   MOVE  2                 TO  MF100-TYOKI
+               END-EVALUATE
+           END-PERFORM
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
            IF  FLG-ERR    =    ZERO
                WRITE   MF100-REC
                ADD     1   TO  CNT-MF100
@@ -903,27 +930,56 @@
                MOVE    WRK-Z6              TO  SC05-KOHFTN(IDX1)
       *
       *    自己負担額
-               MOVE    MF100-FTNMONEY      TO  WRK-Z39
-               MOVE    WRK-Z39             TO  SC05-ITBFTN(IDX1)
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *         MOVE    MF100-FTNMONEY      TO  WRK-Z39
+      *         MOVE    WRK-Z39             TO  SC05-ITBFTN(IDX1)
+               MOVE    MF100-FTNMONEY      TO  WRK-Z59
+               MOVE    WRK-Z59             TO  SC05-ITBFTN(IDX1)
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    公長表示の確認
-               IF      MF100-KEKKAKUFLG    =   1
-                   MOVE    "◯"            TO  SC05-TOKKI1(IDX1 1)
-                   MOVE    "10"            TO  SC05-TOKKI2(IDX1 1)
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *         IF      MF100-KEKKAKUFLG    =   1
+      *             MOVE    "◯"            TO  SC05-TOKKI1(IDX1 1)
+      *             MOVE    "10"            TO  SC05-TOKKI2(IDX1 1)
+      *         END-IF
+      *         IF      MF100-SEISHINFLG    =   1
+      *             MOVE    "◯"            TO  SC05-TOKKI1(IDX1 2)
+      *             MOVE    "21"            TO  SC05-TOKKI2(IDX1 2)
+      *         END-IF
+      *         IF      MF100-TYOKI         =   1
+      *             IF      MF100-KEKKAKUFLG    =   ZERO
+      *                 MOVE    "◯"        TO  SC05-TOKKI1(IDX1 1)
+      *                 MOVE    "長"        TO  SC05-TOKKI2(IDX1 1)
+      *             ELSE
+      *                 MOVE    "◯"        TO  SC05-TOKKI1(IDX1 2)
+      *                 MOVE    "長"        TO  SC05-TOKKI2(IDX1 2)
+      *             END-IF
+      *         END-IF
+               IF  MF100-ETCKOHNUM  NOT =  SPACE
+                   MOVE  "○"                  TO SC05-TOKKI1(IDX1 1)
+                   MOVE  MF100-ETCKOHNUM(2:2)  TO SC05-TOKKI2(IDX1 1)
                END-IF
-               IF      MF100-SEISHINFLG    =   1
-                   MOVE    "◯"            TO  SC05-TOKKI1(IDX1 2)
-                   MOVE    "21"            TO  SC05-TOKKI2(IDX1 2)
-               END-IF
-               IF      MF100-TYOKI         =   1
-                   IF      MF100-KEKKAKUFLG    =   ZERO
-                       MOVE    "◯"        TO  SC05-TOKKI1(IDX1 1)
-                       MOVE    "長"        TO  SC05-TOKKI2(IDX1 1)
+      *        高額療養費
+                IF  MF100-TOKKI  =  1
+                   IF  MF100-ETCKOHNUM  =  SPACE
+                       MOVE  "◯"      TO  SC05-TOKKI1(IDX1 1)
+                       MOVE  "公"      TO  SC05-TOKKI2(IDX1 1)
                    ELSE
-                       MOVE    "◯"        TO  SC05-TOKKI1(IDX1 2)
-                       MOVE    "長"        TO  SC05-TOKKI2(IDX1 2)
+                       MOVE  "◯"      TO  SC05-TOKKI1(IDX1 2)
+                       MOVE  "公"      TO  SC05-TOKKI2(IDX1 2)
                    END-IF
                END-IF
+      *        長期
+               IF      MF100-TYOKI         =   1
+                   MOVE    "◯"        TO  SC05-TOKKI1(IDX1 2)
+                   MOVE    "長"        TO  SC05-TOKKI2(IDX1 2)
+               END-IF
+               IF      MF100-TYOKI         =   2
+                   MOVE    "◯"        TO  SC05-TOKKI1(IDX1 2)
+                   MOVE    "長２"      TO  SC05-TOKKI2(IDX1 2)
+               END-IF
+      *---(01.00.05) LINE ADD END ------------------------------------
       *
       *    合計加算
       *    全国公費分のデータは件数としてカウントしない
@@ -949,8 +1005,12 @@
            IF  FLG-PRINT  =  1
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    合計件数
-             MOVE    SUM-GKENSU              TO  WRK-Z2
-             MOVE    WRK-Z2                  TO  SC05-GKENSU
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *       MOVE    SUM-GKENSU              TO  WRK-Z2
+      *       MOVE    WRK-Z2                  TO  SC05-GKENSU
+             MOVE    SUM-GKENSU              TO  WRK-Z39
+             MOVE    WRK-Z39                 TO  SC05-GKENSU
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    合計点数
              MOVE    SUM-GTENSU              TO  WRK-Z99
@@ -966,8 +1026,12 @@
       *---(01.00.02) LINE ADD START ------------------------------------
            ELSE
       *    合計件数
-             MOVE    SUM-KENSU               TO  WRK-Z2
-             MOVE    WRK-Z2                  TO  SC05-GKENSU
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *       MOVE    SUM-KENSU               TO  WRK-Z2
+      *       MOVE    WRK-Z2                  TO  SC05-GKENSU
+             MOVE    SUM-KENSU               TO  WRK-Z39
+             MOVE    WRK-Z39                 TO  SC05-GKENSU
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    合計点数
              MOVE    SUM-TENSU               TO  WRK-Z99
@@ -1123,14 +1187,29 @@
       *
                IF      SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
                        SYU-KOH-HKNNUM(IDX)     NOT =   "027"
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *             EVALUATE  SYU-KOH-HKNNUM(IDX)
+      *                 WHEN    "010"
+      *                 WHEN    "011"
+      *                     MOVE    1   TO  MF100-KEKKAKUFLG
+      *                 WHEN    "020"
+      *                 WHEN    "021"
+      *                     MOVE    1   TO  MF100-SEISHINFLG
+      *             END-EVALUATE
                    EVALUATE  SYU-KOH-HKNNUM(IDX)
                        WHEN    "010"
-                       WHEN    "011"
-                           MOVE    1   TO  MF100-KEKKAKUFLG
-                       WHEN    "020"
+                       WHEN    "015"
+                       WHEN    "016"
                        WHEN    "021"
-                           MOVE    1   TO  MF100-SEISHINFLG
+                       WHEN    "024"
+                       WHEN    "079"
+                           MOVE  SYU-KOH-HKNNUM(IDX)
+                                           TO  MF100-ETCKOHNUM
+                           IF  SYU-KOH-HKNNUM(IDX)  =  "010"
+                               MOVE    1   TO  MF100-KEKKAKUFLG
+                           END-IF
                    END-EVALUATE
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
                    IF      RECE02-FTNMONEY(1)  NOT =   ZERO
                        MOVE    SYU-KOH-COMPFTN(IDX)
@@ -1142,12 +1221,14 @@
                    MOVE    SYU-TOTAL-HKNTEN    TO  WRK-KOHTENSU
                END-IF
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *         IF      SYU-KOH-HKNNUM(IDX)     =   "972"
-               IF      SYU-KOH-HKNNUM(IDX)  =  "972"  OR  "974"
-      *---(01.00.03) LINE ADD END   ------------------------------------
-                   MOVE    1   TO  MF100-TYOKI
-               END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **         IF      SYU-KOH-HKNNUM(IDX)     =   "972"
+      *         IF      SYU-KOH-HKNNUM(IDX)  =  "972"  OR  "974"
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *             MOVE    1   TO  MF100-TYOKI
+      *         END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            END-PERFORM
       *
       *
@@ -1553,6 +1634,59 @@
            .
        910-HKNCOMBI-READ-EXT.
            EXIT.
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    請求管理読込
+      *****************************************************************
+       900-SEIKYU-SET-SEC             SECTION.
+      *
+      *    請求管理ＤＢ検索
+           INITIALIZE                     RECE10-REC
+      *
+           MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
+           MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
+           MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+           MOVE  RECE02-PTID          TO  RECE10-PTID
+           MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
+           MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+           MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+           MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+           MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+           MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+      *
+           MOVE  RECE10-REC           TO  MCPDATA-REC
+           MOVE  "DBSELECT"           TO  MCP-FUNC
+           MOVE  "tbl_seikyu"         TO  MCP-TABLE
+           MOVE  "key"                TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"              USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF      MCP-RC          =  ZERO
+               MOVE  "DBFETCH"        TO  MCP-FUNC
+               MOVE  "tbl_seikyu"     TO  MCP-TABLE
+               MOVE  "key"            TO  MCP-PATHNAME
+               CALL  "ORCDBMAIN"          USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+               IF      MCP-RC             =   ZERO
+                   MOVE    MCPDATA-REC    TO  RECE10-REC
+               END-IF
+           END-IF
+      *
+           MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE  "tbl_seikyu"         TO  MCP-TABLE
+           MOVE  "key"                TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       900-SEIKYU-SET-EXT.
+           EXIT.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
