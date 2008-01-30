@@ -36,6 +36,10 @@
       *  01.00.05    内田    07/09/02    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.06    内田    07/12/05    レセ電時、レセ電国保請求書の枚数を集計
+      *  01.00.07    内田    07/12/19    レセ電国保請求書は２枚１組で１枚とする
+      *                                  レセ電国保請求書は県毎で帳票を分けて
+      *                                  カウントする
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -190,6 +194,14 @@
            03  WRK-CNT           PIC 9(03).
            03  WRK-KENNAME       PIC X(10).
            03  WRK-HKNJANAME     PIC X(20).
+      *---(01.00.06) LINE ADD START ------------------------------------
+           03  WRK-MAISU         PIC 9(03).
+           03  WRK-AMARI         PIC 9(02).
+           03  WRK-MAISUKEI      PIC 9(03).
+      *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  WRK-GMAISU        PIC 9(03).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    請求書枚数カウント用エリア
       ***** 05/10/04 yamaguchi DEL
       *     03  WRK-SEIKYUSYO-CNT-TBL OCCURS 200.
@@ -204,11 +216,25 @@
       ***** 05/10/04 yamaguchi INS
            03  WRK-SEIKYUSYO-CNT-TBL OCCURS 200.
                05  WRK-SEIKYUSYO-KEY.
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   07  WRK-KEY-PREFKBN   PIC X(01).
+                   07  WRK-KEY-PREFNUM   PIC X(02).
+      *---(01.00.07) LINE ADD END   ------------------------------------
                    07  WRK-KEY-HKNJANUM  PIC X(06).
                    07  WRK-KEY-ZAITAKU   PIC X(01).
            03  WRK-CHK-KEY.
+      *---(01.00.07) LINE ADD START ------------------------------------
+               05  WRK-CHK-PREFKBN       PIC X(01).
+               05  WRK-CHK-PREFNUM       PIC X(02).
+      *---(01.00.07) LINE ADD END   ------------------------------------
                05  WRK-CHK-HKNJANUM      PIC X(06).
                05  WRK-CHK-ZAITAKU       PIC X(01).
+      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  WRK-PREFKENSU-TBL  OCCURS  47.
+               05  WRK-PREFNUM           PIC X(02).
+               05  WRK-PREFKENSU         PIC 9(03).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****
       *    県外保険者数カウント用エリア
            03  WRK-CNT-TBL OCCURS 200.
@@ -320,6 +346,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *
+      *    医療機関情報−レセプト・総括印刷情報
+           COPY    "CPSK2005.INC".
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    患者情報
        01  PTINF-REC.
@@ -539,6 +570,29 @@
                     PERFORM   500-ERR-HENSYU-SEC
                     MOVE      1           TO    FLG-END
            END-IF 
+      *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    医療機関情報−レセプト・総括印刷情報
+           INITIALIZE                     SYS-2005-REC
+           MOVE     "2005"        TO      SYS-2005-KANRICD
+           MOVE     "*"           TO      SYS-2005-KBNCD
+           MOVE     LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-2005-STYUKYMD(1:6)
+                                          SYS-2005-EDYUKYMD(1:6)
+           MOVE     "01"          TO      SYS-2005-STYUKYMD(7:2)
+                                          SYS-2005-EDYUKYMD(7:2)
+           MOVE     SPA-HOSPNUM   TO      SYS-2005-HOSPNUM
+           MOVE     SYS-2005-REC  TO      MCPDATA-REC
+           PERFORM  900-SYSKANRI-INV-SEC
+           IF       FLG-SYSKANRI       =  ZERO
+               MOVE    MCPDATA-REC   TO    SYS-2005-REC
+           ELSE
+               MOVE "医療機関情報（レセプト）が取得できませんでした"
+                                     TO    WRK-RECEERR
+               PERFORM   500-ERR-HENSYU-SEC
+               MOVE      1           TO    FLG-END
+           END-IF 
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -776,11 +830,28 @@
       *
       *    KEY設定(保険者番号・診療年月・在宅フラグで判定)
            INITIALIZE          WRK-CHK-KEY
-           MOVE     RECE10-HKNJANUM-S      TO    WRK-CHK-HKNJANUM
-      ***** 05/10/04 yamaguchi DEL
-      *     MOVE     RECE10-SRYYM           TO    WRK-CHK-SRYYM
-      *****
-           MOVE     RECE10-ZAITAKU         TO    WRK-CHK-ZAITAKU
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE     RECE10-HKNJANUM-S      TO    WRK-CHK-HKNJANUM
+      ****** 05/10/04 yamaguchi DEL
+      **     MOVE     RECE10-SRYYM           TO    WRK-CHK-SRYYM
+      ******
+      *     MOVE     RECE10-ZAITAKU         TO    WRK-CHK-ZAITAKU
+      *    レセ電と紙レセで条件が異なる
+           IF   SYS-2005-KKHRECEKBN  NOT =  ZERO
+           AND  WRK-PARA-SYOKBN      NOT =  2
+      *---(01.00.07) LINE ADD START ------------------------------------
+               IF  RECE10-PREFKBN  =  1
+                   MOVE  RECE10-PREFKBN    TO    WRK-CHK-PREFKBN
+               ELSE
+                   MOVE  RECE10-PREFNUM    TO    WRK-CHK-PREFNUM
+               END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
+               MOVE  RECE10-HKNJANUM-S     TO    WRK-CHK-HKNJANUM
+           ELSE
+               MOVE  RECE10-HKNJANUM-S     TO    WRK-CHK-HKNJANUM
+               MOVE  RECE10-ZAITAKU        TO    WRK-CHK-ZAITAKU
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    神戸市は代表番号で括る
            IF       WRK-CHK-HKNJANUM(1:3)  =     "284"
@@ -798,6 +869,24 @@
                  MOVE  WRK-CHK-KEY       TO WRK-SEIKYUSYO-KEY(IDX3)
                  ADD   1                     TO SUM-SEIKYUSYO(IDX2)
                                                 SUM-SEIKYUSYO(3)
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *          レセ電時、各県毎の保険者格納
+                 IF  RECE10-PREFKBN  NOT =  "1"
+                   PERFORM  VARYING  IDX4  FROM  1  BY  1
+                            UNTIL    WRK-PREFNUM(IDX4)  =  SPACE
+                            OR       IDX4  >    47
+                     IF  WRK-PREFNUM(IDX4)  =  WRK-CHK-PREFNUM
+                       ADD   1               TO  WRK-PREFKENSU(IDX4)
+                       MOVE  47              TO  IDX4
+                     END-IF
+                   END-PERFORM
+      *
+                   IF  IDX4  <  47
+                       MOVE  WRK-CHK-PREFNUM  TO  WRK-PREFNUM(IDX4)
+                       ADD   1                TO  WRK-PREFKENSU(IDX4)
+                   END-IF
+                 END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  MOVE  1                     TO FLG-OK
                END-IF
              END-IF
@@ -981,6 +1070,9 @@
        310-HEAD-HEN-SEC             SECTION.
       *
            INITIALIZE                             SKT2800
+      *---(01.00.06) LINE ADD START ------------------------------------
+                                                  WRK-MAISUKEI
+      *---(01.00.06) LINE ADD START ------------------------------------
       *
            MOVE     WRK-SRYYMWH              TO   SKT2800-SRYYM
       *
@@ -1079,7 +1171,54 @@
       *請求書枚数データ移行
              PERFORM   VARYING   IDX3  FROM  1  BY  1
                        UNTIL     IDX3  >     3
-               MOVE     SUM-SEIKYUSYO(IDX3)  TO  WRK-Z3
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *        レセ電はレセ電国保請求書の行数（２２）で割る
+      *         MOVE     SUM-SEIKYUSYO(IDX3)  TO  WRK-Z3
+               IF   SYS-2005-KKHRECEKBN  NOT =  ZERO
+               AND  WRK-PARA-SYOKBN      NOT =  2
+                   IF  IDX3  =  3
+                       MOVE  WRK-MAISUKEI     TO  WRK-Z3
+                   ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                 DIVIDE  SUM-SEIKYUSYO(IDX3)  BY  22
+      *                        GIVING  WRK-MAISU  REMAINDER  WRK-AMARI
+      *                 IF  WRK-AMARI  >  ZERO
+      *                     ADD   1            TO  WRK-MAISU
+      *                 END-IF
+      *        １帳票で２頁ある（一般・老人）
+      *                 COMPUTE  WRK-MAISU  =  WRK-MAISU  *  2
+      *                 ADD   WRK-MAISU        TO  WRK-MAISUKEI
+      *                 MOVE  WRK-MAISU        TO  WRK-Z3
+                     IF  IDX3  =  1
+                       DIVIDE  SUM-SEIKYUSYO(IDX3)  BY  22
+                       GIVING  WRK-GMAISU  REMAINDER  WRK-AMARI
+                       IF  WRK-AMARI  >  ZERO
+                           ADD   1            TO  WRK-GMAISU
+                       END-IF
+                     ELSE
+      *        県外データ
+                       INITIALIZE                    WRK-GMAISU
+                       PERFORM  VARYING  IDX4  FROM  1  BY  1
+                                UNTIL    IDX4  >     47
+                                OR   WRK-PREFKENSU(IDX4)  =  ZERO
+                  DISPLAY  "PREFKENSU  :  "  WRK-PREFKENSU(IDX4)
+                  DISPLAY  "PREFNUM  :  "  WRK-PREFNUM(IDX4)
+                         DIVIDE  WRK-PREFKENSU(IDX4)  BY  22
+                         GIVING  WRK-MAISU  REMAINDER  WRK-AMARI
+                         IF  WRK-AMARI  >  ZERO
+                             ADD   1          TO  WRK-MAISU
+                         END-IF
+                         ADD   WRK-MAISU      TO  WRK-GMAISU
+                       END-PERFORM
+                     END-IF
+                     ADD   WRK-GMAISU         TO  WRK-MAISUKEI
+                     MOVE  WRK-GMAISU         TO  WRK-Z3
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                   END-IF
+               ELSE
+                   MOVE  SUM-SEIKYUSYO(IDX3)  TO  WRK-Z3
+               END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                MOVE     WRK-Z3               TO  WRK-MAE-INPUT
                PERFORM  2009-HENKAN-SEC
                MOVE     WRK-OUT-INPUT        TO  SKT2800-SEIKYUSYO(IDX3)
