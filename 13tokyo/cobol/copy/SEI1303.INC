@@ -152,6 +152,7 @@
                05  MF100-KAIGO          PIC  9(01).
                05  MF100-SHISETU        PIC  9(01).
                05  MF100-MIYAKO         PIC  9(01).
+               05  MF100-SYONI          PIC  9(01).
       *ƒ„ΩÍ∆¿º‘•’•È•∞
            03  MF100-TEISHOTOKU         PIC  9(01).
       *¿¡µ·≥€
