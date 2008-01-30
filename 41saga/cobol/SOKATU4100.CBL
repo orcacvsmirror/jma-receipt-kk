@@ -33,12 +33,13 @@
       *                                     システム管理マスタ「1901」の
       *                                     医療機関情報を参照
       *                                     返戻対応
+      *  01.00.03    内田       07/12/05    政令指定都市は市でまとめる
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
-
+      *
       *    請求書一時ファイル  
            SELECT  SKT4100TMP-FILE ASSIGN    SKT4100TP
                                    ORGANIZATION    IS  INDEXED
@@ -680,6 +681,11 @@
                     MOVE    RECE10-HKNJANUM(3:6)    TO
                             SKT4100TMP-HKNJANUM(1:6)
            END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    政令指定都市は代表番号でまとめる
+           PERFORM  20011-SEIREI-SEC
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
       *    県外→県内市町村→県内扱い国保組合の順で印字する
            IF    YUSEN-HKNJANUM   =  SKT4100TMP-HKNJANUM
              MOVE          1   TO    SKT4100TMP-SYUTURYOKU
@@ -734,6 +740,81 @@
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    政令指定都市の代表番号集計
+      *****************************************************************
+       20011-SEIREI-SEC              SECTION.
+      *
+      *    札幌市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "014"
+             MOVE  "014001"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    仙台市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "044"
+             MOVE  "044008"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    さいたま市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "114"
+             MOVE  "114009"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    千葉市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "124"
+             MOVE  "124008"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    横浜市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "144"
+             MOVE  "144006"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    川崎市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "145"
+             MOVE  "145003"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    名古屋市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "234"
+             MOVE  "234005"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    京都市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "264"
+             MOVE  "264002"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    大阪市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "274"
+             MOVE  "274001"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    神戸市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "284"
+             MOVE  "284000"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    広島市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "344"
+             MOVE  "344002"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    北九州市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "404"
+             MOVE  "404004"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+      *    福岡市の場合、代表番号セット
+           IF  SKT4100TMP-HKNJANUM (1:3) = "405"
+             MOVE  "405001"  TO  SKT4100TMP-HKNJANUM
+           END-IF
+      *
+           .
+       20011-SEIREI-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    医療保険・老人保健分集計処理
       *****************************************************************
