@@ -33,6 +33,7 @@
       *  01.00.03    内田    07/08/31    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.04    内田    07/11/30    ７０歳未満は一部負担金欄へ集計しない
       ****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -675,7 +676,14 @@
            ADD   RECE10-YKZFTN (1)  TO  SKT3900TMP-YKZFTN (IDX1)
       *
       *    一部負担金(老人＋健診)
-            ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *      ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
+      *    ７０歳未満は集計しない
+           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+           OR  RECE10-AGE  >= 70
+             ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    食事療養費：件数
       *---(01.00.02) LINE ADD START ------------------------------------
