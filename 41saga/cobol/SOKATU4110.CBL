@@ -34,6 +34,8 @@
       *                                     医療機関情報を参照
       *                                     長期上位（974）は長期と同様の
       *                                     処理をする
+      *  01.00.04    内田       07/12/05    政令指定都市は市でまとめる
+      *  01.00.05    内田       08/01/29    保険者名の印字修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -644,7 +646,10 @@
            ELSE
              MOVE  RECE10-HKNJANUM(3:6)  TO  SKT4110TMP-HKNJANUM(1:6)
            END-IF
-
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    政令指定都市は代表番号でまとめる
+           PERFORM  20011-SEIREI-SEC
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU        TO  SKT4110TMP-ZAITAKU
@@ -703,6 +708,81 @@
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    政令指定都市の代表番号集計
+      *****************************************************************
+       20011-SEIREI-SEC              SECTION.
+      *
+      *    札幌市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "014"
+             MOVE  "014001"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    仙台市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "044"
+             MOVE  "044008"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    さいたま市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "114"
+             MOVE  "114009"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    千葉市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "124"
+             MOVE  "124008"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    横浜市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "144"
+             MOVE  "144006"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    川崎市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "145"
+             MOVE  "145003"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    名古屋市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "234"
+             MOVE  "234005"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    京都市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "264"
+             MOVE  "264002"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    大阪市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "274"
+             MOVE  "274001"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    神戸市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "284"
+             MOVE  "284000"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    広島市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "344"
+             MOVE  "344002"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    北九州市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "404"
+             MOVE  "404004"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    福岡市の場合、代表番号セット
+           IF  SKT4110TMP-HKNJANUM (1:3) = "405"
+             MOVE  "405001"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+           .
+       20011-SEIREI-EXT.
+           EXIT.
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    医療保険・老人保健分集計処理
       *****************************************************************
@@ -1268,7 +1348,13 @@
            MOVE    SKT4110TMP-HKNJANUM  TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
            MOVE    WRK-HKNJANAME        TO  SKT4110-HOKENJANAME
-
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    保険者番号の印字を変える
+      *    （指定されている番号が保険者マスタと異なる）
+           PERFORM  3101-HKNJANUM-CHANG-SEC
+      *    保険者番号
+           MOVE    SKT4110TMP-HKNJANUM   TO  SKT4110-HKNJANUM
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD       TO  SKT4110-HOSPCD
       *    在総診・在医総
@@ -1293,7 +1379,76 @@
            .
        310-HEAD-HEN-EXT.
            EXIT.
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理
+      *****************************************************************
+       3101-HKNJANUM-CHANG-SEC          SECTION.
       *
+      *    札幌市
+           IF  SKT4110TMP-HKNJANUM  = "014001"
+             MOVE  "014019"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    仙台市
+           IF  SKT4110TMP-HKNJANUM  = "044008"
+             MOVE  "044016"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    千葉市
+           IF  SKT4110TMP-HKNJANUM  = "124008"
+             MOVE  "124016"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    横浜市
+           IF  SKT4110TMP-HKNJANUM  = "144006"
+             MOVE  "144014"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    川崎市
+           IF  SKT4110TMP-HKNJANUM  = "145003"
+             MOVE  "145011"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    名古屋市
+           IF  SKT4110TMP-HKNJANUM  = "234005"
+             MOVE  "234013"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    京都市
+           IF  SKT4110TMP-HKNJANUM  = "264002"
+             MOVE  "264010"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    大阪市
+           IF  SKT4110TMP-HKNJANUM  = "274001"
+             MOVE  "274019"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    神戸市
+           IF  SKT4110TMP-HKNJANUM  = "284000"
+             MOVE  "284018"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    広島市
+           IF  SKT4110TMP-HKNJANUM  = "344002"
+             MOVE  "344010"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    北九州市
+           IF  SKT4110TMP-HKNJANUM  = "404004"
+             MOVE  "404012"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+      *    福岡市
+           IF  SKT4110TMP-HKNJANUM  = "405001"
+             MOVE  "405019"  TO  SKT4110TMP-HKNJANUM
+           END-IF
+      *
+           .
+       3101-HKNJANUM-CHANG-EXT.
+           EXIT.
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    帳票編集<明細行>処理
       *****************************************************************
@@ -1425,9 +1580,22 @@
            MOVE    WRK-HOSPTEL          TO  SKT4120-TEL
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    保険者名
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    SKT4110TMP-HKNJANUM  TO  WRK-HKNJANUM
+      *     PERFORM  920-HKNJAINF-SET-SEC
+      *---(01.00.04) LINE ADD END   ------------------------------------
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE    WRK-HKNJANAME        TO  SKT4120-HOKENJANAME
            MOVE    SKT4110TMP-HKNJANUM  TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
            MOVE    WRK-HKNJANAME        TO  SKT4120-HOKENJANAME
+      *
+      *    保険者番号の印字を変える
+      *    （指定されている番号が保険者マスタと異なる）
+           PERFORM  3101-HKNJANUM-CHANG-SEC
+      *    保険者番号
+           MOVE    SKT4110TMP-HKNJANUM   TO  SKT4120-HKNJANUM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    在総診・在医総
            IF    SKT4110TMP-ZAITAKU  =  "1"
              MOVE    "在"                TO  SKT4120-ZAI1
@@ -1776,9 +1944,22 @@
            MOVE    WRK-HOSPTEL           TO  SKT4150-TEL
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    保険者名
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    SKT4110TMP-HKNJANUM   TO  WRK-HKNJANUM
+      *     PERFORM  920-HKNJAINF-SET-SEC
+      *---(01.00.04) LINE ADD END   ------------------------------------
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE    WRK-HKNJANAME        TO  SKT4150-HOKENJANAME
            MOVE    SKT4110TMP-HKNJANUM   TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
            MOVE    WRK-HKNJANAME         TO  SKT4150-HOKENJANAME
+      *
+      *    保険者番号の印字を変える
+      *    （指定されている番号が保険者マスタと異なる）
+           PERFORM  3101-HKNJANUM-CHANG-SEC
+      *    保険者番号
+           MOVE    SKT4110TMP-HKNJANUM   TO  SKT4150-HKNJANUM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            .
        313-HEAD-HEN-EXT.
