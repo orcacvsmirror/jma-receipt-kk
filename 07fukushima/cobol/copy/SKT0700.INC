@@ -74,9 +74,9 @@
       *請求年月
                05  SKT0700-B-SEIYM                 PIC  X(16).
       *医療機関住所
-               05  SKT0700-B-ADRS                  PIC  X(80).
+               05  SKT0700-B-ADRS                  PIC  X(100).
       *医療機関名称
-               05  SKT0700-B-HOSPNAME              PIC  X(80).
+               05  SKT0700-B-HOSPNAME              PIC  X(100).
       *開設者名
                05  SKT0700-B-KAISETUNAME           PIC  X(40).
       *医療機関コード
