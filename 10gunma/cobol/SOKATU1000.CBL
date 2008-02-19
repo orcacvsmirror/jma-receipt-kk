@@ -34,6 +34,7 @@
       * 01.00.05     内田    2007/09/19    日レセver4.0対応
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
+      * 01.00.06     内田    2008/02/13    特別療養費国保は別帳票とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -142,6 +143,9 @@
       ****2006/02/20  yamaguchi INS.
            03  WRK-PARA-SYOKBN     PIC X(01).
       ****
+      *---(01.00.06) LINE ADD START ------------------------------------
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    一時領域
        01  WRK-AREA.
@@ -332,6 +336,9 @@
 					       WRK-PARA-SHELLID
 					       WRK-PARA-SYOKBN
       ****
+      *---(01.00.06) LINE ADD START ------------------------------------
+                                               WRK-PARA-TOKUBETU
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.05) LINE ADD END   ------------------------------------
@@ -457,20 +464,32 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
       **** 2006/02/20 yamaguchi INS.
-           EVALUATE    WRK-PARA-SYOKBN
-	       WHEN    "2"
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    "2"
       *---(01.00.05) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
-                   MOVE    "key37"        TO  WRK-PATH
+      *             MOVE    "key37"        TO  WRK-PATH
       *---(01.00.05) LINE ADD END   ------------------------------------
-	       WHEN    "1"
+      *         WHEN    "1"
       *---(01.00.05) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-                   MOVE    "key38"        TO  WRK-PATH
+      *             MOVE    "key38"        TO  WRK-PATH
       *---(01.00.05) LINE ADD END   ------------------------------------
-           END-EVALUATE
+      *     END-EVALUATE
       ****
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE   "key37"  TO  WRK-PATH
+               WHEN   "1"               ALSO  "1"
+                   MOVE   "key38"  TO  WRK-PATH
+               WHEN   "2"               ALSO  "2"
+                   MOVE   "key39"  TO  WRK-PATH
+               WHEN   "1"               ALSO  "2"
+                   MOVE   "key40"  TO  WRK-PATH
+           END-EVALUATE
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -641,7 +660,10 @@
       *           MOVE   3  TO  SKT1000TMP-SYUBETU
       *         END-IF
       *       END-IF
-            IF  RECE10-HKNNUM  =  "060"
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *      IF  RECE10-HKNNUM  =  "060"
+            IF  RECE10-HKNNUM  =  "060"  OR  "068"
+      *---(01.00.06) LINE ADD END   ------------------------------------
                MOVE  1  TO  SKT1000TMP-SYUBETU
             ELSE
                MOVE  3  TO  SKT1000TMP-SYUBETU
@@ -698,8 +720,12 @@
                    END-IF
                  END-IF
       *      保険種別一般７割は区分１，２
-                 IF  RECE10-HKNNUM  =  "060"  AND
-                     RECE10-KYURATE  =  7
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *           IF  RECE10-HKNNUM  =  "060"  AND
+      *               RECE10-KYURATE  =  7
+                 IF  (RECE10-HKNNUM  =  "060"  OR  "068")
+                 AND  RECE10-KYURATE  =  7
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    IF  RECE10-NYUGAIKBN  =  1
                      MOVE    "1"         TO  SKT1000TMP-KBN
                      MOVE    5           TO  SKT1000TMP-JYUNJO
@@ -933,6 +959,12 @@
       *
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT1000-KAISETUNAME
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT1000-TOKUBETU
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            .
        310-HEAD-HEN-EXT.
@@ -1323,6 +1355,13 @@
       *
            MOVE    SPACE                TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"           TO  RECE10-XXEDHKNJANUM
+      *
+      *---(01.00.06) LINE ADD START ------------------------------------
+           IF  WRK-PARA-TOKUBETU  =  2
+             MOVE    "000000"           TO  RECE10-SRYYM
+             MOVE    "999999"           TO  RECE10-XXSRYYM
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            MOVE    RECE10-REC                 TO  MCPDATA-REC
            MOVE    "DBSELECT"                 TO  MCP-FUNC

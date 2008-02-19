@@ -41,6 +41,8 @@
       **** 05/02/04 INS
       *    ページ番号
            03  SKT1020-NO                PIC  X(04).
+      *    特別療養費
+           03  SKT1020-TOKUBETU          PIC  X(10).
       ****
       *    請求テーブル
            03  SKT1020-SEIKYU-TBL   OCCURS  5.

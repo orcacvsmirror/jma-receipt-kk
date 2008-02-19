@@ -44,6 +44,8 @@
       *    ページ番号
            03  SKT1010-NO                PIC  X(04).
       ****
+      *    特別療養費
+           03  SKT1010-TOKUBETU          PIC  X(10).
       *    請求テーブル
            03  SKT1010-SEIKYU-TBL   OCCURS  5.
       *    入外テーブル

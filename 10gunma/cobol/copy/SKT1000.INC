@@ -36,6 +36,8 @@
               03  SKT1000-TEL              PIC  X(15).
       *    開設者名
               03  SKT1000-KAISETUNAME      PIC  X(40).
+      *    特別療養費
+              03  SKT1000-TOKUBETU         PIC  X(10).
       *    請求テーブル
               03  SKT1000-SEIKYU-TBL    OCCURS  25.
       *    保険者名
