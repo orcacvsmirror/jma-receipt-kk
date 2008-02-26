@@ -36,6 +36,8 @@
       *                                  °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *                                  Ä¹´ü¾å°Ì¡Ê974¡Ë¤ÏÄ¹´ü¤ÈÆ±ÍÍ¤Î
       *                                  ½èÍý¤ò¤¹¤ë
+      *  01.00.04    ÆâÅÄ    08/02/23    ºÆ°õºþ¤ÎÄ¢É¼¥¿¥¤¥È¥ë¤Î½¤Àµ
+      *                                  ¹â³ÛÎÅÍÜÈñ¤Î¾å¸Â³Û¤ò¹ÍÎ¸¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -684,6 +686,12 @@
            MOVE     WRK-FTNMONEY-G2    TO    MF100-FTNMONEY
       *
       *    °ìÉôÉéÃ´¶â(Ï··ò)
+      *---(01.00.04) LINE ADD START ------------------------------------
+           IF   RECE02-FTNMONEY (1)  >  ZERO
+           AND  RECE02-FTNMONEY (1)  <  WRK-RFTNMONEY
+               MOVE  RECE02-FTNMONEY (1)  TO    WRK-RFTNMONEY
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE     WRK-RFTNMONEY      TO    MF100-RFTNMONEY
       *
       ***** 05/08/01 yamaguchi DEL
@@ -1024,8 +1032,12 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC2807.red"         TO  SPRT-PRTID
-           MOVE    "Ê¡»ã°åÎÅÈñÀÁµá½ñ"
-                                    TO  SPRT-TITLE
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    "Ê¡»ã°åÎÅÈñÀÁµá½ñ"
+      *                              TO  SPRT-TITLE
+           MOVE    "¹âÎð½ÅÅÙ¾ã³²¼Ô°åÎÅÈñÀÁµá½ñ"
+                                       TO  SPRT-TITLE
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE    SC07             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
