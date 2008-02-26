@@ -40,6 +40,8 @@
       *  01.00.07    内田    07/12/19    レセ電国保請求書は２枚１組で１枚とする
       *                                  レセ電国保請求書は県毎で帳票を分けて
       *                                  カウントする
+      *  01.00.08    内田    08/02/23    同一保険者で複数診療月がある場合の
+      *                                  請求書枚数の修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -221,6 +223,9 @@
                    07  WRK-KEY-PREFNUM   PIC X(02).
       *---(01.00.07) LINE ADD END   ------------------------------------
                    07  WRK-KEY-HKNJANUM  PIC X(06).
+      *---(01.00.08) LINE ADD START ------------------------------------
+                   07  WRK-KEY-SRYYM     PIC X(06).
+      *---(01.00.08) LINE ADD END   ------------------------------------
                    07  WRK-KEY-ZAITAKU   PIC X(01).
            03  WRK-CHK-KEY.
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -228,6 +233,9 @@
                05  WRK-CHK-PREFNUM       PIC X(02).
       *---(01.00.07) LINE ADD END   ------------------------------------
                05  WRK-CHK-HKNJANUM      PIC X(06).
+      *---(01.00.08) LINE ADD START ------------------------------------
+               05  WRK-CHK-SRYYM         PIC X(06).
+      *---(01.00.08) LINE ADD END   ------------------------------------
                05  WRK-CHK-ZAITAKU       PIC X(01).
       *
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -850,6 +858,11 @@
            ELSE
                MOVE  RECE10-HKNJANUM-S     TO    WRK-CHK-HKNJANUM
                MOVE  RECE10-ZAITAKU        TO    WRK-CHK-ZAITAKU
+      *---(01.00.08) LINE ADD START ------------------------------------
+               IF  RECE10-HENREIYM  NOT =  ZERO
+                   MOVE  RECE10-SRYYM      TO    WRK-CHK-SRYYM
+               END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
@@ -1201,8 +1214,6 @@
                        PERFORM  VARYING  IDX4  FROM  1  BY  1
                                 UNTIL    IDX4  >     47
                                 OR   WRK-PREFKENSU(IDX4)  =  ZERO
-                  DISPLAY  "PREFKENSU  :  "  WRK-PREFKENSU(IDX4)
-                  DISPLAY  "PREFNUM  :  "  WRK-PREFNUM(IDX4)
                          DIVIDE  WRK-PREFKENSU(IDX4)  BY  22
                          GIVING  WRK-MAISU  REMAINDER  WRK-AMARI
                          IF  WRK-AMARI  >  ZERO
