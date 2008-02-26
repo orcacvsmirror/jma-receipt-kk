@@ -37,6 +37,7 @@
       *                                  日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.07      内田    08/02/23  返戻時の診療年月の修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -669,6 +670,15 @@
                MOVE    2       TO  SKT3310TMP-SYUTURYOKU
            END-IF
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    返戻分は実際の診療年月を設定
+            IF  WRK-PARA-SYOKBN  =  "2"
+              MOVE    RECE10-SRYYM          TO   SKT3310TMP-SRYYM
+      *    当月分・月遅れ分は画面入力された診療年月を設定
+            ELSE
+              MOVE    LNK-PRTKANRI-SRYYM    TO   SKT3310TMP-SRYYM
+            END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -1419,7 +1429,10 @@
       *    診療年月
       *---(01.00.04) LINE ADD START ------------------------------------
       *     MOVE    WRK-SRYYMWH             TO  SKT3310-SRYYM
-           MOVE    RECE10-SRYYM        TO  WRK-SYMD (1:6)
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     MOVE    RECE10-SRYYM        TO  WRK-SYMD (1:6)
+           MOVE    SKT3310TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *---(01.00.07) LINE ADD END   ------------------------------------
            MOVE    "01"                TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
            MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
