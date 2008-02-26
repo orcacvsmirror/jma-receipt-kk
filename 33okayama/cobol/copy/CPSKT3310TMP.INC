@@ -26,6 +26,7 @@
                05  SKT3310TMP-SYUTURYOKU             PIC  9(01).
                05  SKT3310TMP-KOKUKUMI-KBN           PIC  9(01).
                05  SKT3310TMP-HKNJANUM               PIC  X(06).
+               05  SKT3310TMP-SRYYM                  PIC  9(06).
            03  SKT3310TMP-HKN-AREA.
                05  SKT3310TMP-HKN-TBL  OCCURS  11.      
                    07  SKT3310TMP-NYUGAI-TBL  OCCURS  2.
