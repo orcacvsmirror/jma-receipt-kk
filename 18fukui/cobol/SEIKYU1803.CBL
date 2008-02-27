@@ -35,6 +35,8 @@
       *                                      医療機関情報を参照
       *  01.00.03       吉川    2007/10/25   特定負無(公費番号=091)の患者を
       *                                      帳票に表示させないように修正
+      *  01.00.04       吉川    2008/02/26   負担金が発生しない場合は
+      *                                      印字対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -721,9 +723,14 @@
            MOVE  WRK-KOHFTN  TO  MF100-ITBFTN
            MOVE  WRK-YKZFTN  TO  MF100-YKZFTN
       *
-           WRITE  MF100-REC
-      *
-           ADD  1  TO  CNT-MF100
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) start
+      *     WRITE  MF100-REC
+      *     ADD  1  TO  CNT-MF100
+           IF   MF100-ITBFTN  NOT =  ZERO
+              WRITE  MF100-REC
+              ADD    1       TO  CNT-MF100
+           END-IF
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) end
       *
            .
        20011-SYUKEI-EXT.
@@ -1404,22 +1411,24 @@
                    RECE02-KOHNUM (3)  =  "198"  OR
                    RECE02-KOHNUM (4)  =  "198"
       *
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/10/25) start
-                   IF  RECE02-KOHNUM (1)  =  "091"  OR
-                       RECE02-KOHNUM (2)  =  "091"  OR
-                       RECE02-KOHNUM (3)  =  "091"  OR
-                       RECE02-KOHNUM (4)  =  "091"
-      *
-                       PERFORM  900-KOHSKY-READ-SEC
-                   END-IF
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/10/25) end
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) start
+      **=== 特定負無の患者を表示しない by Yoshikawa(2007/10/25) start
+      *             IF  RECE02-KOHNUM (1)  =  "091"  OR
+      *                 RECE02-KOHNUM (2)  =  "091"  OR
+      *                 RECE02-KOHNUM (3)  =  "091"  OR
+      *                 RECE02-KOHNUM (4)  =  "091"
+      **
+      *                 PERFORM  900-KOHSKY-READ-SEC
+      *             END-IF
+      **=== 特定負無の患者を表示しない by Yoshikawa(2007/10/25) end
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) end
       *            テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
+      *=== Ver4.0対応 by Yoshikawa(2007/10/05) start
       *             MOVE    RECE02-HOSPID       TO  PTINF-HOSPID
                    MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
+      *=== Ver4.0対応 by Yoshikawa(2007/10/05) start
                    MOVE    RECE02-PTID         TO  PTINF-PTID
                    MOVE    PTINF-REC           TO  MCPDATA-REC
                    PERFORM 800-PTINF-READ-SEC
