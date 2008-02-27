@@ -23,6 +23,7 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川      2007/10/05   日レセver4.0対応
       *  01.00.02    吉川      2007/10/24   キー変更
+      *  01.00.03    吉川      2008/02/26   キー変更
       ************************************************************
       *01  MF110-REC.
            03  MF110-KEY.
@@ -41,14 +42,20 @@
                05  MF110-CITYNAME        PIC  X(10).
       *請求年月
                05  MF110-SKYYM           PIC  X(06).
+      *=== キー変更 By Yoshikawa(2008/02/26) start
+      *公費−受給者番号
+               05  MF110-JKYSNUM         PIC  X(20).
+      *=== キー変更 By Yoshikawa(2008/02/26) end
       *=== キー変更 By Yoshikawa(2007/10/24) start
       *公費−保険番号
                05  MF110-KOHHKNNUM       PIC  X(03).
       *=== キー変更 By Yoshikawa(2007/10/24) end
       *公費−負担者番号
                05  MF110-FTNJANUM        PIC  X(08).
-      *公費−受給者番号
-               05  MF110-JKYSNUM         PIC  X(20).
+      *=== キー変更 By Yoshikawa(2008/02/26) start
+      **公費−受給者番号
+      *         05  MF110-JKYSNUM         PIC  X(20).
+      *=== キー変更 By Yoshikawa(2008/02/26) end
       *患者番号
                05  MF110-PTNUM           PIC  X(20).
       *診療年月

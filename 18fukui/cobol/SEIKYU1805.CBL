@@ -39,6 +39,9 @@
       *                                      システム管理マスタ「1901」の
       *                                      医療機関情報を参照
       *  01.00.05       吉川    2007/10/25   保険番号でソートする
+      *  01.00.06       吉川    2008/02/26   負担金が発生しない場合は
+      *                                      印字対象外とする
+      *                                      受給者番号でソートする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -116,10 +119,6 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) start
-      *    特定疾患（負担無し）判定フラグ
-           03  FLG-TOKUMU     PIC 9(01).
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -734,6 +733,9 @@
       *=== 保険番号でソートする By Yoshikawa(2007/10/25) end
            MOVE   RECE01-KOHFTNJANUM (IDZ)  TO  MF110-FTNJANUM
            MOVE   RECE01-KOHJKYSNUM  (IDZ)  TO  MF110-KOHJKYSNUM
+      *=== 受給者番号でソートする By Yoshikawa(2008/02/26) start
+           MOVE   RECE01-KOHJKYSNUM(IDZ)(3:) TO MF110-JKYSNUM
+      *=== 受給者番号でソートする By Yoshikawa(2008/02/26) end
            MOVE   RECE01-KOHINF      (IDZ)  TO  MF110-KOHINF
            COMPUTE  IDY    =    IDZ    +   1
            MOVE   RECE01-JNISSUINF   (IDY)  TO  MF110-JNISSUINF
@@ -928,22 +930,19 @@
               END-PERFORM
            END-IF
       *
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) start
-           MOVE   ZERO                TO   FLG-TOKUMU
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) end
            PERFORM   800-SYUNOU-SET-SEC
            MOVE   WRK-KOHFTN          TO   MF110-ITBFTN
            MOVE   WRK-YKZFTN          TO   MF110-YKZFTN
       *
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) start
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) start
       *     WRITE  MF110-REC
       *     ADD    1                   TO   CNT-MF110
-      *    特定負無持ちの患者ではない場合に書き込む
-           IF   FLG-TOKUMU   =   ZERO
-              WRITE  MF110-REC
-              ADD    1                   TO   CNT-MF110
+           IF  MF110-ITBFTN  NOT =  ZERO
+             WRITE  MF110-REC
+             ADD    1                 TO   CNT-MF110
            END-IF
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) end
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) end
+      *
            .
        200-MAIN-EXT.
            EXIT.
@@ -1751,18 +1750,6 @@
                  COMPUTE  WRK-KOHFTN = WRK-KOHFTN + SYU-KOH4COMPTOTAL
            END-EVALUATE
       *
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) start
-      *    公費に特定負無があるかどうか判定
-           IF  SYU-KOH1HKNNUM = "091" OR
-               SYU-KOH2HKNNUM = "091" OR
-               SYU-KOH3HKNNUM = "091" OR
-               SYU-KOH4HKNNUM = "091"
-      *
-             MOVE  1  TO FLG-TOKUMU
-      *
-           END-IF
-      *=== 特定負無の患者を表示しない By Yoshikawa(2007/08/09) end
-      *
           .
        810-SEIKYU-SEC-EXT.
            EXIT.
@@ -1930,13 +1917,24 @@
                    RECE01-KOHNUM (3)   =  "198"  OR
                    RECE01-KOHNUM (4)   =  "198"
       *
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) start
+      **=== 特定負無の患者を表示しない by Yoshikawa(2007/08/09) start
+      *             IF  RECE02-KOHNUM (1)  =  "091"  OR
+      *                 RECE02-KOHNUM (2)  =  "091"  OR
+      *                 RECE02-KOHNUM (3)  =  "091"  OR
+      *                 RECE02-KOHNUM (4)  =  "091"
+      **
+      *                 PERFORM  900-KOHSKY-READ-SEC
+      *             END-IF
+      **=== 特定負無の患者を表示しない by Yoshikawa(2007/08/09) end
+      *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) end
       *            テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
+      *=== Ver4.0対応 by Yoshikawa(2007/10/05) start
       *             MOVE    RECE01-HOSPID       TO  PTINF-HOSPID
                    MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
+      *=== Ver4.0対応 by Yoshikawa(2007/10/05) start
                    MOVE    RECE01-PTID         TO  PTINF-PTID
                    MOVE    PTINF-REC           TO  MCPDATA-REC
                    PERFORM 800-PTINF-READ-SEC
