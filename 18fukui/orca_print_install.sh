@@ -4,13 +4,32 @@
 
 usrname=`whoami`
 
+# Etchで使用するコードUTF-8への変換
+# echo message (default character-code EUC)
+function echomsg() {
+  if [ "${LANG}" = "ja_JP.UTF-8" ] || [ "${LANG}" = "ja_JP.UTF8" ]; then
+    if [ -z $2 ]; then
+      echo `echo $1 | nkf -wE`
+    else
+      echo -n `echo $1 | nkf -wE`
+    fi 
+  else
+    if [ -z $2 ]; then
+      echo $1
+    else
+      echo -n $1
+    fi
+  fi
+  return 0
+}
+
 # user check
 if [ $usrname != "root" ] ; then
-  echo -e "\nrootユーザで実行してください\n"
+  echomsg "\nrootユーザで実行してください\n"
   exit 1
 fi
 
-echo "福井県（総括表・地方公費）プログラムコピー中..."
+echomsg "福井県（総括表・地方公費）プログラムコピー中..."
 
 # file copy
 for d in cobol doc data form lddef record scripts ; do
@@ -19,7 +38,7 @@ done
 
 # kentan.inc copy
 cp ${SYSCONFDIR}/kentan.inc ${SYSCONFDIR}/kentan.inc.bak
-sed '/fukui;/d' ${SYSCONFDIR}/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
+sed '/fukui/d' ${SYSCONFDIR}/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
 rm -rf ${SYSCONFDIR}/kentan.inc.bak
 echo -e "\tfukui;" >> ${SYSCONFDIR}/kentan.inc
 
@@ -27,7 +46,7 @@ echo -e "\tfukui;" >> ${SYSCONFDIR}/kentan.inc
 if [ -f ${SCRIPTSDIR}/allways/site-upgrade.sh ] ; then
 	sh ${SCRIPTSDIR}/allways/site-upgrade.sh
 else
-	echo "福井県（総括表・地方公費）プログラムコピー異常終了!!"
+	echomsg "福井県（総括表・地方公費）プログラムコピー異常終了!!"
 	exit
 fi
 
@@ -35,4 +54,4 @@ fi
 cp -af ${SITELDDEFDIR} ${ORCA_DIR}
 
 sync
-echo "福井県（総括表・地方公費）プログラムコピー終了!!"
+echomsg "福井県（総括表・地方公費）プログラムコピー終了!!"

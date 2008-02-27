@@ -7,13 +7,32 @@ prefname=fukui
 
 usrname=`whoami`
 
+# Etchで使用するコードUTF-8への変換
+# echo message (default character-code EUC)
+function echomsg() {
+  if [ "${LANG}" = "ja_JP.UTF-8" ] || [ "${LANG}" = "ja_JP.UTF8" ]; then
+    if [ -z $2 ]; then
+      echo `echo $1 | nkf -wE`
+    else
+      echo -n `echo $1 | nkf -wE`
+    fi 
+  else
+    if [ -z $2 ]; then
+      echo $1
+    else
+      echo -n $1
+    fi
+  fi
+  return 0
+}
+
 # user check
 if [ ${usrname} != "root" ] ; then
-  echo -e "\nrootユーザで実行してください\n"
+  echomsg "\nrootユーザで実行してください\n"
   exit 1
 fi
 
-echo "福井県(総括表・地方公費)アンインストール中..."
+echomsg "福井県(総括表・地方公費)アンインストール中..."
 
 cp ${SYSCONFDIR}/kentan.inc ${SYSCONFDIR}/kentan.inc.bak
 sed '/fukui/d' ${SYSCONFDIR}/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
@@ -111,5 +130,5 @@ if test -f ${LDDEFDIR}/${prefname}.bd ; then
 fi
 
 
-echo "福井県(総括表・地方公費)アンインストール終了！！"
+echomsg "福井県(総括表・地方公費)アンインストール終了！！"
 
