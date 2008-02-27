@@ -28,6 +28,8 @@
       *****************************************************************
       *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
       * Maj/Min/Rev	½¤Àµ¼Ô	ÆüÉÕ		ÆâÍÆ
+      *  01.00.01    ÆâÅÄ    2008/02/26    £Ã£Ó£Ö¥Õ¥©¡¼¥Þ¥Ã¥È¤ÎÊÑ¹¹
+      *                                    »ö¶È¥³¡¼¥É¤Î¼èÆÀ¤ÎÊÑ¹¹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -663,7 +665,9 @@
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     3
                  IF   RECE10-TOKKI(IDX)  NOT =  SPACE
-                 AND  (RECE10-TOKKI(IDX)  =  "01" OR "02" OR "03")
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *           AND  (RECE10-TOKKI(IDX)  =  "01" OR "02" OR "03")
+      *---(01.00.01) LINE ADD END   ------------------------------------
                    MOVE  RECE10-TOKKI(IDX)  TO  MF101-TOKKI(IDX)
                  END-IF
              END-PERFORM
@@ -965,14 +969,22 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    £³¡¥»ö¶È¥³¡¼¥É
-           MOVE    MF101-KOHFTNJANUM(4:2)  TO  WRK-DATA
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     MOVE    MF101-KOHFTNJANUM(4:2)  TO  WRK-DATA
+           MOVE    MF101-KOHJKYSNUM(1:2)        TO  WRK-DATA
+      *---(01.00.01) LINE ADD END   ------------------------------------
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    £´¡¥Ê¡»ã¼õµë¼ÔÈÖ¹æ
-           MOVE    MF101-KOHJKYSNUM        TO  WRK-NUM
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     MOVE    MF101-KOHJKYSNUM        TO  WRK-NUM
+      *     MOVE    10                      TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           MOVE    MF101-KOHJKYSNUM(3:)    TO  WRK-DATA
            MOVE    10                      TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    £µ¡¥ÊÝ¸±¼ÔÈÖ¹æ
       *    ÊÝ¸±¼Ô¤ÎÀèÆ¬¥¹¥Ú¡¼¥¹µÍ¤á
@@ -1059,127 +1071,133 @@
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    £±£µ¡¥À­ÊÌ
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *    £±£µ¡¥¼õµë¼Ô»áÌ¾
+           MOVE    MF101-NAME              TO  WRK-DATA
+           MOVE    60                      TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *---(01.00.01) LINE ADD END   ------------------------------------
+      *    £±£¶¡¥À­ÊÌ
            MOVE    MF101-SEX               TO  WRK-NUM
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £±£¶¡¥À¸Ç¯
+      *    £±£·¡¥À¸Ç¯
            MOVE    MF101-BIRTHDAY(1:4)     TO  WRK-DATA
            MOVE    4                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    £±£·¡¥ÆÃµ­»ö¹à£±
+      *    £±£¸¡¥ÆÃµ­»ö¹à£±
            MOVE    MF101-TOKKI(1)          TO  WRK-DATA
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    £±£¸¡¥ÆÃµ­»ö¹à£²
+      *    £±£¹¡¥ÆÃµ­»ö¹à£²
            MOVE    MF101-TOKKI(2)          TO  WRK-DATA
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    £±£¹¡¥ÆÃµ­»ö¹à£³
+      *    £²£°¡¥ÆÃµ­»ö¹à£³
            MOVE    MF101-TOKKI(3)          TO  WRK-DATA
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    £²£°¡¥ÊÝ¸±¡¦¿ÇÎÅ¼ÂÆü¿ô
+      *    £²£±¡¥ÊÝ¸±¡¦¿ÇÎÅ¼ÂÆü¿ô
            MOVE    MF101-JNISSU            TO  WRK-NUM
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£±¡¥¸øÈñ£±¡¦¿ÇÎÅ¼ÂÆü¿ô
+      *    £²£²¡¥¸øÈñ£±¡¦¿ÇÎÅ¼ÂÆü¿ô
            MOVE    MF101-EJNISSU(1)        TO  WRK-NUM
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£²¡¥¸øÈñ£²¡¦¿ÇÎÅ¼ÂÆü¿ô
+      *    £²£³¡¥¸øÈñ£²¡¦¿ÇÎÅ¼ÂÆü¿ô
            MOVE    MF101-EJNISSU(2)        TO  WRK-NUM
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£³¡¥ÊÝ¸±¡¦ÅÀ¿ô
+      *    £²£´¡¥ÊÝ¸±¡¦ÅÀ¿ô
            MOVE    MF101-TOTALTEN          TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£´¡¥¸øÈñ£±¡¦ÅÀ¿ô
+      *    £²£µ¡¥¸øÈñ£±¡¦ÅÀ¿ô
            MOVE    MF101-ETOTALTEN(1)      TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£µ¡¥¸øÈñ£²¡¦ÅÀ¿ô
+      *    £²£¶¡¥¸øÈñ£²¡¦ÅÀ¿ô
            MOVE    MF101-ETOTALTEN(2)      TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£¶¡¥ÊÝ¸±¡¦°ìÉôÉéÃ´¶â
+      *    £²£·¡¥ÊÝ¸±¡¦°ìÉôÉéÃ´¶â
            MOVE    MF101-FTNMONEY          TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£·¡¥¸øÈñ£±¡¦°ìÉôÉéÃ´¶â
+      *    £²£¸¡¥¸øÈñ£±¡¦°ìÉôÉéÃ´¶â
            MOVE    MF101-EITBFTN(1)        TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£¸¡¥¸øÈñ£²¡¦°ìÉôÉéÃ´¶â
+      *    £²£¹¡¥¸øÈñ£²¡¦°ìÉôÉéÃ´¶â
            MOVE    MF101-EITBFTN(2)        TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £²£¹¡¥ÊÝ¸±¡¦¿©»öÆü¿ô
+      *    £³£°¡¥ÊÝ¸±¡¦¿©»öÆü¿ô
            MOVE    MF101-SHOKUJINISSU      TO  WRK-NUM
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£°¡¥ÊÝ¸±¡¦¿©»ö´ð½à³Û
+      *    £³£±¡¥ÊÝ¸±¡¦¿©»ö´ð½à³Û
            MOVE    MF101-SHOKUJIRYOYOHI    TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£±¡¥ÊÝ¸±¡¦¿©»öÉ¸½àÉéÃ´³Û
+      *    £³£²¡¥ÊÝ¸±¡¦¿©»öÉ¸½àÉéÃ´³Û
            MOVE    MF101-SHOKUJIFTN        TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£²¡¥¸øÈñ£±¡¦¿©»öÆü¿ô
+      *    £³£³¡¥¸øÈñ£±¡¦¿©»öÆü¿ô
            MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£³¡¥¸øÈñ£±¡¦¿©»ö´ð½à³Û
+      *    £³£´¡¥¸øÈñ£±¡¦¿©»ö´ð½à³Û
            MOVE    MF101-E-SHOKUJIRYOYOHI(1)   TO  WRK-NUM
            MOVE    8                           TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£´¡¥¸øÈñ£±¡¦¿©»öÉ¸½àÉéÃ´³Û
+      *    £³£µ¡¥¸øÈñ£±¡¦¿©»öÉ¸½àÉéÃ´³Û
            MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£µ¡¥¸øÈñ£²¡¦¿©»öÆü¿ô
+      *    £³£¶¡¥¸øÈñ£²¡¦¿©»öÆü¿ô
            MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£¶¡¥¸øÈñ£²¡¦¿©»ö´ð½à³Û
+      *    £³£·¡¥¸øÈñ£²¡¦¿©»ö´ð½à³Û
            MOVE    MF101-E-SHOKUJIRYOYOHI(2)   TO  WRK-NUM
            MOVE    8                           TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£·¡¥¸øÈñ£²¡¦¿©»öÉ¸½àÉéÃ´³Û
+      *    £³£¸¡¥¸øÈñ£²¡¦¿©»öÉ¸½àÉéÃ´³Û
            MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£¸¡¥¸øÈñ£±¡¦ÂÐ¾Ý°ìÉôÉéÃ´¶â
+      *    £³£¹¡¥¸øÈñ£±¡¦ÂÐ¾Ý°ìÉôÉéÃ´¶â
            MOVE    ZERO                    TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    £³£¹¡¥¸øÈñ£²¡¦ÂÐ¾Ý°ìÉôÉéÃ´¶â
+      *    £´£°¡¥¸øÈñ£²¡¦ÂÐ¾Ý°ìÉôÉéÃ´¶â
            MOVE    ZERO                    TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            MOVE    1                       TO  WRK-END
