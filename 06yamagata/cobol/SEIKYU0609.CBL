@@ -37,6 +37,7 @@
       *  01.00.05    内田    07/10/05    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.06    内田    08/03/07    入院の保険種別の印字の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1759,7 +1760,24 @@
            MOVE    SYS-1001-HOSPCDN     TO  SC10-HOSPCDN
       *
       *    <保険種別１>
-           MOVE    "１社"               TO  SC10-HKNSBT1
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    "１社"               TO  SC10-HKNSBT1
+           EVALUATE    MF101-RECESYUBETU (2:1)
+               WHEN    "1"
+                   EVALUATE    MF101-TEISYUTUSAKI
+                       WHEN    1
+                           MOVE    "１社"  TO  SC10-HKNSBT1
+                       WHEN    2
+                           MOVE    "１国"  TO  SC10-HKNSBT1
+                   END-EVALUATE
+               WHEN    "2"
+                   MOVE    "２公費"        TO  SC10-HKNSBT1
+               WHEN    "3"
+                   MOVE    "３老人"        TO  SC10-HKNSBT1
+               WHEN    "4"
+                   MOVE    "４退職"        TO  SC10-HKNSBT1
+           END-EVALUATE
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    <保険種別２>
            IF  MF101-EKOHFTNJANUM (1) = SPACE
