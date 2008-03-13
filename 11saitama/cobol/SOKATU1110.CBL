@@ -35,6 +35,7 @@
       *  01.00.06    内田    07/09/23   日レセver4.0対応
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
+      *  01.00.07    内田    08/03/12   特別療養費対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -569,6 +570,9 @@
                     UNTIL   FLG-END   =   1
            DISPLAY  "2001 END"
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+           PERFORM  2003-TOKUBETU-SEC
+      *---(01.00.07) LINE ADD END   ------------------------------------
            CLOSE   UPD-FILE
            CLOSE   SKT1110TMP-FILE
       *
@@ -915,7 +919,82 @@
            .
        2202-KOH-EXT.
            EXIT.
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    特別療養費処理
+      *****************************************************************
+       2003-TOKUBETU-SEC         SECTION.
       *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           INITIALIZE    FLG-END
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "2"
+                   MOVE    "key39"        TO  WRK-PATH
+               WHEN    "1"
+                   MOVE    "key40"        TO  WRK-PATH
+           END-EVALUATE
+           PERFORM  900-SEIKYU-SELECT-SEC
+      *
+           PERFORM  UNTIL  FLG-END = 1
+      *
+      *TMP-FILE キーセット
+               INITIALIZE  SKT1110TMP-REC
+               MOVE  RECE10-HKNJANUM-S   TO  SKT1110TMP-HKNJANUM
+      *
+      *    さいたま市の代表番号設定
+               IF    SKT1110TMP-HKNJANUM(1:3)    =   "114"
+                   MOVE    114009        TO  SKT1110TMP-HKNJANUM
+               END-IF
+      *    在宅
+               MOVE    RECE10-ZAITAKU    TO  SKT1110TMP-ZAITAKU
+      *    出力順設定
+               IF      YUSEN-HKNJANUM  =   SKT1110TMP-HKNJANUM
+                   MOVE    1           TO  SKT1110TMP-SYUTURYOKU
+               ELSE
+                   IF      RECE10-PREFKBN  =   "1"
+                       MOVE    2       TO  SKT1110TMP-SYUTURYOKU
+                   ELSE
+                       MOVE    3       TO  SKT1110TMP-SYUTURYOKU
+                   END-IF
+               END-IF
+      *
+               PERFORM  800-SKTTMP-READ-SEC
+               PERFORM  20031-TOKU-SYUKEI-SEC
+      *
+               PERFORM  900-SEIKYU-READ-SEC
+           END-PERFORM
+      *
+           .
+       2003-TOKUBETU-EXT.
+           EXIT.
+      *****************************************************************
+      *    特別療養費処理
+      *****************************************************************
+       20031-TOKU-SYUKEI-SEC         SECTION.
+      *
+      *    件数
+           ADD     1                   TO  SKT1110TMP-T-KENSU
+      *    日数
+           ADD     RECE10-JNISSU(1)    TO  SKT1110TMP-T-NISSU
+      *    点数
+           ADD     RECE10-TOTALTEN(1)  TO  SKT1110TMP-T-TENSU
+      *
+           IF      FLG-SKT1110TMP  =   1
+               WRITE   SKT1110TMP-REC
+           ELSE
+               REWRITE SKT1110TMP-REC
+           END-IF
+      *
+           .
+       20031-TOKU-SYUKEI-EXT.
+           EXIT.
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
       *****************************************************************
@@ -1232,6 +1311,21 @@
                MOVE    SKT1110TMP-SFTNGK(IDX1)     TO  WRK-Z9
                MOVE    WRK-Z9  TO  SKT1120-SFTNGK(IDX3)
            END-PERFORM
+      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    特別療養費
+      *    件数
+           MOVE    SKT1110TMP-T-KENSU TO  WRK-Z5
+           MOVE    WRK-Z5  TO  SKT1120-T-KENSU
+      *
+      *    日数
+           MOVE    SKT1110TMP-T-NISSU TO  WRK-Z5
+           MOVE    WRK-Z5  TO  SKT1120-T-NISSU
+      *
+      *    点数
+           MOVE    SKT1110TMP-T-TENSU TO  WRK-Z9
+           MOVE    WRK-Z9  TO  SKT1120-T-TENSU
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            .
        321-BODY-HEN-EXT.
@@ -1738,6 +1832,10 @@
            END-IF
       *
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+           MOVE    "000000"            TO  RECE10-SRYYM
+           MOVE    "999999"            TO  RECE10-XXSRYYM
+      *---(01.00.07) LINE ADD END   ------------------------------------
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
       *---(01.00.06) LINE ADD START ------------------------------------

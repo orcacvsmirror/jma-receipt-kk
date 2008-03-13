@@ -39,6 +39,7 @@
       *  01.00.07    内田    07/09/21   日レセver4.0対応
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
+      *  01.00.08    内田    08/03/12   特別療養費対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -603,6 +604,11 @@
       *    国保合計・公費合計書き出し
            PERFORM 2203-SYORI-SEC
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    特別療養費集計
+           PERFORM  2004-TOKUBETU-SEC
+      *---(01.00.08) LINE ADD END   ------------------------------------
+      *
            CLOSE   SKT1105TMP-FILE
       *
            IF       FLG-UPD   =         1
@@ -688,7 +694,10 @@
                    ELSE
                        MOVE    ZERO            TO  SKT1105TMP-KYURATE
                    END-IF
-                   MOVE    3       TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *             MOVE    3       TO  SKT1105TMP-KBN1
+                   MOVE    4       TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD END   ------------------------------------
                END-IF
            END-IF
       *
@@ -745,7 +754,10 @@
       *    点数
            ADD     RECE10-TOTALTEN(1)  TO  SKT1105TMP-TENSU(IDX1)
       *
-           IF      SKT1105TMP-KBN1     =   3
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     IF      SKT1105TMP-KBN1     =   3
+           IF      SKT1105TMP-KBN1     =   4
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *    請求額払の金額
                MOVE    ZERO            TO  WRK-SEIKYUGK-G
                COMPUTE WRK-SEIKYUGK-G  =
@@ -842,7 +854,10 @@
       *
       *    TMPキーセット
            INITIALIZE          SKT1105TMP-REC
-           MOVE    4       TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE    4       TO  SKT1105TMP-KBN1
+           MOVE    5       TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
            IF      RECE10-KOHNUM(IDX3) =   "091"
                MOVE    "051"           TO  SKT1105TMP-HKNJANUM
@@ -983,7 +998,10 @@
       *    国保合計書き出し
       *    KEY設定
            INITIALIZE                      SKT1105TMP-REC
-           MOVE    3                   TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE    3                   TO  SKT1105TMP-KBN1
+           MOVE    4                   TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    1                   TO  SKT1105TMP-KBN2
       *
            MOVE    KOKUHO-TAL          TO  SKT1105TMP-DATA
@@ -992,7 +1010,10 @@
       *    公費合計書き出し
       *    KEY設定
            INITIALIZE                      SKT1105TMP-REC
-           MOVE    4                   TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE    4                   TO  SKT1105TMP-KBN1
+           MOVE    5                   TO  SKT1105TMP-KBN1
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    1                   TO  SKT1105TMP-KBN2
       *
            MOVE    KOUHI-TAL           TO  SKT1105TMP-DATA
@@ -1002,6 +1023,84 @@
       *
        2203-SYORI-EXT.
            EXIT.
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    特別療養費処理
+      *****************************************************************
+       2004-TOKUBETU-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH2            TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           INITIALIZE    FLG-END
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "2"
+                   MOVE    "key39"        TO  WRK-PATH2
+               WHEN    "1"
+                   MOVE    "key40"        TO  WRK-PATH2
+           END-EVALUATE
+           PERFORM  900-SEIKYU-SELECT-SEC
+      *
+           PERFORM  UNTIL  FLG-END = 1
+      *
+      *TMP-FILE キーセット
+               INITIALIZE                  SKT1105TMP-REC
+               MOVE    3               TO  SKT1105TMP-KBN1
+      *
+               PERFORM  800-SKTTMP-READ-SEC
+               PERFORM  20041-TOKU-SYUKEI-SEC
+      *
+               PERFORM  900-SEIKYU-READ-SEC
+           END-PERFORM
+      *
+           .
+      *
+       2004-TOKUBETU-EXT.
+           EXIT.
+      *****************************************************************
+      *    特別療養費処理
+      *****************************************************************
+       20041-TOKU-SYUKEI-SEC         SECTION.
+      *
+           IF      RECE10-NYUGAIKBN    =   "1"
+               MOVE    1       TO  IDX1
+           ELSE
+               MOVE    2       TO  IDX1
+           END-IF
+      *
+      *    件数
+           ADD     1                   TO  SKT1105TMP-KENSU(IDX1)
+      *    日数
+           ADD     RECE10-JNISSU(1)    TO  SKT1105TMP-NISSU(IDX1)
+      *    点数
+           ADD     RECE10-TOTALTEN(1)  TO  SKT1105TMP-TENSU(IDX1)
+      *
+      *    食事療養
+           IF      RECE10-SHOKUJINISSU(1)  >   ZERO
+      *    食事療養：件数
+               ADD     1               TO  SKT1105TMP-S-KENSU
+           END-IF
+      *    食事療養：日数
+           ADD     RECE10-SHOKUJINISSU(1)
+                                       TO  SKT1105TMP-S-NISSU
+      *    食事療養：金額
+           ADD     RECE10-SHOKUJIRYOYOHI(1)
+                                       TO  SKT1105TMP-S-KINGK
+      *
+           IF      FLG-SKT1105TMP  =   1
+               WRITE   SKT1105TMP-REC
+           ELSE
+               REWRITE SKT1105TMP-REC
+           END-IF
+      *
+           .
+       20041-TOKU-SYUKEI-EXT.
+           EXIT.
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *****************************************************************
       *    請求ＤＢ更新用ファイル出力処理             
       *****************************************************************
@@ -1185,14 +1284,27 @@
       *            退職者医療
                    WHEN    2
                        PERFORM 3202-BODY-HEN-SEC
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *
+      *            特別療養費
+                   WHEN    3
+                       ADD     1       TO  CNT-LINE
+                       PERFORM 3205-BODY-HEN-SEC
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *            一般国保
-                   WHEN    3
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *             WHEN    3
+                   WHEN    4
+      *---(01.00.08) LINE ADD END   ------------------------------------
                        ADD     1       TO  CNT-LINE
                        PERFORM 3203-BODY-HEN-SEC
       *
       *            公費
-                   WHEN    4
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *             WHEN    4
+                   WHEN    5
+      *---(01.00.08) LINE ADD END   ------------------------------------
                        ADD     1       TO  CNT-LINE
                        PERFORM 3204-BODY-HEN-SEC
               END-EVALUATE
@@ -1309,6 +1421,60 @@
       *
        3202-BODY-HEN-EXT.
            EXIT.
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票編集<特別療養費>処理
+      *****************************************************************
+       3205-BODY-HEN-SEC              SECTION.
+      *
+           PERFORM VARYING IDX4    FROM    1   BY  1
+                   UNTIL   IDX4    >       2
+      *
+      *        療養の給付：件数
+               MOVE    SKT1105TMP-KENSU(IDX4)  TO  WRK-Z5
+               MOVE    WRK-Z5      TO  SKT05-KENSU(CNT-LINE IDX4)
+      *
+      *        療養の給付：日数
+               MOVE    SKT1105TMP-NISSU(IDX4)  TO  WRK-Z5
+               MOVE    WRK-Z5      TO  SKT05-NISSU(CNT-LINE IDX4)
+      *
+      *        療養の給付：点数
+               MOVE    SKT1105TMP-TENSU(IDX4)  TO  WRK-Z9
+               MOVE    WRK-Z9      TO  SKT05-TENSU(CNT-LINE IDX4)
+           END-PERFORM
+      *
+      *    食事療養：件数
+           MOVE    SKT1105TMP-S-KENSU          TO  WRK-Z5
+           MOVE    WRK-Z5          TO  SKT05-S-KENSU(CNT-LINE)
+      *
+      *    食事療養：日数
+           MOVE    SKT1105TMP-S-NISSU          TO  WRK-Z5
+           MOVE    WRK-Z5          TO  SKT05-S-NISSU(CNT-LINE)
+      *
+      *    食事療養：金額
+           MOVE    SKT1105TMP-S-KINGK          TO  WRK-Z9
+           MOVE    WRK-Z9          TO  SKT05-S-MONEY(CNT-LINE)
+      *
+           MOVE    "特別療養費"            TO  SKT05-NAME(CNT-LINE)
+      *    合計加算
+           ADD     SKT1105TMP-KENSU(1)         TO  SUM-KENSU(1)
+           ADD     SKT1105TMP-KENSU(2)         TO  SUM-KENSU(2)
+      *
+           ADD     SKT1105TMP-NISSU(1)         TO  SUM-NISSU(1)
+           ADD     SKT1105TMP-NISSU(2)         TO  SUM-NISSU(2)
+      *
+           ADD     SKT1105TMP-TENSU(1)         TO  SUM-TENSU(1)
+           ADD     SKT1105TMP-TENSU(2)         TO  SUM-TENSU(2)
+      *
+           ADD     SKT1105TMP-S-KENSU          TO  SUM-S-KENSU
+           ADD     SKT1105TMP-S-NISSU          TO  SUM-S-NISSU
+           ADD     SKT1105TMP-S-KINGK          TO  SUM-S-KINGK
+      *
+           .
+      *
+       3205-BODY-HEN-EXT.
+           EXIT.
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *****************************************************************
       *    帳票編集<一般国保>処理
       *****************************************************************
@@ -1683,6 +1849,10 @@
            MOVE    SPACE                   TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"              TO  RECE10-XXEDHKNJANUM
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+           MOVE    "000000"                TO  RECE10-SRYYM
+           MOVE    "999999"                TO  RECE10-XXSRYYM
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    RECE10-REC              TO  MCPDATA-REC.
            MOVE    "DBSELECT"              TO  MCP-FUNC.
       *---(01.00.07) LINE ADD START ------------------------------------
