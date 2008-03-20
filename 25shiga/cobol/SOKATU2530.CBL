@@ -35,6 +35,9 @@
       *  01.00.04    内田    07/09/09    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.05    内田    08/01/07    印字対象番号の追加（441,541）
+      *  01.00.06    内田    08/03/18    政令指定都市の代表番号は
+      *                                  国保総括表にある代表番号に変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -629,27 +632,57 @@
            EVALUATE    SKT2530TMP-HKNJANUM(1:3)
       *        札幌市の場合、代表番号セット
                WHEN    "014"
-                   MOVE    "010017"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "010017"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "014001"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "札幌市"    TO  SKT2530TMP-HKNJANAME
       *        仙台市の場合、代表番号セット
                WHEN    "044"
-                   MOVE    "040014"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "040014"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "044008"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "仙台市"    TO  SKT2530TMP-HKNJANAME
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *        さいたま市の場合、代表番号セット
+               WHEN    "114"
+                   MOVE    "114009"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "さいたま市"    TO  SKT2530TMP-HKNJANAME
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *        千葉市の場合、代表番号セット
                WHEN    "124"
-                   MOVE    "120014"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "120014"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "124008"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "千葉市"    TO  SKT2530TMP-HKNJANAME
       *        横浜市の場合、代表番号セット
                WHEN    "144"
-                   MOVE    "140012"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "140012"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "144006"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "横浜市"    TO  SKT2530TMP-HKNJANAME
       *        川崎市の場合、代表番号セット
                WHEN    "145"
-                   MOVE    "140020"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "140020"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "145003"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "川崎市"    TO  SKT2530TMP-HKNJANAME
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *        新潟市の場合、代表番号セット
+               WHEN    "154"
+                   MOVE    "154005"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "新潟市"    TO  SKT2530TMP-HKNJANAME
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *        名古屋市の場合、代表番号セット
                WHEN    "234"
-                   MOVE    "230011"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "230011"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "234005"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "名古屋市"  TO  SKT2530TMP-HKNJANAME
                    IF      RECE10-AGE  >   2
                    AND     RECE10-AGE  <   70
@@ -660,11 +693,17 @@
                    END-IF
       *        京都市の場合、代表番号セット
                WHEN    "264"
-                   MOVE    "260018"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "260018"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "264002"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "京都市"    TO  SKT2530TMP-HKNJANAME
       *        大阪市の場合、代表番号セット
                WHEN    "274"
-                   MOVE    "270017"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "270017"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "274001"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "大阪市"    TO  SKT2530TMP-HKNJANAME
       *---(01.00.03) LINE ADD START ------------------------------------
       *        堺市の場合、代表番号セット
@@ -674,19 +713,31 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *        神戸市の場合、代表番号セット
                WHEN    "284"
-                   MOVE    "280016"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "280016"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "284000"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "神戸市"    TO  SKT2530TMP-HKNJANAME
       *        広島市の場合、代表番号セット
                WHEN    "344"
-                   MOVE    "340018"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "340018"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "344002"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "広島市"    TO  SKT2530TMP-HKNJANAME
       *        北九州市の場合、代表番号セット
                WHEN    "404"
-                   MOVE    "400010"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "400010"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "404004"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "北九州市"  TO  SKT2530TMP-HKNJANAME
       *        福岡市の場合、代表番号セット
                WHEN    "405"
-                   MOVE    "400028"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             MOVE    "400028"    TO  SKT2530TMP-HKNJANUM
+                   MOVE    "405001"    TO  SKT2530TMP-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "福岡市"    TO  SKT2530TMP-HKNJANAME
            END-EVALUATE
       *
@@ -1074,6 +1125,9 @@
                                            OR  "144" OR "244" OR "344"
                                            OR  "145" OR "245" OR "345"
                                            OR  "146" OR "246" OR "170"
+      *---(01.00.05) LINE ADD START ------------------------------------
+                                           OR  "441" OR "541"
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****
       *
                    IF      RECE10-FTNMONEY(IDX3 + 1)   >   ZERO
