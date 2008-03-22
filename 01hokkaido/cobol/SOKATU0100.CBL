@@ -45,6 +45,7 @@
       *                                 処理をする
       *  01.00.11    内田   07/11/13    保険番号643,843,644,744,844にて
       *                                 公費の助成がないなら集計しない
+      *  01.00.12    内田   08/03/20    福祉再掲欄で入院高額療養費は金額を印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -791,7 +792,6 @@
            .
        2101-SYUKEI-EXT.
            EXIT.
-      *
       *****************************************************************
       *    編集処理
       *****************************************************************
@@ -864,7 +864,6 @@
            .
        2202-KOH-EXT.
            EXIT.
-      *
       *****************************************************************
 006900*    道老集計処理
       *****************************************************************
@@ -1063,6 +1062,23 @@
              MOVE       1              TO  IDX1
            END-IF
       *
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *    高額療養費チェック（入院のみ）
+           IF  RECE02-NYUGAIKBN  =  "1"
+             IF   RECE02-ZAITAKU  NOT =  SPACE
+             AND  RECE02-ZAITAKU  NOT =  "1"
+               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+                 MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-TOTALTEN
+               ELSE
+                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+                 COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+                                          *  RECE02-KYURATE  /  10
+               END-IF
+             END-IF
+           END-IF
+      *---(01.00.12) LINE ADD END   ------------------------------------
+      *
       *    データ加算
       *    件数
       ****2006/05/18 @@@@ START     
@@ -1134,6 +1150,22 @@
              MOVE      WRK-T-KESE      TO  WRK-SEIKYUGK-G
            END-IF
       *
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *    高額療養費チェック（入院のみ）
+           IF  RECE02-NYUGAIKBN  =  "1"
+             IF   RECE02-ZAITAKU  NOT =  SPACE
+             AND  RECE02-ZAITAKU  NOT =  "1"
+               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+                 MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-TOTALTEN
+               ELSE
+                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+                 COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+                                          *  RECE02-KYURATE  /  10
+               END-IF
+             END-IF
+           END-IF
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *    データ加算
       *    件数
       ****2006/05/18 @@@@ START     
