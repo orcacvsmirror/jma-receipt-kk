@@ -49,7 +49,7 @@
                05  SKT0110TMP-D-SKINGK              PIC  9(09).
                05  SKT0110TMP-D-SFTNGK              PIC  9(09).
            03  SKT0110TMP-TYOKI-TBL  OCCURS  2.
-               05  SKT0110TMP-T-RATE                PIC  9(01).
+               05  SKT0110TMP-T-RATE                PIC  9(02).
                05  SKT0110TMP-T-KENSU               PIC  9(05).
                05  SKT0110TMP-T-NISSU               PIC  9(05).
                05  SKT0110TMP-T-TENSU               PIC  9(09).

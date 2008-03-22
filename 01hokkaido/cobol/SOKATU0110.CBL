@@ -40,6 +40,8 @@
       *  01.00.06    内田   07/09/26    日レセver4.0対応
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
+      *  01.00.07    内田   08/03/18    長期欄の割合を印字する
+      *                                 長期欄の一部負担金は印字しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1055,6 +1057,9 @@
              MOVE  2  TO  IDX4
            ELSE
              MOVE  1  TO  IDX4
+      *---(01.00.07) LINE ADD START ------------------------------------
+             MOVE  RECE10-KYURATE    TO  SKT0110TMP-T-RATE (IDX4)
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-IF
       *療養の給付
       *    件数
@@ -1411,6 +1416,13 @@
       *    指定公費（長期療養）
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     2
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    割合
+             IF  IDX1  =  1
+               MOVE  SKT0110TMP-T-RATE (IDX1)   TO  WRK-Z2
+               MOVE  WRK-Z2  TO  SKT0120-T-RATE (IDX1)
+             END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    件数
              MOVE  SKT0110TMP-T-KENSU (IDX1)   TO  WRK-Z5
              MOVE  WRK-Z5  TO  SKT0120-T-KENSU (IDX1)
@@ -1420,9 +1432,11 @@
       *    点数
              MOVE  SKT0110TMP-T-TENSU (IDX1)   TO  WRK-Z9
              MOVE  WRK-Z9  TO  SKT0120-T-TENSU (IDX1)
+      *---(01.00.07) LINE ADD START ------------------------------------
       *    一部負担金
-             MOVE  SKT0110TMP-T-ITBFTN (IDX1)  TO  WRK-Z9
-             MOVE  WRK-Z9  TO  SKT0120-T-ITBFTN (IDX1)
+      *       MOVE  SKT0110TMP-T-ITBFTN (IDX1)  TO  WRK-Z9
+      *       MOVE  WRK-Z9  TO  SKT0120-T-ITBFTN (IDX1)
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-PERFORM
       *
            .

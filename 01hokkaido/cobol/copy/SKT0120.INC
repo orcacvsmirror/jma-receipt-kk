@@ -42,7 +42,7 @@
                 05  SKT0120-D-SKINGK            PIC X(09).
                 05  SKT0120-D-SFTNGK            PIC X(09).
             03  SKT0120-TYOKI-TBL               OCCURS  2 TIMES.
-                05  SKT0120-T-RATE              PIC X(01).
+                05  SKT0120-T-RATE              PIC X(02).
                 05  SKT0120-T-KENSU             PIC X(05).
                 05  SKT0120-T-NISSU             PIC X(05).
                 05  SKT0120-T-TENSU             PIC X(09).
