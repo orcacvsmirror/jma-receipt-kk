@@ -35,6 +35,7 @@
       *                                   医療機関情報を参照
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
+      *  01.00.03     内田    08/03/26    保険者名取得の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1518,7 +1519,17 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
            IF  MCP-RC  =  ZERO
              PERFORM  925-HKNJAINF-READ-SEC
-             MOVE  HKNJA-HKNJANAME   TO  WRK-HKNJANAME
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *       MOVE  HKNJA-HKNJANAME   TO  WRK-HKNJANAME
+             PERFORM  UNTIL  FLG-HKNJAINF  =  1
+                 IF  HKNJA-HKNNUM  =  "060"
+                     MOVE  HKNJA-HKNJANAME   TO  WRK-HKNJANAME
+                     MOVE  1                 TO  FLG-HKNJAINF
+                 ELSE
+                     PERFORM  925-HKNJAINF-READ-SEC
+                 END-IF
+             END-PERFORM
+      *---(01.00.03) LINE ADD END   ------------------------------------
            ELSE
              DISPLAY  "HKNJAINF SELECT ERR"
            END-IF
