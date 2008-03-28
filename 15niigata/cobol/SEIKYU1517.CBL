@@ -44,6 +44,9 @@
       *  01.00.06    内田    07/09/21    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.07    内田　　08/03/22    複数保険所持時の長期欄の○印字修正
+      *                                  長期所持時の患者負担額の修正
+      *                                  患者負担額の四捨五入修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -118,7 +121,9 @@
            03  FLG-PTKOHINF   PIC 9(01).
            03  FLG-KEIKA      PIC 9(01).
            03  FLG-TYOKI      PIC 9(01).
-      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  FLG-RECE10     PIC 9(01).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -279,6 +284,11 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    請求管理
+           COPY    "CPRCF010.INC".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    保険組合せ
        01  HKNCOMBI-REC.
@@ -695,9 +705,18 @@
            END-IF
            PERFORM  920-SYUNOU-SET-SEC
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    長期チェック
+           PERFORM  900-SEIKYU-SELECT-SEC
+      *---(01.00.07) LINE ADD END   ------------------------------------
+      *
       *    長期
-           IF   WRK-TYOKI                    >=   10000     AND
-                FLG-TYOKI                     =   1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     IF   WRK-TYOKI                    >=   10000     AND
+      *          FLG-TYOKI                     =   1
+           IF   FLG-TYOKI                    =  1         AND
+                MF100-TAHOFTN                >  10000
+      *---(01.00.07) LINE ADD END   ------------------------------------
              MOVE   10000                    TO   MF100-TAHOFTN
              MOVE   1                        TO   MF100-TYOKI
            END-IF
@@ -708,11 +727,15 @@
              MOVE   1                        TO   MF100-TYOKI
            END-IF
       *    長期上位
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *     IF   WRK-TYOKI                     >   20000     AND
-           IF   WRK-TYOKI                    >=   20000     AND
+      *---(01.00.07) LINE ADD START ------------------------------------
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **     IF   WRK-TYOKI                     >   20000     AND
+      *     IF   WRK-TYOKI                    >=   20000     AND
       *---(01.00.04) LINE ADD END   ------------------------------------
-                FLG-TYOKI                     =   2
+      *          FLG-TYOKI                     =   2
+           IF   FLG-TYOKI                    =  2         AND
+                MF100-TAHOFTN                >  20000
+      *---(01.00.07) LINE ADD END   ------------------------------------
              MOVE   20000                    TO   MF100-TAHOFTN
              MOVE   2                        TO   MF100-TYOKI
            END-IF
@@ -1891,7 +1914,10 @@
       *      他法公費の計算負担金を四捨五入
              IF  (SYU-KOH-HKNNUM(IDX)(1:1) = "0"  AND
                   SYU-KOH-HKNNUM(IDX) NOT  = "027")
-               MOVE  SYU-KOH-COMPFTN(IDX)  TO  WRK-COMPFTN
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         MOVE  SYU-KOH-COMPFTN(IDX)  TO  WRK-COMPFTN
+               MOVE  SYU-KOH-HKNFTNMONEY(IDX)  TO  WRK-COMPFTN
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *        他法公費と点数
                PERFORM  VARYING  IDX1  FROM  1  BY  1
@@ -1913,14 +1939,16 @@
                    WRK-COMPFTN      =  530   OR
                    WRK-COMPFTN      =  0
                  MOVE  WRK-COMPFTN             TO  WRK-KEISAN2
-                 DIVIDE   WRK-KEISAN2    BY  10
-                          GIVING             WRK-KEISAN
-                          REMAINDER          WRK-AMARI
-                 COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
-                                          -  WRK-AMARI
-                 IF  WRK-AMARI     >=     5
-                   ADD    10             TO  WRK-KEISAN2
-                 END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *           DIVIDE   WRK-KEISAN2    BY  10
+      *                    GIVING             WRK-KEISAN
+      *                    REMAINDER          WRK-AMARI
+      *           COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
+      *                                    -  WRK-AMARI
+      *           IF  WRK-AMARI     >=     5
+      *             ADD    10             TO  WRK-KEISAN2
+      *           END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  MOVE      WRK-KEISAN2       TO  WRK-KEISAN3
       *
       *        複数科診療の場合は伝票番号毎にまとめて合算する
@@ -1945,16 +1973,20 @@
                IF  SYU-GRP-DENPNUM        =  ZERO  OR
                    SYU-KOH-COMPFTN(IDX)   =  530   OR
                    SYU-KOH-COMPFTN(IDX)   =  0
-                 MOVE  SYU-KOH-COMPFTN(IDX)    TO  WRK-KEISAN2
-                 DIVIDE   WRK-KEISAN2    BY  10
-                          GIVING             WRK-KEISAN
-                          REMAINDER          WRK-AMARI
-                 COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
-                                          -  WRK-AMARI
-                 IF  WRK-AMARI     >=     5
-                   ADD    10             TO  WRK-KEISAN2
-                 END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *           MOVE  SYU-KOH-COMPFTN(IDX)    TO  WRK-KEISAN2
+      *           DIVIDE   WRK-KEISAN2    BY  10
+      *                    GIVING             WRK-KEISAN
+      *                    REMAINDER          WRK-AMARI
+      *           COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
+      *                                    -  WRK-AMARI
+      *           IF  WRK-AMARI     >=     5
+      *             ADD    10             TO  WRK-KEISAN2
+      *          END-IF
+      *           ADD     WRK-KEISAN2     TO  MF100-FTNMONEY
+                 MOVE  SYU-KOH-HKNFTNMONEY(IDX)    TO  WRK-KEISAN2
                  ADD     WRK-KEISAN2     TO  MF100-FTNMONEY
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *      複数科診療
                ELSE
@@ -2004,26 +2036,30 @@
                     UNTIL    IDX1                 >     4  
                     OR       KASAN-DENPNUM(IDX1)  =  ZERO
              MOVE  KASAN-COMPFTN(IDX1)    TO  WRK-KEISAN2
-             DIVIDE   WRK-KEISAN2    BY  10
-                      GIVING             WRK-KEISAN
-                      REMAINDER          WRK-AMARI
-             COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
-                                      -  WRK-AMARI
-             IF  WRK-AMARI     >=     5
-               ADD    10             TO  WRK-KEISAN2
-             END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *       DIVIDE   WRK-KEISAN2    BY  10
+      *                GIVING             WRK-KEISAN
+      *                REMAINDER          WRK-AMARI
+      *       COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
+      *                                -  WRK-AMARI
+      *       IF  WRK-AMARI     >=     5
+      *         ADD    10             TO  WRK-KEISAN2
+      *       END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
              ADD     WRK-KEISAN2     TO  MF100-FTNMONEY
       *
              IF  KASAN-TAHO(IDX1)  =  1
                MOVE  KASAN-TAHOFTN(IDX1)    TO  WRK-KEISAN2
-               DIVIDE   WRK-KEISAN2    BY  10
-                        GIVING             WRK-KEISAN
-                        REMAINDER          WRK-AMARI
-               COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
-                                        -  WRK-AMARI
-               IF  WRK-AMARI     >=     5
-                 ADD    10             TO  WRK-KEISAN2
-               END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         DIVIDE   WRK-KEISAN2    BY  10
+      *                  GIVING             WRK-KEISAN
+      *                  REMAINDER          WRK-AMARI
+      *         COMPUTE  WRK-KEISAN2     =  WRK-KEISAN2
+      *                                  -  WRK-AMARI
+      *         IF  WRK-AMARI     >=     5
+      *           ADD    10             TO  WRK-KEISAN2
+      *         END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                ADD     WRK-KEISAN2     TO  MF100-TAHOFTN
              END-IF
            END-PERFORM
@@ -2246,6 +2282,90 @@
        955-HKNNUM-READ-EXT.
            EXIT.
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *****************************************************************
+      *   長期チェック−請求管理情報
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC  SECTION.
+      *
+           INITIALIZE  RECE10-REC
+           MOVE  RECE02-HOSPNUM       TO  RECE10-HOSPNUM
+           MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
+           MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+           MOVE  RECE02-PTID          TO  RECE10-PTID
+           MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
+           MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+           MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+           MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+           MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+           MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+           MOVE  RECE10-REC           TO  MCPDATA-REC
+           MOVE  "DBSELECT"           TO  MCP-FUNC
+           MOVE  "tbl_seikyu"         TO  MCP-TABLE
+           MOVE  "key"                TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF  MCP-RC  =  ZERO
+             PERFORM  900-SEIKYU-READ-SEC
+      *      長期チェック
+             IF  RECE10-TOKKI (1)  =  "02"
+             OR  RECE10-TOKKI (2)  =  "02"
+             OR  RECE10-TOKKI (3)  =  "02"
+             OR  RECE10-TOKKI (4)  =  "02"
+             OR  RECE10-TOKKI (5)  =  "02"
+                 MOVE  1  TO  FLG-TYOKI
+                 MOVE  1  TO  MF100-TYOKI
+             END-IF
+             IF  RECE10-TOKKI (1)  =  "16"
+             OR  RECE10-TOKKI (2)  =  "16"
+             OR  RECE10-TOKKI (3)  =  "16"
+             OR  RECE10-TOKKI (4)  =  "16"
+             OR  RECE10-TOKKI (5)  =  "16"
+                 MOVE  2  TO  FLG-TYOKI
+                 MOVE  2  TO  MF100-TYOKI
+             END-IF
+           ELSE
+             DISPLAY  "SEIKYU SELECT ERR"
+           END-IF
+      *
+           MOVE  "DBCLOSECURSOR"    TO  MCP-FUNC
+           MOVE  "tbl_seikyu"       TO  MCP-TABLE
+           MOVE  "key"              TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+      *
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求管理読込
+      *****************************************************************
+       900-SEIKYU-READ-SEC  SECTION.
+      *
+           MOVE  "tbl_seikyu"   TO  MCP-TABLE
+           MOVE  "key"          TO  MCP-PATHNAME
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  RECE10-REC
+             MOVE  ZERO         TO  FLG-RECE10
+           ELSE
+             INITIALIZE             RECE10-REC
+             MOVE  1            TO  FLG-RECE10
+           END-IF
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
