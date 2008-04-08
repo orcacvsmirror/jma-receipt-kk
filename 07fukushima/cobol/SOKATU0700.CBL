@@ -33,6 +33,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *                                  返戻対応
+      *  01.00.04    内田    08/04/06    SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -328,6 +329,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
