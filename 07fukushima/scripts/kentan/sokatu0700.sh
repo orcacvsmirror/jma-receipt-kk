@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /etc/jma-receipt/jma-receipt.env
+. @jma-receipt-env@
 
 PREFNAME=fukushima
 PROGRAMID=SOKATU0700
@@ -25,8 +25,6 @@ RENNUM=0
             rm  ${16}
         fi
 
-        cd  ${ORCA_DIR}
-
 ##       ÷Ã· ¨
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -44,6 +42,6 @@ RENNUM=0
             fi
         fi
 
-	    ${DBSTUB} -record ${RECORDDIR} -dir ${LDDEFDIR}/directory -bddir ${LDDEFDIR} -db orca -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
+        ${DBSTUB} -record ${RECORDDIR} -dir ${LDDEFDIR}/directory -bddir ${LDDEFDIR} -db orca -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
         exit
