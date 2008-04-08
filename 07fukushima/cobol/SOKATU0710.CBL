@@ -35,6 +35,8 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/02/08    退職で保険番号100所持者は
       *                                  退職法定外欄へ印字
+      *  01.00.04    内田    08/04/06    在総診を別帳票としない
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -352,6 +354,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -691,8 +696,10 @@
            ELSE
              MOVE        2          TO   SKT0710TMP-SYUTURYOKU
            END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
       *    在宅
-           MOVE   RECE10-ZAITAKU    TO   SKT0710TMP-ZAITAKU
+      *     MOVE   RECE10-ZAITAKU    TO   SKT0710TMP-ZAITAKU
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
