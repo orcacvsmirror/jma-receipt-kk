@@ -34,6 +34,7 @@
       *                                      医療機関情報を参照
       *                                      給付割合が異なっても別帳票としない
       *  01.00.03       内田     08/01/27    一般でも在総診は別帳票とする
+      *  01.00.04       内田     08/04/09    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -369,6 +370,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
