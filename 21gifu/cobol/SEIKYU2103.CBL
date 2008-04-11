@@ -32,6 +32,9 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.02    内田    08/04/09    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
+      *                                  長期の判定修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -319,6 +322,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  SUM-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.02) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -676,7 +682,10 @@
                END-IF
       *    長期限度額設定
                IF  WRK-SEIKYUGK-G      >   10000   AND
-                   MF100-TYOKI         =   1
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *             MF100-TYOKI         =   1
+                   FLG-TYOKI         =   1
+      *---(01.00.02) LINE ADD END   ------------------------------------
                    MOVE    10000       TO  WRK-SEIKYUGK-G
                END-IF
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -689,7 +698,10 @@
       *
                MOVE    WRK-SEIKYUGK-G  TO  MF100-ITBFTN
       *    特定疾患併用判定
-               IF  MF100-TYOKI         =   3
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *         IF  MF100-TYOKI         =   3
+               IF  MF100-TYOKI         =   2  OR  3  OR  4
+      *---(01.00.02) LINE ADD END   ------------------------------------
                    MOVE    MF100-TOKUTEIFTN
                                        TO  MF100-ITBFTN
                    IF  MF100-KOHTENSU  =   MF100-TOTALTEN
@@ -1045,15 +1057,38 @@
       *
                    EVALUATE  SYU-KOH-HKNNUM(IDX)
                        WHEN "010"
-                       WHEN "021"
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *                 WHEN "021"
+      *---(01.00.02) LINE ADD END   ------------------------------------
                            ADD SYU-TOTAL-HKNTEN
                                                TO  MF100-KOHTENSU
                        WHEN "051"
-                           MOVE    SYU-TOTAL-HKNTEN
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *                     MOVE    SYU-TOTAL-HKNTEN
+      *                                         TO  MF100-KOHTENSU
+                       WHEN "091"
+                           ADD      SYU-TOTAL-HKNTEN
                                                TO  MF100-KOHTENSU
+      *---(01.00.02) LINE ADD END   ------------------------------------
                            MOVE   3            TO  MF100-TYOKI
                            ADD SYU-KOH-COMPFTN(IDX)
                                                TO  MF100-TOKUTEIFTN
+      *---(01.00.02) LINE ADD START ------------------------------------
+                       WHEN "052"
+                           ADD      SYU-TOTAL-HKNTEN
+                                               TO  MF100-KOHTENSU
+                           MOVE   2            TO  MF100-TYOKI
+                           ADD SYU-KOH-COMPFTN(IDX)
+                                               TO  MF100-TOKUTEIFTN
+                       WHEN "015"
+                       WHEN "016"
+                       WHEN "021"
+                           ADD      SYU-TOTAL-HKNTEN
+                                               TO  MF100-KOHTENSU
+                           MOVE   4            TO  MF100-TYOKI
+                           ADD SYU-KOH-COMPFTN(IDX)
+                                               TO  MF100-TOKUTEIFTN
+      *---(01.00.02) LINE ADD END   ------------------------------------
                    END-EVALUATE
       *
                END-IF
