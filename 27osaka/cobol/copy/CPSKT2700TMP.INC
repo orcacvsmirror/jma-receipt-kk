@@ -25,6 +25,7 @@
            03  SKT2700TMP-KEY.
                05  SKT2700TMP-SYUTURYOKU            PIC  9(01).
                05  SKT2700TMP-HKNJANUM              PIC  X(06).
+               05  SKT2700TMP-SRYYM                 PIC  9(06).
            03  SKT2700TMP-KYURATE                   PIC  9(02).
            03  SKT2700TMP-AREA  OCCURS  31.
                05  SKT2700TMP-KENSU                 PIC  9(06).
@@ -35,3 +36,4 @@
                05  SKT2700TMP-S-KINGAKU             PIC  9(10).
                05  SKT2700TMP-S-FTNGAKU             PIC  9(10).
                05  SKT2700TMP-BIKO                  PIC  9(02).
+           03  SKT2700TMP-TAKOH                     PIC  9(03).

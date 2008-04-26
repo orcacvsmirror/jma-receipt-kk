@@ -1,78 +1,32 @@
-      *******************************************************************
-      * Project code name "ORCA"
-      * ∆¸∞Â…∏Ω‡•Ï•ª•◊•»•Ω•’•»° JMA standard receipt software°À
-      * Copyright(C) 2002 JMA (Japan Medical Association)
-      *
-      * This program is part of "JMA standard receipt software".
-      *
-      *     This program is distributed in the hope that it will be useful
-      * for further advancement in medical care, according to JMA Open
-      * Source License, but WITHOUT ANY WARRANTY.
-      *     Everyone is granted permission to use, copy, modify and
-      * redistribute this program, but only under the conditions described
-      * in the JMA Open Source License. You should have received a copy of
-      * this license along with this program. If not, stop using this
-      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
-      * 113-8621, Japan.
-      ********************************************************************
-       01  SKT2700.
-      *ø«Œ≈«Ø∑Ó
-           03  SKT2700-SRYYM               PIC  X(16).
-      * ›∏±º‘Ãæ
-           03  SKT2700-HKNJANAME           PIC  X(20).
-      * ›∏±º‘»÷πÊ
-           03  SKT2700-HKNJANUM            PIC  X(06).
-      *¿¡µ·«Ø∑Ó∆¸
-           03  SKT2700-SEIYMD              PIC  X(22).
-      *∞ÂŒ≈µ°¥ÿ•≥°º•…
-           03  SKT2700-HOSPCDN             PIC  X(20).
-      *Õπ ÿ»÷πÊ
-      *     03  SKT2700-POST                PIC  X(10).
-      *∞ÂŒ≈µ°¥ÿΩÍ∫ﬂ√œ
-           03  SKT2700-ADRS                PIC  X(100).
-      *∞ÂŒ≈µ°¥ÿÃææŒ
-           03  SKT2700-HOSPNAME            PIC  X(100).
-      *≥´¿ﬂº‘ª·Ãæ
-           03  SKT2700-KAISETUNAME         PIC  X(40).
-      *≈≈œ√»÷πÊ
-           03  SKT2700-TEL                 PIC  X(15).
-      *≥‰πÁ
-           03  SKT2700-KYURATE1            PIC  X(02).
-           03  SKT2700-KYURATE2            PIC  X(02).
-      ***** 05/03/09 yamaguchi DEL
-      *•⁄°º•∏»÷πÊ
-      *      03  SKT2700-NO              PIC X(04).
-      *****
-      *¿¡µ·∞ÏÕ˜
-           03  SKT2700-SEIKYU  OCCURS 31.
-      *Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-               05  SKT2700-KENSU           PIC  X(05).
-      *Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-               05  SKT2700-TENSU           PIC  X(09).
-      *Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚° ¥µº‘…È√¥≥€°À
-               05  SKT2700-ITBFTN          PIC  X(09).
-      *ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-               05  SKT2700-S-KENSU         PIC  X(05).
-      *ø©ªˆŒ≈Õ‹°ß∂‚≥€
-               05  SKT2700-S-KINGAKU       PIC  X(09).
-      *ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
-               05  SKT2700-S-FTNGAKU       PIC  X(09).
-      *»˜πÕÕÛ° ∏∂«˙°À
-               05  SKT2700-BIKO            PIC  X(02).
-      *πÁ∑◊
-           03  SKT2700-GOKEI.
-      *Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-               05  SKT2700-GKENSU          PIC  X(05).
-      *Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-               05  SKT2700-GTENSU          PIC  X(09).
-      *Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚° ¥µº‘…È√¥≥€°À
-               05  SKT2700-GITBFTN         PIC  X(09).
-      *ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-               05  SKT2700-S-GKENSU        PIC  X(05).
-      *ø©ªˆŒ≈Õ‹°ß∂‚≥€
-               05  SKT2700-S-GKINGAKU      PIC  X(09).
-      *ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
-               05  SKT2700-S-GFTNGAKU      PIC  X(09).
-      *»˜πÕÕÛ
-               05  SKT2700-GBIKO           PIC  X(03).
-
+        01  SKT2700.
+            02  SKT2700-SRYYM   PIC X(16).
+            02  SKT2700-HKNJANAME   PIC X(20).
+            02  SKT2700-HKNJANUM    PIC X(6).
+            02  SKT2700-SEIYMD  PIC X(22).
+            02  SKT2700-HOSPCDN PIC X(20).
+            02  SKT2700-ADRS    PIC X(100).
+            02  SKT2700-HOSPNAME    PIC X(100).
+            02  SKT2700-KAISETUNAME PIC X(40).
+            02  SKT2700-TEL PIC X(15).
+            02  SKT2700-KYURATE1    PIC X(2).
+            02  SKT2700-KYURATE2    PIC X(2).
+            02  SKT2700-KYURATE3    PIC X(2).
+            02  SKT2700-KYURATE4    PIC X(2).
+            02  SKT2700-SEIKYU          OCCURS  31 TIMES.
+              03  SKT2700-KENSU   PIC X(5).
+              03  SKT2700-TENSU   PIC X(9).
+              03  SKT2700-ITBFTN  PIC X(9).
+              03  SKT2700-S-KENSU PIC X(5).
+              03  SKT2700-S-KINGAKU   PIC X(9).
+              03  SKT2700-S-FTNGAKU   PIC X(9).
+              03  SKT2700-BIKO    PIC X(2).
+            02  SKT2700-GOKEI.
+              03  SKT2700-GKENSU  PIC X(5).
+              03  SKT2700-GTENSU  PIC X(9).
+              03  SKT2700-GITBFTN PIC X(9).
+              03  SKT2700-S-GKENSU    PIC X(5).
+              03  SKT2700-S-GKINGAKU  PIC X(9).
+              03  SKT2700-S-GFTNGAKU  PIC X(9).
+              03  SKT2700-GBIKO   PIC X(3).
+            02  SKT2700-MENJO   PIC X(4).
+            02  SKT2700-TAKOH   PIC X(4).
