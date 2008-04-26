@@ -25,6 +25,7 @@
            03  SKT4210TMP-KEY.
                05  SKT4210TMP-SYUTURYOKU          PIC  9(01).
                05  SKT4210TMP-HKNJANUM            PIC  X(06).
+               05  SKT4210TMP-SRYYM               PIC  9(06).
                05  SKT4210TMP-ZAITAKU             PIC  X(01).
                05  SKT4210TMP-KYURATE             PIC  9(03).
                05  SKT4210TMP-TYOKI               PIC  X(01).

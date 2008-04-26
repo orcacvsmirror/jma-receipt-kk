@@ -1,66 +1,38 @@
-      *******************************************************************
-      * Project code name "ORCA"
-      * 日医標準レセプトソフト（JMA standard receipt software）
-      * Copyright(C) 2002 JMA (Japan Medical Association)
-      *
-      * This program is part of "JMA standard receipt software".
-      *
-      *     This program is distributed in the hope that it will be useful
-      * for further advancement in medical care, according to JMA Open
-      * Source License, but WITHOUT ANY WARRANTY.
-      *     Everyone is granted permission to use, copy, modify and
-      * redistribute this program, but only under the conditions described
-      * in the JMA Open Source License. You should have received a copy of
-      * this license along with this program. If not, stop using this
-      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
-      * 113-8621, Japan.
-      ********************************************************************
-       01  SKT4210.
-      *    診療年月
-           03  SKT4210-SRYYM               PIC  X(16).
-      *    請求年月日
-           03  SKT4210-SEIYMD              PIC  X(22).
-      *    住所
-           03  SKT4210-ADRS                PIC  X(100).
-      *    医療機関名
-           03  SKT4210-HOSPNAME            PIC  X(100).
-      *    開設者名
-           03  SKT4210-KAISETUNAME         PIC  X(40).
-      *    電話番号
-           03  SKT4210-TEL                 PIC  X(15).
-      *    医療機関コード
-           03  SKT4210-HOSPCD              PIC  X(07).
-      *    保険者番号
-           03  SKT4210-HKNJANUM            PIC  X(06).
-      *    保険者名
-           03  SKT4210-HKNJANAME           PIC  X(20).
-      *    在総診・在医総
-           03  SKT4210-ZAI1                PIC  X(02).
-           03  SKT4210-ZAI2                PIC  X(02).
-      *    長期
-           03  SKT4210-TYOKI1              PIC  X(02).
-           03  SKT4210-TYOKI2              PIC  X(02).
-      *    給付割合
-           03  SKT4210-KYURATE             PIC  X(03).
-      *    ページ番号
-           03  SKT4210-NO                  PIC  X(04).
-      *    請求テーブル
-           03  SKT4210-SEIKYU-TBL  OCCURS  9.
-      *    入外テーブル
-               05  SKT4210-NYUGAI-TBL  OCCURS  2.
-      *    件数
-                   07  SKT4210-KENSU       PIC  X(05).
-      *    診療実日数
-                   07  SKT4210-NISSU       PIC  X(05).
-      *    点数
-                   07  SKT4210-TENSU       PIC  X(09).
-      *    一部負担金
-                   07  SKT4210-ITBFTN      PIC  X(09).
-      *    食事療養：件数
-               05  SKT4210-SKENSU          PIC  X(05).
-      *    食事療養：日数
-               05  SKT4210-SNISSU          PIC  X(05).
-      *    食事療養：金額
-               05  SKT4210-SKINGK          PIC  X(09).
-      *    食事療養：標準負担額
-               05  SKT4210-SFTNGK          PIC  X(09).
+        01  SKT4210.
+            02  SKT4210-SRYYM   PIC X(16).
+            02  SKT4210-SEIYMD  PIC X(22).
+            02  SKT4210-ADRS    PIC X(100).
+            02  SKT4210-HOSPNAME    PIC X(100).
+            02  SKT4210-KAISETUNAME PIC X(40).
+            02  SKT4210-TEL PIC X(15).
+            02  SKT4210-HOSPCD  PIC X(7).
+            02  SKT4210-HKNJANUM    PIC X(6).
+            02  SKT4210-HKNJANAME   PIC X(20).
+            02  SKT4210-ZAI1    PIC X(2).
+            02  SKT4210-ZAI2    PIC X(2).
+            02  SKT4210-TYOKI1  PIC X(2).
+            02  SKT4210-TYOKI2  PIC X(2).
+            02  SKT4210-KYURATE PIC X(3).
+            02  SKT4210-NO  PIC X(4).
+            02  SKT4210-SEIKYU-TBL      OCCURS  11 TIMES.
+              03  SKT4210-NYUGAI-TBL      OCCURS  2 TIMES.
+                04  SKT4210-KENSU   PIC X(5).
+                04  SKT4210-NISSU   PIC X(5).
+                04  SKT4210-TENSU   PIC X(9).
+                04  SKT4210-ITBFTN  PIC X(9).
+              03  SKT4210-SKENSU  PIC X(5).
+              03  SKT4210-SNISSU  PIC X(5).
+              03  SKT4210-SKINGK  PIC X(9).
+              03  SKT4210-SFTNGK  PIC X(9).
+            02  SKT4210-KOH-TBL         OCCURS  3 TIMES.
+              03  SKT4210-KOHNAME PIC X(8).
+              03  SKT4210-KOHNUM  PIC X(2).
+              03  SKT4210-KNYUGAI-TBL     OCCURS  2 TIMES.
+                04  SKT4210-KKENSU  PIC X(5).
+                04  SKT4210-KNISSU  PIC X(5).
+                04  SKT4210-KTENSU  PIC X(9).
+                04  SKT4210-KITBFTN PIC X(9).
+              03  SKT4210-KSKENSU PIC X(5).
+              03  SKT4210-KSNISSU PIC X(5).
+              03  SKT4210-KSKINGK PIC X(9).
+              03  SKT4210-KSFTNGK PIC X(9).
