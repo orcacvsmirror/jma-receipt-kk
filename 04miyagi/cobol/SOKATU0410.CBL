@@ -32,6 +32,9 @@
       *  01.00.03    内田    07/09/05  日レセver4.0対応
       *                                システム管理マスタ「1901」の
       *                                医療機関情報を参照
+      *  01.00.04    内田    08/04/22  帳票様式の変更に伴う修正
+      *                                政令指定都市は市でまとめる
+      *                                SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -227,6 +230,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -321,6 +329,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -686,16 +697,25 @@
                    MOVE   2   TO   IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE < 3
-                   MOVE  3    TO   IDX1
+      *---(01.00.04) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  3     TO  IDX1
                  ELSE
-                   IF  RECE10-KYURATE  =  7
-                     MOVE  5   TO   IDX1
+      *---(01.00.04) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE < 3
+                     MOVE  3    TO   IDX1
                    ELSE
-                     MOVE  4   TO   IDX1
-                     MOVE  RECE10-KYURATE  TO  SKT0410TMP-WARI
+                     IF  RECE10-KYURATE  =  7
+                       MOVE  5   TO   IDX1
+                     ELSE
+                       MOVE  4   TO   IDX1
+                       MOVE  RECE10-KYURATE  TO  SKT0410TMP-WARI
+                     END-IF
                    END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                END-IF
       *    乳幼児の公費を所持している患者は１０割に分類
                IF  RECE10-KOHNUM(1)  =  "143" OR
@@ -723,19 +743,28 @@
                    MOVE  8  TO   IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  < 3
-                   MOVE  10  TO   IDX1
+      *---(01.00.04) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  10  TO  IDX1
                  ELSE
-                   IF  RECE10-KYURATE  =  10
-                     MOVE  11   TO   IDX1
+      *---(01.00.04) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  < 3
+                     MOVE  10  TO   IDX1
                    ELSE
-                     IF  RECE10-HONKZKKBN = "1"
-                       MOVE  6  TO  IDX1
+                     IF  RECE10-KYURATE  =  10
+                       MOVE  11   TO   IDX1
                      ELSE
-                       MOVE  9 TO  IDX1
+                       IF  RECE10-HONKZKKBN = "1"
+                         MOVE  6  TO  IDX1
+                       ELSE
+                         MOVE  9 TO  IDX1
+                       END-IF
                      END-IF
                    END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                END-IF
       *
       *    退職家族で乳幼児を所持している患者は１０割に分類
