@@ -24,7 +24,7 @@
        01  SKT2610TMP-REC.
            03  SKT2610TMP-KEY.
                05  SKT2610TMP-NYUGAIKBN        PIC  9(01).
-           03  SKT2610TMP-DATA   OCCURS  8.
+           03  SKT2610TMP-DATA   OCCURS  11.
                05  SKT2610TMP-NYUGAI-TBL   OCCURS  2.
                    07  SKT2610TMP-KENSU        PIC  9(06).
                    07  SKT2610TMP-NISSU        PIC  9(06).

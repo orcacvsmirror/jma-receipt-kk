@@ -25,7 +25,7 @@
            03  SKT2630TMP-KEY.
                05  SKT2630TMP-HKNJANUM         PIC  9(06).
                05  SKT2630TMP-ZAITAKU          PIC  9(01).
-           03  SKT2630TMP-DATA   OCCURS  12.
+           03  SKT2630TMP-DATA   OCCURS  14.
                05  SKT2630TMP-NYUGAI-TBL   OCCURS  2.
                    07  SKT2630TMP-KENSU        PIC  9(06).
                    07  SKT2630TMP-NISSU        PIC  9(06).

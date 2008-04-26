@@ -1,64 +1,26 @@
-      *******************************************************************
-      * Project code name "ORCA"
-      * 日医標準レセプトソフト（JMA standard receipt software）
-      * Copyright(C) 2002 JMA (Japan Medical Association)
-      *
-      * This program is part of "JMA standard receipt software".
-      *
-      *     This program is distributed in the hope that it will be useful
-      * for further advancement in medical care, according to JMA Open
-      * Source License, but WITHOUT ANY WARRANTY.
-      *     Everyone is granted permission to use, copy, modify and
-      * redistribute this program, but only under the conditions described
-      * in the JMA Open Source License. You should have received a copy of
-      * this license along with this program. If not, stop using this
-      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
-      * 113-8621, Japan.
-      ********************************************************************
-       01  SKT2640.
-      *    診療年月
-           03  SKT2640-SRYYM              PIC  X(16).
-      *    診療科コード
-           03  SKT2640-SRYKA              PIC  X(20).
-      *    郵便番号
-           03  SKT2640-POST               PIC  X(08).
-      *    住所
-           03  SKT2640-ADRS               PIC  X(100).
-      *    医療機関名
-           03  SKT2640-HOSPNAME           PIC  X(100).
-      *    開設者名
-           03  SKT2640-KAISETUNAME        PIC  X(40).
-      *    電話番号
-           03  SKT2640-TEL                PIC  X(15).
-      *    医療機関コード
-           03  SKT2640-HOSPCDN            PIC  X(07).
-      *    請求テーブル
-           03  SKT2640-SEIKYU-TBL    OCCURS  8.
-      *    入外テーブル
-               05  SKT2640-NYUGAI-TBL  OCCURS  2.
-      *    件数
-                   07  SKT2640-KENSU      PIC  X(06).
-      *    点数
-                   07  SKT2640-TENSU      PIC  X(09).
-      *    一部負担金
-                   07  SKT2640-ITBFTN     PIC  X(09).
-      *    他
-                   07  SKT2640-TAKOH      PIC  X(02).
-      *    長期
-                   07  SKT2640-TYOKI      PIC  X(02).
-      *    原爆
-                   07  SKT2640-GENBAKU    PIC  X(02).
-      *    実日数
-                   07  SKT2640-NISSU      PIC  X(03).
-      *    食事療養：件数
-                   07  SKT2640-S-KENSU    PIC  X(06).
-      *    食事療養：金額
-                   07  SKT2640-S-KINGAKU  PIC  X(09).
-      *    食事療養：標準負担額
-                   07  SKT2640-S-FTNGAKU  PIC  X(09).
-      *    一部負担金：減免・猶予
-           03  SKT2640-GENMEN-TBL  OCCURS  2.
-               05  SKT2640-G-KESNU        PIC  X(06).
-               05  SKT2640-G-TENSU        PIC  X(09).
-      *    特別療養費
-           03  SKT2640-TOKUBETU           PIC  X(03).
+        01  SKT2640.
+            02  SKT2640-SRYYM   PIC X(16).
+            02  SKT2640-SRYKA   PIC X(20).
+            02  SKT2640-POST    PIC X(8).
+            02  SKT2640-ADRS    PIC X(100).
+            02  SKT2640-HOSPNAME    PIC X(100).
+            02  SKT2640-KAISETUNAME PIC X(40).
+            02  SKT2640-TEL PIC X(15).
+            02  SKT2640-HOSPCDN PIC X(7).
+            02  SKT2640-SEIKYU-TBL      OCCURS  4 TIMES.
+              03  SKT2640-NYUGAI-TBL      OCCURS  2 TIMES.
+                04  SKT2640-KENSU   PIC X(6).
+                04  SKT2640-TENSU   PIC X(9).
+                04  SKT2640-ITBFTN  PIC X(9).
+                04  SKT2640-TAKOH   PIC X(2).
+                04  SKT2640-TYOKI   PIC X(2).
+                04  SKT2640-GENBAKU PIC X(2).
+                04  SKT2640-NISSU   PIC X(3).
+                04  SKT2640-S-KENSU PIC X(6).
+                04  SKT2640-S-KINGAKU   PIC X(9).
+                04  SKT2640-S-FTNGAKU   PIC X(9).
+            02  SKT2640-GENMEN-TBL      OCCURS  2 TIMES.
+              03  SKT2640-G-KESNU PIC X(6).
+              03  SKT2640-G-TENSU PIC X(9).
+            02  SKT2640-TOKUBETUKEN PIC X(3).
+            02  SKT2640-TOKUBEUTTEN PIC X(9).
