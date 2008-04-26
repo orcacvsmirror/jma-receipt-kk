@@ -29,7 +29,7 @@
       *    開設者氏名
            03  SKT0400-KAISETU           PIC  X(40).
       *    請求テーブル
-           03  SKT0400-SEIKYU-TBL     OCCURS  15.
+           03  SKT0400-SEIKYU-TBL     OCCURS  17.
       *    入外テーブル
                05  SKT0400-NYUGAI-TBL      OCCURS   2.
       *    件数

@@ -25,7 +25,7 @@
            03    SKT0400TMP-KEY.
                05    SKT0400TMP-KBN           PIC X(01).
       *
-           03    SKT0400TMP-SEIKYU-TBL        OCCURS 15.
+           03    SKT0400TMP-SEIKYU-TBL        OCCURS 17.
                05    SKT0400TMP-NYUGAI-TBL    OCCURS 2.
                  07    SKT0400TMP-KENSU       PIC 9(05).
                  07    SKT0400TMP-NISSU       PIC 9(05).
