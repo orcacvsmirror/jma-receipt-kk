@@ -33,3 +33,10 @@
                    07  SKT1300TMP-TENSU            PIC 9(11).
                    07  SKT1300TMP-SKENSU           PIC 9(05).
                    07  SKT1300TMP-SKINGK           PIC 9(11).
+           03  SKT1300TMP-KOUKI-TBL OCCURS 2.
+               05  SKT1300TMP-KO-KENSU             PIC 9(05).
+               05  SKT1300TMP-KO-TENSU             PIC 9(11).
+               05  SKT1300TMP-KO-KKENSU            PIC 9(05).
+               05  SKT1300TMP-KO-SKENSU            PIC 9(05).
+               05  SKT1300TMP-KO-SKINGK            PIC 9(11).
+

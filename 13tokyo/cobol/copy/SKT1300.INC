@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * ∆¸∞Â…∏Ω‡•Ï•ª•◊•»•Ω•’•»° JMA standard receipt software°À
+      * ì˙à„ïWèÄÉåÉZÉvÉgÉ\ÉtÉgÅiJMA standard receipt softwareÅj
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -15,32 +15,39 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-       01  SKT1300.
-      *    ø«Œ≈«Ø∑Ó
-           03  SKT1300-SEIYM                   PIC X(16).
-      *    ΩªΩÍ
-           03  SKT1300-ADRS                    PIC X(100).
-      *    ∞ÂŒ≈µ°¥ÿÃæ
-           03  SKT1300-HOSPNAME                PIC X(100).
-      *    ≥´¿ﬂº‘Ãæ
-           03  SKT1300-KAISETUNAME             PIC X(40).
-      *    ≈≈œ√»÷πÊ
-           03  SKT1300-TEL                     PIC X(15).
-           03  SKT1300-HOSPCD                  PIC X(20).
-           03  SKT1300-ZIP-TBL.
-               05  SKT1300-ZIP1                PIC X(06).
-               05  SKT1300-ZIP2                PIC X(02).
-               05  SKT1300-ZIP3                PIC X(02).
-               05  SKT1300-ZIP4                PIC X(02).
-               05  SKT1300-ZIP5                PIC X(02).
-      *    ∫ﬂ¬
-           03  SKT1300-ZAI1                    PIC X(02).
-           03  SKT1300-ZAI2                    PIC X(02).
-      *    Ω∏∑◊•∆°º•÷•Î
-           03  SKT1300-KEN-TBL OCCURS 2.
-               05  SKT1300-KKENSU              PIC X(05).
-               05  SKT1300-HKN-TBL OCCURS 4.
-                   07  SKT1300-KENSU           PIC X(05).
-                   07  SKT1300-TENSU           PIC X(14).
-                   07  SKT1300-SKENSU          PIC X(05).
-                   07  SKT1300-SKINGK          PIC X(14).
+        01  SKT1300.
+      *    êfó√îNåé
+            02  SKT1300-SEIYM   PIC X(16).
+      *    èZèä
+            02  SKT1300-ADRS    PIC X(100).
+      *    à„ó√ã@ä÷ñº
+            02  SKT1300-HOSPNAME    PIC X(100).
+      *    äJê›é“ñº
+            02  SKT1300-KAISETUNAME PIC X(40).
+      *    ìdòbî‘çÜ
+            02  SKT1300-TEL PIC X(15).
+            02  SKT1300-HOSPCD  PIC X(20).
+            02  SKT1300-ZIP-TBL.
+              03  SKT1300-ZIP1    PIC X(6).
+              03  SKT1300-ZIP2    PIC X(2).
+              03  SKT1300-ZIP3    PIC X(2).
+              03  SKT1300-ZIP4    PIC X(2).
+              03  SKT1300-ZIP5    PIC X(2).
+      *    ç›ëÓ
+            02  SKT1300-ZAI1    PIC X(2).
+            02  SKT1300-ZAI2    PIC X(2).
+      *    èWåvÉeÅ[ÉuÉã
+            02  SKT1300-SYUKEI-TBL      OCCURS  2 TIMES.
+              03  SKT1300-HEIYOKEN    PIC X(5).
+              03  SKT1300-HKN-TBL         OCCURS  4 TIMES.
+                04  SKT1300-KENSU   PIC X(5).
+                04  SKT1300-TENSU   PIC X(14).
+                04  SKT1300-SKENSU  PIC X(5).
+                04  SKT1300-SKINGK  PIC X(14).
+      *    å„ä˙çÇóÓé“èWåvÉeÅ[ÉuÉã
+            02  SKT1300-KOUKI-TRL       OCCURS  2 TIMES.
+              03  SKT1300-KKENSU  PIC X(5).
+              03  SKT1300-KTENSU  PIC X(14).
+              03  SKT1300-KHEIYOKEN   PIC X(5).
+              03  SKT1300-KSKENSU PIC X(5).
+              03  SKT1300-KSKINGK PIC X(14).
