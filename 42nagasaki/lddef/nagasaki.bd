@@ -5,6 +5,7 @@ textsize	400;
 
 bind	"SOKATU4200"	"OpenCOBOL";
 bind	"SOKATU4210"	"OpenCOBOL";
+bind	"SOKATU4215"	"OpenCOBOL";
 
 
 #include "orcadb.inc"
