@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /etc/jma-receipt/jma-receipt.env
+. @jma-receipt-env@
 
 PREFNAME=tokyo
 PROGRAMID=SOKATU1300
