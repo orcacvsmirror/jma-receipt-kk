@@ -39,6 +39,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.07    内田    07/12/18    請求額１０円未満は印字対象外
+      *  01.00.08    内田    08/04/06    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -317,6 +318,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *---(01.00.08) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

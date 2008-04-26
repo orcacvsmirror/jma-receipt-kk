@@ -39,6 +39,7 @@
       *  01.00.07    内田    07/10/21    印字対象番号の追加(588)
       *  01.00.08    内田    07/12/18    請求額１０円未満は印字対象外
       *                                  小児慢性の場合、備考欄へ「慢」印字
+      *  01.00.09    内田    08/04/06    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -318,6 +319,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *---(01.00.09) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

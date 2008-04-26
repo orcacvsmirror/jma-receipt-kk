@@ -38,6 +38,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.06    内田    07/12/18    請求額１０円未満は印字対象外
+      *  01.00.07    内田    08/04/06    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -316,6 +317,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *---(01.00.07) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
