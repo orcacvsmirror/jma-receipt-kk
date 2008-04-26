@@ -38,6 +38,8 @@
       *  01.00.08       内田     07/08/24  日レセver4.0対応
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
+      *  01.00.09       内田     08/04/22  帳票様式の変更に伴う修正
+      *                                    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -333,6 +335,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.09) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -710,25 +715,38 @@
       *         END-IF
       *       END-IF
       *     END-IF
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    老人保健か
+      *     IF  RECE10-RJNHKNNUM  NOT  =  SPACE
+      *         MOVE    7     TO  IDX1
+      *     ELSE
+      *    前期高齢者か
+      *       IF  RECE10-AGE  >=  70
+      *         IF  RECE10-KOHNUM (1)  NOT =  SPACE
+      *           MOVE  1     TO  IDX1
+      *         ELSE
+      *           MOVE  2     TO  IDX1
+      *         END-IF
+      *       ELSE
+      *         IF  RECE10-KOHNUM (1)  NOT =  SPACE
+      *           MOVE  4     TO  IDX1
+      *         ELSE
+      *           MOVE  5     TO  IDX1
+      *         END-IF
+      *       END-IF
+      *     END-IF
       *    老人保健か
            IF  RECE10-RJNHKNNUM  NOT  =  SPACE
-               MOVE    7     TO  IDX1
+               MOVE    3     TO  IDX1
            ELSE
       *    前期高齢者か
              IF  RECE10-AGE  >=  70
-               IF  RECE10-KOHNUM (1)  NOT =  SPACE
                  MOVE  1     TO  IDX1
-               ELSE
-                 MOVE  2     TO  IDX1
-               END-IF
              ELSE
-               IF  RECE10-KOHNUM (1)  NOT =  SPACE
-                 MOVE  4     TO  IDX1
-               ELSE
-                 MOVE  5     TO  IDX1
-               END-IF
+                 MOVE  2     TO  IDX1
              END-IF
            END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            PERFORM  2101-SYUKEI-SEC
@@ -756,15 +774,18 @@
       *     END-IF
       *     MOVE  13   TO  IDX1
       *     PERFORM  2101-SYUKEI-SEC
-           EVALUATE  TRUE
-             WHEN  IDX1  =    7     MOVE   0  TO  IDX1
-             WHEN  IDX1  >=   4     MOVE   6  TO  IDX1
-             WHEN  IDX1  <=   2     MOVE   3  TO  IDX1
-           END-EVALUATE
-           IF  IDX1  NOT =  0
-             PERFORM  2101-SYUKEI-SEC
-           END-IF
-           MOVE  8   TO  IDX1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     EVALUATE  TRUE
+      *       WHEN  IDX1  =    7     MOVE   0  TO  IDX1
+      *       WHEN  IDX1  >=   4     MOVE   6  TO  IDX1
+      *       WHEN  IDX1  <=   2     MOVE   3  TO  IDX1
+      *     END-EVALUATE
+      *     IF  IDX1  NOT =  0
+      *       PERFORM  2101-SYUKEI-SEC
+      *    END-IF
+      *     MOVE  8   TO  IDX1
+           MOVE  4   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
            PERFORM  2101-SYUKEI-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -991,10 +1012,13 @@
       *
       *    編集処理
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *              UNTIL    IDX1  >     13
-                    UNTIL    IDX1  >     8
+      *---(01.00.09) LINE ADD START ------------------------------------
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **              UNTIL    IDX1  >     13
+      *              UNTIL    IDX1  >     8
+                    UNTIL    IDX1  >     4
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *    療養の給付：件数
              MOVE   SKT2600TMP-NYUGAIKBN  TO    IDX6
