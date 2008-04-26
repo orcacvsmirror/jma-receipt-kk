@@ -30,6 +30,9 @@
       *  01.00.01    内田    07/09/12    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    内田    08/04/22    帳票様式の変更に伴う修正
+      *                                  政令指定都市は市でまとめる
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -240,6 +243,12 @@
            COPY    "COMMON-SPA".
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.02) LINE ADD END   ------------------------------------
+      *
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -340,6 +349,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.02) LINE ADD START ------------------------------------
+           INITIALIZE                   SPA-AREA
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -616,11 +628,22 @@
            INITIALIZE       SKT1310TMP-REC
            INITIALIZE       SKT1310TMP-HKNJANUM
       *
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     IF  RECE10-HKNJANUM(7:2)  =  SPACE
+      *       MOVE  RECE10-HKNJANUM(1:6)  TO  SKT1310TMP-HKNJANUM(1:6)
+      *     ELSE
+      *       MOVE  RECE10-HKNJANUM(3:6)  TO  SKT1310TMP-HKNJANUM(1:6)
+      *     END-IF
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
-             MOVE  RECE10-HKNJANUM(1:6)  TO  SKT1310TMP-HKNJANUM(1:6)
+             MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM
            ELSE
-             MOVE  RECE10-HKNJANUM(3:6)  TO  SKT1310TMP-HKNJANUM(1:6)
+             MOVE  RECE10-HKNJANUM(3:6)  TO  WRK-HKNJANUM
            END-IF
+      *
+      *    区の場合代表番号セット
+           PERFORM  2002-HKNJANUM-SET-SEC
+           MOVE  WRK-HKNJANUM            TO  SKT1310TMP-HKNJANUM
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    印刷順設定
            IF    YUSEN-HKNJANUM   =  SKT1310TMP-HKNJANUM
@@ -660,7 +683,70 @@
            .
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    代表番号セット
+      *****************************************************************
+       2002-HKNJANUM-SET-SEC                SECTION.
       *
+           EVALUATE  WRK-HKNJANUM (1:3)
+      *        札幌市の場合、代表番号セット
+               WHEN  "014"
+                   MOVE  "010017"  TO  WRK-HKNJANUM
+      *        仙台市の場合、代表番号セット
+               WHEN  "044"
+                   MOVE  "040014"  TO  WRK-HKNJANUM
+      *        さいたま市の場合、代表番号セット
+               WHEN  "114"
+                   MOVE  "114009"  TO  WRK-HKNJANUM
+      *        千葉市の場合、代表番号セット
+               WHEN  "124"
+                   MOVE  "124008"  TO  WRK-HKNJANUM
+      *        横浜市の場合、代表番号セット
+               WHEN  "144"
+                   MOVE  "144006"  TO  WRK-HKNJANUM
+      *        川崎市の場合、代表番号セット
+               WHEN  "145"
+                   MOVE  "145003"  TO  WRK-HKNJANUM
+      *        新潟市の場合、代表番号セット
+               WHEN  "154"
+                   MOVE  "154005"  TO  WRK-HKNJANUM
+      *        静岡市の場合、代表番号セット
+               WHEN  "224"
+                   MOVE  "224006"  TO  WRK-HKNJANUM
+      *        浜松市の場合、代表番号セット
+               WHEN  "225"
+                   MOVE  "225003"  TO  WRK-HKNJANUM
+      *        名古屋市の場合、代表番号セット
+               WHEN  "234"
+                   MOVE  "234005"  TO  WRK-HKNJANUM
+      *        京都市の場合、代表番号セット
+               WHEN  "264"
+                   MOVE  "264002"  TO  WRK-HKNJANUM
+      *        大阪市の場合、代表番号セット
+               WHEN  "274"
+                   MOVE  "274001"  TO  WRK-HKNJANUM
+      *        堺市の場合、代表番号セット
+               WHEN  "275"
+                   MOVE  "275008"  TO  WRK-HKNJANUM
+      *        神戸市の場合、代表番号セット
+               WHEN  "284"
+                   MOVE  "284000"  TO  WRK-HKNJANUM
+      *        広島市の場合、代表番号セット
+               WHEN  "344"
+                   MOVE  "344002"  TO  WRK-HKNJANUM
+      *        北九州市の場合、代表番号セット
+               WHEN  "404"
+                   MOVE  "404004"  TO  WRK-HKNJANUM
+      *        福岡市の場合、代表番号セット
+               WHEN  "405"
+                   MOVE  "405001"  TO  WRK-HKNJANUM
+           END-EVALUATE
+      *
+           .
+       2002-HKNJANUM-SET-EXT.
+           EXIT.
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *****************************************************************
       *    医療保険・老人保健分集計処理
       *****************************************************************
@@ -677,24 +763,40 @@
       *    一般国保か
              IF  RECE10-HKNNUM  =  "060"
                IF  RECE10-AGE  >= 70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE    1     TO    IDX1
-                 ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE    1     TO    IDX1
+      *           ELSE
+      *             MOVE    2     TO    IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  7
                    MOVE    2     TO    IDX1
-                 END-IF
-               ELSE
-                 IF  RECE10-AGE  >= 3
-      *
-                   IF    RECE10-KYURATE  =  7
-                     MOVE    4     TO    IDX1
-                   ELSE
-                     MOVE    3     TO    IDX1
-                     MOVE    RECE10-KYURATE  TO  SKT1310TMP-KYURATE
-                   END-IF
                  ELSE
-                   MOVE    5     TO    IDX1
+                   MOVE    1     TO    IDX1
                  END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
+               ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5     TO  IDX1
+                 ELSE
+      *---(01.00.02) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >= 3
+      *
+                     IF    RECE10-KYURATE  =  7
+                       MOVE    4     TO    IDX1
+                     ELSE
+                       MOVE    3     TO    IDX1
+                       MOVE    RECE10-KYURATE  TO  SKT1310TMP-KYURATE
+                     END-IF
+                   ELSE
+                     MOVE    5     TO    IDX1
+                   END-IF
+                 END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
                END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
              ELSE
                IF  RECE10-AGE  >=  70
@@ -707,11 +809,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  8    TO   IDX1
                  ELSE
-                   IF  RECE10-AGE  <  3
-                     MOVE  10  TO  IDX1
+      *---(01.00.02) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  10     TO  IDX1
                    ELSE
-                     MOVE  9  TO  IDX1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  <  3
+                       MOVE  10  TO  IDX1
+                     ELSE
+                       MOVE  9  TO  IDX1
+                     END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
