@@ -36,6 +36,8 @@
       *  01.00.03    内田     07/09/17    日レセver4.0対応
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
+      *  01.00.04    内田     08/04/25    帳票様式の変更に伴う修正
+      *                                   SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -135,6 +137,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-ZAIISO          PIC 9(01).
+      *---(01.00.04) LINE ADD START ------------------------------------
+           03  FLG-PTKOHINF        PIC 9(01).
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -239,6 +244,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -254,6 +264,12 @@
       *    診療行為
        01  SRYACT-REC.
            COPY    "CPSRYACT.INC".
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *
+      *    患者公費情報
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    システム管理マスタ
            COPY    "CPSYSKANRI.INC".
@@ -340,6 +356,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -651,6 +670,12 @@
                MOVE      3          TO   SKT2700TMP-SYUTURYOKU
              END-IF
            END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM        TO  SKT2700TMP-SRYYM
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -700,15 +725,24 @@
                  END-EVALUATE
                ELSE
                  IF  RECE10-AGE  >  2
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  10     TO  IDX1
+                   ELSE
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *    割合チェック
-                   EVALUATE  RECE10-KYURATE
-                     WHEN  7       MOVE  14   TO  IDX1
-                     WHEN  OTHER
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  7       MOVE  14   TO  IDX1
+                       WHEN  OTHER
       *---(01.00.02) LINE ADD START ------------------------------------
       *                 MOVE  RECE10-KYURATE  TO  SKT2700TMP-KYURATE
       *---(01.00.02) LINE ADD END   ------------------------------------
-                       MOVE  13              TO  IDX1
-                   END-EVALUATE
+                         MOVE  13              TO  IDX1
+                     END-EVALUATE
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                  ELSE
                    MOVE  10   TO  IDX1
                  END-IF
@@ -722,11 +756,20 @@
                  END-EVALUATE
                ELSE
                  IF  RECE10-AGE  >  2
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  4     TO  IDX1
+                   ELSE
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *    割合チェック
-                   EVALUATE  RECE10-KYURATE
-                     WHEN  7       MOVE  8   TO  IDX1
-                     WHEN  OTHER   MOVE  7   TO  IDX1
-                   END-EVALUATE
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  7       MOVE  8   TO  IDX1
+                       WHEN  OTHER   MOVE  7   TO  IDX1
+                     END-EVALUATE
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                  ELSE
                    MOVE  4   TO  IDX1
                  END-IF
@@ -799,6 +842,15 @@
              END-IF
            END-IF
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    他府県公費取得
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL    IDX3  >     4
+                    OR       RECE10-KOHNUM (IDX3)  =  SPACE
+             PERFORM  2102-TAKOH-SET-SEC
+           END-PERFORM
+      *---(01.00.04) LINE ADD END   ------------------------------------
+      *
            IF  FLG-SKT2700TMP  =  1
                WRITE    SKT2700TMP-REC
            ELSE
@@ -827,7 +879,11 @@
       *    療養の給付：一部負担金
            ADD  RECE10-FTNMONEY(1)  TO  SKT2700TMP-FTNMONEY(IDX1)
       *    公費併用の一部負担金
-           IF  IDX1  =  3  OR  9  OR  18  OR  25
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     IF  IDX1  =  3  OR  9  OR  18  OR  25
+           IF  (IDX1  =  3  OR  9  OR  18  OR  25)
+           OR  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *---(01.00.04) LINE ADD END   ------------------------------------
              PERFORM VARYING  IDX3  FROM  1  BY  1
                      UNTIL    IDX3  >     4
                      OR  RECE10-KOHNUM (IDX3) =   SPACE
@@ -855,6 +911,60 @@
            .
        2101-SYUKEI-EXT.
            EXIT.
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    患者公費情報読込
+      *****************************************************************
+       2102-TAKOH-SET-SEC             SECTION.
+      *
+      *    請求管理ＤＢ検索
+           INITIALIZE                  PTKOHINF-REC
+      *
+           MOVE    SPA-HOSPNUM         TO  PTKOH-HOSPNUM
+           MOVE    RECE10-PTID         TO  PTKOH-PTID
+           MOVE    RECE10-KOHID(IDX3)  TO  PTKOH-KOHID
+      *
+           MOVE    PTKOHINF-REC        TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"      TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           IF      MCP-RC              =   ZERO
+               MOVE    "tbl_ptkohinf"  TO  MCP-TABLE
+               MOVE    "key"           TO  MCP-PATHNAME
+               MOVE    "DBFETCH"       TO  MCP-FUNC
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE  ZERO          TO  FLG-PTKOHINF
+                   MOVE  MCPDATA-REC   TO  PTKOHINF-REC
+      *        県内／県外チェック
+                   IF  PTKOH-FTNJANUM(3:2)  NOT  =  "27"
+                       ADD  1          TO  SKT2700TMP-TAKOH
+                   END-IF
+               END-IF
+           ELSE
+               MOVE    1               TO  FLG-PTKOHINF
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"      TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       2102-TAKOH-SET-EXT.
+           EXIT.
+      *---(01.00.04) LINE ADD END   ------------------------------------
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -904,7 +1014,18 @@
       *
            INITIALIZE                    SKT2700
       *    診療年月
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    WRK-SRYYMWH           TO  SKT2700-SRYYM
+           IF  SKT2700TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT2700TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
            MOVE    WRK-SRYYMWH           TO  SKT2700-SRYYM
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT2700-HOSPCDN
       *    保険者名
@@ -1007,6 +1128,12 @@
            MOVE  WRK-BIKO        TO  WRK-Z3
            MOVE  WRK-Z3          TO  SKT2700-GBIKO
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    他府県公費
+           MOVE  SKT2700TMP-TAKOH    TO  WRK-Z3
+           MOVE  WRK-Z3              TO  SKT2700-TAKOH
+      *---(01.00.04) LINE ADD END   ------------------------------------
+      *
            PERFORM  900-TMP-READ-SEC
       *
            .
@@ -1034,7 +1161,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2700.red"            TO  SPRT-PRTID
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2700.red"            TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT2700.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT2700o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE    "国保請求書（府内用）"  TO  SPRT-TITLE
            MOVE    SKT2700             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID

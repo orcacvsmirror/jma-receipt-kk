@@ -32,6 +32,8 @@
       *  01.00.02    内田    07/09/17    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.03    内田    08/04/23    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -120,6 +122,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  FLG-HKNNUM          PIC 9(01).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -210,6 +215,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -221,6 +231,12 @@
       *    保険者情報
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *
+      *    保険番号
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    システム管理マスタ
            COPY    "CPSYSKANRI.INC".
@@ -307,6 +323,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.03) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -585,6 +604,12 @@
       *
              MOVE  "284000"  TO  SKT2710TMP-HKNJANUM
            END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM          TO  SKT2710TMP-SRYYM
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -634,16 +659,36 @@
            ELSE
       *    退職者かどうか
              IF  RECE10-HKNNUM  =  "060"
-               EVALUATE  TRUE
-                 WHEN  RECE10-AGE  >=  70
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         EVALUATE  TRUE
+      *           WHEN  RECE10-AGE  >=  70
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE  1  TO  IDX1
+      *             ELSE
+      *               MOVE  2  TO  IDX1
+      *             END-IF
+      *           WHEN  RECE10-AGE  <  3  MOVE  4  TO  IDX1
+      *           WHEN  OTHER             MOVE  3  TO  IDX1
+      *         END-EVALUATE
+               IF  RECE10-AGE  >=  70
                    IF  RECE10-KYURATE  =  9
-                     MOVE  1  TO  IDX1
+                     MOVE    1     TO    IDX1
                    ELSE
-                     MOVE  2  TO  IDX1
+                     MOVE    2     TO    IDX1
                    END-IF
-                 WHEN  RECE10-AGE  <  3  MOVE  4  TO  IDX1
-                 WHEN  OTHER             MOVE  3  TO  IDX1
-               END-EVALUATE
+               ELSE
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  4     TO  IDX1
+                   ELSE
+                       IF  RECE10-AGE  >= 3
+                         MOVE    3     TO    IDX1
+                       ELSE
+                         MOVE    4     TO    IDX1
+                       END-IF
+                   END-IF
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
              ELSE
                IF  RECE10-AGE  >=  70
                  IF  RECE10-KYURATE  =  9
@@ -655,11 +700,23 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
-                   IF  RECE10-AGE  <  3
-                     MOVE  9  TO  IDX1
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             IF  RECE10-AGE  <  3
+      *               MOVE  9  TO  IDX1
+      *             ELSE
+      *               MOVE  8  TO  IDX1
+      *             END-IF
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  9     TO  IDX1
                    ELSE
-                     MOVE  8  TO  IDX1
+                       IF  RECE10-AGE  >= 3
+                         MOVE    8     TO    IDX1
+                       ELSE
+                         MOVE    9     TO    IDX1
+                       END-IF
                    END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
@@ -672,7 +729,14 @@
                RECE10-KOHNUM (2)   NOT =   SPACE  OR
                RECE10-KOHNUM (3)   NOT =   SPACE  OR
                RECE10-KOHNUM (4)   NOT =   SPACE
-               PERFORM 220-KOH-SYUKEI-SEC
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         PERFORM 220-KOH-SYUKEI-SEC
+               IF  SKT2710TMP-SRYYM  NOT =  ZERO
+                   PERFORM 220-KOH-SYUKEI-SEC
+               ELSE
+                   PERFORM 221-KOH-SYUKEI-SEC
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-IF
       *
       *    原爆チェック
@@ -778,6 +842,68 @@
            .
        220-KOH-SYUKEI-EXT.
            EXIT.
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    公費負担分集計処理（新様式）
+      *****************************************************************
+       221-KOH-SYUKEI-SEC        SECTION.
+      *
+           PERFORM VARYING IDX3     FROM    1   BY  1
+                   UNTIL   IDX3     >       4
+                   OR  RECE10-KOHNUM (IDX3) =   SPACE
+      *    ０５１と０９１は同じ場所に集計する
+             IF    RECE10-KOHNUM(IDX3)  =  "091"
+               MOVE    "051"    TO    RECE10-KOHNUM(IDX3)
+             END-IF
+      *    公費判別
+             PERFORM  VARYING  IDX4  FROM  1  BY  1
+                      UNTIL    IDX4  >     20
+                      OR       SKT2710TMP-KOHNUM (IDX4) = SPACE
+               IF  RECE10-KOHNUM (IDX3)  =  SKT2710TMP-KOHNUM (IDX4)
+                   MOVE  IDX4  TO  CNT-KOH
+                   MOVE  20    TO  IDX4
+               END-IF
+             END-PERFORM
+      *
+      *    該当公費がなかった場合
+             IF  IDX4  < 20
+               MOVE  IDX4  TO  CNT-KOH
+             END-IF
+      *
+      *    公費名
+             MOVE  RECE10-KOHNUM(IDX3)  TO  SKT2710TMP-KOHNUM(CNT-KOH)
+      *    療養の給付：件数
+             ADD   1  TO  SKT2710TMP-KKENSU (CNT-KOH IDX2)
+      *    療養の給付:診療実日数
+             ADD  RECE10-JNISSU(IDX3 + 1)  TO
+                               SKT2710TMP-KNISSU(CNT-KOH IDX2)
+      *    療養の給付：点数
+             ADD  RECE10-TOTALTEN(IDX3 + 1)  TO
+                               SKT2710TMP-KTENSU(CNT-KOH IDX2)
+      *
+      *    療養の給付：一部負担金
+              ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
+                              SKT2710TMP-KFTNMONEY(CNT-KOH IDX2)
+      *
+             IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  ZERO
+      *    食事療養:件数
+               ADD   1  TO  SKT2710TMP-KSKENSU(CNT-KOH)
+             END-IF
+      *    食事療養:日数
+             ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
+                               SKT2710TMP-KSNISSU(CNT-KOH)
+      *    食事療養：金額
+             ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
+                               SKT2710TMP-KSKINGK(CNT-KOH)
+      *    食事療養：標準負担額
+             ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
+                               SKT2710TMP-KSFTNGK(CNT-KOH)
+           END-PERFORM
+      *
+           .
+       221-KOH-SYUKEI-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -806,6 +932,10 @@
       *
            PERFORM  UNTIL     FLG-PRINT   =   1
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+             PERFORM  UNTIL  SKT2710TMP-KOHNUM (WRK-CNT) = SPACE
+                      AND    FLG-PASS  =  1
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    帳票編集<見出し>処理
                PERFORM 310-HEAD-HEN-SEC
                DISPLAY "310 OK"
@@ -815,6 +945,11 @@
       *    帳票印刷処理
                PERFORM 330-PRINT-OUT-SEC
                DISPLAY "330 OK"
+      *---(01.00.03) LINE ADD START ------------------------------------
+               MOVE  1  TO  FLG-PASS
+             END-PERFORM
+             MOVE  ZERO  TO  FLG-PASS
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    一時ファイル読込
              PERFORM  900-TMP-READ-SEC
              MOVE  1  TO  WRK-CNT
@@ -835,7 +970,18 @@
       *
            INITIALIZE                    SKT2710
       *    診療年月
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE    WRK-SRYYMWH           TO  SKT2710-SRYYM
+           IF  SKT2710TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT2710TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
            MOVE    WRK-SRYYMWH           TO  SKT2710-SRYYM
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    保険者名
            IF    SKT2710TMP-HKNJANUM2  NOT =  SPACE
              MOVE  SKT2710TMP-HKNJANUM2  TO  SKT2710TMP-HKNJANUM
@@ -880,6 +1026,10 @@
       *****************************************************************
        320-BODY-HEN-SEC      SECTION.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    公費の為の２枚目以上か
+           IF  WRK-CNT  =  1
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    編集処理
            PERFORM  VARYING  IDX1  FROM    1   BY  1
                     UNTIL    IDX1  >  12
@@ -921,6 +1071,48 @@
                MOVE  WRK-Z3  TO  SKT2710-GENBK-KENSU(IDX1 IDX2)
              END-PERFORM
            END-PERFORM
+      *---(01.00.03) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    公費再掲欄
+           PERFORM  VARYING  IDX1  FROM  11  BY  1
+                    UNTIL   IDX1   >     12
+                    OR  WRK-CNT    >    20
+                    OR  SKT2710TMP-KOHNUM (WRK-CNT) = SPACE
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     2
+      *    療養の給付：件数
+               MOVE  SKT2710TMP-KKENSU(WRK-CNT IDX2)  TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT2710-KENSU(IDX1 IDX2)
+      *    療養の給付：日数
+               MOVE  SKT2710TMP-KNISSU(WRK-CNT IDX2)  TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT2710-NISSU(IDX1 IDX2)
+      *    療養の給付：点数
+               MOVE  SKT2710TMP-KTENSU(WRK-CNT IDX2)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT2710-TENSU(IDX1 IDX2)
+      *    療養の給付：一部負担金
+               MOVE  SKT2710TMP-KFTNMONEY (IDX1 IDX2)  TO  WRK-Z7
+               MOVE  WRK-Z7   TO  SKT2710-ITBFTN(IDX1 IDX2)
+             END-PERFORM
+      *    食事療養：件数
+             MOVE  SKT2710TMP-KSKENSU(WRK-CNT)  TO  WRK-Z5
+             MOVE  WRK-Z5   TO  SKT2710-SKENSU(IDX1)
+      *    食事療養：日数
+             MOVE  SKT2710TMP-KSNISSU(WRK-CNT)  TO  WRK-Z5
+             MOVE  WRK-Z5   TO  SKT2710-SNISSU(IDX1)
+      *    食事療養：金額
+             MOVE  SKT2710TMP-KSKINGK(WRK-CNT)  TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT2710-SKINGK(IDX1)
+      *    食事療養：標準負担額
+             MOVE  SKT2710TMP-KSFTNGK(WRK-CNT)  TO  WRK-Z7
+             MOVE  WRK-Z7   TO  SKT2710-SFTNGK(IDX1)
+      *    公費名
+             PERFORM  950-HKNNUM-SET-SEC
+             MOVE  HKN-TANSEIDONAME  TO  SKT2710-KOHNAME (IDX1 - 10)
+             ADD  1  TO  WRK-CNT
+           END-PERFORM
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            .
        320-BODY-HEN-EXT.
@@ -947,7 +1139,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2710.red"        TO  SPRT-PRTID
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2710.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT2710.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT2710o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    "国保請求書（他府県用）"  TO  SPRT-TITLE
            MOVE    SKT2710             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1335,7 +1534,72 @@
            .
        800-PTINF-READ-EXT.
            EXIT.
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *   保険番号情報セット
+      *****************************************************************
+       950-HKNNUM-SET-SEC  SECTION.
       *
+           INITIALIZE  HKNNUM-REC
+           MOVE    SPA-HOSPNUM          TO  HKN-HOSPNUM
+           MOVE    SKT2710TMP-KOHNUM(WRK-CNT)  TO  HKN-HKNNUM
+           MOVE    HKNNUM-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"           TO  MCP-FUNC
+           MOVE    "tbl_hknnum"         TO  MCP-TABLE
+           MOVE    "key2"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    "tbl_hknnum"     TO  MCP-TABLE
+               MOVE    "key2"           TO  MCP-PATHNAME
+               PERFORM  955-HKNNUM-READ-SEC
+           ELSE
+               DISPLAY  "HKNNUM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"        TO  MCP-FUNC
+           MOVE  "tbl_hknnum"           TO  MCP-TABLE
+           MOVE  "key2"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"            USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       950-HKNNUM-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険番号情報読込
+      *****************************************************************
+       955-HKNNUM-READ-SEC  SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  HKNNUM-REC
+             MOVE  ZERO         TO  FLG-HKNNUM
+      *
+             IF    HKN-HKNNUM  =  "051"
+               INITIALIZE                HKN-TANSEIDONAME
+               MOVE    "特定疾患"   TO   HKN-TANSEIDONAME
+             END-IF
+      *
+           ELSE
+             INITIALIZE  HKNNUM-REC
+             MOVE  1  TO  FLG-HKNNUM
+           END-IF
+      *
+           .
+       955-HKNNUM-READ-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    集計ファイル読込
       *****************************************************************
