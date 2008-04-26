@@ -33,6 +33,8 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *                                  返戻対応
+      *  01.00.02    内田    08/04/23    ４月改正に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -176,6 +178,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -257,6 +264,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.02) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -516,7 +526,15 @@
              WHEN 0  THRU 2
                MOVE     3               TO  IDX1
              WHEN 3  THRU 69
-               MOVE     1               TO  IDX1
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *         MOVE     1               TO  IDX1
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+               AND  (RECE10-FLG (1)   =  1)
+                   MOVE     3           TO  IDX1
+               ELSE
+                   MOVE     1           TO  IDX1
+               END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
              WHEN 70 THRU 999 
                MOVE     2               TO  IDX1
              END-EVALUATE

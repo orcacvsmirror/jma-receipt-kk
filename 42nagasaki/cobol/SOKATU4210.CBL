@@ -41,6 +41,8 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.06    内田    08/04/23    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -237,6 +239,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -331,6 +338,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.06) LINE ADD START ------------------------------------
+           INITIALIZE                   SPA-AREA
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -614,6 +624,19 @@
              MOVE  RECE10-HKNJANUM(3:6)  TO  SKT4210TMP-HKNJANUM(1:6)
            END-IF
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    平成２０年３月以前の前期９割、退職前期、３歳未満、老人は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+             IF  (RECE10-HKNNUM  =  "060"  AND  RECE10-AGE  >=  70
+                  AND  RECE10-KYURATE  =  9)
+             OR  (RECE10-HKNNUM  =  "067"  AND  RECE10-AGE  >=  70)
+             OR  (RECE10-AGE  <  3)
+             OR  (RECE10-RJNHKNNUM  NOT =  SPACE)
+               MOVE  RECE10-SRYYM          TO  SKT4210TMP-SRYYM
+             END-IF
+           END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *
       *    国保組合判定
            IF      SKT4210TMP-HKNJANUM(3:1)  =     "3"    AND
                    RECE10-RJNHKNNUM          =   SPACE    AND
@@ -701,17 +724,33 @@
       *    退職者かどうか
              IF  RECE10-HKNNUM  =  "060"
                IF  RECE10-AGE  >= 70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE    1     TO    IDX1
-                 ELSE
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE    1     TO    IDX1
+      *           ELSE
+      *             MOVE    2     TO    IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  7
                    MOVE    2     TO    IDX1
-                 END-IF
-               ELSE
-                 IF  RECE10-AGE  >= 3
-                   MOVE    3     TO    IDX1
                  ELSE
-                   MOVE    4     TO    IDX1
+                   MOVE    1     TO    IDX1
                  END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
+               ELSE
+      *---(01.00.06) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
+                 ELSE
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >= 3
+                     MOVE    3     TO    IDX1
+                   ELSE
+                     MOVE    4     TO    IDX1
+                   END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+                 END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                END-IF
       *
              ELSE
@@ -725,11 +764,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
-                   IF  RECE10-AGE  <  3
-                     MOVE  9  TO  IDX1
+      *---(01.00.06) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  9     TO  IDX1
                    ELSE
-                     MOVE  8  TO  IDX1
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  <  3
+                       MOVE  9  TO  IDX1
+                     ELSE
+                       MOVE  8  TO  IDX1
+                     END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
@@ -1126,6 +1174,10 @@
       **    帳票印刷処理
       *       PERFORM 330-PRINT-OUT-SEC
       ***** 05/08/17 INS
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     旧様式が必要なデータかどうか
+             IF  SKT4210TMP-SRYYM  NOT =  ZERO
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *    １枚目
       *    印字データが存在しない場合は印刷しない
              IF  SKT4210TMP-PAGE-FLG1  NOT  =  ZERO
@@ -1176,6 +1228,25 @@
                  MOVE  1  TO  FLG-PASS
                END-PERFORM
              END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+             ELSE
+      *      新様式
+               MOVE     1    TO  WRK-CNT
+               MOVE  ZERO    TO  FLG-PASS
+               PERFORM  UNTIL  SKT4210TMP-KOHNUM (WRK-CNT) = SPACE
+                        AND    FLG-PASS  =  1
+      *          帳票編集<見出し>処理
+                 PERFORM 313-HEAD-HEN-SEC
+      *
+      *          帳票編集<明細>処理
+                 PERFORM 323-BODY-HEN-SEC
+      *
+      *          帳票印刷処理
+                 PERFORM 333-PRINT-OUT-SEC
+                 MOVE  1  TO  FLG-PASS
+               END-PERFORM
+             END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *    一時ファイル読込
              PERFORM  900-TMP-READ-SEC
            END-PERFORM
@@ -1196,6 +1267,12 @@
            INITIALIZE                    SKT4210
       *
       *    診療年月
+      *---(01.00.06) LINE ADD START ------------------------------------
+           MOVE    SKT4210TMP-SRYYM      TO  WRK-SYMD (1:6)
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE    WRK-SRYYMWH           TO  SKT4210-SRYYM
       *    保険者名
            MOVE    SKT4210TMP-HKNJANUM   TO  WRK-HKNJANUM
@@ -1324,7 +1401,10 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4210.red"        TO  SPRT-PRTID
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE   "SKT4210.red"        TO  SPRT-PRTID
+           MOVE   "SKT4210o.red"       TO  SPRT-PRTID
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"        TO  SPRT-TITLE
            MOVE    SKT4210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1357,6 +1437,12 @@
            INITIALIZE                    SKT4220
       *
       *    診療年月
+      *---(01.00.06) LINE ADD START ------------------------------------
+           MOVE    SKT4210TMP-SRYYM      TO  WRK-SYMD (1:6)
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE    WRK-SRYYMWH           TO  SKT4220-SRYYM
       *    保険者名
            MOVE    SKT4210TMP-HKNJANUM   TO  WRK-HKNJANUM
@@ -1707,6 +1793,217 @@
            .
        332-PRINT-OUT-EXT.
            EXIT.
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理
+      *****************************************************************
+       313-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1                     TO  CNT-PAGE
+      *
+           INITIALIZE                    SKT4210
+      *
+      *    診療年月
+      *---(01.00.06) LINE ADD START ------------------------------------
+           MOVE    LNK-PRTKANRI-SRYYM    TO  WRK-SYMD (1:6)
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *---(01.00.06) LINE ADD END   ------------------------------------
+           MOVE    WRK-SRYYMWH           TO  SKT4210-SRYYM
+      *    保険者名
+           MOVE    SKT4210TMP-HKNJANUM   TO  WRK-HKNJANUM
+           PERFORM  920-HKNJAINF-SET-SEC
+           MOVE    WRK-HKNJANAME         TO  SKT4210-HKNJANAME
+      *    請求年月日
+           MOVE    WRK-SEIYMDWH          TO  SKT4210-SEIYMD
+      *    郵便番号
+           MOVE    WRK-HOSPADRS          TO  SKT4210-ADRS
+      *    医療機関名
+           MOVE    WRK-HOSPNAME          TO  SKT4210-HOSPNAME
+      *    開設者名
+           MOVE    SYS-1001-KAISETUNAME  TO  SKT4210-KAISETUNAME
+      *    電話番号
+           MOVE    WRK-HOSPTEL           TO  SKT4210-TEL
+      *    保険者番号
+           MOVE    SKT4210TMP-HKNJANUM   TO  SKT4210-HKNJANUM
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCD       TO  SKT4210-HOSPCD
+      *    在宅
+           IF     SKT4210TMP-ZAITAKU  =  "1"
+             MOVE  "在"                  TO  SKT4210-ZAI1
+             MOVE  "○"                  TO  SKT4210-ZAI2
+           END-IF
+      *    長期
+           IF     SKT4210TMP-TYOKI    =  "1"
+             MOVE  "長"                  TO  SKT4210-TYOKI1
+             MOVE  "○"                  TO  SKT4210-TYOKI2
+           END-IF
+      *
+      *    ページ番号
+           MOVE      CNT-PAGE               TO  WRK-Z4
+           MOVE      WRK-Z4                 TO  SKT4210-NO
+      *
+           .
+       313-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<明細行>処理
+      *****************************************************************
+       323-BODY-HEN-SEC      SECTION.
+      *
+      *    公費の為の２枚目以上か
+           IF  WRK-CNT  =  1
+      *    編集処理
+             PERFORM  VARYING  IDX1  FROM    1   BY  1
+                      UNTIL    IDX1  >  9
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *    療養の給付：件数
+                 MOVE  SKT4210TMP-KENSU(IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT4210-KENSU(IDX1 IDX2)
+      *    療養の給付：日数
+                 MOVE  SKT4210TMP-NISSU(IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT4210-NISSU(IDX1 IDX2)
+      *    療養の給付：点数
+                 MOVE  SKT4210TMP-TENSU(IDX1 IDX2)   TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT4210-TENSU(IDX1 IDX2)
+                 MOVE  SKT4210TMP-ITBFTN (IDX1 IDX2) TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT4210-ITBFTN(IDX1 IDX2)
+               END-PERFORM
+      *    食事療養：件数
+               MOVE  SKT4210TMP-SKENSU(IDX1)  TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT4210-SKENSU(IDX1)
+      *    食事療養：日数
+               MOVE  SKT4210TMP-SNISSU(IDX1)  TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT4210-SNISSU(IDX1)
+      *    食事療養：金額
+               MOVE  SKT4210TMP-SKINGK(IDX1)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT4210-SKINGK(IDX1)
+      *    食事療養：標準負担額
+               MOVE  SKT4210TMP-SFTNGK(IDX1)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT4210-SFTNGK(IDX1)
+             END-PERFORM
+      *    原爆・被爆
+             PERFORM  VARYING  IDX1  FROM    1   BY  1
+                      UNTIL    IDX1  >  2
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *    療養の給付：件数
+                 MOVE  SKT4210TMP-G-KENSU(IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT4210-KENSU(IDX1 + 9 IDX2)
+      *    療養の給付：日数
+                 MOVE  SKT4210TMP-G-NISSU(IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT4210-NISSU(IDX1 + 9 IDX2)
+      *    療養の給付：点数
+                 MOVE  SKT4210TMP-G-TENSU(IDX1 IDX2)   TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT4210-TENSU(IDX1 + 9 IDX2)
+                 MOVE  SKT4210TMP-G-ITBFTN (IDX1 IDX2) TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT4210-ITBFTN(IDX1 + 9 IDX2)
+               END-PERFORM
+      *    食事療養：件数
+               MOVE  SKT4210TMP-G-SKENSU(IDX1)  TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT4210-SKENSU(IDX1 + 9)
+      *    食事療養：日数
+               MOVE  SKT4210TMP-G-SNISSU(IDX1)  TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT4210-SNISSU(IDX1 + 9)
+      *    食事療養：金額
+               MOVE  SKT4210TMP-G-SKINGK(IDX1)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT4210-SKINGK(IDX1 + 9)
+      *    食事療養：標準負担額
+               MOVE  SKT4210TMP-G-SFTNGK(IDX1)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT4210-SFTNGK(IDX1 + 9)
+             END-PERFORM
+           END-IF
+      *
+      *    公費の印字
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL    IDX3  >     3
+                    OR  WRK-CNT    >     20
+                    OR  SKT4210TMP-KOHNUM(WRK-CNT) = SPACE
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     2
+      *    療養の給付：件数
+               MOVE  SKT4210TMP-K-KENSU(WRK-CNT IDX2)   TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT4210-KKENSU(IDX3 IDX2)
+      *    療養の給付：日数
+               MOVE  SKT4210TMP-K-NISSU(WRK-CNT IDX2)   TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT4210-KNISSU(IDX3 IDX2)
+      *    療養の給付：点数
+               MOVE  SKT4210TMP-K-TENSU(WRK-CNT IDX2)   TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT4210-KTENSU(IDX3 IDX2)
+      *    療養の給付：一部負担金
+               MOVE  SKT4210TMP-K-ITBFTN(WRK-CNT IDX2)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT4210-KITBFTN(IDX3 IDX2)
+             END-PERFORM
+      *    食事療養：件数
+             MOVE  SKT4210TMP-K-SKENSU(WRK-CNT)         TO  WRK-Z5
+             MOVE  WRK-Z5   TO  SKT4210-KSKENSU(IDX3)
+      *    食事療養：日数
+             MOVE  SKT4210TMP-K-SNISSU(WRK-CNT)         TO  WRK-Z5
+             MOVE  WRK-Z5   TO  SKT4210-KSNISSU(IDX3)
+      *    食事療養：金額
+             MOVE  SKT4210TMP-K-SKINGK(WRK-CNT)         TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT4210-KSKINGK(IDX3)
+      *    食事療養：標準負担額
+             MOVE  SKT4210TMP-K-SFTNGK(WRK-CNT)         TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT4210-KSFTNGK(IDX3)
+      *    公費名
+             MOVE  SKT4210TMP-KOHNUM (WRK-CNT)  TO  WRK-KOHNUM
+             PERFORM  950-HKNNUM-SET-SEC
+             MOVE  HKN-HBTNUM         TO  SKT4210-KOHNUM(IDX3)
+             MOVE  HKN-TANSEIDONAME   TO  SKT4210-KOHNAME(IDX3)
+      *
+             ADD  1  TO  WRK-CNT
+           END-PERFORM
+      *
+           .
+       323-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理
+      *****************************************************************
+       333-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT4210.red"        TO  SPRT-PRTID
+           MOVE    "国保請求書"        TO  SPRT-TITLE
+           MOVE    SKT4210             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           MOVE    "2"                 TO  SPRT-SITEKBN
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       333-PRINT-OUT-EXT.
+           EXIT.
+      *---(01.00.06) LINE ADD END   ------------------------------------
 057400*
       *****************************************************************
       *    公費ソート処理
