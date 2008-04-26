@@ -43,6 +43,8 @@
       *                                  医療機関情報を参照
       *  01.00.09    内田    07/11/28    「43被爆」の一部負担金欄は
       *                                  保険の一部負担金を印字
+      *  01.00.10    内田    08/04/25    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -249,6 +251,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.08) LINE ADD END   ------------------------------------
       *
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -356,6 +363,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.10) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -775,21 +785,30 @@
                    END-IF
                  END-IF
                ELSE
-                 IF  RECE10-AGE  >= 3
-      *    給付割合で分ける
-                   EVALUATE  RECE10-KYURATE
-                     WHEN  8
-                       MOVE  4  TO  IDX1
-                     WHEN  7
-                       MOVE  5  TO  IDX1
-                     WHEN  OTHER
-                       MOVE  6  TO  IDX1
-                       MOVE  RECE10-KYURATE  TO
-                             SKT4020TMP-KYURATE(IDX2)
-                   END-EVALUATE
+      *---(01.00.10) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  7     TO  IDX1
                  ELSE
-                   MOVE    7     TO    IDX1
+      *---(01.00.10) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >= 3
+      *    給付割合で分ける
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  8
+                         MOVE  4  TO  IDX1
+                       WHEN  7
+                         MOVE  5  TO  IDX1
+                       WHEN  OTHER
+                         MOVE  6  TO  IDX1
+                         MOVE  RECE10-KYURATE  TO
+                               SKT4020TMP-KYURATE(IDX2)
+                     END-EVALUATE
+                   ELSE
+                     MOVE    7     TO    IDX1
+                   END-IF
+      *---(01.00.10) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
                END-IF
       *=== ７割追加対応 By Takashima(2006/10/31) end
              MOVE    1    TO    SKT4020TMP-PAGE1-FLG
