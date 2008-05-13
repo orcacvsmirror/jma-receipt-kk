@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev       修正者    日付          内容
+      *  01.00.01    長屋   08/04/29      帳票様式に伴う修正
+      *****************************************************************
        01  SKT3820.
       *ページ番号
            03  SKT3820-NO                  PIC  X(04).
@@ -34,12 +38,17 @@
            03  SKT3820-HKNJANAME           PIC  X(24).
       *保険者番号
            03  SKT3820-HKNJANUM            PIC  X(12).
+      *---(01.00.01) LINE ADD START ------------------------------------
       *給付割合
-           03  SKT3820-KYURATE             PIC  X(04).
+      *     03  SKT3820-KYURATE             PIC  X(04).
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *在総診・在医総
            03  SKT3820-ZAI                 PIC  X(02) OCCURS 2.
       *療養の給付テーブル
-           03  SKT3820-SEIKYU  OCCURS  9.
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     03  SKT3820-SEIKYU  OCCURS  9.
+           03  SKT3820-SEIKYU  OCCURS  7.
+      *---(01.00.01) LINE ADD END   ------------------------------------
                05  SKT3820-NYUGAI-TBL  OCCURS  2.
       *件数
                    07 SKT3820-KENSU        PIC  X(06).
@@ -50,7 +59,10 @@
       *一部負担金
                    07 SKT3820-ITBFTN       PIC  X(09).
       *食事療養テーブル
-           03  SKT3820-SHOKUJI-TBL OCCURS 9.
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     03  SKT3820-SHOKUJI-TBL OCCURS 9.
+           03  SKT3820-SHOKUJI-TBL OCCURS 7.
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *食事件数
                05  SKT3820-S-KENSU         PIC  X(06).
       *食事日数

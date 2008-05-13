@@ -15,13 +15,20 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev       修正者    日付          内容
+      *  01.00.01    長屋   08/04/29      帳票様式に伴う修正
+      *****************************************************************
        01  SKT3800.
       *診療年月
            03  SKT3800-SRYYM               PIC  X(16).
       *医療機関コード
            03  SKT3800-HOSPCD              PIC  X(14).
       *療養の給付テーブル
-           03  SKT3800-SEIKYU  OCCURS  9.
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     03  SKT3800-SEIKYU  OCCURS  9.
+           03  SKT3800-SEIKYU  OCCURS  7.
+      *---(01.00.01) LINE ADD END   ------------------------------------
                05  SKT3800-NYUGAI-TBL  OCCURS  2.
       *件数
                    07 SKT3800-KENSU        PIC  X(06).
@@ -30,7 +37,10 @@
       *一部負担金
                    07 SKT3800-ITBFTN       PIC  X(10).
       *食事療養テーブル
-           03  SKT3800-SHOKUJI-TBL OCCURS 9.
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     03  SKT3800-SHOKUJI-TBL OCCURS 9.
+           03  SKT3800-SHOKUJI-TBL OCCURS 7.
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *食事件数
                05  SKT3800-S-KENSU         PIC  X(06).
       *食事療養費

@@ -38,6 +38,10 @@
       *                                  ∞ÂŒ≈µ°¥ÿæ Û§Úª≤æ»
       *  01.00.08    ∆‚≈ƒ    07/10/21    ∞Ï»Ã≈˘§Œ£∑£∞∫–Ã§À˛§Œ
       *                                  ∞Ï…Ù…È√¥∂‚ÕÛ§œ∞ıª˙§∑§ §§
+      *  01.00.09    ƒπ≤∞    08/04/29    ƒ¢…ºÕÕº∞§À»º§¶Ω§¿µ
+      *  01.00.10    ∆‚≈ƒ    08/05/04    πÒ¡»§Œ«ØŒ»ΩƒÍΩ§¿µ
+      *  01.00.11    ∆‚≈ƒ    08/05/09    ø©ªˆ∑ÂøÙΩ§¿µ
+      *                                  ø«Œ≈«Ø∑Ó§Œ…Ωº®Ω§¿µ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -129,6 +133,9 @@
       *
            COPY    "SKT3820.INC".
            COPY    "SKT3830.INC".
+      *---(01.00.09) LINE ADD START ------------------------------------
+           COPY    "SKT3825.INC". 
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *    •π•—ŒŒ∞Ë
        01  STS-AREA.
@@ -190,6 +197,9 @@
            03  WRK-SEIYMD          PIC X(08).
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
+      *---(01.00.11) LINE ADD START ------------------------------------
+           03  WRK-SRYYMWH2        PIC X(16).
+      *---(01.00.11) LINE ADD END   ------------------------------------
            03  WRK-SRYYMD          PIC X(08).
       *
       *    •’•°•§•ÎÃææŒÕ—•®•Í•¢
@@ -304,6 +314,12 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    ∏«ƒÍπ‡Ã‹
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+           03  WRK-ROUJIN-FLG          PIC 9(01).
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    •’•°•§•Î•Ï•§•¢•¶•»
@@ -595,7 +611,6 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *  
-           DISPLAY     "WRK-PARA-SYOKBN=" WRK-PARA-SYOKBN
            EVALUATE    WRK-PARA-SYOKBN 
                WHEN    "2"
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -730,14 +745,31 @@
            END-IF
       *    ∫ﬂ¡Ìø«
            MOVE    RECE10-ZAITAKU        TO  SKT3810TMP-ZAISOU
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     ø¿Æ£≤£∞«Ø£≥∑Ó∞ ¡∞œ∑øÕ ›∑Ú»ΩƒÍ
+           IF (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+             AND  (RECE10-RJNHKNNUM  NOT =  SPACE)
+               MOVE  RECE10-SRYYM          TO  SKT3810TMP-SRYYM
+               MOVE  1                     TO  WRK-ROUJIN-FLG
+           END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *    ¡»πÁ
            IF  SKT3810TMP-HKNJANUM(3:1) = "3"
              IF  RECE10-RJNHKNNUM  =  SPACE
-               IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
-                 IF  RECE10-KYURATE  NOT =  7
-                     MOVE   RECE10-KYURATE  TO  SKT3810TMP-KYURATE
+      *---(01.00.10) LINE ADD START ------------------------------------
+               IF   RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+               AND  RECE10-FLG (1)  =  1
+                 CONTINUE
+               ELSE
+      *---(01.00.10) LINE ADD END   ------------------------------------
+                 IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+                   IF  RECE10-KYURATE  NOT =  7
+                       MOVE   RECE10-KYURATE  TO  SKT3810TMP-KYURATE
+                   END-IF
                  END-IF
+      *---(01.00.10) LINE ADD START ------------------------------------
                END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
              END-IF
            END-IF
       *    ∞ı∫˛ΩÁ¿ﬂƒÍ
@@ -804,41 +836,79 @@
                    WHEN  OTHER   MOVE  2  TO  IDX1
                  END-EVALUATE
                ELSE
+      *---(01.00.09) LINE ADD START ------------------------------------
+                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                AND  (RECE10-FLG (1)   =  1)
+                    MOVE  4     TO  IDX1
+                ELSE
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *    £≥∫–Ã§À˛•¡•ß•√•Ø
                  IF  RECE10-AGE > 2
       *    ≥‰πÁ•¡•ß•√•Ø
                    MOVE  3        TO    IDX1
                  ELSE
                    MOVE  4        TO    IDX1
-                 END-IF 
+                 END-IF
+      *---(01.00.09) LINE ADD START ------------------------------------
+                END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------ 
                END-IF
              ELSE
       *    «ØŒ•¡•ß•√•Ø
                IF  RECE10-HONKZKKBN  =  "1"
                  IF  RECE10-AGE  >  69
                    IF  RECE10-KYURATE  =  9
-                     MOVE  6   TO  IDX1
+      *---(01.00.09) LINE ADD START ----------------------------------
+      *   70∞ æÂ£π≥‰§œ¬‡ø¶À‹øÕ§ÿ
+      *               MOVE  6   TO  IDX1
+                     MOVE  5   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
                    ELSE
-                     MOVE  7   TO  IDX1
+      *---(01.00.09) LINE ADD START ----------------------------------
+      *   70∞ æÂ£∑≥‰§œ¬‡ø¶»Ô…ﬁÕ‹º‘§ÿ
+      *               MOVE  7   TO  IDX1
+                     MOVE  6   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
                    END-IF
                  ELSE
                    MOVE    5   TO  IDX1
                  END-IF
                ELSE
+      *---(01.00.09) LINE ADD START ------------------------------------
+                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                AND  (RECE10-FLG (1)   =  1)
+                     MOVE  7     TO  IDX1
+                ELSE
+      *---(01.00.09) LINE ADD END   ------------------------------------
                  IF  RECE10-AGE  >  2
       *     ≤»¬≤§‚£∑£∞∫–»ΩƒÍ§Úπ‘§¶
                    IF  RECE10-AGE > 69
                      IF  RECE10-KYURATE  =  9
-                       MOVE  6   TO  IDX1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *                 MOVE  6   TO  IDX1
+                       MOVE  5   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
                      ELSE
-                       MOVE  7   TO  IDX1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *                 MOVE  7   TO  IDX1
+                       MOVE  6   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
                      END-IF
                    ELSE
-                    MOVE  8     TO  IDX1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *              MOVE  8     TO  IDX1
+                    MOVE  6   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
                    END-IF
                  ELSE
-                   MOVE  9     TO  IDX1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *             MOVE  9     TO  IDX1
+                   MOVE  7   TO  IDX1
+      *---(01.00.09) LINE ADD END   ------------------------------------
                  END-IF
+      *---(01.00.09) LINE ADD START ------------------------------------
+                END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
                END-IF
              END-IF
       *
@@ -1101,12 +1171,24 @@
       *    œ∑øÕ ›∏±°¶∏¯»Ò ¨
       *    •«°º•ø§ŒÃµ§§æÏπÁ§œ∞ı∫˛§∑§ §§
              IF     SKT3810TMP-PAGE-FLG2  =  1
+      *---(01.00.09) LINE ADD START ------------------------------------
+               IF SKT3810TMP-SRYYM  = ZERO
       *    ƒ¢…º ‘Ω∏<∏´Ω–§∑>ΩËÕ˝
-               PERFORM 313-HEAD-HEN-SEC
+                   PERFORM 313-HEAD-HEN-SEC
       *    ƒ¢…º ‘Ω∏<Ã¿∫Ÿ>ΩËÕ˝
-               PERFORM 323-BODY-HEN-SEC
+                   PERFORM 323-BODY-HEN-SEC
       *    ƒ¢…º∞ı∫˛ΩËÕ˝
-               PERFORM 333-PRINT-OUT-SEC
+                   PERFORM 333-PRINT-OUT-SEC
+                ELSE
+      *         IF SKT3810TMP-SRYYM NOT = ZERO
+      *    ∑Ó√Ÿ§Ïœ∑øÕƒ¢…º ‘Ω∏<∏´Ω–§∑>ΩËÕ˝
+                   PERFORM 314-HEAD-HEN-SEC
+      *    ∑Ó√Ÿ§Ïœ∑øÕƒ¢…º ‘Ω∏<Ã¿∫Ÿ>ΩËÕ˝
+                   PERFORM 324-BODY-HEN-SEC
+      *    ∑Ó√Ÿ§Ïœ∑øÕƒ¢…º∞ı∫˛ΩËÕ˝
+                   PERFORM 334-PRINT-OUT-SEC
+               END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
              END-IF
       *
       *     ‘Ω∏∫—∞Ïª˛•’•°•§•Î∆…§ﬂπ˛§ﬂ
@@ -1302,15 +1384,17 @@
       *    ≥´¿ﬂº‘Ãæ
            MOVE    SYS-1001-KAISETUNAME  TO  SKT3820-KAISETU
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
       *    µÎ…’≥‰πÁ
-           IF      SKT3810TMP-KYURATE    = SPACE
-               MOVE    SPACE             TO  SKT3820-KYURATE
-           ELSE
-               MOVE    SKT3810TMP-KYURATE  TO  WRK-Z2
-               MOVE    WRK-Z2            TO  WRK-MAE-INPUT
-               PERFORM 2009-HENKAN-SEC
-               MOVE    WRK-OUT-INPUT     TO  SKT3820-KYURATE
-           END-IF
+      *     IF      SKT3810TMP-KYURATE    = SPACE
+      *         MOVE    SPACE             TO  SKT3820-KYURATE
+      *     ELSE
+      *         MOVE    SKT3810TMP-KYURATE  TO  WRK-Z2
+      *         MOVE    WRK-Z2            TO  WRK-MAE-INPUT
+      *         PERFORM 2009-HENKAN-SEC
+      *         MOVE    WRK-OUT-INPUT     TO  SKT3820-KYURATE
+      *     END-IF
+      *---(01.00.09) LINE ADD START ------------------------------------
       *
       *     ›∏±º‘»÷πÊ
            MOVE    SKT3810TMP-HKNJANUM     TO  WRK-MAE-INPUT
@@ -1342,7 +1426,10 @@
       *
       *     ‘Ω∏ΩËÕ˝
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     9
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *              UNTIL    IDX1  >     9
+                    UNTIL    IDX1  >     7
+      *---(01.00.09) LINE ADD END   ------------------------------------
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
       *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
@@ -1437,6 +1524,7 @@
       *    •⁄°º•∏»÷πÊ
            MOVE    CNT-PAGE              TO  WRK-Z4
            MOVE    WRK-Z4                TO  SKT3830-NO
+                                             SKT3825-NO
       *
       *    ø«Œ≈«Ø∑Ó
            MOVE    WRK-SRYYMWH           TO  SKT3830-SRYYM
@@ -1465,15 +1553,17 @@
       *    ≥´¿ﬂº‘Ãæ
            MOVE    SYS-1001-KAISETUNAME  TO  SKT3830-KAISETU
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
       *    µÎ…’≥‰πÁ
-           IF      SKT3810TMP-KYURATE    = SPACE
-               MOVE    SPACE             TO  SKT3830-KYURATE
-           ELSE
-               MOVE    SKT3810TMP-KYURATE  TO  WRK-Z2
-               MOVE    WRK-Z2            TO  WRK-MAE-INPUT
-               PERFORM 2009-HENKAN-SEC
-               MOVE    WRK-OUT-INPUT     TO  SKT3820-KYURATE
-           END-IF
+      *     IF      SKT3810TMP-KYURATE    = SPACE
+      *         MOVE    SPACE             TO  SKT3830-KYURATE
+      *     ELSE
+      *         MOVE    SKT3810TMP-KYURATE  TO  WRK-Z2
+      *         MOVE    WRK-Z2            TO  WRK-MAE-INPUT
+      *         PERFORM 2009-HENKAN-SEC
+      *         MOVE    WRK-OUT-INPUT     TO  SKT3820-KYURATE
+      *     END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *     ›∏±º‘»÷πÊ
            MOVE    SKT3810TMP-HKNJANUM     TO  WRK-MAE-INPUT
@@ -1502,82 +1592,113 @@
       *****************************************************************
        323-BODY-HEN-SEC      SECTION.
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
       *     ‘Ω∏ΩËÕ˝
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     2
+      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     2
+      *
+      **    œ∑øÕ ‘Ω∏
+      **    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+      *         MOVE  SKT3810TMP-RKENSU (IDX1 IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3830-KENSU(IDX1 IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+      *         MOVE  SKT3810TMP-RNISSU (IDX1 IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3830-NISSU(IDX1 IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+      *         MOVE  SKT3810TMP-RTENSU (IDX1 IDX2)   TO  WRK-Z10
+      *         MOVE  WRK-Z10   TO  SKT3830-TENSU(IDX1 IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+      *         MOVE  SKT3810TMP-RITBFTN (IDX1 IDX2)  TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT3830-ITBFTN(IDX1 IDX2)
+      *
+      **    ∏¯»Ò ‘Ω∏
+      **    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+      *         MOVE  SKT3810TMP-KKENSU (IDX1 IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3830-KKENSU(IDX1 IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+      *         MOVE  SKT3810TMP-KNISSU (IDX1 IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3830-KNISSU(IDX1 IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+      *         MOVE  SKT3810TMP-KTENSU (IDX1 IDX2)   TO  WRK-Z10
+      *         MOVE  WRK-Z10   TO  SKT3830-KTENSU(IDX1 IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+      *         MOVE  SKT3810TMP-KITBFTN (IDX1 IDX2)  TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT3830-KITBFTN(IDX1 IDX2)
+      **
+      *       END-PERFORM
+      ****  ø©ªˆŒ≈Õ‹°ßœ∑øÕ ‘Ω∏
+      **    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+      *       MOVE  SKT3810TMP-S-RKENSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3830-S-KENSU(IDX1)
+      **    ø©ªˆŒ≈Õ‹°ß∆¸øÙ
+      *       MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3830-S-NISSU(IDX1)
+      **    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+      *       MOVE  SKT3810TMP-S-RKINGAKU (IDX1)      TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT3830-S-MONEY(IDX1)
+      **    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+      *       MOVE  SKT3810TMP-S-RFTNGAKU (IDX1)      TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT3830-S-FTNGAKU(IDX1)
+      **
+      ****  ø©ªˆŒ≈Õ‹°ß∏¯»Ò ‘Ω∏
+      **    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+      *       MOVE  SKT3810TMP-S-KKENSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3830-S-KKENSU(IDX1)
+      **    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+      *       MOVE  SKT3810TMP-S-KNISSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3830-S-KNISSU(IDX1)
+      **    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+      *       MOVE  SKT3810TMP-S-KKINGAKU (IDX1)      TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT3830-S-KMONEY(IDX1)
+      **    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+      *       MOVE  SKT3810TMP-S-KFTNGAKU (IDX1)      TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT3830-S-KFTNGAKU(IDX1)
+      *    END-PERFORM
+      ***  ƒπ¥¸π‚≥€°ß ‘Ω∏
+      *     PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *              UNTIL    IDX2  >     2
+      **    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+      *         MOVE  SKT3810TMP-TKENSU (IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3830-TKENSU(IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+      *         MOVE  SKT3810TMP-TNISSU (IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3830-TNISSU(IDX2)
+      **    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+      *         MOVE  SKT3810TMP-TTENSU (IDX2)   TO  WRK-Z10
+      *         MOVE  WRK-Z10   TO  SKT3830-TTENSU(IDX2)
+      *     END-PERFORM
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     2
-             PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     2
-      *
-      *    œ∑øÕ ‘Ω∏
-      *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-               MOVE  SKT3810TMP-RKENSU (IDX1 IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3830-KENSU(IDX1 IDX2)
-      *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
-               MOVE  SKT3810TMP-RNISSU (IDX1 IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3830-NISSU(IDX1 IDX2)
-      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-               MOVE  SKT3810TMP-RTENSU (IDX1 IDX2)   TO  WRK-Z10
-               MOVE  WRK-Z10   TO  SKT3830-TENSU(IDX1 IDX2)
-      *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
-               MOVE  SKT3810TMP-RITBFTN (IDX1 IDX2)  TO  WRK-Z9
-               MOVE  WRK-Z9   TO  SKT3830-ITBFTN(IDX1 IDX2)
-      *
       *    ∏¯»Ò ‘Ω∏
       *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-               MOVE  SKT3810TMP-KKENSU (IDX1 IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3830-KKENSU(IDX1 IDX2)
+               MOVE  SKT3810TMP-KKENSU (1 IDX1)   TO  WRK-Z6
+               MOVE  WRK-Z6   TO  SKT3830-KKENSU(IDX1)
       *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
-               MOVE  SKT3810TMP-KNISSU (IDX1 IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3830-KNISSU(IDX1 IDX2)
+               MOVE  SKT3810TMP-KNISSU (1 IDX1)   TO  WRK-Z6
+               MOVE  WRK-Z6   TO  SKT3830-KNISSU(IDX1)
       *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-               MOVE  SKT3810TMP-KTENSU (IDX1 IDX2)   TO  WRK-Z10
-               MOVE  WRK-Z10   TO  SKT3830-KTENSU(IDX1 IDX2)
+               MOVE  SKT3810TMP-KTENSU (1 IDX1)   TO  WRK-Z10
+               MOVE  WRK-Z10   TO  SKT3830-KTENSU(IDX1)
       *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
-               MOVE  SKT3810TMP-KITBFTN (IDX1 IDX2)  TO  WRK-Z9
-               MOVE  WRK-Z9   TO  SKT3830-KITBFTN(IDX1 IDX2)
-      *
-             END-PERFORM
-      ***  ø©ªˆŒ≈Õ‹°ßœ∑øÕ ‘Ω∏
-      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-             MOVE  SKT3810TMP-S-RKENSU (IDX1)        TO  WRK-Z6
-             MOVE  WRK-Z6   TO  SKT3830-S-KENSU(IDX1)
-      *    ø©ªˆŒ≈Õ‹°ß∆¸øÙ
-             MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z6
-             MOVE  WRK-Z6   TO  SKT3830-S-NISSU(IDX1)
-      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
-             MOVE  SKT3810TMP-S-RKINGAKU (IDX1)      TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT3830-S-MONEY(IDX1)
-      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
-             MOVE  SKT3810TMP-S-RFTNGAKU (IDX1)      TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT3830-S-FTNGAKU(IDX1)
-      *
-      ***  ø©ªˆŒ≈Õ‹°ß∏¯»Ò ‘Ω∏
-      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-             MOVE  SKT3810TMP-S-KKENSU (IDX1)        TO  WRK-Z6
-             MOVE  WRK-Z6   TO  SKT3830-S-KKENSU(IDX1)
-      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-             MOVE  SKT3810TMP-S-KNISSU (IDX1)        TO  WRK-Z6
-             MOVE  WRK-Z6   TO  SKT3830-S-KNISSU(IDX1)
-      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
-             MOVE  SKT3810TMP-S-KKINGAKU (IDX1)      TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT3830-S-KMONEY(IDX1)
-      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
-             MOVE  SKT3810TMP-S-KFTNGAKU (IDX1)      TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT3830-S-KFTNGAKU(IDX1)
+               MOVE  SKT3810TMP-KITBFTN (1 IDX1)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT3830-KITBFTN(IDX1)
            END-PERFORM
-      ***  ƒπ¥¸π‚≥€°ß ‘Ω∏
-           PERFORM  VARYING  IDX2  FROM  1  BY  1
-                    UNTIL    IDX2  >     2
-      *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-               MOVE  SKT3810TMP-TKENSU (IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3830-TKENSU(IDX2)
-      *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
-               MOVE  SKT3810TMP-TNISSU (IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3830-TNISSU(IDX2)
-      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-               MOVE  SKT3810TMP-TTENSU (IDX2)   TO  WRK-Z10
-               MOVE  WRK-Z10   TO  SKT3830-TTENSU(IDX2)
-           END-PERFORM
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+             MOVE  SKT3810TMP-S-KKENSU (1)        TO  WRK-Z6
+             MOVE  WRK-Z6   TO  SKT3830-S-KKENSU
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+             MOVE  SKT3810TMP-S-KNISSU (1)        TO  WRK-Z6
+             MOVE  WRK-Z6   TO  SKT3830-S-KNISSU
+      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+             MOVE  SKT3810TMP-S-KKINGAKU (1)      TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT3830-S-KMONEY
+      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+             MOVE  SKT3810TMP-S-KFTNGAKU (1)      TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT3830-S-KFTNGAKU
+
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *
            .
@@ -1627,6 +1748,186 @@
        333-PRINT-OUT-EXT.
            EXIT.
 057400*
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ƒ¢…º ‘Ω∏<•ÿ•√•¿°º…Ù>ΩËÕ˝° œ∑øÕ°¶∏¯»Ò°À
+      *****************************************************************
+       314-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1                     TO  CNT-PAGE
+      *
+           INITIALIZE                    SKT3825
+      *    •⁄°º•∏»÷πÊ
+           MOVE    CNT-PAGE              TO  WRK-Z4
+           MOVE    WRK-Z4                TO  SKT3825-NO
+      *
+      *    ø«Œ≈«Ø∑Ó
+           MOVE    SKT3810TMP-SRYYM      TO  WRK-SYMD (1:6)
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *     MOVE    WRK-SRYYMWH           TO  SKT3825-SRYYM
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
+           MOVE    WRK-SRYYMWH2          TO  SKT3825-SRYYM
+      *---(01.00.11) LINE ADD END   ------------------------------------
+      *
+      *    ¿¡µ·«Ø∑Ó∆¸
+           MOVE    WRK-SEIYMDWH          TO  SKT3825-SEIYMD
+      *
+      *    ∞ÂŒ≈µ°¥ÿ•≥°º•…
+           MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SKT3825-HOSPCD
+      *    ∞ÂŒ≈µ°¥ÿΩªΩÍ
+           MOVE    WRK-HOSPADRS          TO  SKT3825-ADRS
+      *
+      *    ∞ÂŒ≈µ°¥ÿÃæ
+           MOVE    WRK-HOSPNAME          TO  SKT3825-HOSPNAME
+      *
+      *    ≥´¿ﬂº‘Ãæ
+           MOVE    SYS-1001-KAISETUNAME  TO  SKT3825-KAISETUNAME
+      *
+      *     ›∏±º‘»÷πÊ
+           MOVE    "  "                    TO  WRK-MAE-INPUT(1:2)
+           MOVE    SKT3810TMP-HKNJANUM     TO  WRK-MAE-INPUT(3:)
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SKT3825-HKNJANUM
+      *
+      *     ›∏±º‘Ãæ
+           PERFORM  920-HKNJAINF-SET-SEC
+           STRING  HKNJA-HKNJANAME     DELIMITED BY SPACE
+                   "  "                DELIMITED BY SIZE
+                   "≈¬"                DELIMITED BY SIZE
+                   INTO                SKT3825-HKNJANAME
+           END-STRING
+      *
+           IF    SKT3810TMP-ZAISOU    =    "1"
+             MOVE    "∫ﬂ"             TO   SKT3825-ZAI1
+             MOVE    "¢˛"             TO   SKT3825-ZAI2
+           END-IF
+      *
+           .
+       313-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ƒ¢…º ‘Ω∏<Ã¿∫Ÿπ‘>ΩËÕ˝° œ∑øÕ°¶∏¯»Ò°À
+      *****************************************************************
+       324-BODY-HEN-SEC      SECTION.
+      *
+      *     ‘Ω∏ΩËÕ˝
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     2
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     2
+      *
+      *    œ∑øÕ ‘Ω∏
+      *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+               MOVE  SKT3810TMP-RKENSU (IDX1 IDX2)   TO  WRK-Z6
+               MOVE  WRK-Z6   TO  SKT3825-KENSU(IDX1 IDX2)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+               MOVE  SKT3810TMP-RNISSU (IDX1 IDX2)   TO  WRK-Z6
+               MOVE  WRK-Z6   TO  SKT3825-NISSU(IDX1 IDX2)
+      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+               MOVE  SKT3810TMP-RTENSU (IDX1 IDX2)   TO  WRK-Z10
+               MOVE  WRK-Z10   TO  SKT3825-TENSU(IDX1 IDX2)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+               MOVE  SKT3810TMP-RITBFTN (IDX1 IDX2)  TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT3825-ITBFTN(IDX1 IDX2)
+             END-PERFORM
+      *
+      ***  ø©ªˆŒ≈Õ‹°ßœ∑øÕ ‘Ω∏
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+             MOVE  SKT3810TMP-S-RKENSU (IDX1)        TO  WRK-Z6
+             MOVE  WRK-Z6   TO  SKT3825-S-KENSU(IDX1)
+      *    ø©ªˆŒ≈Õ‹°ß∆¸øÙ
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *       MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3825-S-NISSU(IDX1)
+             MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z5
+             MOVE  WRK-Z5   TO  SKT3825-S-NISSU(IDX1)
+      *---(01.00.11) LINE ADD END   ------------------------------------
+      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+             MOVE  SKT3810TMP-S-RKINGAKU (IDX1)      TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT3825-S-KINGK(IDX1)
+      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+             MOVE  SKT3810TMP-S-RFTNGAKU (IDX1)      TO  WRK-Z9
+             MOVE  WRK-Z9   TO  SKT3825-S-FTNGK(IDX1)
+      *
+      *    ∏¯»Ò ‘Ω∏
+      *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+             MOVE  SKT3810TMP-KKENSU (2 IDX1)   TO  WRK-Z6
+             MOVE  WRK-Z6    TO  SKT3825-KKENSU(IDX1)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+             MOVE  SKT3810TMP-KNISSU (2 IDX1)   TO  WRK-Z6
+             MOVE  WRK-Z6    TO  SKT3825-KNISSU(IDX1)
+      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+             MOVE  SKT3810TMP-KTENSU (2 IDX1)   TO  WRK-Z10
+             MOVE  WRK-Z10   TO  SKT3825-KTENSU(IDX1)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+             MOVE  SKT3810TMP-KITBFTN (2 IDX1)  TO  WRK-Z9
+             MOVE  WRK-Z9    TO  SKT3825-KITBFTN(IDX1)
+           END-PERFORM
+      *
+      ***  ø©ªˆŒ≈Õ‹°ß∏¯»Ò ‘Ω∏
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+           MOVE  SKT3810TMP-S-KKENSU (2)        TO  WRK-Z6
+           MOVE  WRK-Z6   TO  SKT3825-S-KKENSU
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+           MOVE  SKT3810TMP-S-KNISSU (2)        TO  WRK-Z6
+           MOVE  WRK-Z6   TO  SKT3825-S-KNISSU
+      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+           MOVE  SKT3810TMP-S-KKINGAKU (2)      TO  WRK-Z9
+           MOVE  WRK-Z9   TO  SKT3825-S-KKINGK
+      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+           MOVE  SKT3810TMP-S-KFTNGAKU (2)      TO  WRK-Z9
+           MOVE  WRK-Z9   TO  SKT3825-S-KFTNGK
+           .
+       323-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ƒ¢…º∞ı∫˛ΩËÕ˝° ∏¯»Ò°À
+      *****************************************************************
+       334-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE    "SKT3825.red"       TO  SPRT-PRTID
+           MOVE    "πÒ ›¿¡µ·ΩÒ"        TO  SPRT-TITLE
+           MOVE    SKT3825             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "∞ı∫˛£ƒ£¬§Àππø∑§«§≠§ﬁ§ª§Û§«§∑§ø"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       333-PRINT-OUT-EXT.
+           EXIT.
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *****************************************************************
       *    •®•È°ºΩ–ŒœΩËÕ˝
       *****************************************************************

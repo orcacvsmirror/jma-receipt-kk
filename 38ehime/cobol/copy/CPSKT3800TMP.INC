@@ -20,6 +20,7 @@
       *
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    Ä¹²°   08/04/29      Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
       ************************************************************
        01  SKT3800TMP-REC.
            03  SKT3800TMP-KEY.
@@ -55,8 +56,12 @@
                    07  SKT3800TMP-TITBFTN           PIC  9(10).
            03  SKT3800TMP-KENNAI-FLG   OCCURS 28    PIC  9(01).
            03  SKT3800TMP-KENNAI-KENSU              PIC  9(02).
-           03  SKT3800TMP-KENNAI-HKNJA-OLD OCCURS 50    PIC  X(06).
-           03  SKT3800TMP-KENGAI-HKNJA     OCCURS 100   PIC  X(06).
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     03  SKT3800TMP-KENNAI-HKNJA-OLD OCCURS 50    PIC  X(06).
+      *     03  SKT3800TMP-KENGAI-HKNJA     OCCURS 100   PIC  X(06).
+           03  SKT3800TMP-KENNAI-HKNJA-OLD OCCURS 50    PIC  X(08).
+           03  SKT3800TMP-KENGAI-HKNJA     OCCURS 100   PIC  X(08).
+      *---(01.00.01) LINE ADD END   ------------------------------------
            03  SKT3800TMP-KENGAI-KENSU              PIC  9(03).
            03  SKT3800TMP-HKN-TBL OCCURS 2.
                05  SKT3800TMP-NYUGAI-TBL OCCURS 2.

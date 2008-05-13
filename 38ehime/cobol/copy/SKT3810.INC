@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev       修正者    日付          内容
+      *  01.00.01    長屋   08/04/29      帳票様式に伴う修正
+      *****************************************************************
        01  SKT3810.
       *診療年月
            03  SKT3810-SRYYM               PIC  X(16).
@@ -42,15 +46,17 @@
                    07 SKT3810-KTENSU        PIC  X(11).
       *一部負担金
                    07 SKT3810-KITBFTN       PIC  X(10).
-      *長期高額の給付テーブル
-           03  SKT3810-T-SEIKYU.
-               05  SKT3810-T-IPA-RJN-TBL  OCCURS  2.
-      *件数
-                   07 SKT3810-TKENSU        PIC  X(06).
-      *点数
-                   07 SKT3810-TTENSU        PIC  X(11).
-      *一部負担金
-      **             07 SKT3810-TITBFTN       PIC  X(10).
+      *---(01.00.01) LINE ADD START ------------------------------------
+      **長期高額の給付テーブル
+      *     03  SKT3810-T-SEIKYU.
+      *         05  SKT3810-T-IPA-RJN-TBL  OCCURS  2.
+      **件数
+      *             07 SKT3810-TKENSU        PIC  X(06).
+      **点数
+      *             07 SKT3810-TTENSU        PIC  X(11).
+      **一部負担金
+      ***             07 SKT3810-TITBFTN       PIC  X(10).
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *老人食事療養テーブル
            03  SKT3810-SHOKUJI-TBL OCCURS 2.
       *食事件数
