@@ -33,6 +33,7 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/04/27    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.04    内田    08/05/11    国組３〜６歳の帳票を分けないように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -618,17 +619,36 @@
            MOVE    RECE10-ZAITAKU      TO  SKT3620TMP-ZAITAKU
       *
       *    法定外給付判定
-           IF     (RECE10-RJNHKNNUM        =   SPACE)  AND
-                  (RECE10-HKNJANUM-S(3:1)  =   "3"  )  AND
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     IF     (RECE10-RJNHKNNUM        =   SPACE)  AND
+      *            (RECE10-HKNJANUM-S(3:1)  =   "3"  )  AND
       *---(01.00.03) LINE ADD START ------------------------------------
-                 ((RECE10-AGE              >   2    )   OR 
-                  ((RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804) AND 
-                  (RECE10-FLG (1)   =  1)) )            AND
+      *           ((RECE10-AGE              >   2    )   OR 
+      *            ((RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804) AND 
+      *            (RECE10-FLG (1)   =  1)) )            AND
       *---(01.00.03) LINE ADD END   ------------------------------------
-                  (RECE10-AGE              <   70   )  AND
-                  (RECE10-KYURATE      NOT =   7    )
-               MOVE    RECE10-KYURATE      TO  SKT3620TMP-KYURATE
+      *            (RECE10-AGE              <   70   )  AND
+      *            (RECE10-KYURATE      NOT =   7    )
+      *         MOVE    RECE10-KYURATE      TO  SKT3620TMP-KYURATE
+      *     END-IF
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF     (RECE10-RJNHKNNUM        =   SPACE)  AND
+                    (RECE10-HKNJANUM-S(3:1)  =   "3"  )  AND
+                    (RECE10-FLG (1)      NOT =   1    )  AND
+                    (RECE10-AGE              <   70   )  AND
+                    (RECE10-KYURATE      NOT =   7    )
+                 MOVE    RECE10-KYURATE      TO  SKT3620TMP-KYURATE
+             END-IF
+           ELSE
+             IF     (RECE10-RJNHKNNUM        =   SPACE)  AND
+                    (RECE10-HKNJANUM-S(3:1)  =   "3"  )  AND
+                    (RECE10-AGE              >   2    )  AND
+                    (RECE10-AGE              <   70   )  AND
+                    (RECE10-KYURATE      NOT =   7    )
+                 MOVE    RECE10-KYURATE      TO  SKT3620TMP-KYURATE
+             END-IF
            END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    印刷順設定
       *    INIファイル登録保険者→県内国保組合→県内扱い国保組合
