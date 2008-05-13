@@ -1,4 +1,5 @@
         01  SKT3605.
+            02  SKT3605-PREF    PIC X(08).
             02  SKT3605-SRYYM   PIC X(16).
             02  SKT3605-SEIYMD  PIC X(22).
             02  SKT3605-HOSPCD  PIC X(20).
