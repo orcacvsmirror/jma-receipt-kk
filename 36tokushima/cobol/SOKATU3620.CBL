@@ -31,6 +31,8 @@
       *  01.00.02    ∆‚≈ƒ    07/09/24    ∆¸•Ï•ªver4.0¬–±˛
       *                                  •∑•π•∆•‡¥…Õ˝•ﬁ•π•ø°÷1901°◊§Œ
       *                                  ∞ÂŒ≈µ°¥ÿæ Û§Úª≤æ»
+      *  01.00.03    ∆‚≈ƒ    08/04/27    ƒ¢…ºÕÕº∞§Œ —ππ§À»º§¶Ω§¿µ
+      *                                  SPA-AREAΩÈ¥¸≤Ω
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -229,6 +231,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    ∏«ƒÍπ‡Ã‹
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    •’•°•§•Î•Ï•§•¢•¶•»
@@ -323,6 +330,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.03) LINE ADD START ------------------------------------
+           INITIALIZE                   SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -610,7 +620,11 @@
       *    À°ƒÍ≥∞µÎ…’»ΩƒÍ
            IF     (RECE10-RJNHKNNUM        =   SPACE)  AND
                   (RECE10-HKNJANUM-S(3:1)  =   "3"  )  AND
-                  (RECE10-AGE              >   2    )  AND
+      *---(01.00.03) LINE ADD START ------------------------------------
+                 ((RECE10-AGE              >   2    )   OR 
+                  ((RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804) AND 
+                  (RECE10-FLG (1)   =  1)) )            AND
+      *---(01.00.03) LINE ADD END   ------------------------------------
                   (RECE10-AGE              <   70   )  AND
                   (RECE10-KYURATE      NOT =   7    )
                MOVE    RECE10-KYURATE      TO  SKT3620TMP-KYURATE
@@ -678,9 +692,11 @@
       *    œ∑øÕ ›∑Ú§´
            IF  RECE10-RJNHKNNUM  NOT  =  SPACE
                IF      RECE10-KYURATE  =   9
-                   MOVE    10      TO  IDX1
+      *             MOVE    10      TO  IDX1
+                   MOVE    1279      TO  IDX1
                ELSE
-                   MOVE    11      TO  IDX1
+      *             MOVE    11      TO  IDX1
+                   MOVE    1277      TO  IDX1
                END-IF
            ELSE
       *        ∞Ï»ÃπÒ ›
@@ -692,35 +708,65 @@
                            MOVE    2       TO  IDX1
                        END-IF
                    ELSE
-                       IF      RECE10-AGE  >=  3
-                           MOVE    3       TO  IDX1
+      *---(01.00.03) LINE ADD START ------------------------------------
+                       IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                       AND  (RECE10-FLG (1)   =  1)
+                          MOVE  4     TO  IDX1
                        ELSE
-                           MOVE    4       TO  IDX1
+      *---(01.00.03) LINE ADD END   ------------------------------------
+                          IF      RECE10-AGE  >=  3
+                              MOVE    3       TO  IDX1
+                          ELSE
+                              MOVE    4       TO  IDX1
+                          END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
                        END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    END-IF
       *        ¬‡ø¶πÒ ›
                ELSE
                    IF      RECE10-AGE  >=  70
                        IF      RECE10-KYURATE  =   9
-                           MOVE    6       TO  IDX1
+      *                     MOVE    6       TO  IDX1
+                           MOVE    1699      TO  IDX1
                        ELSE
-                           MOVE    7       TO  IDX1
+      *                     MOVE    7       TO  IDX1
+                           MOVE    1677      TO  IDX1
                        END-IF
                    ELSE
                        IF      RECE10-HONKZKKBN    =   "1"
                            MOVE    5       TO  IDX1
                        ELSE
-                           IF      RECE10-AGE  <   3
-                               MOVE    9       TO  IDX1
+      *---(01.00.03) LINE ADD START ------------------------------------
+                           IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                           AND  (RECE10-FLG (1)   =  1)
+                              MOVE  7     TO  IDX1
                            ELSE
-                               MOVE    8       TO  IDX1
+      *---(01.00.03) LINE ADD END   ------------------------------------
+                             IF      RECE10-AGE  <   3
+      *                           MOVE    9       TO  IDX1
+                                 MOVE    7       TO  IDX1
+                             ELSE
+      *                           MOVE    8       TO  IDX1
+                                 MOVE    6       TO  IDX1
+                             END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
                            END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                        END-IF
                    END-IF
                END-IF
            END-IF
       *
-           PERFORM  2101-SYUKEI-SEC
+      *---(01.00.03) LINE ADD START ------------------------------------
+           IF  IDX1  <  10
+             PERFORM   2101-SYUKEI-SEC
+           ELSE
+             IF  IDX1  >  10 
+               PERFORM   221-KOH-SEC
+             END-IF
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    ∏¯»Ò…È√¥ ¨
            IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
@@ -858,6 +904,70 @@
        220-KOH-SYUKEI-EXT.
            EXIT.
 057400*
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ∑Ó√Ÿ§Ï ‘Ω∏ΩËÕ˝
+      *****************************************************************
+       221-KOH-SEC              SECTION.
+      *
+           DISPLAY "∑Ó√Ÿ§Ï221-KOH-SEC"IDX1
+           PERFORM VARYING IDX4    FROM    1   BY  1
+                   UNTIL   IDX4    >       20
+                   OR      SKT3620TMP-KOHNUM(IDX4) =   SPACE
+                IF     IDX1(2:3)  =   SKT3620TMP-KOHNUM(IDX4)
+                    MOVE    IDX4    TO  CNT-KOH
+                    MOVE    20      TO  IDX4
+                END-IF
+           END-PERFORM
+      *
+           DISPLAY "IDX4"IDX4
+      *    ≥∫≈ˆ ›∏±§¨§ §´§√§øæÏπÁ
+           IF      IDX4    <   20
+             MOVE    IDX4    TO  CNT-KOH
+      *
+      *     ›∏±Ãæ
+             DISPLAY " ›∏±Ãæ"IDX1(2:3)
+             MOVE    IDX1(2:3)
+                             TO  SKT3620TMP-KOHNUM(CNT-KOH)
+           END-IF
+      *
+      *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+           ADD     1       TO  SKT3620TMP-K-KENSU (CNT-KOH IDX2)
+      *
+      *    Œ≈Õ‹§ŒµÎ…’°ßø«Œ≈º¬∆¸øÙ
+           ADD     RECE10-JNISSU(1)    
+                           TO  SKT3620TMP-K-NISSU (CNT-KOH IDX2)
+      *
+      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+           ADD     RECE10-TOTALTEN(1)
+                           TO  SKT3620TMP-K-TENSU (CNT-KOH IDX2)
+      *
+      *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+           ADD     RECE10-FTNMONEY(1)
+                           TO  SKT3620TMP-K-ITBFTN(CNT-KOH IDX2)
+      *
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+           IF      RECE10-SHOKUJINISSU(1)  >   0
+                ADD     1   TO  SKT3620TMP-K-SKENSU (CNT-KOH)
+           END-IF
+      *
+      *    ø©ªˆŒ≈Õ‹:∆¸øÙ
+           ADD     RECE10-SHOKUJINISSU(1)
+                            TO  SKT3620TMP-K-SNISSU(CNT-KOH)
+      *
+      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+           ADD     RECE10-SHOKUJIRYOYOHI(1)
+                            TO  SKT3620TMP-K-SKINGK(CNT-KOH)
+      *
+      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+           ADD     RECE10-SHOKUJIFTN(1)
+                            TO  SKT3620TMP-K-SFTNGK(CNT-KOH)
+      *
+           .
+       221-KOH-EXT.
+           EXIT.
+      *
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
 006900*    ¿¡µ·£ƒ£¬ππø∑Õ—•’•°•§•ÎΩ–ŒœΩËÕ˝
       *****************************************************************
@@ -906,11 +1016,13 @@
       *            ƒ¢…º ‘Ω∏<∏´Ω–§∑>ΩËÕ˝
                    PERFORM 311-HEAD-HEN-SEC
       *
-                   IF      FLG-PASS    =   ZERO
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             IF      FLG-PASS    =   ZERO
       *
       *                ƒ¢…º ‘Ω∏<Ã¿∫Ÿ:œ∑øÕ>ΩËÕ˝
-                       PERFORM 321-BODY-HEN-SEC
-                   END-IF
+      *                 PERFORM 321-BODY-HEN-SEC
+      *             END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *            ƒ¢…º ‘Ω∏<Ã¿∫Ÿ:∏¯»Ò>ΩËÕ˝
                    PERFORM 3211-BODY-HEN-SEC
@@ -1007,7 +1119,10 @@
       *
       *     ‘Ω∏ΩËÕ˝
            PERFORM VARYING IDX1    FROM    1   BY  1
-                   UNTIL   IDX1    >       9
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             UNTIL   IDX1    >       9
+                   UNTIL   IDX1    >       7
+      *---(01.00.03) LINE ADD END   ------------------------------------
                PERFORM VARYING IDX2    FROM    1   BY  1
                        UNTIL   IDX2    >       2
       *
@@ -1149,64 +1264,70 @@
        311-HEAD-HEN-EXT.
            EXIT.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
       *****************************************************************
       *    ƒ¢…º ‘Ω∏<Ã¿∫Ÿπ‘>ΩËÕ˝° œ∑øÕ°À
       *****************************************************************
-       321-BODY-HEN-SEC      SECTION.
+      * 321-BODY-HEN-SEC      SECTION.
       *
       *    œ∑øÕ ‘Ω∏ΩËÕ˝
-           PERFORM VARYING IDX1    FROM    10  BY  1
-                   UNTIL   IDX1    >       11
-               COMPUTE     IDX4    =   IDX1    -   9
-               PERFORM VARYING IDX2    FROM    1   BY  1
-                       UNTIL   IDX2    >       2
+      *     PERFORM VARYING IDX1    FROM    10  BY  1
+      *             UNTIL   IDX1    >       11
+      *         COMPUTE     IDX4    =   IDX1    -   9
+      *         PERFORM VARYING IDX2    FROM    1   BY  1
+      *                 UNTIL   IDX2    >       2
       *
       *            Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-                   MOVE    SKT3620TMP-KENSU(IDX1 IDX2)     TO  WRK-Z5
-                   MOVE    WRK-Z5      TO  SKT3630-KENSU(IDX4 IDX2)
+      *             MOVE    SKT3620TMP-KENSU(IDX1 IDX2)     TO  WRK-Z5
+      *              MOVE    WRK-Z5      TO  SKT3630-KENSU(IDX4 IDX2)
       *
       *            Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
-                   MOVE    SKT3620TMP-NISSU(IDX1 IDX2)     TO  WRK-Z5
-                   MOVE    WRK-Z5      TO  SKT3630-NISSU(IDX4 IDX2)
+      *             MOVE    SKT3620TMP-NISSU(IDX1 IDX2)     TO  WRK-Z5
+      *             MOVE    WRK-Z5      TO  SKT3630-NISSU(IDX4 IDX2)
       *
       *            Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-                   MOVE    SKT3620TMP-TENSU(IDX1 IDX2)     TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT3630-TENSU(IDX4 IDX2)
+      *             MOVE    SKT3620TMP-TENSU(IDX1 IDX2)     TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT3630-TENSU(IDX4 IDX2)
       *
       *            Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
-                   MOVE    SKT3620TMP-ITBFTN (IDX1 IDX2)   TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT3630-ITBFTN(IDX4 IDX2)
-               END-PERFORM
+      *             MOVE    SKT3620TMP-ITBFTN (IDX1 IDX2)   TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT3630-ITBFTN(IDX4 IDX2)
+      *         END-PERFORM
       *
       *        ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-               MOVE    SKT3620TMP-SKENSU(IDX1)     TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3630-SKENSU(IDX4)
+      *         MOVE    SKT3620TMP-SKENSU(IDX1)     TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3630-SKENSU(IDX4)
       *
       *        ø©ªˆŒ≈Õ‹°ß∆¸øÙ
-               MOVE    SKT3620TMP-SNISSU(IDX1)     TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3630-SNISSU(IDX4)
+      *         MOVE    SKT3620TMP-SNISSU(IDX1)     TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3630-SNISSU(IDX4)
       *
       *        ø©ªˆŒ≈Õ‹°ß∂‚≥€
-               MOVE    SKT3620TMP-SKINGK(IDX1)     TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3630-SKINGK(IDX4)
+      *         MOVE    SKT3620TMP-SKINGK(IDX1)     TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3630-SKINGK(IDX4)
       *
       *        ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
-               MOVE    SKT3620TMP-SFTNGK(IDX1)     TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3630-SFTNGK(IDX4)
-           END-PERFORM
+      *         MOVE    SKT3620TMP-SFTNGK(IDX1)     TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3630-SFTNGK(IDX4)
+      *     END-PERFORM
       *
-           .
-       321-BODY-HEN-EXT.
-           EXIT.
+      *     .
+      * 321-BODY-HEN-EXT.
+      *     EXIT.
       *
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ƒ¢…º ‘Ω∏<Ã¿∫Ÿπ‘>ΩËÕ˝° ∏¯»Ò°À
       *****************************************************************
        3211-BODY-HEN-SEC      SECTION.
       *
+           DISPLAY "3211-BODY-HEN-SEC"
       *    ∏¯»Ò§Œ∞ıª˙
            PERFORM VARYING IDX3    FROM    1   BY  1
-                   UNTIL   IDX3    >       4
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             UNTIL   IDX3    >       4
+                   UNTIL   IDX3    >       7
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    OR      WRK-CNT >       20
                    OR      SKT3620TMP-KOHNUM(WRK-CNT)  =   SPACE
                PERFORM VARYING IDX2    FROM    1   BY  1
@@ -1250,12 +1371,74 @@
                MOVE    WRK-Z9      TO  SKT3630-K-SFTNGK(IDX3)
       *
       *        ∏¯»ÒÃæ
-               MOVE    SKT3620TMP-KOHNUM(WRK-CNT)  TO  WRK-KOHNUM
-               PERFORM 950-HKNNUM-SET-SEC
-               MOVE    HKN-HBTNUM          TO  WRK-MAE-INPUT
-               PERFORM 2009-HENKAN-SEC
-               MOVE    WRK-OUT-INPUT       TO  SKT3630-HBTNUM(IDX3)
-               MOVE    HKN-TANSEIDONAME    TO  SKT3630-KOHNAME(IDX3)
+      *---(01.00.03) LINE ADD START ------------------------------------
+               DISPLAY "∏¯»ÒÃæ"SKT3620TMP-KOHNUM(WRK-CNT)
+               IF  SKT3620TMP-KOHNUM(WRK-CNT)  =  "279"  OR  "277"
+                                              OR  "699"  OR  "677"
+                 DISPLAY "HIT"SKT3620TMP-KOHNUM(WRK-CNT)
+                 EVALUATE  SKT3620TMP-KOHNUM(WRK-CNT)
+                   WHEN  "279"
+                       MOVE  "œ∑øÕ£π≥‰"  TO   SKT3630-KOHNAME(IDX3)
+                       MOVE  "27"        TO   WRK-MAE-INPUT
+                       PERFORM 2009-HENKAN-SEC
+                       MOVE   WRK-OUT-INPUT TO  SKT3630-HBTNUM(IDX3)
+                       DISPLAY "SKT3630-KOHNAME(IDX3)"
+                                SKT3630-KOHNAME(IDX3)
+                       DISPLAY "SKT3630-HBTNUM(IDX3)"
+                                SKT3630-HBTNUM(IDX3)
+                   WHEN  "277"
+                       MOVE  "œ∑øÕ£∑≥‰"  TO   SKT3630-KOHNAME(IDX3)
+                       MOVE  "27"        TO   WRK-MAE-INPUT
+                       PERFORM 2009-HENKAN-SEC
+                       MOVE   WRK-OUT-INPUT TO  SKT3630-HBTNUM(IDX3)
+                       DISPLAY "SKT3630-KOHNAME(IDX3)"
+                                SKT3630-KOHNAME(IDX3)
+                       DISPLAY "SKT3630-HBTNUM(IDX3)"
+                                SKT3630-HBTNUM(IDX3)
+                  WHEN  "699"
+                       MOVE  "¬‡ø¶º‘£∑£∞"
+                                         TO   SKT3630-KOHNAME(IDX3)
+                       MOVE  "∫–∞ æÂ£π≥‰"
+                                         TO   SKT3630-KOHNAME2(IDX3)
+                       MOVE  "69"        TO   WRK-MAE-INPUT
+                       PERFORM 2009-HENKAN-SEC
+                       MOVE   WRK-OUT-INPUT TO  SKT3630-HBTNUM(IDX3)
+                       DISPLAY "SKT3630-KOHNAME(IDX3)"
+                                SKT3630-KOHNAME(IDX3)
+                       DISPLAY "SKT3630-KOHNAME2(IDX3)"
+                                SKT3630-KOHNAME2(IDX3)
+                       DISPLAY "SKT3630-HBTNUM(IDX3)"
+                                SKT3630-HBTNUM(IDX3)
+                   WHEN  "677"
+                       MOVE  "¬‡ø¶º‘£∑£∞"
+                                         TO   SKT3630-KOHNAME(IDX3)
+                       MOVE  "∫–∞ æÂ£∑≥‰"
+                                         TO   SKT3630-KOHNAME2(IDX3)
+                       MOVE  "67"        TO   WRK-MAE-INPUT
+                       PERFORM 2009-HENKAN-SEC
+                       MOVE   WRK-OUT-INPUT TO  SKT3630-HBTNUM(IDX3)
+                       DISPLAY "SKT3630-KOHNAME(IDX3)"
+                                SKT3630-KOHNAME(IDX3)
+                       DISPLAY "SKT3630-KOHNAME2(IDX3)"
+                                SKT3630-KOHNAME2(IDX3)
+                       DISPLAY "SKT3630-HBTNUM(IDX3)"
+                                SKT3630-HBTNUM(IDX3)
+                 END-EVALUATE
+               ELSE
+                 MOVE    SKT3620TMP-KOHNUM(WRK-CNT)  TO  WRK-KOHNUM
+                 PERFORM 950-HKNNUM-SET-SEC
+                 MOVE    HKN-HBTNUM          TO  WRK-MAE-INPUT
+                 PERFORM 2009-HENKAN-SEC
+                 MOVE    WRK-OUT-INPUT       TO  SKT3630-HBTNUM(IDX3)
+                 MOVE    HKN-TANSEIDONAME    TO  SKT3630-KOHNAME(IDX3)
+                 DISPLAY "§Ω§Œ¬æSKT3620TMP-KOHNUM(WRK-CNT)"
+                          SKT3620TMP-KOHNUM(WRK-CNT)
+                       DISPLAY "SKT3630-KOHNAME(IDX3)"
+                                SKT3630-KOHNAME(IDX3)
+                       DISPLAY "SKT3630-HBTNUM(IDX3)"
+                                SKT3630-HBTNUM(IDX3)
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
                ADD     1       TO  WRK-CNT
            END-PERFORM
