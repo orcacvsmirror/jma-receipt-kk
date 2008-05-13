@@ -22,7 +22,8 @@
       *  08/04/28    佐藤          新規作成(後期高齢者対応)
       ********************************************************************
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付         内容
+      *  01.00.01    吉川    2008/05/09   桁ズレ修正
       ********************************************************************
        01  SKT3825.
       *    印刷年月
@@ -51,15 +52,27 @@
       *    入外テーブル
                05  SKT3825-NYUGAI-TBL   OCCURS 2.
       *    件数
-                   07  SKT3825-KENSU       PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *             07  SKT3825-KENSU       PIC X(06).
+                   07  SKT3825-KENSU       PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    日数
-                   07  SKT3825-NISSU       PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *             07  SKT3825-NISSU       PIC X(06).
+                   07  SKT3825-NISSU       PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    点数
-                   07  SKT3825-TENSU       PIC X(10).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *             07  SKT3825-TENSU       PIC X(10).
+                   07  SKT3825-TENSU       PIC X(09).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    一部負担金
                    07  SKT3825-ITBFTN      PIC X(09).
       *    食事件数
-               05  SKT3825-S-KENSU         PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *         05  SKT3825-S-KENSU         PIC X(06).
+               05  SKT3825-S-KENSU         PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    食事日数
                05  SKT3825-S-NISSU         PIC X(05).
       *    金額
@@ -71,17 +84,32 @@
       *    公費入外テーブル
                05  SKT3825-K-NYUGAI-TBL  OCCURS  2.
       *    公費件数
-                   07  SKT3825-KKENSU      PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *             07  SKT3825-KKENSU      PIC X(06).
+                   07  SKT3825-KKENSU      PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    公費日数
-                   07  SKT3825-KNISSU      PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *             07  SKT3825-KNISSU      PIC X(06).
+                   07  SKT3825-KNISSU      PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    公費点数
-                   07  SKT3825-KTENSU      PIC X(10).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *             07  SKT3825-KTENSU      PIC X(10).
+                   07  SKT3825-KTENSU      PIC X(09).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    公費一部負担金
                    07  SKT3825-KITBFTN     PIC X(09).
       *    公費食事件数
-               05  SKT3825-S-KKENSU        PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *         05  SKT3825-S-KKENSU        PIC X(06).
+               05  SKT3825-S-KKENSU        PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    公費食事日数
-               05  SKT3825-S-KNISSU        PIC X(06).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) start
+      *         05  SKT3825-S-KNISSU        PIC X(06).
+               05  SKT3825-S-KNISSU        PIC X(05).
+      *===桁ズレ修正 by Yoshikawa(2008/05/09) end
       *    公費食事金額
                05  SKT3825-S-KKINGK        PIC X(09).
       *    公費標準負担金
