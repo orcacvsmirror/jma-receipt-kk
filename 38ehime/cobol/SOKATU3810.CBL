@@ -1824,14 +1824,70 @@
       *
       *    œ∑øÕ ‘Ω∏
       *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-               MOVE  SKT3810TMP-RKENSU (IDX1 IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3825-KENSU(IDX1 IDX2)
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *         MOVE  SKT3810TMP-RKENSU (IDX1 IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3825-KENSU(IDX1 IDX2)
       *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
-               MOVE  SKT3810TMP-RNISSU (IDX1 IDX2)   TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT3825-NISSU(IDX1 IDX2)
+      *         MOVE  SKT3810TMP-RNISSU (IDX1 IDX2)   TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT3825-NISSU(IDX1 IDX2)
       *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-               MOVE  SKT3810TMP-RTENSU (IDX1 IDX2)   TO  WRK-Z10
-               MOVE  WRK-Z10   TO  SKT3825-TENSU(IDX1 IDX2)
+      *         MOVE  SKT3810TMP-RTENSU (IDX1 IDX2)   TO  WRK-Z10
+      *         MOVE  WRK-Z10   TO  SKT3825-TENSU(IDX1 IDX2)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+      *         MOVE  SKT3810TMP-RITBFTN (IDX1 IDX2)  TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT3825-ITBFTN(IDX1 IDX2)
+      *       END-PERFORM
+      *
+      ***  ø©ªˆŒ≈Õ‹°ßœ∑øÕ ‘Ω∏
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+      *       MOVE  SKT3810TMP-S-RKENSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3825-S-KENSU(IDX1)
+      *    ø©ªˆŒ≈Õ‹°ß∆¸øÙ
+      *       MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z6
+      *       MOVE  WRK-Z6   TO  SKT3825-S-NISSU(IDX1)
+      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+      *       MOVE  SKT3810TMP-S-RKINGAKU (IDX1)      TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT3825-S-KINGK(IDX1)
+      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+      *       MOVE  SKT3810TMP-S-RFTNGAKU (IDX1)      TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT3825-S-FTNGK(IDX1)
+      *
+      *    ∏¯»Ò ‘Ω∏
+      *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
+      *       MOVE  SKT3810TMP-KKENSU (2 IDX1)   TO  WRK-Z6
+      *       MOVE  WRK-Z6    TO  SKT3825-KKENSU(IDX1)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+      *       MOVE  SKT3810TMP-KNISSU (2 IDX1)   TO  WRK-Z6
+      *       MOVE  WRK-Z6    TO  SKT3825-KNISSU(IDX1)
+      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+      *       MOVE  SKT3810TMP-KTENSU (2 IDX1)   TO  WRK-Z10
+      *       MOVE  WRK-Z10   TO  SKT3825-KTENSU(IDX1)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
+      *       MOVE  SKT3810TMP-KITBFTN (2 IDX1)  TO  WRK-Z9
+      *       MOVE  WRK-Z9    TO  SKT3825-KITBFTN(IDX1)
+      *     END-PERFORM
+      *
+      ***  ø©ªˆŒ≈Õ‹°ß∏¯»Ò ‘Ω∏
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+      *     MOVE  SKT3810TMP-S-KKENSU (2)        TO  WRK-Z6
+      *     MOVE  WRK-Z6   TO  SKT3825-S-KKENSU
+      *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
+      *     MOVE  SKT3810TMP-S-KNISSU (2)        TO  WRK-Z6
+      *     MOVE  WRK-Z6   TO  SKT3825-S-KNISSU
+      *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
+      *     MOVE  SKT3810TMP-S-KKINGAKU (2)      TO  WRK-Z9
+      *     MOVE  WRK-Z9   TO  SKT3825-S-KKINGK
+      *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
+      *     MOVE  SKT3810TMP-S-KFTNGAKU (2)      TO  WRK-Z9
+      *     MOVE  WRK-Z9   TO  SKT3825-S-KFTNGK
+               MOVE  SKT3810TMP-RKENSU (IDX1 IDX2)   TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT3825-KENSU(IDX1 IDX2)
+      *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
+               MOVE  SKT3810TMP-RNISSU (IDX1 IDX2)   TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT3825-NISSU(IDX1 IDX2)
+      *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
+               MOVE  SKT3810TMP-RTENSU (IDX1 IDX2)   TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT3825-TENSU(IDX1 IDX2)
       *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
                MOVE  SKT3810TMP-RITBFTN (IDX1 IDX2)  TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT3825-ITBFTN(IDX1 IDX2)
@@ -1839,15 +1895,11 @@
       *
       ***  ø©ªˆŒ≈Õ‹°ßœ∑øÕ ‘Ω∏
       *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-             MOVE  SKT3810TMP-S-RKENSU (IDX1)        TO  WRK-Z6
-             MOVE  WRK-Z6   TO  SKT3825-S-KENSU(IDX1)
+             MOVE  SKT3810TMP-S-RKENSU (IDX1)        TO  WRK-Z5
+             MOVE  WRK-Z5   TO  SKT3825-S-KENSU(IDX1)
       *    ø©ªˆŒ≈Õ‹°ß∆¸øÙ
-      *---(01.00.11) LINE ADD START ------------------------------------
-      *       MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z6
-      *       MOVE  WRK-Z6   TO  SKT3825-S-NISSU(IDX1)
              MOVE  SKT3810TMP-S-RNISSU (IDX1)        TO  WRK-Z5
              MOVE  WRK-Z5   TO  SKT3825-S-NISSU(IDX1)
-      *---(01.00.11) LINE ADD END   ------------------------------------
       *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
              MOVE  SKT3810TMP-S-RKINGAKU (IDX1)      TO  WRK-Z9
              MOVE  WRK-Z9   TO  SKT3825-S-KINGK(IDX1)
@@ -1857,14 +1909,14 @@
       *
       *    ∏¯»Ò ‘Ω∏
       *    Œ≈Õ‹§ŒµÎ…’°ß∑ÔøÙ
-             MOVE  SKT3810TMP-KKENSU (2 IDX1)   TO  WRK-Z6
-             MOVE  WRK-Z6    TO  SKT3825-KKENSU(IDX1)
+             MOVE  SKT3810TMP-KKENSU (2 IDX1)   TO  WRK-Z5
+             MOVE  WRK-Z5    TO  SKT3825-KKENSU(IDX1)
       *    Œ≈Õ‹§ŒµÎ…’°ß∆¸øÙ
-             MOVE  SKT3810TMP-KNISSU (2 IDX1)   TO  WRK-Z6
-             MOVE  WRK-Z6    TO  SKT3825-KNISSU(IDX1)
+             MOVE  SKT3810TMP-KNISSU (2 IDX1)   TO  WRK-Z5
+             MOVE  WRK-Z5    TO  SKT3825-KNISSU(IDX1)
       *    Œ≈Õ‹§ŒµÎ…’°ß≈¿øÙ
-             MOVE  SKT3810TMP-KTENSU (2 IDX1)   TO  WRK-Z10
-             MOVE  WRK-Z10   TO  SKT3825-KTENSU(IDX1)
+             MOVE  SKT3810TMP-KTENSU (2 IDX1)   TO  WRK-Z9
+             MOVE  WRK-Z9    TO  SKT3825-KTENSU(IDX1)
       *    Œ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
              MOVE  SKT3810TMP-KITBFTN (2 IDX1)  TO  WRK-Z9
              MOVE  WRK-Z9    TO  SKT3825-KITBFTN(IDX1)
@@ -1872,17 +1924,18 @@
       *
       ***  ø©ªˆŒ≈Õ‹°ß∏¯»Ò ‘Ω∏
       *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-           MOVE  SKT3810TMP-S-KKENSU (2)        TO  WRK-Z6
-           MOVE  WRK-Z6   TO  SKT3825-S-KKENSU
+           MOVE  SKT3810TMP-S-KKENSU (2)        TO  WRK-Z5
+           MOVE  WRK-Z5   TO  SKT3825-S-KKENSU
       *    ø©ªˆŒ≈Õ‹°ß∑ÔøÙ
-           MOVE  SKT3810TMP-S-KNISSU (2)        TO  WRK-Z6
-           MOVE  WRK-Z6   TO  SKT3825-S-KNISSU
+           MOVE  SKT3810TMP-S-KNISSU (2)        TO  WRK-Z5
+           MOVE  WRK-Z5   TO  SKT3825-S-KNISSU
       *    ø©ªˆŒ≈Õ‹°ß∂‚≥€
            MOVE  SKT3810TMP-S-KKINGAKU (2)      TO  WRK-Z9
            MOVE  WRK-Z9   TO  SKT3825-S-KKINGK
       *    ø©ªˆŒ≈Õ‹°ß…∏Ω‡…È√¥≥€
            MOVE  SKT3810TMP-S-KFTNGAKU (2)      TO  WRK-Z9
            MOVE  WRK-Z9   TO  SKT3825-S-KFTNGK
+      *---(01.00.11) LINE ADD END   ------------------------------------
            .
        323-BODY-HEN-EXT.
            EXIT.
