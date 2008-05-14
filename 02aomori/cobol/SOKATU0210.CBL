@@ -40,6 +40,7 @@
       *                                   ∆¸•Ï•ªver4.0¬–±˛
       *                                   •∑•π•∆•‡¥…Õ˝•ﬁ•π•ø°÷1901°◊§Œ
       *                                   ∞ÂŒ≈µ°¥ÿæ Û§Úª≤æ»
+      *  01.00.08    ∆‚≈ƒ    2008/04/27   ƒ¢…ºÕÕº∞§Œ —ππ§À»º§¶Ω§¿µ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -188,6 +189,9 @@
       *
            03  WRK-MAE-INPUT       PIC X(200).
            03  WRK-OUT-INPUT       PIC X(200).
+      *---(01.00.08) LINE ADD START ------------------------------------
+           03  WRK-KOHMAX          PIC 9(02).
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *---(01.00.07) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -219,6 +223,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    ∏«ƒÍπ‡Ã‹
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *****************************************************************
       *    •’•°•§•Î•Ï•§•¢•¶•»
       *****************************************************************
@@ -673,26 +682,39 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
                  END-EVALUATE
                ELSE
-                 IF  RECE10-AGE  >  2
-                   EVALUATE  RECE10-KYURATE
-                     WHEN   7    MOVE  3  TO  IDX1
-                     WHEN  10    MOVE  5  TO  IDX1
-                     WHEN  OTHER
-                       MOVE  4  TO  IDX1
-                       MOVE  RECE10-KYURATE  
-                                     TO  SKT0210TMP-KYURATE(IDX2)
-                   END-EVALUATE
+      *---(01.00.08) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     IF  RECE10-AGE  =  ZERO  AND  RECE10-KYURATE = 10
+                       MOVE  5  TO  IDX1
+                     ELSE
+                       MOVE  6  TO  IDX1
+                     END-IF
                  ELSE
+      *---(01.00.08) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >  2
+                     EVALUATE  RECE10-KYURATE
+                       WHEN   7    MOVE  3  TO  IDX1
+                       WHEN  10    MOVE  5  TO  IDX1
+                       WHEN  OTHER
+                         MOVE  4  TO  IDX1
+                         MOVE  RECE10-KYURATE  
+                                       TO  SKT0210TMP-KYURATE(IDX2)
+                     END-EVALUATE
+                   ELSE
       *---(01.00.06) LINE ADD START ------------------------------------
       *             MOVE  6  TO  IDX1
       *    £±∫–Ã§À˛°‹£±£∞≥‰¥µº‘§œ£±£∞≥‰§À ¨Œ‡
-                   IF  RECE10-AGE  =  ZERO  AND  RECE10-KYURATE  =  10
-                     MOVE  5  TO  IDX1
-                   ELSE
-                     MOVE  6  TO  IDX1
-                   END-IF
+                     IF  RECE10-AGE  =  ZERO  AND  RECE10-KYURATE = 10
+                       MOVE  5  TO  IDX1
+                     ELSE
+                       MOVE  6  TO  IDX1
+                     END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
+                   END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                END-IF
       *    ∆˝Õƒª˘°‹•º•Ì∫–§Œª˛§Œ§ﬂ£±£∞≥‰§À ¨Œ‡
                IF    RECE10-AGE       =  ZERO  AND
@@ -723,27 +745,40 @@
                    MOVE   7    TO  IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  >  2
-                   IF  RECE10-AGE  >=  70
-                     IF  RECE10-KYURATE  =  9
-                       MOVE  8   TO  IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     IF  RECE10-AGE  =  ZERO  AND  RECE10-KYURATE = 10
+                       MOVE  11  TO  IDX1
                      ELSE
-                       MOVE  9   TO  IDX1
+                       MOVE  12  TO  IDX1
+                     END-IF
+                 ELSE
+      *---(01.00.08) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >  2
+                     IF  RECE10-AGE  >=  70
+                       IF  RECE10-KYURATE  =  9
+                         MOVE  8   TO  IDX1
+                       ELSE
+                         MOVE  9   TO  IDX1
+                       END-IF
+                     ELSE
+                       MOVE   10    TO  IDX1
                      END-IF
                    ELSE
-                     MOVE   10    TO  IDX1
-                   END-IF
-                 ELSE
       *---(01.00.06) LINE ADD START ------------------------------------
       *             MOVE   12    TO  IDX1
       *    £±∫–Ã§À˛°‹£±£∞≥‰¥µº‘§œ£±£∞≥‰§À ¨Œ‡
-                   IF  RECE10-AGE  =  ZERO  AND  RECE10-KYURATE  =  10
-                     MOVE  11  TO  IDX1
-                   ELSE
-                     MOVE  12  TO  IDX1
-                   END-IF
+                     IF  RECE10-AGE  =  ZERO  AND  RECE10-KYURATE = 10
+                       MOVE  11  TO  IDX1
+                     ELSE
+                       MOVE  12  TO  IDX1
+                     END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
+                   END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                END-IF
       *    ∆˝Õƒª˘°‹•º•Ì∫–§Œª˛§Œ§ﬂ£±£∞≥‰§À ¨Œ‡
                IF    RECE10-AGE       =  ZERO  AND
@@ -1129,7 +1164,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE    "SKT0220.red"           TO  SPRT-PRTID
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE    "SKT0220.red"           TO  SPRT-PRTID
+           IF  WRK-PARA-SYOKBN  =  "1"
+               MOVE    "SKT0220.red"   TO  SPRT-PRTID
+           ELSE
+               MOVE    "SKT0220o.red"  TO  SPRT-PRTID
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    "πÒ ›¿¡µ·ΩÒ"        TO  SPRT-TITLE
            MOVE    SKT0220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1227,11 +1269,21 @@
            END-IF
       *
       *    ∏¯»Ò§Œ∞ıª˙
+      *---(01.00.08) LINE ADD START ------------------------------------
+           IF  WRK-PARA-SYOKBN  =  "1"
+               MOVE  8  TO  WRK-KOHMAX
+           ELSE
+               MOVE  5  TO  WRK-KOHMAX
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            PERFORM  VARYING  IDX3  FROM  1  BY  1
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *              UNTIL    IDX3  >     2
-                    UNTIL    IDX3  >     5
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.08) LINE ADD START ------------------------------------
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **              UNTIL    IDX3  >     2
+      *              UNTIL    IDX3  >     5
+      **---(01.00.03) LINE ADD END   ------------------------------------
+                    UNTIL    IDX3  >     WRK-KOHMAX
+      *---(01.00.08) LINE ADD END   ------------------------------------
                     OR  WRK-CNT    >     20
                     OR  SKT0210TMP-KOHNUM(WRK-CNT) = SPACE
              PERFORM  VARYING  IDX2  FROM  1  BY  1
@@ -1319,7 +1371,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE    "SKT0230.red"           TO  SPRT-PRTID
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE    "SKT0230.red"           TO  SPRT-PRTID
+           IF  WRK-PARA-SYOKBN  =  "1"
+               MOVE   "SKT0230.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT0230o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    "πÒ ›¿¡µ·ΩÒ"        TO  SPRT-TITLE
            MOVE    SKT0230             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
