@@ -36,6 +36,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *                                  返戻対応
+      *  01.00.05    内田K   08/04/26    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -191,6 +193,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -283,6 +290,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.05) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -569,13 +579,21 @@
                    WHEN  OTHER   MOVE  2  TO  IDX1
                  END-EVALUATE
                ELSE
-      *    ３歳未満チェック
-                 IF  RECE10-AGE > 2
-      *    割合チェック
-                   MOVE  3        TO    IDX1
+      ***    ３歳未満チェック
+      *    ６歳未満チェック
+      *---(01.00.05) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
                  ELSE
-                   MOVE  4        TO    IDX1
-                 END-IF 
+                   IF  RECE10-AGE > 2
+      *    割合チェック
+                     MOVE  3        TO    IDX1
+                   ELSE
+                     MOVE  4        TO    IDX1
+                   END-IF 
+                 END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
                END-IF
              ELSE
       *    年齢チェック
@@ -586,15 +604,22 @@
                    MOVE    7      TO    IDX1
                  END-IF
                ELSE
-                 IF    RECE10-AGE  <  3
-                   MOVE    9      TO    IDX1
+      *---(01.00.05) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  9     TO  IDX1
                  ELSE
-                   IF    RECE10-HONKZKKBN   =  "1"
-                     MOVE  5      TO    IDX1
+                   IF    RECE10-AGE  <  3
+                     MOVE    9      TO    IDX1
                    ELSE
-                     MOVE  8      TO    IDX1
+                     IF    RECE10-HONKZKKBN   =  "1"
+                       MOVE  5      TO    IDX1
+                     ELSE
+                       MOVE  8      TO    IDX1
+                     END-IF
                    END-IF
                  END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
                END-IF
              END-IF
            END-IF
