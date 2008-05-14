@@ -43,6 +43,9 @@
       *  01.00.09    長屋    08/04/24   帳票様式に伴う修正
       *                                 入院外の点数が無い場合、入院の
       *                                 平均が印字される不具合を修正
+      *  01.00.10    内田    08/05/14   請求額払い金額欄修正
+      *                                 （前期高齢９割の特例措置対応）
+      *                                 後期高齢の食事印字修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -731,6 +734,13 @@
                    INITIALIZE          SKT1105TMP-KEY
                    MOVE    2       TO  SKT1105TMP-KBN1
                ELSE
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *            前期高齢特例措置か
+                   IF   RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+                   AND  RECE10-FLG (2)  =  1
+                       MOVE  8                 TO  RECE10-KYURATE
+                   END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *            組合のみ給付割合別
                    IF      SKT1105TMP-HKNJANUM(3:1)    =   "3"
                        MOVE    RECE10-KYURATE  TO  SKT1105TMP-KYURATE
@@ -1191,6 +1201,20 @@
       *    点数
            ADD     RECE10-TOTALTEN(1)  TO  SKT1105TMP-TENSU(IDX1)
       *
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *
+      *    食事療養
+           IF      RECE10-SHOKUJINISSU(1)  >   ZERO
+      *    食事療養：件数
+               ADD     1               TO  SKT1105TMP-S-KENSU
+           END-IF
+      *    食事療養：日数
+           ADD     RECE10-SHOKUJINISSU(1)
+                                       TO  SKT1105TMP-S-NISSU
+      *    食事療養：金額
+           ADD     RECE10-SHOKUJIRYOYOHI(1)
+                                       TO  SKT1105TMP-S-KINGK
+      *---(01.00.10) LINE ADD END   ------------------------------------
            IF      FLG-SKT1105TMP  =   1
                WRITE   SKT1105TMP-REC
            ELSE
