@@ -6,6 +6,7 @@ textsize	400;
 bind	"SOKATU3300"	"OpenCOBOL";
 bind	"SOKATU3310"	"OpenCOBOL";
 bind	"SOKATU3320"	"OpenCOBOL";
+bind	"SOKATU3315"	"OpenCOBOL";
 bind	"SEIKYU3303"	"OpenCOBOL";
 bind	"SEIKYU3305"	"OpenCOBOL";
 bind	"SEIKYU3307"	"OpenCOBOL";
