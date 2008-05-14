@@ -38,7 +38,9 @@
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
       *  01.00.06    内田    08/03/12   特別療養費対応
-      *  01.00.07    長屋    08/04/24      帳票様式に伴う修正
+      *  01.00.07    長屋    08/04/24   帳票様式に伴う修正
+      *  01.00.08    内田    08/05/08   請求額払い金額欄修正
+      *                                 （前期高齢９割の特例措置対応）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -707,6 +709,13 @@
                    INITIALIZE          SKT1100TMP-KEY
                    MOVE    2       TO  SKT1100TMP-KBN1
                ELSE
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *            前期高齢特例措置か
+                   IF   RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+                   AND  RECE10-FLG (2)  =  1
+                       MOVE  8                 TO  RECE10-KYURATE
+                   END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *            組合のみ給付割合別
                    IF      SKT1100TMP-HKNJANUM(3:1)    =   "3"
                        MOVE    RECE10-KYURATE  TO  SKT1100TMP-KYURATE
