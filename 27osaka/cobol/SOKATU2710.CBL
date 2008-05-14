@@ -34,6 +34,7 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/04/23    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.04    内田    08/05/07    公費再掲欄一部負担金印字修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1092,7 +1093,10 @@
                MOVE  SKT2710TMP-KTENSU(WRK-CNT IDX2)  TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT2710-TENSU(IDX1 IDX2)
       *    療養の給付：一部負担金
-               MOVE  SKT2710TMP-KFTNMONEY (IDX1 IDX2)  TO  WRK-Z7
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *         MOVE  SKT2710TMP-KFTNMONEY (IDX1 IDX2)  TO  WRK-Z7
+               MOVE  SKT2710TMP-KFTNMONEY (WRK-CNT IDX2)  TO  WRK-Z7
+      *---(01.00.04) LINE ADD END   ------------------------------------
                MOVE  WRK-Z7   TO  SKT2710-ITBFTN(IDX1 IDX2)
              END-PERFORM
       *    食事療養：件数
