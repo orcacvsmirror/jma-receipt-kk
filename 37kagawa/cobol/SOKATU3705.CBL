@@ -20,13 +20,16 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 月次帳票
-      *  コンポーネント名  : 兵庫・広域連合・診療報酬請求書
+      *  コンポーネント名  : 兵庫・広域連合・診療報酬請求書送り状
       *  管理者            : 
       *  作成日付    作業者        記述
       *  08/04/27    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/13  県内・県外と分けて印字
+      *                                  まとめ公費を使用した時の
+      *                                  まとめ公費以外の公費名称修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -92,11 +95,18 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+           03  FLG-PRINT1          PIC 9(01).
+           03  FLG-PRINT2          PIC 9(01).
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
       *    添字領域
        01  IDX-AREA.
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+           03  IDW                 PIC 9(04).
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
            03  IDX                 PIC 9(04).
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
@@ -196,7 +206,10 @@
       *    集計領域
        01  SUM-AREA.
            03  SUM-TBL-SRYKA       PIC X(02).
-           03  SUM-TABLE.
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *     03  SUM-TABLE.
+           03  SUM-TABLE       OCCURS  2.
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *        後期高齢者
                05  SUM-TBL             OCCURS  2.
                    07  SUM-NYUGAI-TBL       OCCURS  2.
@@ -615,6 +628,10 @@
        200-HENSYU-SEC                SECTION.
       *
            INITIALIZE                  SUM-AREA
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+                                       FLG-PRINT1
+                                       FLG-PRINT2
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *
            PERFORM             UNTIL   FLG-END     =   1
                                OR      FLG-RECE10  =   1
@@ -639,6 +656,18 @@
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
+      *
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *    県内県外区分
+           EVALUATE    RECE10-PREFKBN
+               WHEN    "1"
+                   MOVE    1                   TO  IDX
+                   MOVE    1                   TO  FLG-PRINT1
+               WHEN    "2"
+                   MOVE    2                   TO  IDX
+                   MOVE    1                   TO  FLG-PRINT2
+           END-EVALUATE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *
       *    入外区分
            EVALUATE    RECE10-NYUGAIKBN
@@ -719,27 +748,50 @@
                PERFORM  20011-HKN-SYUKEI-EXT
            END-IF
       *
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      **    療養の給付：件数
+      *     ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+      **    療養の給付：診療実日数
+      *     ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+      **    療養の給付：点数
+      *     ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+      **    療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+      **
+      *     IF      IDX3                   =   1 
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      **    食事療養：件数
+      *         ADD     1                   TO  SUM-S-KENSU(IDX1)
+      *       END-IF
+      **    食事療養：日数
+      *       ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+      **    食事療養：金額
+      *       ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+      **    食事療養：標準負担額
+      *       ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+      *     END-IF    
       *    療養の給付：件数
-           ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+           ADD  1                  TO  SUM-KENSU(IDX IDX1 IDX3)
       *    療養の給付：診療実日数
-           ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+           ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX IDX1 IDX3)
       *    療養の給付：点数
-           ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+           ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX IDX1 IDX3)
       *    療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+           ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX IDX1 IDX3)
       *
            IF      IDX3                   =   1 
              IF      RECE10-SHOKUJINISSU(1)   >   ZERO
       *    食事療養：件数
-               ADD     1                   TO  SUM-S-KENSU(IDX1)
+               ADD     1                   TO  SUM-S-KENSU(IDX IDX1)
              END-IF
       *    食事療養：日数
-             ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+             ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX IDX1)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX IDX1)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+             ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX IDX1)
            END-IF    
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -755,6 +807,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/13) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/13) end
       *      ０５１と０９１は同じ場所に集計する
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
@@ -787,11 +842,19 @@
                IF  RECE10-KOHNUM(IDZ) = "011" OR "021"
                  CONTINUE
                ELSE
-                 IF  SUM-KOHNUM (IDX2)   =   SPACE
-                   MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
-                   MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *           IF  SUM-KOHNUM (IDX2)   =   SPACE
+      *             MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+      *             MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+                 IF  SUM-KOHNUM (IDX IDX2)   =   SPACE
+                   MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX IDX2)
+                   MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX IDX2)
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                  END-IF
-                 IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *           IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+                 IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX IDX2)
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                    PERFORM 200121-KOH-SYUKEI-01-SEC
                    MOVE    100             TO  IDX2
                  END-IF
@@ -809,27 +872,50 @@
       *
            COMPUTE IDY     =   IDZ     +   1
       *    
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      **    公費再掲欄：療養の給付：件数
+      *     ADD  1                    TO  SUM-KKENSU(IDX2 IDX3)
+      **    公費再掲欄：療養の給付：日数
+      *     ADD  RECE10-JNISSU(IDY)   TO  SUM-KNISSU(IDX2 IDX3)
+      **    公費再掲欄：療養の給付：点数
+      *     ADD  RECE10-TOTALTEN(IDY) TO  SUM-KTENSU(IDX2 IDX3)
+      **    公費再掲欄：療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(IDY) TO  SUM-KITBFTN(IDX2 IDX3)
+      **
+      *     IF      IDX3              =   1 
+      *       IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      **    公費再掲欄：食事療養：件数
+      *         ADD     1                     TO SUM-S-KKENSU(IDX2)
+      *       END-IF
+      **    公費再掲欄：食事療養：日数
+      *       ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
+      **    公費再掲欄：食事療養：金額
+      *       ADD  RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDX2)
+      **    公費再掲欄：食事療養：標準負担額
+      *       ADD  RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDX2)
+      *     END-IF    
       *    公費再掲欄：療養の給付：件数
-           ADD  1                    TO  SUM-KKENSU(IDX2 IDX3)
+           ADD  1                    TO  SUM-KKENSU(IDX IDX2 IDX3)
       *    公費再掲欄：療養の給付：日数
-           ADD  RECE10-JNISSU(IDY)   TO  SUM-KNISSU(IDX2 IDX3)
+           ADD  RECE10-JNISSU(IDY)   TO  SUM-KNISSU(IDX IDX2 IDX3)
       *    公費再掲欄：療養の給付：点数
-           ADD  RECE10-TOTALTEN(IDY) TO  SUM-KTENSU(IDX2 IDX3)
+           ADD  RECE10-TOTALTEN(IDY) TO  SUM-KTENSU(IDX IDX2 IDX3)
       *    公費再掲欄：療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(IDY) TO  SUM-KITBFTN(IDX2 IDX3)
+           ADD  RECE10-FTNMONEY(IDY) TO  SUM-KITBFTN(IDX IDX2 IDX3)
       *
            IF      IDX3              =   1 
              IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
       *    公費再掲欄：食事療養：件数
-               ADD     1                     TO SUM-S-KKENSU(IDX2)
+               ADD     1                     TO SUM-S-KKENSU(IDX IDX2)
              END-IF
       *    公費再掲欄：食事療養：日数
-             ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
+             ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX IDX2)
       *    公費再掲欄：食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDX2)
+             ADD  RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDX IDX2)
       *    公費再掲欄：食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDX2)
+             ADD  RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDX IDX2)
            END-IF    
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -841,27 +927,52 @@
       *****************************************************************
        20013-KZ-SYUKEI-SEC        SECTION.
       *
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      **    公費再掲欄：療養の給付：件数
+      *     ADD  1                    TO  SUM-KZKENSU(IDX4)
+      **    公費再掲欄：療養の給付：日数
+      *     ADD  RECE10-JNISSU(IDXX + 1)   TO  SUM-KZNISSU(IDX4)
+      **    公費再掲欄：療養の給付：点数
+      *     ADD  RECE10-TOTALTEN(IDXX + 1) TO  SUM-KZTENSU(IDX4)
+      **    公費再掲欄：療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(IDXX + 1) TO  SUM-KZITBFTN(IDX4)
+      **
+      *     IF      IDX3              =   1 
+      *       IF    RECE10-SHOKUJINISSU(IDXX + 1)   >   ZERO
+      **    公費再掲欄：食事療養：件数
+      *         ADD     1                     TO SUM-S-KZKENSU(IDX4)
+      *       END-IF
+      **    公費再掲欄：食事療養：日数
+      *       ADD RECE10-SHOKUJINISSU(IDXX + 1)   TO SUM-S-KZNISSU(IDX4)
+      **    公費再掲欄：食事療養：金額
+      *       ADD RECE10-SHOKUJIRYOYOHI(IDXX + 1) TO SUM-S-KZKINGK(IDX4)
+      **    公費再掲欄：食事療養：標準負担額
+      *       ADD RECE10-SHOKUJIFTN(IDXX + 1)     TO SUM-S-KZFTNGK(IDX4)
+      *     END-IF    
       *    公費再掲欄：療養の給付：件数
-           ADD  1                    TO  SUM-KZKENSU(IDX4)
+           ADD  1                    TO  SUM-KZKENSU(IDX IDX4)
       *    公費再掲欄：療養の給付：日数
-           ADD  RECE10-JNISSU(IDXX + 1)   TO  SUM-KZNISSU(IDX4)
+           ADD  RECE10-JNISSU(IDXX + 1)   TO  SUM-KZNISSU(IDX IDX4)
       *    公費再掲欄：療養の給付：点数
-           ADD  RECE10-TOTALTEN(IDXX + 1) TO  SUM-KZTENSU(IDX4)
+           ADD  RECE10-TOTALTEN(IDXX + 1) TO  SUM-KZTENSU(IDX IDX4)
       *    公費再掲欄：療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(IDXX + 1) TO  SUM-KZITBFTN(IDX4)
+           ADD  RECE10-FTNMONEY(IDXX + 1) TO  SUM-KZITBFTN(IDX IDX4)
       *
            IF      IDX3              =   1 
              IF    RECE10-SHOKUJINISSU(IDXX + 1)   >   ZERO
       *    公費再掲欄：食事療養：件数
-               ADD     1                     TO SUM-S-KZKENSU(IDX4)
+               ADD     1                     TO SUM-S-KZKENSU(IDX IDX4)
              END-IF
       *    公費再掲欄：食事療養：日数
-             ADD RECE10-SHOKUJINISSU(IDXX + 1)   TO SUM-S-KZNISSU(IDX4)
+             ADD RECE10-SHOKUJINISSU(IDXX + 1)   
+                                             TO SUM-S-KZNISSU(IDX IDX4)
       *    公費再掲欄：食事療養：金額
-             ADD RECE10-SHOKUJIRYOYOHI(IDXX + 1) TO SUM-S-KZKINGK(IDX4)
+             ADD RECE10-SHOKUJIRYOYOHI(IDXX + 1) 
+                                             TO SUM-S-KZKINGK(IDX IDX4)
       *    公費再掲欄：食事療養：標準負担額
-             ADD RECE10-SHOKUJIFTN(IDXX + 1)     TO SUM-S-KZFTNGK(IDX4)
+             ADD RECE10-SHOKUJIFTN(IDXX + 1) TO SUM-S-KZFTNGK(IDX IDX4)
            END-IF    
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -904,12 +1015,31 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
-      *    帳票編集<見出し>処理
-           PERFORM 20021-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-           PERFORM 20023-BODY-HEN-SEC
-      *    帳票印刷処理
-           PERFORM 20024-PRINT-OUT-SEC
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *    県内分
+           IF  FLG-PRINT1  =  1
+             MOVE  1                   TO  IDW
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
+      *      帳票編集<見出し>処理
+             PERFORM 20021-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+             PERFORM 20023-BODY-HEN-SEC
+      *      帳票印刷処理
+             PERFORM 20024-PRINT-OUT-SEC
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+           END-IF
+      *
+      *    県外分
+           IF  FLG-PRINT2  =  1
+             MOVE  2                   TO  IDW
+      *      帳票編集<見出し>処理
+             PERFORM 20021-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+             PERFORM 20023-BODY-HEN-SEC
+      *      帳票印刷処理
+             PERFORM 20024-PRINT-OUT-SEC
+           END-IF
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *
            .
        2002-PRINT-EXT.
@@ -958,44 +1088,80 @@
              PERFORM VARYING IDY FROM    1   BY  1
                      UNTIL   IDY >       2
       *    療養の給付：件数
-               MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+               MOVE  SUM-KENSU(IDW IDX IDY)  TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  WRK-Z5              TO  SKT3705-KENSU(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+               MOVE  SUM-TENSU(IDW IDX IDY)  TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  WRK-Z9              TO  SKT3705-TENSU(IDZ IDY)
       *    療養の給付：一部負担金
-               MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+               MOVE  SUM-ITBFTN(IDW IDX IDY) TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  WRK-Z9              TO  SKT3705-ITBFTN(IDZ IDY)
              END-PERFORM
       *
       *    食事療養：件数
-             MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+             MOVE  SUM-S-KENSU(IDW IDX)    TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z5                TO  SKT3705-S-KENSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+             MOVE  SUM-S-KINGK(IDW IDX)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z9                TO  SKT3705-S-KINGK(IDZ)
       *    食事療養：標準負担額
-             MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+             MOVE  SUM-S-FTNGK(IDW IDX)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z9                TO  SKT3705-S-FTNGK(IDZ)
       *
       *    感染・精神分編集処理
       *    件数
-             MOVE  SUM-KZKENSU(IDX)      TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-KZKENSU(IDX)      TO  WRK-Z5
+             MOVE  SUM-KZKENSU(IDW IDX)    TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z5                TO  SKT3705-KZKENSU(IDZ)
       *    点数
-             MOVE  SUM-KZTENSU(IDX)      TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-KZTENSU(IDX)      TO  WRK-Z9
+             MOVE  SUM-KZTENSU(IDW IDX)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z9                TO  SKT3705-KZTENSU(IDZ)
       *    一部負担金
-             MOVE  SUM-KZITBFTN(IDX)     TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-KZITBFTN(IDX)     TO  WRK-Z9
+             MOVE  SUM-KZITBFTN(IDW IDX)   TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z9                TO  SKT3705-KZITBFTN(IDZ)
       *    食事療養：件数
-             MOVE  SUM-S-KZKENSU(IDX)    TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-S-KZKENSU(IDX)    TO  WRK-Z5
+             MOVE  SUM-S-KZKENSU(IDW IDX)  TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z5                TO  SKT3705-S-KZKENSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KZKINGK(IDX)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-S-KZKINGK(IDX)    TO  WRK-Z9
+             MOVE  SUM-S-KZKINGK(IDW IDX)  TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z9                TO  SKT3705-S-KZKINGK(IDZ)
       *    食事療養：標準負担額
-             MOVE  SUM-S-KZFTNGK(IDX)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       MOVE  SUM-S-KZFTNGK(IDX)    TO  WRK-Z9
+             MOVE  SUM-S-KZFTNGK(IDW IDX)  TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              MOVE  WRK-Z9                TO  SKT3705-S-KZFTNGK(IDZ)
       *
            END-PERFORM
@@ -1019,31 +1185,52 @@
            PERFORM VARYING IDY     FROM    1   BY  1
                    UNTIL   IDY     >       4         
                    OR      FLG-KOH-END     =   1
-             IF      SUM-KOHNUM (IDX2)   =   SPACE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       IF      SUM-KOHNUM (IDX2)   =   SPACE
+             IF      SUM-KOHNUM (IDW IDX2)   =   SPACE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE    1                     TO  FLG-KOH-END
              ELSE    
                PERFORM 2002311-HKNNUM-HENSYU-SEC     
                PERFORM VARYING IDZ FROM    1   BY  1
                        UNTIL   IDZ >       2
       *    公費再掲欄：療養の給付：件数
-                 MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *           MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
+                 MOVE  SUM-KKENSU(IDW IDX2 IDZ)  TO WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                  MOVE  WRK-Z5                TO SKT3705-KKENSU(IDY IDZ)
       *    公費再掲欄：療養の給付：点数
-                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *           MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+                 MOVE  SUM-KTENSU(IDW IDX2 IDZ)  TO WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                  MOVE  WRK-Z9                TO SKT3705-KTENSU(IDY IDZ)
       *    公費再掲欄：療養の給付：一部負担金
-                 MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *           MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
+                 MOVE  SUM-KITBFTN(IDW IDX2 IDZ) TO WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                  MOVE  WRK-Z9                TO SKT3705-KITBFTN(IDY IDZ)
                END-PERFORM
       *
       *    公費再掲欄：食事療養：件数
-               MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
+               MOVE  SUM-S-KKENSU(IDW IDX2)    TO  WRK-Z5
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  WRK-Z5                TO  SKT3705-S-KKENSU(IDY)
       *    公費再掲欄：食事療養：金額
-               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
+               MOVE  SUM-S-KKINGK(IDW IDX2)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  WRK-Z9                TO  SKT3705-S-KKINGK(IDY)
       *    公費再掲欄：食事療養：標準負担額
-               MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
+               MOVE  SUM-S-KFTNGK(IDW IDX2)    TO  WRK-Z9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  WRK-Z9                TO  SKT3705-S-KFTNGK(IDY)
       *
                ADD     1                   TO  IDX2   
@@ -1051,7 +1238,10 @@
            END-PERFORM
       *
       *    １頁出力しても公費はまだ残っているか
-           IF      SUM-KOHNUM (IDX2)  =   SPACE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *     IF      SUM-KOHNUM (IDX2)  =   SPACE
+           IF      SUM-KOHNUM (IDW IDX2)  =   SPACE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE    1                   TO  FLG-KOH-END
            ELSE    
       *        帳票印刷処理（２頁以降）
@@ -1071,20 +1261,32 @@
       *
            MOVE    SPACE               TO  WRK-KOHKBN
       *
-           MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *     MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+           MOVE    SUM-KOHNUM (IDW IDX2)   TO  WRK-KOHNUM9
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
            MOVE    WRK-KOHNUM9         TO  SKT3705-HBTNUM (IDY)
       *
       *    特定疾患のとき 
-           IF      SUM-KOHNUM (IDX2)  =   "051"
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *     IF      SUM-KOHNUM (IDX2)  =   "051"
+           IF      SUM-KOHNUM (IDW IDX2)  =   "051"
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE    "51"            TO   SKT3705-HBTNUM (IDY)
                MOVE    "特定疾患"      TO   WRK-HKNNAME
            ELSE
       *      公費番号まとめ情報からの集計か
-             IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *       IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+             IF      SUM-KOH-MEISYO(IDW IDX2)  =   SPACE
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
       *        保険番号読込み  
                INITIALIZE                     HKNNUM-REC
                MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
-               MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *         MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+               MOVE  SUM-KOHNUM (IDW IDX2)    TO  HKN-HKNNUM
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
                MOVE  HKNNUM-REC           TO  MCPDATA-REC
                MOVE  "tbl_hknnum"         TO  MCP-TABLE
                MOVE  "key2"               TO  MCP-PATHNAME
@@ -1118,7 +1320,10 @@
                  MOVE  HKN-HBTNUM         TO  SKT3705-HBTNUM(IDY)
              ELSE
       *          公費番号まとめ情報から公費名へ
-                 MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) start
+      *           MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
+                 MOVE SUM-KOH-MEISYO(IDW IDX2)    TO  WRK-HKNNAME
+      *===県内・県外で分ける by Yoshikawa(2008/05/12) end
              END-IF
            END-IF
       *
