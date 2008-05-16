@@ -134,6 +134,9 @@
            03  MF101-TYOKI               PIC  9(01).
       *在宅フラグ（在総診のみ）
            03  MF101-ZAI                 PIC  9(01).
+      *フラグ（未就学児、特例措置）
+           03  MF101-FLG-TBL  OCCURS  5.
+               05  MF101-FLG             PIC  9(01).
       *その他の公費情報
            03  MF101-ETCKOHINF.
                05  MF101-E-KOHNUM          PIC  X(03).
