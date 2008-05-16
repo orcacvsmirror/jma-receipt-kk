@@ -33,7 +33,7 @@
     </element>
     <element name="HOSPCD" occurs="1">
       <appinfo>
-        <embed object="string" length="14"/>
+        <embed object="string" length="40"/>
       </appinfo>
     </element>
     <element name="HKNJANAME" occurs="1">
@@ -5432,10 +5432,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O200">
       <attribute name="obj_pos">
-        <point val="0.872968,2.86467"/>
+        <point val="0.908304,2.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.872968,2.58596;1.93347,2.93596"/>
+        <rectangle val="0.908304,2.6213;1.9688,2.9713"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5449,7 +5449,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="0.872968,2.86467"/>
+            <point val="0.908304,2.9"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -9794,10 +9794,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O306">
       <attribute name="obj_pos">
-        <point val="2.11431,2.88233"/>
+        <point val="2.15548,2.87986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.11431,2.64344;9.08331,2.94344"/>
+        <rectangle val="2.15548,2.64097;9.42748,2.94097"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANAME#</string>
@@ -9808,7 +9808,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9817,7 +9817,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="2.11431,2.88233"/>
+            <point val="2.15548,2.87986"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
