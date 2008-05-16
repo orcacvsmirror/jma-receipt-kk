@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/14  公費は一箇所に集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -936,43 +937,48 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
-      *      ０５１と０９１は同じ場所に集計する
-             IF      RECE10-KOHNUM (IDZ) =   "091"
-               MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
-             END-IF
-      *
-      *      公費番号まとめ情報があるとき
-             IF        WRK-2007-MAX    >       ZERO
-               PERFORM VARYING IDZ1    FROM    1   BY  1
-                       UNTIL   IDZ1    >       WRK-2007-MAX
-                 PERFORM VARYING IDZ2  FROM    1   BY  1
-                         UNTIL   IDZ2  >       5
-                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
-                   IF  RECE10-KOHNUM(IDZ)  
-                                       =   WRK-2007-KOHNUM(IDZ1 IDZ2)
-                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
-                                         TO  RECE10-KOHNUM (IDZ)
-                     MOVE  WRK-2007-MEISYO (IDZ1)
-                                         TO  WRK-MEISYO
-                     MOVE  5             TO  IDZ2
-                     MOVE  WRK-2007-MAX  TO  IDZ1
-                   END-IF
-                 END-PERFORM
-               END-PERFORM
-             END-IF
-      *
-      *      公費番号格納
-             PERFORM VARYING   IDX2    FROM    1   BY  1
-                     UNTIL     IDX2 >          100
-               IF  SUM-KOHNUM (IDX2)   =   SPACE
-                 MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
-                 MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
-               END-IF
-               IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
-                 PERFORM 200121-KOH-SYUKEI-01-SEC
-                 MOVE    100             TO  IDX2
-               END-IF
-             END-PERFORM
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+      **      ０５１と０９１は同じ場所に集計する
+      *       IF      RECE10-KOHNUM (IDZ) =   "091"
+      *         MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
+      *       END-IF
+      **
+      **      公費番号まとめ情報があるとき
+      *       IF        WRK-2007-MAX    >       ZERO
+      *         PERFORM VARYING IDZ1    FROM    1   BY  1
+      *                 UNTIL   IDZ1    >       WRK-2007-MAX
+      *           PERFORM VARYING IDZ2  FROM    1   BY  1
+      *                   UNTIL   IDZ2  >       5
+      *                   OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+      *             IF  RECE10-KOHNUM(IDZ)  
+      *                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+      *               MOVE  WRK-2007-KOHNUM(IDZ1 1)
+      *                                   TO  RECE10-KOHNUM (IDZ)
+      *               MOVE  WRK-2007-MEISYO (IDZ1)
+      *                                   TO  WRK-MEISYO
+      *               MOVE  5             TO  IDZ2
+      *               MOVE  WRK-2007-MAX  TO  IDZ1
+      *             END-IF
+      *           END-PERFORM
+      *         END-PERFORM
+      *       END-IF
+      **
+      **      公費番号格納
+      *       PERFORM VARYING   IDX2    FROM    1   BY  1
+      *               UNTIL     IDX2 >          100
+      *         IF  SUM-KOHNUM (IDX2)   =   SPACE
+      *           MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+      *           MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+      *         END-IF
+      *         IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+             MOVE   1                    TO  IDX2
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
+                  PERFORM 200121-KOH-SYUKEI-01-SEC
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+      *           MOVE    100             TO  IDX2
+      *         END-IF
+      *       END-PERFORM
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
            END-PERFORM
            .
        20012-KOH-SYUKEI-EXT.
@@ -995,16 +1001,26 @@
            ADD  RECE10-FTNMONEY(IDY) TO  SUM-KITBFTN(IDX2 IDX3)
       *
            IF      IDX3              =   1 
-             IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+      *      結核１０精神２１福祉は食事療養を集計しない
+             IF  RECE10-KOHNUM(IDZ)  NOT  = "010" AND "021" AND "174"
+                                       AND  "173" AND "175" AND "172"
+                                       AND  "176" AND "177" AND "178"
+                                       AND  "374"
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
+               IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
       *    公費再掲欄：食事療養：件数
-               ADD     1                     TO SUM-S-KKENSU(IDX2)
-             END-IF
+                 ADD     1                     TO SUM-S-KKENSU(IDX2)
+               END-IF
       *    公費再掲欄：食事療養：日数
-             ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
+               ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
       *    公費再掲欄：食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDX2)
+               ADD  RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDX2)
       *    公費再掲欄：食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDX2)
+               ADD  RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDX2)
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+             END-IF
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
            END-IF    
       *
            MOVE    1               TO  FLG-UPD 
@@ -1144,7 +1160,9 @@
            MOVE    1                     TO  IDX2
       * 
            PERFORM 200231-KOH-HENSYU-SEC
-                                   UNTIL   FLG-KOH-END   =   1
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+      *                             UNTIL   FLG-KOH-END   =   1
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
       *
            .
        20023-BODY-HEN-EXT.
@@ -1155,55 +1173,55 @@
       *****************************************************************
        200231-KOH-HENSYU-SEC         SECTION.
       *
-      *-     PERFORM VARYING IDY     FROM    1   BY  1
-      *-             UNTIL   IDY     >       1         
-      *-             OR      FLG-KOH-END     =   1
-             IF      SUM-KOHNUM (IDX2)   =   SPACE
-               MOVE    1                     TO  FLG-KOH-END
-             ELSE    
-               PERFORM 2002311-HKNNUM-HENSYU-SEC     
-               PERFORM VARYING IDZ FROM    1   BY  1
-                       UNTIL   IDZ >       2
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+      *     IF      SUM-KOHNUM (IDX2)   =   SPACE
+      *       MOVE    1                     TO  FLG-KOH-END
+      *     ELSE    
+      *       PERFORM 2002311-HKNNUM-HENSYU-SEC     
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
+             PERFORM VARYING IDZ FROM    1   BY  1
+                     UNTIL   IDZ >       2
       *    公費再掲欄：療養の給付：件数
-                 MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
-                 MOVE  WRK-Z5                TO SKT0525-KKENSU(IDZ)
+               MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
+               MOVE  WRK-Z5                TO SKT0525-KKENSU(IDZ)
       *    公費再掲欄：療養の給付：日数
-                 MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
-                 MOVE  WRK-Z5                TO SKT0525-KNISSU(IDZ)
+               MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
+               MOVE  WRK-Z5                TO SKT0525-KNISSU(IDZ)
       *    公費再掲欄：療養の給付：点数
-                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT0525-KTENSU(IDZ)
+               MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+               MOVE  WRK-Z9                TO SKT0525-KTENSU(IDZ)
       *    公費再掲欄：療養の給付：一部負担金
-                 MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT0525-KITBFTN(IDZ)
-               END-PERFORM
+               MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
+               MOVE  WRK-Z9                TO SKT0525-KITBFTN(IDZ)
+             END-PERFORM
       *
-      **    公費再掲欄：食事療養：件数
-               MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
-               MOVE  WRK-Z5                TO  SKT0525-S-KKENSU
-      **    公費再掲欄：食事療養：日数
-               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
-               MOVE  WRK-Z5                TO  SKT0525-S-KNISSU
-      **    公費再掲欄：食事療養：金額
-               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
-               MOVE  WRK-Z9                TO  SKT0525-S-KKINGK
-      **    公費再掲欄：食事療養：標準負担額
-               MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
-               MOVE  WRK-Z9                TO  SKT0525-S-KFTNGK
+      *    公費再掲欄：食事療養：件数
+             MOVE  SUM-S-KKENSU(IDX2)      TO  WRK-Z5
+             MOVE  WRK-Z5                  TO  SKT0525-S-KKENSU
+      *    公費再掲欄：食事療養：日数
+             MOVE  SUM-S-KNISSU(IDX2)      TO  WRK-Z5
+             MOVE  WRK-Z5                  TO  SKT0525-S-KNISSU
+      *    公費再掲欄：食事療養：金額
+             MOVE  SUM-S-KKINGK(IDX2)      TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SKT0525-S-KKINGK
+      *    公費再掲欄：食事療養：標準負担額
+             MOVE  SUM-S-KFTNGK(IDX2)      TO  WRK-Z9
+             MOVE  WRK-Z9                  TO  SKT0525-S-KFTNGK
       *
-               ADD     1                   TO  IDX2   
-             END-IF        
-      *-     END-PERFORM
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) start
+      *       ADD     1                     TO  IDX2   
+      *     END-IF        
       *
       *    １頁出力しても公費はまだ残っているか
-           IF      SUM-KOHNUM (IDX2)  =   SPACE
-               MOVE    1                   TO  FLG-KOH-END
-           ELSE    
-      *        帳票印刷処理（２頁以降）
-               PERFORM 20024-PRINT-OUT-SEC
-      *        帳票編集<見出し>処理
-               PERFORM 20021-HEAD-HEN-SEC
-           END-IF     
+      *     IF      SUM-KOHNUM (IDX2)  =   SPACE
+      *         MOVE    1                   TO  FLG-KOH-END
+      *     ELSE    
+      **        帳票印刷処理（２頁以降）
+      *         PERFORM 20024-PRINT-OUT-SEC
+      **        帳票編集<見出し>処理
+      *         PERFORM 20021-HEAD-HEN-SEC
+      *     END-IF     
+      *===公費は一箇所に集計 by Yoshikawa(2008/05/14) end
       *
            .
        200231-KOH-HENSYU-EXT.
@@ -1305,26 +1323,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
