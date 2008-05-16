@@ -9121,7 +9121,7 @@
         <rectangle val="3.3,23.6019;3.805,24.1019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[3].NHKNJA#</string>
+        <string>#NHKNJA-TBL[12].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9163,7 +9163,7 @@
         <rectangle val="3.3,17.3019;3.805,17.8019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[4].NHKNJA#</string>
+        <string>#NHKNJA-TBL[3].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9205,7 +9205,7 @@
         <rectangle val="3.3,18.0019;3.805,18.5019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[5].NHKNJA#</string>
+        <string>#NHKNJA-TBL[4].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9247,7 +9247,7 @@
         <rectangle val="3.3,18.7019;3.805,19.2019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[6].NHKNJA#</string>
+        <string>#NHKNJA-TBL[5].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9289,7 +9289,7 @@
         <rectangle val="3.3,19.4019;3.805,19.9019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[7].NHKNJA#</string>
+        <string>#NHKNJA-TBL[6].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9331,7 +9331,7 @@
         <rectangle val="3.3,20.1019;3.805,20.6019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[8].NHKNJA#</string>
+        <string>#NHKNJA-TBL[7].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9373,7 +9373,7 @@
         <rectangle val="3.3,20.8019;3.805,21.3019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[9].NHKNJA#</string>
+        <string>#NHKNJA-TBL[8].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9415,7 +9415,7 @@
         <rectangle val="3.3,21.5019;3.805,22.0019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[10].NHKNJA#</string>
+        <string>#NHKNJA-TBL[9].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9457,7 +9457,7 @@
         <rectangle val="3.3,22.2019;3.805,22.7019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[11].NHKNJA#</string>
+        <string>#NHKNJA-TBL[10].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9499,7 +9499,7 @@
         <rectangle val="3.3,22.9019;3.805,23.4019"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#NHKNJA-TBL[12].NHKNJA#</string>
+        <string>#NHKNJA-TBL[11].NHKNJA#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -9533,934 +9533,930 @@
         </composite>
       </attribute>
     </object>
-    <group>
-      <object type="Embed - Text" version="0" id="O257">
-        <attribute name="obj_pos">
-          <point val="10.45,15.5823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="10.45,15.1842;10.955,15.6842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[30].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="10.45,15.5823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O258">
-        <attribute name="obj_pos">
-          <point val="10.45,16.22"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="10.45,15.8219;10.955,16.3219"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[31].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="10.45,16.22"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O259">
-        <attribute name="obj_pos">
-          <point val="10.45,16.9823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="10.45,16.5842;10.955,17.0842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[32].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="10.45,16.9823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O260">
-        <attribute name="obj_pos">
-          <point val="10.45,17.6823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="10.45,17.2842;10.955,17.7842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[33].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="10.45,17.6823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O261">
-        <attribute name="obj_pos">
-          <point val="10.45,19.0823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="10.45,18.6842;10.955,19.1842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[34].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="10.45,19.0823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O262">
-        <attribute name="obj_pos">
-          <point val="8.05,15.5823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,15.1842;8.555,15.6842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[21].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,15.5823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O263">
-        <attribute name="obj_pos">
-          <point val="8.05,16.9823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,16.5842;8.555,17.0842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[22].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,16.9823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O264">
-        <attribute name="obj_pos">
-          <point val="8.05,18.3823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,17.9842;8.555,18.4842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[23].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,18.3823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O265">
-        <attribute name="obj_pos">
-          <point val="8.05,19.7823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,19.3842;8.555,19.8842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[24].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,19.7823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O266">
-        <attribute name="obj_pos">
-          <point val="8.05,21.1823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,20.7842;8.555,21.2842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[25].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,21.1823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O267">
-        <attribute name="obj_pos">
-          <point val="8.05,21.8823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,21.4842;8.555,21.9842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[26].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,21.8823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O268">
-        <attribute name="obj_pos">
-          <point val="8.05,22.5823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,22.1842;8.555,22.6842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[27].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,22.5823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O269">
-        <attribute name="obj_pos">
-          <point val="8.05,23.2823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,22.8842;8.555,23.3842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[28].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,23.2823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O270">
-        <attribute name="obj_pos">
-          <point val="8.05,23.9823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="8.05,23.5842;8.555,24.0842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[29].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="8.05,23.9823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-    </group>
-    <group>
-      <object type="Embed - Text" version="0" id="O271">
-        <attribute name="obj_pos">
-          <point val="5.65,15.6"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,15.2019;6.155,15.7019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[13].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,15.6"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O272">
-        <attribute name="obj_pos">
-          <point val="5.65,16.2823"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,15.8842;6.155,16.3842"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[14].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,16.2823"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O273">
-        <attribute name="obj_pos">
-          <point val="5.65,17"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,16.6019;6.155,17.1019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[15].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,17"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O274">
-        <attribute name="obj_pos">
-          <point val="5.65,17.7"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,17.3019;6.155,17.8019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[16].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,17.7"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O275">
-        <attribute name="obj_pos">
-          <point val="5.65,19.1"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,18.7019;6.155,19.2019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[17].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,19.1"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O276">
-        <attribute name="obj_pos">
-          <point val="5.65,19.8"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,19.4019;6.155,19.9019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[18].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,19.8"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O277">
-        <attribute name="obj_pos">
-          <point val="5.65,21.2"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,20.8019;6.155,21.3019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[19].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,21.2"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O278">
-        <attribute name="obj_pos">
-          <point val="5.65,22.6"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="5.65,22.2019;6.155,22.7019"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#NHKNJA-TBL[20].NHKNJA#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="0"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#&#161;&#251;#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.5"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="5.65,22.6"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="0"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.303"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.2525"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-    </group>
+    <object type="Embed - Text" version="0" id="O257">
+      <attribute name="obj_pos">
+        <point val="10.45,15.5823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="10.45,15.1842;10.955,15.6842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[30].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.45,15.5823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O258">
+      <attribute name="obj_pos">
+        <point val="10.45,16.22"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="10.45,15.8219;10.955,16.3219"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[31].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.45,16.22"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O259">
+      <attribute name="obj_pos">
+        <point val="10.45,16.9823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="10.45,16.5842;10.955,17.0842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[32].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.45,16.9823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O260">
+      <attribute name="obj_pos">
+        <point val="10.45,17.6823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="10.45,17.2842;10.955,17.7842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[33].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.45,17.6823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O261">
+      <attribute name="obj_pos">
+        <point val="10.45,19.0823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="10.45,18.6842;10.955,19.1842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[34].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.45,19.0823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O262">
+      <attribute name="obj_pos">
+        <point val="8.05,15.5823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,15.1842;8.555,15.6842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[21].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,15.5823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O263">
+      <attribute name="obj_pos">
+        <point val="8.05,16.9823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,16.5842;8.555,17.0842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[22].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,16.9823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O264">
+      <attribute name="obj_pos">
+        <point val="8.05,18.3823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,17.9842;8.555,18.4842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[23].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,18.3823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O265">
+      <attribute name="obj_pos">
+        <point val="8.05,19.7823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,19.3842;8.555,19.8842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[24].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,19.7823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O266">
+      <attribute name="obj_pos">
+        <point val="8.05,21.1823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,20.7842;8.555,21.2842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[25].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,21.1823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O267">
+      <attribute name="obj_pos">
+        <point val="8.05,21.8823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,21.4842;8.555,21.9842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[26].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,21.8823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O268">
+      <attribute name="obj_pos">
+        <point val="8.05,22.5823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,22.1842;8.555,22.6842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[27].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,22.5823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O269">
+      <attribute name="obj_pos">
+        <point val="8.05,23.2823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,22.8842;8.555,23.3842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[28].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,23.2823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O270">
+      <attribute name="obj_pos">
+        <point val="8.05,23.9823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.05,23.5842;8.555,24.0842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[29].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.05,23.9823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O271">
+      <attribute name="obj_pos">
+        <point val="5.65,15.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,15.2019;6.155,15.7019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[13].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,15.6"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O272">
+      <attribute name="obj_pos">
+        <point val="5.65,16.2823"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,15.8842;6.155,16.3842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[14].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,16.2823"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O273">
+      <attribute name="obj_pos">
+        <point val="5.65,17"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,16.6019;6.155,17.1019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[15].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,17"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O274">
+      <attribute name="obj_pos">
+        <point val="5.65,17.7"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,17.3019;6.155,17.8019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[16].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,17.7"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O275">
+      <attribute name="obj_pos">
+        <point val="5.65,19.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,18.7019;6.155,19.2019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[17].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,19.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O276">
+      <attribute name="obj_pos">
+        <point val="5.65,19.8"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,19.4019;6.155,19.9019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[18].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,19.8"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O277">
+      <attribute name="obj_pos">
+        <point val="5.65,21.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,20.8019;6.155,21.3019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[19].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,21.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O278">
+      <attribute name="obj_pos">
+        <point val="5.65,22.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="5.65,22.2019;6.155,22.7019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#NHKNJA-TBL[20].NHKNJA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="5.65,22.6"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
     <object type="Embed - Text" version="0" id="O279">
       <attribute name="obj_pos">
         <point val="1.15,1.95"/>
