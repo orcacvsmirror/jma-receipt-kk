@@ -11987,10 +11987,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O327">
       <attribute name="obj_pos">
-        <point val="4.81767,25.4831"/>
+        <point val="4.81767,23.999"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.99967,25.2442;4.81767,25.5442"/>
+        <rectangle val="2.99967,23.7601;4.81767,24.0601"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[12].HKNJANUM#</string>
@@ -12010,7 +12010,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.81767,25.4831"/>
+            <point val="4.81767,23.999"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -12029,10 +12029,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O328">
       <attribute name="obj_pos">
-        <point val="4.81767,23.999"/>
+        <point val="4.81767,25.4478"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.99967,23.7601;4.81767,24.0601"/>
+        <rectangle val="2.99967,25.2089;4.81767,25.5089"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[13].HKNJANUM#</string>
@@ -12052,7 +12052,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.81767,23.999"/>
+            <point val="4.81767,25.4478"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
