@@ -27,12 +27,13 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
-      *  01.00.01      内田     06/11/18    帳票様式の変更に伴う修正
-      *                                     食事がない場合でも生活療養費を印字
-      *  01.00.02      内田     07/07/27    Ver4.0対応
-      *                                     システム管理マスタ「1901」の
-      *                                     医療機関情報を参照
-      *  01.00.03      長屋     08/04/22    帳票様式に伴う修正
+      *  01.00.01    内田    06/11/18  帳票様式の変更に伴う修正
+      *                                食事がない場合でも生活療養費を印字
+      *  01.00.02    内田    07/07/27  Ver4.0対応
+      *                                システム管理マスタ「1901」の
+      *                                医療機関情報を参照
+      *  01.00.03    長屋    08/04/22  帳票様式に伴う修正
+      *  01.00.04    内田    08/05/16  国組３〜６歳の帳票を分けないように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -609,13 +610,32 @@
            END-IF
       *
       *    国保組合の法定外給付分は別紙出力する
-           IF      SKT1610TMP-HKNJANUM(3:1)    =   "3"
-           AND     RECE10-RJNHKNNUM            =   SPACE
-           AND     RECE10-AGE                  <   70
-           AND     RECE10-AGE                  >   2
-           AND     RECE10-KYURATE          NOT =   7
-               MOVE    RECE10-KYURATE      TO  SKT1610TMP-KYURATE
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     IF      SKT1610TMP-HKNJANUM(3:1)    =   "3"
+      *     AND     RECE10-RJNHKNNUM            =   SPACE
+      *     AND     RECE10-AGE                  <   70
+      *     AND     RECE10-AGE                  >   2
+      *     AND     RECE10-KYURATE          NOT =   7
+      *         MOVE    RECE10-KYURATE      TO  SKT1610TMP-KYURATE
+      *     END-IF
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF      SKT1610TMP-HKNJANUM(3:1)    =   "3"
+             AND     RECE10-RJNHKNNUM            =   SPACE
+             AND     RECE10-AGE                  <   70
+             AND     RECE10-FLG (1)          NOT =   1
+             AND     RECE10-KYURATE          NOT =   7
+                 MOVE    RECE10-KYURATE      TO  SKT1610TMP-KYURATE
+             END-IF
+           ELSE
+             IF      SKT1610TMP-HKNJANUM(3:1)    =   "3"
+             AND     RECE10-RJNHKNNUM            =   SPACE
+             AND     RECE10-AGE                  <   70
+             AND     RECE10-AGE                  >   2
+             AND     RECE10-KYURATE          NOT =   7
+                 MOVE    RECE10-KYURATE      TO  SKT1610TMP-KYURATE
+             END-IF
            END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
