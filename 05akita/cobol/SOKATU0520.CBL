@@ -32,6 +32,7 @@
       *  01.00.02    内田    07/09/28    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.03    長屋   08/05/02      帳票様式に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -220,6 +221,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -700,11 +706,20 @@
                    MOVE    2     TO    IDX1
                  END-IF
                ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
+                ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                  IF  RECE10-AGE  >= 3
                    MOVE    3     TO    IDX1
                  ELSE
                    MOVE    4     TO    IDX1
                  END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+                END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                END-IF
       *
              ELSE
@@ -718,11 +733,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                AND  (RECE10-FLG (1)   =  1)
+                     MOVE  9     TO  IDX1
+                ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    IF  RECE10-AGE  <  3
                      MOVE  9  TO  IDX1
                    ELSE
                      MOVE  8  TO  IDX1
                    END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+                  END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
@@ -1041,7 +1065,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT0520.red"        TO  SPRT-PRTID
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE   "SKT0520.red"        TO  SPRT-PRTID
+           IF  ( WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804)
+                MOVE   "SKT0520.red"   TO  SPRT-PRTID
+           ELSE
+                MOVE   "SKT0520o.red"  TO  SPRT-PRTID
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"  TO  SPRT-TITLE
            MOVE    SKT0520             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
