@@ -36,6 +36,7 @@
       *  01.00.06     内田   2007/08/19  日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.07     長屋   08/04/27    ４月改正に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -139,6 +140,9 @@
            03  FLG-ZAIISO2         PIC 9(01).
            03  FLG-TOWN            PIC 9(01).
            03  FLG-HKNJACNT        PIC 9(01).
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  FLG-KOUKI           PIC 9(01).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -195,6 +199,10 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       ****2006/02/11 @@@@-BRAND END
            03  WRK-PATH            PIC X(50).
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  WRK-PATH2               PIC X(50).
+           03  WRK-HKNNUM              PIC X(03).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -228,6 +236,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -657,6 +670,12 @@
                        MOVE  2    TO  IDX1
                    END-IF
                  ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                  AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
+                  ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    ３歳未満は組合からは除く
                    IF     RECE10-AGE   <    3
                      MOVE    4    TO  IDX1
@@ -667,6 +686,9 @@
                        MOVE  5    TO  IDX1
                      END-IF
                    END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+                  END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
                ELSE
@@ -681,11 +703,20 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
                    END-EVALUATE
                  ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                  AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
+                  ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
                    IF  RECE10-AGE  >  2
                      MOVE  3  TO  IDX1
                    ELSE
                      MOVE  4  TO  IDX1
                    END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+                  END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              ELSE
@@ -701,6 +732,12 @@
                    MOVE   6    TO  IDX1
                  END-IF
                ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                AND  (RECE10-FLG (1)   =  1)
+                    MOVE  10     TO  IDX1
+                ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  IF  RECE10-AGE  >  2
       *    退職・家族に前期高齢者判定追加
                    IF  RECE10-AGE  >= 70
@@ -715,6 +752,9 @@
                  ELSE
                    MOVE   10   TO  IDX1
                  END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+                END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                END-IF
              END-IF
            END-IF
