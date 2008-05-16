@@ -27,6 +27,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/14  保険者番号毎に集計する
+      *                                  まとめ公費を使用した時の
+      *                                  まとめ公費以外の公費名称修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -642,8 +645,10 @@
            ELSE
              MOVE  RECE10-HKNJANUM(3:6)  TO  WRK-HKNJANUM(1:6)
            END-IF
-      *    代表番号セット
-           PERFORM  200101-HKNJANUM-SET-SEC
+      *===保険者番号毎に集計 by Yoshikawa(2008/05/14) start
+      **    代表番号セット
+      *     PERFORM  200101-HKNJANUM-SET-SEC
+      *===保険者番号毎に集計 by Yoshikawa(2008/05/14) end
       *
       *    入外区分
            EVALUATE    RECE10-NYUGAIKBN
@@ -896,6 +901,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/14) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/14) end
       *      ０５１と０９１は同じ場所に集計する
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
@@ -1046,19 +1054,21 @@
            MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT3925-HKNJANUM
-      *    保険者名
-           INITIALIZE                      HKNJAINF-REC
-           MOVE    SPA-HOSPNUM         TO  HKNJA-HOSPNUM
-           MOVE    "39"                TO  HKNJA-HKNJANUM(1:2)
-           MOVE    WRK-HKNJANUM        TO  HKNJA-HKNJANUM(3:6)
-           MOVE    HKNJAINF-REC        TO  MCPDATA-REC
-           PERFORM 900-HKNJAINF-INV-SEC
-           IF      FLG-HKNJAINF        =   ZERO
-               STRING  HKNJA-HKNJANAME     DELIMITED  BY  SPACE
-                       "　殿"              DELIMITED  BY  SIZE
-                                           INTO  SKT3925-HKNJANAME
-               END-STRING
-           END-IF
+      *===保険者番号毎に集計 by Yoshikawa(2008/05/14) start
+      **    保険者名
+      *     INITIALIZE                      HKNJAINF-REC
+      *     MOVE    SPA-HOSPNUM         TO  HKNJA-HOSPNUM
+      *     MOVE    "39"                TO  HKNJA-HKNJANUM(1:2)
+      *     MOVE    WRK-HKNJANUM        TO  HKNJA-HKNJANUM(3:6)
+      *     MOVE    HKNJAINF-REC        TO  MCPDATA-REC
+      *     PERFORM 900-HKNJAINF-INV-SEC
+      *     IF      FLG-HKNJAINF        =   ZERO
+      *         STRING  HKNJA-HKNJANAME     DELIMITED  BY  SPACE
+      *                 "　殿"              DELIMITED  BY  SIZE
+      *                                     INTO  SKT3925-HKNJANAME
+      *         END-STRING
+      *     END-IF
+      *===保険者番号毎に集計 by Yoshikawa(2008/05/14) end
       *
       *    在総診・在医総
            IF    WRK-INDEX  =  2
@@ -1555,7 +1565,10 @@
                  PERFORM    900-SEIKYU-READ-SEC
                END-IF
       *        キーに県番号を格納
-               MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
+      *===保険者番号毎に集計する by Yoshikawa(2008/05/14) start
+      *         MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
+               MOVE    RECE10-HKNJANUM       TO  KEY-N-HKNJANUM
+      *===保険者番号毎に集計する by Yoshikawa(2008/05/14) end
                ADD     1                     TO  CNT-RECE10   
       *         
                DISPLAY "PTNUM=" RECE10-PTNUM 
