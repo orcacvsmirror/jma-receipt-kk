@@ -35,8 +35,7 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/02/08    退職で保険番号100所持者は
       *                                  退職法定外欄へ印字
-      *  01.00.04    内田    08/04/06    在総診を別帳票としない
-      *                                  SPA-AREA初期化
+      *  01.00.04    長屋    08/04/27    帳票様式に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -242,6 +241,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -354,9 +358,6 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
-      *---(01.00.04) LINE ADD START ------------------------------------
-           INITIALIZE                  SPA-AREA
-      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -696,11 +697,18 @@
            ELSE
              MOVE        2          TO   SKT0710TMP-SYUTURYOKU
            END-IF
-      *---(01.00.04) LINE ADD START ------------------------------------
       *    在宅
-      *     MOVE   RECE10-ZAITAKU    TO   SKT0710TMP-ZAITAKU
-      *---(01.00.04) LINE ADD END   ------------------------------------
+           MOVE   RECE10-ZAITAKU    TO   SKT0710TMP-ZAITAKU
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+             IF  (RECE10-HKNNUM  =  "060"  AND  RECE10-AGE  >=  70
+                  AND  RECE10-KYURATE  =  9)
+             AND  ( RECE10-RJNHKNNUM  =  SPACE )
+                      MOVE  RECE10-SRYYM TO SKT0710TMP-SRYYM
+             END-IF
+           END-IF  
+      *---(01.00.04) LINE ADD END   ------------------------------------
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
@@ -733,6 +741,7 @@
        210-HKN-SYUKEI-SEC          SECTION.
       *
       *    入外区分
+           DISPLAY "ptid" RECE10-PTID
            IF  RECE10-NYUGAIKBN  =  1
              MOVE  1  TO  IDX2
            ELSE
@@ -774,13 +783,29 @@
                    WHEN  OTHER   MOVE  2  TO  IDX1
                  END-EVALUATE
                ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  6     TO  IDX1
+                 ELSE
+                   IF  RECE10-AGE  >= 3
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    割合チェック
-                 EVALUATE  RECE10-KYURATE
-                   WHEN  7       MOVE  3  TO  IDX1
-                   WHEN  8       MOVE  4  TO  IDX1
-                   WHEN  9       MOVE  5  TO  IDX1
-                   WHEN  OTHER   MOVE  6  TO  IDX1
-                 END-EVALUATE
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  7       MOVE  3  TO  IDX1
+                       WHEN  8       MOVE  4  TO  IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                 WHEN  9       MOVE  5  TO  IDX1
+      *                 WHEN  OTHER   MOVE  6  TO  IDX1
+                       WHEN  OTHER   MOVE  5  TO  IDX1
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                     END-EVALUATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   ELSE
+                       MOVE  6   TO IDX1
+                   END-IF
+                 END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                END-IF
              ELSE
       *    年齢チェック
@@ -813,6 +838,8 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
              END-IF
            END-IF
+           DISPLAY "IDX1 = " IDX1
+           DISPLAY "IDX2 = " IDX2
       *
            PERFORM  2102-SYUKEI-SEC
       *
@@ -1081,6 +1108,11 @@
       *    ページ番号
            MOVE    CNT-PAGE               TO   WRK-Z4
            MOVE    WRK-Z4                 TO   SKT0710-NO
+      *---(01.00.04) LINE ADD START ------------------------------------
+           IF  SKT0710TMP-SRYYM  NOT =  ZERO
+               MOVE   "○"                TO   SKT0710-KYUHANTEI
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            .
        311-HEAD-HEN-EXT.

@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    長屋    08/04/29    帳票様式に伴う修正
       ************************************************************
        01  SKT0710TMP-REC.
            03  SKT0710TMP-KEY.
@@ -27,6 +28,9 @@
                05  SKT0710TMP-HKNJANUM             PIC  X(06).
                05  SKT0710TMP-HKNJANAME            PIC  X(20).
                05  SKT0710TMP-ZAITAKU              PIC  X(01).
+      *---(01.00.01) LINE ADD START ------------------------------------
+               05  SKT0710TMP-SRYYM                PIC  9(06).
+      *---(01.00.01) LINE ADD END   ------------------------------------
            03  SKT0710TMP-SEIKYU-TBL     OCCURS  14.
                05  SKT0710TMP-NYUGAI-TBL  OCCURS  2.
                    07  SKT0710TMP-KENSU            PIC  9(06).
