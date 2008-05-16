@@ -66,3 +66,4 @@
       *ศ๗นอ
             03  SC05-BIKO                     PIC X(16).
             03  SC05-BIKO2                    PIC X(16).
+            03  SC05-BIKO3                    PIC X(16).

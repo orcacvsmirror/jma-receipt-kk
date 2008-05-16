@@ -159,3 +159,5 @@
            03  MF100-HENREI              PIC  9(01).
       *光驰闻蛙锐フラブ
            03  MF100-KOGAKU              PIC  9(01).
+      *回年给锐フラブ
+           03  MF100-SHITEI              PIC  9(01).
