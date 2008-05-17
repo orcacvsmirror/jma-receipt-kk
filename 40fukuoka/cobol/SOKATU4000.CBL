@@ -43,6 +43,7 @@
       *                                  食事療養費を一千万の位まで印字
       *  01.00.10    内田    08/04/25    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.11    内田    08/04/30    返戻対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -202,7 +203,9 @@
            03  WRK-PARA-HKNJANUM   PIC X(08).
       *---(01.00.10) LINE ADD END   ------------------------------------
            03  WRK-PARA-PAGE       PIC 9(10).
-      *
+      *---(01.00.10) LINE ADD START ------------------------------------
+           03  WRK-PARA-SYOKBN     PIC X(01).
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *
       *    一時領域
        01  WRK-AREA.
@@ -452,6 +455,9 @@
       *---(01.00.10) LINE ADD START ------------------------------------
                                                WRK-PARA-HKNJANUM
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+                                               WRK-PARA-SYOKBN
+      *---(01.00.11) LINE ADD END   ------------------------------------
                                                RECEERR
       *---(01.00.09) LINE ADD END   ------------------------------------
            END-UNSTRING
@@ -596,13 +602,23 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *
-      *---(01.00.09) LINE ADD START ------------------------------------
-      *     MOVE    PATH-TBL-SEIKYU-KEY4    TO  WRK-PATH
-           MOVE    "key4"                  TO  WRK-PATH
-      *---(01.00.09) LINE ADD END   ------------------------------------
-      *---(01.00.10) LINE ADD START ------------------------------------
-           MOVE    "key66"                  TO  WRK-PATH2
-      *---(01.00.10) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+      **---(01.00.09) LINE ADD START ------------------------------------
+      **     MOVE    PATH-TBL-SEIKYU-KEY4    TO  WRK-PATH
+      *     MOVE    "key4"                  TO  WRK-PATH
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      **---(01.00.10) LINE ADD START ------------------------------------
+      *     MOVE    "key66"                  TO  WRK-PATH2
+      **---(01.00.10) LINE ADD END   ------------------------------------
+           EVALUATE    WRK-PARA-SYOKBN 
+               WHEN    "2"
+                   MOVE    "key37"                  TO  WRK-PATH
+                   MOVE    "key65"                  TO  WRK-PATH2
+               WHEN    "1"
+                   MOVE    "key38"                  TO  WRK-PATH
+                   MOVE    "key66"                  TO  WRK-PATH2
+           END-EVALUATE
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            PERFORM 900-SEIKYU-SELECT-SEC
            .
