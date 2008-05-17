@@ -36,7 +36,7 @@
       *                                   医療機関情報を参照
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
-      *  01.00.04    内田     07/11/11    高額療養費の件数印字の修正
+      *  01.00.04    安藤   2008/04/22    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -240,6 +240,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -713,49 +718,95 @@
              IF  RECE10-HKNNUM  =  "060"
       *    年齢チェック
                IF  RECE10-AGE  >=  70
-                 EVALUATE  RECE10-KYURATE
-                   WHEN  9       MOVE  1  TO  IDX1
-                   WHEN  OTHER   MOVE  2  TO  IDX1
-                 END-EVALUATE
+
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *           EVALUATE  RECE10-KYURATE
+      *             WHEN  9       MOVE  1  TO  IDX1
+      *             WHEN  OTHER   MOVE  2  TO  IDX1
+      *           END-EVALUATE
+                 IF  RECE10-KYURATE  =  7
+                   MOVE    2     TO    IDX1
+                 ELSE
+                   MOVE    1     TO    IDX1
+                 END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                ELSE
+      *---(01.00.04) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5     TO  IDX1
+                 ELSE
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *    ３歳未満チェック
-                 IF  RECE10-AGE > 2
+                  IF  RECE10-AGE > 2
       *    割合チェック
                    IF  RECE10-KYURATE = 7
                        MOVE  4    TO    IDX1
                    ELSE
                        MOVE  3    TO    IDX1
                    END-IF 
-                 ELSE
+                  ELSE
                    MOVE  5        TO    IDX1
-                 END-IF 
+                  END-IF 
+      *---(01.00.04) LINE ADD START ------------------------------------
+                END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                END-IF
              ELSE
       *    年齢チェック
                IF  RECE10-HONKZKKBN  =  "1"
                  IF  RECE10-AGE  >  69
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE  7   TO  IDX1
+      *             ELSE
+      *               MOVE  8   TO  IDX1
+      *             END-IF
                    IF  RECE10-KYURATE  =  9
-                     MOVE  7   TO  IDX1
+                     MOVE  1   TO  IDX1
                    ELSE
-                     MOVE  8   TO  IDX1
+                     MOVE  2   TO  IDX1
                    END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                  ELSE
                    MOVE    6   TO  IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  >  2
-                   IF     RECE10-AGE  > 69
-                     IF  RECE10-KYURATE  =  9
-                       MOVE  7   TO  IDX1
-                     ELSE
-                       MOVE  8   TO  IDX1
-                     END-IF
-                   ELSE
-                     MOVE  9     TO  IDX1
-                   END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  8     TO  IDX1
                  ELSE
-                   MOVE  10     TO  IDX1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+                  IF  RECE10-AGE  >  2
+                    IF     RECE10-AGE  > 69
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *               IF  RECE10-KYURATE  =  9
+      *                 MOVE  7   TO  IDX1
+      *               ELSE
+      *                 MOVE  8   TO  IDX1
+      *               END-IF
+                     IF  RECE10-KYURATE  =  9
+                       MOVE  1   TO  IDX1
+                     ELSE
+                       MOVE  2   TO  IDX1
+                     END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
+                    ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *                MOVE  9     TO  IDX1
+                      MOVE  7     TO  IDX1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+                    END-IF
+                  ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *              MOVE  10     TO  IDX1
+                    MOVE  8     TO  IDX1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+                  END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
                END-IF
              END-IF
       *

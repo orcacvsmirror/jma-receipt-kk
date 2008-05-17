@@ -22,7 +22,7 @@
        01  SKT2300TMP-REC.
            03  SKT2300TMP-KEY.
              05  SKT2300TMP-SYUTURYOKU  PIC  9(01).
-             05  SKT2300TMP-HKNJANUM    PIC  X(06).
+             05  SKT2300TMP-HKNJANUM    PIC  X(08).
            03    SKT2300TMP-DATA.
              05  SKT2300TMP-HKNKBN  OCCURS 3.
                07  SKT2300TMP-NYUGAIKBN  OCCURS 2.

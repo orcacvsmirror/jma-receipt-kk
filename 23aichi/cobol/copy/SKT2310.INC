@@ -40,7 +40,7 @@
       *    ページ番号
            03  SKT2310-NO          PIC  X(04).
       *    療養の給付テーブル
-           03  SKT2310-RYOUYOU-TBL OCCURS 10.
+           03  SKT2310-RYOUYOU-TBL OCCURS 8.
       *    入外テーブル
                05  SKT2310-NYUGAI-TBL OCCURS 2.
       *    件数
@@ -52,7 +52,7 @@
       *    一部負担金
                    07  SKT2310-ITBFTN     PIC X(09).
       *    食事療養費テーブル
-           03  SKT2310-SHOKUJI-TBL OCCURS 10.
+           03  SKT2310-SHOKUJI-TBL OCCURS 8.
       *    食事−件数
                05  SKT2310-S-KENSU        PIC X(05).
       *    食事−日数

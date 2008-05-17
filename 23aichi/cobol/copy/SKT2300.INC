@@ -18,7 +18,7 @@
        01  SKT2300.
            03  SKT2300-SEIYM1       PIC  X(16).
            03  SKT2300-HKNJAINF     OCCURS  8.
-             05  SKT2300-HKNJANAME  PIC  X(20).
+             05  SKT2300-HKNJANAME  PIC  X(100).
              05  SKT2300-HKNKBN     OCCURS  3.
                07  SKT2300-NYUGAIKBN  OCCURS  2.
                  09  SKT2300-KENSU  PIC  X(05).
