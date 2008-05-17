@@ -24,15 +24,15 @@
            03         SKT3400-HOSPCD           PIC  X(20).
            03         SKT3400-SRYKANAME        PIC  X(30) OCCURS 3.
            03         SKT3400-TOKUBETU         PIC  X(10).
-           03         SKT3400-DATA-TBL         OCCURS  48.
-             05       SKT3400-HKNJANUM         PIC  X(06).
+           03         SKT3400-DATA-TBL         OCCURS  46.
+             05       SKT3400-HKNJANUM         PIC  X(08).
              05       SKT3400-NYUIN.
                07     SKT3400-N-KENSU          PIC  X(06).
                07     SKT3400-N-TENSU          PIC  X(11).
              05       SKT3400-GAIRAI.
                07     SKT3400-G-KENSU          PIC  X(06).
                07     SKT3400-G-TENSU          PIC  X(11).
-           03         SKT3400-TOTAL.
+           03         SKT3400-TOTAL            OCCURS   2.
              05       SKT3400-TL-NYUIN.
                07     SKT3400-TL-N-KENSU       PIC  X(06).
                07     SKT3400-TL-N-TENSU       PIC  X(11).

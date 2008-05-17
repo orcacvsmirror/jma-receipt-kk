@@ -42,6 +42,7 @@
       *  01.00.08    内田    07/09/07    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.09    内田    08/05/03    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -188,6 +189,9 @@
            03  WRK-HOUMON-TBL.
                05  WRK-HOUMON-DAY  PIC 9(01)  OCCURS  31.
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *---(01.00.09) LINE ADD START ------------------------------------
+           03  WRK-WRKYM           PIC 9(06).
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *    文字変換
            03  WRK-MAE-INPUT       PIC X(200).
@@ -212,6 +216,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.08) LINE ADD END   ------------------------------------
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト　領域
       *****************************************************************
@@ -1020,6 +1029,7 @@
            MOVE    WRK-SEIYMDWH            TO  SC03-SEIYMD
       *
       *    診療年月
+           MOVE    MF100-SRYYM             TO  WRK-WRKYM
            MOVE    MF100-SRYYM             TO  WRK-SYMD (1:6)
            MOVE    "01"                    TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
@@ -1300,7 +1310,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SC3403.red"         TO  SPRT-PRTID
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     MOVE   "SC3403.red"         TO  SPRT-PRTID
+           IF  WRK-WRKYM   >=  WRK-CONS-SRYYM-200804
+               MOVE   "SC3403.red"     TO  SPRT-PRTID
+           ELSE
+               MOVE   "SC3403o.red"    TO  SPRT-PRTID
+           END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
            MOVE    "福祉医療費請求書"
                                        TO  SPRT-TITLE
            MOVE    SC03                TO  SPRT-PRTDATA

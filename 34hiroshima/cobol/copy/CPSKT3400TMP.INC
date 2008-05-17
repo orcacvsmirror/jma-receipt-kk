@@ -26,7 +26,7 @@
              05    SKT3400TMP-SRYYM                 PIC  X(08).
              05    SKT3400TMP-KBN                   PIC  9(01).
              05    SKT3400TMP-SYUTURYOKU            PIC  9(01).
-             05    SKT3400TMP-HKNJANUM              PIC  X(06).
+             05    SKT3400TMP-HKNJANUM              PIC  X(08).
            03      SKT3400TMP-DATA.
              05    SKT3400TMP-NYUIN.
                07  SKT3400TMP-N-KENSU               PIC  9(06).
