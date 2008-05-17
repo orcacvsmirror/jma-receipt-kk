@@ -24,6 +24,7 @@
                05  SKT2000TMP-PREFKBN        PIC  X(01).
                05  SKT2000TMP-GOKEIKBN       PIC  X(01).
                05  SKT2000TMP-HKNJANUM       PIC  X(06).
+               05  SKT2000TMP-RJNFLG         PIC  X(01).
            03  SKT2000TMP-DATA.
                05  SKT2000TMP-KENSU          PIC  9(06).
                05  SKT2000TMP-TYOKI          PIC  9(05).

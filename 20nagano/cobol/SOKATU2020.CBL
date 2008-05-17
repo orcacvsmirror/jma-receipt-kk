@@ -31,6 +31,8 @@
       *  01.00.02    内田    07/10/05    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.03    内田    08/04/23    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -109,6 +111,9 @@
       *
            COPY    "SKT2020.INC".
            COPY    "SKT2030.INC".
+      *---(01.00.03) LINE ADD START ------------------------------------
+           COPY    "SKT2040.INC".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    スパ領域
        01  STS-AREA.
@@ -245,6 +250,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -342,6 +352,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.03) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -631,6 +644,13 @@
                MOVE    2           TO  SKT2020TMP-SYUTURYOKU
            END-IF
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    平成２０年３月以前の老人
+           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+             MOVE  RECE10-SRYYM    TO  SKT2020TMP-SRYYM
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
       *    在宅
            MOVE    RECE10-ZAITAKU  TO  SKT2020TMP-ZAITAKU
       *
@@ -682,35 +702,66 @@
       *        一般国保
                IF      RECE10-HKNNUM   =   "060"
                    IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    1       TO  IDX1
-                       ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *                 IF      RECE10-KYURATE  =   9
+      *                     MOVE    1       TO  IDX1
+      *                 ELSE
+      *                     MOVE    2       TO  IDX1
+      *                 END-IF
+                       IF      RECE10-KYURATE  =   7
                            MOVE    2       TO  IDX1
+                       ELSE
+                           MOVE    1       TO  IDX1
                        END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+                     IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                     AND  (RECE10-FLG (1)   =  1)
+                         MOVE  4     TO  IDX1
+                     ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                        IF      RECE10-AGE  >=  3
                            MOVE    3       TO  IDX1
                        ELSE
                            MOVE    4       TO  IDX1
                        END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+                     END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    END-IF
       *        退職国保
                ELSE
                    IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    6       TO  IDX1
-                       ELSE
-                           MOVE    7       TO  IDX1
-                       END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *                 IF      RECE10-KYURATE  =   9
+      *                     MOVE    6       TO  IDX1
+      *                 ELSE
+      *                     MOVE    7       TO  IDX1
+      *                 END-IF
+                       MOVE    5       TO  IDX1
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    ELSE
                        IF      RECE10-HONKZKKBN    =   "1"
                            MOVE    5       TO  IDX1
                        ELSE
-                           IF      RECE10-AGE  <   3
-                               MOVE    9       TO  IDX1
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *                     IF      RECE10-AGE  <   3
+      *                         MOVE    9       TO  IDX1
+      *                     ELSE
+      *                         MOVE    8       TO  IDX1
+      *                     END-IF
+                         IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                         AND  (RECE10-FLG (1)   =  1)
+                             MOVE  7     TO  IDX1
+                         ELSE
+                           IF      RECE10-AGE  >=   3
+                               MOVE    6       TO  IDX1
                            ELSE
-                               MOVE    8       TO  IDX1
+                               MOVE    7       TO  IDX1
                            END-IF
+                         END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                        END-IF
                    END-IF
                END-IF
@@ -897,6 +948,10 @@
       *
            PERFORM  UNTIL     FLG-PRINT   =   1
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *      老人かどうか
+             IF  SKT2020TMP-SRYYM  =  ZERO
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *        一般
       *        帳票編集<見出し>処理
                PERFORM 310-HEAD-HEN-SEC
@@ -909,7 +964,19 @@
       *
       *        公費番号順にソート
                PERFORM  KOH-SORT-SEC
-      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *        公費はあるか
+               MOVE    1       TO  WRK-CNT
+               PERFORM UNTIL   SKT2020TMP-KOHNUM(WRK-CNT)  =   SPACE
+      *            帳票編集<見出し>処理
+                   PERFORM  312-HEAD-HEN-SEC
+      *            帳票編集<公費>処理
+                   PERFORM  322-KOH-HEN-SEC
+      *            帳票印刷処理
+                   PERFORM  332-PRINT-OUT-SEC
+               END-PERFORM
+             ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *        老人
       *        公費は残っているか
                MOVE    1       TO  WRK-CNT
@@ -932,6 +999,9 @@
                    PERFORM 331-PRINT-OUT-SEC
                    MOVE  1  TO  FLG-PASS
                END-PERFORM
+      *---(01.00.03) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *        一時ファイル読込
                PERFORM  900-TMP-READ-SEC
@@ -1377,6 +1447,165 @@
        331-PRINT-OUT-EXT.
            EXIT.
 057400*
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理
+      *****************************************************************
+       312-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1       TO  CNT-PAGE
+      *
+           INITIALIZE  SKT2040
+      *
+      *    保険者番号
+           MOVE    SKT2020TMP-HKNJANUM     TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SKT2040-HKNJANUM
+      *
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SKT2040-HOSPCD
+      *
+      *    在宅
+           IF      SKT2020TMP-ZAITAKU  =   "1"
+               MOVE    "在"    TO  SKT2020-ZAI1
+               MOVE    "◯"    TO  SKT2020-ZAI2
+           END-IF
+      *
+      *    ページ番号
+           MOVE    CNT-PAGE                TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SKT2040-NO
+      *
+           .
+       312-HEAD-HEN-EXT.
+           EXIT.
+      *****************************************************************
+      *    帳票編集<公費>処理
+      *****************************************************************
+       322-KOH-HEN-SEC               SECTION.
+      *
+           PERFORM VARYING IDX1    FROM    1   BY  1
+                   UNTIL   IDX1    >       7
+                   OR      WRK-CNT >       20
+                   OR      SKT2020TMP-KOHNUM (WRK-CNT) =   SPACE
+      *
+      *        公費名・法別番号
+               MOVE    SKT2020TMP-KOHNUM(WRK-CNT)  TO  WRK-KOHNUM
+               PERFORM 950-HKNNUM-SET-SEC
+               MOVE    HKN-TANSEIDONAME    TO  SKT2040-KOHNAME (IDX1)
+               MOVE    HKN-HBTNUM          TO  WRK-MAE-INPUT
+               PERFORM 2009-HENKAN-SEC
+               MOVE    WRK-OUT-INPUT       TO  SKT2040-KOHNUM (IDX1)
+      *
+               PERFORM VARYING IDX2    FROM    1   BY  1
+                       UNTIL   IDX2    >       2
+      *
+      *            件数
+                   MOVE    SKT2020TMP-K-KENSU(WRK-CNT IDX2)   
+                                           TO  WRK-Z4
+                   MOVE    WRK-Z4          TO  WRK-MAE-INPUT
+                   PERFORM 2009-HENKAN-SEC
+                   MOVE    WRK-OUT-INPUT   
+                                       TO  SKT2040-K-KENSU(IDX1 IDX2)
+      *
+      *            日数
+                   MOVE    SKT2020TMP-K-NISSU (WRK-CNT IDX2)
+                                           TO  WRK-Z4
+                   MOVE    WRK-Z4          TO  WRK-MAE-INPUT
+                   PERFORM 2009-HENKAN-SEC
+                   MOVE    WRK-OUT-INPUT   
+                                       TO  SKT2040-K-NISSU(IDX1 IDX2)
+      *
+      *            点数
+                   MOVE    SKT2020TMP-K-TENSU (WRK-CNT IDX2)
+                                           TO  WRK-Z8
+                   MOVE    WRK-Z8          TO  WRK-MAE-INPUT
+                   PERFORM 2009-HENKAN-SEC
+                   MOVE    WRK-OUT-INPUT  
+                                       TO  SKT2040-K-TENSU (IDX1 IDX2)
+      *
+      *            一部負担金
+                   MOVE    SKT2020TMP-K-ITBFTN (WRK-CNT IDX2)
+                                           TO  WRK-Z8
+                   MOVE    WRK-Z8          TO  WRK-MAE-INPUT
+                   PERFORM 2009-HENKAN-SEC
+                   MOVE    WRK-OUT-INPUT  
+                                       TO  SKT2040-K-ITBFTN(IDX1 IDX2)
+               END-PERFORM
+      *
+      *        食事療養：件数
+               MOVE    SKT2020TMP-K-SKENSU (WRK-CNT)   TO  WRK-Z4
+               MOVE    WRK-Z4          TO  WRK-MAE-INPUT
+               PERFORM 2009-HENKAN-SEC
+               MOVE    WRK-OUT-INPUT   TO  SKT2040-K-SKENSU (IDX1)
+      *
+      *        食事療養：日数
+               MOVE    SKT2020TMP-K-SNISSU (WRK-CNT)   TO  WRK-Z4
+               MOVE    WRK-Z4          TO  WRK-MAE-INPUT
+               PERFORM 2009-HENKAN-SEC
+               MOVE    WRK-OUT-INPUT   TO  SKT2040-K-SNISSU (IDX1)
+      *
+      *        食事療養：金額
+               MOVE    SKT2020TMP-K-SKINGK (WRK-CNT)   TO  WRK-Z8
+               MOVE    WRK-Z8          TO  WRK-MAE-INPUT
+               PERFORM 2009-HENKAN-SEC
+               MOVE    WRK-OUT-INPUT   TO  SKT2040-K-SKINGK (IDX1)
+      *
+      *        食事療養：標準負担額
+               MOVE    SKT2020TMP-K-SFTNGK (WRK-CNT)   TO  WRK-Z8
+               MOVE    WRK-Z8          TO  WRK-MAE-INPUT
+               PERFORM 2009-HENKAN-SEC
+               MOVE    WRK-OUT-INPUT   TO  SKT2040-K-SFTNGK (IDX1)
+      *
+               ADD   1  TO  WRK-CNT
+           END-PERFORM
+      *
+           .
+       322-KOH-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理（公費）
+      *****************************************************************
+       332-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT2040.red"        TO  SPRT-PRTID
+           MOVE    "国保請求書"        TO  SPRT-TITLE
+           MOVE    SKT2040             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       332-PRINT-OUT-EXT.
+           EXIT.
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    公費ソート処理
       *****************************************************************

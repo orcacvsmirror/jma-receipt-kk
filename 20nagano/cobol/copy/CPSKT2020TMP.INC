@@ -23,6 +23,7 @@
            03  SKT2020TMP-KEY.
                05  SKT2020TMP-SYUTURYOKU       PIC  9(01).
                05  SKT2020TMP-HKNJANUM         PIC  X(06).
+               05  SKT2020TMP-SRYYM            PIC  9(06).
                05  SKT2020TMP-ZAITAKU          PIC  X(01).
            03  SKT2020TMP-IPAN-TBL    OCCURS  11.
                05  SKT2020TMP-NYUGAI-TBL  OCCURS  2.
