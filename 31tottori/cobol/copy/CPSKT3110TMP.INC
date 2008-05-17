@@ -25,6 +25,7 @@
            03  SKT3110TMP-KEY.
                05  SKT3110TMP-SYUTURYOKU             PIC  9(01).
                05  SKT3110TMP-HKNJANUM               PIC  X(06).
+               05  SKT3110TMP-SRYYM                  PIC  9(06).
            03  SKT3110TMP-KYURATE                 PIC  9(03).
            03  SKT3110TMP-ZAITAKU                     PIC  X(01).
       *     03  SKT3110TMP-PAGE-FLG2                   PIC  9(01).
