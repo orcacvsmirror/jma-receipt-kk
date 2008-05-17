@@ -3,9 +3,11 @@ name	fukui;
 arraysize	20;
 textsize	400;
 
-bind	"SOKATU1800"	"OpenCOBOL";
-bind	"SOKATU1810"	"OpenCOBOL";
 bind	"SEIKYU1803"	"OpenCOBOL";
 bind	"SEIKYU1805"	"OpenCOBOL";
+bind	"SOKATU1800"	"OpenCOBOL";
+bind	"SOKATU1810"	"OpenCOBOL";
+bind	"SOKATU1815"	"OpenCOBOL";
+bind	"SOKATU1825"	"OpenCOBOL";
 
 #include "orcadb.inc"
