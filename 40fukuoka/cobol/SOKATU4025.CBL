@@ -27,6 +27,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/04/29  原爆データを記載外公費ではなく
+      *                                  通常の公費から取得するよう修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -680,12 +682,20 @@
            END-IF
       *
       *    原爆
-           IF  RECE10-ETC-KOHNUM (1)  = "019"  OR
-               RECE10-ETC-KOHNUM (2)  = "019"  OR
-               RECE10-ETC-KOHNUM (3)  = "019"  OR
-               RECE10-ETC-KOHNUM (4)  = "019"
+      *=== 原爆取得データ修正 by Yoshikawa(2008/04/29) start
+      *     IF  RECE10-ETC-KOHNUM (1)  = "019"  OR
+      *         RECE10-ETC-KOHNUM (2)  = "019"  OR
+      *         RECE10-ETC-KOHNUM (3)  = "019"  OR
+      *         RECE10-ETC-KOHNUM (4)  = "019"
+      *    既定公費集計
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  4
+             IF  RECE10-KOHNUM(IDXX)  =  "019"
                PERFORM 20013-GENBK-SYUKEI-SEC
-           END-IF
+             END-IF
+           END-PERFORM
+      *=== 原爆取得データ修正 by Yoshikawa(2008/04/29) end
+      *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 20014-UPD-FILE-HENSYU-SEC
@@ -997,23 +1007,42 @@
       *
       *    原爆：療養の給付：件数
            ADD   1                           TO  SUM-GKENSU (IDX3)
+      *=== 原爆取得データ修正 by Yoshikawa(2008/04/29) start
+      **    原爆：療養の給付:診療実日数
+      *     ADD  RECE10-ETC-JNISSU(1)         TO  SUM-GNISSU(IDX3)
+      **    原爆：療養の給付：点数
+      *     ADD  RECE10-ETC-TOTALTEN(1)       TO  SUM-GTENSU(IDX3)
+      **    原爆：療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(1)           TO  SUM-GITBFTN(IDX3)
+      **
+      *     IF  RECE10-ETC-SHOKUJINISSU(1)  >  0
+      **    原爆：食事療養:件数
+      *       ADD  1                          TO  SUM-S-GKENSU
+      *     END-IF
+      **    原爆：食事療養:日数
+      *     ADD  RECE10-ETC-SHOKUJINISSU(1)   TO  SUM-S-GNISSU
+      **    原爆：食事療養：金額
+      *     ADD  RECE10-ETC-SHOKUJIRYOYOHI(1) TO  SUM-S-GKINGK
+      **    原爆：食事療養：標準負担額
+      *     ADD  RECE10-ETC-SHOKUJIFTN(1)     TO  SUM-S-GFTNGK
       *    原爆：療養の給付:診療実日数
-           ADD  RECE10-ETC-JNISSU(1)         TO  SUM-GNISSU(IDX3)
+           ADD  RECE10-JNISSU(IDXX + 1)         TO  SUM-GNISSU(IDX3)
       *    原爆：療養の給付：点数
-           ADD  RECE10-ETC-TOTALTEN(1)       TO  SUM-GTENSU(IDX3)
+           ADD  RECE10-TOTALTEN(IDXX + 1)       TO  SUM-GTENSU(IDX3)
       *    原爆：療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(1)           TO  SUM-GITBFTN(IDX3)
+           ADD  RECE10-FTNMONEY(IDXX + 1)       TO  SUM-GITBFTN(IDX3)
       *
-           IF  RECE10-ETC-SHOKUJINISSU(1)  >  0
+           IF   RECE10-SHOKUJINISSU(IDXX + 1)  >  0
       *    原爆：食事療養:件数
-             ADD  1                          TO  SUM-S-GKENSU
+             ADD  1                             TO  SUM-S-GKENSU
            END-IF
       *    原爆：食事療養:日数
-           ADD  RECE10-ETC-SHOKUJINISSU(1)   TO  SUM-S-GNISSU
+           ADD  RECE10-SHOKUJINISSU(IDXX + 1)   TO  SUM-S-GNISSU
       *    原爆：食事療養：金額
-           ADD  RECE10-ETC-SHOKUJIRYOYOHI(1) TO  SUM-S-GKINGK
+           ADD  RECE10-SHOKUJIRYOYOHI(IDXX + 1) TO  SUM-S-GKINGK
       *    原爆：食事療養：標準負担額
-           ADD  RECE10-ETC-SHOKUJIFTN(1)     TO  SUM-S-GFTNGK
+           ADD  RECE10-SHOKUJIFTN(IDXX + 1)     TO  SUM-S-GFTNGK
+      *=== 原爆取得データ修正 by Yoshikawa(2008/04/29) end
       *
            MOVE    1               TO  FLG-UPD 
          .
