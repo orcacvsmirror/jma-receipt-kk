@@ -15,6 +15,11 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev     修正者   日付         内容
+      *  01.00.01       長屋   08/04/26    帳票様式に伴う修正
+      *****************************************************************
        01  SKT0800.
       *    診療年月
            03    SKT0800-SRYYM          PIC  X(16).
@@ -26,7 +31,10 @@
            03    SKT0800-HOSPNAME       PIC  X(100).
       *    開設者名
            03    SKT0800-KAISETUNAME    PIC  X(40).
-           03       SKT0800-SEIKYU-TBL OCCURS 3.
+      *---(01.00.01) LINE ADD END   ------------------------------------
+      *     03       SKT0800-SEIKYU-TBL OCCURS 3.
+           03       SKT0800-SEIKYU-TBL OCCURS 4.
+      *---(01.00.01) LINE ADD END   ------------------------------------
                  05   SKT0800-NYUGAI-TBL OCCURS 2.
       *    件数
                       07  SKT0800-KENSU      PIC  X(07).
@@ -36,7 +44,10 @@
                  05   SKT0800-S-KENSU        PIC  X(07).
       *    食事金額
                  05   SKT0800-S-KINGK        PIC  X(11).
-           03    SKT0800-KOH-TBL OCCURS 3.
+      *---(01.00.01) LINE ADD END   ------------------------------------
+      *     03    SKT0800-KOH-TBL OCCURS 3.
+           03    SKT0800-KOH-TBL OCCURS 5.
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *    公費件数
                  05    SKT0800-KKENSU        PIC  X(07).
       *    公費点数

@@ -38,6 +38,7 @@
       *                                 °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.07    ÆâÅÄ   08/01/23    £²£·Ï·¿Í¤¬¸©Æâ¤Î¾ì¹ç¡¢
       *                                 ÊÝ¸±¤¬¸©³°¤Ç¤â¸©Æâ¤È¤·¤Æ°·¤¦
+      *  01.00.08    Ä¹²°   08/04/22    Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -260,6 +261,12 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+           03  WRK-SRYFLG              PIC 9(01).
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
@@ -725,6 +732,11 @@
                END-IF
            END-IF
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM          TO  SKT0810TMP-SRYYM
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -781,11 +793,20 @@
                    MOVE    2     TO    IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  >= 3
-                   MOVE    3     TO    IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
                  ELSE
-                   MOVE    4     TO    IDX1
+      *---(01.00.08) LINE ADD END   ------------------------------------
+                  IF  RECE10-AGE  >= 3
+                       MOVE    3     TO    IDX1
+                  ELSE
+                       MOVE    4     TO    IDX1
+                  END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                END-IF
       *
              ELSE
@@ -799,11 +820,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
-                   IF  RECE10-AGE  <  3
-                     MOVE  9  TO  IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  9     TO  IDX1
                    ELSE
-                     MOVE  8  TO  IDX1
+      *---(01.00.08) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  <  3
+                       MOVE  9  TO  IDX1
+                     ELSE
+                       MOVE  8  TO  IDX1
+                     END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
@@ -1105,8 +1135,19 @@
            ADD     1                     TO  CNT-PAGE
       *
            INITIALIZE                    SKT0810
+      *---(01.00.08) LINE ADD START ------------------------------------
       *    ¿ÇÎÅÇ¯·î
+      *     MOVE    WRK-SRYYMWH           TO  SKT0810-SRYYM
+           IF  SKT0810TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT0810TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
            MOVE    WRK-SRYYMWH           TO  SKT0810-SRYYM
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *    ÀÁµáÇ¯·îÆü
            MOVE    WRK-SEIYMDWH          TO  SKT0810-SEIYMD
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -1215,7 +1256,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT0810.red"        TO  SPRT-PRTID
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE   "SKT0810.red"   TO  SPRT-PRTID
+           IF  ( WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804)
+                MOVE   "SKT0810.red"   TO  SPRT-PRTID
+           ELSE
+                MOVE   "SKT0810o.red"  TO  SPRT-PRTID
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    "¹ñÊÝÀÁµá½ñ£±"  TO  SPRT-TITLE
            MOVE    SKT0810             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1271,6 +1319,13 @@
       *****************************************************************
        321-BODY-HEN-SEC      SECTION.
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+           IF  (WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804)
+                MOVE   5      TO     WRK-SRYFLG
+           ELSE
+                MOVE   3      TO     WRK-SRYFLG
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *    ¸øÈñ¤Î°Ù¤Î£²ËçÌÜ°Ê¾å¤«
            IF  WRK-CNT  =  1
       *    Ï·¿ÍÊÔ½¸½èÍý
@@ -1310,10 +1365,13 @@
       *    ¸øÈñ¤Î°õ»ú
            IF  WRK-CNT  =  1
              PERFORM  VARYING  IDX3  FROM  1  BY  1
+      *---(01.00.08) LINE ADD START ------------------------------------
       *---(01.00.04) LINE ADD START -----------------------------------
       *                UNTIL    IDX3  >     2
-                      UNTIL    IDX3  >     3
+      *                UNTIL    IDX3  >     3
       *---(01.00.04) LINE ADD END   -----------------------------------
+                      UNTIL    IDX3  >     WRK-SRYFLG
+      *---(01.00.08) LINE ADD END   ------------------------------------
                       OR  WRK-CNT    >     20
                       OR  SKT0810TMP-KOHNUM(WRK-CNT) = SPACE
                PERFORM  VARYING  IDX2  FROM  1  BY  1
@@ -1584,7 +1642,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT0820.red"        TO  SPRT-PRTID
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE   "SKT0820.red"   TO  SPRT-PRTID
+           IF  ( WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804)
+                MOVE   "SKT0820.red"   TO  SPRT-PRTID
+           ELSE
+                MOVE   "SKT0820o.red"  TO  SPRT-PRTID
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    "¹ñÊÝÀÁµá½ñ£²"  TO  SPRT-TITLE
            MOVE    SKT0820             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID

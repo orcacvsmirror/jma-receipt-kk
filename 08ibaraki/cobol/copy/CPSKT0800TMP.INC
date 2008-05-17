@@ -20,17 +20,24 @@
       *
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01       Ä¹²°   08/04/26    Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
       ************************************************************
        01  SKT0800TMP-REC.
            03  SKT0800TMP-KEY.
                05  SKT0800TMP-PREFKBN           PIC  X(01).
-           03       SKT0800TMP-SEIKYU-TBL OCCURS 3.
+      *---(01.00.01) LINE ADD START -----------------------------------
+      *     03       SKT0800TMP-SEIKYU-TBL OCCURS 3.
+           03       SKT0800TMP-SEIKYU-TBL OCCURS 4.
+      *---(01.00.01) LINE ADD START -----------------------------------
                  05   SKT0800TMP-NYUGAI-TBL OCCURS 2.
                       07  SKT0800TMP-KENSU      PIC  9(07).
                       07  SKT0800TMP-TENSU      PIC  9(14).
                  05   SKT0800TMP-S-KENSU        PIC  9(07).
                  05   SKT0800TMP-S-KINGK        PIC  9(11).
            03  SKT0800TMP-SYOKBN-TBL OCCURS 2.
-                 05    SKT0800TMP-KOH-TBL OCCURS 3.
+      *---(01.00.01) LINE ADD START -----------------------------------
+      *           05    SKT0800TMP-KOH-TBL OCCURS 3.
+                 05    SKT0800TMP-KOH-TBL OCCURS 5.
+      *---(01.00.01) LINE ADD START -----------------------------------
                       07    SKT0800TMP-KKENSU        PIC  9(07).
                       07    SKT0800TMP-KTENSU        PIC  9(14).

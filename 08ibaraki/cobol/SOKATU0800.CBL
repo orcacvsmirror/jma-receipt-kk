@@ -37,6 +37,7 @@
       *                                   医療機関情報を参照
       *  01.00.06    内田   08/01/23      ２７老人が県内の場合、
       *                                   保険が県外でも県内として扱う
+      *  01.00.07    長屋   08/04/23      帳票様式に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -125,6 +126,9 @@
            03  FLG-PRINT           PIC 9(01).
            03  FLG-KENKBN          PIC 9(01).
            03  FLG-PTKOHINF        PIC 9(01).
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  FLG-KOUKI           PIC 9(01).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -180,6 +184,10 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       ****2006/05/12 @@@@ END
            03  WRK-PATH              PIC X(50).
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  WRK-PATH2               PIC X(50).
+           03  WRK-HKNNUM              PIC X(03).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -207,6 +215,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -478,11 +491,17 @@
       *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
                    MOVE    "key37"     TO  WRK-PATH
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   MOVE    "key65"                  TO  WRK-PATH2
+      *---(01.00.07) LINE ADD END   ------------------------------------
                WHEN    "1"
       *---(01.00.05) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
                    MOVE    "key38"     TO  WRK-PATH
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   MOVE    "key66"                  TO  WRK-PATH2
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-EVALUATE
       ****2006/05/12 @@@@ END
       *  
@@ -505,6 +524,21 @@
       *
            PERFORM  2001-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
+      *---(01.00.07) LINE ADD START ------------------------------------
+           PERFORM  900-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE     1       TO        FLG-KOUKI
+           MOVE    "039"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "040"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    公費請求テーブルは参照しない
       *---(01.00.03) LINE ADD START -----------------------------------
@@ -619,7 +653,14 @@
       *    処理済
                PERFORM 230-UPD-FILE-HENSYU-SEC
       *
-               PERFORM 900-SEIKYU-READ-SEC
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         PERFORM 900-SEIKYU-READ-SEC
+               IF  FLG-KOUKI  =  ZERO
+                  PERFORM   900-SEIKYU-READ-SEC
+               ELSE
+                  PERFORM   950-SEIKYU-READ-SEC
+               END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
            ELSE
       *    未処理
                MOVE    SPACE               TO  WRK-RECEERR
@@ -657,7 +698,15 @@
              IF    RECE10-HKNNUM  =  "060"
                MOVE  1        TO     IDX1
              ELSE
-               MOVE  2        TO     IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         MOVE  2        TO     IDX1
+               IF    RECE10-HKNNUM  = "039"
+                               OR   "040"
+                  MOVE   4    TO   IDX1
+               ELSE
+                  MOVE  2     TO     IDX1
+               END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
              END-IF
            END-IF
       *
@@ -721,31 +770,64 @@
                     RECE10-KOHNUM(IDX3) =  SPACE
       *    全国共通／地方公費判定
              IF    RECE10-KOHNUM(IDX3)(1:1)  =  "0"
-      ****2006/05/23 @@@@ START
-      *    件数加算
-      *           ADD       1     TO    SKT0800TMP-KKENSU(3)
-      *
-      *    点数
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *****2006/05/23 @@@@ START
+      **    件数加算
+      **           ADD       1     TO    SKT0800TMP-KKENSU(3)
+      **
+      **    点数
+      **           ADD       RECE10-TOTALTEN(IDX3 + 1)
+      **                       TO    SKT0800TMP-KTENSU(1 3)
+      **    件数加算
+      **           ADD       1     TO    SKT0800TMP-KKENSU(1 3)
+      **    点数
       *           ADD       RECE10-TOTALTEN(IDX3 + 1)
       *                       TO    SKT0800TMP-KTENSU(1 3)
+      ****2006/05/23 @@@@ END
+      *---(01.00.07) LINE ADD END   ------------------------------------
+               IF    RECE10-HKNNUM  = "039"
+                               OR   "040"
+      *    件数加算
+                 ADD       1     TO    SKT0800TMP-KKENSU(1 5)
+      *    点数
+                 ADD       RECE10-TOTALTEN(IDX3 + 1)
+                             TO    SKT0800TMP-KTENSU(1 5)
+               ELSE
       *    件数加算
                  ADD       1     TO    SKT0800TMP-KKENSU(1 3)
       *    点数
                  ADD       RECE10-TOTALTEN(IDX3 + 1)
                              TO    SKT0800TMP-KTENSU(1 3)
-      ****2006/05/23 @@@@ END
+               END-IF
       *    地方公費の集計
       *---(01.00.03) LINE ADD START -----------------------------------
              ELSE
-               IF  RECE10-KOHNUM (IDX3)  =  "181" OR "182" OR "183"
+              IF  RECE10-KOHNUM (IDX3)  =  "181" OR "182" OR "183"
                                 OR "185" OR "187" OR "188" OR "189"
                                 OR "143" OR "145" OR "146"
+      *---(01.00.07) LINE ADD START ------------------------------------
+      **    件数加算
+      *             ADD       1     TO    SKT0800TMP-KKENSU(1 2)
+      **    点数
+      *             ADD       RECE10-TOTALTEN(IDX3 + 1)
+      *                             TO    SKT0800TMP-KTENSU(1 2)
+      *         END-IF
+               IF    RECE10-HKNNUM  = "039"
+                               OR   "040"
+      *    件数加算
+                   ADD       1     TO    SKT0800TMP-KKENSU(1 4)
+      *    点数
+                   ADD       RECE10-TOTALTEN(IDX3 + 1)
+                                   TO    SKT0800TMP-KTENSU(1 4)
+               ELSE
       *    件数加算
                    ADD       1     TO    SKT0800TMP-KKENSU(1 2)
       *    点数
                    ADD       RECE10-TOTALTEN(IDX3 + 1)
                                    TO    SKT0800TMP-KTENSU(1 2)
                END-IF
+      *---(01.00.07) LINE ADD START -----------------------------------
+              END-IF
       *---(01.00.03) LINE ADD END   -----------------------------------
              END-IF
            END-PERFORM
@@ -783,7 +865,16 @@
                  IF    RECE02-HKNNUM  =  "060" OR "067"
                    MOVE    2                     TO  IDX4
                  ELSE
-                   MOVE    1                     TO  IDX4
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   IF    RECE10-HKNNUM  = "039"
+                                   OR   "040"
+                          MOVE  4   TO   IDX4
+                   ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                          MOVE    1            TO  IDX4
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  END-IF
       *    キー設定
                  INITIALIZE    SKT0800TMP-REC
@@ -888,8 +979,12 @@
        320-BODY-HEN-SEC      SECTION.
       *
       *    保険データ設定
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     3
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     3
+                    UNTIL    IDX1  >     4
+      *---(01.00.07) LINE ADD END   ------------------------------------
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
       *
@@ -912,8 +1007,12 @@
            END-PERFORM
       *
       *    公費データ設定
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     PERFORM  VARYING  IDX3  FROM  1  BY  1
+      *              UNTIL    IDX3  >     3
            PERFORM  VARYING  IDX3  FROM  1  BY  1
-                    UNTIL    IDX3  >     3
+                    UNTIL    IDX3  >     5
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****2006/05/23 @@@@ START
       *    件数
       *       MOVE      SKT0800TMP-KKENSU(IDX3)      TO   WRK-Z7
@@ -1201,6 +1300,115 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    請求管理読込（後期高齢）
+      *****************************************************************
+       950-SEIKYU-SELECT-SEC             SECTION.
+      *
+      *    請求管理ＤＢ検索
+           INITIALIZE         RECE10-REC.
+           MOVE   SPA-HOSPNUM             TO  RECE10-HOSPNUM
+           MOVE   LNK-PRTKANRI-SRYYM      TO  RECE10-SKYYM
+           MOVE   WRK-CONS-SRYYM-200804   TO  RECE10-SRYYM
+           MOVE   999999                  TO  RECE10-XXSRYYM
+           MOVE   WRK-HKNNUM              TO  RECE10-HKNNUM-S
+                                              RECE10-HKNNUM
+      *
+           IF    WRK-HKNJANUM  NOT = ZERO
+               MOVE    WRK-HKNJANUM  TO  RECE10-XXSTHKNJANUM
+                                              RECE10-XXEDHKNJANUM
+           ELSE
+               MOVE    SPACE              TO  RECE10-XXSTHKNJANUM
+               MOVE    "99999999"         TO  RECE10-XXEDHKNJANUM
+           END-IF
+      *
+           MOVE    RECE10-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 950-SEIKYU-READ-SEC
+           ELSE
+               MOVE    1                   TO  FLG-END
+               DISPLAY "SELECT ERR"
+           END-IF
+           .
+      *
+       950-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求マスター読込（後期高齢）
+      *****************************************************************
+       950-SEIKYU-READ-SEC           SECTION.
+      *
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    WRK-PATH2           TO  MCP-PATHNAME
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO            TO  FLG-END
+               MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *        テスト患者のときは読み飛ばす
+               MOVE    SPACE               TO  PTINF-REC
+               INITIALIZE                      PTINF-REC
+               MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
+               MOVE    RECE10-PTID         TO  PTINF-PTID
+               MOVE    PTINF-REC           TO  MCPDATA-REC
+               PERFORM 800-PTINF-READ-SEC
+               IF      FLG-PTINF           =   ZERO
+               AND     PTINF-TSTPTNUMKBN   =   "1"
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF   
+      *         
+               ADD     1                   TO  CNT-RECE10   
+           ELSE
+               MOVE    1               TO  FLG-END
+           END-IF
+           .
+      *
+       950-SEIKYU-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    請求管理クローズ
+      *****************************************************************
+       900-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *****************************************************************
+      *    請求管理クローズ
+      *****************************************************************
+       950-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH2            TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
