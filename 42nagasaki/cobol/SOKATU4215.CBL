@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/01  原爆の値が二倍になるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -658,26 +659,37 @@
            END-EVALUATE
       *
       *    原爆(公費エリアと記載外エリア両方チェック)
-           IF  RECE10-KOHNUM(1) = "019" OR
-               RECE10-KOHNUM(2) = "019" OR
-               RECE10-KOHNUM(3) = "019" OR
-               RECE10-KOHNUM(4) = "019" OR
-               RECE10-ETC-KOHNUM(1) = "019" OR
-               RECE10-ETC-KOHNUM(2) = "019" OR
-               RECE10-ETC-KOHNUM(3) = "019" OR
-               RECE10-ETC-KOHNUM(4) = "019"
-                   MOVE    3                   TO  IDX1
-           END-IF
-      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  4
+             IF  RECE10-KOHNUM(IDXX)      =  "019"
+                 MOVE      3                   TO  IDX1
+                 PERFORM 20013-GENBK-SYUKEI-SEC
+             END-IF
+             IF  RECE10-ETC-KOHNUM(IDXX)  =  "019"
+                 MOVE      3                   TO  IDX1
+                 PERFORM 20013-GENBK2-SYUKEI-SEC
+             END-IF
       *    被爆
-           IF  RECE10-KOHNUM(1) = "186" OR
-               RECE10-KOHNUM(2) = "186" OR
-               RECE10-KOHNUM(3) = "186" OR
-               RECE10-KOHNUM(4) = "186"
-                   MOVE    4                   TO  IDX1
-           END-IF
+             IF  RECE10-KOHNUM(IDXX)      =  "186"
+                 MOVE      4                   TO  IDX1
+                 PERFORM 20013-GENBK-SYUKEI-SEC
+             END-IF
+           END-PERFORM
+                 
       *
-           PERFORM 20011-HKN-SYUKEI-SEC
+      *=== 原爆二重カウント修正 by Yoshikawa(2008/05/01) start
+           IF      RECE10-KOHNUM (1)   =  "019" OR "186" OR
+                   RECE10-KOHNUM (2)   =  "019" OR "186" OR
+                   RECE10-KOHNUM (3)   =  "019" OR "186" OR
+                   RECE10-KOHNUM (4)   =  "019" OR "186"
+               CONTINUE
+           ELSE
+      *=== 原爆二重カウント修正 by Yoshikawa(2008/05/01) end
+             PERFORM 20011-HKN-SYUKEI-SEC
+      *=== 原爆二重カウント修正 by Yoshikawa(2008/05/01) start
+           END-IF
+      *=== 原爆二重カウント修正 by Yoshikawa(2008/05/01) end
+      *
       *    公費負担分
            IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
                    RECE10-KOHNUM (2)   NOT =   SPACE  OR
@@ -688,7 +700,7 @@
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
-               PERFORM 20013-UPD-FILE-HENSYU-SEC
+               PERFORM 20014-UPD-FILE-HENSYU-SEC
       *
                MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
                MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
@@ -1038,9 +1050,73 @@
            EXIT.
       *
       *****************************************************************
+      *    原爆集計処理
+      *****************************************************************
+       20013-GENBK-SYUKEI-SEC        SECTION.
+      *
+      *    公費再掲欄：療養の給付：件数
+           ADD  1                    TO  SUM-KENSU(IDX1 IDX3)
+      *    公費再掲欄：療養の給付：日数
+           ADD  RECE10-JNISSU(IDXX + 1)   TO  SUM-NISSU(IDX1 IDX3)
+      *    公費再掲欄：療養の給付：点数
+           ADD  RECE10-TOTALTEN(IDXX + 1) TO  SUM-TENSU(IDX1 IDX3)
+      *    公費再掲欄：療養の給付：一部負担金
+           ADD  RECE10-FTNMONEY(IDXX + 1) TO  SUM-ITBFTN(IDX1 IDX3)
+      *
+           IF      IDX3              =   1 
+             IF    RECE10-SHOKUJINISSU(IDXX + 1)   >   ZERO
+      *    公費再掲欄：食事療養：件数
+               ADD     1                     TO SUM-S-KENSU(IDX1)
+             END-IF
+      *    公費再掲欄：食事療養：日数
+             ADD RECE10-SHOKUJINISSU(IDXX + 1)   TO SUM-S-NISSU(IDX1)
+      *    公費再掲欄：食事療養：金額
+             ADD RECE10-SHOKUJIRYOYOHI(IDXX + 1) TO SUM-S-KINGK(IDX1)
+      *    公費再掲欄：食事療養：標準負担額
+             ADD RECE10-SHOKUJIFTN(IDXX + 1)     TO SUM-S-FTNGK(IDX1)
+           END-IF    
+      *
+           MOVE    1               TO  FLG-UPD 
+           .
+       20013-GENBK-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    原爆集計処理（記載外エリアから取得）
+      *****************************************************************
+       20013-GENBK2-SYUKEI-SEC        SECTION.
+      *
+      *    公費再掲欄：療養の給付：件数
+           ADD  1                    TO  SUM-KENSU(IDX1 IDX3)
+      *    公費再掲欄：療養の給付：日数
+           ADD  RECE10-ETC-JNISSU(IDXX)   TO  SUM-NISSU(IDX1 IDX3)
+      *    公費再掲欄：療養の給付：点数
+           ADD  RECE10-ETC-TOTALTEN(IDXX) TO  SUM-TENSU(IDX1 IDX3)
+      *    公費再掲欄：療養の給付：一部負担金
+           ADD  RECE10-ETC-FTNMONEY(IDXX) TO  SUM-ITBFTN(IDX1 IDX3)
+      *
+           IF      IDX3              =   1 
+             IF    RECE10-ETC-SHOKUJINISSU(IDXX)   >   ZERO
+      *    公費再掲欄：食事療養：件数
+               ADD     1                     TO SUM-S-KENSU(IDX1)
+             END-IF
+      *    公費再掲欄：食事療養：日数
+             ADD RECE10-ETC-SHOKUJINISSU(IDXX)   TO SUM-S-NISSU(IDX1)
+      *    公費再掲欄：食事療養：金額
+             ADD RECE10-ETC-SHOKUJIRYOYOHI(IDXX) TO SUM-S-KINGK(IDX1)
+      *    公費再掲欄：食事療養：標準負担額
+             ADD RECE10-ETC-SHOKUJIFTN(IDXX)     TO SUM-S-FTNGK(IDX1)
+           END-IF    
+      *
+           MOVE    1               TO  FLG-UPD 
+           .
+       20013-GENBK2-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
       *    請求ＤＢ更新用ファイル出力処理
       *****************************************************************
-       20013-UPD-FILE-HENSYU-SEC         SECTION.
+       20014-UPD-FILE-HENSYU-SEC         SECTION.
       *
            MOVE    RECE10-REC          TO  RECE10X-REC
            INITIALIZE                      RECE10X-UPHKNJANUM
@@ -1065,7 +1141,7 @@
            END-IF 
            ADD     1                   TO  CNT-UPDFILE
            .
-       20013-UPD-FILE-HENSYU-EXT.
+       20014-UPD-FILE-HENSYU-EXT.
            EXIT.
       *
       *****************************************************************
