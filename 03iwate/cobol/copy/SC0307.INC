@@ -20,7 +20,7 @@
             03  SC07-HOSPCDN    PIC X(20).
             03  SC07-HKNKBN     PIC X(02)   OCCURS  4 TIMES.
             03  SC07-HEIYOKBN   PIC X(02)   OCCURS  2 TIMES.
-            03  SC07-HONKZKKBN  PIC X(02)   OCCURS  2 TIMES.
+            03  SC07-HONKZKKBN  PIC X(02)   OCCURS  5 TIMES.
             03  SC07-FTNJANUM   PIC X(16)   OCCURS  3 TIMES.
             03  SC07-JKYSNUM    PIC X(14)   OCCURS  3 TIMES.
             03  SC07-HKNJANUM   PIC X(16).

@@ -35,6 +35,7 @@
       *                                   °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *                                   Ä¹´ü¾å°Ì¡Ê974¡Ë¤ÏÄ¹´ü¤ÈÆ±ÍÍ¤Î
       *                                   ½èÍý¤ò¤¹¤ë
+      *  01.00.03     ÆâÅÄ    2008/05/16  £´·î²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -348,6 +349,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È¡¡ÎÎ°è
       *****************************************************************
@@ -875,6 +881,11 @@
                PERFORM 200122-ETC-KOH-HEN-SEC
            END-IF
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    ¥Õ¥é¥°¡ÊÌ¤½¢³Ø»ù¡¢ÆÃÎãÁ¼ÃÖ¡Ë
+           MOVE    RECE02-FLG (1)     TO  MF101-FLG (1)
+           MOVE    RECE02-FLG (2)     TO  MF101-FLG (2)
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    ÊÝ¸±¼ÔÈÖ¹æ¥Á¥§¥Ã¥¯½èÍý
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -1114,6 +1125,9 @@
       *
       *    ÊÝ¸±¶èÊ¬
            IF      MF101-RJNHKNNUM     NOT =   SPACE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           OR      MF101-HKNNUM  =  "039"  OR  "040"
+      *---(01.00.03) LINE ADD END   ------------------------------------
                MOVE    "¡û"                TO  SC07-HKNKBN(3)
            ELSE
                IF      MF101-HKNNUM        =   "067"
@@ -1134,8 +1148,18 @@
            EVALUATE   MF101-RECESYUBETU(4:1)
                WHEN "1"
                    MOVE    "¡û"            TO  SC07-HONKZKKBN(1)
-               WHEN "5"
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         WHEN "5"
+      *             MOVE    "¡û"            TO  SC07-HONKZKKBN(2)
+               WHEN "3"
                    MOVE    "¡û"            TO  SC07-HONKZKKBN(2)
+               WHEN "5"
+                   MOVE    "¡û"            TO  SC07-HONKZKKBN(3)
+               WHEN "7"
+                   MOVE    "¡û"            TO  SC07-HONKZKKBN(4)
+               WHEN "9"
+                   MOVE    "¡û"            TO  SC07-HONKZKKBN(5)
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-EVALUATE
       *
       *    Ï·¿Í»ÔÄ®Â¼ÈÖ¹æ
@@ -1179,7 +1203,13 @@
            MOVE    SYS-1001-KAISETUNAME    TO  SC07-KAISETU
       *
       *    µëÉÕ³ä¹ç
-           EVALUATE  MF101-KYURATE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           IF   MF101-SRYYM   >=  WRK-CONS-SRYYM-200804
+           AND  MF101-FLG (2)  =  1
+               MOVE    "¡û"                TO  SC07-KYURATE(3)
+           ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
+             EVALUATE  MF101-KYURATE
                WHEN 10
                    MOVE    "¡û"            TO  SC07-KYURATE(2)
                WHEN 20
@@ -1188,7 +1218,10 @@
                    MOVE    "¡û"            TO  SC07-KYURATE(4)
                WHEN OTHER
                    MOVE    "¡û"            TO  SC07-KYURATE(1)
-           END-EVALUATE
+             END-EVALUATE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    ´µ¼Ô»áÌ¾
            MOVE    MF101-KANANAME          TO  SC07-KANANAME
@@ -1396,6 +1429,9 @@
       *
       *    ÊÝ¸±¶èÊ¬
            IF      MF101-RJNHKNNUM     NOT =   SPACE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           OR      MF101-HKNNUM  =  "039"  OR  "040"
+      *---(01.00.03) LINE ADD END   ------------------------------------
                MOVE    "¡û"                TO  SC08-HKNKBN(3)
            ELSE
                IF      MF101-HKNNUM        =   "067"
@@ -1416,8 +1452,18 @@
            EVALUATE   MF101-RECESYUBETU(4:1)
                WHEN "2"
                    MOVE    "¡û"            TO  SC08-HONKZKKBN(1)
-               WHEN "6"
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         WHEN "6"
+      *             MOVE    "¡û"            TO  SC08-HONKZKKBN(2)
+               WHEN "4"
                    MOVE    "¡û"            TO  SC08-HONKZKKBN(2)
+               WHEN "6"
+                   MOVE    "¡û"            TO  SC08-HONKZKKBN(3)
+               WHEN "8"
+                   MOVE    "¡û"            TO  SC08-HONKZKKBN(4)
+               WHEN "0"
+                   MOVE    "¡û"            TO  SC08-HONKZKKBN(5)
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-EVALUATE
       *
       *    Ï·¿Í»ÔÄ®Â¼ÈÖ¹æ
@@ -1461,7 +1507,13 @@
            MOVE    SYS-1001-KAISETUNAME    TO  SC08-KAISETU
       *
       *    µëÉÕ³ä¹ç
-           EVALUATE  MF101-KYURATE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           IF   MF101-SRYYM   >=  WRK-CONS-SRYYM-200804
+           AND  MF101-FLG (2)  =  1
+               MOVE    "¡û"                TO  SC08-KYURATE(3)
+           ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
+             EVALUATE  MF101-KYURATE
                WHEN 10
                    MOVE    "¡û"            TO  SC08-KYURATE(2)
                WHEN 20
@@ -1470,7 +1522,10 @@
                    MOVE    "¡û"            TO  SC08-KYURATE(4)
                WHEN OTHER
                    MOVE    "¡û"            TO  SC08-KYURATE(1)
-           END-EVALUATE
+             END-EVALUATE
+      *---(01.00.03) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    ´µ¼Ô»áÌ¾
            MOVE    MF101-KANANAME          TO  SC08-KANANAME
