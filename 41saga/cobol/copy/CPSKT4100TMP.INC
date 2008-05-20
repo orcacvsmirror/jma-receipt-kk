@@ -25,7 +25,8 @@
            03  SKT4100TMP-KEY.
                05  SKT4100TMP-SRYYM                 PIC  X(06).
                05  SKT4100TMP-SYUTURYOKU            PIC  9(01).
-               05  SKT4100TMP-HKNJANUM              PIC  X(06).
+               05  SKT4100TMP-HKNJANUM              PIC  X(08).
+               05  SKT4100TMP-HKNJANAME             PIC  X(08).
                05  SKT4100TMP-ZAITAKU               PIC  X(01).
                05  SKT4100TMP-KYURATE               PIC  9(02).
            03  SKT4100TMP-HKN-TBL   OCCURS  3.
