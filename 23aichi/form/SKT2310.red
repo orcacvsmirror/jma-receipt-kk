@@ -5802,10 +5802,10 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#198;&#253;
+            <string>#&#187;&#210;
 &#190;&#227;
 &#202;&#236;
-&#189;&#253;#</string>
+&#192;&#186;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7617,22 +7617,20 @@
     </object>
     <object type="Standard - Text" version="0" id="O292">
       <attribute name="obj_pos">
-        <point val="0.664664,21.5"/>
+        <point val="0.664664,21.765"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.664664,21.2611;0.967664,23.6611"/>
+        <rectangle val="0.664664,21.5261;0.967664,23.3261"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
             <string>#&#176;&#236;
-
-
-
-
-
-
-&#200;&#204;#</string>
+&#200;&#204;
+&#200;&#239;
+&#202;&#221;
+&#184;&#177;
+&#188;&#212;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7641,7 +7639,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="0.664664,21.5"/>
+            <point val="0.664664,21.765"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8460,21 +8458,19 @@
     </object>
     <object type="Standard - Text" version="0" id="O315">
       <attribute name="obj_pos">
-        <point val="0.664664,26.075"/>
+        <point val="0.664664,26.6934"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.664664,25.8361;0.967664,27.9361"/>
+        <rectangle val="0.664664,26.4545;0.967664,27.9545"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
             <string>#&#194;&#224;
-
-
 &#191;&#166;
-
-
-&#188;&#212;#</string>
+&#188;&#212;
+&#176;&#229;
+&#206;&#197;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8483,7 +8479,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="0.664664,26.075"/>
+            <point val="0.664664,26.6934"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
