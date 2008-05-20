@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/20  原爆件数が印字されない不具合修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -214,12 +215,15 @@
                        09  SUM-KKENSU          PIC  9(06).
                        09  SUM-KNISSU          PIC  9(06).
                        09  SUM-KTENSU          PIC  9(10).
-                       09  SUM-KITBFTN          PIC  9(10).
+                       09  SUM-KITBFTN         PIC  9(10).
                    07  SUM-S-KKENSU            PIC  9(06).
                    07  SUM-S-KNISSU            PIC  9(06).
                    07  SUM-S-KKINGK            PIC  9(10).
                    07  SUM-S-KFTNGK            PIC  9(10).
-                   07  SUM-KOH-MEISYO            PIC  X(44).
+                   07  SUM-KOH-MEISYO          PIC  X(44).
+      *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) start
+               05  SUM-GENBAKU                 PIC  9(07).
+      *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) end
       *
       *    キー領域
        01  KEY-AREA                    VALUE   LOW-VALUE.
@@ -664,6 +668,15 @@
       *
            PERFORM 20011-HKN-SYUKEI-SEC
       *
+      *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) start
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  4
+             IF  RECE10-KOHNUM(IDXX)  =  "019"
+                 ADD    1                      TO  SUM-GENBAKU
+             END-IF
+           END-PERFORM
+      *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) end
+      *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 20013-UPD-FILE-HENSYU-SEC
@@ -1020,6 +1033,10 @@
            MOVE  SUM-S-FTNGK(IDX)        TO  WRK-Z9
            MOVE  WRK-Z9                  TO  SKT2315-S-FTNGK(IDZ)
            END-PERFORM
+      *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) start
+           MOVE  SUM-GENBAKU             TO  WRK-Z9
+           MOVE  WRK-Z9                  TO  SKT2315-GENBAKU
+      *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) end
       *
            .
        20023-BODY-HEN-EXT.
@@ -1056,26 +1073,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID

@@ -61,6 +61,11 @@
         <embed object="string" length="4"/>
       </appinfo>
     </element>
+    <element name="GENBAKU" occurs="1">
+      <appinfo>
+        <embed object="string" length="9"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU-TBL" occurs="2">
       <element name="NYUGAI-TBL" occurs="2">
         <element name="KENSU" occurs="1">
@@ -1914,14 +1919,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O87">
       <attribute name="obj_pos">
-        <point val="20.6471,1.0424"/>
+        <point val="20.5266,0.496454"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="20.5545,0.9674;20.7221,7.72518"/>
+        <rectangle val="20.4516,0.421454;20.6125,29.25"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="20.6471,1.0424"/>
-        <point val="20.6295,7.65018"/>
+        <point val="20.5266,0.496454"/>
+        <point val="20.5375,29.175"/>
       </attribute>
       <attribute name="numcp">
         <int val="0"/>
@@ -6462,6 +6467,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O207">
+      <attribute name="obj_pos">
+        <point val="3.5879,8.83454"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="1.679,8.55584;3.5879,8.90584"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#GENBAKU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="3.5879,8.83454"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
           </attribute>
         </composite>
       </attribute>
