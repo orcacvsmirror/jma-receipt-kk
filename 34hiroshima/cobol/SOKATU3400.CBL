@@ -34,6 +34,7 @@
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
       *  01.00.05    長屋     08/04/25    帳票様式に伴う修正
+      *  01.00.06    内田     08/05/17    印字順序の修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -834,10 +835,13 @@
                    MOVE      3   TO    SKT3400TMP-SYUTURYOKU
                  END-IF
                ELSE
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE        6   TO    SKT3400TMP-SYUTURYOKU
-                 MOVE        7   TO    SKT3400TMP-SYUTURYOKU
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD START ------------------------------------
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE        6   TO    SKT3400TMP-SYUTURYOKU
+      *           MOVE        7   TO    SKT3400TMP-SYUTURYOKU
+      **---(01.00.05) LINE ADD END   ------------------------------------
+                 MOVE        6   TO    SKT3400TMP-SYUTURYOKU
+      *---(01.00.06) LINE ADD END   ------------------------------------
                END-IF
              END-IF
            END-IF
@@ -847,13 +851,22 @@
             ELSE
                   PERFORM   2102-KENGAI-SEC
             END-IF
-      *---(01.00.05) LINE ADD START ------------------------------------
-           IF  WRK-KBN =  1
-                  MOVE  6   TO    SKT3400TMP-SYUTURYOKU
-           ELSE
-                  MOVE  8   TO    SKT3400TMP-SYUTURYOKU
+      *---(01.00.06) LINE ADD START ------------------------------------
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *       IF  WRK-KBN =  1
+      *              MOVE  6   TO    SKT3400TMP-SYUTURYOKU
+      *       ELSE
+      *              MOVE  8   TO    SKT3400TMP-SYUTURYOKU
+      *       END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+           IF  FLG-KOUKI  =  1
+               IF  WRK-KBN =  1
+                    MOVE  7   TO    SKT3400TMP-SYUTURYOKU
+               ELSE
+                    MOVE  8   TO    SKT3400TMP-SYUTURYOKU
+               END-IF
            END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
             PERFORM   900-TMP-READ-SEC
       *---(01.00.05) LINE ADD START ------------------------------------
