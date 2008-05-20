@@ -27,6 +27,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/15  在医総と在総診の印字位置が
+      *                                  逆になっているのを修正
+      *                                  請求冊数カウントミス修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -663,7 +666,9 @@
                                             FLG-UPD
                                             FLG-HKNJACNT
                                             WRK-HKNJANUM
-                                            WRK-HKNJASU-TBL
+      *=== 請求冊数カウントミス修正 by Yoshikawa(2008/05/15) start
+      *                                      WRK-HKNJASU-TBL
+      *=== 請求冊数カウントミス修正 by Yoshikawa(2008/05/15) start
       *    保険者番号
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM(1:6)
@@ -712,11 +717,17 @@
            IF   RECE10-ZAITAKU  =  1
              PERFORM  960-SRYACT-SET-SEC
       *      在総診
-             IF  FLG-ZAIISO   NOT = ZERO
+      *===在医総と在総診が逆 by Yoshikawa(2008/05/15) start
+      *       IF  FLG-ZAIISO   NOT = ZERO
+             IF  FLG-ZAIISO2  NOT = ZERO
+      *===在医総と在総診が逆 by Yoshikawa(2008/05/15) end
                  MOVE      1                   TO  IDX1
              END-IF
       *      在医総
-             IF  FLG-ZAIISO2  NOT = ZERO
+      *===在医総と在総診が逆 by Yoshikawa(2008/05/15) start
+      *       IF  FLG-ZAIISO2  NOT = ZERO
+             IF  FLG-ZAIISO   NOT = ZERO
+      *===在医総と在総診が逆 by Yoshikawa(2008/05/15) end
                  MOVE      2                   TO  IDX1
              END-IF
              PERFORM  20011-ZAI-SYUKEI-SEC
@@ -731,16 +742,11 @@
       *
       *
       *    請求先処理（カウントしてない保険者のみ）
-           DISPLAY "FLG-HKNJACNT=" FLG-HKNJACNT
-           DISPLAY "RECE10-PREFKBN=" RECE10-PREFKBN
            IF  FLG-HKNJACNT        =  ZERO
              IF  RECE10-PREFKBN    =  1
       *        県内処理
                PERFORM  VARYING  IDX4  FROM  1  BY  1
                         UNTIL    HKNJA03-NUM(IDX4) = ZERO
-                 DISPLAY "HKNJA03-NUM=" HKNJA03-NUM(IDX4)
-                 DISPLAY "WRK-HKNJANUM=" WRK-HKNJANUM
-                 DISPLAY "HKNJA03-HKNJANUM=" HKNJA03-HKNJANUM(IDX4)
                  IF  WRK-HKNJANUM  =  HKNJA03-HKNJANUM(IDX4)
                    MOVE  1            TO  SUM-KENNAI-FLG(IDX4)
                    ADD   1            TO  SUM-GOKEIHKNJA(1)
