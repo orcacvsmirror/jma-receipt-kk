@@ -30,6 +30,7 @@
       *  01.00.01    内田    07/08/21    Ver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    安藤    08/04/22    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -214,6 +215,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -664,16 +670,30 @@
       *    一般国保か
              IF  RECE10-HKNNUM  =  "060"
                IF  RECE10-AGE  >= 70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE    1     TO    IDX1
-                 ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE    1     TO    IDX1
+      *           ELSE
+      *             MOVE    2     TO    IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  7
                    MOVE    2     TO    IDX1
-                 END-IF
-               ELSE
-                 IF  RECE10-AGE  >= 3
-                   MOVE    3     TO    IDX1
                  ELSE
-                   MOVE    4     TO    IDX1
+                   MOVE    1     TO    IDX1
+                 END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
+               ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
+                 ELSE
+      *---(01.00.02) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >= 3
+                     MOVE    3     TO    IDX1
+                   ELSE
+                     MOVE    4     TO    IDX1
+                   END-IF
                  END-IF
                END-IF
       *
@@ -688,11 +708,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  1    TO   IDX1
                  ELSE
+      *---(01.00.02) LINE ADD START ------------------------------------
+                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                  AND  (RECE10-FLG (1)   =  1)
+                       MOVE  5     TO  IDX1
+                  ELSE
+      *---(01.00.02) LINE ADD END   ------------------------------------
                    IF  RECE10-AGE  <  3
                      MOVE  5  TO  IDX1
                    ELSE
                      MOVE  4  TO  IDX1
                    END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+                  END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
