@@ -25,7 +25,7 @@ function echomsg() {
 
 # user check
 if [ $usrname != "root" ] ; then
-  echomsg "\nrootユーザで実行してください\n"
+  echomsg "rootユーザで実行してください"
   exit 1
 fi
 
