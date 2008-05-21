@@ -36,6 +36,7 @@
       *                                     処理をする
       *  01.00.04    内田       07/12/05    政令指定都市は市でまとめる
       *  01.00.05    内田       08/01/29    保険者名の印字修正
+      *  01.00.06    内田       08/05/11    ４月改正対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -238,6 +239,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -657,11 +663,26 @@
       *    法定外給付チェック
            IF  SKT4110TMP-HKNJANUM(3:1) = "3"
              IF  RECE10-RJNHKNNUM  =  SPACE
-               IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
-                 IF  RECE10-KYURATE  NOT =  7
-                     MOVE  RECE10-KYURATE TO  SKT4110TMP-KYURATE
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *         IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+      *           IF  RECE10-KYURATE  NOT =  7
+      *               MOVE  RECE10-KYURATE TO  SKT4110TMP-KYURATE
+      *           END-IF
+      *         END-IF
+               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+                 IF  (RECE10-FLG(1) NOT = 1) AND (RECE10-AGE < 70)
+                   IF  RECE10-KYURATE  NOT =  7
+                       MOVE  RECE10-KYURATE TO  SKT4110TMP-KYURATE
+                   END-IF
+                 END-IF
+               ELSE
+                 IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+                   IF  RECE10-KYURATE  NOT =  7
+                       MOVE  RECE10-KYURATE TO  SKT4110TMP-KYURATE
+                   END-IF
                  END-IF
                END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
              END-IF
            END-IF
       *
@@ -814,11 +835,20 @@
                    MOVE    2     TO    IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  >= 3
-                   MOVE    3     TO    IDX1
+      *---(01.00.06) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                    MOVE  4      TO  IDX1
                  ELSE
-                   MOVE    4     TO    IDX1
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >= 3
+                     MOVE    3     TO    IDX1
+                   ELSE
+                     MOVE    4     TO    IDX1
+                   END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                END-IF
       *
              ELSE
@@ -832,11 +862,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
-                   IF  RECE10-AGE  <  3
-                     MOVE  9  TO  IDX1
+      *---(01.00.06) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                      MOVE   9  TO  IDX1
                    ELSE
-                     MOVE  8  TO  IDX1
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  <  3
+                       MOVE  9  TO  IDX1
+                     ELSE
+                       MOVE  8  TO  IDX1
+                     END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
