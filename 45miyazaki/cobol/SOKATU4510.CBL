@@ -34,6 +34,7 @@
       *                                  °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.04    ÆâÅÄ    07/10/23    ÊÝ¸±ÈÖ¹æ190¤Î¸øÈñºÆ·ÇÍó¤Ï
       *                                  °ìÉôÉéÃ´¶â¤ò°õ»ú¤·¤Ê¤¤
+      *  01.00.05    ÆâÅÄ    08/05/03    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -239,6 +240,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
@@ -380,7 +386,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU4510"    TO  JOB-PGID
-           MOVE    "¸©Æâ¡¦¿ÇÎÅÊó½·ÀÁµá½ñ" TO  JOB-SHELLMSG
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE    "¸©Æâ¡¦¿ÇÎÅÊó½·ÀÁµá½ñ" TO  JOB-SHELLMSG
+           MOVE   "¿ÇÎÅÊó½·ÀÁµá½ñ" TO  JOB-SHELLMSG
+      *---(01.00.05) LINE ADD END   ------------------------------------
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA  
                                    JOBKANRI-REC
@@ -617,7 +626,10 @@
       *
            INITIALIZE  SKT4510TMP-REC
       *
+         DISPLAY  "--------------"
+         DISPLAY  "HKNJANUM-S  :  "  RECE10-HKNJANUM-S
            MOVE    RECE10-HKNJANUM-S       TO  SKT4510TMP-HKNJANUM
+         DISPLAY  "HKNJANUM    :  "  SKT4510TMP-HKNJANUM
       *
       *    ºßÁí¿Ç¡¦ºß°åÁí¥Á¥§¥Ã¥¯
            IF      RECE10-ZAITAKU  NOT =   SPACE
@@ -630,15 +642,34 @@
            ELSE
                MOVE    1           TO  SKT4510TMP-SYUTURYOKU
            END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
+           IF  RECE10-PREFKBN  =  2
+               MOVE    2           TO  SKT4510TMP-SYUTURYOKU
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ¹ñÊÝÁÈ¹ç¤ÎË¡Äê³°µëÉÕÈ½Äê
-           IF      SKT4510TMP-HKNJANUM(3:1)    =   "3"
-           AND     RECE10-RJNHKNNUM            =   SPACE
-           AND     RECE10-AGE                  <   70
-           AND     RECE10-AGE                  >   2
-           AND     RECE10-KYURATE          NOT =   7
-               MOVE    RECE10-KYURATE      TO  SKT4510TMP-KYURATE
+      *---(01.00.05) LINE ADD START ------------------------------------
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF      SKT4510TMP-HKNJANUM(3:1)    =   "3"
+             AND     RECE10-RJNHKNNUM            =   SPACE
+             AND     RECE10-AGE                  <   70
+             AND     RECE10-FLG (1)          NOT =   1
+             AND     RECE10-KYURATE          NOT =   7
+                 MOVE    RECE10-KYURATE      TO  SKT4510TMP-KYURATE
+             END-IF
+           ELSE
+      *---(01.00.05) LINE ADD END   ------------------------------------
+             IF      SKT4510TMP-HKNJANUM(3:1)    =   "3"
+             AND     RECE10-RJNHKNNUM            =   SPACE
+             AND     RECE10-AGE                  <   70
+             AND     RECE10-AGE                  >   2
+             AND     RECE10-KYURATE          NOT =   7
+                 MOVE    RECE10-KYURATE      TO  SKT4510TMP-KYURATE
+             END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
            END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    TMP¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
            PERFORM  800-SKTTMP-READ-SEC
@@ -679,56 +710,90 @@
                MOVE    2       TO   IDX2
            END-IF
       *
-      *    Ï·¿Í¤«¤É¤¦¤«
-           IF      RECE10-RJNHKNNUM    NOT =   SPACE
-               IF      RECE10-KYURATE  =   9
-                   MOVE    10      TO  IDX1
-               ELSE
-                   MOVE    11      TO  IDX1
-               END-IF
-               MOVE    1   TO  SKT4510TMP-PAGE-FLG2
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    Ê¿À®£²£°Ç¯£³·î°ÊÁ°¤ÎÏ·¿Í¡¦°ìÉôÁ°´ü¹âÎð¼Ô¤Ï¸øÈñºÆ·ÇÍó¤Ø
+           IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+           AND ((RECE10-AGE  >=  70  AND  RECE10-KYURATE  =  9)
+           OR  (RECE10-HKNNUM  =  "067"  AND  RECE10-AGE  >=  70)
+           OR  (RECE10-RJNHKNNUM  NOT =  SPACE))
+               PERFORM 2203-IZEN-SYUKEI-SEC
            ELSE
-               MOVE    1   TO  SKT4510TMP-PAGE-FLG1
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *    Ï·¿Í¤«¤É¤¦¤«
+             IF      RECE10-RJNHKNNUM    NOT =   SPACE
+                 IF      RECE10-KYURATE  =   9
+                     MOVE    10      TO  IDX1
+                 ELSE
+                     MOVE    11      TO  IDX1
+                 END-IF
+                 MOVE    1   TO  SKT4510TMP-PAGE-FLG2
+             ELSE
+                 MOVE    1   TO  SKT4510TMP-PAGE-FLG1
       *        °ìÈÌ¹ñÊÝ
-               IF      RECE10-HKNNUM   =   "060"
-                   IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    1       TO  IDX1
+                 IF      RECE10-HKNNUM   =   "060"
+                     IF      RECE10-AGE  >=  70
+                         IF      RECE10-KYURATE  =   9
+                             MOVE    1       TO  IDX1
+                         ELSE
+                             MOVE    2       TO  IDX1
+                         END-IF
+                     ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+                       IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                       AND  (RECE10-FLG (1)   =  1)
+                         MOVE        4       TO  IDX1
                        ELSE
-                           MOVE    2       TO  IDX1
+      *---(01.00.05) LINE ADD END   ------------------------------------
+                         IF      RECE10-AGE  >=  3
+                             MOVE    3       TO  IDX1
+                         ELSE
+                             MOVE    4       TO  IDX1
+                         END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
                        END-IF
-                   ELSE
-                       IF      RECE10-AGE  >=  3
-                           MOVE    3       TO  IDX1
-                       ELSE
-                           MOVE    4       TO  IDX1
-                       END-IF
-                   END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
+                     END-IF
       *        Âà¿¦¹ñÊÝ
-               ELSE
-                   IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    6       TO  IDX1
-                       ELSE
-                           MOVE    7       TO  IDX1
-                       END-IF
-                   ELSE
-                       IF      RECE10-HONKZKKBN    =   "1"
-                           MOVE    5       TO  IDX1
-                       ELSE
-                           IF      RECE10-AGE  <   3
-                               MOVE    9       TO  IDX1
+                 ELSE
+                     IF      RECE10-AGE  >=  70
+                         IF      RECE10-KYURATE  =   9
+                             MOVE    6       TO  IDX1
+                         ELSE
+                             MOVE    7       TO  IDX1
+                         END-IF
+                     ELSE
+                         IF      RECE10-HONKZKKBN    =   "1"
+                            MOVE    5       TO  IDX1
+                         ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *                     IF      RECE10-AGE  <   3
+      *                         MOVE    9       TO  IDX1
+      *                     ELSE
+      *                         MOVE    8       TO  IDX1
+      *                     END-IF
+                           IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                           AND  (RECE10-FLG (1)   =  1)
+                             MOVE        7       TO  IDX1
                            ELSE
-                               MOVE    8       TO  IDX1
+                             IF      RECE10-AGE  <   3
+                                 MOVE    7       TO  IDX1
+                             ELSE
+                                 MOVE    6       TO  IDX1
+                             END-IF
                            END-IF
-                       END-IF
-                   END-IF
-               END-IF
-           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
+                         END-IF
+                     END-IF
+                 END-IF
+             END-IF
       *
       *    ½¸·×
-           PERFORM 2101-SYUKEI-SEC
+             PERFORM 2101-SYUKEI-SEC
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    ¸øÈñÊ»ÍÑ
            IF      RECE10-KOHNUM (1)   NOT =   SPACE
                MOVE    1       TO  SKT4510TMP-PAGE-FLG2
@@ -743,6 +808,7 @@
                PERFORM 22021-GENBK-KOH-SEC
            END-IF
       *
+         DISPLAY  "@@@@@HKNJANUM    :  "  SKT4510TMP-HKNJANUM
            IF      FLG-SKT4510TMP  =  1
                WRITE   SKT4510TMP-REC
            ELSE
@@ -974,6 +1040,90 @@
            .
        22021-GENBK-KOH-EXT.
            EXIT.
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    Ê¿À®£²£°Ç¯£³·î°ÊÁ°ÊÔ½¸½èÍý
+      *****************************************************************
+       2203-IZEN-SYUKEI-SEC              SECTION.
+      *
+      *    ÉéÃ´³ä¹çÀßÄê
+           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+               IF  RECE10-KYURATE  =  7
+                   MOVE  7         TO  WRK-FTNRATE
+               ELSE
+                   MOVE  9         TO  WRK-FTNRATE
+               END-IF
+               MOVE  "027"         TO  WRK-KOHNUM
+           ELSE
+               IF  RECE10-HKNNUM  =  "060"
+                   MOVE  9         TO  WRK-FTNRATE
+                   MOVE  "025"     TO  WRK-KOHNUM
+               ELSE
+                   IF  RECE10-KYURATE  =  7
+                       MOVE  7     TO  WRK-FTNRATE
+                   ELSE
+                       MOVE  9     TO  WRK-FTNRATE
+                   END-IF
+                   MOVE  "067"     TO  WRK-KOHNUM
+               END-IF
+           END-IF
+      *
+      *    ¼ïÊÌ¡¦ÉéÃ´³ä¹çÈ½ÊÌ
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >     20
+                    OR       SKT4510TMP-KOHNUM (IDX4) = SPACE
+               IF  SKT4510TMP-KOHNUM(IDX4)       =  WRK-KOHNUM
+               AND SKT4510TMP-KOH-FTNRATE(IDX4)  =  WRK-FTNRATE
+                   MOVE    IDX4    TO  CNT-KOH
+                   MOVE    20      TO  IDX4
+               END-IF
+           END-PERFORM
+      *
+      *
+      *    ³ºÅö¤¬¤Ê¤«¤Ã¤¿¾ì¹ç
+           IF      IDX4    <   20
+               MOVE    IDX4    TO  CNT-KOH
+           END-IF
+      *
+      *    ÉéÃ´³ä¹ç
+           MOVE    WRK-FTNRATE  TO  SKT4510TMP-KOH-FTNRATE(CNT-KOH)
+      *
+      *    ¸øÈñÈÖ¹æ
+           MOVE    WRK-KOHNUM   TO  SKT4510TMP-KOHNUM(CNT-KOH)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+           ADD     1       TO  SKT4510TMP-K-KENSU(CNT-KOH IDX2)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ:¿ÇÎÅ¼ÂÆü¿ô
+           ADD     RECE10-JNISSU(1) 
+                               TO  SKT4510TMP-K-NISSU(CNT-KOH IDX2)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+           ADD     RECE10-TOTALTEN(1)
+                               TO  SKT4510TMP-K-TENSU(CNT-KOH IDX2)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
+           ADD     RECE10-FTNMONEY (1)
+                               TO  SKT4510TMP-K-ITBFTN(CNT-KOH IDX2)
+      *
+      *    ¿©»öÎÅÍÜ¡§·ï¿ô
+           IF      RECE10-SHOKUJINISSU (1)  >   ZERO
+               ADD     1       TO  SKT4510TMP-K-SKENSU(CNT-KOH)
+           END-IF
+      *    ¿©»öÎÅÍÜ¡§Æü¿ô
+           ADD     RECE10-SHOKUJINISSU(1)
+                               TO  SKT4510TMP-K-SNISSU(CNT-KOH)
+      *    ¿©»öÎÅÍÜ¡§¶â³Û
+           ADD     RECE10-SHOKUJIRYOYOHI (1)
+                               TO  SKT4510TMP-K-SKINGK(CNT-KOH)
+      *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+           ADD     RECE10-SHOKUJIFTN (1)
+                               TO  SKT4510TMP-K-SFTNGK(CNT-KOH)
+      *
+           .
+       2203-IZEN-SYUKEI-EXT.
+           EXIT.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *****************************************************************
 006900*    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
@@ -1003,37 +1153,63 @@
                MOVE  ZERO  TO  FLG-PASS
                MOVE  1     TO  WRK-CNT
       *
-               IF     SKT4510TMP-PAGE-FLG1  =  1
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *         IF     SKT4510TMP-PAGE-FLG1  =  1
       *
       *            Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
-                   PERFORM  310-HEAD-HEN-SEC
+      *             PERFORM  310-HEAD-HEN-SEC
       *
       *            Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
-                   PERFORM  320-BODY-HEN-SEC
+      *             PERFORM  320-BODY-HEN-SEC
       *
       *            Ä¢É¼°õºþ½èÍý
-                   PERFORM  330-PRINT-OUT-SEC
-               END-IF
+      *             PERFORM  330-PRINT-OUT-SEC
+      *         END-IF
       *
       *        ¸øÈñ¤Ï»Ä¤Ã¤Æ¤¤¤ë¤«
-               IF     SKT4510TMP-PAGE-FLG2  =  1
+      *         IF     SKT4510TMP-PAGE-FLG2  =  1
       *            ¸øÈñ¥½¡¼¥È½èÍý
-                   PERFORM KOH-SORT-SEC
-                   PERFORM UNTIL   ((SKT4510TMP-KOHNUM(WRK-CNT) = SPACE)
-                           AND      (FLG-PASS  =  1))
-                           OR      (WRK-CNT     >   20)
+      *             PERFORM KOH-SORT-SEC
+      *             PERFORM UNTIL   ((SKT4510TMP-KOHNUM(WRK-CNT) = SPACE)
+      *                     AND      (FLG-PASS  =  1))
+      *                     OR      (WRK-CNT     >   20)
       * 
       *                Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
-                       PERFORM  311-HEAD-HEN-SEC
+      *                 PERFORM  311-HEAD-HEN-SEC
       *
       *                Ä¢É¼ÊÔ½¸<¸øÈñ>½èÍý
-                       PERFORM  321-BODY-HEN-SEC
+      *                 PERFORM  321-BODY-HEN-SEC
       *
       *                Ä¢É¼°õºþ½èÍý
-                       PERFORM  331-PRINT-OUT-SEC
-                       MOVE  1   TO  FLG-PASS
-                   END-PERFORM
-               END-IF
+      *                 PERFORM  331-PRINT-OUT-SEC
+      *                 MOVE  1   TO  FLG-PASS
+      *             END-PERFORM
+      *         END-IF
+      *
+      *        Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+               PERFORM  310-HEAD-HEN-SEC
+      *
+      *        ¸øÈñ¥½¡¼¥È½èÍý
+               PERFORM KOH-SORT-SEC
+      *        Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
+               PERFORM  320-BODY-HEN-SEC
+      *
+      *        Ä¢É¼°õºþ½èÍý
+               PERFORM  330-PRINT-OUT-SEC
+      *
+               PERFORM  UNTIL  SKT4510TMP-KOHNUM(WRK-CNT) = SPACE
+                        OR     WRK-CNT  >  20
+      *
+      *          Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+                 PERFORM  311-HEAD-HEN-SEC
+      *
+      *          Ä¢É¼ÊÔ½¸<¸øÈñ>½èÍý
+                 PERFORM  321-BODY-HEN-SEC
+      *
+      *          Ä¢É¼°õºþ½èÍý
+                 PERFORM  331-PRINT-OUT-SEC
+               END-PERFORM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *        °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
                PERFORM  900-TMP-READ-SEC
            END-PERFORM
@@ -1098,6 +1274,7 @@
       *
       *    ÊÝ¸±¼ÔÌ¾
            MOVE    SKT4510TMP-HKNJANUM     TO  WRK-HKNJANUM
+         DISPLAY  "HKNJANUM  :  "  SKT4510TMP-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
            IF      HKNJA-HKNJANAME     NOT =   SPACE
                IF      SKT4510TMP-HKNJANUM(3:1)    NOT =   "3"
@@ -1130,6 +1307,13 @@
       *    µëÉÕ³ä¹ç
            MOVE    SKT4510TMP-KYURATE      TO  WRK-Z2
            MOVE    WRK-Z2                  TO  SKT4510-KYURATE
+      *
+      *    ¸©Æâ¡¿¸©³°
+           IF  SKT4510TMP-SYUTURYOKU  =  2
+               MOVE  "¡Ê¸©³°Ê¬¡Ë"  TO  SKT4510-PREFKBN
+           ELSE
+               MOVE  "¡Ê¸©ÆâÊ¬¡Ë"  TO  SKT4510-PREFKBN
+           END-IF
       *
            .
        310-HEAD-HEN-EXT.
@@ -1201,7 +1385,10 @@
        320-BODY-HEN-SEC      SECTION.
       *
            PERFORM VARYING IDX1    FROM    1   BY  1
-                   UNTIL   IDX1    >       9
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *             UNTIL   IDX1    >       9
+                   UNTIL   IDX1    >       7
+      *---(01.00.05) LINE ADD END   ------------------------------------
                PERFORM VARYING IDX2    FROM    1   BY  1
                        UNTIL   IDX2    >       2
       *
@@ -1239,6 +1426,62 @@
                MOVE    WRK-Z9      TO  SKT4510-SFTNGK(IDX1)
            END-PERFORM
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    ¸øÈñºÆ·ÇÍó
+           PERFORM  VARYING  IDX1  FROM  8  BY  1
+                    UNTIL    IDX1  >     9
+      *    Ë¡ÊÌÈÖ¹æ
+             IF  SKT4510TMP-KOHNUM (WRK-CNT)  =  "025" OR "067" OR "027"
+               MOVE  SKT4510TMP-KOHNUM (WRK-CNT)(2:)
+                                       TO  SKT4510-HBTNUM(WRK-CNT)
+             ELSE
+               MOVE    SKT4510TMP-KOHNUM (WRK-CNT) TO  WRK-KOHNUM
+               PERFORM 950-HKNNUM-SET-SEC
+               MOVE    HKN-HBTNUM      TO  SKT4510-HBTNUM(WRK-CNT)
+             END-IF
+      *    ³ä¹ç
+             MOVE  SKT4510TMP-KOH-FTNRATE(WRK-CNT)  TO  WRK-Z1
+             MOVE  WRK-Z1              TO  SKT4510-FTNRATE(WRK-CNT)
+      *
+             PERFORM VARYING IDX2    FROM    1   BY  1
+                     UNTIL   IDX2    >       2
+      *
+      *        ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+               MOVE    SKT4510TMP-K-KENSU(WRK-CNT IDX2)  TO  WRK-Z5
+               MOVE    WRK-Z5  TO  SKT4510-KENSU(IDX1 IDX2)
+      *
+      *        ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
+               MOVE    SKT4510TMP-K-NISSU(WRK-CNT IDX2)  TO  WRK-Z5
+               MOVE    WRK-Z5  TO  SKT4510-NISSU(IDX1 IDX2)
+      *
+      *        ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+               MOVE    SKT4510TMP-K-TENSU(WRK-CNT IDX2)  TO  WRK-Z9
+               MOVE    WRK-Z9  TO  SKT4510-TENSU(IDX1 IDX2)
+      *
+      *        ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
+               MOVE    SKT4510TMP-K-ITBFTN(WRK-CNT IDX2) TO  WRK-Z9
+               MOVE    WRK-Z9  TO  SKT4510-ITBFTN(IDX1 IDX2)
+             END-PERFORM
+      *
+      *      ¿©»öÎÅÍÜ¡§·ï¿ô
+             MOVE    SKT4510TMP-K-SKENSU(WRK-CNT)    TO  WRK-Z5
+             MOVE    WRK-Z5  TO  SKT4510-SKENSU(IDX1)
+      *
+      *      ¿©»öÎÅÍÜ¡§Æü¿ô
+             MOVE    SKT4510TMP-K-SNISSU(WRK-CNT)    TO  WRK-Z5
+             MOVE    WRK-Z5  TO  SKT4510-SNISSU(IDX1)
+      *
+      *      ¿©»öÎÅÍÜ¡§¶â³Û
+             MOVE    SKT4510TMP-K-SKINGK(WRK-CNT)    TO  WRK-Z9
+             MOVE    WRK-Z9  TO  SKT4510-SKINGK(IDX1)
+      *
+      *      ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+             MOVE    SKT4510TMP-K-SFTNGK(WRK-CNT)    TO  WRK-Z9
+             MOVE    WRK-Z9  TO  SKT4510-SFTNGK(IDX1)
+      *
+             ADD  1  TO  WRK-CNT
+           END-PERFORM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            .
        320-BODY-HEN-EXT.
@@ -1266,7 +1509,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4510.red"        TO  SPRT-PRTID
-           MOVE    "¸©Æâ¡¦¹ñÊÝÀÁµá½ñ"  TO  SPRT-TITLE
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE    "¸©Æâ¡¦¹ñÊÝÀÁµá½ñ"  TO  SPRT-TITLE
+           MOVE    "¹ñÊÝÀÁµá½ñ"        TO  SPRT-TITLE
+      *---(01.00.05) LINE ADD START ------------------------------------
            MOVE    SKT4510             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1371,6 +1617,13 @@
                MOVE    "¡û"        TO  SKT4511-ZAI2
            END-IF
       *
+      *    ¸©Æâ¡¿¸©³°
+           IF  SKT4510TMP-SYUTURYOKU  =  2
+               MOVE  "¡Ê¸©³°Ê¬¡Ë"  TO  SKT4511-PREFKBN
+           ELSE
+               MOVE  "¡Ê¸©ÆâÊ¬¡Ë"  TO  SKT4511-PREFKBN
+           END-IF
+      *
            .
        311-HEAD-HEN-EXT.
            EXIT.
@@ -1380,54 +1633,58 @@
       *****************************************************************
        321-BODY-HEN-SEC      SECTION.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
       *    ¸øÈñ¤Î°Ù¤Î£²ËçÌÜ°Ê¾å¤«
-           IF      WRK-CNT     =   1
-               PERFORM VARYING IDX1    FROM    10  BY  1
-                       UNTIL   IDX1    >       11
-                   COMPUTE IDX4    =   IDX1    -   9
-                   PERFORM VARYING IDX2    FROM    1   BY  1
-                           UNTIL   IDX2    >       2
+      *     IF      WRK-CNT     =   1
+      *         PERFORM VARYING IDX1    FROM    10  BY  1
+      *                 UNTIL   IDX1    >       11
+      *             COMPUTE IDX4    =   IDX1    -   9
+      *             PERFORM VARYING IDX2    FROM    1   BY  1
+      *                     UNTIL   IDX2    >       2
       *
       *                ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
-                       MOVE    SKT4510TMP-KENSU(IDX1 IDX2) TO  WRK-Z5
-                       MOVE    WRK-Z5  TO  SKT4511-KENSU(IDX4 IDX2)
+      *                 MOVE    SKT4510TMP-KENSU(IDX1 IDX2) TO  WRK-Z5
+      *                 MOVE    WRK-Z5  TO  SKT4511-KENSU(IDX4 IDX2)
       *
       *                ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
-                       MOVE    SKT4510TMP-NISSU(IDX1 IDX2) TO  WRK-Z5
-                       MOVE    WRK-Z5  TO  SKT4511-NISSU(IDX4 IDX2)
+      *                 MOVE    SKT4510TMP-NISSU(IDX1 IDX2) TO  WRK-Z5
+      *                 MOVE    WRK-Z5  TO  SKT4511-NISSU(IDX4 IDX2)
       *
       *                ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
-                       MOVE    SKT4510TMP-TENSU(IDX1 IDX2) TO  WRK-Z9
-                       MOVE    WRK-Z9  TO  SKT4511-TENSU(IDX4 IDX2)
+      *                 MOVE    SKT4510TMP-TENSU(IDX1 IDX2) TO  WRK-Z9
+      *                 MOVE    WRK-Z9  TO  SKT4511-TENSU(IDX4 IDX2)
       *
       *                ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
-                       MOVE    SKT4510TMP-ITBFTN(IDX1 IDX2)
-                                                           TO  WRK-Z9
-                       MOVE    WRK-Z9  TO  SKT4511-ITBFTN(IDX4 IDX2)
-                   END-PERFORM
+      *                 MOVE    SKT4510TMP-ITBFTN(IDX1 IDX2)
+      *                                                     TO  WRK-Z9
+      *                 MOVE    WRK-Z9  TO  SKT4511-ITBFTN(IDX4 IDX2)
+      *             END-PERFORM
       *
       *            ¿©»öÎÅÍÜ¡§·ï¿ô
-                   MOVE    SKT4510TMP-SKENSU(IDX1)     TO  WRK-Z5
-                   MOVE    WRK-Z5  TO  SKT4511-SKENSU(IDX4)
+      *             MOVE    SKT4510TMP-SKENSU(IDX1)     TO  WRK-Z5
+      *             MOVE    WRK-Z5  TO  SKT4511-SKENSU(IDX4)
       *
       *            ¿©»öÎÅÍÜ¡§Æü¿ô
-                   MOVE    SKT4510TMP-SNISSU(IDX1)     TO  WRK-Z5
-                   MOVE    WRK-Z5  TO  SKT4511-SNISSU(IDX4)
+      *             MOVE    SKT4510TMP-SNISSU(IDX1)     TO  WRK-Z5
+      *             MOVE    WRK-Z5  TO  SKT4511-SNISSU(IDX4)
       *
       *            ¿©»öÎÅÍÜ¡§¶â³Û
-                   MOVE    SKT4510TMP-SKINGK(IDX1)     TO  WRK-Z9
-                   MOVE    WRK-Z9  TO  SKT4511-SKINGK(IDX4)
+      *             MOVE    SKT4510TMP-SKINGK(IDX1)     TO  WRK-Z9
+      *             MOVE    WRK-Z9  TO  SKT4511-SKINGK(IDX4)
       *
       *            ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
-                   MOVE    SKT4510TMP-SFTNGK(IDX1)     TO  WRK-Z9
-                   MOVE    WRK-Z9  TO  SKT4511-SFTNGK(IDX4)
-               END-PERFORM
-           END-IF
-      *
+      *             MOVE    SKT4510TMP-SFTNGK(IDX1)     TO  WRK-Z9
+      *             MOVE    WRK-Z9  TO  SKT4511-SFTNGK(IDX4)
+      *         END-PERFORM
+      *     END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ¸øÈñ¤Î°õ»ú
            PERFORM VARYING IDX3    FROM    1   BY  1
-                   UNTIL   IDX3    >       5
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *             UNTIL   IDX3    >       5
+                   UNTIL   IDX3    >       7
+      *---(01.00.05) LINE ADD END   ------------------------------------
                    OR      WRK-CNT >       20
                    OR      SKT4510TMP-KOHNUM(WRK-CNT)  =   SPACE
                PERFORM VARYING IDX2    FROM    1   BY  1
@@ -1470,9 +1727,19 @@
                IF      SKT4510TMP-KOHNUM (WRK-CNT) =   "019"
                    MOVE    "43"    TO  SKT4511-HBTNUM(IDX3)
                ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+                 IF  SKT4510TMP-KOHNUM (WRK-CNT)
+                                   =  "025" OR "067" OR "027"
+                   MOVE  SKT4510TMP-KOHNUM (WRK-CNT)(2:)
+                                       TO  SKT4511-HBTNUM(IDX3)
+                 ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
                    MOVE    SKT4510TMP-KOHNUM (WRK-CNT) TO  WRK-KOHNUM
                    PERFORM 950-HKNNUM-SET-SEC
                    MOVE    HKN-HBTNUM      TO  SKT4511-HBTNUM(IDX3)
+      *---(01.00.05) LINE ADD START ------------------------------------
+                 END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
                END-IF
       *
       *        ÉéÃ´³ä¹ç
@@ -1967,10 +2234,12 @@
                AND     PTINF-TSTPTNUMKBN   =   "1"
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
       *        ¸©³°¥Ç¡¼¥¿¤ÏÂÐ¾Ý³°¤Ë¤¹¤ë
-               IF  RECE10-PREFKBN     NOT  =   "1"
-                   GO  TO  900-SEIKYU-READ-SEC
-               END-IF
+      *         IF  RECE10-PREFKBN     NOT  =   "1"
+      *             GO  TO  900-SEIKYU-READ-SEC
+      *         END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *         
                ADD     1                   TO  CNT-RECE10   
            ELSE

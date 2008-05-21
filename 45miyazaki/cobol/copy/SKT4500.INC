@@ -15,6 +15,8 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  01.00.01    Ä¹²°   08/05/03      Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
+      *****************************************************************
         01  SKT4500.
             03  SKT4500-SRYYM           PIC X(16)   OCCURS  2 TIMES.
             03  SKT4500-SEIYMD          PIC X(22).
@@ -31,9 +33,16 @@
             03  SKT4500-KENGAI          PIC X(02)   OCCURS  2 TIMES.
             03  SKT4500-HYOUBOUKA       PIC X(20)   OCCURS  3 TIMES.
             03  SKT4500-SRYKA           PIC X(28).
-            03  SKT4500-SEIKYU-TBL      OCCURS  4 TIMES.
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *      03  SKT4500-SEIKYU-TBL      OCCURS  4 TIMES.
+            03  SKT4500-SEIKYU-TBL      OCCURS  5 TIMES.
+      *---(01.00.01) LINE ADD END   ------------------------------------
                 05  SKT4500-NYUGAI-TBL  OCCURS  2 TIMES.
                     07  SKT4500-KENSU   PIC X(06).
                     07  SKT4500-TENSU   PIC X(10).
-            03  SKT4500-GKENSU          PIC X(06).
-            03  SKT4500-GTENSU          PIC X(10).
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *      03  SKT4500-GKENSU          PIC X(06).
+      *      03  SKT4500-GTENSU          PIC X(10).
+            03  SKT4500-GKENSU          PIC X(06)  OCCURS  2 TIMES.
+            03  SKT4500-GTENSU          PIC X(10)  OCCURS  2 TIMES.
+      *---(01.00.01) LINE ADD END   ------------------------------------

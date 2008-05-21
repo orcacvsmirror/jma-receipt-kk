@@ -28,6 +28,7 @@
             03  SKT4511-HKNJANAME           PIC X(40).
             03  SKT4511-ZAI1                PIC X(02).
             03  SKT4511-ZAI2                PIC X(02).
+            03  SKT4511-PREFKBN             PIC X(12).
             03  SKT4511-SEIKYU-TBL          OCCURS  2 TIMES.
                 05  SKT4511-NYUGAI-TBL1     OCCURS  2 TIMES.
                     07  SKT4511-KENSU       PIC X(05).
@@ -38,7 +39,7 @@
                 05  SKT4511-SNISSU          PIC X(05).
                 05  SKT4511-SKINGK          PIC X(09).
                 05  SKT4511-SFTNGK          PIC X(09).
-            03  SKT4511-KOH-TBL             OCCURS  5 TIMES.
+            03  SKT4511-KOH-TBL             OCCURS  7 TIMES.
                 05  SKT4511-HBTNUM          PIC X(02).
                 05  SKT4511-FTNRATE         PIC X(01).
                 05  SKT4511-NYUGAI-TBL2     OCCURS  2 TIMES.

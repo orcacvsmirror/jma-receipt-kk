@@ -29,6 +29,7 @@
             03  SKT4510-KYURATE         PIC X(02).
             03  SKT4510-ZAI1            PIC X(02).
             03  SKT4510-ZAI2            PIC X(02).
+            03  SKT4510-PREFKBN         PIC X(12).
             03  SKT4510-SEIKYU-TBL      OCCURS  9 TIMES.
                 05  SKT4510-NYUGAI-TBL  OCCURS  2 TIMES.
                     07  SKT4510-KENSU   PIC X(05).
@@ -39,3 +40,5 @@
                 05  SKT4510-SNISSU      PIC X(05).
                 05  SKT4510-SKINGK      PIC X(09).
                 05  SKT4510-SFTNGK      PIC X(09).
+            03  SKT4510-HBTNUM          PIC X(2)  OCCURS  2 TIMES. 
+            03  SKT4510-FTNRATE         PIC X(1)  OCCURS  2 TIMES.
