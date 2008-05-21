@@ -34,6 +34,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/01/22    主科対応
+      *  01.00.06    内田K   08/04/22    帳票様式の変更に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -284,6 +286,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -391,6 +398,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.06) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -703,8 +713,14 @@
       *
       *    給付割合別（老人、高齢者、３歳未満でなく本人で７割以外）
            IF  RECE10-RJNHKNNUM  =  SPACE
-             IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *       IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+             IF  ((RECE10-AGE  >  2)  
+               OR  (RECE10-SRYYM  >= ( WRK-CONS-SRYYM-200804) 
+               AND (RECE10-FLG (1)   =  1)) )  
+               AND  (RECE10-AGE  <  70)
                IF  RECE10-HONKZKKBN  =  "1"
+      *---(01.00.06) LINE ADD END   ------------------------------------
                  IF  RECE10-KYURATE  NOT =  7
                    IF  SKT1210TMP-HKNJANUM(3:1)  =  "3"
                      IF  RECE10-KYURATE  =  0
@@ -733,6 +749,12 @@
              END-IF
            END-IF
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM        TO  SKT1210TMP-SRYYM
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
       *    診療科
            MOVE    RECE10-RECEKA         TO  SKT1210TMP-RECEKA
@@ -796,11 +818,20 @@
                    MOVE    2     TO    IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  >= 3
-                   MOVE    3     TO    IDX1
+      *---(01.00.06) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
                  ELSE
-                   MOVE    4     TO    IDX1
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                   IF  RECE10-AGE  >= 3
+                     MOVE    3     TO    IDX1
+                   ELSE
+                     MOVE    4     TO    IDX1
+                   END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                END-IF
       *
              ELSE
@@ -814,11 +845,20 @@
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
-                   IF  RECE10-AGE  <  3
-                     MOVE  9  TO  IDX1
+      *---(01.00.06) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  9     TO  IDX1
                    ELSE
-                     MOVE  8  TO  IDX1
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  <  3
+                       MOVE  9  TO  IDX1
+                     ELSE
+                       MOVE  8  TO  IDX1
+                     END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
@@ -860,6 +900,7 @@
                PERFORM  2101-SYUKEI-SEC 
              END-IF
            END-IF
+      *
       *
            IF  FLG-SKT1210TMP  =  1
                WRITE    SKT1210TMP-REC
@@ -1078,7 +1119,13 @@
       *
       *    給付割合別（老人、高齢者、３歳未満でなく本人で７割以外）
            IF  RECE10-RJNHKNNUM  =  SPACE
-             IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *       IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+             IF  ((RECE10-AGE  >  2)  
+               OR  (RECE10-SRYYM  >= ( WRK-CONS-SRYYM-200804) 
+               AND (RECE10-FLG (1)   =  1)) )  
+               AND  (RECE10-AGE  <  70)
+      *---(01.00.06) LINE ADD END   ------------------------------------
                IF  RECE10-HONKZKKBN  =  "1"
                  IF  RECE10-KYURATE  NOT =  7
                    IF  SKT1210TMP-HKNJANUM(3:1)  =  "3"
@@ -1108,6 +1155,12 @@
              END-IF
            END-IF
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM        TO  SKT1210TMP-SRYYM
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
       *
@@ -1195,6 +1248,16 @@
       *
            INITIALIZE                    SKT1210
       *    診療年月
+      *---(01.00.06) LINE ADD START ------------------------------------
+           IF  SKT1210TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT1210TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE    WRK-SRYYMWH           TO  SKT1210-SRYYM
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT1210-SEIYMD
@@ -1505,7 +1568,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT1210.red"         TO  SPRT-PRTID
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE   "SKT1210.red"         TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT1210.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT1210o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            MOVE    "国保請求書・入院用"  TO  SPRT-TITLE
            MOVE    SKT1210             TO  SPRT-PRTDATA
@@ -1537,6 +1607,16 @@
       *
            INITIALIZE                    SKT1220
       *    診療年月
+      *---(01.00.06) LINE ADD START ------------------------------------
+           IF  SKT1210TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT1210TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE    WRK-SRYYMWH           TO  SKT1220-SRYYM
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT1220-SEIYMD
@@ -1823,7 +1903,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT1220.red"         TO  SPRT-PRTID
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE   "SKT1220.red"         TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT1220.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT1220o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE    "国保請求書・外来用"  TO  SPRT-TITLE
            MOVE    SKT1220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID

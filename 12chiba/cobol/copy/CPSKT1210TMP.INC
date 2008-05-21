@@ -31,6 +31,7 @@
                05  SKT1210TMP-RECEKA               PIC  X(02).
       ***** 08/01/09 ADD
                05  SKT1210TMP-ZAITAKU              PIC  X(01).
+               05  SKT1210TMP-SRYYM                PIC  9(06).
            03  SKT1210TMP-SEIKYU-TBL     OCCURS  11.
                05  SKT1210TMP-KENSU                PIC  9(06).
                05  SKT1210TMP-NISSU                PIC  9(06).

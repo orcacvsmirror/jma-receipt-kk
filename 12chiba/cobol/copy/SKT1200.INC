@@ -23,7 +23,7 @@
             03  SKT1200-TEL         PIC X(15).
             03  SKT1200-KAISETUNAME PIC X(40).
             03  SKT1200-RECEKA      PIC X(20).
-            03  SKT1200-SEIKYU-TBL      OCCURS  3 TIMES.
+            03  SKT1200-SEIKYU-TBL      OCCURS  6 TIMES.
                 05  SKT1200-KENSU   PIC X(06).
                 05  SKT1200-TENSU   PIC X(10).
                 05  SKT1200-SKENSU  PIC X(06).

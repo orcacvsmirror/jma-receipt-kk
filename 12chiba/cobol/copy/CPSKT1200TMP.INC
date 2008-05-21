@@ -24,7 +24,7 @@
        01  SKT1200TMP-REC.
            03  SKT1200TMP-KEY.
                05  SKT1200TMP-RECEKA               PIC  X(02).
-           03  SKT1200TMP-SEIKYU-TBL  OCCURS 3.
+           03  SKT1200TMP-SEIKYU-TBL  OCCURS 6.
                05  SKT1200TMP-KENSU                PIC  9(06).
                05  SKT1200TMP-TENSU                PIC  9(10).
                05  SKT1200TMP-SKENSU               PIC  9(06).
