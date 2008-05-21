@@ -27,6 +27,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/21  足りない公費は備考欄に記載
+      *                                  まとめ公費を使用した時の
+      *                                  まとめ公費以外の公費名称修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -888,6 +891,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/21) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/21) end
       *      ０５１と０９１は同じ場所に集計する
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
@@ -1120,7 +1126,10 @@
        200231-KOH-HENSYU-SEC         SECTION.
       *
            PERFORM VARYING IDY     FROM    1   BY  1
-                   UNTIL   IDY     >       2         
+      *=== 足りない公費は備考欄に記載 by Yoshikawa(2008/05/21) start
+      *             UNTIL   IDY     >       2         
+                   UNTIL   IDY     >       7         
+      *=== 足りない公費は備考欄に記載 by Yoshikawa(2008/05/21) end
                    OR      FLG-KOH-END     =   1
              IF      SUM-KOHNUM (IDX2)   =   SPACE
                MOVE    1                     TO  FLG-KOH-END
@@ -1154,6 +1163,14 @@
       *    公費再掲欄：食事療養：標準負担額
                MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
                MOVE  WRK-Z9                TO  SKT2815-S-KFTNGK(IDY)
+      *
+      *=== 足りない公費は備考欄に記載 by Yoshikawa(2008/05/21) start
+      *        備考欄記載用文字
+               IF  IDY  >  2
+                   MOVE  "入　院"          TO  SKT2815-NYUIN(IDY)
+                   MOVE  "入院外"          TO  SKT2815-NYUINGAI(IDY)
+               END-IF
+      *=== 足りない公費は備考欄に記載 by Yoshikawa(2008/05/21) end
       *
                ADD     1                   TO  IDX2   
              END-IF        
@@ -1269,26 +1286,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
