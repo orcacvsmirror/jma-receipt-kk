@@ -38,6 +38,7 @@
       *  01.00.05    内田    08/01/07    印字対象番号の追加（441,541）
       *  01.00.06    内田    08/03/18    政令指定都市の代表番号は
       *                                  国保総括表にある代表番号に変更
+      *  01.00.07    伊藤    08/04/29    帳票様式に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -248,6 +249,12 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -684,13 +691,27 @@
                    MOVE    "234005"    TO  SKT2530TMP-HKNJANUM
       *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE    "名古屋市"  TO  SKT2530TMP-HKNJANAME
-                   IF      RECE10-AGE  >   2
-                   AND     RECE10-AGE  <   70
-                       MOVE    RECE10-KYURATE
-                                       TO  SKT2530TMP-KYURATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *             IF      RECE10-AGE  >   2
+      *             AND     RECE10-AGE  <   70
+      *                 MOVE    RECE10-KYURATE
+      *                                 TO  SKT2530TMP-KYURATE
+      *             ELSE
+      *                 MOVE    7       TO  SKT2530TMP-KYURATE
+      *             END-IF
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE    7   TO  SKT2530TMP-KYURATE
                    ELSE
-                       MOVE    7       TO  SKT2530TMP-KYURATE
+                       IF  (RECE10-AGE > 2) AND 
+                           (RECE10-AGE < 70)
+                           MOVE    RECE10-KYURATE
+                                       TO  SKT2530TMP-KYURATE
+                       ELSE
+                           MOVE    7   TO  SKT2530TMP-KYURATE
+                       END-IF
                    END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *        京都市の場合、代表番号セット
                WHEN    "264"
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -754,13 +775,27 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
                    WHEN   (SKT2530TMP-HKNJANUM (3:1) = "3") OR
                           (SKT2530TMP-HKNJANUM = "230011")
-                       IF  (RECE10-AGE > 2) AND 
-                           (RECE10-AGE < 70)
-                           MOVE    RECE10-KYURATE
-                                       TO  SKT2530TMP-KYURATE
-                       ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                 IF  (RECE10-AGE > 2) AND 
+      *                     (RECE10-AGE < 70)
+      *                     MOVE    RECE10-KYURATE
+      *                                 TO  SKT2530TMP-KYURATE
+      *                 ELSE
+      *                     MOVE    7   TO  SKT2530TMP-KYURATE
+      *                 END-IF
+                       IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                       AND  (RECE10-FLG (1)   =  1)
                            MOVE    7   TO  SKT2530TMP-KYURATE
+                       ELSE
+                           IF  (RECE10-AGE > 2) AND 
+                               (RECE10-AGE < 70)
+                               MOVE    RECE10-KYURATE
+                                           TO  SKT2530TMP-KYURATE
+                           ELSE
+                               MOVE    7   TO  SKT2530TMP-KYURATE
+                           END-IF
                        END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                END-EVALUATE
            END-IF
       *    指定された保険者は、最後に印刷する
@@ -912,45 +947,90 @@
       *
       *    老人かどうか
            IF  RECE10-RJNHKNNUM  NOT =  SPACE
-               IF      RECE10-KYURATE  =   9
-                   MOVE    10      TO  IDX1
-               ELSE
-                   MOVE    11      TO  IDX1
-               END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         IF      RECE10-KYURATE  =   9
+      *             MOVE    10      TO  IDX1
+      *         ELSE
+      *             MOVE    11      TO  IDX1
+      *         END-IF
+                 IF  RECE10-KYURATE  =  7
+                   MOVE  11   TO  IDX1
+                 ELSE
+                   MOVE  10   TO  IDX1
+                 END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            ELSE
       *        一般／退職者
                IF      RECE10-HKNNUM   =   "060"
                    IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    1       TO  IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                 IF      RECE10-KYURATE  =   9
+      *                     MOVE    1       TO  IDX1
+      *                 ELSE
+      *                     MOVE    2       TO  IDX1
+      *                 END-IF
+                       IF  RECE10-KYURATE  =  7
+                           MOVE  2   TO  IDX1
                        ELSE
-                           MOVE    2       TO  IDX1
+                           MOVE  1   TO  IDX1
                        END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                    ELSE
-                       IF      RECE10-AGE  >=  3
-                           MOVE    3       TO  IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                 IF      RECE10-AGE  >=  3
+      *                     MOVE    3       TO  IDX1
+      *                 ELSE
+      *                     MOVE    4       TO  IDX1
+      *                 END-IF
+                       IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                       AND  (RECE10-FLG (1)   =  1)
+                           MOVE    4      TO  IDX1
                        ELSE
-                           MOVE    4       TO  IDX1
+                           IF      RECE10-AGE  >=  3
+                               MOVE    3       TO  IDX1
+                           ELSE
+                               MOVE    4       TO  IDX1
+                           END-IF
                        END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                    END-IF
       *        退職国保
                ELSE
                    IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    6       TO  IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                 IF      RECE10-KYURATE  =   9
+      *                     MOVE    6       TO  IDX1
+      *                 ELSE
+      *                     MOVE    7       TO  IDX1
+      *                 END-IF
+                       IF  RECE10-KYURATE  =  7
+                           MOVE  7   TO  IDX1
                        ELSE
-                           MOVE    7       TO  IDX1
+                           MOVE  6   TO  IDX1
                        END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                    ELSE
                        IF      RECE10-HONKZKKBN    =   "1"
                            MOVE    5       TO  IDX1
                        ELSE
-                           IF      RECE10-AGE  <   3
-                               MOVE    9       TO  IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *                     IF      RECE10-AGE  <   3
+      *                         MOVE    9       TO  IDX1
+      *                     ELSE
+      *                         MOVE    8       TO  IDX1
+      *                     END-IF
+                           IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                           AND  (RECE10-FLG (1)   =  1)
+                               MOVE    9      TO  IDX1
                            ELSE
-                               MOVE    8       TO  IDX1
+                               IF      RECE10-AGE  <   3
+                                   MOVE    9       TO  IDX1
+                               ELSE
+                                   MOVE    8       TO  IDX1
+                               END-IF
                            END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                        END-IF
                    END-IF
                END-IF
@@ -1476,7 +1556,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2530.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2530.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT2530.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT2530o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE    "国保請求書(入院・入院外併用)"
                                        TO  SPRT-TITLE
            MOVE    SKT2530             TO  SPRT-PRTDATA

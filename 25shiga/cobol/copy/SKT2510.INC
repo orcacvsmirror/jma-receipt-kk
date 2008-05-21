@@ -50,3 +50,9 @@
            03  SKT2510-JIKIMAISU           PIC  X(05).
       *合計件数
            03  SKT2510-GKENSU              PIC  X(05).
+      *後期高齢者エリア
+           03  SKT2510-KOUKI-TBL  OCCURS 24.
+               05  SKT2510-TODOHUKEN       PIC  X(12).
+               05  SKT2510-KENSUK          PIC  X(05).
+      *合計件数（後期高齢者）
+           03  SKT2510-GKENSUK             PIC  X(05).

@@ -32,6 +32,7 @@
       *  01.00.03    内田    2007/09/08    日レセver4.0対応
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
+      *  01.00.04    伊藤    2008/04/29    帳票様式に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -102,6 +103,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-RECEDEN         PIC 9(01).
+      *---(01.00.04) LINE ADD START ------------------------------------
+           03  FLG-KOUKI           PIC 9(01).
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -174,12 +178,23 @@
                05  WRK-EHKNJANUM   PIC 9(06).
                05  WRK-EKENSU      PIC 9(05).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD START ------------------------------------
+           03  WRK-PATH2               PIC X(50).
+           03  WRK-HKNNUM              PIC X(03).
+           03  WRK-TODOUHUKEN          PIC X(100).
+           03  WRK-RETSU               PIC 9(02).
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    集計エリア
        01  SUM-AREA.
            03  SUM-HKNJA-TBL OCCURS 61.
                05  SUM-KENSU       PIC 9(05).
            03  SUM-GKENSU          PIC 9(05).
+      *---(01.00.04) LINE ADD START ------------------------------------
+           03  SUM-GKENSUK         PIC 9(05).
+           03  SUM-TOKGKENSU       PIC 9(05).
+           03  SUM-TOKGKENSUK      PIC 9(05).
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    カウント領域
        01  CNT-AREA.
@@ -193,6 +208,12 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -468,11 +489,17 @@
       *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
                    MOVE    "key37"                  TO  WRK-PATH
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   MOVE    "key65"     TO  WRK-PATH2
+      *---(01.00.04) LINE ADD END   ------------------------------------
 	       WHEN    "1"
       *---(01.00.03) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
                    MOVE    "key38"                  TO  WRK-PATH
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   MOVE    "key66"     TO  WRK-PATH2
+      *---(01.00.04) LINE ADD END   ------------------------------------
            END-EVALUATE
       ****
       *  
@@ -491,6 +518,25 @@
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
+      *---(01.00.04) LINE ADD START ------------------------------------
+           PERFORM  900-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE     1       TO        FLG-KOUKI
+           MOVE    "039"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "040"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+      *
+           MOVE     ZERO    TO        FLG-END
+           PERFORM  2001-KOKUHO-TOKU-SYUKEI-SEC
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            CLOSE   UPD-FILE
       *
@@ -551,13 +597,27 @@
       *
            MOVE    RECE10-HKNJANUM-S(1:6) TO    WRK-HKNJANUM(1:6)
       *
-           PERFORM  210-HKN-SYUKEI-SEC
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     PERFORM  210-HKN-SYUKEI-SEC
+           IF  FLG-KOUKI  =  ZERO
+               PERFORM  210-HKN-SYUKEI-SEC
+           ELSE
+               PERFORM  220-KOUKI-SYUKEI-SEC
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 230-UPD-FILE-HENSYU-SEC
       *
-               PERFORM 900-SEIKYU-READ-SEC
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *         PERFORM 900-SEIKYU-READ-SEC
+               IF  FLG-KOUKI  =  ZERO
+                  PERFORM   900-SEIKYU-READ-SEC
+               ELSE
+                  PERFORM   950-SEIKYU-READ-SEC
+               END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            ELSE
                MOVE    SPACE               TO  WRK-RECEERR
                STRING "集計対象外　患者番号＝"     DELIMITED  BY  SIZE
@@ -661,11 +721,22 @@
                WHEN    "253013"    MOVE    1   TO  IDX1
                WHEN    "093013"
       *            本人家族で判別
-                   IF  RECE10-HONKZKKBN  =  "1"
-                       MOVE    2       TO  IDX1
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             IF  RECE10-HONKZKKBN  =  "1"
+      *                 MOVE    2       TO  IDX1
+      *             ELSE
+      *                 MOVE    3       TO  IDX1
+      *             END-IF
+                   IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804
+                       IF  RECE10-HONKZKKBN  =  "1"
+                           MOVE    2       TO  IDX1
+                       ELSE
+                           MOVE    3       TO  IDX1
+                       END-IF
                    ELSE
-                       MOVE    3       TO  IDX1
+                       MOVE    2       TO  IDX1
                    END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                WHEN    "133033"    MOVE    4   TO  IDX1
                WHEN    "133264"    MOVE    5   TO  IDX1
                WHEN    "133298"    MOVE    6   TO  IDX1
@@ -721,6 +792,59 @@
            .
        210-HKN-SYUKEI-EXT.
            EXIT.
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    後期高齢者分集計処理
+      *****************************************************************
+       220-KOUKI-SYUKEI-SEC               SECTION.
+      *
+      *    県内時集計
+           IF      RECE10-HKNJANUM(3:2) = "25"
+               IF  RECE10-HKNNUM  =  "039"
+                   ADD  1  TO  SUM-GKENSUK
+               END-IF
+               IF  RECE10-HKNNUM  =  "040"
+                   ADD  1  TO  SUM-TOKGKENSUK
+               END-IF
+           END-IF
+      *
+           MOVE    1    TO  FLG-UPD 
+      *
+           .
+       220-KOUKI-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    特別療養費国保集計処理
+      *****************************************************************
+       2001-KOKUHO-TOKU-SYUKEI-SEC              SECTION.
+      * 
+           MOVE    "key41"                  TO  WRK-PATH
+      *
+           PERFORM 900-SEIKYU-SELECT-SEC
+      *
+           PERFORM 
+                   UNTIL       FLG-END     =   1
+               EVALUATE    WRK-PARA-SYOKBN
+                   WHEN    "2"
+                       IF    RECE10-HENREIYM  NOT =  '000000'
+                           ADD  1  TO  SUM-TOKGKENSU
+                       END-IF
+                   WHEN    "1"
+                       IF    RECE10-HENREIYM    =  '000000'
+                           ADD  1  TO  SUM-TOKGKENSU
+                       END-IF
+               END-EVALUATE
+               PERFORM   900-SEIKYU-READ-SEC
+      *
+           END-PERFORM
+      *
+           PERFORM  900-SEIKYU-CLOSE-SEC
+           .
+       2001-KOKUHO-TOKU-SYUKEI-EXT.
+           EXIT.
+      *
+      *---(01.00.04) LINE ADD END   ------------------------------------
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -838,6 +962,18 @@
            MOVE    SUM-GKENSU  TO  WRK-Z6
            MOVE    WRK-Z6      TO  SKT2500-GKENSU
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    合計処理（県内後期高齢者）
+           MOVE    SUM-GKENSUK  TO  WRK-Z6
+           MOVE    WRK-Z6      TO  SKT2500-GKENSUK
+      *    合計処理（特別療養費国保）
+           MOVE    SUM-TOKGKENSU  TO  WRK-Z3
+           MOVE    WRK-Z3      TO  SKT2500-TOKURYO
+      *    合計処理（特別療養費後期高齢者）
+           MOVE    SUM-TOKGKENSUK  TO  WRK-Z3
+           MOVE    WRK-Z3      TO  SKT2500-TOKURYOK
+      *---(01.00.04) LINE ADD END   ------------------------------------
+      *
            .
        320-BODY-HEN-EXT.
            EXIT.
@@ -862,7 +998,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2500.red"        TO  SPRT-PRTID
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2500.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT2500.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT2500o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE    "県内・国保総括票"  TO  SPRT-TITLE
            MOVE    SKT2500             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1389,6 +1532,115 @@
            .
        910-SEIKYU-INV-EXT.
            EXIT.
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    請求管理読込（後期高齢）
+      *****************************************************************
+       950-SEIKYU-SELECT-SEC             SECTION.
+      *
+      *    請求管理ＤＢ検索
+           INITIALIZE         RECE10-REC.
+           MOVE   SPA-HOSPNUM             TO  RECE10-HOSPNUM
+           MOVE   LNK-PRTKANRI-SRYYM      TO  RECE10-SKYYM
+           MOVE   WRK-CONS-SRYYM-200804   TO  RECE10-SRYYM
+           MOVE   999999                  TO  RECE10-XXSRYYM
+           MOVE   WRK-HKNNUM              TO  RECE10-HKNNUM-S
+                                              RECE10-HKNNUM
+      *
+      *     IF    WRK-PARA-HKNJANUM  NOT = ZERO
+      *         MOVE    WRK-PARA-HKNJANUM  TO  RECE10-XXSTHKNJANUM
+      *                                        RECE10-XXEDHKNJANUM
+      *     ELSE
+               MOVE    SPACE              TO  RECE10-XXSTHKNJANUM
+               MOVE    "99999999"         TO  RECE10-XXEDHKNJANUM
+      *     END-IF
+      *
+           MOVE    RECE10-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 950-SEIKYU-READ-SEC
+           ELSE
+               MOVE    1                   TO  FLG-END
+               DISPLAY "SELECT ERR"
+           END-IF
+           .
+      *
+       950-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求マスター読込（後期高齢）
+      *****************************************************************
+       950-SEIKYU-READ-SEC           SECTION.
+      *
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    WRK-PATH2           TO  MCP-PATHNAME
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO            TO  FLG-END
+               MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *        テスト患者のときは読み飛ばす
+               MOVE    SPACE               TO  PTINF-REC
+               INITIALIZE                      PTINF-REC
+               MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
+               MOVE    RECE10-PTID         TO  PTINF-PTID
+               MOVE    PTINF-REC           TO  MCPDATA-REC
+               PERFORM 800-PTINF-READ-SEC
+               IF      FLG-PTINF           =   ZERO
+               AND     PTINF-TSTPTNUMKBN   =   "1"
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF   
+      *         
+               ADD     1                   TO  CNT-RECE10   
+           ELSE
+               MOVE    1               TO  FLG-END
+           END-IF
+           .
+      *
+       950-SEIKYU-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    請求管理クローズ
+      *****************************************************************
+       900-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *****************************************************************
+      *    請求管理クローズ
+      *****************************************************************
+       950-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH2            TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD START ------------------------------------
       *****************************************************************
       *    医療機関編集情報読み込み

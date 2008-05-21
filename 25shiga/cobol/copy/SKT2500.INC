@@ -42,3 +42,9 @@
                05  SKT2500-EKENSU          PIC  X(05).
       *合計件数
            03  SKT2500-GKENSU              PIC  X(06).
+      *合計件数（後期高齢者）
+           03  SKT2500-GKENSUK             PIC  X(06).
+      *特別療養費
+           03  SKT2500-TOKURYO             PIC  X(03).
+      *特別療養費（後期高齢者）
+           03  SKT2500-TOKURYOK            PIC  X(03).
