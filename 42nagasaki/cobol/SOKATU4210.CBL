@@ -43,6 +43,7 @@
       *                                  処理をする
       *  01.00.06    内田    08/04/23    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.07    内田    08/05/20    国組３〜６歳の帳票を分けないように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -638,13 +639,27 @@
       *---(01.00.06) LINE ADD START ------------------------------------
       *
       *    国保組合判定
-           IF      SKT4210TMP-HKNJANUM(3:1)  =     "3"    AND
-                   RECE10-RJNHKNNUM          =   SPACE    AND
-                   RECE10-AGE                >      2     AND
-                   RECE10-AGE                <      70    AND
-                   RECE10-KYURATE            NOT =  7
-             MOVE  RECE10-KYURATE     TO    SKT4210TMP-KYURATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF      SKT4210TMP-HKNJANUM(3:1)  =     "3"    AND
+                     RECE10-RJNHKNNUM          =   SPACE    AND
+                     RECE10-FLG (1)        NOT =      1     AND
+                     RECE10-AGE                <      70    AND
+                     RECE10-KYURATE            NOT =  7
+               MOVE  RECE10-KYURATE     TO    SKT4210TMP-KYURATE
+             END-IF
+           ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+             IF      SKT4210TMP-HKNJANUM(3:1)  =     "3"    AND
+                     RECE10-RJNHKNNUM          =   SPACE    AND
+                     RECE10-AGE                >      2     AND
+                     RECE10-AGE                <      70    AND
+                     RECE10-KYURATE            NOT =  7
+               MOVE  RECE10-KYURATE     TO    SKT4210TMP-KYURATE
+             END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
            END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    出力順設定
            IF     YUSEN-HKNJANUM    =    SKT4210TMP-HKNJANUM
