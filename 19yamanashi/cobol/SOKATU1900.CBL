@@ -36,6 +36,7 @@
       *  01.00.06       ÆâÅÄ     07/08/05  Æü¥ì¥»ver4.0ÂÐ±þ
       *                                    ¥·¥¹¥Æ¥à´ÉÍý¥Þ¥¹¥¿¡Ö1901¡×¤Î
       *                                    °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
+      *  01.00.07       ÆâÅÄ     08/05/03  £´·î²þÀµ¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -127,6 +128,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  FLG-KOUKI           PIC 9(01).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -215,6 +219,15 @@
       *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+           03  WRK-PATH2             PIC X(50).
+           03  WRK-HKNNUM            PIC X(03).
+           03  WRK-KENNUM            PIC 9(02).
+           03  WRK-KENNAME           PIC X(10).
+           03  WRK-KOHKEI            PIC 9(03).
+           03  WRK-KOHKEI2           PIC 9(03).
+      *---(01.00.07) LINE ADD END   ------------------------------------
+      *
       *    ¥«¥¦¥ó¥ÈÎÎ°è
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -256,6 +269,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
@@ -546,11 +564,17 @@
       *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
                    MOVE    "key37"                  TO  WRK-PATH
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   MOVE    "key65"                  TO  WRK-PATH2
+      *---(01.00.07) LINE ADD END   ------------------------------------
                WHEN    "1"
       *---(01.00.06) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
                    MOVE    "key38"                  TO  WRK-PATH
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   MOVE    "key66"                  TO  WRK-PATH2
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-EVALUATE
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
@@ -574,6 +598,22 @@
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
+      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+           PERFORM  900-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE     1       TO        FLG-KOUKI
+           MOVE    "039"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "040"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            CLOSE   UPD-FILE
            CLOSE   SKT1900TMP-FILE
@@ -637,11 +677,19 @@
            INITIALIZE       SKT1900TMP-REC
            INITIALIZE       SKT1900TMP-HKNJANUM
       *
-           IF  RECE10-HKNJANUM(7:2)  =  SPACE
-             MOVE  RECE10-HKNJANUM(1:6)  TO  SKT1900TMP-HKNJANUM(1:6)
+      *---(01.00.07) LINE ADD START ------------------------------------
+           IF       FLG-KOUKI   =   1
+             MOVE  RECE10-HKNJANUM(1:4)    TO  SKT1900TMP-HKNJANUM(1:4)
            ELSE
-             MOVE  RECE10-HKNJANUM(3:6)  TO  SKT1900TMP-HKNJANUM(1:6)
+      *---(01.00.07) LINE ADD END   ------------------------------------
+             IF  RECE10-HKNJANUM(7:2)  =  SPACE
+               MOVE  RECE10-HKNJANUM(1:6)  TO  SKT1900TMP-HKNJANUM(1:6)
+             ELSE
+               MOVE  RECE10-HKNJANUM(3:6)  TO  SKT1900TMP-HKNJANUM(1:6)
+             END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
            END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    ¸©³°ÊÝ¸±¼Ô¢ª¸©Æâ»ÔÄ®Â¼¢ª¸©Æâ¹ñÊÝÁÈ¹ç¢ª¸©Æâ°·¤¤¹ñÊÝÁÈ¹ç
              IF     RECE10-PREFKBN   =    "2"
                MOVE      1          TO   SKT1900TMP-SYUTURYOKU
@@ -656,8 +704,16 @@
                  END-IF
                END-IF
              END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+           IF  FLG-KOUKI   =   1
+             MOVE    9                TO   SKT1900TMP-SYUTURYOKU
+           END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    Ä¢É¼¶èÊ¬
            IF    RECE10-RJNHKNNUM  NOT  =  SPACE   OR
+      *---(01.00.07) LINE ADD START ------------------------------------
+                 FLG-KOUKI         NOT  =  ZERO    OR
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  RECE10-HKNNUM          =  "060"
              MOVE          1          TO  SKT1900TMP-TYOHYOKBN
            ELSE
@@ -665,13 +721,27 @@
            END-IF
       *
       *    ¹ñÊÝÁÈ¹çË¡Äê³°µëÉÕÈ½Äê
-           IF   SKT1900TMP-HKNJANUM(3:1)  =  "3"    AND
-                RECE10-RJNHKNNUM          =  SPACE  AND
-                RECE10-AGE                >  2      AND
-                RECE10-AGE                <  70     AND
-                RECE10-KYURATE        NOT =  7
-             MOVE    RECE10-KYURATE      TO  SKT1900TMP-KYURATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF   SKT1900TMP-HKNJANUM(3:1)  =  "3"    AND
+                  RECE10-RJNHKNNUM          =  SPACE  AND
+                  RECE10-FLG(1)             =  ZERO   AND
+                  RECE10-AGE                <  70     AND
+                  RECE10-KYURATE        NOT =  7
+               MOVE    RECE10-KYURATE      TO  SKT1900TMP-KYURATE
+             END-IF
+           ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+             IF   SKT1900TMP-HKNJANUM(3:1)  =  "3"    AND
+                  RECE10-RJNHKNNUM          =  SPACE  AND
+                  RECE10-AGE                >  2      AND
+                  RECE10-AGE                <  70     AND
+                  RECE10-KYURATE        NOT =  7
+               MOVE    RECE10-KYURATE      TO  SKT1900TMP-KYURATE
+             END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
            END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -683,7 +753,14 @@
       ***** 05/04/18 yamaguchi DEL
       *         MOVE    "SEIKYU-KEY4"       TO  ORC-DBPATH
       ***** 
-               PERFORM 900-SEIKYU-READ-SEC
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         PERFORM 900-SEIKYU-READ-SEC
+               IF  FLG-KOUKI  =  ZERO
+                  PERFORM   900-SEIKYU-READ-SEC
+               ELSE
+                  PERFORM   950-SEIKYU-READ-SEC
+               END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
            ELSE
                MOVE    SPACE               TO  WRK-RECEERR
                STRING "½¸·×ÂÐ¾Ý³°¡¡´µ¼ÔÈÖ¹æ¡á"     DELIMITED  BY  SIZE
@@ -715,40 +792,71 @@
                MOVE  6   TO   IDX1
              END-IF
            ELSE
-      *    Âà¿¦¼Ô¤«¤É¤¦¤«
-             IF  RECE10-HKNNUM  =  "060"
-               IF  RECE10-AGE  >=  70
-                 IF  RECE10-KYURATE  = 9
-                   MOVE  1    TO  IDX1
-                 ELSE
-                   MOVE  2    TO  IDX1
-                 END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    ¸å´ü¹âÎð²½¤É¤¦¤«
+             IF  FLG-KOUKI  NOT  =  ZERO
+               IF  RECE10-KYURATE  =  9
+                 MOVE  5   TO   IDX1
                ELSE
-                 IF  RECE10-AGE  >= 3
-                   MOVE  3    TO  IDX1
-                 ELSE
-                   MOVE  4    TO  IDX1
-                 END-IF
+                 MOVE  6   TO   IDX1
                END-IF
              ELSE
-               IF  RECE10-AGE  >=  70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  2    TO  IDX1
-                 ELSE
-                   MOVE  3    TO  IDX1
-                 END-IF
-               ELSE
-                 IF  RECE10-AGE >= 3
-                   IF  RECE10-HONKZKKBN = "1"
-                     MOVE  1  TO  IDX1
+      *---(01.00.07) LINE ADD END   ------------------------------------
+      *    Âà¿¦¼Ô¤«¤É¤¦¤«
+               IF  RECE10-HKNNUM  =  "060"
+                 IF  RECE10-AGE  >=  70
+                   IF  RECE10-KYURATE  = 9
+                     MOVE  1    TO  IDX1
                    ELSE
-                     MOVE  4 TO  IDX1
+                     MOVE  2    TO  IDX1
                    END-IF
                  ELSE
-                   MOVE    5 TO  IDX1
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                     MOVE  4     TO  IDX1
+                   ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  >= 3
+                       MOVE  3    TO  IDX1
+                     ELSE
+                       MOVE  4    TO  IDX1
+                     END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                 END-IF
+               ELSE
+                 IF  RECE10-AGE  >=  70
+                   IF  RECE10-KYURATE  =  9
+                     MOVE  2    TO  IDX1
+                   ELSE
+                     MOVE  3    TO  IDX1
+                   END-IF
+                 ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5     TO  IDX1
+                   ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE >= 3
+                       IF  RECE10-HONKZKKBN = "1"
+                         MOVE  1  TO  IDX1
+                       ELSE
+                         MOVE  4  TO  IDX1
+                       END-IF
+                     ELSE
+                       MOVE    5  TO  IDX1
+                     END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+                   END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
              END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-IF
       *
            PERFORM  2101-SYUKEI-SEC
@@ -898,9 +1006,18 @@
                     FLG-PRINT      =     1  OR
                     SKT1900TMP-TYOHYOKBN    NOT  =  1
       *    ÊÝ¸±¼ÔÌ¾
-             MOVE     SKT1900TMP-HKNJANUM   TO  WRK-HKNJANUM
-             PERFORM  920-HKNJAINF-SET-SEC
-             MOVE     WRK-HKNJANAME         TO  SKT1900-HKNJANAME(IDX1)
+      *---(01.00.07) LINE ADD START ------------------------------------
+             IF  SKT1900TMP-SYUTURYOKU  =  9
+               PERFORM  400-KENNAME-SEC
+               MOVE   WRK-KENNAME          TO  SKT1900-HKNJANAME(IDX1)
+             ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+               MOVE   SKT1900TMP-HKNJANUM  TO  WRK-HKNJANUM
+               PERFORM  920-HKNJAINF-SET-SEC
+               MOVE   WRK-HKNJANAME        TO  SKT1900-HKNJANAME(IDX1)
+      *---(01.00.07) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    µëÉÕ³ä¹ç
              IF       SKT1900TMP-KYURATE    NOT  =  ZERO
                MOVE  SKT1900TMP-KYURATE     TO  WRK-Z2
@@ -1060,9 +1177,18 @@
                     UNTIL    IDX1  >     7  OR
                     FLG-PRINT      =     1  
       *    ÊÝ¸±¼ÔÌ¾
-           MOVE     SKT1900TMP-HKNJANUM   TO  WRK-HKNJANUM
-           PERFORM  920-HKNJAINF-SET-SEC
-           MOVE     WRK-HKNJANAME         TO  SKT1910-HKNJANAME(IDX1)
+      *---(01.00.07) LINE ADD START ------------------------------------
+             IF  SKT1900TMP-SYUTURYOKU  =  9
+               PERFORM  400-KENNAME-SEC
+               MOVE  WRK-KENNAME           TO  SKT1910-HKNJANAME(IDX1)
+             ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+               MOVE  SKT1900TMP-HKNJANUM   TO  WRK-HKNJANUM
+               PERFORM  920-HKNJAINF-SET-SEC
+               MOVE  WRK-HKNJANAME         TO  SKT1910-HKNJANAME(IDX1)
+      *---(01.00.07) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     5
@@ -1188,6 +1314,67 @@
            .
        331-PRINT-OUT-EXT.
            EXIT.
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ¸©Ì¾ÀßÄê½èÍý
+      *****************************************************************
+       400-KENNAME-SEC                SECTION.
+      *
+           INITIALIZE                 WRK-KENNAME
+           EVALUATE  SKT1900TMP-HKNJANUM(3:2)
+           WHEN  "01"  MOVE  "ËÌ³¤Æ»"    TO  WRK-KENNAME
+           WHEN  "02"  MOVE  "ÀÄ¿¹¸©"    TO  WRK-KENNAME
+           WHEN  "03"  MOVE  "´ä¼ê¸©"    TO  WRK-KENNAME
+           WHEN  "04"  MOVE  "µÜ¾ë¸©"    TO  WRK-KENNAME
+           WHEN  "05"  MOVE  "½©ÅÄ¸©"    TO  WRK-KENNAME
+           WHEN  "06"  MOVE  "»³·Á¸©"    TO  WRK-KENNAME
+           WHEN  "07"  MOVE  "Ê¡Åç¸©"    TO  WRK-KENNAME
+           WHEN  "08"  MOVE  "°ñ¾ë¸©"    TO  WRK-KENNAME
+           WHEN  "09"  MOVE  "ÆÊÌÚ¸©"    TO  WRK-KENNAME
+           WHEN  "11"  MOVE  "ºë¶Ì¸©"    TO  WRK-KENNAME
+           WHEN  "10"  MOVE  "·²ÇÏ¸©"    TO  WRK-KENNAME
+           WHEN  "12"  MOVE  "ÀéÍÕ¸©"    TO  WRK-KENNAME
+           WHEN  "13"  MOVE  "ÅìµþÅÔ"    TO  WRK-KENNAME
+           WHEN  "14"  MOVE  "¿ÀÆàÀî¸©"  TO  WRK-KENNAME
+           WHEN  "15"  MOVE  "¿·³ã¸©"    TO  WRK-KENNAME
+           WHEN  "16"  MOVE  "ÉÙ»³¸©"    TO  WRK-KENNAME
+           WHEN  "17"  MOVE  "ÀÐÀî¸©"    TO  WRK-KENNAME
+           WHEN  "18"  MOVE  "Ê¡°æ¸©"    TO  WRK-KENNAME
+           WHEN  "19"  MOVE  "»³Íü¸©"    TO  WRK-KENNAME
+           WHEN  "20"  MOVE  "Ä¹Ìî¸©"    TO  WRK-KENNAME
+           WHEN  "21"  MOVE  "´ôÉì¸©"    TO  WRK-KENNAME
+           WHEN  "22"  MOVE  "ÀÅ²¬¸©"    TO  WRK-KENNAME
+           WHEN  "23"  MOVE  "°¦ÃÎ¸©"    TO  WRK-KENNAME
+           WHEN  "24"  MOVE  "»°½Å¸©"    TO  WRK-KENNAME
+           WHEN  "25"  MOVE  "¼¢²ì¸©"    TO  WRK-KENNAME
+           WHEN  "26"  MOVE  "µþÅÔÉÜ"    TO  WRK-KENNAME
+           WHEN  "27"  MOVE  "ÂçºåÉÜ"    TO  WRK-KENNAME
+           WHEN  "28"  MOVE  "Ê¼¸Ë¸©"    TO  WRK-KENNAME
+           WHEN  "29"  MOVE  "ÆàÎÉ¸©"    TO  WRK-KENNAME
+           WHEN  "30"  MOVE  "ÏÂ²Î»³¸©"  TO  WRK-KENNAME
+           WHEN  "31"  MOVE  "Ä»¼è¸©"    TO  WRK-KENNAME
+           WHEN  "32"  MOVE  "Åçº¬¸©"    TO  WRK-KENNAME
+           WHEN  "33"  MOVE  "²¬»³¸©"    TO  WRK-KENNAME
+           WHEN  "34"  MOVE  "¹­Åç¸©"    TO  WRK-KENNAME
+           WHEN  "35"  MOVE  "»³¸ý¸©"    TO  WRK-KENNAME
+           WHEN  "36"  MOVE  "ÆÁÅç¸©"    TO  WRK-KENNAME
+           WHEN  "37"  MOVE  "¹áÀî¸©"    TO  WRK-KENNAME
+           WHEN  "38"  MOVE  "°¦É²¸©"    TO  WRK-KENNAME
+           WHEN  "39"  MOVE  "¹âÃÎ¸©"    TO  WRK-KENNAME
+           WHEN  "40"  MOVE  "Ê¡²¬¸©"    TO  WRK-KENNAME
+           WHEN  "41"  MOVE  "º´²ì¸©"    TO  WRK-KENNAME
+           WHEN  "42"  MOVE  "Ä¹ºê¸©"    TO  WRK-KENNAME
+           WHEN  "43"  MOVE  "·§ËÜ¸©"    TO  WRK-KENNAME
+           WHEN  "44"  MOVE  "ÂçÊ¬¸©"    TO  WRK-KENNAME
+           WHEN  "45"  MOVE  "µÜºê¸©"    TO  WRK-KENNAME
+           WHEN  "46"  MOVE  "¼¯»ùÅç¸©"  TO  WRK-KENNAME
+           WHEN  "47"  MOVE  "²­Æì¸©"    TO  WRK-KENNAME
+           END-EVALUATE
+      *
+           .
+       400-KENNAME-EXT.
+           EXIT.
+      *---(01.00.07) LINE ADD END   ------------------------------------
 057400*
       *****************************************************************
       *    ¥¨¥é¡¼½ÐÎÏ½èÍý
@@ -1565,6 +1752,110 @@
            .
        900-SEIKYU-READ-EXT.
            EXIT.
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ÀÁµá´ÉÍýÆÉ¹þ¡Ê¸å´ü¹âÎð¡Ë
+      *****************************************************************
+       950-SEIKYU-SELECT-SEC             SECTION.
+      *
+      *    ÀÁµá´ÉÍý£Ä£Â¸¡º÷
+           INITIALIZE         RECE10-REC.
+           MOVE   SPA-HOSPNUM             TO  RECE10-HOSPNUM
+           MOVE   LNK-PRTKANRI-SRYYM      TO  RECE10-SKYYM
+           MOVE   WRK-CONS-SRYYM-200804   TO  RECE10-SRYYM
+           MOVE   999999                  TO  RECE10-XXSRYYM
+           MOVE   WRK-HKNNUM              TO  RECE10-HKNNUM-S
+                                              RECE10-HKNNUM
+      *
+           MOVE    SPACE                  TO  RECE10-XXSTHKNJANUM
+           MOVE    "99999999"             TO  RECE10-XXEDHKNJANUM
+      *
+           MOVE    RECE10-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 950-SEIKYU-READ-SEC
+           ELSE
+               MOVE    1                   TO  FLG-END
+               DISPLAY "SELECT ERR"
+           END-IF
+           .
+      *
+       950-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ÀÁµá¥Þ¥¹¥¿¡¼ÆÉ¹þ¡Ê¸å´ü¹âÎð¡Ë
+      *****************************************************************
+       950-SEIKYU-READ-SEC           SECTION.
+      *
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    WRK-PATH2           TO  MCP-PATHNAME
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO            TO  FLG-END
+               MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *        ¥Æ¥¹¥È´µ¼Ô¤Î¤È¤­¤ÏÆÉ¤ßÈô¤Ð¤¹
+               MOVE    SPACE               TO  PTINF-REC
+               INITIALIZE                      PTINF-REC
+               MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
+               MOVE    RECE10-PTID         TO  PTINF-PTID
+               MOVE    PTINF-REC           TO  MCPDATA-REC
+               PERFORM 800-PTINF-READ-SEC
+               IF      FLG-PTINF           =   ZERO
+               AND     PTINF-TSTPTNUMKBN   =   "1"
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF   
+      *         
+               ADD     1                   TO  CNT-RECE10   
+           ELSE
+               MOVE    1               TO  FLG-END
+           END-IF
+           .
+      *
+       950-SEIKYU-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    ÀÁµá´ÉÍý¥¯¥í¡¼¥º
+      *****************************************************************
+       900-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *****************************************************************
+      *    ÀÁµá´ÉÍý¥¯¥í¡¼¥º
+      *****************************************************************
+       950-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH2            TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ´µ¼Ô¥Þ¥¹¥¿ÆÉ¹þ

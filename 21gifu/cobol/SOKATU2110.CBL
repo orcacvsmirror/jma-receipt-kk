@@ -35,6 +35,7 @@
       *                                      給付割合が異なっても別帳票としない
       *  01.00.03       内田     08/01/27    一般でも在総診は別帳票とする
       *  01.00.04       内田     08/04/09    SPA-AREA初期化
+      *  01.00.05       内田     08/04/23    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -264,6 +265,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -757,18 +763,38 @@
       *    一般／退職者
              IF  RECE10-HKNNUM  =  "060"
       *    年齢チェック
-               EVALUATE  TRUE
-                 WHEN  RECE10-AGE  >=  70
-                   IF  RECE10-KYURATE  =  9
-                     MOVE  1  TO  IDX1
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *         EVALUATE  TRUE
+      *           WHEN  RECE10-AGE  >=  70
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE  1  TO  IDX1
+      *             ELSE
+      *               MOVE  2  TO  IDX1
+      *             END-IF
+      *           WHEN  RECE10-AGE  >  2
+      *             MOVE  3  TO  IDX1
+      *           WHEN OTHER
+      *             MOVE  4  TO  IDX1
+      *         END-EVALUATE
+               IF  RECE10-AGE  >=  70
+                   IF  RECE10-KYURATE  =  7
+                       MOVE    2     TO    IDX1
                    ELSE
-                     MOVE  2  TO  IDX1
+                       MOVE    1     TO    IDX1
                    END-IF
-                 WHEN  RECE10-AGE  >  2
-                   MOVE  3  TO  IDX1
-                 WHEN OTHER
-                   MOVE  4  TO  IDX1
-               END-EVALUATE
+               ELSE
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  4     TO  IDX1
+                   ELSE
+                       IF  RECE10-AGE  >=  3
+                           MOVE  3     TO  IDX1
+                       ELSE
+                           MOVE  4     TO  IDX1
+                       END-IF
+                   END-IF
+               END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
              ELSE
                IF    RECE10-AGE   >= 70
                  IF    RECE10-KYURATE  =  9
@@ -777,15 +803,24 @@
                    MOVE      3    TO    IDX1
                  END-IF
                ELSE
-                 IF    RECE10-AGE  >=  3
-                   IF    RECE10-HONKZKKBN  =  "1"
-                     MOVE    1    TO    IDX1
-                   ELSE
-                     MOVE    4    TO    IDX1
-                   END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5     TO  IDX1
                  ELSE
-                   MOVE      5    TO    IDX1
+      *---(01.00.05) LINE ADD END   ------------------------------------
+                   IF    RECE10-AGE  >=  3
+                     IF    RECE10-HONKZKKBN  =  "1"
+                       MOVE    1    TO    IDX1
+                     ELSE
+                       MOVE    4    TO    IDX1
+                     END-IF
+                   ELSE
+                     MOVE      5    TO    IDX1
+                   END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
                END-IF
              END-IF
       *

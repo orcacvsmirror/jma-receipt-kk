@@ -35,6 +35,7 @@
       *  01.00.02    ÆâÅÄ    08/04/09    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *                                  SPA-AREA½é´ü²½
       *                                  Ä¹´ü¤ÎÈ½Äê½¤Àµ
+      *  01.00.03    ÆâÅÄ    08/04/23    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -799,18 +800,19 @@
            MOVE  WRK-HOSPTEL               TO  SC03-TEL
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
       *    ¸øÈñ¼ïÊÌ
-           EVALUATE    MF100-KOHNUM-KEY
-               WHEN    "145"
-                       MOVE    "¢þ"        TO  SC03-KOHKBN(1)
-               WHEN    "146"
-                       MOVE    "¢þ"        TO  SC03-KOHKBN(2)
-               WHEN    "143"
-                       MOVE    "¢þ"        TO  SC03-KOHKBN(3)
-               WHEN    "147"
-                       MOVE    "¢þ"        TO  SC03-KOHKBN(4)
-           END-EVALUATE
-      *
+      *     EVALUATE    MF100-KOHNUM-KEY
+      *         WHEN    "145"
+      *                 MOVE    "¢þ"        TO  SC03-KOHKBN(1)
+      *         WHEN    "146"
+      *                 MOVE    "¢þ"        TO  SC03-KOHKBN(2)
+      *         WHEN    "143"
+      *                 MOVE    "¢þ"        TO  SC03-KOHKBN(3)
+      *         WHEN    "147"
+      *                 MOVE    "¢þ"        TO  SC03-KOHKBN(4)
+      *    END-EVALUATE
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            .
        310-HEAD-HEN-EXT.
@@ -850,6 +852,10 @@
                        MOVE    "¡û"    TO  SC03-HKNKBN(IDX 2)
                    WHEN "067"
                        MOVE    "¡û"    TO  SC03-HKNKBN(IDX 3)
+      *---(01.00.03) LINE ADD START ------------------------------------
+                   WHEN "039"
+                       MOVE    "¡û"    TO  SC03-HKNKBN(IDX 4)
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    WHEN OTHER
                        MOVE    "¡û"    TO  SC03-HKNKBN(IDX 1)
                END-EVALUATE
@@ -857,6 +863,9 @@
       *    Á°´ü¹âÎð¼Ô
                IF  MF100-AGE           >=  70  AND
                    MF100-RJNHKNNUM     =   SPACE
+      *---(01.00.03) LINE ADD START ------------------------------------
+               AND  MF100-HKNNUM  NOT =  "039"
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    MOVE    "1"         TO  SC03-KOREI (IDX)
                END-IF
       *
