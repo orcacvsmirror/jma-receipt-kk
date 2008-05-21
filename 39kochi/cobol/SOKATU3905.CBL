@@ -32,6 +32,9 @@
       *                                  公費エリアから取得するよう修正
       *  01.00.02    吉川    2008/05/16  データがちょうど14行の場合
       *                                  改頁されてしまう不具合を修正
+      *  01.00.03    吉川    2008/05/20  ９割のデータを先に印字する
+      *                                  食事日数がゼロでも
+      *                                  食事療養費を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -668,7 +671,10 @@
       *=== 給付割合毎でも分ける by Yoshiawa(2008/05/03) start
       *         PERFORM 20011-HKN-SYUKEI-SEC
       *        集計処理
-               IF   RECE10-KYURATE  =  7
+      *=== 9割を先に印字 by Yoshiawa(2008/05/20) start
+      *         IF   RECE10-KYURATE  =  7
+               IF   RECE10-KYURATE  =  9
+      *=== 9割を先に印字 by Yoshiawa(2008/05/20) end
                  MOVE  RECE10-KYURATE       TO SUM-KYURATE(WRK-CNT)
                  MOVE  RECE10-HKNJANUM(3:6) TO SUM-HKNJANUM(WRK-CNT)
                  PERFORM 20011-HKN-SYUKEI-SEC
@@ -773,12 +779,16 @@
            ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(WRK-CNT IDX1)
       *
            IF      IDX1                   =   1 
-             IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      *=== 食事が０でも食事療養費を印字 by Yoshikawa(2008/05/20) start
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      *=== 食事が０でも食事療養費を印字 by Yoshikawa(2008/05/20) end
       *    食事療養：金額
              ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(WRK-CNT)
       *    食事療養：標準負担額
              ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(WRK-CNT)
-             END-IF
+      *=== 食事が０でも食事療養費を印字 by Yoshikawa(2008/05/20) start
+      *       END-IF
+      *=== 食事が０でも食事療養費を印字 by Yoshikawa(2008/05/20) end
            END-IF    
       *
       *    原爆件数集計
