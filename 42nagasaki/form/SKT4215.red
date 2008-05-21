@@ -123,7 +123,7 @@
       </element>
       <element name="KOHNAME" occurs="1">
         <appinfo>
-          <embed object="string" length="8"/>
+          <embed object="string" length="10"/>
         </appinfo>
       </element>
       <element name="KNYUGAI-TBL" occurs="2">
@@ -13538,10 +13538,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O427">
       <attribute name="obj_pos">
-        <point val="1.5,19.8"/>
+        <point val="1.5,19.9237"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3182,19.5611;1.6818,19.8611"/>
+        <rectangle val="1.3182,19.6848;1.6818,19.9848"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[0].HBTNUM#</string>
@@ -13561,7 +13561,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.5,19.8"/>
+            <point val="1.5,19.9237"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13580,10 +13580,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O428">
       <attribute name="obj_pos">
-        <point val="1.5,21.8"/>
+        <point val="1.5,21.9237"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3182,21.5611;1.6818,21.8611"/>
+        <rectangle val="1.3182,21.6848;1.6818,21.9848"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[1].HBTNUM#</string>
@@ -13603,7 +13603,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.5,21.8"/>
+            <point val="1.5,21.9237"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13622,10 +13622,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O429">
       <attribute name="obj_pos">
-        <point val="1.5,23.8"/>
+        <point val="1.5,23.906"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3182,23.5611;1.6818,23.8611"/>
+        <rectangle val="1.3182,23.6671;1.6818,23.9671"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[2].HBTNUM#</string>
@@ -13645,7 +13645,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.5,23.8"/>
+            <point val="1.5,23.906"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13664,10 +13664,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O430">
       <attribute name="obj_pos">
-        <point val="1.5,25.8"/>
+        <point val="1.5,25.9237"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3182,25.5611;1.6818,25.8611"/>
+        <rectangle val="1.3182,25.6848;1.6818,25.9848"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[3].HBTNUM#</string>
@@ -13687,7 +13687,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.5,25.8"/>
+            <point val="1.5,25.9237"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13709,7 +13709,7 @@
         <point val="1.5,18.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3485,18.2111;1.6515,19.4111"/>
+        <rectangle val="1.3485,18.2111;1.6515,19.7111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[0].KOHNAME#</string>
@@ -13724,6 +13724,7 @@
         <composite type="text">
           <attribute name="string">
             <string>#&#164;&#162;
+&#164;&#162;
 &#164;&#162;
 &#164;&#162;
 &#164;&#162;#</string>
@@ -13757,7 +13758,7 @@
         <point val="1.5,20.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3485,20.2111;1.6515,21.4111"/>
+        <rectangle val="1.3485,20.2111;1.6515,21.7111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[1].KOHNAME#</string>
@@ -13772,6 +13773,7 @@
         <composite type="text">
           <attribute name="string">
             <string>#&#164;&#162;
+&#164;&#162;
 &#164;&#162;
 &#164;&#162;
 &#164;&#162;#</string>
@@ -13805,7 +13807,7 @@
         <point val="1.5,22.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3485,22.2111;1.6515,23.4111"/>
+        <rectangle val="1.3485,22.2111;1.6515,23.7111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[2].KOHNAME#</string>
@@ -13820,6 +13822,7 @@
         <composite type="text">
           <attribute name="string">
             <string>#&#164;&#162;
+&#164;&#162;
 &#164;&#162;
 &#164;&#162;
 &#164;&#162;#</string>
@@ -13853,7 +13856,7 @@
         <point val="1.5,24.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.3485,24.2111;1.6515,25.4111"/>
+        <rectangle val="1.3485,24.2111;1.6515,25.7111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[3].KOHNAME#</string>
@@ -13868,6 +13871,7 @@
         <composite type="text">
           <attribute name="string">
             <string>#&#164;&#162;
+&#164;&#162;
 &#164;&#162;
 &#164;&#162;
 &#164;&#162;#</string>
