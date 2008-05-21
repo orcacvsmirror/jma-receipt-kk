@@ -39,7 +39,7 @@
                05  SKT1410TMP-S-FTNGAKU            PIC  9(10).
       ****2006/01/13 @@@@-BRAND  START
       *     03  SKT1410TMP-KOH-TBL      OCCURS  24.
-           03  SKT1410TMP-KOH-TBL      OCCURS  31.
+           03  SKT1410TMP-KOH-TBL      OCCURS  32.
       ****2006/01/13 @@@@-BRAND  END
                05  SKT1410TMP-K-KENSU              PIC  9(06).
       *         05  SKT1410TMP-K-TENSU              PIC  9(10).

@@ -45,6 +45,8 @@
       *  01.00.10    内田    07/10/08    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.11    内田    08/04/27    ４月改正に伴う修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -236,6 +238,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -340,6 +347,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.11) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -711,39 +721,63 @@
       *    一般被保険者
            IF  RECE10-HKNNUM  =  "060"
       *    年齢チェック
-             EVALUATE  TRUE
-               WHEN  RECE10-AGE  >  69
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *           IF  RECE10-KYURATE  =  8
-      *             MOVE  6  TO  IDX1
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *       EVALUATE  TRUE
+      *         WHEN  RECE10-AGE  >  69
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **           IF  RECE10-KYURATE  =  8
+      **             MOVE  6  TO  IDX1
+      **           ELSE
+      **             MOVE  7  TO  IDX1
+      **          END-IF
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE  5  TO  IDX1
       *           ELSE
-      *             MOVE  7  TO  IDX1
-      *          END-IF
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  5  TO  IDX1
-                 ELSE
-                   MOVE  4  TO  IDX1
-                 END-IF
-      *---(01.00.04) LINE ADD END   ------------------------------------
-               WHEN  RECE10-AGE  >  2
-      *---(01.00.05) LINE ADD START ------------------------------------
+      *             MOVE  4  TO  IDX1
+      *           END-IF
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *         WHEN  RECE10-AGE  >  2
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **             EVALUATE  RECE10-KYURATE
+      **               WHEN   7      MOVE  1  TO  IDX1
+      **               WHEN   8      MOVE  2  TO  IDX1
+      **               WHEN   9      MOVE  3  TO  IDX1
+      **               WHEN  OTHER   MOVE  4  TO  IDX1
+      **             END-EVALUATE
       *             EVALUATE  RECE10-KYURATE
       *               WHEN   7      MOVE  1  TO  IDX1
-      *               WHEN   8      MOVE  2  TO  IDX1
-      *               WHEN   9      MOVE  3  TO  IDX1
-      *               WHEN  OTHER   MOVE  4  TO  IDX1
+      *               WHEN  OTHER   MOVE  2  TO  IDX1
       *             END-EVALUATE
-                   EVALUATE  RECE10-KYURATE
-                     WHEN   7      MOVE  1  TO  IDX1
-                     WHEN  OTHER   MOVE  2  TO  IDX1
-                   END-EVALUATE
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               WHEN OTHER
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  8  TO  IDX1
-                 MOVE  6  TO  IDX1
-      *---(01.00.05) LINE ADD END   ------------------------------------
-             END-EVALUATE
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         WHEN OTHER
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  8  TO  IDX1
+      *           MOVE  6  TO  IDX1
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *       END-EVALUATE
+             IF  RECE10-AGE  >=  70
+                 IF  RECE10-KYURATE  =  9
+                     MOVE  5  TO  IDX1
+                 ELSE
+                     MOVE  4  TO  IDX1
+                 END-IF
+             ELSE
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  6     TO  IDX1
+                 ELSE
+                     IF  RECE10-AGE  >=  3
+                         IF  RECE10-KYURATE  =  7
+                             MOVE  1     TO  IDX1
+                         ELSE
+                             MOVE  2     TO  IDX1
+                         END-IF
+                     ELSE
+                         MOVE  6     TO  IDX1
+                     END-IF
+                 END-IF
+             END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *     障害を所持している患者は年齢を問わず「障害」欄に集計する
       *     但し、全国土木、全国建設工事業は除く
              IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
@@ -823,33 +857,42 @@
       *      家族
              ELSE
                IF  RECE10-AGE  >  2
+      *---(01.00.11) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  13     TO  IDX1
+                 ELSE
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *          前期高齢者判定
-                 IF    RECE10-AGE   >= 70
+                   IF    RECE10-AGE   >= 70
       *---(01.00.04) LINE ADD START ------------------------------------
       *             IF  RECE10-KYURATE  =  8
       *               MOVE  13  TO  IDX1
       *             ELSE
       *               MOVE  14  TO  IDX1
       *             END-IF
-                   IF  RECE10-KYURATE  =  9
-                     MOVE  10  TO  IDX1
-                   ELSE
-                     MOVE  9   TO  IDX1
-                   END-IF
+                     IF  RECE10-KYURATE  =  9
+                       MOVE  10  TO  IDX1
+                     ELSE
+                       MOVE  9   TO  IDX1
+                     END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
-                 ELSE
+                   ELSE
       *---(01.00.05) LINE ADD START ------------------------------------
       *               EVALUATE  RECE10-KYURATE
       *                 WHEN   7      MOVE  15  TO  IDX1
       *                 WHEN   8      MOVE  16  TO  IDX1
       *                 WHEN  OTHER   MOVE  17  TO  IDX1
       *               END-EVALUATE
-                     EVALUATE  RECE10-KYURATE
-                       WHEN   7      MOVE  11  TO  IDX1
-                       WHEN  OTHER   MOVE  12  TO  IDX1
-                     END-EVALUATE
+                       EVALUATE  RECE10-KYURATE
+                         WHEN   7      MOVE  11  TO  IDX1
+                         WHEN  OTHER   MOVE  12  TO  IDX1
+                       END-EVALUATE
       *---(01.00.05) LINE ADD END   ------------------------------------
+                   END-IF
+      *---(01.00.11) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
                ELSE
       *---(01.00.05) LINE ADD START ------------------------------------
       *           MOVE  19  TO   IDX1
@@ -870,18 +913,27 @@
                    OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
       *****
       *            ３歳未満、前期高齢者は家族でも本人欄に集計する
-                   IF  RECE10-AGE     <   3  OR
-                       RECE10-AGE     >   69
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *               MOVE     12     TO   IDX1
-                     MOVE     8      TO   IDX1
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  8       TO  IDX1
                    ELSE
+      *---(01.00.11) LINE ADD ENF   ------------------------------------
+                     IF  RECE10-AGE     <   3  OR
+                         RECE10-AGE     >   69
       *---(01.00.05) LINE ADD START ------------------------------------
-      *               MOVE     18     TO   IDX1
-                     MOVE     12     TO   IDX1
+      *                 MOVE     12     TO   IDX1
+                       MOVE     8      TO   IDX1
       *---(01.00.05) LINE ADD END   ------------------------------------
+                     ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *                 MOVE     18     TO   IDX1
+                       MOVE     12     TO   IDX1
+      *---(01.00.05) LINE ADD END   ------------------------------------
+                     END-IF
+      *---(01.00.11) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
@@ -1145,6 +1197,9 @@
 	       WHEN  961
 	       WHEN  962
 	       WHEN  963   MOVE  28  TO  IDX4
+      *---(01.00.11) LINE ADD START ------------------------------------
+               WHEN  038   MOVE  32  TO  IDX4
+      *---(01.00.11) LINE ADD END   ------------------------------------
                WHEN  OTHER MOVE  99  TO  IDX4
       *---(01.00.05) LINE ADD END   ------------------------------------
              END-EVALUATE
@@ -1379,6 +1434,15 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *    集計
            END-PERFORM
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    肝炎
+           IF  SKT1410TMP-K-KENSU (32)  NOT =  ZERO
+               MOVE  "肝炎"        TO  SKT1410-ETC-HBT
+               MOVE  "38"          TO  SKT1410-ETC-CODE
+               MOVE  SKT1410TMP-K-KENSU (32)   TO  WRK-Z3
+               MOVE  WRK-Z3                    TO  SKT1410-ETC-KENSU
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC

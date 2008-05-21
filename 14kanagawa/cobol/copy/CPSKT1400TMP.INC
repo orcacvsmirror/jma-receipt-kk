@@ -29,6 +29,12 @@
              05   SKT1400TMP-GAIRAI-AREA.
                07 SKT1400TMP-G-KENSU         PIC  9(06).
                07 SKT1400TMP-G-TENSU         PIC  9(10).
+             05   SKT1400TMP-KOUKI-NYUIN-AREA.
+               07 SKT1400TMP-KN-KENSU         PIC  9(06).
+               07 SKT1400TMP-KN-TENSU         PIC  9(10).
+             05   SKT1400TMP-KOUKI-GAIRAI-AREA.
+               07 SKT1400TMP-KG-KENSU         PIC  9(06).
+               07 SKT1400TMP-KG-TENSU         PIC  9(10).
              05   SKT1400TMP-SYOKUJI-AREA.
                07 SKT1400TMP-S-KENSU         PIC  9(06).
                07 SKT1400TMP-S-MONEY         PIC  9(10).

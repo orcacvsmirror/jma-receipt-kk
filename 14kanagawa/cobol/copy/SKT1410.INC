@@ -80,3 +80,11 @@
                05  SKT1410-GKENSU        PIC  X(06).
       *    合計：金額
                05  SKT1410-GKINGAKU      PIC  X(07).
+      *    その他テーブル
+           03  SKT1410-ETC-TBL  OCCURS  1.
+      *    法別名
+               05  SKT1410-ETC-HBT       PIC  X(06).
+      *    コード
+               05  SKT1410-ETC-CODE      PIC  X(02).
+      *    件数
+               05  SKT1410-ETC-KENSU     PIC  X(03).
