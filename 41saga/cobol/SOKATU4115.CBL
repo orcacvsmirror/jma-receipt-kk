@@ -27,6 +27,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/13  まとめ公費を使用した時の
+      *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2008/05/21  在宅は別様式の帳票に印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -72,6 +75,9 @@
            COPY    "CPCOMMONSHELL.INC".
       *
            COPY    "SKT4115.INC".
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) start
+           COPY    "SKT4125.INC".
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -899,6 +905,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/13) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/13) end
       *      ０５１と０９１は同じ場所に集計する
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
@@ -1013,12 +1022,25 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
-      *    帳票編集<見出し>処理
-           PERFORM 20021-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-           PERFORM 20023-BODY-HEN-SEC
-      *    帳票印刷処理
-           PERFORM 20024-PRINT-OUT-SEC
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) start
+           IF  WRK-INDEX  =  1
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) end
+      *        帳票編集<見出し>処理
+               PERFORM 20021-HEAD-HEN-SEC
+      *        帳票編集<明細>処理
+               PERFORM 20023-BODY-HEN-SEC
+      *        帳票印刷処理
+               PERFORM 20024-PRINT-OUT-SEC
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) start
+           ELSE
+      *        帳票編集(在宅)<見出し>処理
+               PERFORM 20031-HEAD-HEN-SEC
+      *        帳票編集(在宅)<明細>処理
+               PERFORM 20033-BODY-HEN-SEC
+      *        帳票印刷(在宅)処理
+               PERFORM 20034-PRINT-OUT-SEC
+           END-IF
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) end
       *
            .
        2002-PRINT-EXT.
@@ -1065,11 +1087,13 @@
       *                                     INTO  SKT4115-HKNJANAME
       *         END-STRING
       *     END-IF
-      *    在総診・在医総
-           IF    WRK-INDEX  =  2
-             MOVE    "在"              TO  SKT4115-ZAI1
-             MOVE    "◯"              TO  SKT4115-ZAI2
-           END-IF
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) start
+      **    在総診・在医総
+      *     IF    WRK-INDEX  =  2
+      *       MOVE    "在"              TO  SKT4115-ZAI1
+      *       MOVE    "◯"              TO  SKT4115-ZAI2
+      *     END-IF
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) end
       *    とりあえずコメントアウト
       *    給付割合
       *     EVALUATE    SUM-KYURATE
@@ -1347,6 +1371,273 @@
        20024-PRINT-OUT-EXT.
            EXIT.
       *
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) start
+      *****************************************************************
+      *    帳票編集(在宅)<見出し>処理
+      *****************************************************************
+       20031-HEAD-HEN-SEC          SECTION.
+      *
+           INITIALIZE                      SKT4125
+      *    請求年月日
+           MOVE    WRK-SEIYMDWH        TO  SKT4125-SEIYMD
+      *    診療年月
+           MOVE    WRK-SRYYMWH         TO  SKT4125-SRYYM
+      *    医療機関住所
+           MOVE    WRK-HOSPADRS        TO  SKT4125-ADRS
+      *    医療機関名
+           MOVE    WRK-HOSPNAME        TO  SKT4125-HOSPNAME
+      *    開設者名
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  SKT4125-KAISETUNAME
+      *    電話番号
+           MOVE    WRK-HOSPTEL         TO  SKT4125-TEL
+      *    医療機関コード
+           MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT      TO  SKT4125-HOSPCD
+      *    保険者番号
+           MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT      TO  SKT4125-HKNJANUM
+      *    保険者名(必要あらばコメントを外して下さい)
+      *     INITIALIZE                      HKNJAINF-REC
+      *     MOVE    SPA-HOSPNUM         TO  HKNJA-HOSPNUM
+      *     MOVE    "39"                TO  HKNJA-HKNJANUM(1:2)
+      *     MOVE    WRK-HKNJANUM        TO  HKNJA-HKNJANUM(3:6)
+      **     MOVE    KEY-O-HKNJANUM      TO  HKNJA-HKNJANUM
+      *     MOVE    HKNJAINF-REC        TO  MCPDATA-REC
+      *     PERFORM 900-HKNJAINF-INV-SEC
+      *     IF      FLG-HKNJAINF        =   ZERO
+      *         STRING  HKNJA-HKNJANAME     DELIMITED  BY  SPACE
+      *                 "　殿"              DELIMITED  BY  SIZE
+      *                                     INTO  SKT4125-HKNJANAME
+      *         END-STRING
+      *     END-IF
+      *    とりあえずコメントアウト
+      *    給付割合
+      *     EVALUATE    SUM-KYURATE
+      *     WHEN 10
+      *       MOVE    "◯"              TO  SKT4125-KYURATE(1)
+      *       MOVE    "×"              TO  SKT4125-KYURATE(4)
+      *     WHEN 9
+      *       MOVE    "◯"              TO  SKT4125-KYURATE(2)
+      *       MOVE    "×"              TO  SKT4125-KYURATE(4)
+      *     WHEN 8
+      *       MOVE    "◯"              TO  SKT4125-KYURATE(3)
+      *       MOVE    "×"              TO  SKT4125-KYURATE(4)
+      *     END-EVALUATE
+            MOVE     SPACE             TO  SKT4125-KYURATE(1)
+            MOVE     SPACE             TO  SKT4125-KYURATE(2)
+            MOVE     SPACE             TO  SKT4125-KYURATE(3)
+            MOVE     SPACE             TO  SKT4125-KYURATE(4)
+      *
+           .
+       20031-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集(在宅)<明細行>処理
+      *****************************************************************
+       20033-BODY-HEN-SEC      SECTION.
+      *
+           MOVE    ZERO                TO  IDZ
+      *
+      *    編集処理
+           PERFORM VARYING IDX FROM    1   BY  1
+                   UNTIL   IDX >       2
+             ADD     1                   TO  IDZ    
+      *    療養の給付：件数
+             MOVE  SUM-KENSU(IDX 2)      TO  WRK-Z5
+             MOVE  WRK-Z5                TO  SKT4125-KENSU(IDZ)
+      *    療養の給付：診療実日数
+             MOVE  SUM-NISSU(IDX 2)      TO  WRK-Z5 
+             MOVE  WRK-Z5                TO  SKT4125-NISSU(IDZ)
+      *    療養の給付：点数
+             MOVE  SUM-TENSU(IDX 2)      TO  WRK-Z9
+             MOVE  WRK-Z9                TO  SKT4125-TENSU(IDZ)
+      *    療養の給付：一部負担金
+             MOVE  SUM-ITBFTN(IDX 2)     TO  WRK-Z9
+             MOVE  WRK-Z9                TO  SKT4125-ITBFTN(IDZ)
+           END-PERFORM
+      *
+      *    公費負担分編集処理
+           MOVE    ZERO                  TO  FLG-KOH-END
+           MOVE    1                     TO  IDX2
+      * 
+           PERFORM 200231-KOH-HENSYU-SEC
+                                   UNTIL   FLG-KOH-END   =   1
+      *
+           .
+       20033-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集(在宅)<公費負担分>処理
+      *****************************************************************
+       200331-KOH-HENSYU-SEC         SECTION.
+      *
+           PERFORM VARYING IDY     FROM    1   BY  1
+                   UNTIL   IDY     >       9         
+                   OR      FLG-KOH-END     =   1
+             IF      SUM-KOHNUM (IDX2)   =   SPACE
+               MOVE    1                     TO  FLG-KOH-END
+             ELSE    
+               PERFORM 2002311-HKNNUM-HENSYU-SEC     
+      *    公費再掲欄：療養の給付：件数
+               MOVE  SUM-KKENSU(IDX2 2)    TO WRK-Z5
+               MOVE  WRK-Z5                TO SKT4125-KKENSU(IDY)
+      *    公費再掲欄：療養の給付：日数
+               MOVE  SUM-KNISSU(IDX2 2)    TO WRK-Z5
+               MOVE  WRK-Z5                TO SKT4125-KNISSU(IDY)
+      *    公費再掲欄：療養の給付：点数
+               MOVE  SUM-KTENSU(IDX2 2)    TO WRK-Z9
+               MOVE  WRK-Z9                TO SKT4125-KTENSU(IDY)
+      *    公費再掲欄：療養の給付：一部負担金
+               MOVE  SUM-KITBFTN(IDX2 2)   TO WRK-Z9
+               MOVE  WRK-Z9                TO SKT4125-KITBFTN(IDY)
+      *    公費再掲欄：療養の給付：患者負担額
+               MOVE  SUM-KPTFTN(IDX2 2)    TO WRK-Z9
+               MOVE  WRK-Z9                TO SKT4125-KPTFTN(IDY)
+      *
+               ADD     1                   TO  IDX2   
+             END-IF        
+           END-PERFORM
+      *
+      *    １頁出力しても公費はまだ残っているか
+           IF      SUM-KOHNUM (IDX2)  =   SPACE
+               MOVE    1                   TO  FLG-KOH-END
+           ELSE    
+      *        帳票印刷処理（２頁以降）
+               PERFORM 20034-PRINT-OUT-SEC
+      *        帳票編集<見出し>処理
+               PERFORM 20031-HEAD-HEN-SEC
+           END-IF     
+      *
+           .
+       200331-KOH-HENSYU-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費保険区分編集(在宅)処理
+      *****************************************************************
+       2003311-HKNNUM-HENSYU-SEC         SECTION.
+      *
+           MOVE    SPACE               TO  WRK-KOHKBN
+      *
+           MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+           MOVE    WRK-KOHNUM9         TO  SKT4125-HBTNUM (IDY)
+      *
+      *    特定疾患のとき 
+           IF      SUM-KOHNUM (IDX2)  =   "051"
+               MOVE    "51"            TO   SKT4125-HBTNUM (IDY)
+               MOVE    "特定疾患"      TO   WRK-HKNNAME
+           ELSE
+      *      公費番号まとめ情報からの集計か
+             IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+      *        保険番号読込み  
+               INITIALIZE                     HKNNUM-REC
+               MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
+               MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+               MOVE  HKNNUM-REC           TO  MCPDATA-REC
+               MOVE  "tbl_hknnum"         TO  MCP-TABLE
+               MOVE  "key2"               TO  MCP-PATHNAME
+                 PERFORM 900-DBSELECT-SEC
+                 IF      MCP-RC              =   ZERO
+                   MOVE  "tbl_hknnum"     TO  MCP-TABLE
+                   MOVE  "key2"           TO  MCP-PATHNAME
+                   PERFORM 900-HKNNUM-READ-SEC
+                 ELSE
+                   MOVE    1              TO  FLG-HKNNUM
+                 END-IF
+      *
+                 PERFORM UNTIL       FLG-HKNNUM      =   1
+                   IF      HKN-TEKSTYMD            <=  WRK-SRYYMD
+                   AND     HKN-TEKEDYMD            >=  WRK-SRYYMD
+                     MOVE  HKN-TANSEIDONAME   TO  WRK-HKNNAME
+                     MOVE  1                  TO  FLG-HKNNUM   
+                   END-IF
+      *
+                   IF      FLG-HKNNUM           =   ZERO
+                     MOVE  "tbl_hknnum"       TO  MCP-TABLE
+                     MOVE  "key2"             TO  MCP-PATHNAME
+                     PERFORM 900-HKNNUM-READ-SEC
+                   END-IF
+                 END-PERFORM
+                 MOVE  "tbl_hknnum"       TO  MCP-TABLE
+                 MOVE  "key2"             TO  MCP-PATHNAME
+                 PERFORM  900-CLOSE-SEC
+      *
+      *          法別番号
+                 MOVE  HKN-HBTNUM         TO  SKT4125-HBTNUM(IDY)
+             ELSE
+      *          公費番号まとめ情報から公費名へ
+                 MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
+             END-IF
+           END-IF
+      *
+      *    公費名
+           MOVE  WRK-HKNNAME        TO  SKT4125-KOHNAME(IDY)
+      *
+           . 
+       2003311-HKNNUM-HENSYU-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷(在宅)処理
+      *****************************************************************
+       20034-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           ADD     1                   TO  CNT-PAGE
+           MOVE    CNT-PAGE            TO  WRK-PAGE
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE    WRK-PAGE            TO  SKT4125-NO
+           MOVE    "SKT4125.red"         TO  SPRT-PRTID
+           MOVE    SKT4125               TO  SPRT-PRTDATA
+           EVALUATE    WRK-SYOKBN
+               WHEN    "1"
+                   MOVE    "広域連合請求書・在医総等"
+                                         TO  SPRT-TITLE
+               WHEN    "2"
+                   MOVE    "広域連合請求書・在医総等［返戻分］" 
+                                         TO  SPRT-TITLE
+           END-EVALUATE
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *     MOVE    "1"                 TO  SPRT-SITEKBN
+      *     
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+               PERFORM 500-COBABORT-SEC
+           END-IF
+           .
+       20034-PRINT-OUT-EXT.
+           EXIT.
+      *
+      *=== 在宅は別様式 by Yoshikawa(2008/05/21) end
       *****************************************************************
       *    全角変換処理
       *****************************************************************
