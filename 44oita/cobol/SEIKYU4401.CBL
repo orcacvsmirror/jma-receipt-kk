@@ -34,6 +34,9 @@
       *                                    医療機関情報を参照
       *                                    長期上位（974）は長期と同様の
       *                                    処理をする
+      *  01.00.03     内田     08/05/21    一部負担額欄を１円単位四捨五入
+      *                                    社保の保険者名が印字されなかった
+      *                                    のを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1073,10 +1076,13 @@
       *
       *        保険者名
                MOVE    MF100-HKNJANUM          TO  WRK-HKNJANUM
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *         MOVE    PATH-TBL-HKNJAINF-KEY   TO  WRK-PATH
-               MOVE    "key2"                  TO  WRK-PATH
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **         MOVE    PATH-TBL-HKNJAINF-KEY   TO  WRK-PATH
+      *         MOVE    "key2"                  TO  WRK-PATH
+      **---(01.00.02) LINE ADD END   ------------------------------------
+               MOVE    "key"                   TO  WRK-PATH
+      *---(01.00.03) LINE ADD END   ------------------------------------
                PERFORM 920-HKNJAINF-SET-SEC
                MOVE    HKNJA-HKNJANAME     TO  SC01-HKNJANAME(IDX)
       *
@@ -1709,21 +1715,25 @@
       *
            IF  FLG-HEIYOU      =   ZERO
                MOVE    SYU-SYUSKJ-FTN  TO  WRK-KOHSKJFTN
-               IF  RECE02-FTNMONEY(1)  =   ZERO
-                   IF  RECE02-RJNHKNNUM    NOT =   SPACE
-                       MOVE    SYU-KOH-COMPFTN-ENTANI(1)
-                                                   TO  WRK-SEIKYUGK
-                   ELSE
-                       MOVE    SYU-SYUCOMPFTN-ENTANI
-                                                   TO  WRK-SEIKYUGK
-                   END-IF
-               ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         IF  RECE02-FTNMONEY(1)  =   ZERO
+      *             IF  RECE02-RJNHKNNUM    NOT =   SPACE
+      *                 MOVE    SYU-KOH-COMPFTN-ENTANI(1)
+      *                                             TO  WRK-SEIKYUGK
+      *             ELSE
+      *                 MOVE    SYU-SYUCOMPFTN-ENTANI
+      *                                             TO  WRK-SEIKYUGK
+      *             END-IF
+      *         ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    IF  RECE02-RJNHKNNUM    NOT =   SPACE
                        MOVE    SYU-KOH-COMPFTN(1)  TO  WRK-SEIKYUGK
                    ELSE
                        MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
                    END-IF
-               END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-IF
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
@@ -1931,6 +1941,9 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *       AND   (WRK-PATH           =  PATH-TBL-HKNJAINF-KEY2)
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+             AND   (WRK-PATH           =  "key2")
+      *---(01.00.03) LINE ADD END   ------------------------------------
                GO               TO    925-HKNJAINF-READ-SEC
              END-IF
       *
