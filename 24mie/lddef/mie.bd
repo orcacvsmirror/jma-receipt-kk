@@ -4,6 +4,7 @@ arraysize	20;
 textsize	400;
 
 bind	"SOKATU2410"	"OpenCOBOL";
+bind	"SOKATU2415"	"OpenCOBOL";
 
 #include "orcadb.inc"
 
