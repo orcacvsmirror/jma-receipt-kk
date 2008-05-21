@@ -32,7 +32,7 @@
       *電話番号
            03  SKT4200-TEL                 PIC  X(15).
       *請求テーブル
-           03  SKT4200-SEIKYU  OCCURS 15.
+           03  SKT4200-SEIKYU  OCCURS 17.
       *療養の給付：件数
                05  SKT4200-KENSU           PIC  X(05).
       *療養の給付：点数
