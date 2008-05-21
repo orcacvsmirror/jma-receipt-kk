@@ -36,6 +36,7 @@
       *  01.00.03    内田       07/12/05    政令指定都市は市でまとめる
       *  01.00.04    内田K      08/04/26    ４月改正対応
       *                                     SPA-AREA初期化
+      *  01.00.05    内田       08/05/11    国組３〜６歳は帳票を分けない
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -769,13 +770,32 @@
       *
       *法定外給付は法定内給付と分ける
            MOVE   ZERO     TO     SKT4100TMP-KYURATE
-           IF     RECE10-RJNHKNNUM          =    SPACE   AND
-                  RECE10-AGE                <    70      AND
-                  RECE10-AGE                >    2       AND
-                  SKT4100TMP-HKNJANUM(3:1)  =   "3"      AND
-                  RECE10-KYURATE       NOT  =    7
-             MOVE     RECE10-KYURATE        TO   SKT4100TMP-KYURATE
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     IF     RECE10-RJNHKNNUM          =    SPACE   AND
+      *            RECE10-AGE                <    70      AND
+      *            RECE10-AGE                >    2       AND
+      *            SKT4100TMP-HKNJANUM(3:1)  =   "3"      AND
+      *            RECE10-KYURATE       NOT  =    7
+      *       MOVE     RECE10-KYURATE        TO   SKT4100TMP-KYURATE
+      *     END-IF
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF     RECE10-RJNHKNNUM          =    SPACE   AND
+                    RECE10-AGE                <    70      AND
+                    RECE10-FLG(1)         NOT =    1       AND
+                    SKT4100TMP-HKNJANUM(3:1)  =   "3"      AND
+                    RECE10-KYURATE       NOT  =    7
+               MOVE     RECE10-KYURATE        TO   SKT4100TMP-KYURATE
+             END-IF
+           ELSE
+             IF     RECE10-RJNHKNNUM          =    SPACE   AND
+                    RECE10-AGE                <    70      AND
+                    RECE10-AGE                >    2       AND
+                    SKT4100TMP-HKNJANUM(3:1)  =   "3"      AND
+                    RECE10-KYURATE       NOT  =    7
+               MOVE     RECE10-KYURATE        TO   SKT4100TMP-KYURATE
+             END-IF
            END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    在宅は一般と分ける
            MOVE    RECE10-ZAITAKU           TO   SKT4100TMP-ZAITAKU
