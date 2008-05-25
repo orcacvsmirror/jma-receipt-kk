@@ -43,6 +43,7 @@
       *  01.00.09    内田     07/10/08    日レセver4.0対応
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
+      *  01.00.10    内田     08/05/02    表示を３歳から６歳へ変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1496,7 +1497,10 @@
                    WHEN    "2"
                        MOVE    "２本外"       TO  HC06-HONKZK
                    WHEN    "4"
-                       MOVE    "４三外"       TO  HC06-HONKZK
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *                 MOVE    "４三外"       TO  HC06-HONKZK
+                       MOVE    "４六外"       TO  HC06-HONKZK
+      *---(01.00.10) LINE ADD END   ------------------------------------
                    WHEN    "6"
                        MOVE    "６家外"       TO  HC06-HONKZK
                    WHEN    "8"
@@ -1803,7 +1807,10 @@
                    WHEN    "1"
                        MOVE    "１本入"     TO  HCN06-HONKZK
                    WHEN    "3"
-                       MOVE    "３三入"     TO  HCN06-HONKZK
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *                 MOVE    "３三入"     TO  HCN06-HONKZK
+                       MOVE    "３六入"     TO  HCN06-HONKZK
+      *---(01.00.10) LINE ADD END   ------------------------------------
                    WHEN    "5"
                        MOVE    "５家入"     TO  HCN06-HONKZK
                    WHEN    "7"
