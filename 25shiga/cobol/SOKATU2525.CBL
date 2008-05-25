@@ -29,6 +29,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/03  公費再掲欄には法別番号を印字
       *                                  在宅時、○は指定の場所に印字
+      *  01.00.02    吉川    2008/05/23  公費負担者番号の頭2桁毎に集計する
+      *                                  点数等のバイト数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -94,6 +96,9 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *=== 負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) start
+           03  FLG-PTKOHINF        PIC 9(01).
+      *=== 負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
@@ -141,11 +146,17 @@
            03  WRK-CNT             PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) start
+           03  WRK-FTNJANUM        PIC X(08).
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) end
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) start
+           03  WRK-Z11             PIC ZZZ,ZZZ,ZZZ.
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) end
            03  WRK-KOHNUM9         PIC Z9.
            03  WRK-PAGE            PIC ZZZ9.
       *
@@ -253,6 +264,12 @@
       *    保険者情報
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
+      *
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) start
+      *    患者公費情報
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) end
       *
       *    医療機関情報情報
            COPY    "CPSK1001.INC".
@@ -978,6 +995,11 @@
       *      公費番号格納
              PERFORM VARYING   IDX2    FROM    1   BY  1
                      UNTIL     IDX2 >          100
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) start
+               MOVE  RECE10-KOHNUM(IDZ)  TO  WRK-KOHNUM
+               PERFORM  900-PTKOHINF-SET-SEC
+               MOVE  WRK-FTNJANUM(1:2)   TO  RECE10-KOHNUM(IDZ)
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) end
                IF  SUM-KOHNUM (IDX2)   =   SPACE
                  MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
                  MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
@@ -1133,12 +1155,20 @@
       *    療養の給付：診療実日数
                MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT2525-NISSU(IDZ IDY)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) start
+      **    療養の給付：点数
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT2525-TENSU(IDZ IDY)
+      **    療養の給付：一部負担金
+      *         MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT2525-ITBFTN(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
-               MOVE  WRK-Z9              TO  SKT2525-TENSU(IDZ IDY)
+               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z11
+               MOVE  WRK-Z11             TO  SKT2525-TENSU(IDZ IDY)
       *    療養の給付：一部負担金
-               MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
-               MOVE  WRK-Z9              TO  SKT2525-ITBFTN(IDZ IDY)
+               MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z11
+               MOVE  WRK-Z11             TO  SKT2525-ITBFTN(IDZ IDY)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) end
              END-PERFORM
       *
       *    食事療養：件数
@@ -1147,12 +1177,20 @@
       *    食事療養：日数
              MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT2525-S-NISSU(IDZ)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) start
+      **    食事療養：金額
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2525-S-KINGK(IDZ)
+      **    食事療養：標準負担額
+      *       MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2525-S-FTNGK(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
-             MOVE  WRK-Z9                TO  SKT2525-S-KINGK(IDZ)
+             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z11
+             MOVE  WRK-Z11               TO  SKT2525-S-KINGK(IDZ)
       *    食事療養：標準負担額
-             MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
-             MOVE  WRK-Z9                TO  SKT2525-S-FTNGK(IDZ)
+             MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z11
+             MOVE  WRK-Z11               TO  SKT2525-S-FTNGK(IDZ)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) end
            END-PERFORM
            
       *    長期高額療養件数
@@ -1190,26 +1228,42 @@
       *    公費再掲欄：療養の給付：日数
                  MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
                  MOVE  WRK-Z5                TO SKT2525-KNISSU(IDY IDZ)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) start
+      **    公費再掲欄：療養の給付：点数
+      *           MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+      *           MOVE  WRK-Z9                TO SKT2525-KTENSU(IDY IDZ)
+      **    公費再掲欄：療養の給付：一部負担金
+      *           MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
+      *           MOVE  WRK-Z9                TO SKT2525-KITBFTN(IDY IDZ)
       *    公費再掲欄：療養の給付：点数
-                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT2525-KTENSU(IDY IDZ)
+                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z11
+                 MOVE  WRK-Z11               TO SKT2525-KTENSU(IDY IDZ)
       *    公費再掲欄：療養の給付：一部負担金
-                 MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT2525-KITBFTN(IDY IDZ)
+                 MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z11
+                 MOVE  WRK-Z11               TO SKT2525-KITBFTN(IDY IDZ)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) end
                END-PERFORM
       *
-      **    公費再掲欄：食事療養：件数
+      *    公費再掲欄：食事療養：件数
                MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT2525-S-KKENSU(IDY)
-      **    公費再掲欄：食事療養：日数
+      *    公費再掲欄：食事療養：日数
                MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT2525-S-KNISSU(IDY)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) start
       **    公費再掲欄：食事療養：金額
-               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
-               MOVE  WRK-Z9                TO  SKT2525-S-KKINGK(IDY)
+      *         MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
+      *         MOVE  WRK-Z9                TO  SKT2525-S-KKINGK(IDY)
       **    公費再掲欄：食事療養：標準負担額
-               MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
-               MOVE  WRK-Z9                TO  SKT2525-S-KFTNGK(IDY)
+      *         MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
+      *         MOVE  WRK-Z9                TO  SKT2525-S-KFTNGK(IDY)
+      *    公費再掲欄：食事療養：金額
+               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z11
+               MOVE  WRK-Z11               TO  SKT2525-S-KKINGK(IDY)
+      *    公費再掲欄：食事療養：標準負担額
+               MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z11
+               MOVE  WRK-Z11               TO  SKT2525-S-KFTNGK(IDY)
+      *=== 点数等のバイト数増加 by Yoshikawa(2008/05/23) end
       *
                ADD     1                   TO  IDX2   
              END-IF        
@@ -1250,43 +1304,46 @@
            ELSE
       *      公費番号まとめ情報からの集計か
              IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
-      *        保険番号読込み  
-               INITIALIZE                     HKNNUM-REC
-               MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
-               MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
-               MOVE  HKNNUM-REC           TO  MCPDATA-REC
-               MOVE  "tbl_hknnum"         TO  MCP-TABLE
-               MOVE  "key2"               TO  MCP-PATHNAME
-                 PERFORM 900-DBSELECT-SEC
-                 IF      MCP-RC              =   ZERO
-                   MOVE  "tbl_hknnum"     TO  MCP-TABLE
-                   MOVE  "key2"           TO  MCP-PATHNAME
-                   PERFORM 900-HKNNUM-READ-SEC
-                 ELSE
-                   MOVE    1              TO  FLG-HKNNUM
-                 END-IF
-      *
-                 PERFORM UNTIL       FLG-HKNNUM      =   1
-                   IF      HKN-TEKSTYMD            <=  WRK-SRYYMD
-                   AND     HKN-TEKEDYMD            >=  WRK-SRYYMD
-                     MOVE  HKN-TANSEIDONAME   TO  WRK-HKNNAME
-                     MOVE  1                  TO  FLG-HKNNUM   
-                   END-IF
-      *
-                   IF      FLG-HKNNUM           =   ZERO
-                     MOVE  "tbl_hknnum"       TO  MCP-TABLE
-                     MOVE  "key2"             TO  MCP-PATHNAME
-                     PERFORM 900-HKNNUM-READ-SEC
-                   END-IF
-                 END-PERFORM
-                 MOVE  "tbl_hknnum"       TO  MCP-TABLE
-                 MOVE  "key2"             TO  MCP-PATHNAME
-                 PERFORM  900-CLOSE-SEC
-      *
-      *=== 公費再掲欄に法別番号印字 by Yoshikawa(2008/05/03) start
-      *          法別番号
-                 MOVE  HKN-HBTNUM         TO  SKT2525-HBTNUM(IDY)
-      *=== 公費再掲欄に法別番号印字 by Yoshikawa(2008/05/03) end
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) start
+      **        保険番号読込み  
+      *         INITIALIZE                     HKNNUM-REC
+      *         MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
+      *         MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+      *         MOVE  HKNNUM-REC           TO  MCPDATA-REC
+      *         MOVE  "tbl_hknnum"         TO  MCP-TABLE
+      *         MOVE  "key2"               TO  MCP-PATHNAME
+      *           PERFORM 900-DBSELECT-SEC
+      *           IF      MCP-RC              =   ZERO
+      *             MOVE  "tbl_hknnum"     TO  MCP-TABLE
+      *             MOVE  "key2"           TO  MCP-PATHNAME
+      *             PERFORM 900-HKNNUM-READ-SEC
+      *           ELSE
+      *             MOVE    1              TO  FLG-HKNNUM
+      *           END-IF
+      **
+      *           PERFORM UNTIL       FLG-HKNNUM      =   1
+      *             IF      HKN-TEKSTYMD            <=  WRK-SRYYMD
+      *             AND     HKN-TEKEDYMD            >=  WRK-SRYYMD
+      *               MOVE  HKN-TANSEIDONAME   TO  WRK-HKNNAME
+      *               MOVE  1                  TO  FLG-HKNNUM   
+      *             END-IF
+      **
+      *             IF      FLG-HKNNUM           =   ZERO
+      *               MOVE  "tbl_hknnum"       TO  MCP-TABLE
+      *               MOVE  "key2"             TO  MCP-PATHNAME
+      *               PERFORM 900-HKNNUM-READ-SEC
+      *             END-IF
+      *           END-PERFORM
+      *           MOVE  "tbl_hknnum"       TO  MCP-TABLE
+      *           MOVE  "key2"             TO  MCP-PATHNAME
+      *           PERFORM  900-CLOSE-SEC
+      **
+      **=== 公費再掲欄に法別番号印字 by Yoshikawa(2008/05/03) start
+      **          法別番号
+      *           MOVE  HKN-HBTNUM         TO  SKT2525-HBTNUM(IDY)
+      **=== 公費再掲欄に法別番号印字 by Yoshikawa(2008/05/03) end
+               CONTINUE
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) end
              ELSE
       *          公費番号まとめ情報から公費名へ
                  MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
@@ -1654,6 +1711,64 @@
        800-PTINF-READ-EXT.
            EXIT.
       *
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) start
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-SET-SEC  SECTION.
+      *
+           INITIALIZE  PTKOHINF-REC
+           MOVE  SPA-HOSPNUM               TO  PTKOH-HOSPNUM
+           MOVE  RECE10-PTID               TO  PTKOH-PTID
+           MOVE  WRK-KOHNUM                TO  PTKOH-KOHNUM
+      *
+           MOVE  PTKOHINF-REC              TO  MCPDATA-REC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           PERFORM 900-DBSELECT-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_ptkohinf"        TO  MCP-TABLE
+             MOVE    "key4"                TO  MCP-PATHNAME
+             PERFORM  900-PTKOHINF-READ-SEC
+             PERFORM  UNTIL  FLG-PTKOHINF = 1
+               IF  PTKOH-SAKJOKBN  NOT = "1"
+                 IF  PTKOH-TEKSTYMD(1:6) <= RECE10-SRYYM(1:6)  AND 
+                     PTKOH-TEKEDYMD(1:6) >= RECE10-SRYYM(1:6)
+                     MOVE  PTKOH-FTNJANUM  TO  WRK-FTNJANUM
+                 END-IF
+               END-IF
+                 PERFORM  900-PTKOHINF-READ-SEC
+             END-PERFORM
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           PERFORM 900-CLOSE-SEC
+      *
+           .
+       900-PTKOHINF-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-READ-SEC  SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  PTKOHINF-REC
+             MOVE  ZERO         TO  FLG-PTKOHINF
+           ELSE
+             INITIALIZE  PTKOHINF-REC
+             MOVE  1  TO  FLG-PTKOHINF
+           END-IF
+      *
+           .
+       900-PTKOHINF-READ-EXT.
+           EXIT.
+      *
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/05/23) end
       *****************************************************************
       *    請求管理ＤＢ更新用ファイル読込
       *****************************************************************

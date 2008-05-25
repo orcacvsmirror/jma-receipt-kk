@@ -16,7 +16,7 @@
       * 113-8621, Japan.
       ********************************************************************
       ********************************************************************
-      *    後期高齢総括表（滋賀県）     COPY (SKT2535.INC)               
+      *    後期高齢請求表（滋賀県）     COPY (SKT2525.INC)               
       *
       *  作成日付    作業者        記述
       *  08/04/17    大竹          新規作成(後期高齢者対応)
@@ -24,6 +24,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者   日付         内容
       *  01.00.01    吉川     2008/05/03   公費再掲欄には法別番号を印字
+      *  01.00.02    吉川     2008/05/23   点数等のバイト数増加
       ********************************************************************
         01  SKT2525.
       *    診療年月
@@ -56,17 +57,29 @@
       *    診療実日数
                 07  SKT2525-NISSU         PIC X(05).
       *    点数
-                07  SKT2525-TENSU         PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *          07  SKT2525-TENSU         PIC X(09).
+                07  SKT2525-TENSU         PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    一部負担金
-                07  SKT2525-ITBFTN        PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *          07  SKT2525-ITBFTN        PIC X(09).
+                07  SKT2525-ITBFTN        PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    食事療養：件数
               05  SKT2525-S-KENSU          PIC X(05).
       *    食事療養：日数
               05  SKT2525-S-NISSU          PIC X(05).
       *    食事療養：金額
-              05  SKT2525-S-KINGK          PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *        05  SKT2525-S-KINGK          PIC X(09).
+              05  SKT2525-S-KINGK          PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    食事療養：標準負担額
-              05  SKT2525-S-FTNGK          PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *        05  SKT2525-S-FTNGK          PIC X(09).
+              05  SKT2525-S-FTNGK          PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    公費請求テーブル
             03  SKT2525-KOUHI-TBL  OCCURS  4 TIMES.
       *    公費名
@@ -81,16 +94,28 @@
       *    診療実日数
                 07  SKT2525-KNISSU       PIC X(05).
       *    点数
-                07  SKT2525-KTENSU       PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *          07  SKT2525-KTENSU       PIC X(09).
+                07  SKT2525-KTENSU       PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    一部負担金
-                07  SKT2525-KITBFTN      PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *          07  SKT2525-KITBFTN      PIC X(09).
+                07  SKT2525-KITBFTN      PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    食事療養：件数
               05  SKT2525-S-KKENSU        PIC X(05).
       *    食事療養：日数
               05  SKT2525-S-KNISSU        PIC X(05).
       *    食事療養：金額
-              05  SKT2525-S-KKINGK        PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *        05  SKT2525-S-KKINGK        PIC X(09).
+              05  SKT2525-S-KKINGK        PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    食事療養：標準負担額
-              05  SKT2525-S-KFTNGK        PIC X(09).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) start
+      *        05  SKT2525-S-KFTNGK        PIC X(09).
+              05  SKT2525-S-KFTNGK        PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2008/05/23) end
       *    長期高額疾病件数
             03  SKT2525-TYOKI-KENSU       PIC X(05).
