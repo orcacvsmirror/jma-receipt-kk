@@ -32,6 +32,7 @@
       *                                     システム管理マスタ「1901」の
       *                                     医療機関情報を参照
       *                                     長期上位も長期と同じ箇所に集計
+      *  01.00.03      長屋     08/04/24    帳票様式に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -209,6 +210,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -662,6 +668,12 @@
                                       IDX3
                  END-IF
                ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                AND  (RECE10-FLG (1)   =  1)
+                    MOVE  6     TO  IDX1
+                ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                  IF  RECE10-AGE  <  3
                    MOVE    6    TO    IDX1
                  ELSE
@@ -674,6 +686,9 @@
                      MOVE    3    TO    IDX1
                    END-EVALUATE
                  END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+                END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                END-IF
              ELSE
                IF  RECE10-AGE  >=  70
@@ -688,11 +703,20 @@
                  IF  RECE10-HONKZKKBN  =  "1"
                    MOVE   9    TO  IDX1
                  ELSE
+      *---(01.00.03) LINE ADD START ------------------------------------
+                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                  AND  (RECE10-FLG (1)   =  1)
+                      MOVE  11     TO  IDX1
+                  ELSE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    IF  RECE10-AGE    <    3
                        MOVE   11    TO    IDX1
                    ELSE
                        MOVE   10    TO    IDX1
                    END-IF
+      *---(01.00.03) LINE ADD START ------------------------------------
+                  END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF

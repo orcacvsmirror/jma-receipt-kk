@@ -16,37 +16,51 @@
       * 113-8621, Japan.
       ********************************************************************
       ************************************************************
-      *  πÒ ›¡Ì≥Á…º         COPY (CPSKT1710TMP.INC)              *
-      *                                                          *
-      *  •≥•‘°º∂ÁΩ§¿µÕ˙ŒÚ                                        *
-      * Maj/Min/Rev  Ω§¿µº‘       ∆¸…’      ∆‚Õ∆                 *
+      *    ø«Œ≈ ÛΩ∑¿¡µ·ΩÒ     COPY (CPSKT1700TMPTMP.INC)              
+      *
+      *  •≥•‘°º∂ÁΩ§¿µÕ˙ŒÚ
+      * Maj/Min/Rev  Ω§¿µº‘       ∆¸…’      ∆‚Õ∆
       ************************************************************
        01  SKT1700TMP-REC.
            03  SKT1700TMP-KEY.
-               05  SKT1700TMP-RECEKA                PIC  X(02).
-           03  SKT1700TMP-SEIKYU-TBL      OCCURS 15.
-               05  SKT1700TMP-NYUGAIKBN   OCCURS 2.
-                   07  SKT1700TMP-KENSU             PIC  9(05).
-                   07  SKT1700TMP-NISSU             PIC  9(05).
-                   07  SKT1700TMP-TENSU             PIC  9(09).
-                   07  SKT1700TMP-YKZFTN            PIC  9(09).
-                   07  SKT1700TMP-ITBFTN            PIC  9(09).
-               05  SKT1700TMP-SKENSU                PIC  9(05).
-               05  SKT1700TMP-SNISSU                PIC  9(05).
-               05  SKT1700TMP-SKINGK                PIC  9(09).
-               05  SKT1700TMP-SFTNGK                PIC  9(09).
-           03  SKT1700TMP-ZAITAKU-TBL     OCCURS 6.
-               05  SKT1700TMP-Z-KENSU               PIC  9(05).
-               05  SKT1700TMP-Z-NISSU               PIC  9(05).
-               05  SKT1700TMP-Z-TENSU               PIC  9(09).
-               05  SKT1700TMP-Z-ITBFTN              PIC  9(09).
-           03  SKT1700TMP-KOHI-TBL        OCCURS 9.
-               05  SKT1700TMP-K-KENSU               PIC  9(05).
-               05  SKT1700TMP-K-NISSU               PIC  9(05).
-               05  SKT1700TMP-K-TENSU               PIC  9(09).
-               05  SKT1700TMP-K-YKZFTN              PIC  9(09).
-               05  SKT1700TMP-K-ITBFTN              PIC  9(09).
-               05  SKT1700TMP-K-SKENSU              PIC  9(05).
-               05  SKT1700TMP-K-SNISSU              PIC  9(05).
-               05  SKT1700TMP-K-SKINGK              PIC  9(09).
-               05  SKT1700TMP-K-SFTNGK              PIC  9(09).
+               05  SKT1700TMP-RECEKA           PIC  X(02).
+            03  SKT1700TMP-SEIKYU-TBL      OCCURS  3 TIMES.
+              05  SKT1700TMP-NYUGAI-TBL      OCCURS  2 TIMES.
+                07  SKT1700TMP-KENSU   PIC 9(5).
+                07  SKT1700TMP-NISSU   PIC 9(5).
+                07  SKT1700TMP-TENSU   PIC 9(9).
+                07  SKT1700TMP-ITBFTN  PIC 9(9).
+              05  SKT1700TMP-SKENSU  PIC 9(5).
+              05  SKT1700TMP-SKAISU  PIC 9(5).
+              05  SKT1700TMP-SKINGK  PIC 9(9).
+              05  SKT1700TMP-SFTNGK  PIC 9(9).
+            03  SKT1700TMP-KOU-TBL.
+              05  SKT1700TMP-NYUGAI-KOU-TBL          OCCURS  2 TIMES.
+                07  SKT1700TMP-KOUKENSU    PIC 9(5).
+                07  SKT1700TMP-KOUNISSU    PIC 9(5).
+                07  SKT1700TMP-KOUTENSU    PIC 9(9).
+                07  SKT1700TMP-KOUITBFTN   PIC 9(9).
+              05  SKT1700TMP-KOUSKENSU   PIC 9(5).
+              05  SKT1700TMP-KOUSKAISU   PIC 9(5).
+              05  SKT1700TMP-KOUSKINGK   PIC 9(9).
+              05  SKT1700TMP-KOUSFTNGK   PIC 9(9).
+            03  SKT1700TMP-ROU-TBL.
+              05  SKT1700TMP-NYUGAI-ROU-TBL          OCCURS  2 TIMES.
+                07  SKT1700TMP-ROUKENSU    PIC 9(5).
+                07  SKT1700TMP-ROUNISSU    PIC 9(5).
+                07  SKT1700TMP-ROUTENSU    PIC 9(9).
+                07  SKT1700TMP-ROUITBFTN   PIC 9(9).
+              05  SKT1700TMP-ROUSKENSU   PIC 9(5).
+              05  SKT1700TMP-ROUSKAISU   PIC 9(5).
+              05  SKT1700TMP-ROUSKINGK   PIC 9(9).
+              05  SKT1700TMP-ROUSFTNGK   PIC 9(9).
+            03  SKT1700TMP-KOH-TBL.
+              05  SKT1700TMP-NYUGAI-KOH-TBL          OCCURS  2 TIMES.
+                07  SKT1700TMP-KKENSU  PIC 9(5).
+                07  SKT1700TMP-KNISSU  PIC 9(5).
+                07  SKT1700TMP-KTENSU  PIC 9(9).
+                07  SKT1700TMP-KITBFTN PIC 9(9).
+              05  SKT1700TMP-KSKENSU PIC 9(5).
+              05  SKT1700TMP-KSKAISU PIC 9(5).
+              05  SKT1700TMP-KSKINGK PIC 9(9).
+              05  SKT1700TMP-KSFTNGK PIC 9(9).
