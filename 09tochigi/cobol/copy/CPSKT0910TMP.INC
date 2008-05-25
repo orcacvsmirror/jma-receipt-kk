@@ -23,28 +23,29 @@
       ************************************************************
        01  SKT0910TMP-REC.
            03  SKT0910TMP-KEY.
-               05  SKT0910TMP-SYUTURYOKU          PIC  X(01).
-               05  SKT0910TMP-HKNJANUM            PIC  X(06).
-               05  SKT0910TMP-ZAITAKU             PIC  X(01).
-           03  SKT0910TMP-TBL             OCCURS  12.
+               05  SKT0910TMP-SYUTURYOKU            PIC  9(01).
+               05  SKT0910TMP-HKNJANUM1             PIC  X(12).
+               05  SKT0910TMP-KBN                   PIC  X(04).
+               05  SKT0910TMP-PREFKBN               PIC  X(01).
+               05  SKT0910TMP-ZAITAKU               PIC  X(01).
+           03  SKT0910TMP-HKN-AREA  OCCURS  7.
                05  SKT0910TMP-NYUGAI-TBL  OCCURS  2.
-                   07  SKT0910TMP-KENSU               PIC  9(06).
-                   07  SKT0910TMP-NISSU               PIC  9(05).
-                   07  SKT0910TMP-TENSU               PIC  9(10).
-                   07  SKT0910TMP-ITBFTN              PIC  9(10).
-               05  SKT0910TMP-SKENSU                  PIC  9(06).
-               05  SKT0910TMP-SNISSU                  PIC  9(05).
-               05  SKT0910TMP-SKINGK                  PIC  9(10).
-               05  SKT0910TMP-SFTNGK                  PIC  9(10).
-           03  SKT0910TMP-KOH-AREA.
-               05  SKT0910TMP-KOH-TBL  OCCURS  20.
-                   07  SKT0910TMP-KOHNUM              PIC  X(03).
-                   07  SKT0910TMP-KOH-NYUGAI-TBL OCCURS 2.
-                       09  SKT0910TMP-K-KENSU         PIC  9(05).
-                       09  SKT0910TMP-K-NISSU         PIC  9(05).
-                       09  SKT0910TMP-K-TENSU         PIC  9(09).
-                       09  SKT0910TMP-K-ITBFTN        PIC  9(09).
-                   07  SKT0910TMP-K-SKENSU            PIC  9(05).
-                   07  SKT0910TMP-K-SNISSU            PIC  9(05).
-                   07  SKT0910TMP-K-SKINGK            PIC  9(09).
-                   07  SKT0910TMP-K-SFTNGK            PIC  9(09).
+                   07  SKT0910TMP-KENSU             PIC  9(05).
+                   07  SKT0910TMP-NISSU             PIC  9(05).
+                   07  SKT0910TMP-TENSU             PIC  9(09).
+                   07  SKT0910TMP-ITBFTN            PIC  9(07).
+               05  SKT0910TMP-S-KENSU               PIC  9(05).
+               05  SKT0910TMP-S-NISSU               PIC  9(05).
+               05  SKT0910TMP-S-KINGK               PIC  9(09).
+               05  SKT0910TMP-S-FTNGK               PIC  9(09).
+           03  SKT0910TMP-KOH-AREA  OCCURS  20.
+               05  SKT0910TMP-KOHNUM                PIC  X(03).
+               05  SKT0910TMP-KOH-NYUGAI-TBL OCCURS 2.
+                   07  SKT0910TMP-KKENSU            PIC  9(05).
+                   07  SKT0910TMP-KNISSU            PIC  9(05).
+                   07  SKT0910TMP-KTENSU            PIC  9(09).
+                   07  SKT0910TMP-KITBFTN           PIC  9(07).
+               05  SKT0910TMP-S-KKENSU              PIC  9(05).
+               05  SKT0910TMP-S-KNISSU              PIC  9(05).
+               05  SKT0910TMP-S-KKINGK              PIC  9(09).
+               05  SKT0910TMP-S-KFTNGK              PIC  9(09).
