@@ -44,6 +44,7 @@
       *  01.00.10    ∆‚≈ƒ    08/04/25    ƒ¢…ºÕÕº∞§Œ —ππ§À»º§¶Ω§¿µ
       *                                  SPA-AREAΩÈ¥¸≤Ω
       *  01.00.11    ∆‚≈ƒ    08/04/30     ÷Ã·¬–±˛
+      *  01.00.12    ∆‚≈ƒ    08/05/01    ∏Â¥¸π‚Œ∞ı∫˛ΩËÕ˝»ΩƒÍΩ§¿µ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -733,20 +734,22 @@
            PERFORM  2002-KOUKI-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
            PERFORM  950-SEIKYU-CLOSE-SEC
+      *---(01.00.12) LINE ADD START ------------------------------------
       *     ÷Ã· ¨
-           MOVE    "key65"                  TO  WRK-PATH2
-           MOVE     ZERO    TO        FLG-END
-           MOVE    "039"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2002-KOUKI-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE    "040"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2002-KOUKI-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
+      *     MOVE    "key65"                  TO  WRK-PATH2
+      *     MOVE     ZERO    TO        FLG-END
+      *     MOVE    "039"    TO        WRK-HKNNUM
+      *     PERFORM  950-SEIKYU-SELECT-SEC
+      *     PERFORM  2002-KOUKI-SYUKEI-SEC
+      *              UNTIL   FLG-END   =   1
+      *     PERFORM  950-SEIKYU-CLOSE-SEC
+      *     MOVE     ZERO    TO        FLG-END
+      *     MOVE    "040"    TO        WRK-HKNNUM
+      *     PERFORM  950-SEIKYU-SELECT-SEC
+      *     PERFORM  2002-KOUKI-SYUKEI-SEC
+      *              UNTIL   FLG-END   =   1
+      *     PERFORM  950-SEIKYU-CLOSE-SEC
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
       *    æ„≥≤∆˝Õƒª˘ Ïª“∞ÂŒ≈≈¿øÙΩ∏∑◊
@@ -1243,9 +1246,12 @@
       *     ‘Ω∏ΩËÕ˝
            PERFORM  VARYING  IDX1  FROM   1   BY  1
                     UNTIL    IDX1  >      8
-      *---(01.00.10) LINE ADD START ------------------------------------
-                    OR       FLG-PRINT  =  1
-                    OR   (FLG-PRINT  =  1  AND  FLG-PRINT2)
+      *---(01.00.12) LINE ADD START ------------------------------------
+      **---(01.00.10) LINE ADD START ------------------------------------
+      *              OR       FLG-PRINT  =  1
+      *              OR   (FLG-PRINT  =  1  AND  FLG-PRINT2)
+                    OR   (FLG-PRINT  =  1  AND  FLG-PRINT2  =  1)
+      *---(01.00.12) LINE ADD END   ------------------------------------
              IF  FLG-PRINT  NOT =  1
       *---(01.00.10) LINE ADD END   ------------------------------------
       *     ›∏±º‘»÷πÊ
