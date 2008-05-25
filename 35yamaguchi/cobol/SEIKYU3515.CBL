@@ -39,6 +39,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.06    内田    08/03/13    精神通院の場合、結精点数は印字しない
+      *  01.00.07    内田    08/05/01    ３歳未満の判定を６歳へ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -220,6 +221,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト　領域
       *****************************************************************
@@ -773,17 +779,35 @@
       *
       *   入外区分
            IF    RECE02-NYUGAIKBN  =  "1"
-             IF    RECE02-AGE    <   3
-               MOVE    "3"    TO    MF101-NYUGAIKBN
+      *---(01.00.07) LINE ADD START ------------------------------------
+             IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+             AND  (RECE02-FLG (1)   =  1)
+                 MOVE    "3"    TO    MF101-NYUGAIKBN
              ELSE
-               MOVE    "1"    TO    MF101-NYUGAIKBN
+      *---(01.00.07) LINE ADD END   ------------------------------------
+               IF    RECE02-AGE    <   3
+                 MOVE    "3"    TO    MF101-NYUGAIKBN
+               ELSE
+                 MOVE    "1"    TO    MF101-NYUGAIKBN
+               END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
              END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
            ELSE
-             IF    RECE02-AGE    <   3
-               MOVE    "4"    TO    MF101-NYUGAIKBN
+      *---(01.00.07) LINE ADD START ------------------------------------
+             IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+             AND  (RECE02-FLG (1)   =  1)
+                 MOVE    "4"    TO    MF101-NYUGAIKBN
              ELSE
-               MOVE    "2"    TO    MF101-NYUGAIKBN
+      *---(01.00.07) LINE ADD END   ------------------------------------
+               IF    RECE02-AGE    <   3
+                 MOVE    "4"    TO    MF101-NYUGAIKBN
+               ELSE
+                 MOVE    "2"    TO    MF101-NYUGAIKBN
+               END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
              END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-IF
       *
       *    保険者番号チェック処理

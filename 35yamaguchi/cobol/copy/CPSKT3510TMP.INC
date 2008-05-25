@@ -20,12 +20,16 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    長屋   08/04/28      帳票様式に伴う修正
       ************************************************************
        01  SKT3510TMP-REC.
            03      SKT3510TMP-KEY.
              05    SKT3510TMP-SYUTURYOKU            PIC  9(01).
              05    SKT3510TMP-ZAITAKU               PIC  X(01).
              05    SKT3510TMP-HKNJANUM              PIC  X(06).
+      *---(01.00.01) LINE ADD START ------------------------------------
+             05    SKT3510TMP-SRYYM                 PIC  9(06).
+      *---(01.00.01) LINE ADD END   ------------------------------------
              05    SKT3510TMP-SRYKA                 PIC  X(02).
            03    SKT3510TMP-PAGE-FLG1               PIC  9(01).
            03    SKT3510TMP-PAGE-FLG2               PIC  9(01).
