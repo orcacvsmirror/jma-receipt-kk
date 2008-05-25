@@ -50,7 +50,7 @@
             03  SKT0120-KOH-TBL                 OCCURS  5 TIMES.
                 05  SKT0120-KOHNUM              PIC X(02).
                 05  SKT0120-KOHMARU             PIC X(02).
-                05  SKT0120-GENBAKU1            PIC X(02).
+                05  SKT0120-GENBAKU1            PIC X(04).
                 05  SKT0120-GENBAKU2            PIC X(02).
                 05  SKT0120-K-RATE-TBL          OCCURS  2 TIMES.
                     07  SKT0120-K-NYUGAI-TBL    OCCURS  2 TIMES.

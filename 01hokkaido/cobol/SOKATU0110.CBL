@@ -42,6 +42,8 @@
       *                                 °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.07    ÆâÅÄ   08/03/18    Ä¹´üÍó¤Î³ä¹ç¤ò°õ»ú¤¹¤ë
       *                                 Ä¹´üÍó¤Î°ìÉôÉéÃ´¶â¤Ï°õ»ú¤·¤Ê¤¤
+      *  01.00.08    ÆâÅÄk  08/04/25    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
+      *                                 SPA-AREA½é´ü²½
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -259,6 +261,11 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
@@ -720,6 +727,8 @@
       *****************************************************************
        210-HKN-SYUKEI-SEC          SECTION.
       *
+      *    2008Ç¯3·î°ÊÁ°¤ÎÊÝ¸±¤ÇIDX1¤¬1000ÈÖÂæ¤Ï¸øÈñÍó¤Øµ­ºÜ¤¹¤ë
+      *
       *    Æþ±¡¡¿³°Íè
            IF  RECE10-NYUGAIKBN  =  "1"
              MOVE  1  TO  IDX2
@@ -729,11 +738,17 @@
       *
       *    Ï·¿Í¤«¤É¤¦¤«
            IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      *---(01.00.08) LINE ADD START ------------------------------------
              IF  RECE10-KYURATE = 9
-               MOVE  11      TO  IDX1
+      *         MOVE  11      TO  IDX1
+               MOVE  1279     TO  IDX1
+                      DISPLAY "·îÃÙ¤ì"IDX1
              ELSE
-               MOVE  12      TO  IDX1
+      *         MOVE  12      TO  IDX1
+               MOVE  1277     TO  IDX1
+                      DISPLAY "·îÃÙ¤ì"IDX1
              END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       ***** 05/08/04 INS
              MOVE    1       TO  SKT0110TMP-PAGE-FLG
       *****
@@ -743,53 +758,92 @@
       *    Ç¯Îð¥Á¥§¥Ã¥¯
                IF  RECE10-AGE  >=  70
                  IF  RECE10-KYURATE  =  9
-                    MOVE   1    TO    IDX1
+                   IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+                      MOVE  1099  TO    IDX1
+                      DISPLAY "·îÃÙ¤ì"IDX1
+                   ELSE
+                      MOVE   1    TO    IDX1
+                   END-IF
                  ELSE
                     MOVE   2    TO    IDX1
                  END-IF
                ELSE
-                 IF  RECE10-AGE  <  3
-                   MOVE    5    TO    IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                     AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5     TO  IDX1
                  ELSE
-                   IF  RECE10-KYURATE  =  7
-                     MOVE  4    TO    IDX1
+                   IF  RECE10-AGE  <  3
+                     MOVE    5    TO    IDX1
                    ELSE
-                     MOVE  3    TO    IDX1
-                     MOVE  RECE10-KYURATE  TO  SKT0110TMP-KYURATE(IDX2)
+                     IF  RECE10-KYURATE  =  7
+                       MOVE  4    TO    IDX1
+                     ELSE
+                       MOVE  3    TO    IDX1
+                       MOVE  RECE10-KYURATE  
+                             TO  SKT0110TMP-KYURATE(IDX2)
+                     END-IF
                    END-IF
                  END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                END-IF
              ELSE
+      *---(01.00.08) LINE ADD START ------------------------------------
                IF  RECE10-AGE  >=  70
+                   AND  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804  
                  IF  RECE10-KYURATE  =  9
-                   MOVE  7        TO  IDX1
+      *             MOVE  7        TO  IDX1
+                   MOVE   1699     TO  IDX1
+                      DISPLAY "·îÃÙ¤ì"IDX1
                  ELSE
-                   MOVE  8        TO  IDX1
+      *             MOVE  8        TO  IDX1
+                   MOVE   1677     TO  IDX1
+                      DISPLAY "·îÃÙ¤ì"IDX1
                  END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                ELSE
                  IF  RECE10-HONKZKKBN  =  "1"
                    MOVE   6    TO  IDX1
                  ELSE
-                   IF  RECE10-AGE    <    3
-                       MOVE   10    TO    IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                       MOVE  8     TO  IDX1
                    ELSE
-                       MOVE   9     TO    IDX1
+                     IF  RECE10-AGE    <    3
+      *                   MOVE   10    TO    IDX1
+                         MOVE   8    TO    IDX1
+                     ELSE
+      *                   MOVE   9     TO    IDX1
+                         MOVE   7     TO    IDX1
+                     END-IF
                    END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              END-IF
            END-IF
       *    ½¸·×
-           PERFORM   2101-SYUKEI-SEC
+      *---(01.00.08) LINE ADD START ------------------------------------
+           IF  IDX1  <  10
+             PERFORM   2101-SYUKEI-SEC
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *    ¸øÈñÊ»ÍÑ
            IF  RECE10-KOHNUM (1) NOT = SPACE
-             PERFORM  2202-KOH-SEC
+               PERFORM  2202-KOH-SEC
       ***** 05/08/04 INS
              MOVE    1       TO  SKT0110TMP-PAGE-FLG
       *****
            END-IF
-      *
+      *    ·îÃÙ¤ì¸øÈñÍó·×¾åÊ¬
+      *---(01.00.08) LINE ADD START ------------------------------------
+           IF   IDX1  >  10
+                PERFORM  2203-KOH-SEC
+                MOVE    1       TO  SKT0110TMP-PAGE-FLG
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *    Ä¹´ü
            IF  RECE10-ETC-KOHNUM(1)  =  "972"
             OR RECE10-ETC-KOHNUM(2)  =  "972"
@@ -883,10 +937,13 @@
             END-EVALUATE
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
       *    Æ»Ï·¤«¤½¤ÎÂ¾¸øÈñ¤«
-             IF  RECE10-KOHNUM(IDX3)    =  "141" OR "241"
-               PERFORM  22021-DORO-SEC
-             ELSE
+      *       IF  RECE10-KOHNUM(IDX3)    =  "141" OR "241"
+      *         DISPLAY  "Æ»Ï·"RECE10-PTNUM
+      *         PERFORM  22021-DORO-SEC
+      *       ELSE
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *    ÉéÃ´³ä¹ç
                IF  RECE10-KOHNUM(IDX3)  =  "019"  AND
@@ -1002,51 +1059,146 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *         END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
-             END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *       END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            END-PERFORM
       *
            .
        2202-KOH-EXT.
            EXIT.
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ·îÃÙ¤ìÊÔ½¸½èÍý
+      *****************************************************************
+       2203-KOH-SEC              SECTION.
+      *
+           DISPLAY "·îÃÙ¤ì2203-KOH-SEC"
+      *    ÉéÃ´³ä¹ç
+               MOVE  IDX1(4:1)   TO  WRK-RATE(3:1)
+               DISPLAY  "WRK-RATE"WRK-RATE
+               DISPLAY  "´µ¼ÔÈÖ¹æ=" RECE10-PTNUM
+               PERFORM  VARYING  IDX4  FROM  1   BY  1
+                        UNTIL    IDX4  >     40
+                   DISPLAY "IDX4=" IDX4
+                 IF  SKT0110TMP-KOHNUM(IDX4)  =  SPACE
+                   DISPLAY "TMP¤Î¼çÊÝ¸±ÈÖ¹æ¥¹¥Ú¡¼¥¹=" IDX4
+                   MOVE  IDX4                TO  SKT0110TMP-RENNUM(IDX4)
+                                                 CNT-KOH
+                   MOVE  IDX1(2:3)           TO  SKT0110TMP-KOHNUM(IDX4)
+                   DISPLAY "IDX1"IDX1
+                   MOVE  1                   TO  CNT-KOH2
+                   MOVE  WRK-RATE            TO
+                                SKT0110TMP-K-RATE(CNT-KOH CNT-KOH2 IDX2)
+                   MOVE  40                  TO  IDX4
+                 ELSE
+                   IF  IDX1(2:3)  =  SKT0110TMP-KOHNUM(IDX4)
+                     DISPLAY "ÈÖ¹æ¤¬Æ±¤¸=" IDX1(2:2)
+                             "´µ¼ÔÂ¦ÉéÃ´³ä¹ç=" WRK-RATE
+                             "¥Ç¡¼¥¿Â¦ÉéÃ´³ä¹ç1=" 
+                                     SKT0110TMP-K-RATE(CNT-KOH 1 IDX2) 
+                             "¥Ç¡¼¥¿Â¦ÉéÃ´³ä¹ç2=" 
+                                     SKT0110TMP-K-RATE(CNT-KOH 2 IDX2)
+                             "Æþ³°¶èÊ¬=" IDX2
+                       MOVE  IDX4            TO  CNT-KOH
+                       IF  SKT0110TMP-K-RATE(CNT-KOH  1 IDX2) =
+                                                    WRK-RATE OR ZERO
+                         MOVE    1         TO  CNT-KOH2
+                         MOVE    WRK-RATE  TO  
+                                 SKT0110TMP-K-RATE(CNT-KOH 1 IDX2)
+                         MOVE      40        TO  IDX4
+                         DISPLAY "£±¤ÄÌÜ¤ÎµëÉÕ³ä¹ç¤ÈÆ±¤¸"
+                       ELSE
+                         IF  SKT0110TMP-K-RATE(CNT-KOH  2 IDX2) =
+                                                      WRK-RATE OR  ZERO
+                           MOVE     2        TO  CNT-KOH2
+                           MOVE   WRK-RATE  TO  
+                                  SKT0110TMP-K-RATE(CNT-KOH 2 IDX2)
+                           MOVE    40        TO  IDX4
+                           DISPLAY "£²¤ÄÌÜ¤ÎµëÉÕ³ä¹ç¤ÈÆ±¤¸"
+                         END-IF
+                       END-IF
+                   END-IF
+                 END-IF
+               END-PERFORM
+      *
+               DISPLAY "¼çÊÝ¸±ÈÖ¹æ"  IDX1(2:2)
+                       "Ï¢ÈÖ¹æ="   SKT0110TMP-RENNUM(CNT-KOH)
+                       "Æþ³°¶èÊ¬=" RECE10-NYUGAIKBN
+                       "ÉéÃ´³ä¹ç=" WRK-RATE
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+               ADD   1  TO  SKT0110TMP-K-KENSU(CNT-KOH CNT-KOH2 IDX2)
+      *    ÎÅÍÜ¤ÎµëÉÕ:¿ÇÎÅ¼ÂÆü¿ô
+               ADD  RECE10-JNISSU(1)   TO
+                        SKT0110TMP-K-NISSU(CNT-KOH CNT-KOH2 IDX2)
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+               ADD  RECE10-TOTALTEN(1)  TO
+                          SKT0110TMP-K-TENSU(CNT-KOH CNT-KOH2 IDX2)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â 
+               ADD  RECE10-FTNMONEY(1)  TO
+                          SKT0110TMP-K-ITBFTN(CNT-KOH CNT-KOH2 IDX2)
+      *
+               IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *    ¿©»öÎÅÍÜ:·ï¿ô
+                 ADD   1  TO  SKT0110TMP-K-SKENSU(CNT-KOH CNT-KOH2)
+               END-IF
+      *    ¿©»öÎÅÍÜ:Æü¿ô
+               ADD  RECE10-SHOKUJINISSU(1)    TO
+                               SKT0110TMP-K-SNISSU(CNT-KOH CNT-KOH2)
+      *    ¿©»öÎÅÍÜ¡§¶â³Û
+               ADD  RECE10-SHOKUJIRYOYOHI(1)  TO
+                               SKT0110TMP-K-SKINGK(CNT-KOH CNT-KOH2)
+      *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+               ADD  RECE10-SHOKUJIFTN(1)      TO
+                               SKT0110TMP-K-SFTNGK(CNT-KOH CNT-KOH2)
+      *
+           .
+       2203-KOH-EXT.
+           EXIT.
+      *
+      *---(01.00.08) LINE ADD END   ------------------------------------
+      *---(01.00.08) LINE ADD START ------------------------------------
       *****************************************************************
       *    Æ»Ï·½èÍý
       *****************************************************************
-       22021-DORO-SEC         SECTION.
+      * 22021-DORO-SEC         SECTION.
       *
       *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
-           ADD   1  TO  SKT0110TMP-D-KENSU
+      *     ADD   1  TO  SKT0110TMP-D-KENSU
       *    ÎÅÍÜ¤ÎµëÉÕ:¿ÇÎÅ¼ÂÆü¿ô
-           ADD  RECE10-JNISSU(IDX3 + 1)    TO  SKT0110TMP-D-NISSU
+      *     ADD  RECE10-JNISSU(IDX3 + 1)    TO  SKT0110TMP-D-NISSU
       *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
-           ADD  RECE10-TOTALTEN(IDX3 + 1)  TO  SKT0110TMP-D-TENSU
+      *     ADD  RECE10-TOTALTEN(IDX3 + 1)  TO  SKT0110TMP-D-TENSU
       *
       *    ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
-           ADD  RECE10-FTNMONEY(IDX3 + 1)  TO  SKT0110TMP-D-ITBFTN
+      *     ADD  RECE10-FTNMONEY(IDX3 + 1)  TO  SKT0110TMP-D-ITBFTN
       *
-           IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *     IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
       *    ¿©»öÎÅÍÜ:·ï¿ô
-             ADD   1                       TO  SKT0110TMP-D-SKENSU
+      *       ADD   1                       TO  SKT0110TMP-D-SKENSU
       *---(01.00.02) LINE ADD START ------------------------------------
-           END-IF
+      *     END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    ¿©»öÎÅÍÜ:Æü¿ô
-           ADD  RECE10-SHOKUJINISSU(IDX3 + 1)
-                                           TO  SKT0110TMP-D-SNISSU
+      *     ADD  RECE10-SHOKUJINISSU(IDX3 + 1)
+      *                                     TO  SKT0110TMP-D-SNISSU
       *    ¿©»öÎÅÍÜ¡§¶â³Û
-           ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)
-                                           TO  SKT0110TMP-D-SKINGK
+      *     ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)
+      *                                     TO  SKT0110TMP-D-SKINGK
       *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
-           ADD  RECE10-SHOKUJIFTN(IDX3 + 1)
-                                           TO  SKT0110TMP-D-SFTNGK
+      *     ADD  RECE10-SHOKUJIFTN(IDX3 + 1)
+      *                                     TO  SKT0110TMP-D-SFTNGK
       *---(01.00.02) LINE ADD START ------------------------------------
       *     END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-           .
-       22021-DORO-EXT.
-           EXIT.
+      *     .
+      * 22021-DORO-EXT.
+      *     EXIT.
       *
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *****************************************************************
       *    Ä¹´üÎÅÍÜ½èÍý
       *****************************************************************
@@ -1448,15 +1600,24 @@
       *****************************************************************
        321-KOH-HEN-SEC               SECTION.
       *
+           DISPLAY  "321-KOH-HEN-SEC"
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     5
                     OR    WRK-CNT  >     40
                     OR    SKT0110TMP-KOHNUM (WRK-CNT) = SPACE
       *    ¸øÈñÈÖ¹æ
-             MOVE  SKT0110TMP-KOHNUM(WRK-CNT)    TO  WRK-KOHNUM
-             PERFORM  950-HKNNUM-SET-SEC
-             MOVE  HKN-HBTNUM        TO  SKT0120-KOHNUM(IDX1)
+      *---(01.00.08) LINE ADD START ------------------------------------
+             IF  SKT0110TMP-KOHNUM(WRK-CNT)(1:2)  =  "09" OR "27" 
+                                                  OR "67" OR "69"
+               MOVE  SKT0110TMP-KOHNUM(WRK-CNT)
+                                       TO  SKT0120-KOHNUM(IDX1)
+             ELSE
+               MOVE  SKT0110TMP-KOHNUM(WRK-CNT)    TO  WRK-KOHNUM
+               PERFORM  950-HKNNUM-SET-SEC
+               MOVE  HKN-HBTNUM        TO  SKT0120-KOHNUM(IDX1)
+             END-IF
              MOVE  "¢þ"              TO  SKT0120-KOHMARU(IDX1)
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *    ¢þ¸¶
              IF  SKT0110TMP-KOHNUM(WRK-CNT)     =  "019"  AND
                  SKT0110TMP-RJN-19-KBN(WRK-CNT) =  "027"
@@ -1464,11 +1625,21 @@
                MOVE  "¢þ"            TO  SKT0120-GENBAKU2(IDX1)
              END-IF
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+             IF  SKT0110TMP-KOHNUM(WRK-CNT)(1:2)  =  "27"
+                 IF  SKT0110TMP-KOHNUM(WRK-CNT)(3:1)  =  9
+                     MOVE  "¶å³ä"  TO  SKT0120-GENBAKU1(IDX1)
+                 ELSE
+                     MOVE  "¼·³ä"  TO  SKT0120-GENBAKU1(IDX1)
+                 END-IF
+             END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
                PERFORM  VARYING  IDX3  FROM  1  BY  1
                         UNTIL    IDX3  >     2
       *    ³ä¹ç
+                 DISPLAY "³ä¹ç"SKT0110TMP-K-RATE(WRK-CNT IDX2 IDX3)
                  MOVE  SKT0110TMP-K-RATE(WRK-CNT IDX2 IDX3) TO WRK-Z1
                  MOVE  WRK-Z1  TO  SKT0120-K-RATE (IDX1 IDX2 IDX3)
       *    ·ï¿ô

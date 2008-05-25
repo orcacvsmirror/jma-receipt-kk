@@ -27,28 +27,11 @@
                05  SKT0100TMP-NYUGAI-TBL  OCCURS  2 TIMES.
                    07  SKT0100TMP-KENSU   PIC 9(05).
                    07  SKT0100TMP-TENSU   PIC 9(14).
-                   07  SKT0100TMP-ITBFTN  PIC 9(10).
-               05  SKT0100TMP-SKENSU      PIC 9(05).
-               05  SKT0100TMP-SKINGK      PIC 9(14).
-               05  SKT0100TMP-SFTNGK      PIC 9(10).
-           03  SKT0100TMP-ETC-TBL         OCCURS  3 TIMES.
+           03  SKT0100TMP-ETC-TBL         OCCURS  2 TIMES.
                05  SKT0100TMP-ETC-KENSU   PIC 9(05).
                05  SKT0100TMP-ETC-TENSU   PIC 9(14).
-               05  SKT0100TMP-ETC-ITBFTN  PIC 9(10).
-               05  SKT0100TMP-ETC-SKENSU  PIC 9(05).
-               05  SKT0100TMP-ETC-SKINGK  PIC 9(14).
-               05  SKT0100TMP-ETC-SFTNGK  PIC 9(10).
-           03  SKT0100TMP-KOHI-AREA.
-               05  SKT0100TMP-KOH-TBL        OCCURS  20 TIMES.
-                   07  SKT0100TMP-KOHNUM      PIC X(03).
-                   07  SKT0100TMP-K-KENSU     PIC 9(05).
-                   07  SKT0100TMP-K-TENSU     PIC 9(14).
-                   07  SKT0100TMP-K-ITBFTN    PIC 9(10).
-                   07  SKT0100TMP-K-SKENSU    PIC 9(05).
-                   07  SKT0100TMP-K-SKINGK    PIC 9(14).
-                   07  SKT0100TMP-K-SFTNGK    PIC 9(10).
            03  SKT0100TMP-HENREIYM-TBL      OCCURS  2 TIMES.
                05  SKT0100TMP-FUKUSI-TBL      OCCURS  2 TIMES.
-                   07  SKT0100TMP-F-KENSU     PIC 9(05) OCCURS  3.
-                   07  SKT0100TMP-F-TENSU     PIC 9(11) OCCURS  3.
+                   07  SKT0100TMP-F-KENSU     PIC 9(05) OCCURS  4.
+                   07  SKT0100TMP-F-TENSU     PIC 9(11) OCCURS  4.
       *

@@ -45,6 +45,8 @@
       *  01.00.08     内田     07/09/26    日レセver4.0対応
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
+      *  01.00.09     内田     08/03/26    公費の助成がないなら集計しない(743)
+      *  01.00.10     内田     08/05/02    後期高齢者を障老人欄へ印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -793,6 +795,9 @@
            IF   MF100-KOHNUM  =  "143"
            OR   MF100-KOHNUM  =  "343"
            OR   MF100-KOHNUM  =  "643"
+      *---(01.00.09) LINE ADD START ------------------------------------
+           OR   MF100-KOHNUM  =  "743"
+      *---(01.00.09) LINE ADD END   ------------------------------------
            OR   MF100-KOHNUM  =  "843"
       *---(01.00.07) LINE ADD END   ------------------------------------
              MOVE      1                       TO  FLG-ERR
@@ -908,8 +913,16 @@
       *    件数加算場所を判定
            IF    MF100-TOTALTEN         =  ZERO  OR
                  RECE02-RJNHKNNUM   NOT =  SPACE OR
+      *---(01.00.10) LINE ADD START ------------------------------------
+                 MF100-HKNNUM           =  "039" OR
+                 MF100-HKNNUM           =  "040" OR
+      *---(01.00.10) LINE ADD END   ------------------------------------
                  RECE02-AGE            >=  70
              IF  RECE02-RJNHKNNUM   NOT =  SPACE
+      *---(01.00.10) LINE ADD START ------------------------------------
+             OR  MF100-HKNNUM           =  "039"
+             OR  MF100-HKNNUM           =  "040"
+      *---(01.00.10) LINE ADD END   ------------------------------------
                MOVE     5              TO  MF100-KASAN-FLG
              ELSE
                MOVE     4              TO  MF100-KASAN-FLG
@@ -1406,6 +1419,10 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
              IF      MF100-RJNHKNNUM   NOT  =  SPACE
+      *---(01.00.10) LINE ADD START ------------------------------------
+             OR      MF100-HKNNUM           =  "039"
+             OR      MF100-HKNNUM           =  "040"
+      *---(01.00.10) LINE ADD END   ------------------------------------
                MOVE  MF100-SEIKYUGK    TO  WRK-Z7
                MOVE  WRK-Z7            TO  SC07-RJN(IDX1)
              ELSE
@@ -1414,6 +1431,10 @@
              END-IF
       *
              IF    (MF100-RJNHKNNUM  NOT   =  SPACE  OR
+      *---(01.00.10) LINE ADD START ------------------------------------
+                    MF100-HKNNUM           =  "039"  OR
+                    MF100-HKNNUM           =  "040"  OR
+      *---(01.00.10) LINE ADD END   ------------------------------------
                     MF100-AGE          >=  70)       AND
       *---(01.00.05) LINE ADD START ------------------------------------
       *              MF100-KYURATE       =  20
@@ -1500,6 +1521,10 @@
              END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
              IF     MF100-RJNHKNNUM NOT =  SPACE
+      *---(01.00.10) LINE ADD START ------------------------------------
+             OR     MF100-HKNNUM        =  "039"
+             OR     MF100-HKNNUM        =  "040"
+      *---(01.00.10) LINE ADD END   ------------------------------------
                ADD     MF100-SEIKYUGK  TO  SUM-RJN
              ELSE
                ADD     MF100-SEIKYUGK  TO  SUM-ZNK
