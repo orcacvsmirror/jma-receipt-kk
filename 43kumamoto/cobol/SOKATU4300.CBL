@@ -32,6 +32,8 @@
       *                                  °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.02    ÆâÅÄ    07/11/16    ·×Íó¤ÏºÇ½ªÊÇ¤ËÁí¹ç·×¤ò°õ»ú¤·¡¢
       *                                  ¤½¤ì°Ê³°¤Ï°õ»ú¤·¤Ê¤¤
+      *  01.00.03    ÆâÅÄk   08/04/29    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
+      *                                  SPA-AREA½é´ü²½
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -151,6 +153,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PRINT2          PIC 9(01).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  FLG-PRINT3          PIC 9(01).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -227,6 +232,11 @@
                    07  SUM-TENSU   PIC 9(07).
                05  SUM-SKINGK      PIC 9(07).
                05  SUM-SFTNGK      PIC 9(07).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  SUM-SSKENSU    PIC 9(04).
+           03  SUM-SSKINGK    PIC 9(07).
+           03  SUM-SSFTNGK    PIC 9(07).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    ¥«¥¦¥ó¥ÈÎÎ°è
        01  CNT-AREA.
@@ -236,6 +246,10 @@
            03  CNT-UPDFILE         PIC 9(06).
            03  CNT-IN              PIC 9(02).
       *
+       01  KEY-AREA.
+           03  KEY-NEW             PIC 9(06).
+           03  KEY-OLD             PIC 9(06).
+      *
            COPY    "CPSHELLTBL.INC".
       *     
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -243,6 +257,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
@@ -342,6 +361,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  SUM-AREA
+      *---(01.00.03) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -655,9 +677,20 @@
              MOVE  RECE10-KYURATE     TO    SKT4300TMP-KYURATE
            END-IF
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+           MOVE  RECE10-SRYYM        TO  SKT4300TMP-SRYYM
+           MOVE  RECE10-SKYYM        TO  SKT4300TMP-SKYYM
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
            PERFORM  900-SKTTMP-READ-SEC
       *
-           PERFORM  210-HKN-SYUKEI-SEC
+      *---(01.00.03) LINE ADD START ------------------------------------
+           IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                PERFORM  220-HKN-SYUKEI-SEC
+           ELSE
+                PERFORM  210-HKN-SYUKEI-SEC
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    ½¸·×¤ÎÂÐ¾Ý¤Ë¤Ê¤é¤Ê¤«¤Ã¤¿¤È¤­
            IF      FLG-UPD             =   1
@@ -760,6 +793,79 @@
        210-HKN-SYUKEI-EXT.
            EXIT.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    °åÎÅÊÝ¸±Ê¬½¸·×½èÍý
+      *****************************************************************
+       220-HKN-SYUKEI-SEC          SECTION.
+      *
+      *    Æþ³°¶èÊ¬
+           IF  RECE10-NYUGAIKBN  =  "1"
+             MOVE  1      TO   IDX2
+           ELSE
+             MOVE  2      TO   IDX2
+           END-IF
+      *
+      *    Âà¿¦¼Ô¤«¤É¤¦¤«
+           IF  RECE10-HKNNUM  =  "060"
+             IF  RECE10-AGE  >= 70
+               IF  RECE10-KYURATE  =  9
+                 MOVE    1     TO    IDX1
+               ELSE
+                 MOVE    2     TO    IDX1
+               END-IF
+             ELSE
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+               AND  (RECE10-FLG (1)   =  1)
+                   MOVE  4     TO  IDX1
+               ELSE
+                   IF  RECE10-AGE  >= 3
+                     MOVE    3     TO    IDX1
+                   ELSE
+                     MOVE    4     TO    IDX1
+                   END-IF
+               END-IF
+             END-IF
+      *
+           ELSE
+               IF  RECE10-HONKZKKBN  =  1
+                 MOVE  5    TO   IDX1
+               ELSE
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE  7     TO  IDX1
+                 ELSE
+                   IF  RECE10-AGE  <  3
+                     MOVE  7  TO  IDX1
+                   ELSE
+                     MOVE  6  TO  IDX1
+                   END-IF
+                 END-IF
+               END-IF
+           END-IF
+      *
+           PERFORM  2101-SYUKEI-SEC
+      *
+      *    ¸øÈñÉéÃ´Ê¬
+           IF  RECE10-KOHNUM (1)   NOT =   SPACE  OR
+               RECE10-KOHNUM (2)   NOT =   SPACE  OR
+               RECE10-KOHNUM (3)   NOT =   SPACE  OR
+               RECE10-KOHNUM (4)   NOT =   SPACE
+               PERFORM 220-KOH-SYUKEI-SEC
+           END-IF
+      *
+           IF  FLG-SKT4300TMP  =  1
+               WRITE    SKT4300TMP-REC
+           ELSE
+               REWRITE  SKT4300TMP-REC
+           END-IF
+      *
+           MOVE    1    TO  FLG-UPD 
+      *
+           .
+       220-HKN-SYUKEI-EXT.
+           EXIT.
+      *
       *****************************************************************
       *    °åÎÅÊÝ¸±¡¦°ìÈÌ¹ñÊÝÊ¬½¸·×½èÍý
       *****************************************************************
@@ -771,11 +877,24 @@
       *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
            ADD  RECE10-TOTALTEN(1)  TO  SKT4300TMP-TENSU(IDX1 IDX2)
       *
-      *    ¿©»öÎÅÍÜ¡§¶â³Û
-           ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SKT4300TMP-SKINGK(IDX1)
-      *
-      *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
-           ADD  RECE10-SHOKUJIFTN(1)     TO  SKT4300TMP-SFTNGK(IDX1)
+      *    ¿©»öÎÅÍÜ¡§·ï¿ô
+           IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+             IF      RECE10-SHOKUJINISSU(1)  NOT =   ZERO
+                 ADD     1                 TO  SKT4300TMP-SSKENSU
+             END-IF
+      *      ¿©»öÎÅÍÜ¡§¶â³Û
+             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SKT4300TMP-SSKINGK
+      *  
+      *      ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+             ADD  RECE10-SHOKUJIFTN(1)     TO  SKT4300TMP-SSFTNGK
+           ELSE
+      *      ¿©»öÎÅÍÜ¡§¶â³Û
+             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SKT4300TMP-SKINGK(IDX1)
+      *  
+      *      ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+             ADD  RECE10-SHOKUJIFTN(1)     TO  SKT4300TMP-SFTNGK(IDX1)
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            MOVE    1               TO  FLG-UPD
            .
@@ -793,6 +912,10 @@
                    UNTIL   IDX3     >       4
                    OR  RECE10-KOHNUM (IDX3) =   SPACE
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+             MOVE  RECE10-SRYYM    TO    KOH4300TMP-SRYYM
+      *
+      *---(01.00.03) LINE ADD END   ------------------------------------
              IF    RECE10-KOHNUM(IDX3)  =  "091"
                MOVE    "051"       TO    RECE10-KOHNUM(IDX3)
              END-IF
@@ -807,6 +930,14 @@
       *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
                ADD  RECE10-TOTALTEN(IDX3 + 1)        TO
                                  KOH4300TMP-TENSU(IDX2)
+      *---(01.00.03) LINE ADD START ------------------------------------
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *    ¿©»öÎÅÍÜ¡§·ï¿ô
+                 IF   RECE10-SHOKUJINISSU(IDX3 + 1)  NOT =   ZERO
+                     ADD     1           TO  KOH4300TMP-SKENSU
+                 END-IF
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    ¿©»öÎÅÍÜ¡§¶â³Û
                ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
                                  KOH4300TMP-SKINGK
@@ -852,27 +983,105 @@
            PERFORM  900-TMP-READ-SEC
            PERFORM  950-KOHTMPFILE-READ-SEC
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    Åö·î
            PERFORM  UNTIL     FLG-PRINT   =  1
                     AND       FLG-PRINT2  =  1
-      *
-      *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+             IF  (SKT4300TMP-SRYYM  >=  WRK-CONS-SRYYM-200804)
+               DISPLAY "Åö·î"
+      *        Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
                PERFORM 310-HEAD-HEN-SEC
-      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
-               PERFORM 320-BODY-HEN-SEC
-      *---(01.00.02) LINE ADD START ------------------------------------
-               IF   FLG-PRINT   =  1  AND  FLG-PRINT2  =  1
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      *    Ä¢É¼ÊÔ½¸<¾®·×>½èÍý
-                 PERFORM 321-BODY-HEN-SEC
-      *---(01.00.02) LINE ADD START ------------------------------------
+      *        Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
+               PERFORM 330-BODY-HEN-SEC
+      *        Ä¢É¼ÊÔ½¸<¾®·×>½èÍý
+               PERFORM 3213-SHOKEI-HEN-SEC
+      *        Ä¢É¼ÊÔ½¸<¸øÈñ>
+               IF  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
+                 PERFORM  331-KOH-HEN-SEC
+               ELSE
+                 PERFORM
+                   UNTIL  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
+                      OR  FLG-PRINT2  =  1
+                   PERFORM  950-KOHTMPFILE-READ-SEC
+                 END-PERFORM
+                 PERFORM 331-KOH-HEN-SEC
                END-IF
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      *    Ä¢É¼°õºþ½èÍý
-               PERFORM 330-PRINT-OUT-SEC
-           END-PERFORM
+      *        Ä¢É¼°õºþ½èÍý
+               PERFORM 331-PRINT-OUT-SEC
       *
+               PERFORM  950-KOHTMPFILE-READ-SEC
+      
+               PERFORM UNTIL     FLG-PRINT2   =  1
+      *          Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+                 PERFORM 310-HEAD-HEN-SEC
+      *        Ä¢É¼ÊÔ½¸<¸øÈñ>
+                 IF  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
+                     PERFORM  331-KOH-HEN-SEC
+                 ELSE
+                     PERFORM  950-KOHTMPFILE-READ-SEC
+                 END-IF
+      *        Ä¢É¼°õºþ½èÍý
+                 PERFORM 331-PRINT-OUT-SEC
+               END-PERFORM
+             ELSE
+               PERFORM  900-TMP-READ-SEC
+             END-IF
+      *
+           END-PERFORM
            CLOSE    SKT4300TMP-FILE
            CLOSE    KOH4300TMP-FILE
+      *
+      *
+      *    ·îÃÙ¤ì½èÍý
+           OPEN     INPUT       SKT4300TMP-FILE
+           OPEN     INPUT       KOH4300TMP-FILE
+      *
+           MOVE     ZERO        TO       FLG-PRINT
+           MOVE     ZERO        TO       FLG-PRINT2
+      *
+      *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
+           PERFORM  900-TMP-READ-SEC
+           PERFORM  950-KOHTMPFILE-READ-SEC
+      *
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *              AND       FLG-PRINT2  =  1
+             IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *        Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+               PERFORM 310-HEAD-HEN-SEC
+      *        Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
+               PERFORM 320-BODY-HEN-SEC
+             ELSE
+               PERFORM 900-TMP-READ-SEC
+             END-IF
+           END-PERFORM
+           CLOSE    SKT4300TMP-FILE
+           CLOSE    KOH4300TMP-FILE
+      *
+      *
+      *
+      *     PERFORM  UNTIL     FLG-PRINT   =  1
+      *              AND       FLG-PRINT2  =  1
+      *
+      *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+      *         PERFORM 310-HEAD-HEN-SEC
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
+      *         PERFORM 320-BODY-HEN-SEC
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *         IF   FLG-PRINT   =  1  AND  FLG-PRINT2  =  1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+      *    Ä¢É¼ÊÔ½¸<¾®·×>½èÍý
+      *           PERFORM 321-BODY-HEN-SEC
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *         END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
+      *    Ä¢É¼°õºþ½èÍý
+      *         PERFORM 330-PRINT-OUT-SEC
+      *     END-PERFORM
+      *
+      *     CLOSE    SKT4300TMP-FILE
+      *     CLOSE    KOH4300TMP-FILE
+      *
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            .
        2002-PRINT-EXT.
@@ -883,10 +1092,19 @@
       *****************************************************************
        310-HEAD-HEN-SEC          SECTION.
       *
-      *
            INITIALIZE                        SKT4300
            INITIALIZE                        SKT4310
       *    ¿ÇÎÅÇ¯·î
+      *---(01.00.03) LINE ADD START ------------------------------------
+           IF  SKT4300TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT4300TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    WRK-SRYYMWH           TO  SKT4300-SRYYM
                                              SKT4310-SRYYM
       *    °åÎÅµ¡´Ø¥³¡¼¥É
@@ -907,9 +1125,15 @@
            ADD     1                     TO  CNT-PAGE
            MOVE    CNT-PAGE              TO  WRK-Z3
            MOVE    WRK-Z3                TO  SKT4300-NO
-           ADD     1                     TO  CNT-PAGE
-           MOVE    CNT-PAGE              TO  WRK-Z3
-           MOVE    WRK-Z3                TO  SKT4310-NO
+      *---(01.00.03) LINE ADD START ------------------------------------
+           IF  (SKT4300TMP-SRYYM  >= WRK-CONS-SRYYM-200804)
+             CONTINUE
+           ELSE
+             ADD     1                     TO  CNT-PAGE
+             MOVE    CNT-PAGE              TO  WRK-Z3
+             MOVE    WRK-Z3                TO  SKT4310-NO
+           END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *    °åÎÅµ¡´Ø½»½ê
@@ -947,99 +1171,148 @@
       *****************************************************************
        320-BODY-HEN-SEC      SECTION.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
       *---(01.00.02) LINE ADD START ------------------------------------
-      *     INITIALIZE                       SUM-AREA
+           INITIALIZE                       SUM-AREA
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+           MOVE     SKT4300TMP-SRYYM   TO   KEY-NEW
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *    ·îÃÙ¤ì¡¦ÊÖÌáÊ¬
+      *
       *    ÊÔ½¸½èÍý
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     8
                     OR       FLG-PRINT   =      1
       *
-      *    ÊÝ¸±¼ÔÌ¾
-             MOVE     SKT4300TMP-HKNJANUM     TO  WRK-HKNJANUM
-             PERFORM  920-HKNJAINF-SET-SEC
-             MOVE     WRK-HKNJANAME     TO  SKT4300-HKNJANAME(IDX1)
+      *---(01.00.03) LINE ADD START ------------------------------------
+             IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *        ÊÝ¸±¼ÔÌ¾
+               MOVE     SKT4300TMP-HKNJANUM     TO  WRK-HKNJANUM
+               PERFORM  920-HKNJAINF-SET-SEC
+               MOVE     WRK-HKNJANAME     TO  SKT4300-HKNJANAME(IDX1)
                                             SKT4310-HKNJANAME(IDX1)
-      *    µëÉÕ³ä¹ç(Ë¡Äê³°Ê¬¤Î¤ß)
-             IF       SKT4300TMP-KYURATE  NOT  =  ZERO
-               MOVE   SKT4300TMP-KYURATE      TO  WRK-Z2
-               INITIALIZE                   WRK-KYURATE
-               STRING "(" WRK-Z2 "³ä"  ")"  DELIMITED BY SIZE
-                      INTO                  WRK-KYURATE
-               END-STRING
-               MOVE  WRK-KYURATE      TO    SKT4300-KYURATE(IDX1)
-                                            SKT4310-KYURATE(IDX1)
+      *      µëÉÕ³ä¹ç(Ë¡Äê³°Ê¬¤Î¤ß)
+               IF       SKT4300TMP-KYURATE  NOT  =  ZERO
+                 MOVE   SKT4300TMP-KYURATE      TO  WRK-Z2
+                 INITIALIZE                   WRK-KYURATE
+                 STRING "(" WRK-Z2 "³ä"  ")"  DELIMITED BY SIZE
+                        INTO                  WRK-KYURATE
+                 END-STRING
+                 MOVE  WRK-KYURATE      TO    SKT4300-KYURATE(IDX1)
+                                              SKT4310-KYURATE(IDX1)
+               END-IF
+      *
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     11
+                 IF     IDX2     <     7
+                   PERFORM  3201-BODY-HEN-SEC
+                 ELSE
+                   PERFORM  3202-BODY-HEN-SEC
+                 END-IF
+               END-PERFORM
+      *        °ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
+      *---(01.00.03) LINE ADD START ------------------------------------
+               MOVE     KEY-NEW  TO  KEY-OLD
+               PERFORM  900-TMP-READ-SEC
+               MOVE     SKT4300TMP-SRYYM  TO  KEY-NEW
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.03) LINE ADD START ------------------------------------
+               IF  KEY-NEW  NOT =  KEY-OLD
+      *          ¸øÈñ½¸·×
+                 PERFORM 950-KOHTMPFILE-READ-SEC
+                 PERFORM UNTIL FLG-PRINT2 = 1
+                   IF  KEY-OLD  =  KOH4300TMP-SRYYM
+                     PERFORM 331-KOH-HEN-SEC
+                   ELSE
+                     PERFORM 950-KOHTMPFILE-READ-SEC
+                   END-IF
+                   PERFORM 950-KOHTMPFILE-READ-SEC
+                 END-PERFORM
+                 CLOSE    KOH4300TMP-FILE
+      *
+      *          Ä¢É¼ÊÔ½¸<¾®·×>½èÍý
+                 PERFORM 321-BODY-HEN-SEC
+      *          Ä¢É¼°õºþ½èÍý
+                 PERFORM 330-PRINT-OUT-SEC
+                 INITIALIZE  SUM-AREA
+                 MOVE   ZERO  TO  IDX1
+                 MOVE   ZERO  TO  IDX2
+                 IF ( FLG-PRINT   =  ZERO ) 
+                   AND (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *            Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+                   PERFORM 310-HEAD-HEN-SEC
+                   OPEN     INPUT       KOH4300TMP-FILE
+                   MOVE     ZERO    TO  FLG-PRINT2
+                 END-IF
+               END-IF
+             ELSE
+               PERFORM 900-TMP-READ-SEC
              END-IF
       *
-             PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     11
-               IF     IDX2     <     7
-                 PERFORM  3201-BODY-HEN-SEC
-               ELSE
-                 PERFORM  3202-BODY-HEN-SEC
-               END-IF
-             END-PERFORM
-      *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
-             PERFORM  900-TMP-READ-SEC
            END-PERFORM
-      *
       *    ¸øÈñÊ¬ÊÔ½¸(£±ËçÌÜ)
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     6
-                    OR       FLG-PRINT2  =      1
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     6
+      *              OR       FLG-PRINT2  =      1
       *
       *    Ë¡ÊÌÈÖ¹æ
-             MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
-             PERFORM  950-HKNNUM-SET-SEC
-             MOVE   HKN-HBTNUM            TO     SKT4300-HBTNUM(IDX1)
-             PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     2
+      *       MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+      *       PERFORM  950-HKNNUM-SET-SEC
+      *       MOVE   HKN-HBTNUM            TO     SKT4300-HBTNUM(IDX1)
+      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     2
       *    ¸øÈñ¡§·ï¿ô
-               MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
-               MOVE  WRK-Z4         TO  SKT4300-K-KENSU(IDX1 IDX2)
+      *         MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+      *         MOVE  WRK-Z4         TO  SKT4300-K-KENSU(IDX1 IDX2)
       *    ¸øÈñ¡§ÅÀ¿ô
-               MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
-               MOVE  WRK-Z7         TO  SKT4300-K-TENSU(IDX1 IDX2)
-             END-PERFORM
+      *         MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+      *         MOVE  WRK-Z7         TO  SKT4300-K-TENSU(IDX1 IDX2)
+      *       END-PERFORM
       *    ¸øÈñ¡§¿©»öÎÅÍÜÈñ
-             MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
-             MOVE  WRK-Z7           TO  SKT4300-K-SKINGK(IDX1)
+      *       MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+      *       MOVE  WRK-Z7           TO  SKT4300-K-SKINGK(IDX1)
       *    ¸øÈñ¡§É¸½àÉéÃ´³Û
-             MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
-             MOVE  WRK-Z7           TO  SKT4300-K-SFTNGK(IDX1)
+      *       MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+      *       MOVE  WRK-Z7           TO  SKT4300-K-SFTNGK(IDX1)
       *
       *    ¸øÈñ°ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
-             PERFORM  950-KOHTMPFILE-READ-SEC
-           END-PERFORM
+      *       PERFORM  950-KOHTMPFILE-READ-SEC
+      *     END-PERFORM
       *
       *    ¸øÈñÊ¬ÊÔ½¸(£²ËçÌÜ)
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     6
-                    OR       FLG-PRINT2  =      1
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     6
+      *              OR       FLG-PRINT2  =      1
       *
       *    Ë¡ÊÌÈÖ¹æ
-             MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
-             PERFORM  950-HKNNUM-SET-SEC
-             MOVE   HKN-HBTNUM            TO     SKT4310-HBTNUM(IDX1)
-             PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     2
+      *       MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+      *       PERFORM  950-HKNNUM-SET-SEC
+      *       MOVE   HKN-HBTNUM            TO     SKT4310-HBTNUM(IDX1)
+      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     2
       *    ¸øÈñ¡§·ï¿ô
-               MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
-               MOVE  WRK-Z4         TO  SKT4310-K-KENSU(IDX1 IDX2)
+      *         MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+      *         MOVE  WRK-Z4         TO  SKT4310-K-KENSU(IDX1 IDX2)
       *    ¸øÈñ¡§ÅÀ¿ô
-               MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
-               MOVE  WRK-Z7         TO  SKT4310-K-TENSU(IDX1 IDX2)
-             END-PERFORM
+      *         MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+      *         MOVE  WRK-Z7         TO  SKT4310-K-TENSU(IDX1 IDX2)
+      *       END-PERFORM
       *    ¸øÈñ¡§¿©»öÎÅÍÜÈñ
-             MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
-             MOVE  WRK-Z7           TO  SKT4310-K-SKINGK(IDX1)
+      *       MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+      *       MOVE  WRK-Z7           TO  SKT4310-K-SKINGK(IDX1)
       *    ¸øÈñ¡§É¸½àÉéÃ´³Û
-             MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
-             MOVE  WRK-Z7           TO  SKT4310-K-SFTNGK(IDX1)
+      *       MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+      *       MOVE  WRK-Z7           TO  SKT4310-K-SFTNGK(IDX1)
       *
       *    ¸øÈñ°ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
-             PERFORM  950-KOHTMPFILE-READ-SEC
-           END-PERFORM
+      *       PERFORM  950-KOHTMPFILE-READ-SEC
+      *     END-PERFORM
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            .
        320-BODY-HEN-EXT.
@@ -1114,6 +1387,194 @@
        3202-BODY-HEN-EXT.
            EXIT.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ¹Ô>½èÍý
+      *****************************************************************
+       330-BODY-HEN-SEC      SECTION.
+      *
+      *    ÊÔ½¸½èÍý
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     8
+                    OR       FLG-PRINT   =      1
+      *
+      *    ÊÝ¸±¼ÔÌ¾
+             MOVE     SKT4300TMP-HKNJANUM     TO  WRK-HKNJANUM
+             PERFORM  920-HKNJAINF-SET-SEC
+             MOVE     WRK-HKNJANAME     TO  SKT4300-HKNJANAME(IDX1)
+                                            SKT4310-HKNJANAME(IDX1)
+      *    µëÉÕ³ä¹ç(Ë¡Äê³°Ê¬¤Î¤ß)
+             IF       SKT4300TMP-KYURATE  NOT  =  ZERO
+               MOVE   SKT4300TMP-KYURATE      TO  WRK-Z2
+               INITIALIZE                   WRK-KYURATE
+               STRING "(" WRK-Z2 "³ä"  ")"  DELIMITED BY SIZE
+                      INTO                  WRK-KYURATE
+               END-STRING
+               MOVE  WRK-KYURATE      TO    SKT4300-KYURATE(IDX1)
+                                            SKT4310-KYURATE(IDX1)
+             END-IF
+      *
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     7
+                 PERFORM  3203-BODY-HEN-SEC
+             END-PERFORM
+      *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           .
+       330-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¿·£±ËçÌÜÊÔ½¸½èÍý
+      *****************************************************************
+       3203-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL    IDX3  >     2
+      *    ·ï¿ô
+             MOVE    SKT4300TMP-KENSU(IDX2 IDX3)  TO  WRK-Z4
+             MOVE    WRK-Z4     TO    SKT4300-KENSU(IDX1 IDX2 IDX3)
+      *    ÅÀ¿ô
+             MOVE    SKT4300TMP-TENSU(IDX2 IDX3)  TO  WRK-Z7
+             MOVE    WRK-Z7     TO    SKT4300-TENSU(IDX1 IDX2 IDX3)
+           END-PERFORM
+      *
+           IF  IDX2 =  7
+      *      ¿©»ö·ï¿ô
+             MOVE      SKT4300TMP-SSKENSU      TO  WRK-Z4
+             MOVE      WRK-Z4     TO    SKT4300-SSKENSU(IDX1)
+      *      ¿©»öÎÅÍÜÈñ
+             MOVE      SKT4300TMP-SSKINGK      TO  WRK-Z7
+             MOVE      WRK-Z7     TO    SKT4300-SSKINGK(IDX1)
+      *      É¸½àÉéÃ´³Û
+             MOVE      SKT4300TMP-SSFTNGK      TO  WRK-Z7
+             MOVE      WRK-Z7     TO    SKT4300-SSFTNGK(IDX1)
+      *    ¾®·×²Ã»»(¥Ú¡¼¥¸·×)
+             ADD       SKT4300TMP-SSKENSU   TO  SUM-SSKENSU
+             ADD       SKT4300TMP-SSKINGK   TO  SUM-SSKINGK
+             ADD       SKT4300TMP-SSFTNGK   TO  SUM-SSFTNGK
+           END-IF
+      *
+      *    ¾®·×²Ã»»(¥Ú¡¼¥¸·×)
+           ADD       SKT4300TMP-KENSU(IDX2 1)   TO  SUM-KENSU(IDX2 1)
+           ADD       SKT4300TMP-KENSU(IDX2 2)   TO  SUM-KENSU(IDX2 2)
+           ADD       SKT4300TMP-TENSU(IDX2 1)   TO  SUM-TENSU(IDX2 1)
+           ADD       SKT4300TMP-TENSU(IDX2 2)   TO  SUM-TENSU(IDX2 2)
+      *
+           .
+       3203-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¸øÈñ½¸·×½èÍý
+      *****************************************************************
+       331-KOH-HEN-SEC      SECTION.
+      *
+      *    ¸øÈñÊ¬ÊÔ½¸
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     6
+                    OR       FLG-PRINT2  =      1
+      *
+      *    Ë¡ÊÌÈÖ¹æ
+             MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+             PERFORM  950-HKNNUM-SET-SEC
+             MOVE   HKN-HBTNUM            TO     SKT4300-HBTNUM(IDX1)
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     2
+      *    ¸øÈñ¡§·ï¿ô
+               MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+               MOVE  WRK-Z4         TO  SKT4300-K-KENSU(IDX1 IDX2)
+      *    ¸øÈñ¡§ÅÀ¿ô
+               MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+               MOVE  WRK-Z7         TO  SKT4300-K-TENSU(IDX1 IDX2)
+             END-PERFORM
+      *    ¸øÈñ¡§¿©»öÎÅÍÜÈñ
+             MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+             MOVE  WRK-Z7           TO  SKT4300-K-SKINGK(IDX1)
+      *    ¸øÈñ¡§É¸½àÉéÃ´³Û
+             MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+             MOVE  WRK-Z7           TO  SKT4300-K-SFTNGK(IDX1)
+      *
+      *    ¸øÈñ°ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
+             PERFORM  950-KOHTMPFILE-READ-SEC
+             IF  WRK-SYMD  NOT  =  KOH4300TMP-SRYYM
+                 MOVE  1  TO FLG-PRINT2
+             END-IF
+           END-PERFORM
+      *
+           .
+       331-KOH-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¸øÈñ½¸·×½èÍý
+      *****************************************************************
+       332-KOH-HEN-SEC      SECTION.
+      *
+      *    ¸øÈñÊ¬ÊÔ½¸
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     12
+                    OR       FLG-PRINT2  =      1
+      *
+             IF  IDX1 <  6
+      *        Ë¡ÊÌÈÖ¹æ
+               MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+               PERFORM  950-HKNNUM-SET-SEC
+               MOVE   HKN-HBTNUM            TO     SKT4300-HBTNUM(IDX1)
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *      ¸øÈñ¡§·ï¿ô
+                 MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+                 MOVE  WRK-Z4         TO  SKT4300-K-KENSU(IDX1 IDX2)
+      *      ¸øÈñ¡§ÅÀ¿ô
+                 MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+                 MOVE  WRK-Z7         TO  SKT4300-K-TENSU(IDX1 IDX2)
+               END-PERFORM
+      *      ¸øÈñ¡§¿©»öÎÅÍÜÈñ
+               MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+               MOVE  WRK-Z7           TO  SKT4300-K-SKINGK(IDX1)
+      *      ¸øÈñ¡§É¸½àÉéÃ´³Û
+               MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+               MOVE  WRK-Z7           TO  SKT4300-K-SFTNGK(IDX1)
+      *
+             ELSE
+      *        Ë¡ÊÌÈÖ¹æ
+               MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+               PERFORM  950-HKNNUM-SET-SEC
+               MOVE   HKN-HBTNUM            TO     SKT4310-HBTNUM(IDX1)
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *      ¸øÈñ¡§·ï¿ô
+                 MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+                 MOVE  WRK-Z4         TO  SKT4310-K-KENSU(IDX1 IDX2)
+      *      ¸øÈñ¡§ÅÀ¿ô
+                 MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+                 MOVE  WRK-Z7         TO  SKT4310-K-TENSU(IDX1 IDX2)
+               END-PERFORM
+      *      ¸øÈñ¡§¿©»öÎÅÍÜÈñ
+               MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+               MOVE  WRK-Z7           TO  SKT4310-K-SKINGK(IDX1)
+      *      ¸øÈñ¡§É¸½àÉéÃ´³Û
+               MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+               MOVE  WRK-Z7           TO  SKT4310-K-SFTNGK(IDX1)
+      *
+             END-IF
+      *
+      *      ¸øÈñ°ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
+               PERFORM  950-KOHTMPFILE-READ-SEC
+               IF  WRK-SYMD  NOT  =  KOH4300TMP-SRYYM
+                   MOVE  1  TO FLG-PRINT2
+               END-IF
+      *
+           END-PERFORM
+      *
+           .
+       332-KOH-HEN-EXT.
+           EXIT.
+      *
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    Ä¢É¼ÊÔ½¸<¾®·×>½èÍý
       *****************************************************************
@@ -1187,6 +1648,42 @@
        3212-BODY-HEN-EXT.
            EXIT.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ¾®·×ÊÔ½¸½èÍý
+      *****************************************************************
+       3213-SHOKEI-HEN-SEC      SECTION.
+      *
+           PERFORM  VARYING  IDX2  FROM  1  BY  1
+                    UNTIL    IDX2  >     7
+             PERFORM  VARYING  IDX3  FROM  1  BY  1
+                      UNTIL    IDX3  >     2
+      *      ·ï¿ô
+               MOVE    SUM-KENSU(IDX2 IDX3)  TO  WRK-Z4
+               MOVE    WRK-Z4     TO    SKT4300-G-KENSU(IDX2 IDX3)
+      *      ÅÀ¿ô
+               MOVE    SUM-TENSU(IDX2 IDX3)  TO  WRK-Z7
+               MOVE    WRK-Z7     TO    SKT4300-G-TENSU(IDX2 IDX3)
+             END-PERFORM
+      *
+           END-PERFORM
+      *
+      *    ¿©»ö·ï¿ô
+           MOVE      SUM-SSKENSU     TO  WRK-Z4
+           MOVE      WRK-Z4     TO    SKT4300-G-SSKENSU
+      *    ¿©»öÎÅÍÜÈñ
+           MOVE      SUM-SSKINGK     TO  WRK-Z7
+           MOVE      WRK-Z7     TO    SKT4300-G-SSKINGK
+      *    É¸½àÉéÃ´³Û
+           MOVE      SUM-SSFTNGK     TO  WRK-Z7
+           MOVE      WRK-Z7     TO    SKT4300-G-SSFTNGK
+      *
+      *
+           .
+       3213-SHOKEI-HEN-EXT.
+           EXIT.
+      *
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    Ä¢É¼°õºþ½èÍý
       *****************************************************************
@@ -1208,7 +1705,10 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4300.red"            TO  SPRT-PRTID
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE   "SKT4300.red"            TO  SPRT-PRTID
+           MOVE   "SKT4300o.red"            TO  SPRT-PRTID
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    "¹ñÊÝÁí³çÉ½"        TO  SPRT-TITLE
            MOVE    SKT4300             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1242,7 +1742,10 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4310.red"            TO  SPRT-PRTID
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE   "SKT4310.red"            TO  SPRT-PRTID
+           MOVE   "SKT4310o.red"            TO  SPRT-PRTID
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    "¹ñÊÝÁí³çÉ½"        TO  SPRT-TITLE
            MOVE    SKT4310             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1260,10 +1763,55 @@
                                           TO  WRK-RECEERR
                PERFORM 500-ERR-HENSYU-SEC
            END-IF
+      *
            .
        330-PRINT-OUT-EXT.
            EXIT.
       *
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    Ä¢É¼°õºþ½èÍý
+      *****************************************************************
+       331-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT4300.red"            TO  SPRT-PRTID
+           MOVE    "¹ñÊÝÁí³çÉ½"        TO  SPRT-TITLE
+           MOVE    SKT4300             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+      *
+           .
+       331-PRINT-OUT-EXT.
+           EXIT.
+      *
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ¥¨¥é¡¼½ÐÎÏ½èÍý
       *****************************************************************
@@ -1867,7 +2415,11 @@
            READ  SKT4300TMP-FILE   NEXT
                AT  END
                    MOVE  1  TO  FLG-PRINT
+      *---(01.00.03) LINE ADD START ------------------------------------
+                   MOVE  1  TO  FLG-PRINT3
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-READ
+           DISPLAY "FLG-PRINT"FLG-PRINT
            .
        900-TMP-READ-EXT.
            EXIT.
@@ -1881,6 +2433,7 @@
                AT  END
                    MOVE  1  TO  FLG-PRINT2
            END-READ
+      *
            .
        950-KOHTMPFILE-READ-EXT.
            EXIT.

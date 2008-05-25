@@ -23,6 +23,7 @@
       ************************************************************
        01  SKT4300TMP-REC.
            03  SKT4300TMP-KEY.
+               05  SKT4300TMP-SRYYM                 PIC  9(06).
                05  SKT4300TMP-HKNJANUM              PIC  X(06).
                05  SKT4300TMP-KYURATE               PIC  9(03).
            03  SKT4300TMP-HKN-TBL   OCCURS  11.
@@ -31,3 +32,7 @@
                    07  SKT4300TMP-TENSU             PIC  9(10).
                05  SKT4300TMP-SKINGK                PIC  9(10).
                05  SKT4300TMP-SFTNGK                PIC  9(10).
+           03  SKT4300TMP-SSKENSU                PIC  9(04).
+           03  SKT4300TMP-SSKINGK                PIC  9(10).
+           03  SKT4300TMP-SSFTNGK                PIC  9(10).
+           03  SKT4300TMP-SKYYM                  PIC  9(06).

@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      ********************************************************************
        01  SKT4320.
       *ページ番号
            03  SKT4320-NO                  PIC  X(04).
@@ -39,7 +43,7 @@
       *一般・在宅メッセージ
            03  SKT4320-ZAI                 PIC  X(32).
       *療養の給付テーブル
-           03  SKT4320-SEIKYU  OCCURS  9.
+           03  SKT4320-SEIKYU  OCCURS  7.
                05  SKT4320-NYUGAI-TBL  OCCURS  2.
       *件数
                    07 SKT4320-KENSU        PIC  X(05).
@@ -57,3 +61,25 @@
                05  SKT4320-SKINGK          PIC  X(09).
       *標準負担額
                05  SKT4320-SFTNGK          PIC  X(09).
+      *公費テーブル
+           03  SKT4320-KOHSEIKYU  OCCURS  3.
+      *法別番号
+               05  SKT4320-HBTNUM          PIC  X(02).
+      *公費入外テーブル
+               05  SKT4320-K-NYUGAI-TBL  OCCURS  2.
+      *件数
+                   07 SKT4320-K-KENSU      PIC  X(05).
+      *日数
+                   07 SKT4320-K-NISSU      PIC  X(05).
+      *点数
+                   07 SKT4320-K-TENSU      PIC  X(09).
+      *一部負担金
+                   07 SKT4320-K-ITBFTN     PIC  X(09).
+      *食事件数
+               05  SKT4320-K-SKENSU        PIC  X(05).
+      *食事日数
+               05  SKT4320-K-SNISSU        PIC  X(05).
+      *食事療養費
+               05  SKT4320-K-SKINGK        PIC  X(09).
+      *標準負担額
+               05  SKT4320-K-SFTNGK        PIC  X(09).

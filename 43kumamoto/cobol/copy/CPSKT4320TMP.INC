@@ -25,6 +25,7 @@
            03  SKT4320TMP-KEY.
                05  SKT4320TMP-SYUTURYOKU          PIC  9(01).
                05  SKT4320TMP-HKNJANUM            PIC  X(06).
+               05  SKT4320TMP-SRYYM               PIC  9(06).
                05  SKT4320TMP-ZAITAKU             PIC  X(01).
                05  SKT4320TMP-KYURATE             PIC  9(03).
            03  SKT4320TMP-TBL             OCCURS  11.

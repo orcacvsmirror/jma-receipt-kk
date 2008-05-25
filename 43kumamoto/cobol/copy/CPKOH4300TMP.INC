@@ -23,10 +23,12 @@
       ************************************************************
        01  KOH4300TMP-REC.
            03  KOH4300TMP-KEY.
+               05  KOH4300TMP-SRYYM                 PIC  9(06).
                05  KOH4300TMP-KOHNUM                PIC  X(03).
            03  KOH4300TMP-KOH-TBL.
                05  KOH4300TMP-NYUGAIKBN  OCCURS 2.
                    07  KOH4300TMP-KENSU             PIC  9(04).
                    07  KOH4300TMP-TENSU             PIC  9(10).
+               05  KOH4300TMP-SKENSU                PIC  9(04).
                05  KOH4300TMP-SKINGK                PIC  9(10).
                05  KOH4300TMP-SFTNGK                PIC  9(10).
