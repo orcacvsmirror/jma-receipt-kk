@@ -27,6 +27,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/21  長期分を公費再掲欄に記載する
+      *                                  食事日数がゼロでも
+      *                                  生活療養費を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -661,6 +664,21 @@
                    RECE10-KOHNUM (3)   NOT =   SPACE  OR
                    RECE10-KOHNUM (4)   NOT =   SPACE
                PERFORM 20012-KOH-SYUKEI-SEC
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+           ELSE
+               IF  RECE10-ETC-KOHNUM(1)  =  "972" OR
+                   RECE10-ETC-KOHNUM(2)  =  "972" OR
+                   RECE10-ETC-KOHNUM(3)  =  "972" OR
+                   RECE10-ETC-KOHNUM(4)  =  "972" OR
+                   RECE10-ETC-KOHNUM(1)  =  "974" OR
+                   RECE10-ETC-KOHNUM(2)  =  "974" OR
+                   RECE10-ETC-KOHNUM(3)  =  "974" OR
+                   RECE10-ETC-KOHNUM(4)  =  "974"
+                 MOVE  "972"             TO  RECE10-KOHNUM(1)
+                 MOVE  SPACE             TO  RECE10-KOHNUM(2)
+                 PERFORM  20012-KOH-SYUKEI-SEC
+               END-IF
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
            END-IF
       *
       *    集計の対象にならなかったとき
@@ -706,7 +724,9 @@
            ADD  RECE10-FTNMONEY(1)         TO  SUM-ITBFTN(IDXX IDX1)
       *
            IF   IDXX    =    1
-             IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) start
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) end
       *    食事療養：件数
                ADD     1                     TO  SUM-S-KENSU(IDXX IDX1)
       *    食事療養：日数
@@ -715,7 +735,9 @@
                ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDXX IDX1)
       *    食事療養：標準負担額
                ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDXX IDX1)
-             END-IF
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) start
+      *       END-IF
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) end
            END-IF
       *
            MOVE    1               TO  FLG-UPD 
@@ -784,6 +806,27 @@
       *    
       *    公費再掲欄：療養の給付：件数
            ADD  1                            TO  SUM-KKENSU(IDXX IDX2)
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+           IF   RECE10-KOHNUM(IDZ)  =  "972"
+      *      公費再掲欄：療養の給付：日数
+             ADD  RECE10-JNISSU(1)           TO  SUM-KNISSU(IDXX IDX2)
+      *      公費再掲欄：療養の給付：点数
+             ADD  RECE10-TOTALTEN(1)         TO  SUM-KTENSU(IDXX IDX2)
+      *      公費再掲欄：療養の給付：一部負担金
+             ADD  RECE10-FTNMONEY(1)         TO  SUM-KITBFTN(IDXX IDX2)
+      *
+             IF   IDXX   =   1
+      *      公費再掲欄：食事療養：件数
+               ADD    1                      TO SUM-S-KKENSU(IDXX IDX2)
+      *      公費再掲欄：食事療養：日数
+               ADD RECE10-SHOKUJINISSU(1)    TO SUM-S-KNISSU(IDXX IDX2)
+      *      公費再掲欄：食事療養：金額
+               ADD RECE10-SHOKUJIRYOYOHI(1)  TO SUM-S-KKINGK(IDXX IDX2)
+      *      公費再掲欄：食事療養：標準負担額
+               ADD RECE10-SHOKUJIFTN(1)      TO SUM-S-KFTNGK(IDXX IDX2)
+             END-IF
+           ELSE
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
       *    公費再掲欄：療養の給付：日数
            ADD  RECE10-JNISSU(IDY)           TO  SUM-KNISSU(IDXX IDX2)
       *    公費再掲欄：療養の給付：点数
@@ -792,7 +835,9 @@
            ADD  RECE10-FTNMONEY(IDY)         TO  SUM-KITBFTN(IDXX IDX2)
       *
            IF   IDXX   =   1
-             IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) start
+      *       IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) end
       *    公費再掲欄：食事療養：件数
                ADD    1                       TO SUM-S-KKENSU(IDXX IDX2)
       *    公費再掲欄：食事療養：日数
@@ -801,9 +846,13 @@
                ADD RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDXX IDX2)
       *    公費再掲欄：食事療養：標準負担額
                ADD RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDXX IDX2)
-             END-IF
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) start
+      *       END-IF
+      *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) end
            END-IF
-      *
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+           END-IF
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
            MOVE    1               TO  FLG-UPD 
       *
            .
@@ -1035,6 +1084,12 @@
            IF      SUM-KOHNUM (1 IDX2)  =   "051"
                MOVE    "51"            TO  SKT1215-HBTNUM (IDY)
            ELSE
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+      *     長期のとき
+            IF     SUM-KOHNUM (1 IDX2)  =   "972"
+               MOVE    "61"            TO  SKT1215-HBTNUM (IDY)
+            ELSE
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
       *      公費番号まとめ情報からの集計か
              IF      SUM-KOH-MEISYO(1 IDX2)  =   SPACE
       *        保険番号読込み  
@@ -1073,6 +1128,9 @@
       *          法別番号
                  MOVE  HKN-HBTNUM         TO  SKT1215-HBTNUM(IDY)
              END-IF
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+            END-IF
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
            END-IF
       *
            . 
@@ -1297,6 +1355,12 @@
            IF      SUM-KOHNUM (2 IDX2)  =   "051"
                MOVE    "51"            TO  SKT1225-HBTNUM (IDY)
            ELSE
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+      *     長期のとき
+            IF     SUM-KOHNUM (2 IDX2)  =   "972"
+               MOVE    "61"            TO  SKT1225-HBTNUM (IDY)
+            ELSE
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
       *      公費番号まとめ情報からの集計か
              IF      SUM-KOH-MEISYO(2 IDX2)  =   SPACE
       *        保険番号読込み  
@@ -1335,6 +1399,9 @@
       *          法別番号
                  MOVE  HKN-HBTNUM         TO  SKT1225-HBTNUM(IDY)
              END-IF
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) start
+            END-IF
+      *=== 長期分を公費再掲欄に記載 by Yoshikawa(2008/05/21) end
            END-IF
       *
            . 
