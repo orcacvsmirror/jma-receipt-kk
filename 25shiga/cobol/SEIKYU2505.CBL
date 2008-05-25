@@ -30,6 +30,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
+      *  01.00.01    内田    08/05/21    請求年月の印字修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -869,9 +870,15 @@
            MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY1-YMD
            CALL    "ORCSDAY"               USING   STS-AREA-DAY
                                                    LNK-DAY1-AREA
-           MOVE    LNK-DAY1-WYMD(1:5)      TO  WRK-NUM
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     MOVE    LNK-DAY1-WYMD(1:5)      TO  WRK-NUM
+           MOVE    LNK-DAY1-WYMD(1:5)      TO  WRK-DATA
+      *---(01.00.01) LINE ADD END   ------------------------------------
            MOVE    5                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.01) LINE ADD START ------------------------------------
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    マルチボリューム識別番号
            MOVE    "00"                    TO  WRK-DATA
