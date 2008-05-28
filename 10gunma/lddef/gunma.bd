@@ -11,6 +11,8 @@ bind	"SEIKYU1010"	"OpenCOBOL";
 bind	"SEIKYU1011"	"OpenCOBOL";
 bind	"SEIKYU1012"	"OpenCOBOL";
 bind    "SOKATU1000"    "OpenCOBOL";
+bind	"SOKATU1005"	"OpenCOBOL";
 bind    "SOKATU1010"    "OpenCOBOL";
+bind    "SOKATU1015"    "OpenCOBOL";
 
 #include "orcadb.inc"
