@@ -44,6 +44,7 @@
       *                                 長期欄の一部負担金は印字しない
       *  01.00.08    内田k  08/04/25    帳票様式の変更に伴う修正
       *                                 SPA-AREA初期化
+      *  01.00.09    内田   08/05/25    長期欄の給付割合印字修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1209,9 +1210,19 @@
              MOVE  2  TO  IDX4
            ELSE
              MOVE  1  TO  IDX4
-      *---(01.00.07) LINE ADD START ------------------------------------
-             MOVE  RECE10-KYURATE    TO  SKT0110TMP-T-RATE (IDX4)
-      *---(01.00.07) LINE ADD END   ------------------------------------
+      *---(01.00.09) LINE ADD START ------------------------------------
+      **---(01.00.07) LINE ADD START ------------------------------------
+      *       MOVE  RECE10-KYURATE    TO  SKT0110TMP-T-RATE (IDX4)
+      **---(01.00.07) LINE ADD END   ------------------------------------
+             EVALUATE  RECE10-KYURATE
+               WHEN  9
+                 MOVE  1                TO  SKT0110TMP-T-RATE (IDX4)
+               WHEN  8
+                 MOVE  2                TO  SKT0110TMP-T-RATE (IDX4)
+               WHEN  OTHER
+                 MOVE  0                TO  SKT0110TMP-T-RATE (IDX4)
+             END-EVALUATE
+      *---(01.00.09) LINE ADD END   ------------------------------------
            END-IF
       *療養の給付
       *    件数
