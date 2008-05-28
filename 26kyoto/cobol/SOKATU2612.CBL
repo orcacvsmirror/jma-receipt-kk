@@ -35,6 +35,8 @@
       *                                    医療機関情報を参照
       *  01.00.05       内田    08/04/22   帳票様式の変更に伴う修正
       *                                    SPA-AREA初期化
+      *  01.00.06       内田    08/05/07   国保データがない場合の
+      *                                    後期高齢印刷不具合修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -321,7 +323,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -581,7 +585,9 @@
            CLOSE            SKT2610TMP-FILE
            OPEN     I-O     SKT2610TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
