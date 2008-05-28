@@ -3824,7 +3824,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#76#</string>
+            <string>#75#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -4068,10 +4068,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O132">
       <attribute name="obj_pos">
-        <point val="2.8,22.9"/>
+        <point val="2.825,22.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8,22.3426;3.507,23.0426"/>
+        <rectangle val="2.825,22.3426;3.532,23.0426"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4085,7 +4085,7 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="2.8,22.9"/>
+            <point val="2.825,22.9"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
