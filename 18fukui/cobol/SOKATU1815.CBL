@@ -28,6 +28,9 @@
       *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
       *  01.00.01    µÈÀî    2008/05/03  ºßÂð¤Ï¤Þ¤È¤á¤Æ°õ»ú¤¹¤ë
+      *  01.00.02    µÈÀî    2008/05/16  ¸©Ì¾¤ò°õ»ú¤¹¤ë
+      *                                  ¤Þ¤È¤á¸øÈñ¤ò»ÈÍÑ¤·¤¿»þ¤Î
+      *                                  ¤Þ¤È¤á¸øÈñ°Ê³°¤Î¸øÈñÌ¾¾Î½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -140,6 +143,9 @@
            03  WRK-CNT             PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) start
+           03  WRK-HKNJANAME       PIC X(20).
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) end
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
@@ -639,6 +645,9 @@
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) start
+                                            WRK-HKNJANAME
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) end
       *    ÊÝ¸±¼ÔÈÖ¹æ
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM(1:6)
@@ -704,147 +713,337 @@
        200101-HKNJANUM-SET-SEC                SECTION.
       *
            EVALUATE  WRK-HKNJANUM(1:2)
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) start
+      **      ËÌ³¤Æ»
+      *       WHEN  "01"
+      *           MOVE  "010004"  TO  WRK-HKNJANUM
+      **      ÀÄ¿¹¸©
+      *       WHEN  "02"
+      *           MOVE  "020003"  TO  WRK-HKNJANUM
+      **      ´ä¼ê¸©
+      *       WHEN  "03"
+      *           MOVE  "030002"  TO  WRK-HKNJANUM
+      **      µÜ¾ë¸©
+      *       WHEN  "04"
+      *           MOVE  "040001"  TO  WRK-HKNJANUM
+      **      ½©ÅÄ¸©
+      *       WHEN  "05"
+      *           MOVE  "050000"  TO  WRK-HKNJANUM
+      **      »³·Á¸©
+      *       WHEN  "06"
+      *           MOVE  "060009"  TO  WRK-HKNJANUM
+      **      Ê¡Åç¸©
+      *       WHEN  "07"
+      *           MOVE  "070008"  TO  WRK-HKNJANUM
+      **      °ñ¾ë¸©
+      *       WHEN  "08"
+      *           MOVE  "080007"  TO  WRK-HKNJANUM
+      **      ÆÊÌÚ¸©
+      *       WHEN  "09"
+      *           MOVE  "090006"  TO  WRK-HKNJANUM
+      **      ·²ÇÏ¸©
+      *       WHEN  "10"
+      *           MOVE  "100003"  TO  WRK-HKNJANUM
+      **      ºë¶Ì¸©
+      *       WHEN  "11"
+      *           MOVE  "110002"  TO  WRK-HKNJANUM
+      **      ÀéÍÕ¸©
+      *       WHEN  "12"
+      *           MOVE  "120001"  TO  WRK-HKNJANUM
+      **      ÅìµþÅÔ
+      *       WHEN  "13"
+      *           MOVE  "130000"  TO  WRK-HKNJANUM
+      **      ¿ÀÆàÀî¸©
+      *       WHEN  "14"
+      *           MOVE  "140009"  TO  WRK-HKNJANUM
+      **      ¿·³ã¸©
+      *       WHEN  "15"
+      *           MOVE  "150008"  TO  WRK-HKNJANUM
+      **      ÉÙ»³¸©
+      *       WHEN  "16"
+      *           MOVE  "160007"  TO  WRK-HKNJANUM
+      **      ÀÐÀî¸©
+      *       WHEN  "17"
+      *           MOVE  "170006"  TO  WRK-HKNJANUM
+      **      Ê¡°æ¸©
+      *       WHEN  "18"
+      *           MOVE  "180005"  TO  WRK-HKNJANUM
+      **      »³Íü¸©
+      *       WHEN  "19"
+      *           MOVE  "190004"  TO  WRK-HKNJANUM
+      **      Ä¹Ìî¸©
+      *       WHEN  "20"
+      *           MOVE  "200001"  TO  WRK-HKNJANUM
+      **      ´ôÉì¸©
+      *       WHEN  "21"
+      *           MOVE  "210000"  TO  WRK-HKNJANUM
+      **      ÀÅ²¬¸©
+      *       WHEN  "22"
+      *           MOVE  "220009"  TO  WRK-HKNJANUM
+      **      °¦ÃÎ¸©
+      *       WHEN  "23"
+      *           MOVE  "230008"  TO  WRK-HKNJANUM
+      **      »°½Å¸©
+      *       WHEN  "24"
+      *           MOVE  "240007"  TO  WRK-HKNJANUM
+      **      ¼¢²ì¸©
+      *       WHEN  "25"
+      *           MOVE  "250006"  TO  WRK-HKNJANUM
+      **      µþÅÔÉÜ
+      *       WHEN  "26"
+      *           MOVE  "260005"  TO  WRK-HKNJANUM
+      **      ÂçºåÉÜ
+      *       WHEN  "27"
+      *           MOVE  "270004"  TO  WRK-HKNJANUM
+      **      Ê¼¸Ë¸©
+      *       WHEN  "28"
+      *           MOVE  "280003"  TO  WRK-HKNJANUM
+      **      ÆàÎÉ¸©
+      *       WHEN  "29"
+      *           MOVE  "290002"  TO  WRK-HKNJANUM
+      **      ÏÂ²Î»³¸©
+      *       WHEN  "30"
+      *           MOVE  "300009"  TO  WRK-HKNJANUM
+      **      Ä»¼è¸©
+      *       WHEN  "31"
+      *           MOVE  "310008"  TO  WRK-HKNJANUM
+      **      Åçº¬¸©
+      *       WHEN  "32"
+      *           MOVE  "320007"  TO  WRK-HKNJANUM
+      **      ²¬»³¸©
+      *       WHEN  "33"
+      *           MOVE  "330006"  TO  WRK-HKNJANUM
+      **      ¹­Åç¸©
+      *       WHEN  "34"
+      *           MOVE  "340005"  TO  WRK-HKNJANUM
+      **      »³¸ý¸©
+      *       WHEN  "35"
+      *           MOVE  "350004"  TO  WRK-HKNJANUM
+      **      ÆÁÅç¸©
+      *       WHEN  "36"
+      *           MOVE  "360003"  TO  WRK-HKNJANUM
+      **      ¹áÀî¸©
+      *       WHEN  "37"
+      *           MOVE  "370002"  TO  WRK-HKNJANUM
+      **      °¦É²¸©
+      *       WHEN  "38"
+      *           MOVE  "380001"  TO  WRK-HKNJANUM
+      **      ¹âÃÎ¸©
+      *       WHEN  "39"
+      *           MOVE  "390000"  TO  WRK-HKNJANUM
+      **      Ê¡²¬¸©
+      *       WHEN  "40"
+      *           MOVE  "400007"  TO  WRK-HKNJANUM
+      **      º´²ì¸©
+      *       WHEN  "41"
+      *           MOVE  "410006"  TO  WRK-HKNJANUM
+      **      Ä¹ºê¸©
+      *       WHEN  "42"
+      *           MOVE  "420005"  TO  WRK-HKNJANUM
+      **      ·§ËÜ¸©
+      *       WHEN  "43"
+      *           MOVE  "430004"  TO  WRK-HKNJANUM
+      **      ÂçÊ¬¸©
+      *       WHEN  "44"
+      *           MOVE  "440003"  TO  WRK-HKNJANUM
+      **      µÜºê¸©
+      *       WHEN  "45"
+      *           MOVE  "450002"  TO  WRK-HKNJANUM
+      **      ¼¯»ùÅç¸©
+      *       WHEN  "46"
+      *           MOVE  "460001"  TO  WRK-HKNJANUM
+      **      ²­Æì¸©
+      *       WHEN  "47"
+      *           MOVE  "470000"  TO  WRK-HKNJANUM
       *      ËÌ³¤Æ»
              WHEN  "01"
                  MOVE  "010004"  TO  WRK-HKNJANUM
+                 MOVE  "ËÌ³¤Æ»"  TO  WRK-HKNJANAME
       *      ÀÄ¿¹¸©
              WHEN  "02"
                  MOVE  "020003"  TO  WRK-HKNJANUM
+                 MOVE  "ÀÄ¿¹¸©"  TO  WRK-HKNJANAME
       *      ´ä¼ê¸©
              WHEN  "03"
                  MOVE  "030002"  TO  WRK-HKNJANUM
+                 MOVE  "´ä¼ê¸©"  TO  WRK-HKNJANAME
       *      µÜ¾ë¸©
              WHEN  "04"
                  MOVE  "040001"  TO  WRK-HKNJANUM
+                 MOVE  "µÜ¾ë¸©"  TO  WRK-HKNJANAME
       *      ½©ÅÄ¸©
              WHEN  "05"
                  MOVE  "050000"  TO  WRK-HKNJANUM
+                 MOVE  "½©ÅÄ¸©"  TO  WRK-HKNJANAME
       *      »³·Á¸©
              WHEN  "06"
                  MOVE  "060009"  TO  WRK-HKNJANUM
+                 MOVE  "»³·Á¸©"  TO  WRK-HKNJANAME
       *      Ê¡Åç¸©
              WHEN  "07"
                  MOVE  "070008"  TO  WRK-HKNJANUM
+                 MOVE  "Ê¡Åç¸©"  TO  WRK-HKNJANAME
       *      °ñ¾ë¸©
              WHEN  "08"
                  MOVE  "080007"  TO  WRK-HKNJANUM
+                 MOVE  "°ñ¾ë¸©"  TO  WRK-HKNJANAME
       *      ÆÊÌÚ¸©
              WHEN  "09"
                  MOVE  "090006"  TO  WRK-HKNJANUM
+                 MOVE  "ÆÊÌÚ¸©"  TO  WRK-HKNJANAME
       *      ·²ÇÏ¸©
              WHEN  "10"
                  MOVE  "100003"  TO  WRK-HKNJANUM
+                 MOVE  "·²ÇÏ¸©"  TO  WRK-HKNJANAME
       *      ºë¶Ì¸©
              WHEN  "11"
                  MOVE  "110002"  TO  WRK-HKNJANUM
+                 MOVE  "ºë¶Ì¸©"  TO  WRK-HKNJANAME
       *      ÀéÍÕ¸©
              WHEN  "12"
                  MOVE  "120001"  TO  WRK-HKNJANUM
+                 MOVE  "ÀéÍÕ¸©"  TO  WRK-HKNJANAME
       *      ÅìµþÅÔ
              WHEN  "13"
                  MOVE  "130000"  TO  WRK-HKNJANUM
+                 MOVE  "ÅìµþÅÔ"  TO  WRK-HKNJANAME
       *      ¿ÀÆàÀî¸©
              WHEN  "14"
                  MOVE  "140009"  TO  WRK-HKNJANUM
+                 MOVE  "¿ÀÆàÀî¸©"  TO  WRK-HKNJANAME
       *      ¿·³ã¸©
              WHEN  "15"
                  MOVE  "150008"  TO  WRK-HKNJANUM
+                 MOVE  "¿·³ã¸©"  TO  WRK-HKNJANAME
       *      ÉÙ»³¸©
              WHEN  "16"
                  MOVE  "160007"  TO  WRK-HKNJANUM
+                 MOVE  "ÉÙ»³¸©"  TO  WRK-HKNJANAME
       *      ÀÐÀî¸©
              WHEN  "17"
                  MOVE  "170006"  TO  WRK-HKNJANUM
+                 MOVE  "ÀÐÀî¸©"  TO  WRK-HKNJANAME
       *      Ê¡°æ¸©
              WHEN  "18"
                  MOVE  "180005"  TO  WRK-HKNJANUM
+                 MOVE  "Ê¡°æ¸©"  TO  WRK-HKNJANAME
       *      »³Íü¸©
              WHEN  "19"
                  MOVE  "190004"  TO  WRK-HKNJANUM
+                 MOVE  "»³Íü¸©"  TO  WRK-HKNJANAME
       *      Ä¹Ìî¸©
              WHEN  "20"
                  MOVE  "200001"  TO  WRK-HKNJANUM
+                 MOVE  "Ä¹Ìî¸©"  TO  WRK-HKNJANAME
       *      ´ôÉì¸©
              WHEN  "21"
                  MOVE  "210000"  TO  WRK-HKNJANUM
+                 MOVE  "´ôÉì¸©"  TO  WRK-HKNJANAME
       *      ÀÅ²¬¸©
              WHEN  "22"
                  MOVE  "220009"  TO  WRK-HKNJANUM
+                 MOVE  "ÀÅ²¬¸©"  TO  WRK-HKNJANAME
       *      °¦ÃÎ¸©
              WHEN  "23"
                  MOVE  "230008"  TO  WRK-HKNJANUM
+                 MOVE  "°¦ÃÎ¸©"  TO  WRK-HKNJANAME
       *      »°½Å¸©
              WHEN  "24"
                  MOVE  "240007"  TO  WRK-HKNJANUM
+                 MOVE  "»°½Å¸©"  TO  WRK-HKNJANAME
       *      ¼¢²ì¸©
              WHEN  "25"
                  MOVE  "250006"  TO  WRK-HKNJANUM
+                 MOVE  "¼¢²ì¸©"  TO  WRK-HKNJANAME
       *      µþÅÔÉÜ
              WHEN  "26"
                  MOVE  "260005"  TO  WRK-HKNJANUM
+                 MOVE  "µþÅÔÉÜ"  TO  WRK-HKNJANAME
       *      ÂçºåÉÜ
              WHEN  "27"
                  MOVE  "270004"  TO  WRK-HKNJANUM
+                 MOVE  "ÂçºåÉÜ"  TO  WRK-HKNJANAME
       *      Ê¼¸Ë¸©
              WHEN  "28"
                  MOVE  "280003"  TO  WRK-HKNJANUM
+                 MOVE  "Ê¼¸Ë¸©"  TO  WRK-HKNJANAME
       *      ÆàÎÉ¸©
              WHEN  "29"
                  MOVE  "290002"  TO  WRK-HKNJANUM
+                 MOVE  "ÆàÎÉ¸©"  TO  WRK-HKNJANAME
       *      ÏÂ²Î»³¸©
              WHEN  "30"
                  MOVE  "300009"  TO  WRK-HKNJANUM
+                 MOVE  "ÏÂ²Î»³¸©"  TO  WRK-HKNJANAME
       *      Ä»¼è¸©
              WHEN  "31"
                  MOVE  "310008"  TO  WRK-HKNJANUM
+                 MOVE  "Ä»¼è¸©"  TO  WRK-HKNJANAME
       *      Åçº¬¸©
              WHEN  "32"
                  MOVE  "320007"  TO  WRK-HKNJANUM
+                 MOVE  "Åçº¬¸©"  TO  WRK-HKNJANAME
       *      ²¬»³¸©
              WHEN  "33"
                  MOVE  "330006"  TO  WRK-HKNJANUM
+                 MOVE  "²¬»³¸©"  TO  WRK-HKNJANAME
       *      ¹­Åç¸©
              WHEN  "34"
                  MOVE  "340005"  TO  WRK-HKNJANUM
+                 MOVE  "¹­Åç¸©"  TO  WRK-HKNJANAME
       *      »³¸ý¸©
              WHEN  "35"
                  MOVE  "350004"  TO  WRK-HKNJANUM
+                 MOVE  "»³¸ý¸©"  TO  WRK-HKNJANAME
       *      ÆÁÅç¸©
              WHEN  "36"
                  MOVE  "360003"  TO  WRK-HKNJANUM
+                 MOVE  "ÆÁÅç¸©"  TO  WRK-HKNJANAME
       *      ¹áÀî¸©
              WHEN  "37"
                  MOVE  "370002"  TO  WRK-HKNJANUM
+                 MOVE  "¹áÀî¸©"  TO  WRK-HKNJANAME
       *      °¦É²¸©
              WHEN  "38"
                  MOVE  "380001"  TO  WRK-HKNJANUM
+                 MOVE  "°¦É²¸©"  TO  WRK-HKNJANAME
       *      ¹âÃÎ¸©
              WHEN  "39"
                  MOVE  "390000"  TO  WRK-HKNJANUM
+                 MOVE  "¹âÃÎ¸©"  TO  WRK-HKNJANAME
       *      Ê¡²¬¸©
              WHEN  "40"
                  MOVE  "400007"  TO  WRK-HKNJANUM
+                 MOVE  "Ê¡²¬¸©"  TO  WRK-HKNJANAME
       *      º´²ì¸©
              WHEN  "41"
                  MOVE  "410006"  TO  WRK-HKNJANUM
+                 MOVE  "º´²ì¸©"  TO  WRK-HKNJANAME
       *      Ä¹ºê¸©
              WHEN  "42"
                  MOVE  "420005"  TO  WRK-HKNJANUM
+                 MOVE  "Ä¹ºê¸©"  TO  WRK-HKNJANAME
       *      ·§ËÜ¸©
              WHEN  "43"
                  MOVE  "430004"  TO  WRK-HKNJANUM
+                 MOVE  "·§ËÜ¸©"  TO  WRK-HKNJANAME
       *      ÂçÊ¬¸©
              WHEN  "44"
                  MOVE  "440003"  TO  WRK-HKNJANUM
+                 MOVE  "ÂçÊ¬¸©"  TO  WRK-HKNJANAME
       *      µÜºê¸©
              WHEN  "45"
                  MOVE  "450002"  TO  WRK-HKNJANUM
+                 MOVE  "µÜºê¸©"  TO  WRK-HKNJANAME
       *      ¼¯»ùÅç¸©
              WHEN  "46"
                  MOVE  "460001"  TO  WRK-HKNJANUM
+                 MOVE  "¼¯»ùÅç¸©"  TO  WRK-HKNJANAME
       *      ²­Æì¸©
              WHEN  "47"
                  MOVE  "470000"  TO  WRK-HKNJANUM
+                 MOVE  "²­Æì¸©"  TO  WRK-HKNJANAME
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) end
            END-EVALUATE
       *
            .
@@ -897,6 +1096,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *===¤Þ¤È¤á»ÈÍÑ»þ¤Î¸øÈñÌ¾ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/16) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *===¤Þ¤È¤á»ÈÍÑ»þ¤Î¸øÈñÌ¾ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/16) end
       *      £°£µ£±¤È£°£¹£±¤ÏÆ±¤¸¾ì½ê¤Ë½¸·×¤¹¤ë
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
@@ -1041,6 +1243,10 @@
            MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT1815-HOSPCD
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) start
+      *    ÊÝ¸±¼ÔÌ¾¡ÊÅÔÆ»ÉÜ¸©Ì¾¡Ë
+           MOVE    WRK-HKNJANAME       TO  SKT1815-HKNJANAME
+      *=== ¸©Ì¾¤ò°õ»ú by Yoshikawa(2008/05/16) end
       *    ºßÁí¿Ç¡¦ºß°åÁí
            IF    WRK-INDEX  =  2
              MOVE    "ºß"              TO  SKT1815-ZAI1
