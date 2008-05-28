@@ -20,6 +20,7 @@
       *
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    µÈÀî         08/05/26  Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       ************************************************************
        01  SKT1910TMP-REC.
            03  SKT1910TMP-KEY.
@@ -50,3 +51,24 @@
                    07  SKT1910TMP-S-KNISSU          PIC  9(05).
                    07  SKT1910TMP-S-KKINGAKU        PIC  9(13).
                    07  SKT1910TMP-S-KFTNGAKU        PIC  9(09).
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/05/26) start
+           03  SKT1910TMP-TKOH-AREA.
+               05  SKT1910TMP-TKOH-TBL  OCCURS  3.
+                   07  SKT1910TMP-TNYUGAI-TBL  OCCURS  2.
+                       09  SKT1910TMP-TKENSU        PIC  9(05).
+                       09  SKT1910TMP-TNISSU        PIC  9(05).
+                       09  SKT1910TMP-TTENSU        PIC  9(09).
+                       09  SKT1910TMP-TFTNMONEY     PIC  9(09).
+           03  SKT1910TMP-KOH2-AREA.
+               05  SKT1910TMP-KOH2-TBL  OCCURS  20.
+                   07  SKT1910TMP-KOHNUM2           PIC  X(03).
+                   07  SKT1910TMP-KNYUGAI-TBL  OCCURS  2.
+                       09  SKT1910TMP-KKENSU2       PIC  9(05).
+                       09  SKT1910TMP-KNISSU2       PIC  9(05).
+                       09  SKT1910TMP-KTENSU2       PIC  9(11).
+                       09  SKT1910TMP-KFTNMONEY2    PIC  9(07).
+                   07  SKT1910TMP-S-KKENSU2         PIC  9(05).
+                   07  SKT1910TMP-S-KNISSU2         PIC  9(05).
+                   07  SKT1910TMP-S-KKINGAKU2       PIC  9(13).
+                   07  SKT1910TMP-S-KFTNGAKU2       PIC  9(09).
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/05/26) end

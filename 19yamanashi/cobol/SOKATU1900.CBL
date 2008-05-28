@@ -37,6 +37,7 @@
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
       *  01.00.07       内田     08/05/03  ４月改正に伴う修正
+      *  01.00.08       吉川     08/05/27  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -181,6 +182,10 @@
       *
            03  WRK-CNT             PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+           03  WRK-MAX1            PIC 9(03).
+           03  WRK-MAX2            PIC 9(03).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *
            03  WRK-Z2              PIC ZZ.
            03  WRK-Z3              PIC ZZZ.
@@ -240,7 +245,10 @@
       *    合計エリア
        01  SUM-AREA.
            03  SUM-SGOKEI-AREA.
-               05  SUM-SGKANSYO-TBL OCCURS 6.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *         05  SUM-SGKANSYO-TBL OCCURS 6.
+               05  SUM-SGKANSYO-TBL OCCURS 9.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                    07  SUM-NYUGAI-SKJ-TBL OCCURS 3.
                        09  SUM-GKENSU         PIC 9(06).
                        09  SUM-GNISSU         PIC 9(06).
@@ -248,7 +256,10 @@
       ***** 04/10/12 INS
       *    一般・老人
            03  SUM-SGOKEI-AREA2.
-               05  SUM-SGKANSYO-TBL2 OCCURS 6.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *         05  SUM-SGKANSYO-TBL2 OCCURS 6.
+               05  SUM-SGKANSYO-TBL2 OCCURS 9.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                    07  SUM-NYUGAI-SKJ-TBL2 OCCURS 3.
                        09  SUM-GKENSU2         PIC 9(06).
                        09  SUM-GNISSU2         PIC 9(06).
@@ -714,6 +725,9 @@
       *---(01.00.07) LINE ADD START ------------------------------------
                  FLG-KOUKI         NOT  =  ZERO    OR
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+                 RECE10-SRYYM          >=  WRK-CONS-SRYYM-200804  OR
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                  RECE10-HKNNUM          =  "060"
              MOVE          1          TO  SKT1900TMP-TYOHYOKBN
            ELSE
@@ -742,6 +756,15 @@
       *---(01.00.07) LINE ADD START ------------------------------------
            END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM   TO  WRK-SRYYMD(1:6)
+               MOVE  "01"           TO  WRK-SRYYMD(6:2)
+           ELSE
+               MOVE  SPACE          TO  WRK-SRYYMD
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -796,9 +819,14 @@
       *    後期高齢化どうか
              IF  FLG-KOUKI  NOT  =  ZERO
                IF  RECE10-KYURATE  =  9
-                 MOVE  5   TO   IDX1
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *           MOVE  5   TO   IDX1
+      *         ELSE
+      *           MOVE  6   TO   IDX1
+                 MOVE  8   TO   IDX1
                ELSE
-                 MOVE  6   TO   IDX1
+                 MOVE  9   TO   IDX1
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                END-IF
              ELSE
       *---(01.00.07) LINE ADD END   ------------------------------------
@@ -837,9 +865,21 @@
       *---(01.00.07) LINE ADD START ------------------------------------
                    IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
                    AND  (RECE10-FLG (1)   =  1)
-                     MOVE  5     TO  IDX1
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *               MOVE  5     TO  IDX1
+                     MOVE  7     TO  IDX1
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                    ELSE
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+                    IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+                      IF  RECE10-HONKZKKBN = "1"
+                         MOVE  5  TO  IDX1
+                      ELSE
+                         MOVE  6  TO  IDX1
+                      END-IF
+                    ELSE  
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                      IF  RECE10-AGE >= 3
                        IF  RECE10-HONKZKKBN = "1"
                          MOVE  1  TO  IDX1
@@ -849,6 +889,9 @@
                      ELSE
                        MOVE    5  TO  IDX1
                      END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+                    END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *---(01.00.07) LINE ADD START ------------------------------------
                    END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
@@ -971,6 +1014,13 @@
            ADD     1                     TO  CNT-PAGE
       *
            INITIALIZE                    SKT1900
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+           IF  WRK-SRYYMD  NOT =  SPACE
+               MOVE  WRK-SRYYMD(1:6)     TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *    診療年月
            MOVE    WRK-SRYYMWH           TO  SKT1900-SRYYM
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -1001,8 +1051,17 @@
       *    編集処理
       *
            INITIALIZE    SUM-SGOKEI-AREA
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE  10  TO  WRK-MAX1
+           ELSE
+               MOVE  7   TO  WRK-MAX1
+           END-IF
+      *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     7  OR
+      *              UNTIL    IDX1  >     7  OR
+                    UNTIL    IDX1  >     WRK-MAX1 OR
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                     FLG-PRINT      =     1  OR
                     SKT1900TMP-TYOHYOKBN    NOT  =  1
       *    保険者名
@@ -1018,6 +1077,12 @@
       *---(01.00.07) LINE ADD START ------------------------------------
              END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *    保険者番号
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE  WRK-HKNJANUM          TO  SKT1900-HKNJANUM(IDX1)
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *    給付割合
              IF       SKT1900TMP-KYURATE    NOT  =  ZERO
                MOVE  SKT1900TMP-KYURATE     TO  WRK-Z2
@@ -1025,8 +1090,18 @@
                          INTO                   SKT1900-KYURATE(IDX1) 
              END-IF
       *
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *         PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     6
+             IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+                 MOVE  9  TO  WRK-MAX2
+             ELSE
+                 MOVE  6  TO  WRK-MAX2
+             END-IF
+      *
              PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     6
+                      UNTIL    IDX2  >    WRK-MAX2
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                PERFORM  VARYING  IDX3  FROM  1  BY  1
                         UNTIL    IDX3  >     3
       *    件数
@@ -1065,8 +1140,12 @@
            IF  FLG-PRINT                 =  1  OR  
                SKT1900TMP-TYOHYOKBN NOT  =  1
       *    総合計編集
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     6
              PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     6
+                      UNTIL    IDX2  >     WRK-MAX2
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                PERFORM  VARYING  IDX3  FROM  1  BY  1
                         UNTIL    IDX3  >     3
       *    件数
@@ -1083,8 +1162,12 @@
            ELSE
       *****
       *    ページ計編集
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     6
              PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     6
+                      UNTIL    IDX2  >     WRK-MAX2
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
                PERFORM  VARYING  IDX3  FROM  1  BY  1
                         UNTIL    IDX3  >     3
       *    件数
@@ -1129,7 +1212,14 @@
                                        TO  SPRT-PRIORITY
       ***** 05/02/22 UPD
       *     MOVE   "SKT1900"            TO  SPRT-PRTID
-           MOVE   "SKT1900.red"        TO  SPRT-PRTID
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *     MOVE   "SKT1900.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT1900.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT1900o.red"   TO  SPRT-PRTID
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *****
            MOVE    "国保総括表"  TO  SPRT-TITLE
            MOVE    SKT1900             TO  SPRT-PRTDATA

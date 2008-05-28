@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         08/05/27  帳票様式の変更に伴う修正
       ************************************************************
        01  SKT1900TMP-REC.
            03  SKT1900TMP-KEY.
@@ -27,7 +28,10 @@
                05  SKT1900TMP-SYUTURYOKU            PIC  9(01).
                05  SKT1900TMP-HKNJANUM              PIC  X(06).
                05  SKT1900TMP-KYURATE               PIC  9(03).
-           03  SKT1900TMP-HKN-AREA  OCCURS  6.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *     03  SKT1900TMP-HKN-AREA  OCCURS  6.
+           03  SKT1900TMP-HKN-AREA  OCCURS  9.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
                05  SKT1900TMP-NYUGAI-SKJ-TBL  OCCURS  3.
                    07  SKT1900TMP-KENSU             PIC  9(05).
                    07  SKT1900TMP-NISSU             PIC  9(05).

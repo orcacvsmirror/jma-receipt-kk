@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev 修正者  日付        内容
+      *  01.00.01   吉川    2008/05/27  帳票様式の変更に伴う修正
+      ********************************************************************
        01  SKT1900.
       *診療年月
            03  SKT1900-SRYYM               PIC  X(16).
@@ -29,13 +33,21 @@
       *開設者氏名
            03  SKT1900-KAISETUNAME         PIC  X(40).
       *請求テーブル
-           03  SKT1900-SEIKYU  OCCURS  7.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *     03  SKT1900-SEIKYU  OCCURS  7.
+           03  SKT1900-SEIKYU  OCCURS  10.
+      *保険者番号
+               05  SKT1900-HKNJANUM        PIC  X(16).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *保険者名
                05  SKT1900-HKNJANAME       PIC  X(20).
       *給付割合(国保組合用)
                05  SKT1900-KYURATE         PIC  X(10).
       *管掌テーブル
-               05  SKT1900-KANSYO-TBL  OCCURS  6.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *         05  SKT1900-KANSYO-TBL  OCCURS  6.
+               05  SKT1900-KANSYO-TBL  OCCURS  9.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *入外・食事テーブル
                    07  SKT1900-NYUGAI-SKJ-TBL OCCURS 3.
       *件数
@@ -47,7 +59,10 @@
       *合計テーブル
            03  SKT1900-GOKEI-TBL. 
       *管掌テーブル
-               05  SKT1900-G-KANSYO-TBL  OCCURS  6.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *         05  SKT1900-G-KANSYO-TBL  OCCURS  6.
+               05  SKT1900-G-KANSYO-TBL  OCCURS  9.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
       *入外・食事テーブル
                    07  SKT1900-GNYUGAI-SKJ-TBL OCCURS 3.
       *合計件数

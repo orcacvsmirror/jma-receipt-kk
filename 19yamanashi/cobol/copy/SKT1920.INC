@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev 修正者  日付        内容
+      *  01.00.01   吉川    2008/05/26  帳票様式の変更に伴う修正
+      ********************************************************************
        01  SKT1920.
       *    NO
            03  SKT1920-NO                  PIC  X(04).
@@ -66,3 +70,41 @@
                05  SKT1920-S-KINGK         PIC  X(09).
       *    食事療養：標準負担額
                05  SKT1920-S-FTNGK         PIC  X(09).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *    地方公費テーブル
+           03  SKT1920-TKOUHI-TBL  OCCURS  3.
+      *    入外テーブル
+               05  SKT1920-TNYUGAI-TBL  OCCURS  2.
+      *    件数
+                   07  SKT1920-TKENSU      PIC  X(05).
+      *    診療実日数
+                   07  SKT1920-TNISSU      PIC  X(05).
+      *    点数
+                   07  SKT1920-TTENSU      PIC  X(09).
+      *    一部負担金
+                   07  SKT1920-TITBFTN     PIC  X(09).
+      *    公費テーブル
+           03  SKT1920-KOUHI-TBL  OCCURS  3.
+      *    法別番号
+               05  SKT1920-HBTNUM          PIC  X(02).
+      *    公費名
+               05  SKT1920-KOHNAME         PIC  X(20).
+      *    入外テーブル
+               05  SKT1920-KNYUGAI-TBL  OCCURS  2.
+      *    件数
+                   07  SKT1920-KKENSU      PIC  X(05).
+      *    診療実日数
+                   07  SKT1920-KNISSU      PIC  X(05).
+      *    点数
+                   07  SKT1920-KTENSU      PIC  X(09).
+      *    一部負担金
+                   07  SKT1920-KITBFTN     PIC  X(09).
+      *    食事療養：件数
+               05  SKT1920-S-KKENSU        PIC  X(05).
+      *    食事療養：日数
+               05  SKT1920-S-KNISSU        PIC  X(05).
+      *    食事療養：金額
+               05  SKT1920-S-KKINGK        PIC  X(09).
+      *    食事療養：標準負担額
+               05  SKT1920-S-KFTNGK        PIC  X(09).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end

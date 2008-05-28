@@ -47,6 +47,7 @@
       *                                        システム管理マスタ「1901」の
       *                                        医療機関情報を参照
       *  01.00.10       内田      08/05/03     ４月改正に伴う修正
+      *  01.00.11       吉川      08/05/26     帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -253,6 +254,22 @@
                    07  SORT-S-KNISSU          PIC  9(05).
                    07  SORT-S-KKINGAKU        PIC  9(13).
                    07  SORT-S-KFTNGAKU        PIC  9(09).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *    公費ソート用エリア(新様式用)
+       01  SORT2-AREA.
+           03  SORT2-TBL.
+               05  SORT-KOH2-TBL  OCCURS  20.
+                   07  SORT-KOHNUM2           PIC  X(03).
+                   07  SORT-KNYUGAI-TBL  OCCURS  2.
+                       09  SORT-KKENSU2       PIC  9(05).
+                       09  SORT-KNISSU2       PIC  9(05).
+                       09  SORT-KTENSU2       PIC  9(11).
+                       09  SORT-KFTNMONEY2    PIC  9(07).
+                   07  SORT-S-KKENSU2         PIC  9(05).
+                   07  SORT-S-KNISSU2         PIC  9(05).
+                   07  SORT-S-KKINGAKU2       PIC  9(13).
+                   07  SORT-S-KFTNGAKU2       PIC  9(09).
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****
       *
       *    カウント領域
@@ -783,6 +800,15 @@
       *    在宅
            MOVE   RECE10-ZAITAKU    TO   SKT1910TMP-ZAITAKU
       *****
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM   TO  WRK-SRYYMD(1:6)
+               MOVE  "01"           TO  WRK-SRYYMD(6:2)
+           ELSE
+               MOVE  SPACE          TO  WRK-SRYYMD
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -894,9 +920,16 @@
                RECE10-KOHNUM (2)   NOT =   SPACE  OR
                RECE10-KOHNUM (3)   NOT =   SPACE  OR
                RECE10-KOHNUM (4)   NOT =   SPACE
-               PERFORM 220-KOH-SYUKEI-SEC
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                  PERFORM 221-KOH-SYUKEI-SEC
+               ELSE
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
+                  PERFORM 220-KOH-SYUKEI-SEC
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+               END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
            END-IF
-      *
       *
            IF  FLG-SKT1910TMP  =  1
                WRITE    SKT1910TMP-REC
@@ -1027,6 +1060,103 @@
            .
        220-KOH-SYUKEI-EXT.
            EXIT.
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *****************************************************************
+      *    公費負担分集計処理
+      *****************************************************************
+       221-KOH-SYUKEI-SEC        SECTION.
+      *
+           PERFORM VARYING IDX3     FROM    1   BY  1
+                   UNTIL   IDX3     >       4
+                   OR  RECE10-KOHNUM (IDX3) =   SPACE
+      *      ５１、９１は１つにまとめる
+             IF    RECE10-KOHNUM(IDX3)  =  "091"
+               MOVE    "051"       TO    RECE10-KOHNUM(IDX3)
+             END-IF
+      *    公費判別
+      *    乳幼児、ひとり親、重障は印字場所固定
+             IF    RECE10-KOHNUM(IDX3)  =  "142" OR "144" OR "143"
+               PERFORM  222-TKOH-SYUKEI-SEC
+             ELSE
+               PERFORM  VARYING  IDX4  FROM  1  BY  1
+                        UNTIL    IDX4  >     20
+                        OR       SKT1910TMP-KOHNUM2 (IDX4) = SPACE
+                 IF  RECE10-KOHNUM (IDX3)  =  SKT1910TMP-KOHNUM2 (IDX4)
+                     MOVE  IDX4  TO  CNT-KOH
+                     MOVE  20    TO  IDX4
+                 END-IF
+               END-PERFORM
+      *
+      *    該当公費がなかった場合
+               IF  IDX4  < 20
+                 MOVE  IDX4  TO  CNT-KOH
+               END-IF
+      *
+      *    公費名
+               MOVE  RECE10-KOHNUM(IDX3) TO SKT1910TMP-KOHNUM2(CNT-KOH)
+      *    療養の給付：件数
+               ADD   1  TO  SKT1910TMP-KKENSU2 (CNT-KOH IDX2)
+      *    療養の給付:診療実日数
+               ADD  RECE10-JNISSU(IDX3 + 1)  TO
+                                 SKT1910TMP-KNISSU2(CNT-KOH IDX2)
+      *    療養の給付：点数
+               ADD  RECE10-TOTALTEN(IDX3 + 1)  TO
+                                 SKT1910TMP-KTENSU2(CNT-KOH IDX2)
+      *    療養の給付：一部負担金
+               ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
+                                 SKT1910TMP-KFTNMONEY2(CNT-KOH IDX2)
+      *
+               IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *    食事療養:件数
+                 ADD   1  TO  SKT1910TMP-S-KKENSU2(CNT-KOH)
+               END-IF
+      *    食事療養:日数
+               ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
+                                 SKT1910TMP-S-KNISSU2(CNT-KOH)
+      *    食事療養：金額
+               ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
+                                 SKT1910TMP-S-KKINGAKU2(CNT-KOH)
+      *    食事療養：標準負担額
+               ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
+                                 SKT1910TMP-S-KFTNGAKU2(CNT-KOH)
+             END-IF
+           END-PERFORM
+      *
+           .
+       221-KOH-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    地方公費負担分集計処理
+      *****************************************************************
+       222-TKOH-SYUKEI-SEC        SECTION.
+      *
+           EVALUATE  RECE10-KOHNUM(IDX3)
+             WHEN  "142"
+                 MOVE  1  TO  IDX1
+             WHEN  "144"
+                 MOVE  2  TO  IDX1
+             WHEN  "143"
+                 MOVE  3  TO  IDX1
+           END-EVALUATE
+      *
+      *    療養の給付：件数
+           ADD   1  TO  SKT1910TMP-TKENSU (IDX1 IDX2)
+      *    療養の給付:診療実日数
+           ADD  RECE10-JNISSU(IDX3 + 1)    TO
+                               SKT1910TMP-TNISSU(IDX1 IDX2)
+      *    療養の給付：点数
+           ADD  RECE10-TOTALTEN(IDX3 + 1)  TO
+                               SKT1910TMP-TTENSU(IDX1 IDX2)
+      *    療養の給付：一部負担金
+           ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
+                               SKT1910TMP-TFTNMONEY(IDX1 IDX2)
+      *
+           .
+       222-TKOH-SYUKEI-EXT.
+           EXIT.
+      *
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -1063,23 +1193,52 @@
              PERFORM 330-PRINT-OUT-SEC
       ***** 05/02/22 INS
       *    公費ソート処理
-             PERFORM  KOH-SORT-SEC
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+             IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               PERFORM  KOH2-SORT-SEC
+             ELSE
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
+               PERFORM  KOH-SORT-SEC
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+             END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+             IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
       *    公費が残っているか
-             PERFORM  UNTIL  SKT1910TMP-KOHNUM (WRK-CNT) = SPACE
-                      AND    FLG-PASS  =  1
+               PERFORM  UNTIL  SKT1910TMP-KOHNUM2 (WRK-CNT) = SPACE
       *    帳票編集<見出し>処理
-               PERFORM 311-HEAD-HEN-SEC
+                 PERFORM 310-HEAD-HEN-SEC
       *    帳票編集<明細>処理
-               PERFORM 321-BODY-HEN-SEC
+                 PERFORM 320-BODY-HEN-SEC
       *    帳票印刷処理
-               PERFORM 331-PRINT-OUT-SEC
-               MOVE  1  TO  FLG-PASS
-             END-PERFORM
-             MOVE  ZERO  TO  FLG-PASS
+                 PERFORM 330-PRINT-OUT-SEC
+                 MOVE  1  TO  FLG-PASS
+               END-PERFORM
+               MOVE  ZERO  TO  FLG-PASS
       *    一時ファイル読込
-             PERFORM  900-TMP-READ-SEC
-             MOVE  1  TO  WRK-CNT
+               PERFORM  900-TMP-READ-SEC
+               MOVE  1  TO  WRK-CNT
+             ELSE
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
+      *    公費が残っているか
+               PERFORM  UNTIL  SKT1910TMP-KOHNUM (WRK-CNT) = SPACE
+                        AND    FLG-PASS  =  1
+      *    帳票編集<見出し>処理
+                 PERFORM 311-HEAD-HEN-SEC
+      *    帳票編集<明細>処理
+                 PERFORM 321-BODY-HEN-SEC
+      *    帳票印刷処理
+                 PERFORM 331-PRINT-OUT-SEC
+                 MOVE  1  TO  FLG-PASS
+               END-PERFORM
+               MOVE  ZERO  TO  FLG-PASS
+      *    一時ファイル読込
+               PERFORM  900-TMP-READ-SEC
+               MOVE  1  TO  WRK-CNT
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+             END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
            END-PERFORM
       *
            CLOSE    SKT1910TMP-FILE
@@ -1101,10 +1260,22 @@
            MOVE    CNT-PAGE              TO  WRK-Z4
            MOVE    WRK-Z4                TO  SKT1920-NO
       *****
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+           IF  WRK-SRYYMD  NOT =  SPACE
+               MOVE  WRK-SRYYMD(1:6)     TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *    診療年月
            MOVE    WRK-SRYYMWH           TO  SKT1920-SRYYM
       *    保険者名
-           PERFORM  920-HKNJAINF-SET-SEC
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *     PERFORM  920-HKNJAINF-SET-SEC
+           IF  (WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804)
+             PERFORM  920-HKNJAINF-SET-SEC
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT1920-SEIYMD
       *    郵便番号
@@ -1175,6 +1346,13 @@
       *****************************************************************
        320-BODY-HEN-SEC      SECTION.
       *
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *    公費の為の２枚目以上か
+           IF  (WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804)
+           AND  WRK-CNT  >  1
+             CONTINUE
+           ELSE
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *    編集処理
            PERFORM  VARYING  IDX1  FROM    1   BY  1
                     UNTIL    IDX1  >  9
@@ -1217,6 +1395,73 @@
              MOVE  WRK-Z9   TO  SKT1920-S-FTNGK(IDX1)
       *****
            END-PERFORM
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *    地方公費編集処理
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+             PERFORM  VARYING  IDX1  FROM    1   BY  1
+                      UNTIL    IDX1  >  3
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *    療養の給付：件数
+                 MOVE  SKT1910TMP-TKENSU(IDX1 IDX2)  TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT1920-TKENSU(IDX1 IDX2)
+      *    療養の給付：日数
+                 MOVE  SKT1910TMP-TNISSU(IDX1 IDX2)  TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT1920-TNISSU(IDX1 IDX2)
+      *    療養の給付：点数
+                 MOVE  SKT1910TMP-TTENSU(IDX1 IDX2)  TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT1920-TTENSU(IDX1 IDX2)
+      *    療養の給付：一部負担金
+                 MOVE  SKT1910TMP-TFTNMONEY (IDX1 IDX2)  TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT1920-TITBFTN(IDX1 IDX2)
+               END-PERFORM
+             END-PERFORM
+           END-IF
+      *
+           END-IF
+      *    公費の印字
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+             PERFORM  VARYING  IDX3  FROM  1  BY  1
+                      UNTIL    IDX3  >     3
+                      OR  WRK-CNT    >     20
+                      OR  SKT1910TMP-KOHNUM2(WRK-CNT) = SPACE
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *    療養の給付：件数
+                 MOVE  SKT1910TMP-KKENSU2 (WRK-CNT IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT1920-KKENSU(IDX3 IDX2)
+      *    療養の給付：日数
+                 MOVE  SKT1910TMP-KNISSU2 (WRK-CNT IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT1920-KNISSU(IDX3 IDX2)
+      *    療養の給付：点数
+                 MOVE  SKT1910TMP-KTENSU2 (WRK-CNT IDX2)   TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT1920-KTENSU(IDX3 IDX2)
+      *    療養の給付：一部負担金
+                 MOVE  SKT1910TMP-KFTNMONEY2 (WRK-CNT IDX2)  TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT1920-KITBFTN(IDX3 IDX2)
+               END-PERFORM
+      *    食事療養：件数
+               MOVE  SKT1910TMP-S-KKENSU2 (WRK-CNT)        TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT1920-S-KKENSU(IDX3)
+      *    食事療養：日数
+               MOVE  SKT1910TMP-S-KNISSU2 (WRK-CNT)        TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT1920-S-KNISSU(IDX3)
+      *    食事療養：金額
+               MOVE  SKT1910TMP-S-KKINGAKU2 (WRK-CNT)      TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT1920-S-KKINGK(IDX3)
+      *    食事療養：標準負担額
+               MOVE  SKT1910TMP-S-KFTNGAKU2 (WRK-CNT)      TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT1920-S-KFTNGK(IDX3)
+      *    公費名
+               MOVE  SKT1910TMP-KOHNUM2 (WRK-CNT)  TO  WRK-KOHNUM
+               PERFORM  950-HKNNUM-SET-SEC
+               MOVE  HKN-TANSEIDONAME      TO  SKT1920-KOHNAME(IDX3)
+               MOVE  HKN-HBTNUM            TO  SKT1920-HBTNUM(IDX3)
+      *
+               ADD  1  TO  WRK-CNT
+             END-PERFORM
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1245,7 +1490,14 @@
                                        TO  SPRT-PRIORITY
       ***** 05/02/22 UPD
       *     MOVE   "SKT1920"            TO  SPRT-PRTID
-           MOVE   "SKT1920.red"        TO  SPRT-PRTID
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *     MOVE   "SKT1920.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT1920.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT1920o.red"   TO  SPRT-PRTID
+           END-IF
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****
            MOVE    "国保請求書"  TO  SPRT-TITLE
            MOVE    SKT1920             TO  SPRT-PRTDATA
@@ -1511,6 +1763,72 @@
        KOH-SORT-EXT.
            EXIT.
       *
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *****************************************************************
+      *    公費ソート処理(新様式用)
+      *****************************************************************
+       KOH2-SORT-SEC          SECTION.
+      *
+      *
+           INITIALIZE  SORT2-AREA
+      *    公費数を取得
+           MOVE    ZERO    TO    IDX-MAX
+                                 IDX2 
+           MOVE    SPACE   TO    WRK-KOHNUM
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >  20
+             IF  SKT1910TMP-KOHNUM2(IDX1)  =  SPACE
+               MOVE  20    TO    IDX1
+             ELSE
+               IF    WRK-KOHNUM               =   SPACE   OR
+                     SKT1910TMP-KOHNUM2(IDX1)  <   WRK-KOHNUM
+                 MOVE     IDX1                TO  IDX2
+                 MOVE     SKT1910TMP-KOHNUM2(IDX1) TO  WRK-KOHNUM
+               END-IF
+               ADD   1     TO    IDX-MAX
+             END-IF
+           END-PERFORM
+           IF     IDX2     >     ZERO
+             MOVE    SKT1910TMP-KOH2-TBL(IDX2) TO  SORT-KOH2-TBL(1)
+           END-IF
+      *
+           DISPLAY "一般ソート前１" SKT1910TMP-KOHNUM2(1)
+           DISPLAY "一般ソート前２" SKT1910TMP-KOHNUM2(2)
+           DISPLAY "一般ソート前３" SKT1910TMP-KOHNUM2(3)
+      *
+           IF      IDX-MAX    >     ZERO
+             MOVE    2    TO    IDX1
+             MOVE    1    TO    IDX2
+             MOVE    1    TO    IDX3
+             MOVE   "999"   TO    WRK-KOHNUM
+             PERFORM    UNTIL    IDX1  >    IDX-MAX
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >    IDX-MAX
+                 IF  SKT1910TMP-KOHNUM2(IDX2)  >  SORT-KOHNUM2(IDX1 - 1)
+                   IF  SKT1910TMP-KOHNUM2(IDX2)  <  WRK-KOHNUM
+                     MOVE  SKT1910TMP-KOHNUM2(IDX2)  TO WRK-KOHNUM
+                     MOVE  IDX2          TO    IDX3
+                   END-IF
+                 END-IF
+               END-PERFORM
+               MOVE  SKT1910TMP-KOH2-TBL(IDX3)  TO  SORT-KOH2-TBL(IDX1)
+               MOVE   "999"   TO    WRK-KOHNUM
+               ADD   1    TO    IDX1
+             END-PERFORM
+           END-IF
+      *
+           INITIALIZE             SKT1910TMP-KOH2-AREA
+           MOVE  SORT2-AREA  TO   SKT1910TMP-KOH2-AREA
+      *
+           DISPLAY "一般ソート後１" SKT1910TMP-KOHNUM2(1)
+           DISPLAY "一般ソート後２" SKT1910TMP-KOHNUM2(2)
+           DISPLAY "一般ソート後３" SKT1910TMP-KOHNUM2(3)
+      *
+           .
+       KOH2-SORT-EXT.
+           EXIT.
+      *
+      *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****************************************************************
       *    エラー出力処理
       *****************************************************************
