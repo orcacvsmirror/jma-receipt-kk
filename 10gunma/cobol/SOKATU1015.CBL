@@ -27,6 +27,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/05/22  印刷ジョブ・タイトル名修正
+      *                                  公費名は印字しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -367,7 +369,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU1015"    TO  JOB-PGID
-           MOVE    "広域連合・診療報酬請求書"
+      *=== 印刷ジョブ名修正 by Yoshikawa(2008/05/22) start
+      *     MOVE    "広域連合・診療報酬請求書"
+           MOVE    "後期高齢者請求書"
+      *=== 印刷ジョブ名修正 by Yoshikawa(2008/05/22) start
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -1269,7 +1274,9 @@
            END-IF
       *
       *    公費名
-           MOVE  WRK-HKNNAME        TO  SKT1015-KOHNAME(IDY)
+      *=== 公費名は印字しない by Yoshikawa(2008/05/22) start
+      *     MOVE  WRK-HKNNAME        TO  SKT1015-KOHNAME(IDY)
+      *=== 公費名は印字しない by Yoshikawa(2008/05/22) end
       *
            . 
        2002311-HKNNUM-HENSYU-EXT.
@@ -1306,26 +1313,44 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合請求書"        TO  SPRT-TITLE
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) start
+      *             MOVE    "広域連合請求書"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) end
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合請求書（在医総等）"
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) start
+      *             MOVE    "広域連合請求書（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) end
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合請求書［返戻分］" 
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) start
+      *             MOVE    "広域連合請求書［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) end
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合請求書（在医総等）［返戻分］"
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) start
+      *             MOVE    "広域連合請求書（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) end
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合請求書［特別療養費］"
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) start
+      *             MOVE    "広域連合請求書［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) end
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合請求書［返戻分］［特別療養費］" 
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) start
+      *             MOVE    "広域連合請求書［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
+      *=== 印刷タイトル名修正 by Yoshikawa(2008/05/22) end
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
