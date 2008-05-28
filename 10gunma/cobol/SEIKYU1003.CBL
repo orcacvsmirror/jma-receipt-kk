@@ -46,6 +46,7 @@
       *                                  ¾®¿ôÅÀ°Ê²¼»Í¼Î¸ÞÆþ¤ò¤¹¤ë
       *  01.00.07    ÆâÅÄ    08/04/30    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *  01.00.08    ÆâÅÄ    08/05/07    Ç¯ÎðÈ½Äê½¤Àµ
+      *  01.00.09    ÆâÅÄ    08/05/21    ¡Ö»ÔÄ®Â¼Ä¹ÅÂ¡×¤ò¡Ö»ÔÄ®Â¼Ä¹ÍÍ¡×¤ØÊÑ¹¹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1165,11 +1166,17 @@
            PERFORM  920-HKNJAINF-SET-SEC
            IF       WRK-HKNJANAME   NOT = SPACE
              STRING  WRK-HKNJANAME      DELIMITED BY SPACE
-                     "  »ÔÄ®Â¼Ä¹ÅÂ"     DELIMITED BY SIZE
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *               "  »ÔÄ®Â¼Ä¹ÅÂ"     DELIMITED BY SIZE
+                     "  »ÔÄ®Â¼Ä¹ÍÍ"     DELIMITED BY SIZE
+      *---(01.00.09) LINE ADD END   ------------------------------------
                      INTO               SC03-CITYNAME
              END-STRING
            ELSE
-             MOVE    "  »ÔÄ®Â¼Ä¹ÅÂ"    TO  SC03-CITYNAME(19:12)
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *       MOVE    "  »ÔÄ®Â¼Ä¹ÅÂ"    TO  SC03-CITYNAME(19:12)
+             MOVE    "  »ÔÄ®Â¼Ä¹ÍÍ"    TO  SC03-CITYNAME(19:12)
+      *---(01.00.09) LINE ADD END   ------------------------------------
            END-IF
       *
       *    ÀÁµáÆüÉÕ
@@ -1503,11 +1510,17 @@
            PERFORM  920-HKNJAINF-SET-SEC
            IF       WRK-HKNJANAME   NOT = SPACE
              STRING  WRK-HKNJANAME      DELIMITED BY SPACE
-                     "  »ÔÄ®Â¼Ä¹ÅÂ"     DELIMITED BY SIZE
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *               "  »ÔÄ®Â¼Ä¹ÅÂ"     DELIMITED BY SIZE
+                     "  »ÔÄ®Â¼Ä¹ÍÍ"     DELIMITED BY SIZE
+      *---(01.00.09) LINE ADD END   ------------------------------------
                      INTO               SC04-CITYNAME
              END-STRING
            ELSE
-             MOVE    "  »ÔÄ®Â¼Ä¹ÅÂ"    TO  SC04-CITYNAME(19:12)
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *       MOVE    "  »ÔÄ®Â¼Ä¹ÅÂ"    TO  SC04-CITYNAME(19:12)
+             MOVE    "  »ÔÄ®Â¼Ä¹ÍÍ"    TO  SC04-CITYNAME(19:12)
+      *---(01.00.09) LINE ADD END   ------------------------------------
            END-IF
       *
       *    ÀÁµáÆüÉÕ
