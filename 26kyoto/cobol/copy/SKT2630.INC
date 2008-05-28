@@ -6,7 +6,7 @@
             02  SKT2630-HOSPNAME    PIC X(100).
             02  SKT2630-KAISETUNAME PIC X(40).
             02  SKT2630-TEL PIC X(15).
-            02  SKT2630-HKNJANUM    PIC X(12).
+            02  SKT2630-HKNJANUM    PIC X(16).
             02  SKT2630-HOSPCD  PIC X(14).
             02  SKT2630-ZAI1    PIC X(2).
             02  SKT2630-ZAI2    PIC X(2).

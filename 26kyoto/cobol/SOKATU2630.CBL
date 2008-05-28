@@ -35,6 +35,9 @@
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/04/22    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.06    内田    08/04/29    保険者番号を８桁に修正
+      *  01.00.07    内田    08/05/07    国保データがない場合の
+      *                                  後期高齢印刷不具合修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -297,7 +300,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -501,7 +506,9 @@
            CLOSE            SKT2630TMP-FILE
            OPEN     I-O     SKT2630TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.07) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
@@ -583,11 +590,19 @@
       *
            INITIALIZE       SKT2630TMP-REC
       *
-           IF  RECE10-HKNJANUM(7:2)  =     SPACE
-             MOVE  RECE10-HKNJANUM(1:6)  TO  SKT2630TMP-HKNJANUM(1:6)
+      *---(01.00.06) LINE ADD START ------------------------------------
+           IF  FLG-KOUKI  =  1
+             MOVE  RECE10-HKNJANUM         TO  SKT2630TMP-HKNJANUM
            ELSE
-             MOVE  RECE10-HKNJANUM(3:6)  TO  SKT2630TMP-HKNJANUM(1:6)
+      *---(01.00.06) LINE ADD END   ------------------------------------
+             IF  RECE10-HKNJANUM(7:2)  =     SPACE
+               MOVE  RECE10-HKNJANUM(1:6)  TO  SKT2630TMP-HKNJANUM(1:6)
+             ELSE
+               MOVE  RECE10-HKNJANUM(3:6)  TO  SKT2630TMP-HKNJANUM(1:6)
+             END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
            END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.01) LINE ADD START ------------------------------------
       *    給付割合
       *     IF    SKT2630TMP-HKNJANUM(3:1)  =  "3"
@@ -1027,9 +1042,12 @@
            MOVE    WRK-OUT-INPUT         TO  SKT2630-HOSPCD
       *
       *    保険者番号
-           MOVE    SKT2630TMP-HKNJANUM   TO  WRK-MAE-INPUT
-           PERFORM 2009-HENKAN-SEC  
-           MOVE    WRK-OUT-INPUT         TO  SKT2630-HKNJANUM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    SKT2630TMP-HKNJANUM   TO  WRK-MAE-INPUT
+      *     PERFORM 2009-HENKAN-SEC  
+      *     MOVE    WRK-OUT-INPUT         TO  SKT2630-HKNJANUM
+           MOVE    SKT2630TMP-HKNJANUM   TO  SKT2630-HKNJANUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT2630-SEIYMD
