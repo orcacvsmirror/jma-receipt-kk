@@ -32,6 +32,8 @@
       *                                      医療機関情報を参照
       *                                      返戻対応
       *  01.00.02       長屋    2008/04/29   ４月改正に伴う修正
+      *  01.00.03       内田    2008/05/28   後期高齢は保険者数を県毎で
+      *                                      カウントする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -685,7 +687,11 @@
                IF  FLG-KOUKI  =  ZERO
                  MOVE  RECE10-HKNJANUM-S  TO  WRK-CHK-HKNJANUM(IDX3)
                ELSE
-                 MOVE  RECE10-HKNJANUM    TO  WRK-CHK-HKNJANUM(IDX3)
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *           MOVE  RECE10-HKNJANUM    TO  WRK-CHK-HKNJANUM(IDX3)
+                 MOVE  RECE10-HKNJANUM (1:4)
+                                        TO  WRK-CHK-HKNJANUM(IDX3)
+      *---(01.00.03) LINE ADD END   ------------------------------------
                END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
                ADD   1                  TO   WRK-HKNJASU(IDX1)
@@ -700,7 +706,11 @@
                    MOVE  200              TO   IDX3 
                  END-IF
                ELSE
-                 IF  WRK-CHK-HKNJANUM(IDX3)  =  RECE10-HKNJANUM
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *           IF  WRK-CHK-HKNJANUM(IDX3)  =  RECE10-HKNJANUM
+                 IF  WRK-CHK-HKNJANUM(IDX3)(1:4)
+                                          =  RECE10-HKNJANUM (1:4)
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    MOVE  200              TO   IDX3 
                  END-IF
                END-IF
