@@ -23,6 +23,7 @@
                05  SKT2210TMP-SYUTURYOKU         PIC  9(01).
                05  SKT2210TMP-HKNJANUM           PIC  X(06).
                05  SKT2210TMP-ZAITAKU            PIC  X(01).
+               05  SKT2210TMP-SRYYM              PIC  9(06).
            03  SKT2210TMP-PAGE-FLG1              PIC  9(01).
            03  SKT2210TMP-PAGE-FLG2              PIC  9(01).
            03  SKT2210TMP-IPAN-TBL     OCCURS 11.

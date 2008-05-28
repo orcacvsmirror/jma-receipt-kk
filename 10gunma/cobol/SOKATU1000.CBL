@@ -35,6 +35,8 @@
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
       * 01.00.06     内田    2008/02/13    特別療養費国保は別帳票とする
+      * 01.00.07     内田    2008/04/30    帳票様式の変更に伴う修正
+      * 01.00.08     内田    2008/05/07    給付割合印字修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -219,6 +221,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -662,12 +669,12 @@
       *       END-IF
       *---(01.00.06) LINE ADD START ------------------------------------
       *      IF  RECE10-HKNNUM  =  "060"
-            IF  RECE10-HKNNUM  =  "060"  OR  "068"
+             IF  RECE10-HKNNUM  =  "060"  OR  "068"
       *---(01.00.06) LINE ADD END   ------------------------------------
-               MOVE  1  TO  SKT1000TMP-SYUBETU
-            ELSE
-               MOVE  3  TO  SKT1000TMP-SYUBETU
-            END-IF
+                MOVE  1  TO  SKT1000TMP-SYUBETU
+             ELSE
+                MOVE  3  TO  SKT1000TMP-SYUBETU
+             END-IF
       *
       *     本家入外区分
              IF    RECE10-AGE    >=  70
@@ -689,6 +696,18 @@
                  END-IF
                END-IF
              ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+               AND  (RECE10-FLG (1)   =  1)
+                 IF  RECE10-NYUGAIKBN  =  1
+                   MOVE    "3"           TO  SKT1000TMP-KBN
+                   MOVE    7             TO  SKT1000TMP-JYUNJO
+                 ELSE
+                   MOVE    "4"           TO  SKT1000TMP-KBN
+                   MOVE    8             TO  SKT1000TMP-JYUNJO
+                 END-IF
+               ELSE
+      *---(01.00.07) LINE ADD START ------------------------------------
                IF    RECE10-AGE    <  3
                  IF  RECE10-NYUGAIKBN  =  1
                    MOVE    "3"           TO  SKT1000TMP-KBN
@@ -735,6 +754,9 @@
                    END-IF
                  END-IF
                END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+               END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
              END-IF
       *    区分
       *       EVALUATE  TRUE
@@ -785,7 +807,17 @@
       *     ELSE
       *       MOVE  RECE10-KYURATE    TO  SKT1000TMP-KYURATE
       *     END-IF
-           MOVE  RECE10-KYURATE    TO  SKT1000TMP-KYURATE
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     MOVE  RECE10-KYURATE    TO  SKT1000TMP-KYURATE
+         DISPLAY  "CHK  :  "  RECE10-FLG (2)
+            IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+            AND  (RECE10-FLG (2)   =  1)
+         DISPLAY  "HIT"
+                MOVE  8                 TO  SKT1000TMP-KYURATE
+            ELSE
+                MOVE  RECE10-KYURATE    TO  SKT1000TMP-KYURATE
+            END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    入外区分

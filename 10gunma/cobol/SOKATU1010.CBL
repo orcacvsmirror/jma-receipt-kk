@@ -40,6 +40,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.07    内田    08/02/13    特別療養費国保は別帳票とする
+      *  01.00.08    内田    08/04/30    帳票様式の変更に伴う修正
+      *  01.00.09    内田    08/05/02    診療年月判定修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -222,6 +224,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -631,7 +638,19 @@
                (RECE10-AGE  >=  70  OR  RECE10-RJNHKNNUM NOT = SPACE)
              MOVE  RECE10-SRYYM  TO  SKT1010TMP-SRYYM
            END-IF
-      *---(01.00.03) LINE ADD START ------------------------------------
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    平成２０年３月以前の一般国保７０歳以上９割は別帳票
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     IF   (RECE10-SRYYM  <=   WRK-CONS-SRYYM-200804)
+           IF   (RECE10-SRYYM  <   WRK-CONS-SRYYM-200804)
+      *---(01.00.09) LINE ADD END   ------------------------------------
+           AND  (RECE10-RJNHKNNUM  =  SPACE)
+           AND  (RECE10-HKNNUM  =  "060")
+           AND  (RECE10-KYURATE  =  9)
+             MOVE  RECE10-SRYYM  TO  SKT1010TMP-SRYYM
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *    県内・県外区分
            MOVE     RECE10-PREFKBN   TO  SKT1010TMP-PREFKBN
@@ -707,12 +726,21 @@
                      MOVE  2  TO  IDX1
                    END-IF
                  WHEN  RECE10-AGE  >  2
-                   IF  RECE10-KYURATE  =  7
-                     MOVE  3  TO  IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5  TO  IDX1
                    ELSE
-                     MOVE  4  TO  IDX1
-                     MOVE  RECE10-KYURATE  TO  SKT1010TMP-KYURATE
+      *---(01.00.08) LINE ADD END   ------------------------------------
+                     IF  RECE10-KYURATE  =  7
+                       MOVE  3  TO  IDX1
+                     ELSE
+                       MOVE  4  TO  IDX1
+                       MOVE  RECE10-KYURATE  TO  SKT1010TMP-KYURATE
+                     END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                  WHEN OTHER
                    MOVE  5  TO  IDX1
                END-EVALUATE
@@ -751,11 +779,20 @@
                      MOVE  3   TO  IDX1
                    END-IF
                  ELSE
-                   IF  RECE10-AGE  >  2
-                     MOVE   4    TO  IDX1
+      *---(01.00.08) LINE ADD START ------------------------------------
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE10-FLG (1)   =  1)
+                     MOVE  5  TO  IDX1
                    ELSE
-                     MOVE   5    TO  IDX1
+      *---(01.00.08) LINE ADD END   ------------------------------------
+                     IF  RECE10-AGE  >  2
+                       MOVE   4    TO  IDX1
+                     ELSE
+                       MOVE   5    TO  IDX1
+                     END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
       *

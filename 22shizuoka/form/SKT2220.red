@@ -2000,7 +2000,7 @@
         <point val="8.65,1.225"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65,0.912273;13.9909,1.31227"/>
+        <rectangle val="8.65,0.920575;13.9828,1.32058"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2023,7 +2023,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.24644"/>
+            <real val="0.2424"/>
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
@@ -2036,7 +2036,7 @@
         <point val="4.3,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.0475,5.35455;4.5525,5.60455"/>
+        <rectangle val="4.0475,5.35973;4.5525,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2059,7 +2059,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2072,7 +2072,7 @@
         <point val="12.3,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.0475,5.35455;12.5525,5.60455"/>
+        <rectangle val="12.0475,5.35973;12.5525,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2095,7 +2095,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2108,7 +2108,7 @@
         <point val="7.75,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.29424,5.35455;8.20576,5.60455"/>
+        <rectangle val="7.2955,5.35973;8.2045,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2131,7 +2131,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2144,7 +2144,7 @@
         <point val="15.25,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.6124,5.35455;15.8876,5.60455"/>
+        <rectangle val="14.6188,5.35973;15.8812,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2167,7 +2167,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2180,7 +2180,7 @@
         <point val="7.2,5.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.33352,4.81545;9.06648,5.11545"/>
+        <rectangle val="5.3517,4.82168;9.0483,5.12168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2203,7 +2203,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2216,7 +2216,7 @@
         <point val="10.25,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.61875,5.35455;10.8812,5.60455"/>
+        <rectangle val="9.61875,5.35973;10.8812,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2239,7 +2239,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2252,7 +2252,7 @@
         <point val="17.25,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.6187,5.35455;17.8812,5.60455"/>
+        <rectangle val="16.6187,5.35973;17.8812,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2275,7 +2275,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2288,7 +2288,7 @@
         <point val="13.625,5.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.3725,5.35455;13.8775,5.60455"/>
+        <rectangle val="13.3725,5.35973;13.8775,5.60973"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2311,7 +2311,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -2324,7 +2324,7 @@
         <point val="14.9901,5.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0721,4.86545;16.9081,5.16545"/>
+        <rectangle val="13.0812,4.87168;16.899,5.17168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2347,7 +2347,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2360,7 +2360,7 @@
         <point val="10.2,3.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.2,3.16545;12.321,3.46545"/>
+        <rectangle val="10.2,3.17168;12.321,3.47168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2383,7 +2383,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2397,7 +2397,7 @@
           <point val="10.2,4.2"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="10.2,3.96545;10.503,4.26545"/>
+          <rectangle val="10.2,3.97168;10.503,4.27168"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -2420,7 +2420,7 @@
               <enum val="0"/>
             </attribute>
             <attribute name="single">
-              <real val="0.18483"/>
+              <real val="0.1818"/>
             </attribute>
             <attribute name="multi">
               <real val="0.1515"/>
@@ -2433,7 +2433,7 @@
           <point val="10.7172,4.2"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="10.7172,3.96545;11.0202,4.26545"/>
+          <rectangle val="10.7172,3.97168;11.0202,4.27168"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -2456,7 +2456,7 @@
               <enum val="0"/>
             </attribute>
             <attribute name="single">
-              <real val="0.18483"/>
+              <real val="0.1818"/>
             </attribute>
             <attribute name="multi">
               <real val="0.1515"/>
@@ -2469,7 +2469,7 @@
           <point val="11.1328,4.20442"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="11.1328,3.96987;11.4358,4.26987"/>
+          <rectangle val="11.1328,3.9761;11.4358,4.2761"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -2492,7 +2492,7 @@
               <enum val="0"/>
             </attribute>
             <attribute name="single">
-              <real val="0.18483"/>
+              <real val="0.1818"/>
             </attribute>
             <attribute name="multi">
               <real val="0.1515"/>
@@ -2505,7 +2505,7 @@
           <point val="11.5128,4.20884"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="11.5128,3.97429;11.8158,4.27429"/>
+          <rectangle val="11.5128,3.98052;11.8158,4.28052"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -2528,7 +2528,7 @@
               <enum val="0"/>
             </attribute>
             <attribute name="single">
-              <real val="0.18483"/>
+              <real val="0.1818"/>
             </attribute>
             <attribute name="multi">
               <real val="0.1515"/>
@@ -2541,7 +2541,7 @@
           <point val="11.9725,4.2"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="11.9725,3.96545;12.2755,4.26545"/>
+          <rectangle val="11.9725,3.97168;12.2755,4.27168"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -2564,7 +2564,7 @@
               <enum val="0"/>
             </attribute>
             <attribute name="single">
-              <real val="0.18483"/>
+              <real val="0.1818"/>
             </attribute>
             <attribute name="multi">
               <real val="0.1515"/>
@@ -2578,7 +2578,7 @@
         <point val="10.2,3.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.2,3.56545;12.321,3.86545"/>
+        <rectangle val="10.2,3.57168;12.321,3.87168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2601,7 +2601,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2614,7 +2614,7 @@
         <point val="17.6,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.5395,1.66545;18.6605,1.96545"/>
+        <rectangle val="16.5395,1.67168;18.6605,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2637,7 +2637,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2650,7 +2650,7 @@
         <point val="11.45,6.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.2682,6.30927;11.45,6.48927"/>
+        <rectangle val="11.2682,6.31301;11.45,6.49301"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2673,7 +2673,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.110898"/>
+            <real val="0.10908"/>
           </attribute>
           <attribute name="multi">
             <real val="0.0909"/>
@@ -2686,7 +2686,7 @@
         <point val="18.15,6.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.9682,6.30927;18.15,6.48927"/>
+        <rectangle val="17.9682,6.31301;18.15,6.49301"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2709,7 +2709,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.110898"/>
+            <real val="0.10908"/>
           </attribute>
           <attribute name="multi">
             <real val="0.0909"/>
@@ -2722,7 +2722,7 @@
         <point val="5.7,5.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.35155,5.27018;6.04845,5.73018"/>
+        <rectangle val="5.35155,5.27496;6.04845,5.73496"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2746,7 +2746,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.141703"/>
+            <real val="0.13938"/>
           </attribute>
           <attribute name="multi">
             <real val="0.11615"/>
@@ -2759,7 +2759,7 @@
         <point val="15.2,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.7455,1.66545;15.6545,1.96545"/>
+        <rectangle val="14.7455,1.67168;15.6545,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2782,7 +2782,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2795,7 +2795,7 @@
         <point val="13.55,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.247,1.66545;13.853,1.96545"/>
+        <rectangle val="13.247,1.67168;13.853,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2818,7 +2818,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2831,7 +2831,7 @@
         <point val="11.35,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.5925,1.66545;12.1075,1.96545"/>
+        <rectangle val="10.5925,1.67168;12.1075,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2854,7 +2854,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2867,7 +2867,7 @@
         <point val="9.35,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.1985,1.66545;9.5015,1.96545"/>
+        <rectangle val="9.1985,1.67168;9.5015,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2890,7 +2890,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2903,7 +2903,7 @@
         <point val="8.2,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.7455,1.66545;8.6545,1.96545"/>
+        <rectangle val="7.7455,1.67168;8.6545,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2926,7 +2926,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2939,7 +2939,7 @@
         <point val="7.2,1.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.86367,1.66545;7.53633,1.96545"/>
+        <rectangle val="6.8667,1.67168;7.5333,1.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2962,7 +2962,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -2975,7 +2975,7 @@
         <point val="7.05,2.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.747,2.31545;7.353,2.61545"/>
+        <rectangle val="6.747,2.32168;7.353,2.62168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2998,7 +2998,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3011,7 +3011,7 @@
         <point val="6.2,2.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.2,2.07636;6.5535,2.42636"/>
+        <rectangle val="6.2,2.08363;6.5535,2.43363"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3034,7 +3034,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.215635"/>
+            <real val="0.2121"/>
           </attribute>
           <attribute name="multi">
             <real val="0.17675"/>
@@ -3047,7 +3047,7 @@
         <point val="16.2,6.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.0182,6.30927;16.2,6.48927"/>
+        <rectangle val="16.0182,6.31301;16.2,6.49301"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3070,7 +3070,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.110898"/>
+            <real val="0.10908"/>
           </attribute>
           <attribute name="multi">
             <real val="0.0909"/>
@@ -3083,7 +3083,7 @@
         <point val="1.2,3.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2,3.16545;2.109,3.46545"/>
+        <rectangle val="1.2,3.17168;2.109,3.47168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3106,7 +3106,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3119,7 +3119,7 @@
         <point val="1.7,3.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.7,3.61545;5.033,3.91545"/>
+        <rectangle val="1.7,3.62168;5.033,3.92168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3142,7 +3142,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3155,7 +3155,7 @@
         <point val="0.85,4.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.85,4.41545;2.062,4.71545"/>
+        <rectangle val="0.85,4.42168;2.062,4.72168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3178,7 +3178,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3191,7 +3191,7 @@
         <point val="19.2,4.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2,4.16545;19.503,4.46545"/>
+        <rectangle val="19.2,4.17168;19.503,4.47168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3214,7 +3214,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3227,7 +3227,7 @@
         <point val="19.1,4.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.1,4.10909;19.605,4.60909"/>
+        <rectangle val="19.1,4.11947;19.605,4.61947"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3250,7 +3250,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.30805"/>
+            <real val="0.303"/>
           </attribute>
           <attribute name="multi">
             <real val="0.2525"/>
@@ -3263,7 +3263,7 @@
         <point val="10.2,4.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.2,4.36545;12.3361,4.66545"/>
+        <rectangle val="10.2,4.37168;12.321,4.67168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3286,7 +3286,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3299,7 +3299,7 @@
         <point val="2.25113,5.44144"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.60069,5.12871;2.90157,5.52871"/>
+        <rectangle val="1.60473,5.13702;2.89753,5.53702"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3322,7 +3322,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.24644"/>
+            <real val="0.2424"/>
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
@@ -3335,7 +3335,7 @@
         <point val="0.8,9.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.8,9.16545;2.618,9.46545"/>
+        <rectangle val="0.8,9.17168;2.618,9.47168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3358,7 +3358,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3371,7 +3371,7 @@
         <point val="3.1,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8273,10.7389;3.3727,11.0089"/>
+        <rectangle val="2.8273,10.7445;3.3727,11.0145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3394,7 +3394,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -3407,7 +3407,7 @@
         <point val="3.1,11.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.69095,11.4389;3.50905,11.7089"/>
+        <rectangle val="2.69095,11.4445;3.50905,11.7145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3430,7 +3430,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -3443,7 +3443,7 @@
         <point val="2.35,11"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.21365,10.7889;2.48635,11.5989"/>
+        <rectangle val="2.21365,10.7945;2.48635,11.6045"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3468,7 +3468,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -3481,7 +3481,7 @@
         <point val="11.95,16.625"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.95,16.4295;14.2225,16.6795"/>
+        <rectangle val="11.95,16.4347;14.2225,16.6847"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3504,7 +3504,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -3517,7 +3517,7 @@
         <point val="12.5,16.975"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.5,16.7795;13.005,17.0295"/>
+        <rectangle val="12.5,16.7847;13.005,17.0347"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3540,7 +3540,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -3553,7 +3553,7 @@
         <point val="15.5,17.025"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.5,16.8295;16.2575,17.0795"/>
+        <rectangle val="15.5,16.8347;16.2575,17.0847"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3576,7 +3576,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -3589,7 +3589,7 @@
         <point val="14.65,17.025"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.65,16.8295;14.9025,17.0795"/>
+        <rectangle val="14.65,16.8347;14.9025,17.0847"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3612,7 +3612,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -3625,7 +3625,7 @@
         <point val="17.775,17.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.775,16.8545;18.0275,17.1045"/>
+        <rectangle val="17.775,16.8597;18.0275,17.1097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3648,7 +3648,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -3661,7 +3661,7 @@
         <point val="1.2,16.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2,16.4045;9.33555,16.6545"/>
+        <rectangle val="1.2,16.4097;9.3305,16.6597"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3684,7 +3684,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -3697,7 +3697,7 @@
         <point val="15.25,2.675"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.644,2.20591;15.856,2.80591"/>
+        <rectangle val="14.644,2.21836;15.856,2.81836"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3720,7 +3720,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.36966"/>
+            <real val="0.3636"/>
           </attribute>
           <attribute name="multi">
             <real val="0.303"/>
@@ -3733,7 +3733,7 @@
         <point val="6.78404,1.24351"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.78404,0.930783;7.18804,1.33078"/>
+        <rectangle val="6.78404,0.939085;7.18804,1.33909"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3756,7 +3756,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.24644"/>
+            <real val="0.2424"/>
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
@@ -3769,7 +3769,7 @@
         <point val="18.6899,5.35111"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6899,5.11656;19.5989,5.41656"/>
+        <rectangle val="18.6899,5.12279;19.5989,5.42279"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3792,7 +3792,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -3802,17 +3802,17 @@
     </object>
     <object type="Standard - Text" version="0" id="O148">
       <attribute name="obj_pos">
-        <point val="1.55004,6.19939"/>
+        <point val="1.40004,6.16405"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.55004,5.98048;1.83284,7.10048"/>
+        <rectangle val="1.40004,5.95096;1.68284,7.07096"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#207;&#183;
-&#191;&#205;
-&#182;&#229;
+            <string>#&#182;&#229;
+
+
 &#179;&#228;#</string>
           </attribute>
           <attribute name="font">
@@ -3822,7 +3822,7 @@
             <real val="0.28"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.55004,6.19939"/>
+            <point val="1.40004,6.16405"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3831,7 +3831,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.172508"/>
+            <real val="0.16968"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1414"/>
@@ -3841,17 +3841,17 @@
     </object>
     <object type="Standard - Text" version="0" id="O149">
       <attribute name="obj_pos">
-        <point val="1.55754,7.80812"/>
+        <point val="1.38086,7.66678"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.55754,7.58921;1.84034,8.70921"/>
+        <rectangle val="1.38086,7.45368;1.66366,8.57368"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#207;&#183;
-&#191;&#205;
-&#188;&#183;
+            <string>#&#188;&#183;
+
+
 &#179;&#228;#</string>
           </attribute>
           <attribute name="font">
@@ -3861,7 +3861,7 @@
             <real val="0.28"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.55754,7.80812"/>
+            <point val="1.38086,7.66678"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3870,7 +3870,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.172508"/>
+            <real val="0.16968"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1414"/>
@@ -3883,7 +3883,7 @@
         <point val="18.15,11.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.9682,11.0093;18.15,11.1893"/>
+        <rectangle val="17.9682,11.013;18.15,11.193"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3906,7 +3906,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.110898"/>
+            <real val="0.10908"/>
           </attribute>
           <attribute name="multi">
             <real val="0.0909"/>
@@ -3919,7 +3919,7 @@
         <point val="16.2,11.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.0182,11.0093;16.2,11.1893"/>
+        <rectangle val="16.0182,11.013;16.2,11.193"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3942,7 +3942,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.110898"/>
+            <real val="0.10908"/>
           </attribute>
           <attribute name="multi">
             <real val="0.0909"/>
@@ -3955,7 +3955,7 @@
         <point val="11.45,11.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.2682,11.0093;11.45,11.1893"/>
+        <rectangle val="11.2682,11.013;11.45,11.193"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3978,7 +3978,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.110898"/>
+            <real val="0.10908"/>
           </attribute>
           <attribute name="multi">
             <real val="0.0909"/>
@@ -3991,7 +3991,7 @@
         <point val="3.1,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8273,5.98891;3.3727,6.25891"/>
+        <rectangle val="2.8273,5.99451;3.3727,6.26451"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4014,7 +4014,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4027,7 +4027,7 @@
         <point val="3.1,7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.69095,6.78891;3.50905,7.05891"/>
+        <rectangle val="2.69095,6.79451;3.50905,7.06451"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4050,7 +4050,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4063,7 +4063,7 @@
         <point val="2.35,6.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.21365,6.13891;2.48635,6.94891"/>
+        <rectangle val="2.21365,6.14451;2.48635,6.95451"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4088,7 +4088,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4101,7 +4101,7 @@
         <point val="3.1,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8273,7.58891;3.3727,7.85891"/>
+        <rectangle val="2.8273,7.59451;3.3727,7.86451"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4124,7 +4124,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4137,7 +4137,7 @@
         <point val="3.1,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.69095,8.38891;3.50905,8.65891"/>
+        <rectangle val="2.69095,8.39451;3.50905,8.66451"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4160,7 +4160,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4173,7 +4173,7 @@
         <point val="2.35,7.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.21365,7.73891;2.48635,8.54891"/>
+        <rectangle val="2.21365,7.74451;2.48635,8.55451"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4198,7 +4198,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4211,7 +4211,7 @@
         <point val="3.1,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8273,12.1389;3.3727,12.4089"/>
+        <rectangle val="2.8273,12.1445;3.3727,12.4145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4234,7 +4234,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4247,7 +4247,7 @@
         <point val="3.1,13.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.69095,12.8389;3.50905,13.1089"/>
+        <rectangle val="2.69095,12.8445;3.50905,13.1145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4270,7 +4270,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4283,7 +4283,7 @@
         <point val="2.35,12.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.21365,12.1889;2.48635,12.9989"/>
+        <rectangle val="2.21365,12.1945;2.48635,13.0045"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4308,7 +4308,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4321,7 +4321,7 @@
         <point val="3.1,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8273,13.5389;3.3727,13.8089"/>
+        <rectangle val="2.8273,13.5445;3.3727,13.8145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4344,7 +4344,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4357,7 +4357,7 @@
         <point val="3.1,14.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.69095,14.2389;3.50905,14.5089"/>
+        <rectangle val="2.69095,14.2445;3.50905,14.5145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4380,7 +4380,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4393,7 +4393,7 @@
         <point val="2.35,13.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.21365,13.5889;2.48635,14.3989"/>
+        <rectangle val="2.21365,13.5945;2.48635,14.4045"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4418,7 +4418,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4431,7 +4431,7 @@
         <point val="3.1,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8273,14.9389;3.3727,15.2089"/>
+        <rectangle val="2.8273,14.9445;3.3727,15.2145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4454,7 +4454,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4467,7 +4467,7 @@
         <point val="3.1,15.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.69095,15.6389;3.50905,15.9089"/>
+        <rectangle val="2.69095,15.6445;3.50905,15.9145"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4490,7 +4490,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4503,7 +4503,7 @@
         <point val="2.35,15.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.21365,14.9889;2.48635,15.7989"/>
+        <rectangle val="2.21365,14.9945;2.48635,15.8045"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4528,7 +4528,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.166347"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
             <real val="0.13635"/>
@@ -4541,7 +4541,7 @@
         <point val="4.3,10.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.0475,10.1545;4.5525,10.4045"/>
+        <rectangle val="4.0475,10.1597;4.5525,10.4097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4564,7 +4564,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4577,7 +4577,7 @@
         <point val="12.3,10.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.0475,10.1545;12.5525,10.4045"/>
+        <rectangle val="12.0475,10.1597;12.5525,10.4097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4600,7 +4600,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4613,7 +4613,7 @@
         <point val="7.75,10.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.29424,10.1545;8.20576,10.4045"/>
+        <rectangle val="7.2955,10.1597;8.2045,10.4097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4636,7 +4636,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4649,7 +4649,7 @@
         <point val="15.325,10.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.6874,10.1545;15.9626,10.4045"/>
+        <rectangle val="14.6937,10.1597;15.9562,10.4097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4672,7 +4672,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4685,7 +4685,7 @@
         <point val="7.125,9.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.25852,9.61545;8.99148,9.91545"/>
+        <rectangle val="5.2767,9.62168;8.9733,9.92168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4708,7 +4708,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -4721,7 +4721,7 @@
         <point val="10.25,10.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.61875,10.1545;10.8812,10.4045"/>
+        <rectangle val="9.61875,10.1597;10.8812,10.4097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4744,7 +4744,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4757,7 +4757,7 @@
         <point val="17.25,10.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.6945,10.028;17.8055,10.248"/>
+        <rectangle val="16.6945,10.0326;17.8055,10.2526"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4780,7 +4780,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.135542"/>
+            <real val="0.13332"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1111"/>
@@ -4793,7 +4793,7 @@
         <point val="13.7,10.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.4475,10.1545;13.9525,10.4045"/>
+        <rectangle val="13.4475,10.1597;13.9525,10.4097"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4816,7 +4816,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4829,7 +4829,7 @@
         <point val="14.9901,9.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0721,9.66545;16.9081,9.96545"/>
+        <rectangle val="13.0812,9.67168;16.899,9.97168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4852,7 +4852,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -4865,7 +4865,7 @@
         <point val="5.7,10.225"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.35155,10.0452;6.04845,10.5052"/>
+        <rectangle val="5.35155,10.05;6.04845,10.51"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4889,7 +4889,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.141703"/>
+            <real val="0.13938"/>
           </attribute>
           <attribute name="multi">
             <real val="0.11615"/>
@@ -4902,7 +4902,7 @@
         <point val="2.25113,10.2414"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.60069,9.92867;2.90157,10.3287"/>
+        <rectangle val="1.60473,9.93698;2.89753,10.337"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4925,7 +4925,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.24644"/>
+            <real val="0.2424"/>
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
@@ -4938,7 +4938,7 @@
         <point val="1.05,7.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.86517,7.11545;1.23483,7.41545"/>
+        <rectangle val="0.8682,7.12168;1.2318,7.42168"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4961,7 +4961,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -4974,7 +4974,7 @@
         <point val="17.25,10.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.6945,10.278;17.8055,10.498"/>
+        <rectangle val="16.6945,10.2826;17.8055,10.5026"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4997,7 +4997,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.135542"/>
+            <real val="0.13332"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1111"/>
@@ -5005,14 +5005,131 @@
         </composite>
       </attribute>
     </object>
+    <object type="Standard - Text" version="0" id="O181">
+      <attribute name="obj_pos">
+        <point val="-1.125,4.2381"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="-1.125,4.025;-0.8422,4.585"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#182;&#229;
+&#179;&#228;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.28"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="-1.125,4.2381"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.16968"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1414"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Standard - Text" version="0" id="O182">
+      <attribute name="obj_pos">
+        <point val="1.73719,6.08916"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="1.73719,5.87606;2.01999,7.27606"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#184;&#229;
+&#180;&#252;
+&#185;&#226;
+&#206;&#240;
+&#188;&#212;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.28"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="1.73719,6.08916"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.16968"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1414"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Standard - Text" version="0" id="O183">
+      <attribute name="obj_pos">
+        <point val="1.70186,7.59092"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="1.70186,7.37783;1.98466,8.77783"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#184;&#229;
+&#180;&#252;
+&#185;&#226;
+&#206;&#240;
+&#188;&#212;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.28"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="1.70186,7.59092"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.16968"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1414"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
   </layer>
   <layer name="&#186;&#185;&#164;&#183;&#185;&#254;&#164;&#223;" visible="true">
-    <object type="Embed - Text" version="0" id="O181">
+    <object type="Embed - Text" version="0" id="O184">
       <attribute name="obj_pos">
         <point val="12.8,3.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8,2.98109;19.87,3.54109"/>
+        <rectangle val="12.8,2.9869;19.87,3.5469"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ADRS#</string>
@@ -5045,7 +5162,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.172508"/>
+            <real val="0.16968"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1414"/>
@@ -5053,12 +5170,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O182">
+    <object type="Embed - Text" version="0" id="O185">
       <attribute name="obj_pos">
         <point val="12.8,3.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8,3.53109;19.87,4.09109"/>
+        <rectangle val="12.8,3.5369;19.87,4.0969"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPNAME#</string>
@@ -5091,7 +5208,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.172508"/>
+            <real val="0.16968"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1414"/>
@@ -5099,12 +5216,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O183">
+    <object type="Embed - Text" version="0" id="O186">
       <attribute name="obj_pos">
         <point val="12.8,4.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8,4.11545;18.86,4.41545"/>
+        <rectangle val="12.8,4.12168;18.86,4.42168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETUNAME#</string>
@@ -5133,7 +5250,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5141,12 +5258,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O184">
+    <object type="Embed - Text" version="0" id="O187">
       <attribute name="obj_pos">
         <point val="15.825,2.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.825,2.08545;19.4908,2.93545"/>
+        <rectangle val="15.825,2.1031;19.4307,2.9531"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPCD#</string>
@@ -5175,7 +5292,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.523685"/>
+            <real val="0.5151"/>
           </attribute>
           <attribute name="multi">
             <real val="0.42925"/>
@@ -5183,12 +5300,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O185">
+    <object type="Embed - Text" version="0" id="O188">
       <attribute name="obj_pos">
         <point val="3.47904,1.2482"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.47904,0.935473;6.71104,1.33547"/>
+        <rectangle val="3.47904,0.943775;6.71104,1.34378"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#PRTYM#</string>
@@ -5217,7 +5334,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.24644"/>
+            <real val="0.2424"/>
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
@@ -5225,12 +5342,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O186">
+    <object type="Embed - Text" version="0" id="O189">
       <attribute name="obj_pos">
         <point val="12.85,4.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.85,4.36545;15.6225,4.66545"/>
+        <rectangle val="12.85,4.37168;15.577,4.67168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TEL#</string>
@@ -5259,7 +5376,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5267,12 +5384,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O187">
+    <object type="Embed - Text" version="0" id="O190">
       <attribute name="obj_pos">
         <point val="2.43404,4.26821"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.43404,4.07276;5.21154,4.32276"/>
+        <rectangle val="2.43404,4.07794;5.21154,4.32794"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIYMD#</string>
@@ -5301,7 +5418,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.154025"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -5309,12 +5426,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O188">
+    <object type="Embed - Text" version="0" id="O191">
       <attribute name="obj_pos">
         <point val="2.53404,3.39035"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.53404,3.1558;6.47304,3.4558"/>
+        <rectangle val="2.53404,3.16203;6.47304,3.46203"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANAME#</string>
@@ -5343,7 +5460,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5351,12 +5468,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O189">
+    <object type="Embed - Text" version="0" id="O192">
       <attribute name="obj_pos">
         <point val="9.95,2.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.95,2.20909;12.98,2.70909"/>
+        <rectangle val="9.95,2.21947;12.98,2.71947"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANUM#</string>
@@ -5385,7 +5502,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.30805"/>
+            <real val="0.303"/>
           </attribute>
           <attribute name="multi">
             <real val="0.2525"/>
@@ -5393,12 +5510,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O190">
+    <object type="Embed - Text" version="0" id="O193">
       <attribute name="obj_pos">
         <point val="2.60367,2.45899"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.60367,1.9899;3.20967,2.5899"/>
+        <rectangle val="2.60367,2.00235;3.20967,2.60235"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAIMOJI#</string>
@@ -5427,7 +5544,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.36966"/>
+            <real val="0.3636"/>
           </attribute>
           <attribute name="multi">
             <real val="0.303"/>
@@ -5435,12 +5552,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O191">
+    <object type="Embed - Text" version="0" id="O194">
       <attribute name="obj_pos">
         <point val="2.4772,2.61535"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.4772,1.87262;3.4367,2.82262"/>
+        <rectangle val="2.4772,1.89234;3.4367,2.84234"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAIMARU#</string>
@@ -5469,7 +5586,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.585295"/>
+            <real val="0.5757"/>
           </attribute>
           <attribute name="multi">
             <real val="0.47975"/>
@@ -5477,12 +5594,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O192">
+    <object type="Embed - Text" version="0" id="O195">
       <attribute name="obj_pos">
         <point val="0.85,11.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.85,11.3655;2.062,11.6655"/>
+        <rectangle val="0.85,11.3717;2.062,11.6717"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].KOHNAME#</string>
@@ -5511,7 +5628,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5519,12 +5636,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O193">
+    <object type="Embed - Text" version="0" id="O196">
       <attribute name="obj_pos">
         <point val="0.85,13"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.85,12.7655;2.062,13.0655"/>
+        <rectangle val="0.85,12.7717;2.062,13.0717"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].KOHNAME#</string>
@@ -5553,7 +5670,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5561,12 +5678,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O194">
+    <object type="Embed - Text" version="0" id="O197">
       <attribute name="obj_pos">
         <point val="0.85,14.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.85,14.1655;2.062,14.4655"/>
+        <rectangle val="0.85,14.1717;2.062,14.4717"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].KOHNAME#</string>
@@ -5595,7 +5712,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5603,12 +5720,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O195">
+    <object type="Embed - Text" version="0" id="O198">
       <attribute name="obj_pos">
         <point val="0.85,15.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.85,15.5655;2.062,15.8655"/>
+        <rectangle val="0.85,15.5717;2.062,15.8717"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].KOHNAME#</string>
@@ -5637,7 +5754,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5645,12 +5762,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O196">
+    <object type="Embed - Text" version="0" id="O199">
       <attribute name="obj_pos">
         <point val="19.35,1.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6107,1.01545;19.35,1.31545"/>
+        <rectangle val="18.6228,1.02168;19.35,1.32168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NO#</string>
@@ -5679,7 +5796,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5687,12 +5804,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O197">
+    <object type="Embed - Text" version="0" id="O200">
       <attribute name="obj_pos">
         <point val="4.85,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,5.90291;4.85,6.28291"/>
+        <rectangle val="3.6986,5.9108;4.85,6.2908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[0].KENSU#</string>
@@ -5721,7 +5838,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -5729,12 +5846,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O198">
+    <object type="Embed - Text" version="0" id="O201">
       <attribute name="obj_pos">
         <point val="6.3,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,5.90291;6.3,6.28291"/>
+        <rectangle val="5.1486,5.9108;6.3,6.2908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[0].NISSU#</string>
@@ -5763,7 +5880,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -5771,12 +5888,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O199">
+    <object type="Embed - Text" version="0" id="O202">
       <attribute name="obj_pos">
         <point val="8.75,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,5.90291;8.75,6.28291"/>
+        <rectangle val="6.67748,5.9108;8.75,6.2908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[0].TENSU#</string>
@@ -5805,7 +5922,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -5813,12 +5930,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O200">
+    <object type="Embed - Text" version="0" id="O203">
       <attribute name="obj_pos">
         <point val="11.325,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,5.90291;11.325,6.28291"/>
+        <rectangle val="9.25248,5.9108;11.325,6.2908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[0].ITBFTN#</string>
@@ -5847,7 +5964,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -5855,12 +5972,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O201">
+    <object type="Embed - Text" version="0" id="O204">
       <attribute name="obj_pos">
         <point val="12.75,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5794,5.90291;12.75,6.28291"/>
+        <rectangle val="11.5986,5.9108;12.75,6.2908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].SKENSU#</string>
@@ -5889,7 +6006,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -5897,12 +6014,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O202">
+    <object type="Embed - Text" version="0" id="O205">
       <attribute name="obj_pos">
         <point val="14.2,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0294,5.90291;14.2,6.28291"/>
+        <rectangle val="13.0486,5.9108;14.2,6.2908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].SNISSU#</string>
@@ -5931,7 +6048,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -5939,12 +6056,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O203">
+    <object type="Embed - Text" version="0" id="O206">
       <attribute name="obj_pos">
         <point val="16.15,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4865,5.96545;16.15,6.26545"/>
+        <rectangle val="14.5138,5.97168;16.15,6.27168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].SKINGK#</string>
@@ -5973,7 +6090,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -5981,12 +6098,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O204">
+    <object type="Embed - Text" version="0" id="O207">
       <attribute name="obj_pos">
         <point val="18.1,6.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4365,5.96545;18.1,6.26545"/>
+        <rectangle val="16.4638,5.97168;18.1,6.27168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].SFTNGK#</string>
@@ -6015,7 +6132,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -6023,12 +6140,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O205">
+    <object type="Embed - Text" version="0" id="O208">
       <attribute name="obj_pos">
         <point val="4.85,7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,6.70291;4.85,7.08291"/>
+        <rectangle val="3.6986,6.7108;4.85,7.0908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[1].KENSU#</string>
@@ -6057,7 +6174,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6065,12 +6182,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O206">
+    <object type="Embed - Text" version="0" id="O209">
       <attribute name="obj_pos">
         <point val="6.3,7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,6.70291;6.3,7.08291"/>
+        <rectangle val="5.1486,6.7108;6.3,7.0908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[1].NISSU#</string>
@@ -6099,7 +6216,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6107,12 +6224,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O207">
+    <object type="Embed - Text" version="0" id="O210">
       <attribute name="obj_pos">
         <point val="8.75,7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,6.70291;8.75,7.08291"/>
+        <rectangle val="6.67748,6.7108;8.75,7.0908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[1].TENSU#</string>
@@ -6141,7 +6258,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6149,12 +6266,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O208">
+    <object type="Embed - Text" version="0" id="O211">
       <attribute name="obj_pos">
         <point val="11.325,7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,6.70291;11.325,7.08291"/>
+        <rectangle val="9.25248,6.7108;11.325,7.0908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[0].NYUGAI-TBL[1].ITBFTN#</string>
@@ -6183,7 +6300,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6191,12 +6308,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O209">
+    <object type="Embed - Text" version="0" id="O212">
       <attribute name="obj_pos">
         <point val="4.85,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,7.50291;4.85,7.88291"/>
+        <rectangle val="3.6986,7.5108;4.85,7.8908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[0].KENSU#</string>
@@ -6225,7 +6342,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6233,12 +6350,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O210">
+    <object type="Embed - Text" version="0" id="O213">
       <attribute name="obj_pos">
         <point val="6.3,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,7.50291;6.3,7.88291"/>
+        <rectangle val="5.1486,7.5108;6.3,7.8908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[0].NISSU#</string>
@@ -6267,7 +6384,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6275,12 +6392,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O211">
+    <object type="Embed - Text" version="0" id="O214">
       <attribute name="obj_pos">
         <point val="8.75,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,7.50291;8.75,7.88291"/>
+        <rectangle val="6.67748,7.5108;8.75,7.8908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[0].TENSU#</string>
@@ -6309,7 +6426,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6317,12 +6434,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O212">
+    <object type="Embed - Text" version="0" id="O215">
       <attribute name="obj_pos">
         <point val="11.325,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,7.50291;11.325,7.88291"/>
+        <rectangle val="9.25248,7.5108;11.325,7.8908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[0].ITBFTN#</string>
@@ -6351,7 +6468,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6359,12 +6476,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O213">
+    <object type="Embed - Text" version="0" id="O216">
       <attribute name="obj_pos">
         <point val="12.75,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5794,7.50291;12.75,7.88291"/>
+        <rectangle val="11.5986,7.5108;12.75,7.8908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].SKENSU#</string>
@@ -6393,7 +6510,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6401,12 +6518,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O214">
+    <object type="Embed - Text" version="0" id="O217">
       <attribute name="obj_pos">
         <point val="14.2,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0294,7.50291;14.2,7.88291"/>
+        <rectangle val="13.0486,7.5108;14.2,7.8908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].SNISSU#</string>
@@ -6435,7 +6552,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6443,12 +6560,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O215">
+    <object type="Embed - Text" version="0" id="O218">
       <attribute name="obj_pos">
         <point val="16.15,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4865,7.56545;16.15,7.86545"/>
+        <rectangle val="14.5138,7.57168;16.15,7.87168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].SKINGK#</string>
@@ -6477,7 +6594,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -6485,12 +6602,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O216">
+    <object type="Embed - Text" version="0" id="O219">
       <attribute name="obj_pos">
         <point val="18.1,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4365,7.56545;18.1,7.86545"/>
+        <rectangle val="16.4638,7.57168;18.1,7.87168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].SFTNGK#</string>
@@ -6519,7 +6636,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -6527,12 +6644,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O217">
+    <object type="Embed - Text" version="0" id="O220">
       <attribute name="obj_pos">
         <point val="4.85,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,8.30291;4.85,8.68291"/>
+        <rectangle val="3.6986,8.3108;4.85,8.6908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[1].KENSU#</string>
@@ -6561,7 +6678,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6569,12 +6686,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O218">
+    <object type="Embed - Text" version="0" id="O221">
       <attribute name="obj_pos">
         <point val="6.3,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,8.30291;6.3,8.68291"/>
+        <rectangle val="5.1486,8.3108;6.3,8.6908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[1].NISSU#</string>
@@ -6603,7 +6720,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6611,12 +6728,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O219">
+    <object type="Embed - Text" version="0" id="O222">
       <attribute name="obj_pos">
         <point val="8.75,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,8.30291;8.75,8.68291"/>
+        <rectangle val="6.67748,8.3108;8.75,8.6908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[1].TENSU#</string>
@@ -6645,7 +6762,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6653,12 +6770,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O220">
+    <object type="Embed - Text" version="0" id="O223">
       <attribute name="obj_pos">
         <point val="11.325,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,8.30291;11.325,8.68291"/>
+        <rectangle val="9.25248,8.3108;11.325,8.6908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA1[1].NYUGAI-TBL[1].ITBFTN#</string>
@@ -6687,7 +6804,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6695,12 +6812,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O221">
+    <object type="Embed - Text" version="0" id="O224">
       <attribute name="obj_pos">
         <point val="4.85,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,10.6529;4.85,11.0329"/>
+        <rectangle val="3.6986,10.6608;4.85,11.0408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[0].K-KENSU#</string>
@@ -6729,7 +6846,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6737,12 +6854,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O222">
+    <object type="Embed - Text" version="0" id="O225">
       <attribute name="obj_pos">
         <point val="6.3,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,10.6529;6.3,11.0329"/>
+        <rectangle val="5.1486,10.6608;6.3,11.0408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[0].K-NISSU#</string>
@@ -6771,7 +6888,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6779,12 +6896,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O223">
+    <object type="Embed - Text" version="0" id="O226">
       <attribute name="obj_pos">
         <point val="8.75,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,10.6529;8.75,11.0329"/>
+        <rectangle val="6.67748,10.6608;8.75,11.0408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[0].K-TENSU#</string>
@@ -6813,7 +6930,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6821,12 +6938,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O224">
+    <object type="Embed - Text" version="0" id="O227">
       <attribute name="obj_pos">
         <point val="11.325,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,10.6529;11.325,11.0329"/>
+        <rectangle val="9.25248,10.6608;11.325,11.0408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[0].K-ITBFTN#</string>
@@ -6855,7 +6972,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6863,12 +6980,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O225">
+    <object type="Embed - Text" version="0" id="O228">
       <attribute name="obj_pos">
         <point val="12.75,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5794,10.6529;12.75,11.0329"/>
+        <rectangle val="11.5986,10.6608;12.75,11.0408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].K-SKENSU#</string>
@@ -6897,7 +7014,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6905,12 +7022,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O226">
+    <object type="Embed - Text" version="0" id="O229">
       <attribute name="obj_pos">
         <point val="14.2,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0294,10.6529;14.2,11.0329"/>
+        <rectangle val="13.0486,10.6608;14.2,11.0408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].K-SNISSU#</string>
@@ -6939,7 +7056,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -6947,12 +7064,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O227">
+    <object type="Embed - Text" version="0" id="O230">
       <attribute name="obj_pos">
         <point val="16.15,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4865,10.7155;16.15,11.0155"/>
+        <rectangle val="14.5138,10.7217;16.15,11.0217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].K-SKINGK#</string>
@@ -6981,7 +7098,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -6989,12 +7106,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O228">
+    <object type="Embed - Text" version="0" id="O231">
       <attribute name="obj_pos">
         <point val="18.1,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4365,10.7155;18.1,11.0155"/>
+        <rectangle val="16.4638,10.7217;18.1,11.0217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].K-SFTNGK#</string>
@@ -7023,7 +7140,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -7031,12 +7148,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O229">
+    <object type="Embed - Text" version="0" id="O232">
       <attribute name="obj_pos">
         <point val="4.85,11.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,11.3529;4.85,11.7329"/>
+        <rectangle val="3.6986,11.3608;4.85,11.7408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[1].K-KENSU#</string>
@@ -7065,7 +7182,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7073,12 +7190,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O230">
+    <object type="Embed - Text" version="0" id="O233">
       <attribute name="obj_pos">
         <point val="6.3,11.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,11.3529;6.3,11.7329"/>
+        <rectangle val="5.1486,11.3608;6.3,11.7408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[1].K-NISSU#</string>
@@ -7107,7 +7224,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7115,12 +7232,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O231">
+    <object type="Embed - Text" version="0" id="O234">
       <attribute name="obj_pos">
         <point val="8.75,11.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,11.3529;8.75,11.7329"/>
+        <rectangle val="6.67748,11.3608;8.75,11.7408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[1].K-TENSU#</string>
@@ -7149,7 +7266,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7157,12 +7274,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O232">
+    <object type="Embed - Text" version="0" id="O235">
       <attribute name="obj_pos">
         <point val="11.325,11.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,11.3529;11.325,11.7329"/>
+        <rectangle val="9.25248,11.3608;11.325,11.7408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].NYUGAIKBN[1].K-ITBFTN#</string>
@@ -7191,7 +7308,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7199,12 +7316,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O233">
+    <object type="Embed - Text" version="0" id="O236">
       <attribute name="obj_pos">
         <point val="4.85,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,12.0529;4.85,12.4329"/>
+        <rectangle val="3.6986,12.0608;4.85,12.4408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[0].K-KENSU#</string>
@@ -7233,7 +7350,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7241,12 +7358,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O234">
+    <object type="Embed - Text" version="0" id="O237">
       <attribute name="obj_pos">
         <point val="6.3,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,12.0529;6.3,12.4329"/>
+        <rectangle val="5.1486,12.0608;6.3,12.4408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[0].K-NISSU#</string>
@@ -7275,7 +7392,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7283,12 +7400,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O235">
+    <object type="Embed - Text" version="0" id="O238">
       <attribute name="obj_pos">
         <point val="8.75,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,12.0529;8.75,12.4329"/>
+        <rectangle val="6.67748,12.0608;8.75,12.4408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[0].K-TENSU#</string>
@@ -7317,7 +7434,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7325,12 +7442,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O236">
+    <object type="Embed - Text" version="0" id="O239">
       <attribute name="obj_pos">
         <point val="11.325,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,12.0529;11.325,12.4329"/>
+        <rectangle val="9.25248,12.0608;11.325,12.4408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[0].K-ITBFTN#</string>
@@ -7359,7 +7476,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7367,12 +7484,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O237">
+    <object type="Embed - Text" version="0" id="O240">
       <attribute name="obj_pos">
         <point val="12.75,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5794,12.0529;12.75,12.4329"/>
+        <rectangle val="11.5986,12.0608;12.75,12.4408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].K-SKENSU#</string>
@@ -7401,7 +7518,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7409,12 +7526,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O238">
+    <object type="Embed - Text" version="0" id="O241">
       <attribute name="obj_pos">
         <point val="14.2,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0294,12.0529;14.2,12.4329"/>
+        <rectangle val="13.0486,12.0608;14.2,12.4408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].K-SNISSU#</string>
@@ -7443,7 +7560,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7451,12 +7568,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O239">
+    <object type="Embed - Text" version="0" id="O242">
       <attribute name="obj_pos">
         <point val="16.15,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4865,12.1155;16.15,12.4155"/>
+        <rectangle val="14.5138,12.1217;16.15,12.4217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].K-SKINGK#</string>
@@ -7485,7 +7602,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -7493,12 +7610,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O240">
+    <object type="Embed - Text" version="0" id="O243">
       <attribute name="obj_pos">
         <point val="18.1,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4365,12.1155;18.1,12.4155"/>
+        <rectangle val="16.4638,12.1217;18.1,12.4217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].K-SFTNGK#</string>
@@ -7527,7 +7644,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -7535,12 +7652,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O241">
+    <object type="Embed - Text" version="0" id="O244">
       <attribute name="obj_pos">
         <point val="4.85,13.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,12.7529;4.85,13.1329"/>
+        <rectangle val="3.6986,12.7608;4.85,13.1408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[1].K-KENSU#</string>
@@ -7569,7 +7686,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7577,12 +7694,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O242">
+    <object type="Embed - Text" version="0" id="O245">
       <attribute name="obj_pos">
         <point val="6.3,13.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,12.7529;6.3,13.1329"/>
+        <rectangle val="5.1486,12.7608;6.3,13.1408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[1].K-NISSU#</string>
@@ -7611,7 +7728,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7619,12 +7736,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O243">
+    <object type="Embed - Text" version="0" id="O246">
       <attribute name="obj_pos">
         <point val="8.75,13.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,12.7529;8.75,13.1329"/>
+        <rectangle val="6.67748,12.7608;8.75,13.1408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[1].K-TENSU#</string>
@@ -7653,7 +7770,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7661,12 +7778,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O244">
+    <object type="Embed - Text" version="0" id="O247">
       <attribute name="obj_pos">
         <point val="11.325,13.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,12.7529;11.325,13.1329"/>
+        <rectangle val="9.25248,12.7608;11.325,13.1408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].NYUGAIKBN[1].K-ITBFTN#</string>
@@ -7695,7 +7812,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7703,12 +7820,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O245">
+    <object type="Embed - Text" version="0" id="O248">
       <attribute name="obj_pos">
         <point val="4.85,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,13.4529;4.85,13.8329"/>
+        <rectangle val="3.6986,13.4608;4.85,13.8408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[0].K-KENSU#</string>
@@ -7737,7 +7854,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7745,12 +7862,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O246">
+    <object type="Embed - Text" version="0" id="O249">
       <attribute name="obj_pos">
         <point val="6.3,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,13.4529;6.3,13.8329"/>
+        <rectangle val="5.1486,13.4608;6.3,13.8408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[0].K-NISSU#</string>
@@ -7779,7 +7896,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7787,12 +7904,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O247">
+    <object type="Embed - Text" version="0" id="O250">
       <attribute name="obj_pos">
         <point val="8.75,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,13.4529;8.75,13.8329"/>
+        <rectangle val="6.67748,13.4608;8.75,13.8408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[0].K-TENSU#</string>
@@ -7821,7 +7938,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7829,12 +7946,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O248">
+    <object type="Embed - Text" version="0" id="O251">
       <attribute name="obj_pos">
         <point val="11.325,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,13.4529;11.325,13.8329"/>
+        <rectangle val="9.25248,13.4608;11.325,13.8408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[0].K-ITBFTN#</string>
@@ -7863,7 +7980,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7871,12 +7988,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O249">
+    <object type="Embed - Text" version="0" id="O252">
       <attribute name="obj_pos">
         <point val="12.75,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5794,13.4529;12.75,13.8329"/>
+        <rectangle val="11.5986,13.4608;12.75,13.8408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].K-SKENSU#</string>
@@ -7905,7 +8022,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7913,12 +8030,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O250">
+    <object type="Embed - Text" version="0" id="O253">
       <attribute name="obj_pos">
         <point val="14.2,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0294,13.4529;14.2,13.8329"/>
+        <rectangle val="13.0486,13.4608;14.2,13.8408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].K-SNISSU#</string>
@@ -7947,7 +8064,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -7955,12 +8072,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O251">
+    <object type="Embed - Text" version="0" id="O254">
       <attribute name="obj_pos">
         <point val="16.15,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4865,13.5155;16.15,13.8155"/>
+        <rectangle val="14.5138,13.5217;16.15,13.8217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].K-SKINGK#</string>
@@ -7989,7 +8106,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -7997,12 +8114,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O252">
+    <object type="Embed - Text" version="0" id="O255">
       <attribute name="obj_pos">
         <point val="18.1,13.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4365,13.5155;18.1,13.8155"/>
+        <rectangle val="16.4638,13.5217;18.1,13.8217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].K-SFTNGK#</string>
@@ -8031,7 +8148,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -8039,12 +8156,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O253">
+    <object type="Embed - Text" version="0" id="O256">
       <attribute name="obj_pos">
         <point val="4.85,14.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,14.1529;4.85,14.5329"/>
+        <rectangle val="3.6986,14.1608;4.85,14.5408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[1].K-KENSU#</string>
@@ -8073,7 +8190,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8081,12 +8198,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O254">
+    <object type="Embed - Text" version="0" id="O257">
       <attribute name="obj_pos">
         <point val="6.3,14.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,14.1529;6.3,14.5329"/>
+        <rectangle val="5.1486,14.1608;6.3,14.5408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[1].K-NISSU#</string>
@@ -8115,7 +8232,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8123,12 +8240,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O255">
+    <object type="Embed - Text" version="0" id="O258">
       <attribute name="obj_pos">
         <point val="8.75,14.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,14.1529;8.75,14.5329"/>
+        <rectangle val="6.67748,14.1608;8.75,14.5408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[1].K-TENSU#</string>
@@ -8157,7 +8274,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8165,12 +8282,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O256">
+    <object type="Embed - Text" version="0" id="O259">
       <attribute name="obj_pos">
         <point val="11.325,14.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,14.1529;11.325,14.5329"/>
+        <rectangle val="9.25248,14.1608;11.325,14.5408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].NYUGAIKBN[1].K-ITBFTN#</string>
@@ -8199,7 +8316,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8207,12 +8324,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O257">
+    <object type="Embed - Text" version="0" id="O260">
       <attribute name="obj_pos">
         <point val="4.85,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,14.8529;4.85,15.2329"/>
+        <rectangle val="3.6986,14.8608;4.85,15.2408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[0].K-KENSU#</string>
@@ -8241,7 +8358,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8249,12 +8366,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O258">
+    <object type="Embed - Text" version="0" id="O261">
       <attribute name="obj_pos">
         <point val="6.3,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,14.8529;6.3,15.2329"/>
+        <rectangle val="5.1486,14.8608;6.3,15.2408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[0].K-NISSU#</string>
@@ -8283,7 +8400,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8291,12 +8408,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O259">
+    <object type="Embed - Text" version="0" id="O262">
       <attribute name="obj_pos">
         <point val="8.75,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,14.8529;8.75,15.2329"/>
+        <rectangle val="6.67748,14.8608;8.75,15.2408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[0].K-TENSU#</string>
@@ -8325,7 +8442,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8333,12 +8450,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O260">
+    <object type="Embed - Text" version="0" id="O263">
       <attribute name="obj_pos">
         <point val="11.325,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,14.8529;11.325,15.2329"/>
+        <rectangle val="9.25248,14.8608;11.325,15.2408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[0].K-ITBFTN#</string>
@@ -8367,7 +8484,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8375,12 +8492,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O261">
+    <object type="Embed - Text" version="0" id="O264">
       <attribute name="obj_pos">
         <point val="12.75,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5794,14.8529;12.75,15.2329"/>
+        <rectangle val="11.5986,14.8608;12.75,15.2408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].K-SKENSU#</string>
@@ -8409,7 +8526,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8417,12 +8534,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O262">
+    <object type="Embed - Text" version="0" id="O265">
       <attribute name="obj_pos">
         <point val="14.2,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0294,14.8529;14.2,15.2329"/>
+        <rectangle val="13.0486,14.8608;14.2,15.2408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].K-SNISSU#</string>
@@ -8451,7 +8568,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8459,12 +8576,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O263">
+    <object type="Embed - Text" version="0" id="O266">
       <attribute name="obj_pos">
         <point val="16.15,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4865,14.9155;16.15,15.2155"/>
+        <rectangle val="14.5138,14.9217;16.15,15.2217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].K-SKINGK#</string>
@@ -8493,7 +8610,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -8501,12 +8618,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O264">
+    <object type="Embed - Text" version="0" id="O267">
       <attribute name="obj_pos">
         <point val="18.1,15.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4365,14.9155;18.1,15.2155"/>
+        <rectangle val="16.4638,14.9217;18.1,15.2217"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].K-SFTNGK#</string>
@@ -8535,7 +8652,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.18483"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -8543,12 +8660,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O265">
+    <object type="Embed - Text" version="0" id="O268">
       <attribute name="obj_pos">
         <point val="4.85,15.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.67941,15.5529;4.85,15.9329"/>
+        <rectangle val="3.6986,15.5608;4.85,15.9408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[1].K-KENSU#</string>
@@ -8577,7 +8694,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8585,12 +8702,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O266">
+    <object type="Embed - Text" version="0" id="O269">
       <attribute name="obj_pos">
         <point val="6.3,15.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.12941,15.5529;6.3,15.9329"/>
+        <rectangle val="5.1486,15.5608;6.3,15.9408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[1].K-NISSU#</string>
@@ -8619,7 +8736,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8627,12 +8744,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O267">
+    <object type="Embed - Text" version="0" id="O270">
       <attribute name="obj_pos">
         <point val="8.75,15.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.64294,15.5529;8.75,15.9329"/>
+        <rectangle val="6.67748,15.5608;8.75,15.9408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[1].K-TENSU#</string>
@@ -8661,7 +8778,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8669,12 +8786,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O268">
+    <object type="Embed - Text" version="0" id="O271">
       <attribute name="obj_pos">
         <point val="11.325,15.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.21794,15.5529;11.325,15.9329"/>
+        <rectangle val="9.25248,15.5608;11.325,15.9408"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].NYUGAIKBN[1].K-ITBFTN#</string>
@@ -8703,7 +8820,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.234118"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
@@ -8711,12 +8828,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O269">
+    <object type="Embed - Text" version="0" id="O272">
       <attribute name="obj_pos">
         <point val="14.575,17.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.1087,16.7842;14.575,17.1242"/>
+        <rectangle val="13.1327,16.7912;14.575,17.1312"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TYOKI-TBL[0].TYOKI#</string>
@@ -8745,7 +8862,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.209474"/>
+            <real val="0.20604"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1717"/>
@@ -8753,12 +8870,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O270">
+    <object type="Embed - Text" version="0" id="O273">
       <attribute name="obj_pos">
         <point val="17.675,17.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.2087,16.7842;17.675,17.1242"/>
+        <rectangle val="16.2327,16.7912;17.675,17.1312"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TYOKI-TBL[1].TYOKI#</string>
@@ -8787,7 +8904,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.209474"/>
+            <real val="0.20604"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1717"/>
@@ -8795,12 +8912,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O271">
+    <object type="Embed - Text" version="0" id="O274">
       <attribute name="obj_pos">
         <point val="1.45,11.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.18508,10.8138;1.71492,11.2438"/>
+        <rectangle val="1.18942,10.8227;1.71058,11.2527"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[0].HBTNUM#</string>
@@ -8829,7 +8946,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.264923"/>
+            <real val="0.26058"/>
           </attribute>
           <attribute name="multi">
             <real val="0.21715"/>
@@ -8837,12 +8954,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O272">
+    <object type="Embed - Text" version="0" id="O275">
       <attribute name="obj_pos">
         <point val="1.45,12.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.18508,12.2138;1.71492,12.6438"/>
+        <rectangle val="1.18942,12.2227;1.71058,12.6527"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[1].HBTNUM#</string>
@@ -8871,7 +8988,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.264923"/>
+            <real val="0.26058"/>
           </attribute>
           <attribute name="multi">
             <real val="0.21715"/>
@@ -8879,12 +8996,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O273">
+    <object type="Embed - Text" version="0" id="O276">
       <attribute name="obj_pos">
         <point val="1.45,13.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.18508,13.6138;1.71492,14.0438"/>
+        <rectangle val="1.18942,13.6227;1.71058,14.0527"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[2].HBTNUM#</string>
@@ -8913,7 +9030,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.264923"/>
+            <real val="0.26058"/>
           </attribute>
           <attribute name="multi">
             <real val="0.21715"/>
@@ -8921,12 +9038,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O274">
+    <object type="Embed - Text" version="0" id="O277">
       <attribute name="obj_pos">
         <point val="1.45,15.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.18508,15.0138;1.71492,15.4438"/>
+        <rectangle val="1.18942,15.0227;1.71058,15.4527"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#DATA2[3].HBTNUM#</string>
@@ -8955,7 +9072,7 @@
             <enum val="1"/>
           </attribute>
           <attribute name="single">
-            <real val="0.264923"/>
+            <real val="0.26058"/>
           </attribute>
           <attribute name="multi">
             <real val="0.21715"/>
