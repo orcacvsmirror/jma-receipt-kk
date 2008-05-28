@@ -38,6 +38,8 @@
       *  01.00.05    伊藤    2008/04/26   帳票様式に伴う修正
       *  01.00.06    伊藤    2008/05/03   退職者の集計修正
       *                                   後期高齢者を県毎に印字
+      *  01.00.07    吉川    2008/05/27   県内2枚目に県外の後期高齢者が
+      *                                   印字されてしまう不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -238,6 +240,9 @@
            03  CNT-PAGE              PIC  9(03).
            03  CNT-RECE10            PIC  9(06).
            03  CNT-UPDFILE           PIC  9(06).
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+           03  CNT-KENNAI            PIC  9(02).
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
       *
       *    集計領域
        01  SUM-AREA.
@@ -1048,6 +1053,9 @@
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE       ZERO        TO        FLG-PRINT2
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+           MOVE       ZERO        TO        CNT-KENNAI
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
@@ -1075,6 +1083,10 @@
                END-IF
       *---(01.00.05) LINE ADD START ------------------------------------
                IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+               AND CNT-KENNAI <  2
+      *        県内2枚目以降の後期高齢欄には何も印字しない
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
       *    帳票編集<明細>処理（後期高齢）
                    PERFORM  320-BODY-HEN-KOUKI-SEC
       *    帳票編集<合計>処理（後期高齢）
@@ -1194,6 +1206,14 @@
       *    一時ファイル読込
              PERFORM  900-TMP-READ-SEC
            END-PERFORM
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+      *    県内分の枚数をカウント
+           IF  KEY-OLD  =  1
+               ADD   1  TO  CNT-KENNAI
+           ELSE
+               MOVE  0  TO  CNT-KENNAI
+           END-IF
+      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
       *
            .
        320-BODY-HEN-EXT.
