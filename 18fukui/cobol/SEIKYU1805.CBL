@@ -42,6 +42,7 @@
       *  01.00.06       吉川    2008/02/26   負担金が発生しない場合は
       *                                      印字対象外とする
       *                                      受給者番号でソートする
+      *  01.00.07       吉川    2008/05/16   H20年4月改正対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -293,6 +294,12 @@
       *     COPY  "ORCA-DBPATH".
            COPY  "COMMON-SPA".
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
+      *
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
       *
       *****************************************************************
       *    ファイルレイアウト　領域
@@ -749,6 +756,11 @@
            MOVE   RECE01-SHOKUJIRYOYOHI     TO  MF110-SHOKUJIRYOYOHI
            MOVE   RECE01-SHOKUJIFTN         TO  MF110-SHOKUJIFTN
       ** 2007/08/01 nagaya END
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+           PERFORM  VARYING  IDX  FROM  1  BY  1  UNTIL  IDX  >  5
+             MOVE   RECE01-FLG(IDX)         TO  MF110-FLG(IDX)
+           END-PERFORM
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
            PERFORM  830-CITY-SET-SEC
       *
            MOVE   4                   TO    IDZ
@@ -762,6 +774,16 @@
       *  本入
                 MOVE   1                 TO   MF110-RECEHONKZKKBN
              ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+      *       ６歳未就学前判定
+              IF  MF110-SRYYM  >=  WRK-CONS-SRYYM-200804
+                IF  MF110-FLG (1)   =  1
+                   MOVE    3             TO   MF110-RECEHONKZKKBN
+                ELSE
+                   MOVE    5             TO   MF110-RECEHONKZKKBN
+                END-IF
+              ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
                 IF  WRK-AGE-YY    <   3
       *  三入
                   MOVE   3               TO   MF110-RECEHONKZKKBN
@@ -769,7 +791,29 @@
       *  家入
                   MOVE   5               TO   MF110-RECEHONKZKKBN
                 END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+              END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
              END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+             IF  MF110-SRYYM  >=  WRK-CONS-SRYYM-200804
+      *        後期高齢者判定
+               IF MF110-HKNNUM  =  "039"  OR  "040"
+                 IF  MF110-KYURATE  =  10
+                     MOVE   7             TO   MF110-RECEHONKZKKBN
+                 ELSE
+                     MOVE   9             TO   MF110-RECEHONKZKKBN
+                 END-IF
+               ELSE
+                 IF  WRK-AGE-YY  >=  70
+                   IF  MF110-HOJOKBN  =  9
+                     MOVE   7             TO   MF110-RECEHONKZKKBN
+                   ELSE
+                     MOVE   9             TO   MF110-RECEHONKZKKBN
+                   END-IF
+                 END-IF
+             ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
       ** 2007/08/01 nagaya  START 本人家族区分振り分け修正
              IF MF110-RJNHKNNUM  = 027
                 COMPUTE  WRK-Z2  =  ( 100   -   MF110-KYURATE )  /  10
@@ -791,6 +835,9 @@
                       MOVE   9                  TO   MF110-RECEHONKZKKBN
                 END-EVALUATE
              END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+             END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
       *修正前記述（コメント化）
       *       IF  MF110-RJNHKNNUM   NOT   =   "027"
       *          EVALUATE  MF110-HOJOKBN
@@ -808,6 +855,16 @@
       *  本外
                 MOVE   2                  TO   MF110-RECEHONKZKKBN
              ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+      *       ６歳未就学前判定
+              IF  MF110-SRYYM  >=  WRK-CONS-SRYYM-200804
+                IF  MF110-FLG (1)   =  1
+                   MOVE    4               TO   MF110-RECEHONKZKKBN
+                ELSE
+                   MOVE    6               TO   MF110-RECEHONKZKKBN
+                END-IF
+              ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
                 IF  WRK-AGE-YY    <   3
       *  三外
                    MOVE   4                TO   MF110-RECEHONKZKKBN
@@ -815,7 +872,29 @@
       *  家外
                    MOVE   6                TO   MF110-RECEHONKZKKBN
                 END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+              END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
              END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+             IF  MF110-SRYYM  >=  WRK-CONS-SRYYM-200804
+      *        後期高齢者判定
+               IF MF110-HKNNUM  =  "039"  OR  "040"
+                 IF  MF110-KYURATE  =  10
+                     MOVE     8             TO   MF110-RECEHONKZKKBN
+                 ELSE
+                     MOVE     0             TO   MF110-RECEHONKZKKBN
+                 END-IF
+               ELSE
+                 IF  WRK-AGE-YY  >=  70
+                   IF  MF110-HOJOKBN  =  9
+                     MOVE     8             TO   MF110-RECEHONKZKKBN
+                   ELSE
+                     MOVE     0             TO   MF110-RECEHONKZKKBN
+                   END-IF
+                 END-IF
+             ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
       ** 2007/08/01 nagaya START 本人家族区分振り分け修正
              IF MF110-RJNHKNNUM  = 027
                 COMPUTE  WRK-Z2  =  ( 100   -   MF110-KYURATE )  /  10
@@ -837,6 +916,9 @@
                       MOVE   0                  TO   MF110-RECEHONKZKKBN
                 END-EVALUATE
              END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+             END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
       *修正前記述（コメント化）
       *       IF  MF110-RJNHKNNUM   NOT   =   "027"
       *          EVALUATE  MF110-HOJOKBN
@@ -1173,8 +1255,19 @@
              MOVE  MF110-CHOKIKBN       TO    WRK-Z1
              MOVE  WRK-Z1               TO    SC1805-CHOKI (IDX1)
       *　給付割合
-             COMPUTE  WRK-Z2  =  ( 100   -   MF110-KYURATE )  /  10
-             MOVE  WRK-Z2               TO    SC1805-KYUFURATE (IDX1)
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+      *      前期高齢特例措置か
+             IF   MF110-SRYYM  >=  WRK-CONS-SRYYM-200804
+             AND  MF110-FLG (2)  =  1
+                  MOVE  8               TO    WRK-Z2
+                  MOVE  WRK-Z2          TO    SC1805-KYUFURATE (IDX1)
+             ELSE
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
+               COMPUTE  WRK-Z2  =  ( 100   -   MF110-KYURATE )  /  10
+               MOVE  WRK-Z2             TO    SC1805-KYUFURATE (IDX1)
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
+             END-IF
+      *=== H20年4月改正対応 by Yoshikawa(2008/05/16) end
       *　日数
              MOVE  MF110-JNISSU         TO    WRK-Z2
              MOVE  WRK-Z2               TO    SC1805-SRYONISSU (IDX1)
