@@ -46,21 +46,21 @@ RENNUM=0
         fi
 
 ##      ÊÖÌáÊ¬¡ÊÆÃÊÌÎÅÍÜÈñ¡Ë
-        if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
-            RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${16} > ${LOG_FILE}-4.log
-            if  [ -e ${16} ]; then
-                exit
-            fi
-        fi
+##        if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
+##            RENNUM=$(expr $RENNUM + 1) 
+##            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${16} > ${LOG_FILE}-4.log
+##            if  [ -e ${16} ]; then
+##                exit
+##            fi
+##        fi
 ##      Åö·î¡¦·îÃÙ¤ìÊ¬¡ÊÆÃÊÌÎÅÍÜÈñ¡Ë
-        if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
-            RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${16} > ${LOG_FILE}-3.log
-            if  [ -e ${16} ]; then
-                exit
-            fi
-        fi
+##        if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
+##            RENNUM=$(expr $RENNUM + 1) 
+##            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${16} > ${LOG_FILE}-3.log
+##            if  [ -e ${16} ]; then
+##                exit
+##            fi
+##        fi
         
 	$DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

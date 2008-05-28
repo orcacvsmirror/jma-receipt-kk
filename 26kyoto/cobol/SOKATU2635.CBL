@@ -27,6 +27,10 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/04/29  診療実日数は印字しない
+      *                                  保険者名はマスタから取得しない
+      *                                  医療機関コード取得先変更
+      *                                  特別療養費は指定の場所に印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -208,10 +212,14 @@
                        09  SUM-TAKOH           PIC  9(02).
                        09  SUM-TYOKI           PIC  9(02).
                        09  SUM-GENBAKU         PIC  9(02).
-                       09  SUM-S-KENSU             PIC  9(06).
-                       09  SUM-S-NISSU             PIC  9(06).
-                       09  SUM-S-KINGK             PIC  9(10).
-                       09  SUM-S-FTNGK             PIC  9(10).
+                       09  SUM-S-KENSU         PIC  9(06).
+                       09  SUM-S-NISSU         PIC  9(06).
+                       09  SUM-S-KINGK         PIC  9(10).
+                       09  SUM-S-FTNGK         PIC  9(10).
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+               05  SUM-T-KENSU                 PIC  9(06).
+               05  SUM-T-TENSU                 PIC  9(10).
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
       *
       *    キー領域
        01  KEY-AREA                    VALUE   LOW-VALUE.
@@ -496,17 +504,25 @@
            MOVE    LOW-VALUE           TO  KEY-AREA
            MOVE    1                   TO  WRK-INDEX
       *
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
-           EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
-               WHEN    "1"             ALSO    "1"
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "1"
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
-               WHEN    "1"             ALSO    "2"
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "1"
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE  
+           EVALUATE    WRK-SYOKBN
+               WHEN    "1"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "2"
+               WHEN    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -517,29 +533,31 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *    入院外集計（在総診または在医総を算定したレセ）
-      *    特別療養費の場合は在総診はなし
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
-                                       OR      FLG-ERR      =  1
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+      **    入院外集計（在総診または在医総を算定したレセ）
+      **    特別療養費の場合は在総診はなし
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+      *                                 OR      FLG-ERR      =  1
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
       *     
            MOVE    1                   TO  FLG-END
       *
@@ -565,6 +583,7 @@
       *   印刷処理
           IF      FLG-UPD        =   1
           AND     FLG-ERR        =   ZERO
+               DISPLAY "HAHAHAHAHAHHA"
                PERFORM 2002-PRINT-SEC
           END-IF
            .
@@ -602,11 +621,22 @@
                    MOVE    2                   TO  IDX1
            END-EVALUATE
       *
-           PERFORM 20011-HKN-SYUKEI-SEC
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+      *    特別療養費
+           IF  RECE10-HKNNUM  =  "040"
+               ADD  1                          TO  SUM-T-KENSU
+               ADD  RECE10-TOTALTEN(1)         TO  SUM-T-TENSU
       *
-      *    合計分を集計
-           MOVE            3                   TO  IDX1
-           PERFORM 20011-HKN-SYUKEI-SEC
+               MOVE  1                         TO  FLG-UPD
+           ELSE
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+             PERFORM 20011-HKN-SYUKEI-SEC
+      *      合計分を集計
+             MOVE            3                   TO  IDX1
+             PERFORM 20011-HKN-SYUKEI-SEC
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+           END-IF
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -749,8 +779,6 @@
        20021-HEAD-HEN-SEC          SECTION.
       *
            INITIALIZE                      SKT2635
-      **    請求年月日
-      *     MOVE    WRK-SEIYMDWH        TO  SKT2635-SEIYMD
       *    診療年月
            MOVE    WRK-SRYYMWH         TO  SKT2635-SRYYM
       *    郵便番号
@@ -767,20 +795,27 @@
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT2635-TEL
       *    医療機関コード
-           MOVE    SYS-1001-HOSPCDN    TO  SKT2635-HOSPCD
+      *=== 医療機関コード取得先変更 by Yoshikawa(2008/04/29) start
+      *     MOVE    SYS-1001-HOSPCDN    TO  SKT2635-HOSPCD
+           MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT      TO  SKT2635-HOSPCD
+      *=== 医療機関コード取得先変更 by Yoshikawa(2008/04/29) end
+      *=== 保険者名はマスタから取得しない by Yoshikawa(2008/04/29) start
       *    保険者名
-           INITIALIZE                      HKNJAINF-REC
-           MOVE    SPA-HOSPNUM         TO  HKNJA-HOSPNUM
-           MOVE    "39"                TO  HKNJA-HKNJANUM(1:2)
-           MOVE    WRK-HKNJANUM        TO  HKNJA-HKNJANUM(3:6)
-           MOVE    HKNJAINF-REC        TO  MCPDATA-REC
-           PERFORM 900-HKNJAINF-INV-SEC
-           IF      FLG-HKNJAINF        =   ZERO
-               STRING  HKNJA-HKNJANAME     DELIMITED  BY  SPACE
-                       "　様"              DELIMITED  BY  SIZE
-                                           INTO  SKT2635-HKNJANAME
-               END-STRING
-           END-IF
+      *     INITIALIZE                      HKNJAINF-REC
+      *     MOVE    SPA-HOSPNUM         TO  HKNJA-HOSPNUM
+      *     MOVE    "39"                TO  HKNJA-HKNJANUM(1:2)
+      *     MOVE    WRK-HKNJANUM        TO  HKNJA-HKNJANUM(3:6)
+      *     MOVE    HKNJAINF-REC        TO  MCPDATA-REC
+      *     PERFORM 900-HKNJAINF-INV-SEC
+      *     IF      FLG-HKNJAINF        =   ZERO
+      *         STRING  HKNJA-HKNJANAME     DELIMITED  BY  SPACE
+      *                 "　様"              DELIMITED  BY  SIZE
+      *                                     INTO  SKT2635-HKNJANAME
+      *         END-STRING
+      *     END-IF
+      *=== 保険者名はマスタから取得しない by Yoshikawa(2008/04/29) end
       *
            .
        20021-HEAD-HEN-EXT.
@@ -801,9 +836,11 @@
       *    療養の給付：件数
                MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z6
                MOVE  WRK-Z6              TO  SKT2635-KENSU(IDX IDY)
-      *    療養の給付：診療実日数
-               MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5
-               MOVE  WRK-Z5              TO  SKT2635-NISSU(IDX IDY)
+      *=== 診療実日数は印字しない by Yoshikawa(2008/04/29) start
+      **    療養の給付：診療実日数
+      *         MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT2635-NISSU(IDX IDY)
+      *=== 診療実日数は印字しない by Yoshikawa(2008/04/29) end
       *    療養の給付：点数
                MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT2635-TENSU(IDX IDY)
@@ -828,6 +865,14 @@
       *    食事療養：標準負担額
                MOVE  SUM-S-FTNGK(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9               TO  SKT2635-S-FTNGK(IDX IDY)
+      *=== 特別療養費対応 by Yoshikawa(2008/04/29) start
+      *    特別療養費：件数
+               MOVE  SUM-T-KENSU          TO  WRK-Z6
+               MOVE  WRK-Z6               TO  SKT2635-T-KENSU
+      *    特別療養費：点数
+               MOVE  SUM-T-TENSU          TO  WRK-Z9
+               MOVE  WRK-Z9               TO  SKT2635-T-TENSU
+      *=== 特別療養費対応 by Yoshikawa(2008/04/29) end
       *
              END-PERFORM
            END-PERFORM
@@ -1087,13 +1132,17 @@
                MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
                MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
            END-IF
-           IF      WRK-PARA-SYOKBN1    =   "1"
-               MOVE    "039"               TO  RECE10-HKNNUM-S
-                                               RECE10-HKNNUM
-           ELSE 
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+      *     IF      WRK-PARA-SYOKBN1    =   "1"
+      *         MOVE    "039"               TO  RECE10-HKNNUM-S
+      *                                         RECE10-HKNNUM
+      *     ELSE 
+      *         MOVE    "040"               TO  RECE10-HKNNUM-S
+      *                                         RECE10-HKNNUM
+      *     END-IF
+               MOVE    "039"               TO  RECE10-HKNNUM
                MOVE    "040"               TO  RECE10-HKNNUM-S
-                                               RECE10-HKNNUM
-           END-IF
+      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
       *
       *###
            DISPLAY "SYOKBN=" WRK-SYOKBN " SYOKBN1=" WRK-PARA-SYOKBN1
@@ -1146,7 +1195,7 @@
                    PERFORM  900-SEIKYU-READ-SEC
                END-IF   
       *        キーに県番号を格納
-               MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
+               MOVE    RECE10-HKNJANUM(3:2)  TO  KEY-N-HKNJANUM
                ADD     1                     TO  CNT-RECE10   
       *         
       *         
