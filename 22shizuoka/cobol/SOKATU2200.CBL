@@ -35,6 +35,9 @@
       *                                   °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *              ÆâÅÄ    2007/10/23   ¹ç·×Íó¤ÏºÇ½ª¥Ú¡¼¥¸¤Î¤ß¤Ë¹ç·×¤ò°õ»ú
       *  01.00.04    ÆâÅÄ    2007/11/16   µìÉÍ¾¾»Ô¤âÉÍ¾¾»Ô¤Ç¤Þ¤È¤á¤ë
+      *  01.00.05    °ËÆ£    2008/04/26   Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
+      *  01.00.06    °ËÆ£    2008/05/03   Âà¿¦¼Ô¤Î½¸·×½¤Àµ
+      *                                   ¸å´ü¹âÎð¼Ô¤ò¸©Ëè¤Ë°õ»ú
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -48,6 +51,15 @@
                                    ACCESS  MODE    IS  DYNAMIC
                                    RECORD  KEY     IS  SKT2200TMP-KEY
                                    FILE    STATUS  IS  STS-SKT2200.
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *
+      *    Áí³çÉ½°ì»þ¥Õ¥¡¥¤¥ë¡Ê¸å´ü¹âÎð¡Ë
+           SELECT  SKT2205TMP-FILE   ASSIGN    SKT2205TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT2205TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT22002.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
 006900*    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë
            SELECT  UPD-FILE        ASSIGN  RECEUPD
@@ -68,6 +80,12 @@
        FD  SKT2200TMP-FILE.
            COPY    "CPSKT2200TMP.INC".
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    Áí³çÉ½°ì»þ¥Õ¥¡¥¤¥ë¡Ê¸å´ü¹âÎð¡Ë
+       FD  SKT2205TMP-FILE.
+           COPY    "CPSKT2205TMP.INC".
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
 006900*    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
@@ -90,6 +108,12 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //SKT2200TP//.
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    Áí³çÉ½°ì»þ¥Õ¥¡¥¤¥ë Ì¾¾ÎÎÎ°è 
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT2205TP//.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë Ì¾¾ÎÎÎ°è 
            COPY    "CPCOMMONDAT2.INC"
@@ -120,6 +144,9 @@
            03  STS-RECE10          PIC X(02).
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  STS-SKT22002        PIC X(02).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ¥Õ¥é¥°ÎÎ°è
        01  FLG-AREA.
@@ -132,6 +159,11 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  FLG-PRINT2          PIC 9(01).
+           03  FLG-KOUKI           PIC 9(01).
+           03  FLG-SKT2205TMP     PIC 9(01).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -183,6 +215,12 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *****
            03  WRK-PATH              PIC X(50).
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  WRK-PATH2               PIC X(50).
+           03  WRK-HKNNUM              PIC X(03).
+           03  WRK-TODOUHUKEN          PIC X(100).
+           03  WRK-RETSU               PIC 9(02).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    °åÎÅµ¡´Ø¾ðÊó
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -209,6 +247,14 @@
                    07  SUM-TENSU     PIC  9(07).
            03  SUM-GKENSU            PIC  9(09).
            03  SUM-GTENSU            PIC  9(10).
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  SUM-SYOKEI-KOUKI-TBL.
+               05  SUM-KOUKI-TBL          OCCURS   26.
+                   07  SUM-KOUKI-KENSU     PIC  9(06).
+                   07  SUM-KOUKI-TENSU     PIC  9(07).
+           03  SUM-KOUKI-GKENSU            PIC  9(09).
+           03  SUM-KOUKI-GTENSU            PIC  9(10).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ¥­¡¼ÍÑ¥¨¥ê¥¢
        01  KEY-AREA  VALUE   LOW-VALUE.
@@ -216,16 +262,34 @@
                05  KEY-N-KBN        PIC  9(01).
            03  KEY-OLD.
                05  KEY-O-KBN        PIC  9(01).
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  KEY-NEW2.
+               05  KEY-N-KBN2       PIC  9(01).
+           03  KEY-OLD2.
+               05  KEY-O-KBN2       PIC  9(01).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) start
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) end
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    ´µ¼Ô
+       01  PTINF-REC.
+           COPY    "CPPTINF.INC".
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    ÊÝ¸±¼Ô¾ðÊó
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
@@ -369,6 +433,11 @@
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) start
            MOVE    WRK-PARA-HOSPNUM        TO  SKT2200TP-HOSPNUM
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) end
+      *---(01.00.05) LINE ADD START ------------------------------------
+           MOVE    "SKT2205"         TO  SKT2205TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID     TO  SKT2205TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM        TO  SKT2205TP-HOSPNUM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID     TO  RECEUPD-TERMID
@@ -469,11 +538,17 @@
       *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
                    MOVE    "key37"        TO  WRK-PATH
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) end
+      *---(01.00.05) LINE ADD START ------------------------------------
+                   MOVE    "key65"     TO  WRK-PATH2
+      *---(01.00.05) LINE ADD END   ------------------------------------
                WHEN    "1"
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) start
       *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
                    MOVE    "key38"        TO  WRK-PATH
       *=== Ver4.0ÂÐ±þ By Yoshikawa(2007/10/03) end
+      *---(01.00.05) LINE ADD START ------------------------------------
+                   MOVE    "key66"     TO  WRK-PATH2
+      *---(01.00.05) LINE ADD END   ------------------------------------
            END-EVALUATE
       ****
       *
@@ -490,6 +565,11 @@
            OPEN     OUTPUT  SKT2200TMP-FILE
            CLOSE            SKT2200TMP-FILE
            OPEN     I-O     SKT2200TMP-FILE
+      *---(01.00.05) LINE ADD START ------------------------------------
+           OPEN     OUTPUT  SKT2205TMP-FILE
+           CLOSE            SKT2205TMP-FILE
+           OPEN     I-O     SKT2205TMP-FILE
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            MOVE     ZERO    TO      FLG-END
            MOVE     ZERO    TO      FLG-UPD
@@ -498,8 +578,27 @@
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+           PERFORM  900-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE     1       TO        FLG-KOUKI
+           MOVE    "039"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOUKI-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "040"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOUKI-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+      *---(01.00.05) LINE ADD END   ------------------------------------
            CLOSE   UPD-FILE
            CLOSE   SKT2200TMP-FILE
+      *---(01.00.05) LINE ADD START ------------------------------------
+           CLOSE   SKT2205TMP-FILE
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            IF  FLG-UPD   =       1
                PERFORM   2002-PRINT-SEC
@@ -598,6 +697,12 @@
                MOVE    1    TO    SKT2200TMP-KUMIAI
              END-IF
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    Ê¿À®£²£°Ç¯£³·î°ÊÁ°¤ÏµìÍÍ¼°
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM        TO  SKT2200TMP-SRYYM
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            PERFORM  800-SKTTMP-READ-SEC
            PERFORM  220-HKN-SYUKEI-SEC
       *
@@ -625,6 +730,62 @@
       *
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ¸å´ü¹âÎðÅÔÆ»ÉÜ¸©ÊÌ½¸·×½èÍý
+      *****************************************************************
+       2001-KOUKI-SYUKEI-SEC               SECTION.
+      *
+      *TMP-FILE ¥­¡¼¥»¥Ã¥È
+      *
+           INITIALIZE       SKT2205TMP-REC
+      *
+      *    ¸©Æâ¡¦¸©³°È½Äê
+      *       IF    RECE10-PREFKBN    =    "1"
+             IF    RECE10-HKNJANUM(3:2)    =    "22"
+               MOVE    1    TO    SKT2205TMP-KBN
+             ELSE
+               MOVE    2    TO    SKT2205TMP-KBN
+             END-IF
+      *       IF    SKT2205TMP-HKNJANUM  =  "133033" OR
+      *                                     "133264" OR
+      *                                     "133298" 
+      *         MOVE    1    TO    SKT2205TMP-KBN
+      *         MOVE    1    TO    SKT2205TMP-KUMIAI
+      *       END-IF
+      *
+      *     MOVE  RECE10-HKNJANUM  TO  SKT2205TMP-HKNJANUM
+           MOVE  RECE10-HKNJANUM(3:2)  TO  SKT2205TMP-HKNJANUM
+      *
+           PERFORM  850-SKTTMP-READ-SEC
+      *
+           PERFORM  220-KOUKI-SYUKEI-SEC
+      *
+      *    ½¸·×¤ÎÂÐ¾Ý¤Ë¤Ê¤é¤Ê¤«¤Ã¤¿¤È¤­
+           IF     FLG-UPD        =       1
+                  PERFORM   240-UPD-FILE-HENSYU-SEC
+      *
+                  PERFORM   950-SEIKYU-READ-SEC
+           ELSE
+                  MOVE      SPACE TO      WRK-RECEERR
+                  STRING    "½¸·×ÂÐ¾Ý³°  ´µ¼ÔÈÖ¹æ¡á"
+                                               DELIMITED  BY  SIZE
+                            RECE10-PTNUM       DELIMITED  BY  SPACE
+                            " ¿ÇÎÅÇ¯·î¡á"      DELIMITED  BY  SIZE
+                            RECE10-SRYYM       DELIMITED  BY  SIZE
+                            " ¥ì¥»¼ïÊÌ¡á"      DELIMITED  BY  SIZE
+                            RECE10-RECESYUBETU DELIMITED  BY  SIZE
+                         INTO                  WRK-RECEERR
+                  END-STRING
+                  PERFORM   500-ERR-HENSYU-SEC
+                  MOVE      1         TO        FLG-END
+           END-IF
+      *
+           .
+      *
+       2001-KOUKI-SYUKEI-EXT.
+           EXIT.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    °ìÈÌÈïÊÝ¸±¼Ô¡¦Âà¿¦¼Ô(ËÜ¿Í¡¦²ÈÂ²)¡¦Ï·¿ÍÊÝ·òÊ¬½¸·×½èÍý
       *****************************************************************
@@ -641,17 +802,30 @@
       *           ELSE
       *             MOVE  1   TO  IDX1
       *           END-IF
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  1   TO  IDX1
-                 ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE  1   TO  IDX1
+      *           ELSE
+      *             MOVE  3   TO  IDX1
+      *           END-IF
+                 IF  RECE10-KYURATE  =  7
                    MOVE  3   TO  IDX1
+                 ELSE
+                   MOVE  1   TO  IDX1
                  END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.01) LINE ADD END   ------------------------------------
                WHEN  RECE10-AGE  >  2
                  MOVE  5     TO  IDX1
                WHEN  OTHER
                  MOVE  7     TO  IDX1
              END-EVALUATE
+      *---(01.00.05) LINE ADD START ------------------------------------
+             IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+             AND  (RECE10-FLG (1)   =  1)
+                 MOVE    7       TO  IDX1
+             END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            ELSE
              IF  RECE10-HONKZKKBN  =  "1"
       *    Ç¯Îð¥Á¥§¥Ã¥¯
@@ -662,11 +836,22 @@
       *           ELSE
       *             MOVE  11  TO  IDX1
       *           END-IF
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  11  TO  IDX1
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE  11  TO  IDX1
+      *           ELSE
+      *             MOVE  13  TO  IDX1
+      *           END-IF
+                 IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+                     IF  RECE10-KYURATE  =  7
+                         MOVE  13  TO  IDX1
+                     ELSE
+                         MOVE  11  TO  IDX1
+                     END-IF
                  ELSE
-                   MOVE  13  TO  IDX1
+                     MOVE  9  TO  IDX1
                  END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.01) LINE ADD END   ------------------------------------
                ELSE
                  MOVE  9     TO  IDX1
@@ -679,23 +864,51 @@
       *           ELSE
       *             MOVE  11  TO  IDX1
       *           END-IF
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  11  TO  IDX1
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE  11  TO  IDX1
+      *           ELSE
+      *             MOVE  13  TO  IDX1
+      *           END-IF
+                 IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+                     IF  RECE10-KYURATE  =  7
+                         MOVE  13  TO  IDX1
+                     ELSE
+                         MOVE  11  TO  IDX1
+                     END-IF
                  ELSE
-                   MOVE  13  TO  IDX1
+                     MOVE  9     TO  IDX1
                  END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.01) LINE ADD START ------------------------------------
                ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *           IF RECE10-AGE  >  2
+      *              MOVE  15    TO  IDX1
+      *           ELSE
+      *              MOVE  17    TO  IDX1
+      *           END-IF
+                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                     MOVE    17      TO  IDX1
+                 ELSE
                  IF RECE10-AGE  >  2
                     MOVE  15    TO  IDX1
                  ELSE
                     MOVE  17    TO  IDX1
                  END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.05) LINE ADD START ------------------------------------
+                 END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
                END-IF
              END-IF
            END-IF
       *
       *    Ï·¿ÍÊÝ·ò½ê»ý¼Ô¤«
+      *---(01.00.05) LINE ADD START ------------------------------------
+           IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *---(01.00.05) LINE ADD END   ------------------------------------
            IF  RECE10-RJNHKNNUM NOT = SPACE
              IF  RECE10-KYURATE  =  9
                MOVE  19      TO  IDX1
@@ -703,6 +916,9 @@
                MOVE  21      TO  IDX1
              END-IF
            END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    Æþ±¡¡¿³°Íè
            IF  RECE10-NYUGAIKBN  =  2
@@ -723,6 +939,37 @@
        220-HKN-SYUKEI-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ¸å´ü¹âÎð¼ÔÊ¬½¸·×½èÍý
+      *****************************************************************
+       220-KOUKI-SYUKEI-SEC               SECTION.
+      *
+      *    ¸å´ü¹âÎð¼Ô¤ò°õ»ú¤¹¤ë¹Ô
+           IF  RECE10-KYURATE  =  7
+               MOVE  25      TO  IDX1
+           ELSE
+               MOVE  23      TO  IDX1
+           END-IF
+      *
+      *    Æþ±¡¡¿³°Íè
+           IF  RECE10-NYUGAIKBN  =  2
+               ADD   1       TO  IDX1
+           END-IF
+      *
+           PERFORM  2201-KOUKI-HENSYU-SEC
+      *
+           IF      FLG-SKT2205TMP  =  1
+                   WRITE    SKT2205TMP-REC
+           ELSE
+                   REWRITE  SKT2205TMP-REC
+           END-IF
+      *
+           MOVE    1               TO  FLG-UPD 
+           .
+       220-KOUKI-SYUKEI-EXT.
+           EXIT.       
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ÊÔ½¸½èÍý
       *****************************************************************
@@ -739,6 +986,24 @@
        2201-HENSYU-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ÊÔ½¸½èÍý¡Ê¸å´ü¹âÎð¡Ë
+      *****************************************************************
+       2201-KOUKI-HENSYU-SEC              SECTION.
+      *
+      *   ·ï¿ô
+          ADD  1  TO  SKT2205TMP-KENSU (IDX1)
+      *
+      *   ÅÀ¿ô
+          COMPUTE  SKT2205TMP-TENSU (IDX1)  =
+                   SKT2205TMP-TENSU (IDX1)  +  RECE10-TOTALTEN (1)
+          .
+      *
+       2201-KOUKI-HENSYU-EXT.
+           EXIT.
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
@@ -775,14 +1040,28 @@
        2002-PRINT-SEC                          SECTION.
       *
            OPEN       INPUT       SKT2200TMP-FILE
+      *---(01.00.05) LINE ADD START ------------------------------------
+           OPEN       INPUT       SKT2205TMP-FILE
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            MOVE       ZERO        TO        FLG-PRINT
+      *---(01.00.05) LINE ADD START ------------------------------------
+           MOVE       ZERO        TO        FLG-PRINT2
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
            PERFORM  900-TMP-READ-SEC
-           MOVE  KEY-NEW  TO  KEY-OLD
       *
-           PERFORM  UNTIL  FLG-PRINT  =  1
+           MOVE  KEY-NEW  TO  KEY-OLD
+      *---(01.00.05) LINE ADD START ------------------------------------
+           PERFORM  950-TMP-READ-SEC
+           MOVE  KEY-NEW2  TO  KEY-OLD2
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     PERFORM  UNTIL  FLG-PRINT  =  1
+           PERFORM  UNTIL  FLG-PRINT  =  1 AND FLG-PRINT2  =  1
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
                PERFORM  310-HEAD-HEN-SEC
@@ -794,12 +1073,26 @@
                IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
                    PERFORM  325-SUM-HEN-SEC
                END-IF
+      *---(01.00.05) LINE ADD START ------------------------------------
+               IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý¡Ê¸å´ü¹âÎð¡Ë
+                   PERFORM  320-BODY-HEN-KOUKI-SEC
+      *    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý¡Ê¸å´ü¹âÎð¡Ë
+                   IF  FLG-PRINT2  =  1  OR  KEY-NEW2  NOT =  KEY-OLD2
+      *         IF  FLG-PRINT2  =  1
+                       PERFORM  325-SUM-HEN-KOUKI-SEC
+                   END-IF
+               END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    Ä¢É¼°õºþ½èÍý
                PERFORM  330-PRINT-OUT-SEC
            END-PERFORM
       *
            CLOSE      SKT2200TMP-FILE
+      *---(01.00.05) LINE ADD START ------------------------------------
+           CLOSE      SKT2205TMP-FILE
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            .
        2002-PRINT-EXT.
@@ -813,6 +1106,16 @@
            INITIALIZE                        SKT2200
       *
       *    ¿ÇÎÅÇ¯·î
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
+           IF  SKT2200TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT2200TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
            MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
       *
       *    °åÎÅµ¡´Ø½»½ê
@@ -848,8 +1151,18 @@
       *****************************************************************
        320-BODY-HEN-SEC               SECTION.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE  6  TO  WRK-RETSU
+           ELSE
+               MOVE  8  TO  WRK-RETSU
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     8  OR
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *              UNTIL    IDX1  >     8  OR
+                    UNTIL    IDX1  >     WRK-RETSU  OR
+      *---(01.00.05) LINE ADD END   ------------------------------------
                              KEY-NEW  NOT =  KEY-OLD  OR
                              FLG-PRINT  =  1
       *    ÊÝ¸±¼ÔÌ¾
@@ -886,6 +1199,55 @@
        320-BODY-HEN-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ¹Ô>½èÍý
+      *****************************************************************
+       320-BODY-HEN-KOUKI-SEC               SECTION.
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     6  OR
+                             KEY-NEW2  NOT =  KEY-OLD2  OR
+                             FLG-PRINT2  =  1
+      *    ÅÔÆ»ÉÜ¸©
+             PERFORM  920-TODOUHUKEN-SET-SEC
+      *
+             PERFORM  VARYING  IDX2  FROM  23  BY  1
+                      UNTIL    IDX2  >     26
+      *    ·ï¿ô
+               MOVE  SKT2205TMP-KENSU (IDX2)  TO  WRK-Z6
+               MOVE  WRK-Z6  TO  SKT2200-KENSU (IDX1 IDX2)
+      *
+      *    ÅÀ¿ô
+               MOVE  SKT2205TMP-TENSU (IDX2)  TO  WRK-Z9
+               MOVE  WRK-Z9  TO  SKT2200-TENSU (IDX1 IDX2)
+      *
+      *    ¾®·×¡§·ï¿ô
+               ADD   SKT2205TMP-KENSU (IDX2)
+                   TO  SUM-KOUKI-KENSU (IDX2)
+      *
+      *    ¾®·×¡§ÅÀ¿ô
+               ADD   SKT2205TMP-TENSU (IDX2)
+                   TO  SUM-KOUKI-TENSU (IDX2)
+      *
+      *    ¹ç·×¡§·ï¿ô
+               ADD   SKT2205TMP-KENSU (IDX2)
+                   TO  SUM-KOUKI-GKENSU
+      *
+      *    ¹ç·×¡§ÅÀ¿ô
+               ADD   SKT2205TMP-TENSU (IDX2)
+                   TO  SUM-KOUKI-GTENSU
+             END-PERFORM
+      *
+      *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
+             PERFORM  950-TMP-READ-SEC
+           END-PERFORM
+      *
+           .
+       320-BODY-HEN-KOUKI-EXT.
+           EXIT.
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý
       *****************************************************************
@@ -909,10 +1271,10 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    ¹ç·×¡§·ï¿ô
              MOVE  SUM-GKENSU          TO  WRK-Z9
-             MOVE  WRK-Z9              TO  SKT2200-GKENSU
+             MOVE  WRK-Z9              TO  SKT2200-GKENSU (1)
       *    ¹ç·×¡§ÅÀ¿ô
              MOVE  SUM-GTENSU          TO  WRK-Z10
-             MOVE  WRK-Z10             TO  SKT2200-GTENSU
+             MOVE  WRK-Z10             TO  SKT2200-GTENSU (1)
       *
              INITIALIZE  SUM-GKENSU
              INITIALIZE  SUM-GTENSU
@@ -924,6 +1286,41 @@
            .
        325-SUM-HEN-EXT.
            EXIT.
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý¡Ê¸å´ü¹âÎð¡Ë
+      *****************************************************************
+       325-SUM-HEN-KOUKI-SEC               SECTION.
+      *
+           PERFORM  VARYING  IDX1  FROM  23  BY  1
+                    UNTIL    IDX1  >     26
+      *    ¾®·×¡§·ï¿ô
+             MOVE  SUM-KOUKI-KENSU (IDX1)  TO  WRK-Z6
+             MOVE  WRK-Z6            TO  SKT2200-G-KENSU (IDX1)
+      *
+      *    ¾®·×¡§ÅÀ¿ô
+             MOVE  SUM-KOUKI-TENSU (IDX1)  TO  WRK-Z9
+             MOVE  WRK-Z9            TO  SKT2200-G-TENSU (IDX1)
+           END-PERFORM
+      *
+           INITIALIZE  SUM-SYOKEI-KOUKI-TBL
+      *
+      *    ¹ç·×¡§·ï¿ô
+             MOVE  SUM-KOUKI-GKENSU          TO  WRK-Z9
+             MOVE  WRK-Z9              TO  SKT2200-GKENSU (2)
+      *    ¹ç·×¡§ÅÀ¿ô
+             MOVE  SUM-KOUKI-GTENSU          TO  WRK-Z10
+             MOVE  WRK-Z10             TO  SKT2200-GTENSU (2)
+      *
+             INITIALIZE  SUM-KOUKI-GKENSU
+             INITIALIZE  SUM-KOUKI-GTENSU
+             MOVE  KEY-NEW2  TO  KEY-OLD2
+      *
+           .
+       325-SUM-HEN-KOUKI-EXT.
+           EXIT.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    Ä¢É¼°õºþ½èÍý
@@ -947,7 +1344,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2200.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2200.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT2200.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT2200o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE    "¹ñÊÝÁí³çÉ½"        TO  SPRT-TITLE
            MOVE    SKT2200             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1093,6 +1497,70 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ÅÔÆ»ÉÜ¸©
+      *****************************************************************
+       920-TODOUHUKEN-SET-SEC  SECTION.
+      *
+      *     EVALUATE  SKT2205TMP-HKNJANUM(3:2)
+           EVALUATE  SKT2205TMP-HKNJANUM
+             WHEN  "01"  MOVE  "ËÌ³¤Æ»"    TO  WRK-TODOUHUKEN
+             WHEN  "02"  MOVE  "ÀÄ¿¹¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "03"  MOVE  "´ä¼ê¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "04"  MOVE  "µÜ¾ë¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "05"  MOVE  "½©ÅÄ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "06"  MOVE  "»³·Á¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "07"  MOVE  "Ê¡Åç¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "08"  MOVE  "°ñ¾ë¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "09"  MOVE  "ÆÊÌÚ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "10"  MOVE  "·²ÇÏ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "11"  MOVE  "ºë¶Ì¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "12"  MOVE  "ÀéÍÕ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "13"  MOVE  "ÅìµþÅÔ"    TO  WRK-TODOUHUKEN
+             WHEN  "14"  MOVE  "¿ÀÆàÀî¸©"  TO  WRK-TODOUHUKEN
+             WHEN  "15"  MOVE  "¿·³ã¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "16"  MOVE  "ÉÙ»³¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "17"  MOVE  "ÀÐÀî¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "18"  MOVE  "Ê¡°æ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "19"  MOVE  "»³Íü¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "20"  MOVE  "Ä¹Ìî¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "21"  MOVE  "´ôÉì¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "22"  MOVE  "ÀÅ²¬¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "23"  MOVE  "°¦ÃÎ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "24"  MOVE  "»°½Å¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "25"  MOVE  "¼¢²ì¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "26"  MOVE  "µþÅÔÉÜ"    TO  WRK-TODOUHUKEN
+             WHEN  "27"  MOVE  "ÂçºåÉÜ"    TO  WRK-TODOUHUKEN
+             WHEN  "28"  MOVE  "Ê¼¸Ë¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "29"  MOVE  "ÆàÎÉ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "30"  MOVE  "ÏÂ²Î»³¸©"  TO  WRK-TODOUHUKEN
+             WHEN  "31"  MOVE  "Ä»¼è¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "32"  MOVE  "Åçº¬¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "33"  MOVE  "²¬»³¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "34"  MOVE  "¹­Åç¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "35"  MOVE  "»³¸ý¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "36"  MOVE  "ÆÁÅç¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "37"  MOVE  "¹áÀî¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "38"  MOVE  "°¦É²¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "39"  MOVE  "¹âÃÎ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "40"  MOVE  "Ê¡²¬¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "41"  MOVE  "º´²ì¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "42"  MOVE  "Ä¹ºê¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "43"  MOVE  "·§ËÜ¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "44"  MOVE  "ÂçÊ¬¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "45"  MOVE  "µÜºê¸©"    TO  WRK-TODOUHUKEN
+             WHEN  "46"  MOVE  "¼¯»ùÅç¸©"  TO  WRK-TODOUHUKEN
+             WHEN  "47"  MOVE  "²­Æì¸©"    TO  WRK-TODOUHUKEN
+           END-EVALUATE
+      *
+           MOVE  WRK-TODOUHUKEN  TO  SKT2200-TODOHUKEN (IDX1)
+           .
+      *
+       920-TDOHUKEN-SET-EXT.
+           EXIT.
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *   ÊÝ¸±¼Ô¾ðÊó¥»¥Ã¥È
       *****************************************************************
@@ -1243,6 +1711,24 @@
        800-SKTTMP-READ-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    Áí³çÉ½°ì»þ¥Õ¥¡¥¤¥ë£Ò£Å£Á£Ä½èÍý
+      *****************************************************************
+       850-SKTTMP-READ-SEC                 SECTION.
+      *
+           READ   SKT2205TMP-FILE
+               INVALID    KEY
+                   MOVE   1         TO  FLG-SKT2205TMP
+               NOT INVALID    KEY
+                   MOVE   ZERO      TO  FLG-SKT2205TMP
+           END-READ
+      *
+           .
+       850-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ÀÁµá¥Þ¥¹¥¿¡¼ÆÉ¹þ
       *****************************************************************
@@ -1396,6 +1882,177 @@
        900-SEIKYU-INV-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ÀÁµá´ÉÍýÆÉ¹þ¡Ê¸å´ü¹âÎð¡Ë
+      *****************************************************************
+       950-SEIKYU-SELECT-SEC             SECTION.
+      *
+      *    ÀÁµá´ÉÍý£Ä£Â¸¡º÷
+           INITIALIZE         RECE10-REC.
+           MOVE   SPA-HOSPNUM             TO  RECE10-HOSPNUM
+           MOVE   LNK-PRTKANRI-SRYYM      TO  RECE10-SKYYM
+           MOVE   WRK-CONS-SRYYM-200804   TO  RECE10-SRYYM
+           MOVE   999999                  TO  RECE10-XXSRYYM
+           MOVE   WRK-HKNNUM              TO  RECE10-HKNNUM-S
+                                              RECE10-HKNNUM
+      *
+      *     IF    WRK-PARA-HKNJANUM  NOT = ZERO
+      *         MOVE    WRK-PARA-HKNJANUM  TO  RECE10-XXSTHKNJANUM
+      *                                        RECE10-XXEDHKNJANUM
+      *     ELSE
+               MOVE    SPACE              TO  RECE10-XXSTHKNJANUM
+               MOVE    "99999999"         TO  RECE10-XXEDHKNJANUM
+      *     END-IF
+      *
+           MOVE    RECE10-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 950-SEIKYU-READ-SEC
+           ELSE
+               MOVE    1                   TO  FLG-END
+               DISPLAY "SELECT ERR"
+           END-IF
+           .
+      *
+       950-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ÀÁµá¥Þ¥¹¥¿¡¼ÆÉ¹þ¡Ê¸å´ü¹âÎð¡Ë
+      *****************************************************************
+       950-SEIKYU-READ-SEC           SECTION.
+      *
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    WRK-PATH2           TO  MCP-PATHNAME
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO            TO  FLG-END
+               MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *        ¥Æ¥¹¥È´µ¼Ô¤Î¤È¤­¤ÏÆÉ¤ßÈô¤Ð¤¹
+               MOVE    SPACE               TO  PTINF-REC
+               INITIALIZE                      PTINF-REC
+               MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
+               MOVE    RECE10-PTID         TO  PTINF-PTID
+               MOVE    PTINF-REC           TO  MCPDATA-REC
+               PERFORM 800-PTINF-READ-SEC
+               IF      FLG-PTINF           =   ZERO
+               AND     PTINF-TSTPTNUMKBN   =   "1"
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF   
+      *         
+               ADD     1                   TO  CNT-RECE10   
+           ELSE
+               MOVE    1               TO  FLG-END
+           END-IF
+           .
+      *
+       950-SEIKYU-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    ÀÁµá´ÉÍý¥¯¥í¡¼¥º
+      *****************************************************************
+       900-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *****************************************************************
+      *    ÀÁµá´ÉÍý¥¯¥í¡¼¥º
+      *****************************************************************
+       950-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH2            TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *****************************************************************
+      *    ´µ¼Ô¥Þ¥¹¥¿ÆÉ¹þ
+      *****************************************************************
+       800-PTINF-READ-SEC         SECTION.
+      *
+           MOVE    "DBSELECT"               TO  MCP-FUNC
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE    PATH-TBL-PTINF-KEY       TO  MCP-PATH
+      *     CALL    "MCPSUB"                USING
+      *                                     MCPAREA
+      *                                     MCPDATA-REC
+           MOVE    "tbl_ptinf"         TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"                  TO  MCP-FUNC
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         MOVE    PATH-TBL-PTINF-KEY         TO  MCP-PATH
+      *         CALL    "MCPSUB"            USING
+      *                                     MCPAREA
+      *                                     MCPDATA-REC
+               MOVE    "tbl_ptinf"     TO  MCP-TABLE
+               MOVE    "key"           TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"     USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-PTINF
+                   MOVE    MCPDATA-REC         TO  PTINF-REC
+               ELSE
+                   MOVE    1                   TO  FLG-PTINF
+                   INITIALIZE                  PTINF-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PTINF
+               INITIALIZE                  PTINF-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"             TO  MCP-FUNC
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE    PATH-TBL-PTINF-KEY          TO  MCP-PATH
+      *     CALL    "MCPSUB"                USING
+      *                                     MCPAREA
+      *                                     MCPDATA-REC
+           MOVE    "tbl_ptinf"         TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+           .
+       800-PTINF-READ-EXT.
+           EXIT.
+      *
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ÀÁµá´ÉÍý£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ëÆÉ¹þ
       *****************************************************************
@@ -1426,6 +2083,23 @@
        900-TMP-READ-EXT.
            EXIT.
       *      
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
+      *****************************************************************
+       950-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT2205TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT2
+               NOT  AT  END
+                   MOVE  SKT2205TMP-KBN  TO  KEY-NEW2
+           END-READ
+           .
+       950-TMP-READ-EXT.
+           EXIT.
+      *      
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *=== ¥·¥¹´É¡Ö1901¡×ÂÐ±þ By Yoshikawa(2007/10/03) start
       *****************************************************************
       *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß

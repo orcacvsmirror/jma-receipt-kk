@@ -34,6 +34,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.04    内田    07/11/16    旧浜松市も浜松市でまとめる
+      *  01.00.05    内田k   08/04/27    帳票様式の変更に伴う修正
+      *  01.00.06    内田    08/05/03    退職家族集計修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -213,6 +215,9 @@
            03  CNT-RECE10          PIC 9(06).
            03  CNT-UPDFILE         PIC 9(06).
            03  CNT-KOH             PIC 9(02).
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  CNT-KOH2            PIC 9(02).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
        01  SORT-AREA.
            03  SORT-TBL.
@@ -233,6 +238,11 @@
            COPY    "COMMON-SPA".
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -553,6 +563,9 @@
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+           PERFORM  900-SEIKYU-CLOSE-SEC
+      *---(01.00.05) LINE ADD END   ------------------------------------
            CLOSE   UPD-FILE
            CLOSE   SKT2210TMP-FILE
       *
@@ -661,15 +674,31 @@
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU        TO  SKT2210TMP-ZAITAKU
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    平成２０年３月以前は旧様式
+           DISPLAY "RECE10-SRYYM"RECE10-SRYYM
+           DISPLAY "WRK-CONS-SRYYM-200804"WRK-CONS-SRYYM-200804
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM          TO  SKT2210TMP-SRYYM
+               DISPLAY "平成２０年３月以前は旧様式"SKT2210TMP-SRYYM
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            PERFORM  900-SKTTMP-READ-SEC
       *
-           PERFORM  210-HKN-SYUKEI-SEC
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     PERFORM  210-HKN-SYUKEI-SEC
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+             PERFORM  210-HKN-SYUKEI-SEC
+           ELSE
+             PERFORM  220-HKN-SYUKEI-SEC
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 230-UPD-FILE-HENSYU-SEC
       *
-               PERFORM 900-SEIKYU-READ-SEC
+                  PERFORM   900-SEIKYU-READ-SEC
            ELSE
                MOVE    SPACE               TO  WRK-RECEERR
                STRING "集計対象外　患者番号＝"     DELIMITED  BY  SIZE
@@ -753,6 +782,9 @@
              IF  RECE10-RJNHKNNUM  NOT =   SPACE
                PERFORM 220-RKOH-SYUKEI-SEC
              ELSE
+      *---(01.00.05) LINE ADD START ------------------------------------
+               MOVE    4    TO    CNT-KOH2
+      *---(01.00.05) LINE ADD END   ------------------------------------
                PERFORM 220-KOH-SYUKEI-SEC
              END-IF
            END-IF
@@ -790,6 +822,106 @@
       *
            .
        210-HKN-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療保険・老人保健分集計処理
+      *****************************************************************
+       220-HKN-SYUKEI-SEC          SECTION.
+      *
+      *    入外区分
+           IF  RECE10-NYUGAIKBN  =  "1"
+             MOVE  1      TO   IDX2
+           ELSE
+             MOVE  2      TO   IDX2
+           END-IF
+      *
+             MOVE    1    TO   SKT2210TMP-PAGE-FLG1
+      *    一般国保
+           IF  RECE10-HKNNUM  =  "060"
+             IF  RECE10-AGE  >= 70
+               IF  RECE10-KYURATE  =  9
+                 MOVE    1     TO    IDX1
+               ELSE
+                 MOVE    2     TO    IDX1
+               END-IF
+             ELSE
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (1)   =  1)
+                   MOVE  4     TO  IDX1
+               ELSE
+                 IF  RECE10-AGE  >= 3
+                   MOVE    3     TO    IDX1
+                 ELSE
+                   MOVE    4     TO    IDX1
+                 END-IF
+               END-IF
+             END-IF
+      *
+           ELSE
+             IF  RECE10-HONKZKKBN  =  "1"
+               MOVE  5    TO   IDX1
+             ELSE
+               IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+               AND  (RECE10-FLG (1)   =  1)
+                  MOVE  7     TO  IDX1
+      *---(01.00.06) LINE ADD START ------------------------------------
+               ELSE
+      *---(01.00.06) LINE ADD END   ------------------------------------
+                 IF  RECE10-AGE  <  3
+                   MOVE  7  TO  IDX1
+                 ELSE
+                   MOVE  6  TO  IDX1
+                 END-IF
+               END-IF
+             END-IF
+           END-IF
+      *
+           PERFORM  2101-SYUKEI-SEC
+      *
+      **    公費負担分
+           IF  RECE10-KOHNUM (1)   NOT =   SPACE
+             IF  RECE10-RJNHKNNUM  NOT =   SPACE
+               PERFORM 220-RKOH-SYUKEI-SEC
+             ELSE
+               MOVE    3    TO    CNT-KOH2
+               PERFORM 220-KOH-SYUKEI-SEC
+             END-IF
+           END-IF
+      *
+      *    長期件数
+           IF  RECE10-ETC-KOHNUM(1) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(2) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(3) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(4) = "972" OR "974"
+             EVALUATE  IDX1
+             WHEN 1 THRU  4
+               ADD     1          TO   SKT2210TMP-TYOGEN(1)
+             WHEN 5 THRU  9
+               ADD     1          TO   SKT2210TMP-TYOGEN(2)
+             WHEN OTHER
+               ADD     1          TO   SKT2210TMP-TYOGEN(3)
+             END-EVALUATE
+           END-IF
+      *
+      *    原爆件数
+           IF  RECE10-ETC-KOHNUM(1) = "019" OR
+               RECE10-ETC-KOHNUM(2) = "019" OR
+               RECE10-ETC-KOHNUM(3) = "019" OR
+               RECE10-ETC-KOHNUM(4) = "019"
+               ADD     1          TO   SKT2210TMP-TYOGEN(4)
+           END-IF
+      *
+           IF  FLG-SKT2210TMP  =  1
+               WRITE    SKT2210TMP-REC
+           ELSE
+               REWRITE  SKT2210TMP-REC
+           END-IF
+      *
+           MOVE    1    TO  FLG-UPD 
+      *
+           .
+       220-HKN-SYUKEI-EXT.
            EXIT.
       *
       *****************************************************************
@@ -848,7 +980,10 @@
        220-KOH-SYUKEI-SEC        SECTION.
       *
            PERFORM VARYING IDX3     FROM    1   BY  1
-                   UNTIL   IDX3     >       4
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *             UNTIL   IDX3     >       4
+                   UNTIL   IDX3     >       CNT-KOH2
+      *---(01.00.05) LINE ADD END   ------------------------------------
                    OR  RECE10-KOHNUM (IDX3) =   SPACE
       *
       *    ０５１と０９１は同じ場所に集計する
@@ -1066,7 +1201,32 @@
       *
            INITIALIZE                        SKT2210
       *    診療年月
-           MOVE    WRK-SRYYMWH           TO  SKT2210-PRTYM
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE    WRK-SRYYMWH           TO  SKT2210-PRTYM
+      *
+           DISPLAY "頭書き時日付"SKT2210TMP-SRYYM
+           IF  SKT2210TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT2210TMP-SRYYM    TO  WRK-SYMD (1:6)
+               DISPLAY "旧"
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+               DISPLAY "新"
+           END-IF
+           MOVE    "01"                TO  WRK-SYMD (7:2)
+           DISPLAY "WRK-SYMD"WRK-SYMD
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+      *     INITIALIZE                      LNK-DAY2-AREA
+      *     MOVE    "21"                TO  LNK-DAY2-IRAI
+      *     MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY2-YMD
+      *     CALL    "ORCSDAY"           USING   STS-AREA-DAY
+      *                                         LNK-DAY2-AREA
+      *     IF      STS-DAY-RC1         =   ZERO 
+      *             MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
+      *     END-IF
+           MOVE    WRK-SRYYMWH      TO  SKT2210-PRTYM
+           DISPLAY "WRK-SRYYMWH"WRK-SRYYMWH
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT2210-SEIYMD
       *    医療機関住所
@@ -1174,7 +1334,10 @@
       *
       *    公費の印字
            PERFORM  VARYING  IDX3  FROM  1  BY  1
-                    UNTIL    IDX3  >     4
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *              UNTIL    IDX3  >     4
+                    UNTIL    IDX3  >     3
+      *---(01.00.05) LINE ADD END   ------------------------------------
                     OR  WRK-CNT1   >     20
                     OR  SKT2210TMP-KOHNUM(WRK-CNT1) = SPACE
              PERFORM  VARYING  IDX2  FROM  1  BY  1
@@ -1237,7 +1400,15 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2210.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD START ------------------------------------
+           DISPLAY "印刷時"WRK-SYMD (1:6)
+           DISPLAY "固定項目"WRK-CONS-SRYYM-200804
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+             MOVE   "SKT2210.red"        TO  SPRT-PRTID
+           ELSE
+             MOVE   "SKT2210o.red"        TO  SPRT-PRTID
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"        TO  SPRT-TITLE
            MOVE    SKT2210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1268,7 +1439,30 @@
       *
            INITIALIZE                        SKT2220
       *    診療年月
-           MOVE    WRK-SRYYMWH           TO  SKT2220-PRTYM
+      *     MOVE    WRK-SRYYMWH           TO  SKT2220-PRTYM
+      *
+           DISPLAY "頭書き時日付"SKT2210TMP-SRYYM
+           IF  SKT2210TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT2210TMP-SRYYM    TO  WRK-SYMD (1:6)
+               DISPLAY "旧"
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+               DISPLAY "新"
+           END-IF
+           MOVE    "01"                TO  WRK-SYMD (7:2)
+           DISPLAY "WRK-SYMD"WRK-SYMD
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+      *     INITIALIZE                      LNK-DAY2-AREA
+      *     MOVE    "21"                TO  LNK-DAY2-IRAI
+      *     MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY2-YMD
+      *     CALL    "ORCSDAY"           USING   STS-AREA-DAY
+      *                                         LNK-DAY2-AREA
+      *     IF      STS-DAY-RC1         =   ZERO 
+      *             MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
+      *     END-IF
+           MOVE    WRK-SRYYMWH     TO  SKT2220-PRTYM
+           DISPLAY "WRK-SRYYMWH"WRK-SRYYMWH
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT2220-SEIYMD
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
@@ -1434,7 +1628,10 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2220.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2220.red"        TO  SPRT-PRTID
+           MOVE   "SKT2220o.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"        TO  SPRT-TITLE
            MOVE    SKT2220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1961,6 +2158,23 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    請求管理クローズ
+      *****************************************************************
+       900-SEIKYU-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           .
+       900-SEIKYU-CLOSE-EXT.
+           EXIT.
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
