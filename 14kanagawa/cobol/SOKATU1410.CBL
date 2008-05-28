@@ -47,6 +47,7 @@
       *                                  医療機関情報を参照
       *  01.00.11    内田    08/04/27    ４月改正に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.12    内田    08/05/20    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -767,11 +768,14 @@
                      MOVE  6     TO  IDX1
                  ELSE
                      IF  RECE10-AGE  >=  3
-                         IF  RECE10-KYURATE  =  7
-                             MOVE  1     TO  IDX1
-                         ELSE
-                             MOVE  2     TO  IDX1
-                         END-IF
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *                   IF  RECE10-KYURATE  =  7
+      *                       MOVE  1     TO  IDX1
+      *                   ELSE
+      *                       MOVE  2     TO  IDX1
+      *                   END-IF
+                         MOVE  1     TO  IDX1
+      *---(01.00.12) LINE ADD END   ------------------------------------
                      ELSE
                          MOVE  6     TO  IDX1
                      END-IF
@@ -1163,45 +1167,78 @@
                WHEN  024   MOVE  11  TO  IDX4
                WHEN  028   MOVE  12  TO  IDX4
                WHEN  029   MOVE  13  TO  IDX4
-               WHEN  142
-               WHEN  141   MOVE  14  TO  IDX4
-               WHEN  051   MOVE  15  TO  IDX4
-               WHEN  091   MOVE  15  TO  IDX4
-               WHEN  052   MOVE  16  TO  IDX4
-               WHEN  053   MOVE  17  TO  IDX4
-               WHEN  066   MOVE  18  TO  IDX4
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *         WHEN  142
+      *         WHEN  141   MOVE  14  TO  IDX4
+      *         WHEN  051   MOVE  15  TO  IDX4
+      *         WHEN  091   MOVE  15  TO  IDX4
+      *         WHEN  052   MOVE  16  TO  IDX4
+      *         WHEN  053   MOVE  17  TO  IDX4
+      *         WHEN  066   MOVE  18  TO  IDX4
       *---(01.00.09) LINE ADD START ------------------------------------
-      *         WHEN  066   MOVE  19  TO  IDX4
-               WHEN  079   MOVE  19  TO  IDX4
+      **         WHEN  066   MOVE  19  TO  IDX4
+      *         WHEN  079   MOVE  19  TO  IDX4
       *---(01.00.09) LINE ADD END   ------------------------------------
-               WHEN  281
-               WHEN  181   MOVE  21  TO  IDX4
-               WHEN  285
-               WHEN  185   MOVE  22  TO  IDX4
+      *         WHEN  281
+      *         WHEN  181   MOVE  21  TO  IDX4
+      *         WHEN  285
+      *         WHEN  185   MOVE  22  TO  IDX4
+      *         WHEN  180
+      *         WHEN  280
+      *           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      *    老人、又は２つの国保組合の場合障老健に分類
+      *             OR  RECE10-HKNJANUM  =  "133033"
+      *             OR  RECE10-HKNJANUM  =  "133298"
+      *             MOVE  20  TO  IDX4
+      *           ELSE
+      *             MOVE  99  TO  IDX4
+      *           END-IF
+      *         WHEN  188   MOVE  23  TO  IDX4
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *         WHEN  289
+      *---(01.00.07) LINE ADD END   ------------------------------------
+      *         WHEN  189   MOVE  24  TO  IDX4*
+      *         WHEN  960
+      *         WHEN  961
+      *         WHEN  962
+      *       WHEN  963   MOVE  28  TO  IDX4
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *         WHEN  038   MOVE  32  TO  IDX4
+      *---(01.00.11) LINE ADD END   ------------------------------------
+      *         WHEN  OTHER MOVE  99  TO  IDX4
+      *---(01.00.05) LINE ADD END   ------------------------------------
+               WHEN  038   MOVE  14  TO  IDX4
+               WHEN  142
+               WHEN  141   MOVE  15  TO  IDX4
+               WHEN  051   MOVE  16  TO  IDX4
+               WHEN  091   MOVE  16  TO  IDX4
+               WHEN  052   MOVE  17  TO  IDX4
+               WHEN  053   MOVE  18  TO  IDX4
+               WHEN  066   MOVE  19  TO  IDX4
+               WHEN  079   MOVE  20  TO  IDX4
                WHEN  180
                WHEN  280
                  IF  RECE10-RJNHKNNUM  NOT =  SPACE
       *    老人、又は２つの国保組合の場合障老健に分類
                    OR  RECE10-HKNJANUM  =  "133033"
                    OR  RECE10-HKNJANUM  =  "133298"
-                   MOVE  20  TO  IDX4
+                   MOVE  21  TO  IDX4
                  ELSE
                    MOVE  99  TO  IDX4
                  END-IF
-               WHEN  188   MOVE  23  TO  IDX4
-      *---(01.00.07) LINE ADD START ------------------------------------
+               WHEN  281
+               WHEN  181   MOVE  22  TO  IDX4
+               WHEN  285
+               WHEN  185   MOVE  23  TO  IDX4
+               WHEN  188   MOVE  24  TO  IDX4
                WHEN  289
-      *---(01.00.07) LINE ADD END   ------------------------------------
-               WHEN  189   MOVE  24  TO  IDX4
+               WHEN  189   MOVE  25  TO  IDX4
 	       WHEN  960
 	       WHEN  961
 	       WHEN  962
-	       WHEN  963   MOVE  28  TO  IDX4
-      *---(01.00.11) LINE ADD START ------------------------------------
-               WHEN  038   MOVE  32  TO  IDX4
-      *---(01.00.11) LINE ADD END   ------------------------------------
+	       WHEN  963   MOVE  29  TO  IDX4
                WHEN  OTHER MOVE  99  TO  IDX4
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.12) LINE ADD END   ------------------------------------
              END-EVALUATE
       *
              IF  IDX4  NOT =  99
@@ -1230,7 +1267,10 @@
                RECE10-ETC-KOHNUM(4)  =  "972"
       *---(01.00.05) LINE ADD START ------------------------------------
       *         ADD   1  TO  SKT1410TMP-K-KENSU (21)
-               ADD   1  TO  SKT1410TMP-K-KENSU (26)
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *         ADD   1  TO  SKT1410TMP-K-KENSU (26)
+               ADD   1  TO  SKT1410TMP-K-KENSU (27)
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *    療養の給付：点数
       *         COMPUTE SKT1410TMP-K-TENSU(21)  =
       *                 SKT1410TMP-K-TENSU(21)  +
@@ -1249,7 +1289,10 @@
                RECE10-ETC-KOHNUM(2)  =  "974" OR
                RECE10-ETC-KOHNUM(3)  =  "974" OR
                RECE10-ETC-KOHNUM(4)  =  "974"
-               ADD   1  TO  SKT1410TMP-K-KENSU (31)
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *         ADD   1  TO  SKT1410TMP-K-KENSU (31)
+               ADD   1  TO  SKT1410TMP-K-KENSU (32)
+      *---(01.00.12) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
       *    老人＋原爆
@@ -1259,7 +1302,10 @@
                 RECE10-ETC-KOHNUM(4)  =  "019" 
       *---(01.00.05) LINE ADD START ------------------------------------
       *         ADD   1  TO  SKT1410TMP-K-KENSU (24)
-               ADD   1  TO  SKT1410TMP-K-KENSU (29)
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *         ADD   1  TO  SKT1410TMP-K-KENSU (29)
+               ADD   1  TO  SKT1410TMP-K-KENSU (30)
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *    療養の給付：点数
       *         COMPUTE SKT1410TMP-K-TENSU(24)  =
       *                 SKT1410TMP-K-TENSU(24)  +
