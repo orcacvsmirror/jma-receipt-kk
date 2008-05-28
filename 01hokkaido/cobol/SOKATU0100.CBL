@@ -50,6 +50,7 @@
       *  01.00.14    内田k  08/04/26    帳票様式の変更に伴う修正
       *                                 SPA-AREA初期化
       *  01.00.15    内田   08/05/02    後期高齢者を障老人欄へ印字
+      *  01.00.16    内田   08/05/28    区分３障の件数集計修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1319,6 +1320,9 @@
              AND  RECE02-ZAITAKU  NOT =  "1"
                IF  RECE02-FTNMONEY (1)  NOT =  ZERO
                  MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+      *---(01.00.16) LINE ADD START ------------------------------------
+                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
+      *---(01.00.16) LINE ADD END   ------------------------------------
       *---(01.00.14) LINE ADD START ------------------------------------
       *           MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-TOTALTEN
                  MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
@@ -1328,6 +1332,9 @@
                  COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
                                           *  RECE02-KYURATE  /  10
                END-IF
+      *---(01.00.16) LINE ADD START ------------------------------------
+               MOVE  2  TO  IDX1
+      *---(01.00.16) LINE ADD END   ------------------------------------
              END-IF
            END-IF
       *---(01.00.12) LINE ADD END   ------------------------------------
