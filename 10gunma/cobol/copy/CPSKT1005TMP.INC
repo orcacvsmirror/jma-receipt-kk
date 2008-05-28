@@ -23,6 +23,7 @@
                05  SKT1005TMP-SYUTURYOKU     PIC  X(01).
                05  SKT1005TMP-HKNJANUM       PIC  X(08).
                05  SKT1005TMP-ZAITAKU        PIC  X(01).
+               05  SKT1005TMP-RATEFLG        PIC  9(01).
                05  SKT1005TMP-KYURATE        PIC  9(02).
            03  SKT1005TMP-NYUGAI-TBL  OCCURS  2.
                05  SKT1005TMP-KENSU          PIC  9(06).

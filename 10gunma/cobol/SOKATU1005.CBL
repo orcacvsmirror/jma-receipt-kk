@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 月次帳票
-      *  コンポーネント名  : 後期高齢者請求書
+      *  コンポーネント名  : 後期高齢者総括表
       *  管理者            : 
       *  作成日付    作業者        記述
       *  08/04/30    内田          新規作成
@@ -29,6 +29,8 @@
       * Maj/Min/Rev   修正者	日付		内容
       *  01.00.01    内田    08/05/02    都道府県名の印字修正
       *                                  群馬県を印字の先頭とする
+      *  01.00.02    内田    08/05/21    同一保険者の場合、９割を先に印字
+      *                                  処理名等を「後期高齢者総括表」へ変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -312,7 +314,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU1005"    TO  JOB-PGID
-           MOVE    "後期高齢者請求書"  TO  JOB-SHELLMSG
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     MOVE    "後期高齢者請求書"  TO  JOB-SHELLMSG
+           MOVE    "後期高齢者総括表"  TO  JOB-SHELLMSG
+      *---(01.00.02) LINE ADD END   ------------------------------------
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -512,6 +517,13 @@
       *    県毎
            MOVE  RECE10-HKNJANUM (1:4)  TO  SKT1005TMP-HKNJANUM
       *
+      *---(01.00.02) LINE ADD START ------------------------------------
+           IF  RECE10-KYURATE  =  9
+               MOVE  1                  TO  SKT1005TMP-RATEFLG
+           ELSE
+               MOVE  2                  TO  SKT1005TMP-RATEFLG
+           END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *    給付割合
            MOVE  RECE10-KYURATE         TO  SKT1005TMP-KYURATE
       *
@@ -734,7 +746,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT1005.red"       TO  SPRT-PRTID
-           MOVE    "後期高齢者請求書"  TO  SPRT-TITLE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     MOVE    "後期高齢者請求書"  TO  SPRT-TITLE
+           MOVE    "後期高齢者総括表"  TO  SPRT-TITLE
+      *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE    SKT1005             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
