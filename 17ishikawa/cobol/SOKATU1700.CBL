@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム修正履歴
       *  [ORCA]ver          日付            内容
+      *  01.00.01    内田    08/05/27    後期高齢者の取得条件修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1185,6 +1186,9 @@
            MOVE   WRK-CONS-SRYYM-200804   TO  RECE10-SRYYM
            MOVE   999999                  TO  RECE10-XXSRYYM
            MOVE   WRK-HKNNUM              TO  RECE10-HKNNUM-S
+      *---(01.00.01) LINE ADD START ------------------------------------
+                                              RECE10-HKNNUM
+      *---(01.00.01) LINE ADD END   ------------------------------------
            MOVE    SPACE              TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"         TO  RECE10-XXEDHKNJANUM
       *
