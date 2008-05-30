@@ -32,6 +32,7 @@
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/04/23    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.03    内田    08/05/28    後期高齢者のみでも印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -237,6 +238,10 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *    暫定処置
+           03  WRK-KENSU           PIC 9(05).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -907,7 +912,14 @@
                PERFORM 310-HEAD-HEN-SEC
       *
       *        帳票編集<明細>処理
-               PERFORM 320-BODY-HEN-SEC
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         PERFORM 320-BODY-HEN-SEC
+               IF  FLG-PRINT  NOT =  1
+                 PERFORM 320-BODY-HEN-SEC
+               ELSE
+                 MOVE  2  TO  KEY-OLD
+               END-IF
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *---(01.00.02) LINE ADD START ------------------------------------
       *        帳票編集<明細>処理（後期高齢）
@@ -994,9 +1006,21 @@
            END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
            IF      SKT2001TMP-GOKEIKBN     =   "1"
+      *---(01.00.03) LINE ADD START ------------------------------------
+             IF  SKT2001TMP-PREFKBN  =  SKT2000TMP-PREFKBN
+      *---(01.00.03) LINE ADD END   ------------------------------------
                MOVE    SKT2001TMP-KENSU    TO  WRK-Z5
                MOVE    WRK-Z5              TO  SKT2000-KGKENSU
                PERFORM 901-TMP-READ-SEC
+      *---(01.00.03) LINE ADD START ------------------------------------
+             ELSE
+               MOVE  SKT2001TMP-KENSU      TO  WRK-KENSU
+               PERFORM 901-TMP-READ-SEC
+             END-IF
+           ELSE
+             MOVE    WRK-KENSU           TO  WRK-Z5
+             MOVE    WRK-Z5              TO  SKT2000-KGKENSU
+      *---(01.00.03) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
