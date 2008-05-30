@@ -31,6 +31,8 @@
       *                                  保険者名はマスタから取得しない
       *                                  医療機関コード取得先変更
       *                                  特別療養費は指定の場所に印字
+      *  01.00.02    吉川    2008/05/12  他公費欄、長期欄、原爆欄の値が
+      *                                  印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -146,6 +148,9 @@
            03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
       *
+      *=== 公費件数欄印字不具合修正 by Yoshikawa(2008/05/12) start
+           03  WRK-Z2              PIC ZZ.
+      *=== 公費件数欄印字不具合修正 by Yoshikawa(2008/05/12) end
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z6              PIC ZZ,ZZZ.
@@ -583,7 +588,6 @@
       *   印刷処理
           IF      FLG-UPD        =   1
           AND     FLG-ERR        =   ZERO
-               DISPLAY "HAHAHAHAHAHHA"
                PERFORM 2002-PRINT-SEC
           END-IF
            .
@@ -847,15 +851,26 @@
       *    療養の給付：一部負担金
                MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT2635-ITBFTN(IDX IDY)
+      *=== 公費件数欄印字不具合修正 by Yoshikawa(2008/05/12) start
+      **    他公費
+      *         MOVE  SUM-TAKOH(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT2635-TAKOH(IDX IDY)
+      **    長期
+      *         MOVE  SUM-TYOKI(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT2635-TYOKI(IDX IDY)
+      **    原爆
+      *         MOVE  SUM-GENBAKU(IDX IDY) TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT2635-GENBAKU(IDX IDY)
       *    他公費
-               MOVE  SUM-TAKOH(IDX IDY)  TO  WRK-Z5
-               MOVE  WRK-Z5              TO  SKT2635-TAKOH(IDX IDY)
+               MOVE  SUM-TAKOH(IDX IDY)  TO  WRK-Z2
+               MOVE  WRK-Z2              TO  SKT2635-TAKOH(IDX IDY)
       *    長期
-               MOVE  SUM-TYOKI(IDX IDY)  TO  WRK-Z5
-               MOVE  WRK-Z5              TO  SKT2635-TYOKI(IDX IDY)
+               MOVE  SUM-TYOKI(IDX IDY)  TO  WRK-Z2
+               MOVE  WRK-Z2              TO  SKT2635-TYOKI(IDX IDY)
       *    原爆
-               MOVE  SUM-GENBAKU(IDX IDY) TO  WRK-Z5
-               MOVE  WRK-Z5              TO  SKT2635-GENBAKU(IDX IDY)
+               MOVE  SUM-GENBAKU(IDX IDY) TO  WRK-Z2
+               MOVE  WRK-Z2              TO  SKT2635-GENBAKU(IDX IDY)
+      *=== 公費件数欄印字不具合修正 by Yoshikawa(2008/05/12) end
       *    食事療養：件数
                MOVE  SUM-S-KENSU(IDX IDY) TO  WRK-Z6
                MOVE  WRK-Z6              TO  SKT2635-S-KENSU(IDX IDY)
