@@ -34,6 +34,7 @@
       *                                  それ以外は印字しない
       *  01.00.03    内田k   08/04/29    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.04    吉川    08/05/29    国組3〜6歳を分けないように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -669,14 +670,33 @@
            MOVE  WRK-HKNJANUM         TO    SKT4300TMP-HKNJANUM
       *
       *    国保組合法定外給付判定
-           IF      WRK-HKNJANUM(3:1)  =     "3"    AND
-                   RECE10-RJNHKNNUM   = SPACE      AND
-                   RECE10-AGE         >      2     AND
-                                      <      70    AND
-                   RECE10-KYURATE     NOT =  7
-             MOVE  RECE10-KYURATE     TO    SKT4300TMP-KYURATE
-           END-IF
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/05/29) start
+      *     IF      WRK-HKNJANUM(3:1)  =     "3"    AND
+      *             RECE10-RJNHKNNUM   = SPACE      AND
+      *             RECE10-AGE         >      2     AND
+      *                                <      70    AND
+      *             RECE10-KYURATE     NOT =  7
+      *       MOVE  RECE10-KYURATE     TO    SKT4300TMP-KYURATE
+      *     END-IF
       *
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+               IF   (WRK-HKNJANUM(3:1)    =   "3" )  AND
+                    (RECE10-RJNHKNNUM     = SPACE )  AND
+                    (RECE10-FLG (1)   NOT =    1  )  AND
+                    (RECE10-AGE           <    70 )  AND
+                    (RECE10-KYURATE   NOT =    7  )
+                 MOVE  RECE10-KYURATE     TO    SKT4300TMP-KYURATE
+               END-IF
+           ELSE
+               IF   (WRK-HKNJANUM(3:1)    =   "3" )  AND
+                    (RECE10-RJNHKNNUM     = SPACE )  AND
+                    (RECE10-AGE           >    2     AND
+                                          <    70 )  AND
+                    (RECE10-KYURATE     NOT =  7  )
+                 MOVE  RECE10-KYURATE     TO    SKT4300TMP-KYURATE
+               END-IF
+           END-IF
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/05/29) end
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE  RECE10-SRYYM        TO  SKT4300TMP-SRYYM
            MOVE  RECE10-SKYYM        TO  SKT4300TMP-SKYYM
