@@ -32,6 +32,10 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/05/01    帳票様式の変更に伴う再作成
+      *  01.00.04    吉川    08/05/29    SPA-AREA初期化
+      *                                  国組3〜6歳を分けないように修正
+      *                                  診療年月の表示修正
+      *                                  旧帳票に値が印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -163,6 +167,9 @@
        01  WRK-AREA.
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
+      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
+           03  WRK-SRYYMWH2        PIC X(16).
+      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) end
       *
       *    ファイル名称用エリア
            03  FILE-NAME        PIC X(512).
@@ -338,6 +345,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/05/29) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/05/29) end
       *
            DISPLAY  "START"
       *
@@ -625,17 +635,36 @@
            END-IF
       *
       *    国保組合判定
-           IF      SKT4320TMP-HKNJANUM(3:1)  =     "3"    AND
-                   RECE10-RJNHKNNUM          =   SPACE    AND
-                   RECE10-AGE                >      2     AND
-                   RECE10-AGE                <      70    AND
-                   RECE10-KYURATE            NOT =  7
-             IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
-             AND  (RECE10-FLG (1)   =  1)
-               CONTINUE
-               MOVE  RECE10-KYURATE     TO    SKT4320TMP-KYURATE
-             END-IF
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/05/29) start
+      *     IF      SKT4320TMP-HKNJANUM(3:1)  =     "3"    AND
+      *             RECE10-RJNHKNNUM          =   SPACE    AND
+      *             RECE10-AGE                >      2     AND
+      *             RECE10-AGE                <      70    AND
+      *             RECE10-KYURATE            NOT =  7
+      *       IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *       AND  (RECE10-FLG (1)   =  1)
+      *         CONTINUE
+      *         MOVE  RECE10-KYURATE     TO    SKT4320TMP-KYURATE
+      *       END-IF
+      *     END-IF
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+               IF   (WRK-HKNJANUM(3:1)    =   "3" )  AND
+                    (RECE10-RJNHKNNUM     = SPACE )  AND
+                    (RECE10-FLG (1)   NOT =    1  )  AND
+                    (RECE10-AGE           <    70 )  AND
+                    (RECE10-KYURATE   NOT =    7  )
+                 MOVE  RECE10-KYURATE     TO    SKT4320TMP-KYURATE
+               END-IF
+           ELSE
+               IF   (WRK-HKNJANUM(3:1)    =   "3" )  AND
+                    (RECE10-RJNHKNNUM     = SPACE )  AND
+                    (RECE10-AGE           >    2     AND
+                                          <    70 )  AND
+                    (RECE10-KYURATE     NOT =  7  )
+                 MOVE  RECE10-KYURATE     TO    SKT4320TMP-KYURATE
+               END-IF
            END-IF
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/05/29) end
       *
       *    出力順設定
            IF     YUSEN-HKNJANUM    =    SKT4320TMP-HKNJANUM
@@ -962,7 +991,10 @@
       *
            ADD     1                     TO  CNT-PAGE
       *
-           INITIALIZE                    SKT4320
+      *=== 初期化忘れ対応 by Yoshikawa(2008/05/29) start
+      *     INITIALIZE                    SKT4320
+           INITIALIZE                    SKT4320o
+      *=== 初期化忘れ対応  by Yoshikawa(2008/05/29) start
       *
       *    ページ番号
            MOVE    CNT-PAGE              TO  WRK-Z4
@@ -973,8 +1005,12 @@
            MOVE  SKT4320TMP-SRYYM        TO  WRK-SYMD (1:6)
            MOVE    "01"                  TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
-           MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
+      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *     MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
+           MOVE    WRK-SRYYMWH2          TO  SKT4320o-SRYYM
+      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) end
       *    保険者名
            MOVE    SKT4320TMP-HKNJANUM   TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
@@ -1038,6 +1074,8 @@
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
       *    療養の給付：件数
+               DISPLAY "KENSU =" SKT4320TMP-KENSU(IDX1 IDX2)
+               DISPLAY "TENSU =" SKT4320TMP-TENSU(IDX1 IDX2)
                MOVE  SKT4320TMP-KENSU(IDX1 IDX2)   TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT4320o-KENSU(IDX1 IDX2)
       *    療養の給付：日数
@@ -1091,6 +1129,7 @@
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4320o.red"       TO  SPRT-PRTID
            MOVE    "国保請求書"        TO  SPRT-TITLE
+           DISPLAY "SKT4320o =" SKT4320o
            MOVE    SKT4320o            TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1126,7 +1165,10 @@
            MOVE    WRK-Z4                TO  SKT4330-NO
       *
       *    診療年月
-           MOVE    WRK-SRYYMWH           TO  SKT4330-SRYYM
+      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
+      *     MOVE    WRK-SRYYMWH           TO  SKT4330-SRYYM
+           MOVE    WRK-SRYYMWH2          TO  SKT4330-SRYYM
+      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
       *    保険者名
            MOVE    SKT4320TMP-HKNJANUM   TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
