@@ -23,6 +23,7 @@
       ************************************************************
        01  SKT2630TMP-REC.
            03  SKT2630TMP-KEY.
+               05  SKT2630TMP-SYUTURYOKU       PIC  9(01).
                05  SKT2630TMP-HKNJANUM         PIC  X(08).
                05  SKT2630TMP-ZAITAKU          PIC  9(01).
            03  SKT2630TMP-DATA   OCCURS  14.
