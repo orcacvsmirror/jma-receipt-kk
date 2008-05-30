@@ -54,6 +54,7 @@
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
       *  01.02.08    内田       08/04/30  ４月改正に伴う修正
+      *  01.02.09    内田       08/05/29  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -165,6 +166,9 @@
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH            PIC X(50).
       *---(01.02.07) LINE ADD END   ------------------------------------
+      *---(01.02.09) LINE ADD START ------------------------------------
+           03  WRK-SRYYM-FLG       PIC 9(01).
+      *---(01.02.09) LINE ADD END   ------------------------------------
       *
            03  WRK-INDEX           PIC 9(02).
            03  WRK-FTNMONEY        PIC 9(10).
@@ -508,6 +512,9 @@
                                                SUM-AREA
                                                WRK-PARA
                                                WRK-SYOKBN
+      *---(01.02.09) LINE ADD START ------------------------------------
+                                               WRK-SRYYM-FLG
+      *---(01.02.09) LINE ADD END   ------------------------------------
            END-IF    
       *****
       *
@@ -1560,6 +1567,11 @@
                ADD     1                   TO  CNT-RECE10
       *         
                DISPLAY "PTNUM=" RECE10-PTNUM 
+      *---(01.02.09) LINE ADD START ------------------------------------
+               IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+                 MOVE  1  TO  WRK-SRYYM-FLG
+               END-IF
+      *---(01.02.09) LINE ADD END   ------------------------------------
       *         
            ELSE
                MOVE    1                   TO  FLG-RECE10

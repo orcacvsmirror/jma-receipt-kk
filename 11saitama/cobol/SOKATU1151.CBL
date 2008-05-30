@@ -42,6 +42,7 @@
       *  01.01.03    内田         07/09/23  日レセver4.0対応
       *                                     システム管理マスタ「1901」の
       *                                     医療機関情報を参照
+      *  01.01.04    内田         08/05/29  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -329,6 +330,9 @@
        01  WRK-NYUGAIKBN           PIC X(01).
       *
        01  WRK-SYOKBN              PIC X(01).
+      *---(01.01.04) LINE ADD START ------------------------------------
+       01  WRK-SRYYM-FLG           PIC 9(01).
+      *---(01.01.04) LINE ADD END   ------------------------------------
       *
       ******************************************************************
       *
@@ -337,6 +341,9 @@
                                                WRK-PARA
                                                WRK-NYUGAIKBN
                                                WRK-SYOKBN
+      *---(01.01.04) LINE ADD START ------------------------------------
+                                               WRK-SRYYM-FLG
+      *---(01.01.04) LINE ADD END   ------------------------------------
            .
       *
       *****************************************************************
@@ -1169,7 +1176,14 @@
       *********MOVE    "HCM2IV01.red"      TO  SPRT-PRTID
       ***** 05/06/09 UPD
       *         MOVE    "HCM2IV02.red"      TO  SPRT-PRTID
-               MOVE    "SKT1150IV02.red"   TO  SPRT-PRTID
+      *---(01.01.04) LINE ADD START ------------------------------------
+      *         MOVE    "SKT1150IV02.red"   TO  SPRT-PRTID
+               IF  WRK-SRYYM-FLG  =  1
+                 MOVE  "SKT1150IV02o.red"  TO  SPRT-PRTID
+               ELSE
+                 MOVE  "SKT1150IV02.red"   TO  SPRT-PRTID
+               END-IF
+      *---(01.01.04) LINE ADD END   ------------------------------------
       *****
                MOVE    HCM2I               TO  SPRT-PRTDATA
            ELSE                          
@@ -1178,7 +1192,14 @@
       *********MOVE    "HCM2JV02.red"      TO  SPRT-PRTID
       ***** 05/06/09 UPD
       *         MOVE    "HCM2JV03.red"      TO  SPRT-PRTID
-               MOVE    "SKT1150JV03.red"   TO  SPRT-PRTID
+      *---(01.01.04) LINE ADD START ------------------------------------
+      *         MOVE    "SKT1150JV03.red"   TO  SPRT-PRTID
+               IF  WRK-SRYYM-FLG  =  1
+                 MOVE  "SKT1150JV03o.red"  TO  SPRT-PRTID
+               ELSE
+                 MOVE  "SKT1150JV03.red"   TO  SPRT-PRTID
+               END-IF
+      *---(01.01.04) LINE ADD END   ------------------------------------
       *****
                MOVE    HCM2J               TO  SPRT-PRTDATA
            END-IF    
