@@ -30,6 +30,7 @@
       * Maj/Min/Rev	修正者	日付		内容
       *  01.00.01    内田    2008/02/26    ＣＳＶフォーマットの変更
       *                                    事業コードの取得の変更
+      *  01.00.02    内田    2008/05/28    ４月改正対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1017,6 +1018,9 @@
       *    ７．保険種別
            EVALUATE  TRUE
              WHEN  MF101-RJNHKNNUM = "027"
+      *---(01.00.02) LINE ADD START ------------------------------------
+             WHEN  MF101-HKNNUM  =  "039"  OR  "040"
+      *---(01.00.02) LINE ADD END   ------------------------------------
                MOVE  3   TO  WRK-RECEHKNSHU
              WHEN  MF101-HKNNUM = "063" OR "072" OR "073" OR
                                   "067" OR "074" OR "075"
@@ -1062,12 +1066,26 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    １３．記号
-           MOVE    MF101-KIGO              TO  WRK-DATA
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     MOVE    MF101-KIGO              TO  WRK-DATA
+           IF  MF101-HKNNUM  =  "039"  OR  "040"
+               MOVE    MF101-NUM           TO  WRK-DATA
+           ELSE
+               MOVE    MF101-KIGO          TO  WRK-DATA
+           END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    １４．番号
-           MOVE    MF101-NUM               TO  WRK-DATA
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     MOVE    MF101-NUM               TO  WRK-DATA
+           IF  MF101-HKNNUM  =  "039"  OR  "040"
+               MOVE    SPACE               TO  WRK-DATA
+           ELSE
+               MOVE    MF101-NUM           TO  WRK-DATA
+           END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1207,6 +1225,7 @@
            STRING  WRK-REC(1:WRK-REC-LENGTH)  DELIMITED  BY  SIZE
                    WRK-KAIGYO                 DELIMITED  BY  SIZE
                    INTO                       WRK-REC
+
            END-STRING
       *
            PERFORM 500-CSVINFO-SEC
