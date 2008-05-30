@@ -30,6 +30,7 @@
       *  01.00.01    内田    07/08/24    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    内田    08/05/28    印字対象番号追加（245）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -584,6 +585,9 @@
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
              IF  RECE02-KOHNUM (IDZ) = "143" OR "144" OR "145"
+      *---(01.00.02) LINE ADD START ------------------------------------
+                                    OR "245"
+      *---(01.00.02) LINE ADD END   ------------------------------------
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1215,10 +1219,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "143" OR "144" OR "145"
-                OR RECE02-KOHNUM(2) = "143" OR "144" OR "145"
-                OR RECE02-KOHNUM(3) = "143" OR "144" OR "145"
-                OR RECE02-KOHNUM(4) = "143" OR "144" OR "145"
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *         IF  RECE02-KOHNUM(1) = "143" OR "144" OR "145"
+      *          OR RECE02-KOHNUM(2) = "143" OR "144" OR "145"
+      *          OR RECE02-KOHNUM(3) = "143" OR "144" OR "145"
+      *          OR RECE02-KOHNUM(4) = "143" OR "144" OR "145"
+               IF  RECE02-KOHNUM(1) = "143" OR "144" OR "145" OR "245"
+               OR  RECE02-KOHNUM(2) = "143" OR "144" OR "145" OR "245"
+               OR  RECE02-KOHNUM(3) = "143" OR "144" OR "145" OR "245"
+               OR  RECE02-KOHNUM(4) = "143" OR "144" OR "145" OR "245"
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *    テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
