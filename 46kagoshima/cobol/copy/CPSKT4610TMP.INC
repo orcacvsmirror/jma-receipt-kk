@@ -20,10 +20,12 @@
       *
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    °ËÆ£    08/04/24    Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
       ************************************************************
        01  SKT4610TMP-REC.
            03  SKT4610TMP-KEY.
                05  SKT4610TMP-SYUTURYOKU          PIC  9(01).
+               05  SKT4610TMP-KOUKI               PIC  9(01).
                05  SKT4610TMP-HKNJANUM            PIC  X(06).
                05  SKT4610TMP-ZAITAKU             PIC  X(01).
                05  SKT4610TMP-KYURATE             PIC  9(03).
@@ -53,3 +55,6 @@
                    07  SKT4610TMP-K-SKINGK            PIC  9(09).
                    07  SKT4610TMP-K-SFTNGK            PIC  9(09).
            03  SKT4610TMP-GENBK                      PIC  9(04).
+      *---(01.00.01) LINE ADD START ------------------------------------
+           03  SKT4610TMP-HKNNUM-S                    PIC  X(03).
+      *---(01.00.01) LINE ADD END   ------------------------------------

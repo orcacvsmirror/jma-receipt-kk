@@ -20,11 +20,15 @@
       *
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    °ËÆ£    08/04/24    Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
       ************************************************************
        01  SKT4600TMP-REC.
            03  SKT4600TMP-KEY.
                05  SKT4600TMP-PREFKBN             PIC  X(01).
-           03  SKT4600TMP-SEIKYU-TBL  OCCURS  12.
+      *---(01.00.01) LINE ADD END   ------------------------------------
+      *     03  SKT4600TMP-SEIKYU-TBL  OCCURS  12.
+           03  SKT4600TMP-SEIKYU-TBL  OCCURS  13.
+      *---(01.00.01) LINE ADD END   ------------------------------------
                05  SKT4600TMP-NYUGAI-TBL  OCCURS  2.
                  07  SKT4600TMP-KENSU               PIC  9(06).
                  07  SKT4600TMP-TENSU               PIC  9(10).
@@ -58,3 +62,6 @@
            03  SKT4600TMP-TYOKI2                    PIC  9(06).
            03  SKT4600TMP-DAISAN                    PIC  9(06).
            03  SKT4600TMP-HKNJA-KENSU               PIC  9(06).
+      *---(01.00.01) LINE ADD START ------------------------------------
+           03  SKT4600TMP-HKNJA-KENSUK              PIC  9(06).
+      *---(01.00.01) LINE ADD END   ------------------------------------

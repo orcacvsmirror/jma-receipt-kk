@@ -34,26 +34,26 @@
            03  SKT4600-KAISETU             PIC  X(40).
       *電話番号
            03  SKT4600-TEL                 PIC  X(15).
+      *請求保険者数（総合計）
+           03  SKT4600-HKNSUUG             PIC  X(05).
+      *請求書枚数（総合計）
+           03  SKT4600-SKYSUUG             PIC  X(05).
+      *明細書枚数（総合計）
+           03  SKT4600-MEISAISUUG          PIC  X(05).
       *請求保険者数
            03  SKT4600-HKNSUU              PIC  X(05).
       *請求書枚数
            03  SKT4600-SKYSUU              PIC  X(05).
       *明細書枚数
            03  SKT4600-MEISAISUU           PIC  X(05).
-      *○長枚数
-           03  SKT4600-TYOKI               PIC  X(05).
-      *○長２枚数
-           03  SKT4600-TYOKI2              PIC  X(05).
-      *○原枚数
-           03  SKT4600-GENBK               PIC  X(05).
-      *○交第三枚数
-           03  SKT4600-KOU-SUU             PIC  X(05).
-      *長処枚数
-           03  SKT4600-CYOSYO-SUU          PIC  X(05).
-      *治験枚数
-           03  SKT4600-CHIKEN-SUU          PIC  X(05).
+      *請求保険者数（後期高齢）
+           03  SKT4600-HKNSUUK             PIC  X(05).
+      *請求書枚数（後期高齢）
+           03  SKT4600-SKYSUUK             PIC  X(05).
+      *明細書枚数（後期高齢）
+           03  SKT4600-MEISAISUUK          PIC  X(05).
       *療養の給付テーブル
-           03  SKT4600-SEIKYU  OCCURS  12.
+           03  SKT4600-SEIKYU  OCCURS  13.
                05  SKT4600-NYUGAI-TBL  OCCURS  2.
       *件数
                    07 SKT4600-KENSU        PIC  X(05).
@@ -64,7 +64,7 @@
       *一部負担金
                    07 SKT4600-ITBFTN       PIC  X(09).
       *食事療養費テーブル
-           03  SKT4600-SEIKYU-S  OCCURS  12.
+           03  SKT4600-SEIKYU-S  OCCURS  11.
       *食事件数
                05  SKT4600-SKENSU          PIC  X(05).
       *食事療養費
