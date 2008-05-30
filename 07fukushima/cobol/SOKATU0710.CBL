@@ -36,6 +36,7 @@
       *  01.00.03    内田    08/02/08    退職で保険番号100所持者は
       *                                  退職法定外欄へ印字
       *  01.00.04    長屋    08/04/27    帳票様式に伴う修正
+      *  01.00.05    内田    08/05/30    １０割の印字修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -794,11 +795,15 @@
                      EVALUATE  RECE10-KYURATE
                        WHEN  7       MOVE  3  TO  IDX1
                        WHEN  8       MOVE  4  TO  IDX1
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *                 WHEN  9       MOVE  5  TO  IDX1
-      *                 WHEN  OTHER   MOVE  6  TO  IDX1
-                       WHEN  OTHER   MOVE  5  TO  IDX1
+      *---(01.00.05) LINE ADD START ------------------------------------
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **                 WHEN  9       MOVE  5  TO  IDX1
+      **                 WHEN  OTHER   MOVE  6  TO  IDX1
+      *                 WHEN  OTHER   MOVE  5  TO  IDX1
       *---(01.00.07) LINE ADD END   ------------------------------------
+                       WHEN  9       MOVE  5  TO  IDX1
+                       WHEN  OTHER   MOVE  6  TO  IDX1
+      *---(01.00.05) LINE ADD START ------------------------------------
                      END-EVALUATE
       *---(01.00.07) LINE ADD START ------------------------------------
                    ELSE
