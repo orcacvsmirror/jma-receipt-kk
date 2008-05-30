@@ -34,6 +34,7 @@
       *                                  091は051と同じ所に集計する
       *                                  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.03    吉川    2008/05/29  県内は保険者名を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1374,10 +1375,32 @@
       *     END-IF
       **=== 保険者番号毎で集計 by Yoshikawa(2008/05/01) end
       *    保険者名（都道府県名)
-           STRING  WRK-HKNJANAME       DELIMITED  BY  SPACE
-                   "　広域連合殿"      DELIMITED  BY  SIZE
-                                       INTO  SKT0315-HKNJANAME
-           END-STRING
+      *=== 県内は保険者名を印字 by Yoshikawa(2008/05/29) start
+      *     STRING  WRK-HKNJANAME       DELIMITED  BY  SPACE
+      *             "　広域連合殿"      DELIMITED  BY  SIZE
+      *                                 INTO  SKT0315-HKNJANAME
+      *     END-STRING
+           IF  WRK-HKNJANUM(1:2)  =  "03"
+      *        保険者名取得
+               INITIALIZE                      HKNJAINF-REC
+               MOVE    SPA-HOSPNUM         TO  HKNJA-HOSPNUM
+               MOVE    "39"                TO  HKNJA-HKNJANUM(1:2)
+               MOVE    WRK-HKNJANUM        TO  HKNJA-HKNJANUM(3:6)
+               MOVE    HKNJAINF-REC        TO  MCPDATA-REC
+               PERFORM 900-HKNJAINF-INV-SEC
+               IF      FLG-HKNJAINF        =   ZERO
+                   STRING  HKNJA-HKNJANAME     DELIMITED  BY  SPACE
+                           "　様"              DELIMITED  BY  SIZE
+                                               INTO  SKT0315-HKNJANAME
+                   END-STRING
+               END-IF
+           ELSE
+               STRING  WRK-HKNJANAME           DELIMITED  BY  SPACE
+               "後期高齢者医療広域連合　様"    DELIMITED  BY  SIZE
+                                               INTO  SKT0315-HKNJANAME
+               END-STRING
+           END-IF
+      *=== 県内は保険者名を印字 by Yoshikawa(2008/05/29) end
       *=== 保険者名は県名を印字 by Yoshikawa(2008/05/15) end
       *
            .
