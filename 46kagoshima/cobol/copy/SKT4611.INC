@@ -45,7 +45,7 @@
       *…∏Ω‡…È√¥≥€
                05  SKT4611-SFTNGK        PIC  X(09).
       *Œ≈Õ‹§ŒµÎ…’•∆°º•÷•Î
-           03  SKT4611-KOHI    OCCURS  5.
+           03  SKT4611-KOHI    OCCURS  7.
       *∏¯»ÒÃæ
                05  SKT4611-HBTNUM          PIC  X(02).
                05  SKT4611-KOHNAME         PIC  X(10).

@@ -33,6 +33,7 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/05/03    帳票様式の変更に伴う修正
       *  01.00.04    内田    08/05/08    年齢判定の修正
+      *  01.00.05    内田    08/05/30    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -644,6 +645,12 @@
       *    在宅
            MOVE    RECE10-ZAITAKU  TO  SKT4610TMP-ZAITAKU
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    平成２０年３月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  RECE10-SRYYM          TO  SKT4610TMP-SRYYM
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            PERFORM 900-SKTTMP-READ-SEC
       *
@@ -983,7 +990,18 @@
            MOVE    "○"                    TO  SKT4610-TENHYOKBN(1)
       *
       *    診療年月
-           MOVE    WRK-SRYYMWH             TO  SKT4610-SRYYM
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE    WRK-SRYYMWH             TO  SKT4610-SRYYM
+           IF  SKT4610TMP-SRYYM  NOT =  ZERO
+               MOVE  SKT4610TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+           MOVE    "01"                  TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+           MOVE    WRK-SRYYMWH           TO  SKT4610-SRYYM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    保険者名
            MOVE    SKT4610TMP-HKNJANUM     TO  WRK-HKNJANUM
@@ -1112,7 +1130,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4610.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE   "SKT4610.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT4610.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT4610o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"        TO  SPRT-TITLE
            MOVE    SKT4610             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1229,7 +1254,10 @@
       *
       *    公費の印字
            PERFORM VARYING IDX3    FROM    1   BY  1
-                   UNTIL   IDX3    >       5
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *             UNTIL   IDX3    >       5
+                   UNTIL   IDX3    >       7
+      *---(01.00.05) LINE ADD END   ------------------------------------
                    OR      WRK-CNT >       20
                    OR      SKT4610TMP-KOHNUM(WRK-CNT)  =   SPACE
                PERFORM VARYING IDX2    FROM    1   BY  1
@@ -1306,7 +1334,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4611.red"        TO  SPRT-PRTID
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE   "SKT4611.red"        TO  SPRT-PRTID
+           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+               MOVE   "SKT4611.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT4611o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"        TO  SPRT-TITLE
            MOVE    SKT4611             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID

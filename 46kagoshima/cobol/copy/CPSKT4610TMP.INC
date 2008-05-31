@@ -28,6 +28,7 @@
                05  SKT4610TMP-KOUKI               PIC  9(01).
                05  SKT4610TMP-HKNJANUM            PIC  X(06).
                05  SKT4610TMP-ZAITAKU             PIC  X(01).
+               05  SKT4610TMP-SRYYM               PIC  9(06).
                05  SKT4610TMP-KYURATE             PIC  9(03).
                05  SKT4610TMP-HENREIKBN           PIC  X(01).
            03  SKT4610TMP-PAGE-FLG2               PIC  9(01).
