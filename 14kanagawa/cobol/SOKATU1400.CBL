@@ -36,6 +36,7 @@
       *  01.00.04    内田    08/04/29    ４月改正に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.05    安藤    08/05/02    新レイアウト対応
+      *  01.00.06    内田    08/05/31    帳票追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1019,6 +1020,10 @@
       *    帳票編集処理
            PERFORM    330-BODY-HEN-SEC
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    追加帳票（受領書）印刷処理
+           PERFORM    341-PRINT-OUT-SEC
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *    帳票印刷処理
            PERFORM    340-PRINT-OUT-SEC
       *
@@ -1093,7 +1098,10 @@
        330-BODY-HEN-SEC                 SECTION.
       *
            INITIALIZE                   SKT1400
-           ADD  1                       TO     CNT-PAGE
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     ADD  1                       TO     CNT-PAGE
+           ADD  2                       TO     CNT-PAGE
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *   総括表発行日
            MOVE     WRK-SRYYMWH         TO     SKT1400-SEIYM
@@ -1251,7 +1259,51 @@
            .
        340-PRINT-OUT-EXT.
            EXIT.
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票印刷処理
+      *****************************************************************
+       341-PRINT-OUT-SEC                   SECTION.
       *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT1401.red"        TO  SPRT-PRTID
+           MOVE    "国保総括表"        TO  SPRT-TITLE
+           MOVE    SKT1400             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+                   CONTINUE
+           ELSE
+            DISPLAY "error"
+
+
+                   MOVE    "帳票ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+                   PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+      *
+           .
+       341-PRINT-OUT-EXT.
+           EXIT.
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *****************************************************************
       *    エラー出力処理
       *****************************************************************
