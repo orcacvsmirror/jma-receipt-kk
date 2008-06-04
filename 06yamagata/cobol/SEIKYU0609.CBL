@@ -38,6 +38,7 @@
       *                                  ¥·¥¹¥Æ¥à´ÉÍý¥Þ¥¹¥¿¡Ö1901¡×¤Î
       *                                  °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.06    ÆâÅÄ    08/03/07    Æþ±¡¤ÎÊÝ¸±¼ïÊÌ¤Î°õ»ú¤Î½¤Àµ
+      *  01.00.07    ÆâÅÄ    08/06/04    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -285,6 +286,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È¡¡ÎÎ°è
       *****************************************************************
@@ -887,6 +893,11 @@
            END-IF
            MOVE  WRK-FTNMONEY-G            TO  MF101-FTNMONEY
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    ¥Õ¥é¥°¡ÊÌ¤½¢³Ø»ù¡¢ÆÃÎãÁ¼ÃÖ¡Ë
+           MOVE    RECE02-FLG (1)     TO  MF101-FLG (1)
+           MOVE    RECE02-FLG (2)     TO  MF101-FLG (2)
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *    ÊÝ¸±¼ÔÈÖ¹æ¥Á¥§¥Ã¥¯½èÍý
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
@@ -1051,24 +1062,43 @@
       *****
       *
       *    ËÜ¿Í²ÈÂ²¶èÊ¬
-           IF  MF101-AGE > 2
-             IF  MF101-HONKZKKBN = 1
-               MOVE  "¡û"     TO  SC06-HONKZKKBN (1)
-             ELSE
-               MOVE  "¡û"     TO  SC06-HONKZKKBN (3)
-             END-IF
-           ELSE
-             MOVE  "¡û"     TO  SC06-HONKZKKBN (2)
-           END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     IF  MF101-AGE > 2
+      *       IF  MF101-HONKZKKBN = 1
+      *         MOVE  "¡û"     TO  SC06-HONKZKKBN (1)
+      *       ELSE
+      *         MOVE  "¡û"     TO  SC06-HONKZKKBN (3)
+      *       END-IF
+      *     ELSE
+      *       MOVE  "¡û"     TO  SC06-HONKZKKBN (2)
+      *     END-IF
       *
       *    ¹âÎð¶èÊ¬
-           IF  MF101-AGE  >  69  OR  MF101-RJNHKNNUM  NOT =  SPACE
-             IF  MF101-KYURATE  =  20
-               MOVE  "¡û"     TO  SC06-KOREIKBN (2)
-             ELSE
-               MOVE  "¡û"     TO  SC06-KOREIKBN (1)
-             END-IF
-           END-IF
+      *     IF  MF101-AGE  >  69  OR  MF101-RJNHKNNUM  NOT =  SPACE
+      *       IF  MF101-KYURATE  =  20
+      *         MOVE  "¡û"     TO  SC06-KOREIKBN (2)
+      *       ELSE
+      *         MOVE  "¡û"     TO  SC06-KOREIKBN (1)
+      *       END-IF
+      *     END-IF
+           EVALUATE    MF101-RECESYUBETU (4:1)
+               WHEN    "1"
+               WHEN    "2"
+                   MOVE    "¢þ"    TO  SC06-HONKZKKBN (1)
+               WHEN    "3"
+               WHEN    "4"
+                   MOVE    "¢þ"    TO  SC06-HONKZKKBN (2)
+               WHEN    "5"
+               WHEN    "6"
+                   MOVE    "¢þ"    TO  SC06-HONKZKKBN (3)
+               WHEN    "7"
+               WHEN    "8"
+                   MOVE    "¢þ"    TO  SC06-KOREIKBN (1)
+               WHEN    "9"
+               WHEN    "0"
+                   MOVE    "¢þ"    TO  SC06-KOREIKBN (2)
+           END-EVALUATE
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            .
        310-HEAD-HEN-EXT.
@@ -1177,16 +1207,25 @@
            MOVE     WRK-OUT-INPUT             TO  SC06-HKNJANUM
       *
       *    µëÉÕ³ä¹ç
-           EVALUATE  MF101-KYURATE
-             WHEN   0
-               MOVE  "¡û"  TO  SC06-KYURATE10 
-             WHEN  10
-               MOVE  "¡û"  TO  SC06-KYURATE9
-             WHEN  20
-               MOVE  "¡û"  TO  SC06-KYURATE8
-             WHEN  30
-               MOVE  "¡û"  TO  SC06-KYURATE7
-           END-EVALUATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+           IF   MF101-SRYYM   >=  WRK-CONS-SRYYM-200804
+           AND  MF101-FLG (2)  =  1
+               MOVE  "¡û"    TO  SC06-KYURATE8
+           ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+             EVALUATE  MF101-KYURATE
+               WHEN   0
+                 MOVE  "¡û"  TO  SC06-KYURATE10 
+               WHEN  10
+                 MOVE  "¡û"  TO  SC06-KYURATE9
+               WHEN  20
+                 MOVE  "¡û"  TO  SC06-KYURATE8
+               WHEN  30
+                 MOVE  "¡û"  TO  SC06-KYURATE7
+             END-EVALUATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    ÈïÊÝ¸±¼Ô¾Úµ­¹æ¡¦ÈÖ¹æ
            MOVE    MF101-KIGO      TO    SC06-KIGO
@@ -1773,7 +1812,10 @@
                WHEN    "2"
                    MOVE    "£²¸øÈñ"        TO  SC10-HKNSBT1
                WHEN    "3"
-                   MOVE    "£³Ï·¿Í"        TO  SC10-HKNSBT1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *             MOVE    "£³Ï·¿Í"        TO  SC10-HKNSBT1
+                   MOVE    "£³¹âÎð"        TO  SC10-HKNSBT1
+      *---(01.00.07) LINE ADD END   ------------------------------------
                WHEN    "4"
                    MOVE    "£´Âà¿¦"        TO  SC10-HKNSBT1
            END-EVALUATE
@@ -1794,11 +1836,17 @@
                WHEN    "1"
                    MOVE    "£±ËÜÆþ"     TO  SC10-HKNKZK
                WHEN    "3"
-                   MOVE    "£³»°Æþ"     TO  SC10-HKNKZK
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *             MOVE    "£³»°Æþ"     TO  SC10-HKNKZK
+                   MOVE    "£³Ï»Æþ"     TO  SC10-HKNKZK
+      *---(01.00.07) LINE ADD END   ------------------------------------
                WHEN    "5"
                    MOVE    "£µ²ÈÆþ"     TO  SC10-HKNKZK
                WHEN    "7"
-                   MOVE    "£·¹âÆþ£¹"   TO  SC10-HKNKZK
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *             MOVE    "£·¹âÆþ£¹"   TO  SC10-HKNKZK
+                   MOVE    "£·¹âÆþ°ì"   TO  SC10-HKNKZK
+      *---(01.00.07) LINE ADD END   ------------------------------------
            END-EVALUATE
       *
       *    Ï·¿Í»ÔÄ®Â¼ÈÖ¹æ
@@ -1880,16 +1928,25 @@
            MOVE    MF101-NUM           TO  SC10-NUM
       *
       *    µëÉÕ³ä¹ç
-           EVALUATE  MF101-KYURATE
-             WHEN   0
-               MOVE  "£±£°³ä"  TO  SC10-KYURATE
-             WHEN  10
-               MOVE  "¡¡£¹³ä"  TO  SC10-KYURATE
-             WHEN  20
-               MOVE  "¡¡£¸³ä"  TO  SC10-KYURATE
-             WHEN  30
-               MOVE  "¡¡£·³ä"  TO  SC10-KYURATE
-           END-EVALUATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+           IF   MF101-SRYYM   >=  WRK-CONS-SRYYM-200804
+           AND  MF101-FLG (2)  =  1
+               MOVE  "¡¡£¸³ä"    TO  SC10-KYURATE
+           ELSE
+      *---(01.00.07) LINE ADD END   ------------------------------------
+             EVALUATE  MF101-KYURATE
+               WHEN   0
+                 MOVE  "£±£°³ä"  TO  SC10-KYURATE
+               WHEN  10
+                 MOVE  "¡¡£¹³ä"  TO  SC10-KYURATE
+               WHEN  20
+                 MOVE  "¡¡£¸³ä"  TO  SC10-KYURATE
+               WHEN  30
+                 MOVE  "¡¡£·³ä"  TO  SC10-KYURATE
+             END-EVALUATE
+      *---(01.00.07) LINE ADD START ------------------------------------
+           END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    ¥«¥Ê»áÌ¾
            MOVE  MF101-KANANAME   TO  SC10-KANANAME

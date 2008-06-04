@@ -177,6 +177,9 @@
       *****
       *在宅フラグ（在総診のみ）
            03  MF101-ZAI                 PIC  9(01).
+      *フラグ（未就学児、特例措置）
+           03  MF101-FLG-TBL  OCCURS  5.
+               05  MF101-FLG             PIC  9(01).
       *保険分
            03  MF101-TOTALTEN-G          PIC  9(09).
            03  MF101-JNISSU-G            PIC  9(09).
