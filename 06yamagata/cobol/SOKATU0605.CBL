@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/06/10  県外分の集計の不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -617,6 +618,9 @@
       *          県名
                  MOVE  WRK-HKNJANAME       TO  SUM-HKNJANAME(1 1)
                  MOVE  1                   TO  FLG-PRINT1
+      *=== 県外集計不具合修正 by Yoshikawa(2008/06/10) start
+                 COMPUTE  WRK-CNT  =  WRK-CNT  -  1
+      *=== 県外集計不具合修正 by Yoshikawa(2008/06/10) end
                WHEN    "2"
       *          県名
                  MOVE  WRK-HKNJANAME       TO  SUM-HKNJANAME(2 WRK-CNT)
@@ -639,7 +643,9 @@
                EVALUATE    RECE10-PREFKBN
                    WHEN    "1"
                       PERFORM 20011-HKN-SYUKEI-SEC
-                      COMPUTE  WRK-CNT  =  WRK-CNT  -  1
+      *=== 県外集計不具合修正 by Yoshikawa(2008/06/10) start
+      *                COMPUTE  WRK-CNT  =  WRK-CNT  -  1
+      *=== 県外集計不具合修正 by Yoshikawa(2008/06/10) end
                    WHEN    "2"
                       PERFORM 20012-HKN-SYUKEI-SEC
                END-EVALUATE
@@ -1031,9 +1037,9 @@
            MOVE    SKT0605               TO  SPRT-PRTDATA
            EVALUATE    WRK-SYOKBN
                WHEN    "1"
-                   MOVE    "広域連合総括表"    TO  SPRT-TITLE
+                   MOVE    "後期高齢者総括表"    TO  SPRT-TITLE
                WHEN    "2"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者総括表［返戻分］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
