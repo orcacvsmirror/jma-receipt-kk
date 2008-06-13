@@ -35,6 +35,8 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.04    内田    08/06/10    帳票様式に伴う修正
+      *                                  SPA-AREA初期化
       ********************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -212,6 +214,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト　領域
       *****************************************************************
@@ -318,6 +325,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -671,26 +681,44 @@
                    END-IF
                  ELSE
       *    ３歳未満かどうか
-                   IF  RECE02-AGE    <   3
-                     MOVE  5           TO  IDX
+      *---(01.00.04) LINE ADD START ------------------------------------
+                   IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   AND  (RECE02-FLG (1)   =  1)
+                       MOVE  5     TO  IDX
                    ELSE
-      *    本人／家族
-                     IF  RECE02-HONKZKKBN  =  1
-                       MOVE  3         TO  IDX
+      *---(01.00.04) LINE ADD END   ------------------------------------
+                     IF  RECE02-AGE    <   3
+                       MOVE  5           TO  IDX
                      ELSE
-                       MOVE  4         TO  IDX
+      *    本人／家族
+                       IF  RECE02-HONKZKKBN  =  1
+                         MOVE  3         TO  IDX
+                       ELSE
+                         MOVE  4         TO  IDX
+                       END-IF
                      END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
                    END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
                  END-IF
                END-IF
              WHEN  "183"
              WHEN  "184"
       *    ３歳未満かどうか
-               IF  RECE02-AGE    <   3
-                 MOVE  2           TO  IDX
+      *---(01.00.04) LINE ADD START ------------------------------------
+               IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+               AND  (RECE02-FLG (1)   =  1)
+                   MOVE  2           TO  IDX
                ELSE
-                 MOVE  1           TO  IDX
+      *---(01.00.04) LINE ADD END   ------------------------------------
+                 IF  RECE02-AGE    <   3
+                   MOVE  2           TO  IDX
+                 ELSE
+                   MOVE  1           TO  IDX
+                 END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
                END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
            END-EVALUATE
       *
       *    データ加算
