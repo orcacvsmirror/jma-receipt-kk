@@ -24,6 +24,7 @@
        01  SKT4400TMP-REC.
            03  SKT4400TMP-KEY.
                05  SKT4400TMP-PREFKBN    PIC X(01).
+               05  SKT4400TMP-KOUKI      PIC X(01).
            03  SKT4400TMP-HKN-TBL OCCURS 2.
                05  SKT4400TMP-NYUGAI-TBL OCCURS 2.
                    07  SKT4400TMP-KENSU  PIC 9(06).

@@ -32,6 +32,8 @@
       *                                  医療機関情報を参照
       *                                  返戻対応
       *  01.00.02    内田    08/05/30    帳票様式の変更に伴う修正
+      *  01.00.03    内田    08/06/14    国保分と後期高齢分は分けて印字
+      *                                  国保がない場合でも印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -281,7 +283,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *              UNTIL   FLG-END   =   1
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            PERFORM  300-END-SEC
       *
@@ -473,7 +477,9 @@
            CLOSE            SKT4400TMP-FILE
            OPEN     I-O     SKT4400TMP-FILE
       *
-           MOVE     ZERO    TO        FLG-END
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO        FLG-END
+      *---(01.00.03) LINE ADD END   ------------------------------------
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
@@ -555,6 +561,9 @@
       *
       *    県内・県外区分設定
            MOVE    RECE10-PREFKBN      TO  SKT4400TMP-PREFKBN
+      *---(01.00.03) LINE ADD START ------------------------------------
+           MOVE    FLG-KOUKI           TO  SKT4400TMP-KOUKI
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
            PERFORM  220-HKN-SYUKEI-SEC
