@@ -31,6 +31,8 @@
       *  01.00.01    内田    2008/02/26    ＣＳＶフォーマットの変更
       *                                    事業コードの取得の変更
       *  01.00.02    内田    2008/05/28    ４月改正対応
+      *  01.00.03    内田    2008/06/13    後期高齢は「保険証・記号」には
+      *                                    保険者番号を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1069,7 +1071,10 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *     MOVE    MF101-KIGO              TO  WRK-DATA
            IF  MF101-HKNNUM  =  "039"  OR  "040"
-               MOVE    MF101-NUM           TO  WRK-DATA
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *         MOVE    MF101-NUM           TO  WRK-DATA
+               MOVE    MF101-HKNJANUM      TO  WRK-DATA
+      *---(01.00.03) LINE ADD END   ------------------------------------
            ELSE
                MOVE    MF101-KIGO          TO  WRK-DATA
            END-IF
@@ -1078,14 +1083,17 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    １４．番号
+      *---(01.00.03) LINE ADD START ------------------------------------
       *---(01.00.02) LINE ADD START ------------------------------------
-      *     MOVE    MF101-NUM               TO  WRK-DATA
-           IF  MF101-HKNNUM  =  "039"  OR  "040"
-               MOVE    SPACE               TO  WRK-DATA
-           ELSE
-               MOVE    MF101-NUM           TO  WRK-DATA
-           END-IF
+      **     MOVE    MF101-NUM               TO  WRK-DATA
+      *     IF  MF101-HKNNUM  =  "039"  OR  "040"
+      *         MOVE    SPACE               TO  WRK-DATA
+      *     ELSE
+      *         MOVE    MF101-NUM           TO  WRK-DATA
+      *     END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+           MOVE    MF101-NUM               TO  WRK-DATA
+      *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
