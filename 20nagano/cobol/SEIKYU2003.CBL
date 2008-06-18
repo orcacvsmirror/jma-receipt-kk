@@ -41,6 +41,9 @@
       *                                  ½èÍý¤ò¤¹¤ë
       *  02.05.06    ÆâÅÄ    07/11/28    ÅÀ¿ô¡¢ÉéÃ´¶âÅù¤Ï¥ì¥»¥×¥È¤ÈÆ±¤¸¤È¤¹¤ë
       *  02.05.07    ÆâÅÄ    08/05/28    £´·î²þÀµÂÐ±þ
+      *  02.05.08    µÈÀî    08/06/03    ÆÃµ­»ö¹à°õ»ú½¤Àµ
+      *              ÆâÅÄ    08/06/13    ¿ÇÎÅÇ¯·îÍó¤Ë¿ÇÎÅÇ¯·î¤ò°õ»ú¤¹¤ë
+      *                                  SPA-AREA½é´ü²½
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -196,6 +199,9 @@
            03  WRK-Z7                PIC ZZZ,ZZZ.
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
+      *---(02.05.08) LINE ADD START ------------------------------------
+           03  WRK-SRYYMWH2          PIC X(16).
+      *---(02.05.08) LINE ADD END   ------------------------------------
            03  WRK-SEIYMDWH          PIC X(22).
            03  WRK-HENYMDG           PIC X(22).
            03  WRK-SYMD.
@@ -290,6 +296,52 @@
            COPY    "HCM09V01.INC".
            COPY    "HCM09V02.INC".
            COPY    "HCRCP060.INC".
+      *
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) start
+      *   ÆÃµ­»ö¹à
+       01  TBL-TOKKI-AREA.
+           03  FILLER          PIC X(02)   VALUE   "01".
+           03  FILLER          PIC X(10)   VALUE   "£°£±¸ø".
+           03  FILLER          PIC X(02)   VALUE   "02".
+           03  FILLER          PIC X(10)   VALUE   "£°£²Ä¹".
+           03  FILLER          PIC X(02)   VALUE   "03".
+           03  FILLER          PIC X(10)   VALUE   "£°£³Ä¹½è".
+           03  FILLER          PIC X(02)   VALUE   "04".
+           03  FILLER          PIC X(10)   VALUE   "£°£´¸åÊÝ".
+           03  FILLER          PIC X(02)   VALUE   "07".
+           03  FILLER          PIC X(10)   VALUE   "£°£·Ï·Ê»".
+           03  FILLER          PIC X(02)   VALUE   "08".
+           03  FILLER          PIC X(10)   VALUE   "£°£¸Ï··ò".
+           03  FILLER          PIC X(02)   VALUE   "09".
+           03  FILLER          PIC X(10)   VALUE   "£°£¹»Ü".
+           03  FILLER          PIC X(02)   VALUE   "10".
+           03  FILLER          PIC X(10)   VALUE   "£±£°Âè»°".
+           03  FILLER          PIC X(02)   VALUE   "11".
+           03  FILLER          PIC X(10)   VALUE   "£±£±Ìô¼£".
+           03  FILLER          PIC X(02)   VALUE   "12".
+           03  FILLER          PIC X(10)   VALUE   "£±£²´ï¼£".
+           03  FILLER          PIC X(02)   VALUE   "13".
+           03  FILLER          PIC X(10)   VALUE   "£±£³Àè¿Ê".
+           03  FILLER          PIC X(02)   VALUE   "14".
+           03  FILLER          PIC X(10)   VALUE   "£±£´À©Ä¶".
+           03  FILLER          PIC X(02)   VALUE   "15".
+           03  FILLER          PIC X(10)   VALUE   "£±£µ·Ð²á".
+           03  FILLER          PIC X(02)   VALUE   "16".
+           03  FILLER          PIC X(10)   VALUE   "£±£¶Ä¹£²".
+           03  FILLER          PIC X(02)   VALUE   "17".
+           03  FILLER          PIC X(10)   VALUE   "£±£·¾å°Ì".
+           03  FILLER          PIC X(02)   VALUE   "18".
+           03  FILLER          PIC X(10)   VALUE   "£±£¸°ìÈÌ".
+           03  FILLER          PIC X(02)   VALUE   "19".
+           03  FILLER          PIC X(10)   VALUE   "£±£¹Äã½ê".
+           03  FILLER          PIC X(02)   VALUE   "20".
+           03  FILLER          PIC X(10)   VALUE   "£²£°Æó³ä".
+       01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
+           03  TBL-TOKKI       OCCURS   18.
+               05  TBL-TOKKICD             PIC X(02).
+               05  TBL-TOKKINAME           PIC X(10).
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   18.
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) end
       * OCRÊÔ½¸ÎÎ°è
        01  OCR-HENSYU-TBL.
            03  OCR1-TBL.
@@ -450,6 +502,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(02.05.08) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(02.05.08) LINE ADD END   ------------------------------------
            INITIALIZE  OCR-HENSYU-TBL
       *
            DISPLAY "START"
@@ -931,6 +986,15 @@
                MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
                MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
              END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) start
+      *ÆÃµ­»ö¹à
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >     3
+                 IF   RECE10-TOKKI(IDX)  NOT =  SPACE
+                   MOVE  RECE10-TOKKI(IDX)  TO  MF101-TOKKI(IDX)
+                 END-IF
+             END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) end
            END-IF
       *
       *    ½õÀ®È½ÄêµÚ¤Ó¡¢·îÅÓÃæ¤Ç¸øÈñ¤òÀÚÂØ¤¨¤¿»þ¤ÎÁ´¹ñ¸øÈñÊ¬¤Î¥Ç¡¼¥¿½¸·×
@@ -1275,7 +1339,14 @@
            INITIALIZE  SC03
       *
       *    °õºþÆüÉÕ
-           MOVE  WRK-SRYYMWH(1:16)      TO  SC03-PRTYM
+      *---(02.05.08) LINE ADD START ------------------------------------
+      *     MOVE  WRK-SRYYMWH(1:16)      TO  SC03-PRTYM
+           MOVE  MF101-SRYYM            TO  WRK-SYMD (1:6)
+           MOVE  "01"                   TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE  WRK-HENYMDG(1:16)      TO  WRK-SRYYMWH2
+           MOVE  WRK-SRYYMWH2(1:16)     TO  SC03-PRTYM
+      *---(02.05.08) LINE ADD END   ------------------------------------
       *
       *    °åÎÅµ¡´Ø¥³¡¼¥É
            MOVE  SYS-1001-HOSPCDN       TO  SC03-HOSPCDN
@@ -1443,14 +1514,26 @@
            MOVE  LNK-DAY2-EDTYMD1(2:)  TO  SC03-BIRTHDAY
       *
       *    ÆÃµ­»ö¹à
-           IF  MF101-TYOKI  =  1
-             MOVE  "£°£²Ä¹"  TO  SC03-TOKKI
-           END-IF
-      *---(02.05.05) LINE ADD START ------------------------------------
-           IF  MF101-TYOKI  =  1
-             MOVE  "£±£¶Ä¹£²"    TO  SC03-TOKKI
-           END-IF
-      *---(02.05.05) LINE ADD END   ------------------------------------
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) start
+      *     IF  MF101-TYOKI  =  1
+      *       MOVE  "£°£²Ä¹"  TO  SC03-TOKKI
+      *     END-IF
+      **---(02.05.05) LINE ADD START ------------------------------------
+      *     IF  MF101-TYOKI  =  1
+      *       MOVE  "£±£¶Ä¹£²"    TO  SC03-TOKKI
+      *     END-IF
+      **---(02.05.05) LINE ADD END   ------------------------------------
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             PERFORM  VARYING  IDY  FROM  1  BY  1
+                      UNTIL  IDY  >  18
+               IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
+                   MOVE  TBL-TOKKINAME(IDY)   TO  SC03-TOKKI(IDX)
+                   MOVE  19  TO  IDY
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) end
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE     MF101-JNISSU     TO  WRK-Z2
@@ -1954,7 +2037,14 @@
            INITIALIZE   SC04
       *
       *    °õºþÆüÉÕ
-           MOVE  WRK-SRYYMWH(1:16)      TO  SC04-PRTYM
+      *---(02.05.08) LINE ADD START ------------------------------------
+      *     MOVE  WRK-SRYYMWH(1:16)      TO  SC04-PRTYM
+           MOVE  MF101-SRYYM            TO  WRK-SYMD (1:6)
+           MOVE  "01"                   TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE  WRK-HENYMDG(1:16)      TO  WRK-SRYYMWH2
+           MOVE  WRK-SRYYMWH2(1:16)     TO  SC04-PRTYM
+      *---(02.05.08) LINE ADD END   ------------------------------------
       *
       *    °åÎÅµ¡´Ø¥³¡¼¥É
            MOVE  SYS-1001-HOSPCDN       TO  SC04-HOSPCDN
@@ -2107,14 +2197,26 @@
 	   MOVE  LNK-DAY2-EDTYMD1(2:)  TO  SC04-BIRTHDAY
       *
       *    ÆÃµ­»ö¹à
-           IF  MF101-TYOKI  =  1
-	     MOVE  "£°£²Ä¹"  TO  SC04-TOKKI
-	   END-IF
-      *---(02.05.05) LINE ADD START ------------------------------------
-           IF  MF101-TYOKI  =  2
-	     MOVE  "£±£¶Ä¹£²"    TO  SC04-TOKKI
-	   END-IF
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) start
+      *     IF  MF101-TYOKI  =  1
+      *   MOVE  "£°£²Ä¹"  TO  SC04-TOKKI
+      * END-IF
+      **---(02.05.05) LINE ADD START ------------------------------------
+      *     IF  MF101-TYOKI  =  2
+      *   MOVE  "£±£¶Ä¹£²"    TO  SC04-TOKKI
+      * END-IF
       *---(02.05.05) LINE ADD END   ------------------------------------
+       PERFORM  VARYING  IDX  FROM  1  BY  1
+                UNTIL    IDX  >  3
+         PERFORM  VARYING  IDY  FROM  1  BY  1
+                  UNTIL  IDY  >  18
+           IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
+               MOVE  TBL-TOKKINAME(IDY)   TO  SC04-TOKKI(IDX)
+               MOVE  19  TO  IDY
+           END-IF
+         END-PERFORM
+       END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) end
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE     MF101-JNISSU     TO  WRK-Z2

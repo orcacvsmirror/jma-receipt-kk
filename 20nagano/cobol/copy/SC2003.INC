@@ -65,7 +65,11 @@
            03  SC03-NENGO-TBL OCCURS 4.
                05  SC03-NENGO          PIC  X(02).
       *特記事項
-           03  SC03-TOKKI              PIC  X(08).
+      *=== 特記事項印字修正 by Yoshikawa(2008/06/03) start
+      *     03  SC03-TOKKI              PIC  X(08).
+           03  SC03-TOKKI-TBL OCCURS 3.
+               05  SC03-TOKKI          PIC  X(08).
+      *=== 特記事項印字修正 by Yoshikawa(2008/06/03) end
            03  SC03-ZAISOU             PIC  X(04).
            03  SC03-ZAIMARU            PIC  X(02).
       *医療機関所在地

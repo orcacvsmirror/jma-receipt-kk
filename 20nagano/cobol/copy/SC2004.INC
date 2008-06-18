@@ -29,7 +29,11 @@
               03  SC04-SEX    PIC X(2).
             02  SC04-NENGO-TBL          OCCURS  4 TIMES.
               03  SC04-NENGO  PIC X(2).
-            02  SC04-TOKKI  PIC X(8).
+      *=== ì¡ãLéñçÄàÛéöèCê≥ by Yoshikawa(2008/06/03) start
+      *      02  SC04-TOKKI  PIC X(8).
+            02  SC04-TOKKI-TBL          OCCURS  3 TIMES.
+              03  SC04-TOKKI PIC X(8).
+      *=== ì¡ãLéñçÄàÛéöèCê≥ by Yoshikawa(2008/06/03) end
             02  SC04-ZAISOU PIC X(4).
             02  SC04-ZAIMARU    PIC X(2).
             02  SC04-ADRS   PIC X(100).
