@@ -48,6 +48,8 @@
       *  01.00.11    ÆâÅÄ    08/04/27    £´·î²þÀµ¤ËÈ¼¤¦½¤Àµ
       *                                  SPA-AREA½é´ü²½
       *  01.00.12    ÆâÅÄ    08/05/20    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
+      *  01.00.13    ÆâÅÄ    08/06/10    ¸øÈñºÆ·ÇÍó¡Ö´Î±ê¡×¤Î°õ»ú½¤Àµ
+      *                                  ¸øÈñºÆ·ÇÍó¡ÖÆó³ä¡×¤Î°õ»ú
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1076,9 +1078,22 @@
       *      IF  FLG-KEIKA  =  1
             IF  FLG-KEIKA  =  1  AND  RECE10-FTNMONEY(1)  >=  12000
       *---(01.00.06) LINE ADD END   ------------------------------------
-              ADD   1  TO  SKT1410TMP-K-KENSU (30)
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *        ADD   1  TO  SKT1410TMP-K-KENSU (30)
+              ADD   1  TO  SKT1410TMP-K-KENSU (31)
+      *---(01.00.13) LINE ADD END   ------------------------------------
             END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *    Æó³ä ¥Á¥§¥Ã¥¯
+           IF  RECE10-TOKKI(1)  =  "20"
+           OR  RECE10-TOKKI(2)  =  "20"
+           OR  RECE10-TOKKI(3)  =  "20"
+           OR  RECE10-TOKKI(4)  =  "20"
+           OR  RECE10-TOKKI(5)  =  "20"
+               ADD   1  TO  SKT1410TMP-K-KENSU (33)
+           END-IF
+      *---(01.00.13) LINE ADD END   ------------------------------------
       *
            .
        2101-SYUKEI-EXT.
@@ -1455,15 +1470,18 @@
       *
       *    ¸øÈñ¤Î°õ»ú
            PERFORM  VARYING  IDX3  FROM  1  BY  1
+      *---(01.00.13) LINE ADD START ------------------------------------
       *---(01.00.06) LINE ADD START ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
       ****2006/01/13 @@@@-BRAND  START
       *              UNTIL   IDX3   >    26
       *              UNTIL   IDX3   >    30
-                    UNTIL   IDX3   >    31
+      *              UNTIL   IDX3   >    31
       ****2006/01/13 @@@@-BRABD  END
       *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD END   ------------------------------------
+                    UNTIL   IDX3   >    33
+      *---(01.00.13) LINE ADD END   ------------------------------------
       *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
              MOVE  SKT1410TMP-K-KENSU (IDX3)  TO  WRK-Z3
              MOVE  WRK-Z3   TO  SKT1410-K-KENSU (IDX3)
@@ -1480,15 +1498,17 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *    ½¸·×
            END-PERFORM
+      *---(01.00.13) LINE ADD START ------------------------------------
       *---(01.00.11) LINE ADD START ------------------------------------
-      *    ´Î±ê
-           IF  SKT1410TMP-K-KENSU (32)  NOT =  ZERO
-               MOVE  "´Î±ê"        TO  SKT1410-ETC-HBT
-               MOVE  "38"          TO  SKT1410-ETC-CODE
-               MOVE  SKT1410TMP-K-KENSU (32)   TO  WRK-Z3
-               MOVE  WRK-Z3                    TO  SKT1410-ETC-KENSU
-           END-IF
-      *---(01.00.11) LINE ADD END   ------------------------------------
+      **    ´Î±ê
+      *     IF  SKT1410TMP-K-KENSU (32)  NOT =  ZERO
+      *         MOVE  "´Î±ê"        TO  SKT1410-ETC-HBT
+      *         MOVE  "38"          TO  SKT1410-ETC-CODE
+      *         MOVE  SKT1410TMP-K-KENSU (32)   TO  WRK-Z3
+      *         MOVE  WRK-Z3                    TO  SKT1410-ETC-KENSU
+      *     END-IF
+      **---(01.00.11) LINE ADD END   ------------------------------------
+      *---(01.00.13) LINE ADD END   ------------------------------------
       *
       *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
            PERFORM  900-TMP-READ-SEC
