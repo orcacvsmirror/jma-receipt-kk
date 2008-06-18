@@ -37,6 +37,7 @@
       *                                  SPA-AREA初期化
       *  01.00.05    安藤    08/05/02    新レイアウト対応
       *  01.00.06    内田    08/05/31    帳票追加
+      *  01.00.07    内田    08/06/10    国保がない場合でも印刷
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -343,7 +344,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *              UNTIL   FLG-END   =   1
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            PERFORM  300-END-SEC
       *
@@ -555,7 +558,9 @@
       *
            INITIALIZE             SUM-AREA
       *
-           MOVE     ZERO    TO        FLG-END
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO        FLG-END
+      *---(01.00.07) LINE ADD END   ------------------------------------
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
