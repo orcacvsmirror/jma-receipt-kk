@@ -38,6 +38,8 @@
       *                                   医療機関情報を参照
       *  01.00.04    内田     08/04/25    帳票様式の変更に伴う修正
       *                                   SPA-AREA初期化
+      *  01.00.05    内田     08/06/14    ３月以前の返戻分を診療年月毎でなく
+      *                                   まとめて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -140,6 +142,9 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            03  FLG-PTKOHINF        PIC 9(01).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *---(01.00.05) LINE ADD START ------------------------------------
+           03  FLG-CHK             PIC 9(01).
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -673,7 +678,10 @@
       *---(01.00.04) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-               MOVE  RECE10-SRYYM        TO  SKT2700TMP-SRYYM
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *         MOVE  RECE10-SRYYM        TO  SKT2700TMP-SRYYM
+               MOVE  "200803"            TO  SKT2700TMP-SRYYM
+      *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
@@ -1014,18 +1022,26 @@
       *
            INITIALIZE                    SKT2700
       *    診療年月
+      *---(01.00.05) LINE ADD START ------------------------------------
       *---(01.00.04) LINE ADD START ------------------------------------
+      **     MOVE    WRK-SRYYMWH           TO  SKT2700-SRYYM
+      *     IF  SKT2700TMP-SRYYM  NOT =  ZERO
+      *         MOVE  SKT2700TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *     ELSE
+      *         MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *     END-IF
+      *     MOVE    "01"                  TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
       *     MOVE    WRK-SRYYMWH           TO  SKT2700-SRYYM
-           IF  SKT2700TMP-SRYYM  NOT =  ZERO
-               MOVE  SKT2700TMP-SRYYM    TO  WRK-SYMD (1:6)
-           ELSE
-               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
-           END-IF
-           MOVE    "01"                  TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
-           MOVE    WRK-SRYYMWH           TO  SKT2700-SRYYM
       *---(01.00.04) LINE ADD END   ------------------------------------
+           MOVE    WRK-SRYYMWH           TO  SKT2700-SRYYM
+           IF  SKT2700TMP-SRYYM  NOT =  ZERO
+               MOVE  1                   TO  FLG-CHK
+           ELSE
+               MOVE  ZERO                TO  FLG-CHK
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT2700-HOSPCDN
       *    保険者名
@@ -1163,7 +1179,10 @@
                                        TO  SPRT-PRIORITY
       *---(01.00.04) LINE ADD START ------------------------------------
       *     MOVE   "SKT2700.red"            TO  SPRT-PRTID
-           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+           IF  FLG-CHK  =  ZERO
+      *---(01.00.05) LINE ADD END   ------------------------------------
                MOVE   "SKT2700.red"    TO  SPRT-PRTID
            ELSE
                MOVE   "SKT2700o.red"   TO  SPRT-PRTID
