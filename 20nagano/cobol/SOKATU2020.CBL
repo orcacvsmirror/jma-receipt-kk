@@ -33,6 +33,7 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/04/23    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.04    内田    08/06/13    老人のみでも１枚目を印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -168,6 +169,9 @@
            03  WRK-SEIYMD          PIC X(08).
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
+      *---(01.00.04) LINE ADD START ------------------------------------
+           03  WRK-SRYYMWH2        PIC X(16).
+      *---(01.00.04) LINE ADD END   ------------------------------------
            03  WRK-SRYYMD          PIC X(08).
       *
       *    ファイル名称用エリア
@@ -647,7 +651,10 @@
       *---(01.00.03) LINE ADD START ------------------------------------
       *    平成２０年３月以前の老人
            IF  RECE10-RJNHKNNUM  NOT =  SPACE
-             MOVE  RECE10-SRYYM    TO  SKT2020TMP-SRYYM
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *       MOVE  RECE10-SRYYM    TO  SKT2020TMP-SRYYM
+             MOVE  "200803"        TO  SKT2020TMP-SRYYM
+      *---(01.00.04) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
@@ -948,10 +955,12 @@
       *
            PERFORM  UNTIL     FLG-PRINT   =   1
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *      老人かどうか
-             IF  SKT2020TMP-SRYYM  =  ZERO
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD START ------------------------------------
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **      老人かどうか
+      *       IF  SKT2020TMP-SRYYM  =  ZERO
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *        一般
       *        帳票編集<見出し>処理
                PERFORM 310-HEAD-HEN-SEC
@@ -964,6 +973,9 @@
       *
       *        公費番号順にソート
                PERFORM  KOH-SORT-SEC
+      *---(01.00.04) LINE ADD START ------------------------------------
+             IF  SKT2020TMP-SRYYM  =  ZERO
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD START ------------------------------------
       *        公費はあるか
                MOVE    1       TO  WRK-CNT
@@ -1023,7 +1035,18 @@
            INITIALIZE  SKT2020
       *
       *    診療年月
-           MOVE    WRK-SRYYMWH             TO  SKT2020-SRYYM
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    WRK-SRYYMWH             TO  SKT2020-SRYYM
+           IF  SKT2020TMP-SRYYM  =  ZERO
+             MOVE    WRK-SRYYMWH           TO  SKT2020-SRYYM
+           ELSE
+             MOVE    SKT2020TMP-SRYYM      TO  WRK-SYMD (1:6)
+             MOVE    "01"                  TO  WRK-SYMD (7:2)
+             PERFORM 31012-SEIWA-HEN-SEC
+             MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
+             MOVE    WRK-SRYYMWH2          TO  SKT2020-SRYYM
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    請求年月日
            MOVE    WRK-SEIYMDWH            TO  SKT2020-SEIYMD
@@ -1175,7 +1198,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT2020.red"            TO  SPRT-PRTID
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE   "SKT2020.red"            TO  SPRT-PRTID
+           IF  SKT2020TMP-SRYYM  =  ZERO
+               MOVE   "SKT2020.red"    TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT2020o.red"   TO  SPRT-PRTID
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE    "国保請求書"        TO  SPRT-TITLE
            MOVE    SKT2020             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
