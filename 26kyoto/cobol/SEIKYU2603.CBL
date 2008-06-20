@@ -40,6 +40,7 @@
       *  01.00.03    内田    07/12/11    合計件数のバイト数増加（２→３）
       *  01.00.04    内田    08/01/25    「表示の確認」欄へ７９等の表示追加
       *  01.00.05    内田    08/05/28    合計件数の印字修正
+      *  01.00.06    内田    08/06/18    前期高齢者の場合、患者負担額印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -697,6 +698,14 @@
                    ADD 10              TO  WRK-ETCKOHFTN-G2
                END-IF
            END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    前期高齢者軽減特例措置は患者負担額印字
+           IF  WRK-ETCKOHFTN-G2  =  ZERO
+             IF  RECE02-FLG (2)  =  1
+               MOVE  MF100-TOTALTEN    TO  MF100-ETCKOHFTN
+             END-IF
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    公費を併用している場合、公費用ファイルを書き出す
            IF      WRK-KOHTENSU-G          >   ZERO
@@ -730,6 +739,13 @@
       *    地方公費の点数から全国公費の分点数を差し引く
                    COMPUTE MF100-TOTALTEN  =   MF100-TOTALTEN
                                            -   WRK-KOHTENSU-G
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    前期高齢者軽減特例措置は患者負担額印字
+                   IF  RECE02-FLG (2)  =  1
+                     MOVE  MF100-TOTALTEN  TO  MF100-ETCKOHFTN
+                   END-IF
+                   MOVE    SPACE           TO  MF100-ETCKOHNUM
+      *---(01.00.06) LINE ADD END   ------------------------------------
                END-IF
            ELSE
                MOVE    1                   TO  MF100-IPANCD
