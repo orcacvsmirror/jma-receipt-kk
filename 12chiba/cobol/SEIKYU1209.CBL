@@ -34,6 +34,8 @@
       *  01.00.03     内田    07/08/29    日レセver4.0対応
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
+      *  01.00.04     内田    08/06/10    ４月改正対応
+      *                                   SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -252,6 +254,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト　領域
       *****************************************************************
@@ -369,6 +376,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
            INITIALIZE  TOWN-DAT
       *
            DISPLAY "START"
@@ -710,6 +720,9 @@
            MOVE  RECE02-HKN          TO  MF100-HKN
            MOVE  RECE02-RJNHKN       TO  MF100-RJNHKN
            MOVE  RECE02-ZAITAKU      TO  MF100-ZAITAKU
+      *---(01.00.04) LINE ADD START ------------------------------------
+           MOVE  RECE02-RECESYUBETU  TO  MF100-RECESYUBETU
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
            MOVE  RECE02-KOHFTNJANUM (IDZ)(6:2)
@@ -758,14 +771,35 @@
            COMPUTE  MF100-SEIKYUGK  = WRK-SEIKYUGK-G
                                     - MF100-FTNMONEY
       *
-           IF    MF100-RJNHKNNUM      = SPACE   AND
-                 MF100-HKNNUM         = "060"   AND
-                 MF100-HKNJANUM(3:1)  = "3"     AND
-                 MF100-AGE            < 70      AND
-                 MF100-AGE           >=  3      AND
-                 MF100-KYURATE    NOT =  30
-             MOVE    MF100-KYURATE   TO  MF100-TOKUKYURATE
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     IF    MF100-RJNHKNNUM      = SPACE   AND
+      *           MF100-HKNNUM         = "060"   AND
+      *           MF100-HKNJANUM(3:1)  = "3"     AND
+      *           MF100-AGE            < 70      AND
+      *           MF100-AGE           >=  3      AND
+      *           MF100-KYURATE    NOT =  30
+      *       MOVE    MF100-KYURATE   TO  MF100-TOKUKYURATE
+      *     END-IF
+           IF  RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804
+             IF    MF100-RJNHKNNUM      = SPACE   AND
+                   MF100-HKNNUM         = "060"   AND
+                   MF100-HKNJANUM(3:1)  = "3"     AND
+                   MF100-AGE            < 70      AND
+                   RECE02-FLG (1)   NOT =  1      AND
+                   MF100-KYURATE    NOT =  30
+               MOVE    MF100-KYURATE   TO  MF100-TOKUKYURATE
+             END-IF
+           ELSE
+             IF    MF100-RJNHKNNUM      = SPACE   AND
+                   MF100-HKNNUM         = "060"   AND
+                   MF100-HKNJANUM(3:1)  = "3"     AND
+                   MF100-AGE            < 70      AND
+                   MF100-AGE           >=  3      AND
+                   MF100-KYURATE    NOT =  30
+               MOVE    MF100-KYURATE   TO  MF100-TOKUKYURATE
+             END-IF
            END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
@@ -951,25 +985,41 @@
                     OR  IDX1        >  10
                     OR  KEY-NEW NOT =  KEY-OLD
       *    入外区分
-             IF  MF100-HONKZKKBN  =  "2"
-                 IF  MF100-AGE     <    3
-                     IF    MF100-NYUGAIKBN   =   "1"
-                       MOVE  "3"        TO  SC09-NYUGAIKBN1(IDX1)
-                       MOVE  "三入"     TO  SC09-NYUGAIKBN2(IDX1)
-                     ELSE
-                       MOVE  "4"        TO  SC09-NYUGAIKBN1(IDX1)
-                       MOVE  "三外"     TO  SC09-NYUGAIKBN2(IDX1)
-                     END-IF
-                 ELSE
-                     IF    MF100-NYUGAIKBN   =   "1"
-                       MOVE  "5"        TO  SC09-NYUGAIKBN1(IDX1)
-                       MOVE  "家入"     TO  SC09-NYUGAIKBN2(IDX1)
-                     ELSE
-                       MOVE  "6"        TO  SC09-NYUGAIKBN1(IDX1)
-                       MOVE  "家外"     TO  SC09-NYUGAIKBN2(IDX1)
-                     END-IF
-                 END-IF
-             END-IF
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *       IF  MF100-HONKZKKBN  =  "2"
+      *           IF  MF100-AGE     <    3
+      *               IF    MF100-NYUGAIKBN   =   "1"
+      *                 MOVE  "3"        TO  SC09-NYUGAIKBN1(IDX1)
+      *                 MOVE  "三入"     TO  SC09-NYUGAIKBN2(IDX1)
+      *               ELSE
+      *                 MOVE  "4"        TO  SC09-NYUGAIKBN1(IDX1)
+      *                 MOVE  "三外"     TO  SC09-NYUGAIKBN2(IDX1)
+      *               END-IF
+      *           ELSE
+      *               IF    MF100-NYUGAIKBN   =   "1"
+      *                 MOVE  "5"        TO  SC09-NYUGAIKBN1(IDX1)
+      *                 MOVE  "家入"     TO  SC09-NYUGAIKBN2(IDX1)
+      *               ELSE
+      *                 MOVE  "6"        TO  SC09-NYUGAIKBN1(IDX1)
+      *                 MOVE  "家外"     TO  SC09-NYUGAIKBN2(IDX1)
+      *               END-IF
+      *           END-IF
+      *       END-IF
+             EVALUATE  MF100-RECESYUBETU(4:1)
+                 WHEN  "3"
+                     MOVE  "3"        TO  SC09-NYUGAIKBN1(IDX1)
+                     MOVE  "六入"     TO  SC09-NYUGAIKBN2(IDX1)
+                 WHEN  "4"
+                     MOVE  "4"        TO  SC09-NYUGAIKBN1(IDX1)
+                     MOVE  "六外"     TO  SC09-NYUGAIKBN2(IDX1)
+                 WHEN  "5"
+                     MOVE  "5"        TO  SC09-NYUGAIKBN1(IDX1)
+                     MOVE  "家入"     TO  SC09-NYUGAIKBN2(IDX1)
+                 WHEN  "6"
+                     MOVE  "6"        TO  SC09-NYUGAIKBN1(IDX1)
+                     MOVE  "家外"     TO  SC09-NYUGAIKBN2(IDX1)
+             END-EVALUATE
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    負担者番号
              MOVE     MF100-FTNJANUM  TO  WRK-MAE-INPUT

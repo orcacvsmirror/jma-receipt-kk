@@ -49,6 +49,8 @@
                05  MF100-TEKSTYMD        PIC  X(08). 
       *¿ÇÎÅ²Ê
                05  MF100-SRYKA           PIC  X(02).
+      *¥ì¥»¥×¥È¼ïÊÌ
+               05  MF100-RECESYUBETU     PIC  X(04).
       *´µ¼Ô£É£Ä
            03  MF100-PTID                PIC  9(10).
       *´Á»ú»áÌ¾
