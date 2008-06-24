@@ -35,6 +35,8 @@
       *                                  返戻対応
       *  01.00.04    内田    07/11/07    「第三件数」を印字する
       *  01.00.05    伊藤    08/04/24    帳票様式に伴う修正
+      *  01.00.06    内田    08/06/20    国保がない場合でも印字する
+      *                                  返戻分は合算する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -367,7 +369,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -539,20 +543,24 @@
       *
            PERFORM  110-INI-FILE-SEC
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-           EVALUATE    WRK-PARA-SYOKBN 
-               WHEN    "2"
-                   MOVE    "key37"                  TO  WRK-PATH
-      *---(01.00.05) LINE ADD START ------------------------------------
-                   MOVE    "key65"     TO  WRK-PATH2
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               WHEN    "1"
-                   MOVE    "key38"                  TO  WRK-PATH
-      *---(01.00.05) LINE ADD START ------------------------------------
-                   MOVE    "key66"     TO  WRK-PATH2
-      *---(01.00.05) LINE ADD END   ------------------------------------
-           END-EVALUATE
+      *---(01.00.06) LINE ADD START ------------------------------------
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *     EVALUATE    WRK-PARA-SYOKBN 
+      *         WHEN    "2"
+      *             MOVE    "key37"                  TO  WRK-PATH
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *             MOVE    "key65"     TO  WRK-PATH2
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      *             MOVE    "key38"                  TO  WRK-PATH
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *             MOVE    "key66"     TO  WRK-PATH2
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
       *---(01.00.03) LINE ADD END   ------------------------------------
+            MOVE    "key4"              TO  WRK-PATH
+            MOVE    "key65"             TO  WRK-PATH2
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            OPEN    OUTPUT  UPD-FILE
       *
@@ -610,8 +618,11 @@
            CLOSE           SKT4610TMP-FILE
            OPEN    I-O     SKT4610TMP-FILE
       *
-           MOVE    ZERO    TO  FLG-END
-                               FLG-UPD
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    ZERO    TO  FLG-END
+      *                         FLG-UPD
+           MOVE    ZERO    TO  FLG-UPD
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM 2001-KOKUHO-SYUKEI-SEC
                    UNTIL   FLG-END     =   1
@@ -632,6 +643,21 @@
                     UNTIL   FLG-END   =   1
            PERFORM  950-SEIKYU-CLOSE-SEC
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD START ------------------------------------
+           MOVE    "key66"  TO        WRK-PATH2
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "039"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "040"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+      *---(01.00.06) LINE ADD END   ------------------------------------
            CLOSE   UPD-FILE
            CLOSE   SKT4600TMP-FILE
            CLOSE   SKT4610TMP-FILE
