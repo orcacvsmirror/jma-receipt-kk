@@ -34,6 +34,7 @@
       *  01.00.02       長屋    2008/04/29   ４月改正に伴う修正
       *  01.00.03       内田    2008/05/28   後期高齢は保険者数を県毎で
       *                                      カウントする
+      *  01.00.04       内田    2008/06/20   後期高齢のみの場合も印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -288,7 +289,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -481,7 +484,9 @@
       *
            DISPLAY  "200-MAIN-SEC START"
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
