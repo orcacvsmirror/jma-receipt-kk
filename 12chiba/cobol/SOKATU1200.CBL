@@ -35,6 +35,7 @@
       *  01.00.04    内田     08/01/22    主科対応でファイル管理の為再作成
       *  01.00.05    内田k    08/04/25    帳票様式の変更に伴う修正
       *                                   SPA-AREA初期化
+      *  01.00.06    内田     08/06/10    国保がない場合でも印刷
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -298,7 +299,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *              UNTIL   FLG-END   =   1
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM  300-END-SEC
       *
@@ -523,8 +526,9 @@
            CLOSE            SKT1200TMP-FILE
            OPEN     I-O     SKT1200TMP-FILE
       *
-           MOVE     ZERO    TO        FLG-END
-      *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO        FLG-END
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
