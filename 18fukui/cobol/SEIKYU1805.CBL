@@ -43,6 +43,8 @@
       *                                      印字対象外とする
       *                                      受給者番号でソートする
       *  01.00.07       吉川    2008/05/16   H20年4月改正対応
+      *  01.00.08       吉川    2008/06/06   請求を取り消した情報は
+      *                                      取得しないように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1716,11 +1718,16 @@
                MOVE  "key2"             TO  MCP-PATHNAME
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
                PERFORM  805-SYUNOU-READ-SEC
-      *
                PERFORM  UNTIL  FLG-SYUNOU  =  1
-                 IF   MF110-SRYYM           =  SYU-SRYYMD(1:6)
-                   PERFORM  810-SEIKYU-SEC
+      *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) start
+                 IF  SYU-DENPJTIKBN   NOT = "3"
+      *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) end
+                   IF   MF110-SRYYM           =  SYU-SRYYMD(1:6)
+                     PERFORM  810-SEIKYU-SEC
+                   END-IF
+      *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) start
                  END-IF
+      *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) end
       *
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *           MOVE  PATH-TBL-SYUNOU-KEY2         TO  MCP-PATH
