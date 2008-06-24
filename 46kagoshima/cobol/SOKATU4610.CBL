@@ -34,6 +34,8 @@
       *  01.00.03    内田    08/05/03    帳票様式の変更に伴う修正
       *  01.00.04    内田    08/05/08    年齢判定の修正
       *  01.00.05    内田    08/05/30    帳票様式の変更に伴う修正
+      *  01.00.06    内田    08/06/18    ３月以前の返戻分を診療年月毎でなく
+      *                                  まとめて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -137,6 +139,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *---(01.00.06) LINE ADD START ------------------------------------
+           03  FLG-CHK             PIC 9(01).
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -648,7 +653,10 @@
       *---(01.00.05) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-               MOVE  RECE10-SRYYM          TO  SKT4610TMP-SRYYM
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *         MOVE  RECE10-SRYYM          TO  SKT4610TMP-SRYYM
+               MOVE  "200803"              TO  SKT4610TMP-SRYYM
+      *---(01.00.06) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
@@ -990,18 +998,26 @@
            MOVE    "○"                    TO  SKT4610-TENHYOKBN(1)
       *
       *    診療年月
+      *---(01.00.06) LINE ADD START ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
-      *     MOVE    WRK-SRYYMWH             TO  SKT4610-SRYYM
-           IF  SKT4610TMP-SRYYM  NOT =  ZERO
-               MOVE  SKT4610TMP-SRYYM    TO  WRK-SYMD (1:6)
-           ELSE
-               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
-           END-IF
-           MOVE    "01"                  TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
-           MOVE    WRK-SRYYMWH           TO  SKT4610-SRYYM
+      **     MOVE    WRK-SRYYMWH             TO  SKT4610-SRYYM
+      *     IF  SKT4610TMP-SRYYM  NOT =  ZERO
+      *         MOVE  SKT4610TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *     ELSE
+      *         MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *     END-IF
+      *     MOVE    "01"                  TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *     MOVE    WRK-SRYYMWH           TO  SKT4610-SRYYM
       *---(01.00.05) LINE ADD END   ------------------------------------
+           MOVE    WRK-SRYYMWH           TO  SKT4610-SRYYM
+           IF  SKT4610TMP-SRYYM  NOT =  ZERO
+               MOVE  1                   TO  FLG-CHK
+           ELSE
+               MOVE  ZERO                TO  FLG-CHK
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    保険者名
            MOVE    SKT4610TMP-HKNJANUM     TO  WRK-HKNJANUM
@@ -1132,7 +1148,10 @@
                                        TO  SPRT-PRIORITY
       *---(01.00.05) LINE ADD START ------------------------------------
       *     MOVE   "SKT4610.red"        TO  SPRT-PRTID
-           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+           IF  FLG-CHK  =  ZERO
+      *---(01.00.06) LINE ADD END   ------------------------------------
                MOVE   "SKT4610.red"    TO  SPRT-PRTID
            ELSE
                MOVE   "SKT4610o.red"   TO  SPRT-PRTID
