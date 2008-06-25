@@ -35,6 +35,7 @@
       *                                     医療機関情報を参照
       *  01.00.04     内田    2008/04/22    帳票様式の変更に伴う修正
       *                                     SPA-AREA初期化
+      *  01.00.05     吉川    2008/06/20    国保がない場合でも印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -293,7 +294,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *=== 国保がない場合でも印字 by Yoshikawa(2008/06/20) start
+      *              UNTIL   FLG-END   =   1
+      *=== 国保がない場合でも印字 by Yoshikawa(2008/06/20) end
       *
            PERFORM  300-END-SEC
       *
@@ -501,7 +504,9 @@
            CLOSE            SKT1300TMP-FILE
            OPEN     I-O     SKT1300TMP-FILE
       *
-           MOVE     ZERO    TO        FLG-END
+      *=== 国保がない場合でも印字 by Yoshikawa(2008/06/20) start
+      *     MOVE     ZERO    TO        FLG-END
+      *=== 国保がない場合でも印字 by Yoshikawa(2008/06/20) end
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
