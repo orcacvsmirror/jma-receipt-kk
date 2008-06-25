@@ -36,6 +36,7 @@
       *  01.00.04    内田    07/11/16    旧浜松市も浜松市でまとめる
       *  01.00.05    内田k   08/04/27    帳票様式の変更に伴う修正
       *  01.00.06    内田    08/05/03    退職家族集計修正
+      *  01.00.07    吉川    08/06/17    H20年3月以前の返戻はまとめて印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -135,6 +136,9 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) start
+           03  FLG-CHK             PIC 9(01).
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -679,7 +683,10 @@
            DISPLAY "RECE10-SRYYM"RECE10-SRYYM
            DISPLAY "WRK-CONS-SRYYM-200804"WRK-CONS-SRYYM-200804
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-               MOVE  RECE10-SRYYM          TO  SKT2210TMP-SRYYM
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) start
+      *         MOVE  RECE10-SRYYM          TO  SKT2210TMP-SRYYM
+               MOVE  "200803"              TO  SKT2210TMP-SRYYM
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) end
                DISPLAY "平成２０年３月以前は旧様式"SKT2210TMP-SRYYM
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
@@ -1201,32 +1208,40 @@
       *
            INITIALIZE                        SKT2210
       *    診療年月
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *     MOVE    WRK-SRYYMWH           TO  SKT2210-PRTYM
-      *
-           DISPLAY "頭書き時日付"SKT2210TMP-SRYYM
-           IF  SKT2210TMP-SRYYM  NOT =  ZERO
-               MOVE  SKT2210TMP-SRYYM    TO  WRK-SYMD (1:6)
-               DISPLAY "旧"
-           ELSE
-               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
-               DISPLAY "新"
-           END-IF
-           MOVE    "01"                TO  WRK-SYMD (7:2)
-           DISPLAY "WRK-SYMD"WRK-SYMD
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
-      *     INITIALIZE                      LNK-DAY2-AREA
-      *     MOVE    "21"                TO  LNK-DAY2-IRAI
-      *     MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY2-YMD
-      *     CALL    "ORCSDAY"           USING   STS-AREA-DAY
-      *                                         LNK-DAY2-AREA
-      *     IF      STS-DAY-RC1         =   ZERO 
-      *             MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **     MOVE    WRK-SRYYMWH           TO  SKT2210-PRTYM
+      **
+      *     DISPLAY "頭書き時日付"SKT2210TMP-SRYYM
+      *     IF  SKT2210TMP-SRYYM  NOT =  ZERO
+      *         MOVE  SKT2210TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *         DISPLAY "旧"
+      *     ELSE
+      *         MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *         DISPLAY "新"
       *     END-IF
-           MOVE    WRK-SRYYMWH      TO  SKT2210-PRTYM
-           DISPLAY "WRK-SRYYMWH"WRK-SRYYMWH
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *     MOVE    "01"                TO  WRK-SYMD (7:2)
+      *     DISPLAY "WRK-SYMD"WRK-SYMD
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+      **     INITIALIZE                      LNK-DAY2-AREA
+      **     MOVE    "21"                TO  LNK-DAY2-IRAI
+      **     MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY2-YMD
+      **     CALL    "ORCSDAY"           USING   STS-AREA-DAY
+      **                                         LNK-DAY2-AREA
+      **     IF      STS-DAY-RC1         =   ZERO 
+      **             MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
+      **     END-IF
+      *     MOVE    WRK-SRYYMWH      TO  SKT2210-PRTYM
+      *     DISPLAY "WRK-SRYYMWH"WRK-SRYYMWH
+      **---(01.00.05) LINE ADD END   ------------------------------------
+           MOVE    WRK-SRYYMWH           TO  SKT2210-PRTYM
+           IF  SKT2210TMP-SRYYM  NOT =  ZERO
+               MOVE  1                   TO  FLG-CHK
+           ELSE
+               MOVE  ZERO                TO  FLG-CHK
+           END-IF
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) end
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT2210-SEIYMD
       *    医療機関住所
@@ -1401,9 +1416,12 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
       *---(01.00.05) LINE ADD START ------------------------------------
-           DISPLAY "印刷時"WRK-SYMD (1:6)
-           DISPLAY "固定項目"WRK-CONS-SRYYM-200804
-           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) start
+      *     DISPLAY "印刷時"WRK-SYMD (1:6)
+      *     DISPLAY "固定項目"WRK-CONS-SRYYM-200804
+      *     IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+           IF  FLG-CHK  =  ZERO
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) end
              MOVE   "SKT2210.red"        TO  SPRT-PRTID
            ELSE
              MOVE   "SKT2210o.red"        TO  SPRT-PRTID
@@ -1441,18 +1459,20 @@
       *    診療年月
       *     MOVE    WRK-SRYYMWH           TO  SKT2220-PRTYM
       *
-           DISPLAY "頭書き時日付"SKT2210TMP-SRYYM
-           IF  SKT2210TMP-SRYYM  NOT =  ZERO
-               MOVE  SKT2210TMP-SRYYM    TO  WRK-SYMD (1:6)
-               DISPLAY "旧"
-           ELSE
-               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
-               DISPLAY "新"
-           END-IF
-           MOVE    "01"                TO  WRK-SYMD (7:2)
-           DISPLAY "WRK-SYMD"WRK-SYMD
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) start
+      *     DISPLAY "頭書き時日付"SKT2210TMP-SRYYM
+      *     IF  SKT2210TMP-SRYYM  NOT =  ZERO
+      *         MOVE  SKT2210TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *         DISPLAY "旧"
+      *     ELSE
+      *         MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *         DISPLAY "新"
+      *     END-IF
+      *     MOVE    "01"                TO  WRK-SYMD (7:2)
+      *     DISPLAY "WRK-SYMD"WRK-SYMD
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+      *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) end
       *     INITIALIZE                      LNK-DAY2-AREA
       *     MOVE    "21"                TO  LNK-DAY2-IRAI
       *     MOVE    LNK-PRTKANRI-SKYYMD     TO  LNK-DAY2-YMD
