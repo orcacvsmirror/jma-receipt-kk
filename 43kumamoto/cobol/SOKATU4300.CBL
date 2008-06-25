@@ -35,6 +35,7 @@
       *  01.00.03    内田k   08/04/29    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.04    吉川    08/05/29    国組3〜6歳を分けないように修正
+      *  01.00.05    吉川    08/06/17    月遅れ及び返戻処理の修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -697,10 +698,17 @@
                END-IF
            END-IF
       *=== 国組3〜6歳は分けない by Yoshikawa(2008/05/29) end
-      *---(01.00.03) LINE ADD START ------------------------------------
-           MOVE  RECE10-SRYYM        TO  SKT4300TMP-SRYYM
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE  RECE10-SRYYM        TO  SKT4300TMP-SRYYM
+      **---(01.00.03) LINE ADD END   ------------------------------------
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE  "200803"    TO  SKT4300TMP-SRYYM
+           ELSE
+               MOVE   SPACE      TO  SKT4300TMP-SRYYM
+           END-IF
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
            MOVE  RECE10-SKYYM        TO  SKT4300TMP-SKYYM
-      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -932,10 +940,17 @@
                    UNTIL   IDX3     >       4
                    OR  RECE10-KOHNUM (IDX3) =   SPACE
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-             MOVE  RECE10-SRYYM    TO    KOH4300TMP-SRYYM
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *       MOVE  RECE10-SRYYM    TO    KOH4300TMP-SRYYM
+      **---(01.00.03) LINE ADD END   ------------------------------------
+             IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+                 MOVE  "200803"    TO  KOH4300TMP-SRYYM
+             ELSE
+               MOVE   SPACE      TO  KOH4300TMP-SRYYM
+             END-IF
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *
-      *---(01.00.03) LINE ADD END   ------------------------------------
              IF    RECE10-KOHNUM(IDX3)  =  "091"
                MOVE    "051"       TO    RECE10-KOHNUM(IDX3)
              END-IF
@@ -998,110 +1013,157 @@
            OPEN     INPUT       KOH4300TMP-FILE
       *
            MOVE     ZERO        TO       FLG-PRINT
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+           MOVE     ZERO        TO       FLG-PRINT2
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
            PERFORM  950-KOHTMPFILE-READ-SEC
       *
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
       *---(01.00.03) LINE ADD START ------------------------------------
       *    当月
+      *     PERFORM  UNTIL     FLG-PRINT   =  1
+      *              AND       FLG-PRINT2  =  1
+      *       IF  (SKT4300TMP-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *         DISPLAY "当月"
+      **        帳票編集<見出し>処理
+      *         PERFORM 310-HEAD-HEN-SEC
+      **        帳票編集<明細>処理
+      *         PERFORM 330-BODY-HEN-SEC
+      **        帳票編集<小計>処理
+      *         PERFORM 3213-SHOKEI-HEN-SEC
+      **        帳票編集<公費>
+      *         IF  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
+      *           PERFORM  331-KOH-HEN-SEC
+      *         ELSE
+      *           PERFORM
+      *             UNTIL  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
+      *                OR  FLG-PRINT2  =  1
+      *             PERFORM  950-KOHTMPFILE-READ-SEC
+      *           END-PERFORM
+      *           PERFORM 331-KOH-HEN-SEC
+      *         END-IF
+      **        帳票印刷処理
+      *         PERFORM 331-PRINT-OUT-SEC
+      **
+      *         PERFORM  950-KOHTMPFILE-READ-SEC
+      *
+      *         PERFORM UNTIL     FLG-PRINT2   =  1
+      **          帳票編集<見出し>処理
+      *           PERFORM 310-HEAD-HEN-SEC
+      **        帳票編集<公費>
+      *           IF  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
+      *               PERFORM  331-KOH-HEN-SEC
+      *           ELSE
+      *               PERFORM  950-KOHTMPFILE-READ-SEC
+      *           END-IF
+      **        帳票印刷処理
+      *           PERFORM 331-PRINT-OUT-SEC
+      *         END-PERFORM
+      *       ELSE
+      *         PERFORM  900-TMP-READ-SEC
+      *       END-IF
+      **
+      *     END-PERFORM
+      *     CLOSE    SKT4300TMP-FILE
+      *     CLOSE    KOH4300TMP-FILE
+      **
+      **
+      **    月遅れ処理
+      *     OPEN     INPUT       SKT4300TMP-FILE
+      *     OPEN     INPUT       KOH4300TMP-FILE
+      **
+      *     MOVE     ZERO        TO       FLG-PRINT
+      *     MOVE     ZERO        TO       FLG-PRINT2
+      **
+      **    一時ファイル読込
+      *     PERFORM  900-TMP-READ-SEC
+      *     PERFORM  950-KOHTMPFILE-READ-SEC
+      **
+      *     PERFORM  UNTIL     FLG-PRINT   =  1
+      **              AND       FLG-PRINT2  =  1
+      *       IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      **        帳票編集<見出し>処理
+      *         PERFORM 310-HEAD-HEN-SEC
+      **        帳票編集<明細>処理
+      *         PERFORM 320-BODY-HEN-SEC
+      *       ELSE
+      *         PERFORM 900-TMP-READ-SEC
+      *       END-IF
+      *     END-PERFORM
+      *     CLOSE    SKT4300TMP-FILE
+      *     CLOSE    KOH4300TMP-FILE
+      **
+      **
+      **
+      **     PERFORM  UNTIL     FLG-PRINT   =  1
+      **              AND       FLG-PRINT2  =  1
+      **
+      **    帳票編集<見出し>処理
+      **         PERFORM 310-HEAD-HEN-SEC
+      **    帳票編集<明細>処理
+      **         PERFORM 320-BODY-HEN-SEC
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **         IF   FLG-PRINT   =  1  AND  FLG-PRINT2  =  1
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      **    帳票編集<小計>処理
+      **           PERFORM 321-BODY-HEN-SEC
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **         END-IF
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      **    帳票印刷処理
+      **         PERFORM 330-PRINT-OUT-SEC
+      **     END-PERFORM
+      **
+      **     CLOSE    SKT4300TMP-FILE
+      **     CLOSE    KOH4300TMP-FILE
+      **
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *
+           IF  SKT4300TMP-SRYYM  NOT  =  SPACE
+               MOVE  SKT4300TMP-SRYYM    TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           END-IF
+      *
            PERFORM  UNTIL     FLG-PRINT   =  1
                     AND       FLG-PRINT2  =  1
-             IF  (SKT4300TMP-SRYYM  >=  WRK-CONS-SRYYM-200804)
-               DISPLAY "当月"
+      *
+      *      新様式か
+             IF  (WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804)
       *        帳票編集<見出し>処理
                PERFORM 310-HEAD-HEN-SEC
       *        帳票編集<明細>処理
                PERFORM 330-BODY-HEN-SEC
-      *        帳票編集<小計>処理
-               PERFORM 3213-SHOKEI-HEN-SEC
       *        帳票編集<公費>
-               IF  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
-                 PERFORM  331-KOH-HEN-SEC
-               ELSE
-                 PERFORM
-                   UNTIL  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
-                      OR  FLG-PRINT2  =  1
-                   PERFORM  950-KOHTMPFILE-READ-SEC
-                 END-PERFORM
-                 PERFORM 331-KOH-HEN-SEC
+               PERFORM 331-KOH-HEN-SEC
+               IF   FLG-PRINT   =  1  AND  FLG-PRINT2  =  1
+      *        帳票編集<小計>処理
+                 PERFORM 3213-SHOKEI-HEN-SEC
                END-IF
       *        帳票印刷処理
                PERFORM 331-PRINT-OUT-SEC
       *
-               PERFORM  950-KOHTMPFILE-READ-SEC
-      
-               PERFORM UNTIL     FLG-PRINT2   =  1
-      *          帳票編集<見出し>処理
-                 PERFORM 310-HEAD-HEN-SEC
-      *        帳票編集<公費>
-                 IF  SKT4300TMP-SRYYM  =  KOH4300TMP-SRYYM
-                     PERFORM  331-KOH-HEN-SEC
-                 ELSE
-                     PERFORM  950-KOHTMPFILE-READ-SEC
-                 END-IF
-      *        帳票印刷処理
-                 PERFORM 331-PRINT-OUT-SEC
-               END-PERFORM
+      *      旧様式
              ELSE
-               PERFORM  900-TMP-READ-SEC
-             END-IF
-      *
-           END-PERFORM
-           CLOSE    SKT4300TMP-FILE
-           CLOSE    KOH4300TMP-FILE
-      *
-      *
-      *    月遅れ処理
-           OPEN     INPUT       SKT4300TMP-FILE
-           OPEN     INPUT       KOH4300TMP-FILE
-      *
-           MOVE     ZERO        TO       FLG-PRINT
-           MOVE     ZERO        TO       FLG-PRINT2
-      *
-      *    一時ファイル読込
-           PERFORM  900-TMP-READ-SEC
-           PERFORM  950-KOHTMPFILE-READ-SEC
-      *
-           PERFORM  UNTIL     FLG-PRINT   =  1
-      *              AND       FLG-PRINT2  =  1
-             IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
       *        帳票編集<見出し>処理
                PERFORM 310-HEAD-HEN-SEC
       *        帳票編集<明細>処理
                PERFORM 320-BODY-HEN-SEC
-             ELSE
-               PERFORM 900-TMP-READ-SEC
+               IF   FLG-PRINT   =  1  AND  FLG-PRINT2  =  1
+      *        帳票編集<小計>処理
+                 PERFORM 321-BODY-HEN-SEC
+               END-IF
+      *        帳票印刷処理
+               PERFORM 330-PRINT-OUT-SEC
              END-IF
+      *
            END-PERFORM
            CLOSE    SKT4300TMP-FILE
            CLOSE    KOH4300TMP-FILE
-      *
-      *
-      *
-      *     PERFORM  UNTIL     FLG-PRINT   =  1
-      *              AND       FLG-PRINT2  =  1
-      *
-      *    帳票編集<見出し>処理
-      *         PERFORM 310-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-      *         PERFORM 320-BODY-HEN-SEC
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *         IF   FLG-PRINT   =  1  AND  FLG-PRINT2  =  1
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      *    帳票編集<小計>処理
-      *           PERFORM 321-BODY-HEN-SEC
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *         END-IF
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      *    帳票印刷処理
-      *         PERFORM 330-PRINT-OUT-SEC
-      *     END-PERFORM
-      *
-      *     CLOSE    SKT4300TMP-FILE
-      *     CLOSE    KOH4300TMP-FILE
-      *
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *
            .
        2002-PRINT-EXT.
@@ -1146,7 +1208,10 @@
            MOVE    CNT-PAGE              TO  WRK-Z3
            MOVE    WRK-Z3                TO  SKT4300-NO
       *---(01.00.03) LINE ADD START ------------------------------------
-           IF  (SKT4300TMP-SRYYM  >= WRK-CONS-SRYYM-200804)
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+      *     IF  (SKT4300TMP-SRYYM  >= WRK-CONS-SRYYM-200804)
+           IF  (WRK-SYMD (1:6)  >= WRK-CONS-SRYYM-200804)
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
              CONTINUE
            ELSE
              ADD     1                     TO  CNT-PAGE
@@ -1207,9 +1272,12 @@
                     UNTIL    IDX1  >     8
                     OR       FLG-PRINT   =      1
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-             IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *       IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      **---(01.00.03) LINE ADD END   ------------------------------------
+             IF  (WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804)
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *        保険者名
                MOVE     SKT4300TMP-HKNJANUM     TO  WRK-HKNJANUM
                PERFORM  920-HKNJAINF-SET-SEC
@@ -1241,98 +1309,100 @@
                MOVE     SKT4300TMP-SRYYM  TO  KEY-NEW
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-               IF  KEY-NEW  NOT =  KEY-OLD
-      *          公費集計
-                 PERFORM 950-KOHTMPFILE-READ-SEC
-                 PERFORM UNTIL FLG-PRINT2 = 1
-                   IF  KEY-OLD  =  KOH4300TMP-SRYYM
-                     PERFORM 331-KOH-HEN-SEC
-                   ELSE
-                     PERFORM 950-KOHTMPFILE-READ-SEC
-                   END-IF
-                   PERFORM 950-KOHTMPFILE-READ-SEC
-                 END-PERFORM
-                 CLOSE    KOH4300TMP-FILE
-      *
-      *          帳票編集<小計>処理
-                 PERFORM 321-BODY-HEN-SEC
-      *          帳票印刷処理
-                 PERFORM 330-PRINT-OUT-SEC
-                 INITIALIZE  SUM-AREA
-                 MOVE   ZERO  TO  IDX1
-                 MOVE   ZERO  TO  IDX2
-                 IF ( FLG-PRINT   =  ZERO ) 
-                   AND (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
-      *            帳票編集<見出し>処理
-                   PERFORM 310-HEAD-HEN-SEC
-                   OPEN     INPUT       KOH4300TMP-FILE
-                   MOVE     ZERO    TO  FLG-PRINT2
-                 END-IF
-               END-IF
-             ELSE
-               PERFORM 900-TMP-READ-SEC
-             END-IF
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *         IF  KEY-NEW  NOT =  KEY-OLD
+      **          公費集計
+      *           PERFORM 950-KOHTMPFILE-READ-SEC
+      *           PERFORM UNTIL FLG-PRINT2 = 1
+      *             IF  KEY-OLD  =  KOH4300TMP-SRYYM
+      *               PERFORM 331-KOH-HEN-SEC
+      *             ELSE
+      *               PERFORM 950-KOHTMPFILE-READ-SEC
+      *             END-IF
+      *             PERFORM 950-KOHTMPFILE-READ-SEC
+      *           END-PERFORM
+      *           CLOSE    KOH4300TMP-FILE
+      **
+      **          帳票編集<小計>処理
+      *           PERFORM 321-BODY-HEN-SEC
+      **          帳票印刷処理
+      *           PERFORM 330-PRINT-OUT-SEC
+      *           INITIALIZE  SUM-AREA
+      *           MOVE   ZERO  TO  IDX1
+      *           MOVE   ZERO  TO  IDX2
+      *           IF ( FLG-PRINT   =  ZERO ) 
+      *             AND (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      **            帳票編集<見出し>処理
+      *             PERFORM 310-HEAD-HEN-SEC
+      *             OPEN     INPUT       KOH4300TMP-FILE
+      *             MOVE     ZERO    TO  FLG-PRINT2
+      *           END-IF
+      *         END-IF
+      *       ELSE
+      *         PERFORM 900-TMP-READ-SEC
+      *       END-IF
+      **---(01.00.03) LINE ADD END   ------------------------------------
       *
            END-PERFORM
       *    公費分編集(１枚目)
-      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
-      *              UNTIL    IDX1  >     6
-      *              OR       FLG-PRINT2  =      1
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     6
+                    OR       FLG-PRINT2  =      1
       *
       *    法別番号
-      *       MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
-      *       PERFORM  950-HKNNUM-SET-SEC
-      *       MOVE   HKN-HBTNUM            TO     SKT4300-HBTNUM(IDX1)
-      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
-      *                UNTIL    IDX2  >     2
+             MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+             PERFORM  950-HKNNUM-SET-SEC
+             MOVE   HKN-HBTNUM            TO     SKT4300-HBTNUM(IDX1)
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     2
       *    公費：件数
-      *         MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
-      *         MOVE  WRK-Z4         TO  SKT4300-K-KENSU(IDX1 IDX2)
+               MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+               MOVE  WRK-Z4         TO  SKT4300-K-KENSU(IDX1 IDX2)
       *    公費：点数
-      *         MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
-      *         MOVE  WRK-Z7         TO  SKT4300-K-TENSU(IDX1 IDX2)
-      *       END-PERFORM
+               MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+               MOVE  WRK-Z7         TO  SKT4300-K-TENSU(IDX1 IDX2)
+             END-PERFORM
       *    公費：食事療養費
-      *       MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
-      *       MOVE  WRK-Z7           TO  SKT4300-K-SKINGK(IDX1)
+             MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+             MOVE  WRK-Z7           TO  SKT4300-K-SKINGK(IDX1)
       *    公費：標準負担額
-      *       MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
-      *       MOVE  WRK-Z7           TO  SKT4300-K-SFTNGK(IDX1)
+             MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+             MOVE  WRK-Z7           TO  SKT4300-K-SFTNGK(IDX1)
       *
       *    公費一時ファイル読み込み
-      *       PERFORM  950-KOHTMPFILE-READ-SEC
-      *     END-PERFORM
+             PERFORM  950-KOHTMPFILE-READ-SEC
+           END-PERFORM
       *
       *    公費分編集(２枚目)
-      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
-      *              UNTIL    IDX1  >     6
-      *              OR       FLG-PRINT2  =      1
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     6
+                    OR       FLG-PRINT2  =      1
       *
       *    法別番号
-      *       MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
-      *       PERFORM  950-HKNNUM-SET-SEC
-      *       MOVE   HKN-HBTNUM            TO     SKT4310-HBTNUM(IDX1)
-      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
-      *                UNTIL    IDX2  >     2
+             MOVE   KOH4300TMP-KOHNUM     TO     WRK-KOHNUM
+             PERFORM  950-HKNNUM-SET-SEC
+             MOVE   HKN-HBTNUM            TO     SKT4310-HBTNUM(IDX1)
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     2
       *    公費：件数
-      *         MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
-      *         MOVE  WRK-Z4         TO  SKT4310-K-KENSU(IDX1 IDX2)
+               MOVE  KOH4300TMP-KENSU(IDX2)  TO  WRK-Z4
+               MOVE  WRK-Z4         TO  SKT4310-K-KENSU(IDX1 IDX2)
       *    公費：点数
-      *         MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
-      *         MOVE  WRK-Z7         TO  SKT4310-K-TENSU(IDX1 IDX2)
-      *       END-PERFORM
+               MOVE  KOH4300TMP-TENSU(IDX2)  TO  WRK-Z7
+               MOVE  WRK-Z7         TO  SKT4310-K-TENSU(IDX1 IDX2)
+             END-PERFORM
       *    公費：食事療養費
-      *       MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
-      *       MOVE  WRK-Z7           TO  SKT4310-K-SKINGK(IDX1)
+             MOVE  KOH4300TMP-SKINGK         TO  WRK-Z7
+             MOVE  WRK-Z7           TO  SKT4310-K-SKINGK(IDX1)
       *    公費：標準負担額
-      *       MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
-      *       MOVE  WRK-Z7           TO  SKT4310-K-SFTNGK(IDX1)
+             MOVE  KOH4300TMP-SFTNGK         TO  WRK-Z7
+             MOVE  WRK-Z7           TO  SKT4310-K-SFTNGK(IDX1)
       *
       *    公費一時ファイル読み込み
-      *       PERFORM  950-KOHTMPFILE-READ-SEC
-      *     END-PERFORM
-      *---(01.00.03) LINE ADD END   ------------------------------------
+             PERFORM  950-KOHTMPFILE-READ-SEC
+           END-PERFORM
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1519,9 +1589,11 @@
       *
       *    公費一時ファイル読み込み
              PERFORM  950-KOHTMPFILE-READ-SEC
-             IF  WRK-SYMD  NOT  =  KOH4300TMP-SRYYM
-                 MOVE  1  TO FLG-PRINT2
-             END-IF
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
+      *       IF  WRK-SYMD  NOT  =  KOH4300TMP-SRYYM
+      *           MOVE  1  TO FLG-PRINT2
+      *       END-IF
+      *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
            END-PERFORM
       *
            .
