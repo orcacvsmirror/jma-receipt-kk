@@ -46,6 +46,7 @@
       *                                  SPA-AREA初期化
       *  01.00.10    内田    08/04/30    レセ電時は請求書枚数は印字しない
       *  01.00.11    内田    08/05/20    福祉件数の対象公費に"380"を追加
+      *  01.00.12    内田    08/06/20    後期高齢のみの場合も印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -469,7 +470,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *              UNTIL   FLG-END   =   1
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *
            PERFORM  300-END-SEC
       *
@@ -781,7 +784,9 @@
        200-MAIN-SEC               SECTION.
       *
       *    データ集計処理
-           MOVE     ZERO    TO        FLG-END
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO        FLG-END
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *
            PERFORM  2001-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
@@ -806,7 +811,12 @@
            PERFORM  2001-KOHI-SYUKEI-SEC
       *
       *    プリント処理
-           PERFORM   2001-PRINT-SEC
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *     PERFORM   2001-PRINT-SEC
+           IF  FLG-UPD   =       1
+               PERFORM   2001-PRINT-SEC
+           END-IF
+      *---(01.00.12) LINE ADD END   ------------------------------------
            MOVE      1      TO     FLG-END
       *
            CLOSE   UPD-FILE
