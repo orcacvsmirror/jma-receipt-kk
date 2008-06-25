@@ -34,6 +34,7 @@
       *                                   医療機関情報を参照
       *  01.00.04    安藤   2008/04/29    帳票様式の変更に伴う修正
       *  01.00.05    内田     08/05/03    福祉欄に１８５、１８９該当者追加
+      *  01.00.06    内田     08/06/20    公費高齢のみの場合でも印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -317,7 +318,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -556,7 +559,9 @@
            CLOSE            SKT2300TMP-FILE
            OPEN     I-O     SKT2300TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
