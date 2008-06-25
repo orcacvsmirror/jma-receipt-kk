@@ -42,6 +42,8 @@
       *  01.00.10    内田    08/05/04    国組の年齢判定修正
       *  01.00.11    内田    08/05/09    食事桁数修正
       *                                  診療年月の表示修正
+      *  01.00.12    内田    08/06/20    ３月以前の返戻分を診療年月毎でなく
+      *                                  まとめて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -749,7 +751,10 @@
       *    平成２０年３月以前老人保健判定
            IF (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
              AND  (RECE10-RJNHKNNUM  NOT =  SPACE)
-               MOVE  RECE10-SRYYM          TO  SKT3810TMP-SRYYM
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *         MOVE  RECE10-SRYYM          TO  SKT3810TMP-SRYYM
+               MOVE  RECE10-SKYYM          TO  SKT3810TMP-SRYYM
+      *---(01.00.12) LINE ADD END   ------------------------------------
                MOVE  1                     TO  WRK-ROUJIN-FLG
            END-IF
       *---(01.00.09) LINE ADD END   ------------------------------------
