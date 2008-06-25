@@ -61,7 +61,7 @@
         <embed object="string" length="4"/>
       </appinfo>
     </element>
-    <element name="GENBAKU" occurs="1">
+    <element name="KOHKENSU" occurs="1">
       <appinfo>
         <embed object="string" length="9"/>
       </appinfo>
@@ -6479,7 +6479,7 @@
         <rectangle val="1.679,8.55584;3.5879,8.90584"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#GENBAKU#</string>
+        <string>#KOHKENSU#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>

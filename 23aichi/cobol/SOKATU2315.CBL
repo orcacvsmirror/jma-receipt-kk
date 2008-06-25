@@ -28,6 +28,7 @@
       *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
       *  01.00.01    µÈÀî    2008/05/20  ¸¶Çú·ï¿ô¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ
+      *  01.00.02    µÈÀî    2008/06/24  ºÆ·ÇÍó¤Ë½¸·×¤¹¤ëÂÐ¾Ý¸øÈñÄÉ²Ã
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -221,9 +222,12 @@
                    07  SUM-S-KKINGK            PIC  9(10).
                    07  SUM-S-KFTNGK            PIC  9(10).
                    07  SUM-KOH-MEISYO          PIC  X(44).
+      *=== ÂÐ¾Ý¸øÈñÄÉ²Ã by Yoshikawa(2008/06/24) start
       *=== ¸¶Çú·ï¿ôÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/20) start
-               05  SUM-GENBAKU                 PIC  9(07).
+      *         05  SUM-GENBAKU                 PIC  9(07).
       *=== ¸¶Çú·ï¿ôÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/20) end
+               05  SUM-KOHKENSU                PIC  9(07).
+      *=== ÂÐ¾Ý¸øÈñÄÉ²Ã by Yoshikawa(2008/06/24) end
       *
       *    ¥­¡¼ÎÎ°è
        01  KEY-AREA                    VALUE   LOW-VALUE.
@@ -370,7 +374,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU2315"    TO  JOB-PGID
-           MOVE    "¹­°èÏ¢¹ç¡¦¹ñÊÝÀÁµá½ñ"
+           MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -671,8 +675,25 @@
       *=== ¸¶Çú·ï¿ôÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/20) start
            PERFORM  VARYING  IDXX  FROM  1  BY  1
                     UNTIL    IDXX  >  4
-             IF  RECE10-KOHNUM(IDXX)  =  "019"
-                 ADD    1                      TO  SUM-GENBAKU
+      *=== ÂÐ¾Ý¸øÈñÄÉ²Ã by Yoshikawa(2008/06/24) start
+      *       IF  RECE10-KOHNUM(IDXX)  =  "019"
+      *           ADD    1                      TO  SUM-GENBAKU
+             IF  RECE10-KOHNUM(IDXX)  =  "010"
+             OR  RECE10-KOHNUM(IDXX)  =  "011"
+             OR  RECE10-KOHNUM(IDXX)  =  "015"
+             OR  RECE10-KOHNUM(IDXX)  =  "016"
+             OR  RECE10-KOHNUM(IDXX)  =  "017"
+             OR  RECE10-KOHNUM(IDXX)  =  "019"
+             OR  RECE10-KOHNUM(IDXX)  =  "020"
+             OR  RECE10-KOHNUM(IDXX)  =  "021"
+             OR  RECE10-KOHNUM(IDXX)  =  "023"
+             OR  RECE10-KOHNUM(IDXX)  =  "051"
+             OR  RECE10-KOHNUM(IDXX)  =  "052"
+             OR  RECE10-KOHNUM(IDXX)  =  "053"
+             OR  RECE10-KOHNUM(IDXX)  =  "091"
+             OR  RECE10-KOHNUM(IDXX)  =  "189"
+                 ADD    1                      TO  SUM-KOHKENSU
+      *=== ÂÐ¾Ý¸øÈñÄÉ²Ã by Yoshikawa(2008/06/24) end
              END-IF
            END-PERFORM
       *=== ¸¶Çú·ï¿ôÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/20) end
@@ -1033,10 +1054,14 @@
            MOVE  SUM-S-FTNGK(IDX)        TO  WRK-Z9
            MOVE  WRK-Z9                  TO  SKT2315-S-FTNGK(IDZ)
            END-PERFORM
+      *=== ÂÐ¾Ý¸øÈñÄÉ²Ã by Yoshikawa(2008/06/24) start
       *=== ¸¶Çú·ï¿ôÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/20) start
-           MOVE  SUM-GENBAKU             TO  WRK-Z9
-           MOVE  WRK-Z9                  TO  SKT2315-GENBAKU
+      *     MOVE  SUM-GENBAKU             TO  WRK-Z9
+      *     MOVE  WRK-Z9                  TO  SKT2315-GENBAKU
       *=== ¸¶Çú·ï¿ôÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2008/05/20) end
+           MOVE  SUM-KOHKENSU            TO  WRK-Z9
+           MOVE  WRK-Z9                  TO  SKT2315-KOHKENSU
+      *=== ÂÐ¾Ý¸øÈñÄÉ²Ã by Yoshikawa(2008/06/24) end
       *
            .
        20023-BODY-HEN-EXT.
