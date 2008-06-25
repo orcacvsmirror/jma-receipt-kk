@@ -2594,10 +2594,10 @@
     </object>
     <object type="ORCA - TextCircle" version="0" id="O93">
       <attribute name="obj_pos">
-        <point val="6.42147,26.2687"/>
+        <point val="6.68649,26.2687"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.42147,26.1094;6.62347,26.3094"/>
+        <rectangle val="6.68649,26.1094;6.88849,26.3094"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2611,7 +2611,7 @@
             <real val="0.2"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.42147,26.2687"/>
+            <point val="6.68649,26.2687"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
