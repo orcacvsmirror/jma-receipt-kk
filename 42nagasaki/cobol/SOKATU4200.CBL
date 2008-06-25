@@ -36,6 +36,8 @@
       *  01.00.02    内田    08/04/23    ４月改正に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.03    内田    08/05/20    帳票様式の変更に伴う修正
+      *  01.00.04    内田    08/06/20    ３歳未満の年齢判定修正
+      *                                  後期高齢のみの場合でも印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -260,7 +262,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -442,7 +446,9 @@
       *****************************************************************
        200-MAIN-SEC                SECTION.
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
@@ -599,7 +605,10 @@
                  AND  (RECE10-FLG (1)   =  1)
                    MOVE     3          TO  IDX1
                  ELSE
-                   IF  RECE10-AGE  >  3
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             IF  RECE10-AGE  >  3
+                   IF  RECE10-AGE  >=  3
+      *---(01.00.04) LINE ADD END   ------------------------------------
                      MOVE     1        TO  IDX1
                    ELSE
                      MOVE     3        TO  IDX1
@@ -614,7 +623,10 @@
                AND  (RECE10-FLG (1)   =  1)
                  MOVE     8          TO  IDX1
                ELSE
-                 IF  RECE10-AGE  >  3
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *           IF  RECE10-AGE  >  3
+                 IF  RECE10-AGE  >=  3
+      *---(01.00.04) LINE ADD END  ------------------------------------
                    MOVE   7          TO  IDX1
                  ELSE
                    MOVE   8          TO  IDX1
