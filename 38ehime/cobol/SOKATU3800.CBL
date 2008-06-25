@@ -42,6 +42,7 @@
       *                                    一部負担金欄は印字しない
       *  01.00.09    長屋      08/04/29    帳票様式に伴う修正
       *  01.00.10    内田      08/05/07    後期高齢の公費再掲欄集計修正
+      *  01.00.11    内田      08/06/20    後期高齢のみの場合でも印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -392,7 +393,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -650,7 +653,9 @@
            CLOSE            SKT3800TMP-FILE
            OPEN     I-O     SKT3800TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.11) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
