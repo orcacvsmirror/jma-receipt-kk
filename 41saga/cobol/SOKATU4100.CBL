@@ -37,6 +37,7 @@
       *  01.00.04    内田K      08/04/26    ４月改正対応
       *                                     SPA-AREA初期化
       *  01.00.05    内田       08/05/11    国組３〜６歳は帳票を分けない
+      *  01.00.06    内田       08/06/18    国保がない場合でも印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -350,7 +351,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -633,7 +636,9 @@
            CLOSE            SKT4100TMP-FILE
            OPEN     I-O     SKT4100TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.06) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
