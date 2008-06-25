@@ -40,6 +40,9 @@
       *                                   後期高齢者を県毎に印字
       *  01.00.07    吉川    2008/05/27   県内2枚目に県外の後期高齢者が
       *                                   印字されてしまう不具合を修正
+      *  01.00.08    吉川    2008/06/23   印刷処理の修正
+      *                                   H20年3月以前の返戻及び
+      *                                   月遅れ処理の修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -166,6 +169,12 @@
            03  FLG-KOUKI           PIC 9(01).
            03  FLG-SKT2205TMP     PIC 9(01).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) start
+           03  FLG-PRINTCHK        PIC 9(01).
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) end
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+           03  FLG-CHK             PIC 9(01).
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -705,7 +714,14 @@
       *---(01.00.05) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-               MOVE  RECE10-SRYYM        TO  SKT2200TMP-SRYYM
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+      *         MOVE  RECE10-SRYYM        TO  SKT2200TMP-SRYYM
+             MOVE  "200803"            TO  SKT2200TMP-SRYYM
+           ELSE
+             IF  WRK-PARA-SYOKBN  =  "2"
+               MOVE  RECE10-SRYYM      TO  SKT2200TMP-SRYYM
+             END-IF
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
            PERFORM  800-SKTTMP-READ-SEC
@@ -761,6 +777,12 @@
       *
       *     MOVE  RECE10-HKNJANUM  TO  SKT2205TMP-HKNJANUM
            MOVE  RECE10-HKNJANUM(3:2)  TO  SKT2205TMP-HKNJANUM
+      *
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+           IF  WRK-PARA-SYOKBN  =  "2"
+               MOVE  RECE10-SRYYM      TO  SKT2205TMP-SRYYM
+           END-IF
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
       *
            PERFORM  850-SKTTMP-READ-SEC
       *
@@ -1044,67 +1066,267 @@
       *****************************************************************
        2002-PRINT-SEC                          SECTION.
       *
+      *=== 印刷処理修正 by Yoshikawa(2008/06/22) start
+      *     OPEN       INPUT       SKT2200TMP-FILE
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     OPEN       INPUT       SKT2205TMP-FILE
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **
+      *     MOVE       ZERO        TO        FLG-PRINT
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE       ZERO        TO        FLG-PRINT2
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+      *     MOVE       ZERO        TO        CNT-KENNAI
+      **=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
+      **
+      **    一時ファイル読込
+      *     PERFORM  900-TMP-READ-SEC
+      **
+      *     MOVE  KEY-NEW  TO  KEY-OLD
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     PERFORM  950-TMP-READ-SEC
+      *     MOVE  KEY-NEW2  TO  KEY-OLD2
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **     PERFORM  UNTIL  FLG-PRINT  =  1
+      *     PERFORM  UNTIL  FLG-PRINT  =  1 AND FLG-PRINT2  =  1
+      *              OR  CNT-KENNAI > 100
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **
+      **    帳票編集<見出し>処理
+      *         PERFORM  310-HEAD-HEN-SEC
+      **    帳票編集<明細>処理
+      *         PERFORM  320-BODY-HEN-SEC
+      **    帳票編集<合計>処理
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **         PERFORM  325-SUM-HEN-SEC
+      *         IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+      *             PERFORM  325-SUM-HEN-SEC
+      *         END-IF
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *         IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      **=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+      *         AND CNT-KENNAI <  2
+      **        県内2枚目以降の後期高齢欄には何も印字しない
+      **=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
+      **    帳票編集<明細>処理（後期高齢）
+      *             PERFORM  320-BODY-HEN-KOUKI-SEC
+      **    帳票編集<合計>処理（後期高齢）
+      *             IF  FLG-PRINT2  =  1  OR  KEY-NEW2  NOT =  KEY-OLD2
+      **         IF  FLG-PRINT2  =  1
+      *                 PERFORM  325-SUM-HEN-KOUKI-SEC
+      *             END-IF
+      *         END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      **    帳票印刷処理
+      *         PERFORM  330-PRINT-OUT-SEC
+      *     END-PERFORM
+      **
+      *     CLOSE      SKT2200TMP-FILE
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     CLOSE      SKT2205TMP-FILE
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **
+      *********県内処理*********
            OPEN       INPUT       SKT2200TMP-FILE
-      *---(01.00.05) LINE ADD START ------------------------------------
            OPEN       INPUT       SKT2205TMP-FILE
-      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            MOVE       ZERO        TO        FLG-PRINT
-      *---(01.00.05) LINE ADD START ------------------------------------
            MOVE       ZERO        TO        FLG-PRINT2
-      *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
-           MOVE       ZERO        TO        CNT-KENNAI
-      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
+           MOVE       ZERO        TO        FLG-PRINTCHK
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
-      *
            MOVE  KEY-NEW  TO  KEY-OLD
-      *---(01.00.05) LINE ADD START ------------------------------------
+      *
            PERFORM  950-TMP-READ-SEC
            MOVE  KEY-NEW2  TO  KEY-OLD2
-      *---(01.00.05) LINE ADD END   ------------------------------------
       *
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *     PERFORM  UNTIL  FLG-PRINT  =  1
-           PERFORM  UNTIL  FLG-PRINT  =  1 AND FLG-PRINT2  =  1
-      *---(01.00.05) LINE ADD END   ------------------------------------
+           PERFORM  UNTIL  FLG-PRINT  =  1  
+                    AND    FLG-PRINT2 =  1
       *
-      *    帳票編集<見出し>処理
-               PERFORM  310-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-               PERFORM  320-BODY-HEN-SEC
-      *    帳票編集<合計>処理
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *         PERFORM  325-SUM-HEN-SEC
-               IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+      *      H20年3月以前は旧様式
+             IF  (SKT2200TMP-SRYYM  NOT  =  ZERO
+             AND SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+             AND FLG-PRINT  =  ZERO
+               IF  SKT2200TMP-KBN  =  1
+      *          帳票編集<見出し>処理
+                 PERFORM  310-HEAD-HEN-SEC
+      *          帳票編集<明細>処理
+                 PERFORM  320-BODY-HEN-SEC
+      *          帳票編集<合計>処理
+                 IF  FLG-PRINT  =  1
                    PERFORM  325-SUM-HEN-SEC
+                 END-IF
+      *          帳票印刷処理
+                 PERFORM  330-PRINT-OUT-SEC
+               ELSE
+                 PERFORM  900-TMP-READ-SEC
+                 MOVE  KEY-NEW  TO  KEY-OLD
                END-IF
-      *---(01.00.05) LINE ADD START ------------------------------------
-               IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
-      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
-               AND CNT-KENNAI <  2
-      *        県内2枚目以降の後期高齢欄には何も印字しない
-      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
-      *    帳票編集<明細>処理（後期高齢）
-                   PERFORM  320-BODY-HEN-KOUKI-SEC
-      *    帳票編集<合計>処理（後期高齢）
-                   IF  FLG-PRINT2  =  1  OR  KEY-NEW2  NOT =  KEY-OLD2
-      *         IF  FLG-PRINT2  =  1
-                       PERFORM  325-SUM-HEN-KOUKI-SEC
-                   END-IF
+             ELSE
+      *
+      *      新様式
+      *        県内データ以外は飛ばす
+               PERFORM UNTIL SKT2200TMP-KBN = 1 
+                       OR    FLG-PRINT = 1
+                 PERFORM  900-TMP-READ-SEC
+                 MOVE  KEY-NEW  TO  KEY-OLD
+               END-PERFORM
+               MOVE    ZERO       TO        FLG-PRINTCHK
+               IF  SKT2200TMP-KBN  =  1  
+               AND  FLG-PRINT NOT  =  1
+                 MOVE  1          TO        FLG-PRINTCHK
+      *          帳票編集<見出し>処理
+                 PERFORM  310-HEAD-HEN-SEC
+      *          帳票編集<明細>処理
+                 PERFORM  320-BODY-HEN-SEC
+      *          帳票編集<合計>処理
+                 IF  FLG-PRINT  =  1
+                   PERFORM  325-SUM-HEN-SEC
+                 END-IF
+               ELSE
+                 PERFORM  900-TMP-READ-SEC
+                 MOVE  KEY-NEW  TO  KEY-OLD
                END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
-      *---(01.00.03) LINE ADD END   ------------------------------------
-      *    帳票印刷処理
-               PERFORM  330-PRINT-OUT-SEC
+      *
+      *        後期高齢
+      *        県内データ以外は飛ばす
+               PERFORM UNTIL SKT2205TMP-KBN = 1 
+                       OR    FLG-PRINT2 = 1
+                 PERFORM  950-TMP-READ-SEC
+                 MOVE  KEY-NEW2  TO  KEY-OLD2
+               END-PERFORM
+               IF  SKT2205TMP-KBN  =  1  
+               AND  FLG-PRINT2 NOT  =  1
+      *          国保がなかった場合見出しを印字
+                 IF  FLG-PRINTCHK  =  ZERO
+      *            帳票編集<見出し>処理(後期高齢)
+                   PERFORM  310-HEAD-HEN-KOUKI-SEC
+                   MOVE  1        TO        FLG-PRINTCHK
+                 END-IF
+      *          帳票編集処理（後期高齢）
+                 PERFORM  320-BODY-HEN-KOUKI-SEC
+      *          帳票編集<合計>処理（後期高齢）
+                 IF  FLG-PRINT2  =  1
+                   PERFORM  325-SUM-HEN-KOUKI-SEC
+                 END-IF
+               ELSE
+                 PERFORM  950-TMP-READ-SEC
+                 MOVE  KEY-NEW2  TO  KEY-OLD2
+               END-IF
+      *        国保か後期高齢のどちらかがあれば印刷
+               IF  FLG-PRINTCHK  =  1
+      *          帳票印刷処理
+                 PERFORM  330-PRINT-OUT-SEC
+               END-IF
+             END-IF
            END-PERFORM
       *
            CLOSE      SKT2200TMP-FILE
-      *---(01.00.05) LINE ADD START ------------------------------------
            CLOSE      SKT2205TMP-FILE
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *********県外処理*********
+           OPEN       INPUT       SKT2200TMP-FILE
+           OPEN       INPUT       SKT2205TMP-FILE
+      *
+           MOVE       ZERO        TO        FLG-PRINT
+           MOVE       ZERO        TO        FLG-PRINT2
+           MOVE       ZERO        TO        FLG-PRINTCHK
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+           MOVE  KEY-NEW  TO  KEY-OLD
+      *
+           PERFORM  950-TMP-READ-SEC
+           MOVE  KEY-NEW2  TO  KEY-OLD2
+      *
+           PERFORM  UNTIL  FLG-PRINT  =  1 
+                    AND    FLG-PRINT2 =  1
+      *
+      *      H20年3月以前は旧様式
+             IF  (SKT2200TMP-SRYYM  NOT  =  ZERO
+             AND SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+             AND FLG-PRINT  =  ZERO
+               IF  SKT2200TMP-KBN  =  2
+      *          帳票編集<見出し>処理
+                 PERFORM  310-HEAD-HEN-SEC
+      *          帳票編集<明細>処理
+                 PERFORM  320-BODY-HEN-SEC
+      *          帳票編集<合計>処理
+                 IF  FLG-PRINT  =  1
+                   PERFORM  325-SUM-HEN-SEC
+                 END-IF
+      *          帳票印刷処理
+                PERFORM  330-PRINT-OUT-SEC
+               ELSE
+                 PERFORM  900-TMP-READ-SEC
+                 MOVE  KEY-NEW  TO  KEY-OLD
+               END-IF
+             ELSE
+      *
+      *      新様式
+      *        県外データ以外は飛ばす
+               PERFORM UNTIL SKT2200TMP-KBN = 2 
+                       OR    FLG-PRINT = 1
+                 PERFORM  900-TMP-READ-SEC
+                 MOVE  KEY-NEW  TO  KEY-OLD
+               END-PERFORM
+               MOVE    ZERO       TO        FLG-PRINTCHK
+               IF  SKT2200TMP-KBN  =  2  
+               AND  FLG-PRINT NOT  =  1
+                 MOVE  1          TO        FLG-PRINTCHK
+      *          帳票編集<見出し>処理
+                 PERFORM  310-HEAD-HEN-SEC
+      *          帳票編集<明細>処理
+                 PERFORM  320-BODY-HEN-SEC
+      *          帳票編集<合計>処理
+                 IF  FLG-PRINT  =  1
+                   PERFORM  325-SUM-HEN-SEC
+                 END-IF
+               ELSE
+                 PERFORM  900-TMP-READ-SEC
+                 MOVE  KEY-NEW  TO  KEY-OLD
+               END-IF
+      *
+      *        後期高齢
+      *        県外データ以外は飛ばす
+               PERFORM UNTIL SKT2205TMP-KBN = 2 
+                       OR    FLG-PRINT2 = 1
+                 PERFORM  950-TMP-READ-SEC
+                 MOVE  KEY-NEW2  TO  KEY-OLD2
+               END-PERFORM
+               IF  SKT2205TMP-KBN  =  2  
+               AND  FLG-PRINT2 NOT  =  1
+      *          国保がなかった場合見出しを印字
+                 IF FLG-PRINTCHK  =  ZERO
+      *            帳票編集<見出し>処理(後期高齢)
+                   PERFORM  310-HEAD-HEN-KOUKI-SEC
+                   MOVE  1        TO        FLG-PRINTCHK
+                 END-IF
+      *          帳票編集処理（後期高齢）
+                 PERFORM  320-BODY-HEN-KOUKI-SEC
+      *          帳票編集<合計>処理（後期高齢）
+                 IF  FLG-PRINT2  =  1
+                   PERFORM  325-SUM-HEN-KOUKI-SEC
+                 END-IF
+               ELSE
+                 PERFORM  950-TMP-READ-SEC
+                 MOVE  KEY-NEW2  TO  KEY-OLD2
+               END-IF
+      *        国保か後期高齢のどちらかがあれば印刷
+               IF  FLG-PRINTCHK  =  1
+      *          帳票印刷処理
+                 PERFORM  330-PRINT-OUT-SEC
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           CLOSE      SKT2200TMP-FILE
+           CLOSE      SKT2205TMP-FILE
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) end
       *
            .
        2002-PRINT-EXT.
@@ -1122,12 +1344,20 @@
       *     MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
            IF  SKT2200TMP-SRYYM  NOT =  ZERO
                MOVE  SKT2200TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+               MOVE  1                   TO  FLG-CHK
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
            ELSE
                MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+               MOVE  ZERO                TO  FLG-CHK
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
            END-IF
-           MOVE    "01"                  TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+      *     MOVE    "01"                  TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
            MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
       *
       *    医療機関住所
@@ -1158,6 +1388,41 @@
        310-HEAD-HEN-EXT.
            EXIT.
       *
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) start
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理（後期高齢）
+      *****************************************************************
+       310-HEAD-HEN-KOUKI-SEC            SECTION.
+      *
+           INITIALIZE                        SKT2200
+      *
+           MOVE  ZERO                    TO  FLG-CHK
+      *    診療年月
+           MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
+      *
+      *    医療機関住所
+           MOVE    WRK-HOSPADRS          TO  SKT2200-ADRS
+      *
+      *    医療機関名
+           MOVE    WRK-HOSPNAME          TO  SKT2200-HOSPNAME
+      *
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCDN      TO  SKT2200-HOSPCDN
+      *
+      *    点数表区分
+           EVALUATE  SYS-1001-TENHYOKBN
+             WHEN  1     MOVE  "○"      TO  SKT2200-TENHYOKBN (1)
+             WHEN  3     MOVE  "○"      TO  SKT2200-TENHYOKBN (2)
+             WHEN  4     MOVE  "○"      TO  SKT2200-TENHYOKBN (3)
+             WHEN  6     MOVE  "○"      TO  SKT2200-TENHYOKBN (4)
+             WHEN  7     MOVE  "○"      TO  SKT2200-TENHYOKBN (5)
+           END-EVALUATE
+      *
+           .
+       310-HEAD-HEN-KOUKI-EXT.
+           EXIT.
+      *
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) end
       *****************************************************************
       *    帳票編集<明細行>処理
       *****************************************************************
@@ -1177,6 +1442,7 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
                              KEY-NEW  NOT =  KEY-OLD  OR
                              FLG-PRINT  =  1
+           DISPLAY "HKNJANUM =" SKT2200TMP-HKNJANUM
       *    保険者名
              PERFORM  920-HKNJAINF-SET-SEC
       *
@@ -1206,14 +1472,16 @@
       *    一時ファイル読込
              PERFORM  900-TMP-READ-SEC
            END-PERFORM
-      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
-      *    県内分の枚数をカウント
-           IF  KEY-OLD  =  1
-               ADD   1  TO  CNT-KENNAI
-           ELSE
-               MOVE  0  TO  CNT-KENNAI
-           END-IF
-      *=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) start
+      **=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) start
+      **    県内分の枚数をカウント
+      *     IF  KEY-OLD  =  1
+      *         ADD   1  TO  CNT-KENNAI
+      *     ELSE
+      *         MOVE  0  TO  CNT-KENNAI
+      *     END-IF
+      **=== 県外後期の県内印字不具合対応 by Yoshikawa(2008/05/27) end
+      *=== 印刷処理修正 by Yoshikawa(2008/06/23) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1230,6 +1498,7 @@
                              KEY-NEW2  NOT =  KEY-OLD2  OR
                              FLG-PRINT2  =  1
       *    都道府県
+            DISPLAY "KOUKI KENNUM =" SKT2205TMP-HKNJANUM
              PERFORM  920-TODOUHUKEN-SET-SEC
       *
              PERFORM  VARYING  IDX2  FROM  23  BY  1
@@ -1366,7 +1635,10 @@
                                        TO  SPRT-PRIORITY
       *---(01.00.05) LINE ADD START ------------------------------------
       *     MOVE   "SKT2200.red"        TO  SPRT-PRTID
-           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+      *     IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+           IF  FLG-CHK  =  ZERO
+      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
                MOVE   "SKT2200.red"    TO  SPRT-PRTID
            ELSE
                MOVE   "SKT2200o.red"   TO  SPRT-PRTID
@@ -2096,6 +2368,9 @@
            READ  SKT2200TMP-FILE   NEXT
                AT  END
                    MOVE  1  TO  FLG-PRINT
+      *=== 印刷処理の修正 by Yoshikawa(2008/06/23) start
+                   MOVE  HIGH-VALUE      TO  KEY-NEW
+      *=== 印刷処理の修正 by Yoshikawa(2008/06/23) end
                NOT  AT  END
                    MOVE  SKT2200TMP-KBN  TO  KEY-NEW
            END-READ
@@ -2112,6 +2387,9 @@
            READ  SKT2205TMP-FILE   NEXT
                AT  END
                    MOVE  1  TO  FLG-PRINT2
+      *=== 印刷処理の修正 by Yoshikawa(2008/06/23) start
+                   MOVE  HIGH-VALUE      TO  KEY-NEW2
+      *=== 印刷処理の修正 by Yoshikawa(2008/06/23) end
                NOT  AT  END
                    MOVE  SKT2205TMP-KBN  TO  KEY-NEW2
            END-READ
