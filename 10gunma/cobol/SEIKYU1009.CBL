@@ -43,6 +43,7 @@
       *                                  ４回目以降の請求額の計算は
       *                                  小数点以下四捨五入をする
       *  01.00.06    内田    08/05/07    年齢判定修正
+      *  01.00.07    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -844,11 +845,21 @@
       *    割合・年齢チェック
              EVALUATE  RECE02-KYURATE
                WHEN  "010"
-                 IF  RECE02-AGE  >= 70
-                   MOVE  2  TO  MF100-SORTKEY
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    前期９割（特例措置）は８割
+                 IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE02-FLG (2)  =  1)
+                     MOVE  5  TO  MF100-SORTKEY
                  ELSE
-                   MOVE  1  TO  MF100-SORTKEY
+      *---(01.00.07) LINE ADD END   ------------------------------------
+                   IF  RECE02-AGE  >= 70
+                     MOVE  2  TO  MF100-SORTKEY
+                   ELSE
+                     MOVE  1  TO  MF100-SORTKEY
+                   END-IF
+      *---(01.00.07) LINE ADD START ------------------------------------
                  END-IF
+      *---(01.00.07) LINE ADD END   ------------------------------------
                WHEN  "020"
                  IF  RECE02-AGE  >= 70
                    MOVE  5  TO  MF100-SORTKEY

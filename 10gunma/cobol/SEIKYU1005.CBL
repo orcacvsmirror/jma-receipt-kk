@@ -42,6 +42,7 @@
       *                                  小数点以下四捨五入をする
       *  01.00.06    内田    08/04/30    帳票様式の変更に伴う修正
       *  01.00.07    内田    08/05/07    年齢判定修正
+      *  01.00.08    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -856,10 +857,21 @@
       *    割合
            EVALUATE  RECE02-KYURATE
            WHEN 10
-             MOVE      1    TO   MF100-WARIAI
-      *---(01.00.02) LINE ADD START ------------------------------------
-             MOVE      1    TO   MF100-JYUNJO
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *       MOVE      1    TO   MF100-WARIAI
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *       MOVE      1    TO   MF100-JYUNJO
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *    前期９割（特例措置）は８割
+             IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
+             AND  (RECE02-FLG (2)  =  1)
+               MOVE      2    TO   MF100-WARIAI
+               MOVE      4    TO   MF100-JYUNJO
+             ELSE
+               MOVE      1    TO   MF100-WARIAI
+               MOVE      1    TO   MF100-JYUNJO
+             END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            WHEN 20
              MOVE      2    TO   MF100-WARIAI
       *---(01.00.02) LINE ADD START ------------------------------------
