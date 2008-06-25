@@ -38,6 +38,10 @@
       *                                    医療機関情報を参照
       *  01.00.07       内田     08/05/03  ４月改正に伴う修正
       *  01.00.08       吉川     08/05/27  帳票様式の変更に伴う修正
+      *  01.00.09       内田     08/06/05  国保がない場合でも印刷
+      *                 吉川     08/06/06  後期高齢は保険者番号を印字しない
+      *                                    改正前の月遅れ分は旧様式に印字
+      *                                    ページ番号を印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -189,6 +193,9 @@
       *
            03  WRK-Z2              PIC ZZ.
            03  WRK-Z3              PIC ZZZ.
+      *---(01.00.09) LINE ADD START ------------------------------------
+           03  WRK-Z4              PIC ZZZZ.
+      *---(01.00.09) LINE ADD END   ------------------------------------
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z6              PIC ZZ,ZZZ.
            03  WRK-Z7              PIC ZZZ,ZZZ.
@@ -271,6 +278,15 @@
                        09  SUM-GKENSU3         PIC 9(06).
                        09  SUM-GNISSU3         PIC 9(06).
                        09  SUM-GTENSU3         PIC 9(10).
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *    旧様式
+           03  SUM-SGOKEI-AREA4.
+               05  SUM-SGKANSYO-TBL4 OCCURS 6.
+                   07  SUM-NYUGAI-SKJ-TBL4 OCCURS 3.
+                       09  SUM-GKENSU4         PIC 9(06).
+                       09  SUM-GNISSU4         PIC 9(06).
+                       09  SUM-GTENSU4         PIC 9(10).
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *****
       *
            COPY    "CPSHELLTBL.INC".
@@ -369,7 +385,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -604,7 +622,9 @@
            CLOSE            SKT1900TMP-FILE
            OPEN     I-O     SKT1900TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.09) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
@@ -719,20 +739,35 @@
            IF  FLG-KOUKI   =   1
              MOVE    9                TO   SKT1900TMP-SYUTURYOKU
            END-IF
-      *---(01.00.07) LINE ADD END   ------------------------------------
-      *    帳票区分
-           IF    RECE10-RJNHKNNUM  NOT  =  SPACE   OR
-      *---(01.00.07) LINE ADD START ------------------------------------
-                 FLG-KOUKI         NOT  =  ZERO    OR
-      *---(01.00.07) LINE ADD END   ------------------------------------
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
-                 RECE10-SRYYM          >=  WRK-CONS-SRYYM-200804  OR
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
-                 RECE10-HKNNUM          =  "060"
+      *---(01.00.09) LINE ADD START ------------------------------------
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      **    帳票区分
+      *     IF    RECE10-RJNHKNNUM  NOT  =  SPACE   OR
+      **---(01.00.07) LINE ADD START ------------------------------------
+      *           FLG-KOUKI         NOT  =  ZERO    OR
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *           RECE10-SRYYM          >=  WRK-CONS-SRYYM-200804  OR
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) end
+      *           RECE10-HKNNUM          =  "060"
+      *       MOVE          1          TO  SKT1900TMP-TYOHYOKBN
+      *     ELSE
+      *       MOVE          2          TO  SKT1900TMP-TYOHYOKBN
+      *     END-IF
+           IF    RECE10-SRYYM          >=  WRK-CONS-SRYYM-200804
+      *    新様式
              MOVE          1          TO  SKT1900TMP-TYOHYOKBN
            ELSE
-             MOVE          2          TO  SKT1900TMP-TYOHYOKBN
+             IF  RECE10-RJNHKNNUM  NOT  =  SPACE   OR
+                 RECE10-HKNNUM          =  "060"
+      *    旧様式
+               MOVE        2          TO  SKT1900TMP-TYOHYOKBN
+             ELSE
+      *    旧様式(退職)
+               MOVE        3          TO  SKT1900TMP-TYOHYOKBN
+             END-IF
            END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *    国保組合法定外給付判定
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -975,6 +1010,9 @@
       ***** 04/10/12 INS
            INITIALIZE    SUM-SGOKEI-AREA2
            INITIALIZE    SUM-SGOKEI-AREA3
+      *---(01.00.09) LINE ADD START ------------------------------------
+           INITIALIZE    SUM-SGOKEI-AREA4
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *****
       *
       *    一時ファイル読込
@@ -991,12 +1029,25 @@
       *    帳票印刷処理
                PERFORM  330-PRINT-OUT-SEC
              ELSE
+      *---(01.00.09) LINE ADD START ------------------------------------
+              IF    SKT1900TMP-TYOHYOKBN   =   2
+      *    帳票編集<見出し>処理
+               PERFORM  312-HEAD-HEN-SEC
+      *    帳票編集<明細>処理
+               PERFORM  322-BODY-HEN-SEC
+      *    帳票印刷処理
+               PERFORM  332-PRINT-OUT-SEC
+              ELSE
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *    帳票編集<見出し>処理
                PERFORM  311-HEAD-HEN-SEC
       *    帳票編集<明細>処理
                PERFORM  321-BODY-HEN-SEC
       *    帳票印刷処理
                PERFORM  331-PRINT-OUT-SEC
+      *---(01.00.09) LINE ADD START ------------------------------------
+              END-IF
+      *---(01.00.09) LINE ADD END   ------------------------------------
              END-IF
            END-PERFORM
       *
@@ -1038,6 +1089,11 @@
            MOVE    SYS-1001-KAISETUNAME  TO  SKT1900-KAISETUNAME
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT1900-HOSPCDN
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    ページ番号
+           MOVE    CNT-PAGE              TO  WRK-Z4
+           MOVE    WRK-Z4                TO  SKT1900-NO
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            .
        310-HEAD-HEN-EXT.
@@ -1068,7 +1124,12 @@
       *---(01.00.07) LINE ADD START ------------------------------------
              IF  SKT1900TMP-SYUTURYOKU  =  9
                PERFORM  400-KENNAME-SEC
-               MOVE   WRK-KENNAME          TO  SKT1900-HKNJANAME(IDX1)
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *         MOVE   WRK-KENNAME          TO  SKT1900-HKNJANAME(IDX1)
+               STRING WRK-KENNAME "広域連合"   DELIMITED BY SPACE
+                      INTO                     SKT1900-HKNJANAME(IDX1)
+               MOVE   SPACE                TO  WRK-HKNJANUM
+      *---(01.00.09) LINE ADD END ------------------------------------
              ELSE
       *---(01.00.07) LINE ADD END   ------------------------------------
                MOVE   SKT1900TMP-HKNJANUM  TO  WRK-HKNJANUM
@@ -1404,6 +1465,171 @@
            .
        331-PRINT-OUT-EXT.
            EXIT.
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理
+      *****************************************************************
+       312-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1                     TO  CNT-PAGE
+      *
+           INITIALIZE                    SKT1900
+      *    診療年月
+           MOVE    WRK-SRYYMWH           TO  SKT1900-SRYYM
+      *    医療機関住所
+           MOVE    WRK-HOSPADRS          TO  SKT1900-ADRS
+      *    医療機関名
+           MOVE    WRK-HOSPNAME          TO  SKT1900-HOSPNAME
+      *    開設者名
+           MOVE    SYS-1001-KAISETUNAME  TO  SKT1900-KAISETUNAME
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCDN      TO  SKT1900-HOSPCDN
+      *
+           .
+       312-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<明細行>処理
+      *****************************************************************
+       322-BODY-HEN-SEC      SECTION.
+      *
+      *    編集処理
+      *
+           INITIALIZE    SUM-SGOKEI-AREA
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     7  OR
+                    FLG-PRINT      =     1  OR
+                    SKT1900TMP-TYOHYOKBN    NOT  =  2
+      *    保険者名
+             MOVE   SKT1900TMP-HKNJANUM  TO  WRK-HKNJANUM
+             PERFORM  920-HKNJAINF-SET-SEC
+             MOVE   WRK-HKNJANAME        TO  SKT1900-HKNJANAME(IDX1)
+      *    給付割合
+             IF       SKT1900TMP-KYURATE    NOT  =  ZERO
+               MOVE  SKT1900TMP-KYURATE     TO  WRK-Z2
+               STRING    "("  WRK-Z2 "割"  ")"  DELIMITED BY SIZE
+                         INTO                   SKT1900-KYURATE(IDX1) 
+             END-IF
+      *
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     6
+               PERFORM  VARYING  IDX3  FROM  1  BY  1
+                        UNTIL    IDX3  >     3
+      *    件数
+                 MOVE  SKT1900TMP-KENSU(IDX2 IDX3)  TO  WRK-Z5
+                 MOVE  WRK-Z5     TO  SKT1900-KENSU(IDX1 IDX2 IDX3)
+      *    日数
+                 MOVE  SKT1900TMP-NISSU(IDX2 IDX3)  TO  WRK-Z5
+                 MOVE  WRK-Z5     TO  SKT1900-NISSU(IDX1 IDX2 IDX3)
+      *    点数・金額
+                 MOVE  SKT1900TMP-TENSU(IDX2 IDX3)  TO  WRK-Z9
+                 MOVE  WRK-Z9     TO  SKT1900-TENSU(IDX1 IDX2 IDX3)
+      *    ページ計に加算
+                 ADD   SKT1900TMP-KENSU(IDX2 IDX3)
+                                  TO  SUM-GKENSU(IDX2 IDX3)
+                 ADD   SKT1900TMP-NISSU(IDX2 IDX3)
+                                  TO  SUM-GNISSU(IDX2 IDX3)
+                 ADD   SKT1900TMP-TENSU(IDX2 IDX3)
+                                  TO  SUM-GTENSU(IDX2 IDX3)
+      *    総合計に加算
+      *    ページ計に加算
+                 ADD   SKT1900TMP-KENSU(IDX2 IDX3)
+                                  TO  SUM-GKENSU4(IDX2 IDX3)
+                 ADD   SKT1900TMP-NISSU(IDX2 IDX3)
+                                  TO  SUM-GNISSU4(IDX2 IDX3)
+                 ADD   SKT1900TMP-TENSU(IDX2 IDX3)
+                                  TO  SUM-GTENSU4(IDX2 IDX3)
+               END-PERFORM
+             END-PERFORM
+      *    一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           IF  FLG-PRINT                 =  1  OR  
+               SKT1900TMP-TYOHYOKBN NOT  =  2
+      *    総合計編集
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     6
+               PERFORM  VARYING  IDX3  FROM  1  BY  1
+                        UNTIL    IDX3  >     3
+      *    件数
+                 MOVE  SUM-GKENSU4(IDX2 IDX3)   TO   WRK-Z6
+                 MOVE  WRK-Z6  TO  SKT1900-GKENSU(IDX2 IDX3)
+      *    日数
+                 MOVE  SUM-GNISSU4(IDX2 IDX3)   TO   WRK-Z6
+                 MOVE  WRK-Z6  TO  SKT1900-GNISSU(IDX2 IDX3)
+      *    点数・金額
+                 MOVE  SUM-GTENSU4(IDX2 IDX3)   TO   WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT1900-GTENSU(IDX2 IDX3)
+               END-PERFORM
+             END-PERFORM
+           ELSE
+      *    ページ計編集
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     6
+               PERFORM  VARYING  IDX3  FROM  1  BY  1
+                        UNTIL    IDX3  >     3
+      *    件数
+                 MOVE  SUM-GKENSU(IDX2 IDX3)   TO   WRK-Z6
+                 MOVE  WRK-Z6  TO  SKT1900-GKENSU(IDX2 IDX3)
+      *    日数
+                 MOVE  SUM-GNISSU(IDX2 IDX3)   TO   WRK-Z6
+                 MOVE  WRK-Z6  TO  SKT1900-GNISSU(IDX2 IDX3)
+      *    点数・金額
+                 MOVE  SUM-GTENSU(IDX2 IDX3)   TO   WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT1900-GTENSU(IDX2 IDX3)
+               END-PERFORM
+             END-PERFORM
+           END-IF
+      *
+           .
+       322-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理(国保・老人)
+      *****************************************************************
+       332-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT1900o.red"   TO  SPRT-PRTID
+           MOVE    "国保総括表"  TO  SPRT-TITLE
+           MOVE    SKT1900            TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       332-PRINT-OUT-EXT.
+           EXIT.
+      *
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD START ------------------------------------
       *****************************************************************
       *    県名設定処理
