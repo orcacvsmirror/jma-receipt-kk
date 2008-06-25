@@ -36,6 +36,8 @@
       *                                  国組3〜6歳を分けないように修正
       *                                  診療年月の表示修正
       *                                  旧帳票に値が印字されない不具合を修正
+      *  01.00.05    内田    08/06/24    ３月以前の返戻分を診療年月毎でなく
+      *                                  まとめて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -676,7 +678,10 @@
            MOVE   RECE10-ZAITAKU    TO   SKT4320TMP-ZAITAKU
       *    診療年月
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-             MOVE   RECE10-SRYYM    TO   SKT4320TMP-SRYYM
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *       MOVE   RECE10-SRYYM    TO   SKT4320TMP-SRYYM
+             MOVE   "200803"        TO   SKT4320TMP-SRYYM
+      *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
       *
            PERFORM  900-SKTTMP-READ-SEC
@@ -1001,16 +1006,19 @@
            MOVE    WRK-Z4                TO  SKT4320o-NO
       *
       *    診療年月
-      *     MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
-           MOVE  SKT4320TMP-SRYYM        TO  WRK-SYMD (1:6)
-           MOVE    "01"                  TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
+      *---(01.00.05) LINE ADD START ------------------------------------
+      **     MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
+      *     MOVE  SKT4320TMP-SRYYM        TO  WRK-SYMD (1:6)
+      *     MOVE    "01"                  TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
       *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
-      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
-      *     MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
-           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
-           MOVE    WRK-SRYYMWH2          TO  SKT4320o-SRYYM
+      **     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      **     MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
+      *     MOVE    WRK-SRYYMWH2          TO  SKT4320o-SRYYM
       *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) end
+           MOVE    WRK-SRYYMWH           TO  SKT4320o-SRYYM
+      *---(01.00.05) LINE ADD START ------------------------------------
       *    保険者名
            MOVE    SKT4320TMP-HKNJANUM   TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
@@ -1165,10 +1173,13 @@
            MOVE    WRK-Z4                TO  SKT4330-NO
       *
       *    診療年月
-      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
-      *     MOVE    WRK-SRYYMWH           TO  SKT4330-SRYYM
-           MOVE    WRK-SRYYMWH2          TO  SKT4330-SRYYM
-      *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
+      *---(01.00.05) LINE ADD START ------------------------------------
+      **=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
+      **     MOVE    WRK-SRYYMWH           TO  SKT4330-SRYYM
+      *     MOVE    WRK-SRYYMWH2          TO  SKT4330-SRYYM
+      **=== 診療年月の表示修正 by Yoshikawa(2008/05/29) start
+           MOVE    WRK-SRYYMWH           TO  SKT4330-SRYYM
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    保険者名
            MOVE    SKT4320TMP-HKNJANUM   TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
