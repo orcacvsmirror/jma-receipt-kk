@@ -47,6 +47,11 @@
       *  01.00.07    内田　　08/03/22    複数保険所持時の長期欄の○印字修正
       *                                  長期所持時の患者負担額の修正
       *                                  患者負担額の四捨五入修正
+      *  01.00.08    内田    08/06/24    帳票様式の変更に伴う修正
+      *                                  公費の助成がない場合は印字対象外
+      *                                  一部負担金欄は０の場合は０印字
+      *                                  保険番号１６０等使用時、
+      *                                  負担金が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -153,6 +158,9 @@
            03  WRK-Z2                PIC ZZ.
            03  WRK-Z6                PIC ZZ,ZZZ.
            03  WRK-Z7                PIC ZZZ,ZZZ.
+      *---(01.00.08) LINE ADD START ------------------------------------
+           03  WRK-Z79               PIC ZZZ,ZZ9.
+      *---(01.00.08) LINE ADD END   ------------------------------------
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
@@ -231,6 +239,11 @@
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト　領域
       *****************************************************************
@@ -687,11 +700,14 @@
            MOVE     ZERO                     TO   MF100-FTNMONEY 
                                                   MF100-TAHOFTN
                                                   KASAN-AREA
-           IF  MF100-RJNHKNNUM          NOT   =   SPACE
-             MOVE    1                       TO   FLG-ERR2
-           ELSE
-             MOVE    ZERO                    TO   FLG-ERR2
-           END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *     IF  MF100-RJNHKNNUM          NOT   =   SPACE
+      *       MOVE    1                       TO   FLG-ERR2
+      *     ELSE
+      *       MOVE    ZERO                    TO   FLG-ERR2
+      *    END-IF
+           MOVE    1                         TO   FLG-ERR2
+      *---(01.00.08) LINE ADD END   ------------------------------------
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.06) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -773,6 +789,12 @@
                      MF100-HKNGAKU(RECE02-NYUGAIKBN)
              END-IF
            END-IF
+      *
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    フラグ（未就学児、特例措置）
+           MOVE    RECE02-FLG (1)     TO  MF100-FLG (1)
+           MOVE    RECE02-FLG (2)     TO  MF100-FLG (2)
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
@@ -999,22 +1021,31 @@
            MOVE    WRK-HENYMDG(5:18)       TO  SC17-TANJOYMD
       *
       *    給付割合
+      *---(01.00.08) LINE ADD START ------------------------------------
+           IF   MF100-SRYYM   >=  WRK-CONS-SRYYM-200804
+           AND  MF100-FLG (1)  =  1
+               MOVE  "○"                      TO  SC17-KYURATE(2)
+           ELSE
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
       *     IF  MF100-AGE  <  70
-           IF  MF100-AGE  <  70  AND  MF100-RJNHKNNUM  =  SPACE
+             IF  MF100-AGE  <  70  AND  MF100-RJNHKNNUM  =  SPACE
       *---(01.00.05) LINE ADD END   ------------------------------------
-             IF  MF100-AGE  >=  3
-               MOVE   "○"                   TO  SC17-KYURATE(1)
+               IF  MF100-AGE  >=  3
+                 MOVE   "○"                   TO  SC17-KYURATE(1)
+               ELSE
+                 MOVE   "○"                   TO  SC17-KYURATE(2)
+               END-IF
              ELSE
-               MOVE   "○"                   TO  SC17-KYURATE(2)
+               IF  MF100-KYURATE  =  "010"
+                 MOVE   "○"                   TO  SC17-KYURATE(3)
+               ELSE
+                 MOVE   "○"                   TO  SC17-KYURATE(4)
+               END-IF
              END-IF
-           ELSE
-             IF  MF100-KYURATE  =  "010"
-               MOVE   "○"                   TO  SC17-KYURATE(3)
-             ELSE
-               MOVE   "○"                   TO  SC17-KYURATE(4)
-             END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
            END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *    保険者番号
            IF    MF100-HKNNUM              =   "001"
@@ -1100,8 +1131,12 @@
              END-IF
       *
       *      入院一部負担金
-             MOVE    MF100-FTNMONEY        TO  WRK-Z7
-             MOVE    WRK-Z7                TO  SC17-ITBFTN(1)
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *       MOVE    MF100-FTNMONEY        TO  WRK-Z7
+      *       MOVE    WRK-Z7                TO  SC17-ITBFTN(1)
+             MOVE    MF100-FTNMONEY        TO  WRK-Z79
+             MOVE    WRK-Z79               TO  SC17-ITBFTN(1)
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *      点数に対する助成は無いが、食事の助成がある為印刷する時は
       *      一部負担金、入院日数は記載しない
@@ -1157,8 +1192,12 @@
              MOVE  WRK-Z9                  TO  SC17-HKNGAKU(2)
       *
       *      外来一部負担金
-             MOVE    MF100-FTNMONEY        TO  WRK-Z7
-             MOVE    WRK-Z7                TO  SC17-ITBFTN(2)
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *       MOVE    MF100-FTNMONEY        TO  WRK-Z7
+      *       MOVE    WRK-Z7                TO  SC17-ITBFTN(2)
+             MOVE    MF100-FTNMONEY        TO  WRK-Z79
+             MOVE    WRK-Z79               TO  SC17-ITBFTN(2)
+      *---(01.00.08) LINE ADD END   ------------------------------------
            END-IF
       *
       *    備考
@@ -1984,7 +2023,16 @@
       *             ADD    10             TO  WRK-KEISAN2
       *          END-IF
       *           ADD     WRK-KEISAN2     TO  MF100-FTNMONEY
-                 MOVE  SYU-KOH-HKNFTNMONEY(IDX)    TO  WRK-KEISAN2
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *           MOVE  SYU-KOH-HKNFTNMONEY(IDX)    TO  WRK-KEISAN2
+                 IF  SYU-KOH-HKNFTNMONEY(IDX)  =  ZERO
+                   COMPUTE  WRK-KEISAN2 =
+                           (SYU-KOH-COMPFTN(IDX) + 5)  /  10
+                   COMPUTE  WRK-KEISAN2  =  WRK-KEISAN2  *  10
+                 ELSE
+                   MOVE  SYU-KOH-HKNFTNMONEY(IDX)   TO  WRK-KEISAN2
+                 END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
                  ADD     WRK-KEISAN2     TO  MF100-FTNMONEY
       *---(01.00.07) LINE ADD END   ------------------------------------
       *

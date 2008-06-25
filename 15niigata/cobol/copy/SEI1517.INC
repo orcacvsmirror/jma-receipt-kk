@@ -141,3 +141,6 @@
            03  MF100-TYOKI               PIC  9(01).
       * ›∏±…È√¥≥€
            03  MF100-HKNGAKU             PIC  9(09)  OCCURS 2.
+      *•’•È•∞° Ã§Ω¢≥ÿª˘°¢∆√Œ„¡º√÷°À
+           03  MF100-FLG-TBL  OCCURS  5.
+               05  MF100-FLG             PIC  9(01).
