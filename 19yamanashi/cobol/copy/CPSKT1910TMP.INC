@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         08/05/26  帳票様式の変更に伴う修正
+      *  01.00.02    吉川         08/06/09  改正前の月遅れ分は旧様式に印字
       ************************************************************
        01  SKT1910TMP-REC.
            03  SKT1910TMP-KEY.
@@ -28,6 +29,9 @@
                05  SKT1910TMP-HKNJANUM              PIC  X(06).
                05  SKT1910TMP-KYURATE               PIC  9(03).
                05  SKT1910TMP-ZAITAKU               PIC  X(01).
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
+           03  SKT1910TMP-SRYYM                     PIC  X(06).
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
            03  SKT1910TMP-HKN-AREA  OCCURS  11.
                05  SKT1910TMP-NYUGAI-TBL  OCCURS  2.
                    07  SKT1910TMP-KENSU             PIC  9(05).

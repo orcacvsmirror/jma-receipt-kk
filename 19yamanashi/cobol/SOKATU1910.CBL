@@ -48,6 +48,8 @@
       *                                        医療機関情報を参照
       *  01.00.10       内田      08/05/03     ４月改正に伴う修正
       *  01.00.11       吉川      08/05/26     帳票様式の変更に伴う修正
+      *  01.00.12       吉川      08/06/05     医療機関コード印字修正
+      *  01.00.13       吉川      08/06/09     改正前の月遅れ分は旧様式に印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -611,7 +613,6 @@
            OPEN    OUTPUT  UPD-FILE
       *  
       ***** 05/04/12 INS
-           DISPLAY     "WRK-PARA-SYOKBN=" WRK-PARA-SYOKBN
            EVALUATE    WRK-PARA-SYOKBN 
                WHEN    "2"
       *---(01.00.09) LINE ADD START ------------------------------------
@@ -784,6 +785,11 @@
            IF     YUSEN-HKNJANUM    =    SKT1910TMP-HKNJANUM
              MOVE        1          TO   SKT1910TMP-SYUTURYOKU
            ELSE
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
+            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE      5          TO   SKT1910TMP-SYUTURYOKU
+            ELSE
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
       ***** 04/05/25 UPD 県外保険者→県内保険者→県内扱い国保組合に変更
       *       MOVE        2          TO   SKT1910TMP-SYUTURYOKU
              IF     RECE10-PREFKBN   =    "2"
@@ -796,6 +802,9 @@
                END-IF
              END-IF
       ***** 04/05/25 UPD END
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
+            END-IF
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
            END-IF
       *    在宅
            MOVE   RECE10-ZAITAKU    TO   SKT1910TMP-ZAITAKU
@@ -803,8 +812,11 @@
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
       *    平成２０年３月以前は旧様式
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-               MOVE  RECE10-SRYYM   TO  WRK-SRYYMD(1:6)
-               MOVE  "01"           TO  WRK-SRYYMD(6:2)
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
+      *         MOVE  RECE10-SRYYM   TO  WRK-SRYYMD(1:6)
+      *         MOVE  "01"           TO  WRK-SRYYMD(6:2)
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
+                MOVE  RECE10-SRYYM  TO  SKT1910TMP-SRYYM
            ELSE
                MOVE  SPACE          TO  WRK-SRYYMD
            END-IF
@@ -1194,7 +1206,10 @@
       ***** 05/02/22 INS
       *    公費ソート処理
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
              IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *       IF  SKT1910TMP-SRYYM  >=  WRK-CONS-SRYYM-200804
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
                PERFORM  KOH2-SORT-SEC
              ELSE
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
@@ -1204,7 +1219,10 @@
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
              IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *       IF  SKT1910TMP-SRYYM  >=  WRK-CONS-SRYYM-200804
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
       *    公費が残っているか
                PERFORM  UNTIL  SKT1910TMP-KOHNUM2 (WRK-CNT) = SPACE
       *    帳票編集<見出し>処理
@@ -1261,14 +1279,28 @@
            MOVE    WRK-Z4                TO  SKT1920-NO
       *****
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
-           IF  WRK-SRYYMD  NOT =  SPACE
-               MOVE  WRK-SRYYMD(1:6)     TO  WRK-SYMD (1:6)
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
+      *     IF  WRK-SRYYMD  NOT =  SPACE
+      *         MOVE  WRK-SRYYMD(1:6)     TO  WRK-SYMD (1:6)
+           IF  SKT1910TMP-SRYYM  NOT  =  SPACE
+               MOVE  SKT1910TMP-SRYYM    TO  WRK-SYMD
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
            ELSE
                MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            END-IF
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *    診療年月
-           MOVE    WRK-SRYYMWH           TO  SKT1920-SRYYM
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
+      *     MOVE    WRK-SRYYMWH           TO  SKT1920-SRYYM
+           IF  WRK-PARA-SYOKBN  =  "2"
+               MOVE  SKT1910TMP-SRYYM    TO  WRK-SYMD
+               MOVE  "01"                TO  WRK-SYMD (7:2)
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE  WRK-HENYMDG(1:16)   TO  SKT1920-SRYYM 
+           ELSE
+               MOVE  WRK-SRYYMWH         TO  SKT1920-SRYYM
+           END-IF
+      *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) end
       *    保険者名
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) start
       *     PERFORM  920-HKNJAINF-SET-SEC
@@ -1314,9 +1346,12 @@
       *     MOVE    SYS-1001-HOSPCDN      TO  SKT1920-HOSPCD
       ***** 05/02/22 UPD
       *     MOVE    SYS-1001-HOSPCD       TO  SKT1920-HOSPCD
-           MOVE    SYS-1001-HOSPCD       TO  WRK-MAE-INPUT
-           PERFORM 2009-HENKAN-SEC
-           MOVE    WRK-OUT-INPUT         TO  SKT1920-HOSPCD
+      *=== 医療機関コード印字修正 by Yoshikawa(2008/06/05) start
+      *     MOVE    SYS-1001-HOSPCD       TO  WRK-MAE-INPUT
+      *     PERFORM 2009-HENKAN-SEC
+      *     MOVE    WRK-OUT-INPUT         TO  SKT1920-HOSPCD
+           MOVE    SYS-1001-HOSPCDN      TO  SKT1920-HOSPCD
+      *=== 医療機関コード印字修正 by Yoshikawa(2008/06/05) end
       *****
       *****
       *    法定外給付割合
