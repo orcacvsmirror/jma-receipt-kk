@@ -33,6 +33,7 @@
       *  01.00.01    内田    07/09/21    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    内田    08/06/24    公費の助成がない場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -631,7 +632,9 @@
            MOVE    SPACE              TO    MF100-CITYNUM
       *
       *    ２７老人のみ助成判定を行う
-           IF  MF100-RJNHKNNUM          NOT   =   SPACE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     IF  MF100-RJNHKNNUM          NOT   =   SPACE
+      *---(01.00.02) LINE ADD END   ------------------------------------
              MOVE    1                       TO   FLG-ERR2
              MOVE    MF100-KOHNUM            TO   WRK-KOHNUM
              MOVE     MF100-KOHID            TO   WRK-KOHID
@@ -647,9 +650,11 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
              END-IF
              PERFORM  920-SYUNOU-SET-SEC
-           ELSE
-             MOVE    ZERO                    TO   FLG-ERR2
-           END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     ELSE
+      *       MOVE    ZERO                    TO   FLG-ERR2
+      *     END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
            MOVE  ZERO                        TO  FLG-ERR
