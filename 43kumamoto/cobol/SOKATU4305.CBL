@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/06/16  点数の桁数の修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -161,7 +162,10 @@
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
-           03  WRK-Z7              PIC ZZZZZZ.
+      *=== 桁数修正 by Yoshikawa(2008/06/16) start
+      *     03  WRK-Z7              PIC ZZZZZZ.
+           03  WRK-Z7              PIC ZZZZZZZ.
+      *=== 桁数修正 by Yoshikawa(2008/06/16) start
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
            03  WRK-KOHNUM9         PIC Z9.
            03  WRK-PAGE            PIC ZZZ9.
