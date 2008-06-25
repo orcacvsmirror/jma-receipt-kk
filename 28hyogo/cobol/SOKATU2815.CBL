@@ -30,6 +30,8 @@
       *  01.00.01    吉川    2008/05/21  足りない公費は備考欄に記載
       *                                  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2008/06/24  公費負担者番号の頭2桁毎に集計する
+      *                                  公費名称は印字しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -95,6 +97,9 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *=== 負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+           03  FLG-PTKOHINF        PIC 9(01).
+      *=== 負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
@@ -142,6 +147,9 @@
            03  WRK-CNT             PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+           03  WRK-FTNJANUM        PIC X(08).
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
@@ -252,6 +260,12 @@
       *    保険者情報
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
+      *
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+      *    患者公費情報
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
       *
       *    医療機関情報情報
            COPY    "CPSK1001.INC".
@@ -922,6 +936,11 @@
       *      公費番号格納
              PERFORM VARYING   IDX2    FROM    1   BY  1
                      UNTIL     IDX2 >          100
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+               MOVE  RECE10-KOHNUM(IDZ)  TO  WRK-KOHNUM
+               PERFORM  900-PTKOHINF-SET-SEC
+               MOVE  WRK-FTNJANUM(1:2)   TO  RECE10-KOHNUM(IDZ)
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
                IF  SUM-KOHNUM (IDX2)   =   SPACE
                  MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
                  MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
@@ -1204,52 +1223,56 @@
            IF      SUM-KOHNUM (IDX2)  =   "051"
                MOVE    "51"            TO   SKT2815-HBTNUM (IDY)
                MOVE    "特定疾患"      TO   WRK-HKNNAME
-           ELSE
-      *      公費番号まとめ情報からの集計か
-             IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
-      *        保険番号読込み  
-               INITIALIZE                     HKNNUM-REC
-               MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
-               MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
-               MOVE  HKNNUM-REC           TO  MCPDATA-REC
-               MOVE  "tbl_hknnum"         TO  MCP-TABLE
-               MOVE  "key2"               TO  MCP-PATHNAME
-                 PERFORM 900-DBSELECT-SEC
-                 IF      MCP-RC              =   ZERO
-                   MOVE  "tbl_hknnum"     TO  MCP-TABLE
-                   MOVE  "key2"           TO  MCP-PATHNAME
-                   PERFORM 900-HKNNUM-READ-SEC
-                 ELSE
-                   MOVE    1              TO  FLG-HKNNUM
-                 END-IF
-      *
-                 PERFORM UNTIL       FLG-HKNNUM      =   1
-                   IF      HKN-TEKSTYMD            <=  WRK-SRYYMD
-                   AND     HKN-TEKEDYMD            >=  WRK-SRYYMD
-                     MOVE  HKN-TANSEIDONAME   TO  WRK-HKNNAME
-                     MOVE  1                  TO  FLG-HKNNUM   
-                   END-IF
-      *
-                   IF      FLG-HKNNUM           =   ZERO
-                     MOVE  "tbl_hknnum"       TO  MCP-TABLE
-                     MOVE  "key2"             TO  MCP-PATHNAME
-                     PERFORM 900-HKNNUM-READ-SEC
-                   END-IF
-                 END-PERFORM
-                 MOVE  "tbl_hknnum"       TO  MCP-TABLE
-                 MOVE  "key2"             TO  MCP-PATHNAME
-                 PERFORM  900-CLOSE-SEC
-      *
-      *          法別番号
-                 MOVE  HKN-HBTNUM         TO  SKT2815-HBTNUM(IDY)
-             ELSE
-      *          公費番号まとめ情報から公費名へ
-                 MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
-             END-IF
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+      *     ELSE
+      **      公費番号まとめ情報からの集計か
+      *       IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+      **        保険番号読込み  
+      *         INITIALIZE                     HKNNUM-REC
+      *         MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
+      *         MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+      *         MOVE  HKNNUM-REC           TO  MCPDATA-REC
+      *         MOVE  "tbl_hknnum"         TO  MCP-TABLE
+      *         MOVE  "key2"               TO  MCP-PATHNAME
+      *           PERFORM 900-DBSELECT-SEC
+      *           IF      MCP-RC              =   ZERO
+      *             MOVE  "tbl_hknnum"     TO  MCP-TABLE
+      *             MOVE  "key2"           TO  MCP-PATHNAME
+      *             PERFORM 900-HKNNUM-READ-SEC
+      *           ELSE
+      *             MOVE    1              TO  FLG-HKNNUM
+      *           END-IF
+      **
+      *           PERFORM UNTIL       FLG-HKNNUM      =   1
+      *             IF      HKN-TEKSTYMD            <=  WRK-SRYYMD
+      *             AND     HKN-TEKEDYMD            >=  WRK-SRYYMD
+      *               MOVE  HKN-TANSEIDONAME   TO  WRK-HKNNAME
+      *               MOVE  1                  TO  FLG-HKNNUM   
+      *             END-IF
+      **
+      *             IF      FLG-HKNNUM           =   ZERO
+      *               MOVE  "tbl_hknnum"       TO  MCP-TABLE
+      *               MOVE  "key2"             TO  MCP-PATHNAME
+      *               PERFORM 900-HKNNUM-READ-SEC
+      *             END-IF
+      *           END-PERFORM
+      *           MOVE  "tbl_hknnum"       TO  MCP-TABLE
+      *           MOVE  "key2"             TO  MCP-PATHNAME
+      *           PERFORM  900-CLOSE-SEC
+      **
+      **          法別番号
+      *           MOVE  HKN-HBTNUM         TO  SKT2815-HBTNUM(IDY)
+      *       ELSE
+      **          公費番号まとめ情報から公費名へ
+      *           MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
+      *       END-IF
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
            END-IF
       *
       *    公費名
-           MOVE  WRK-HKNNAME        TO  SKT2815-KOHNAME(IDY)
+      *=== 公費名称は印字しない by Yoshikawa(2008/06/24) start
+      *     MOVE  WRK-HKNNAME        TO  SKT2815-KOHNAME(IDY)
+      *=== 公費名称は印字しない by Yoshikawa(2008/06/24) end
       *
            . 
        2002311-HKNNUM-HENSYU-EXT.
@@ -1607,6 +1630,64 @@
        800-PTINF-READ-EXT.
            EXIT.
       *
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-SET-SEC  SECTION.
+      *
+           INITIALIZE  PTKOHINF-REC
+           MOVE  SPA-HOSPNUM               TO  PTKOH-HOSPNUM
+           MOVE  RECE10-PTID               TO  PTKOH-PTID
+           MOVE  WRK-KOHNUM                TO  PTKOH-KOHNUM
+      *
+           MOVE  PTKOHINF-REC              TO  MCPDATA-REC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           PERFORM 900-DBSELECT-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_ptkohinf"        TO  MCP-TABLE
+             MOVE    "key4"                TO  MCP-PATHNAME
+             PERFORM  900-PTKOHINF-READ-SEC
+             PERFORM  UNTIL  FLG-PTKOHINF = 1
+               IF  PTKOH-SAKJOKBN  NOT = "1"
+                 IF  PTKOH-TEKSTYMD(1:6) <= RECE10-SRYYM(1:6)  AND 
+                     PTKOH-TEKEDYMD(1:6) >= RECE10-SRYYM(1:6)
+                     MOVE  PTKOH-FTNJANUM  TO  WRK-FTNJANUM
+                 END-IF
+               END-IF
+                 PERFORM  900-PTKOHINF-READ-SEC
+             END-PERFORM
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           PERFORM 900-CLOSE-SEC
+      *
+           .
+       900-PTKOHINF-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-READ-SEC  SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  PTKOHINF-REC
+             MOVE  ZERO         TO  FLG-PTKOHINF
+           ELSE
+             INITIALIZE  PTKOHINF-REC
+             MOVE  1  TO  FLG-PTKOHINF
+           END-IF
+      *
+           .
+       900-PTKOHINF-READ-EXT.
+           EXIT.
+      *
+      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
       *****************************************************************
       *    請求管理ＤＢ更新用ファイル読込
       *****************************************************************
