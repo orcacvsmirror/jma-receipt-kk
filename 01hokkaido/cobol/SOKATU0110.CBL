@@ -45,6 +45,8 @@
       *  01.00.08    内田k  08/04/25    帳票様式の変更に伴う修正
       *                                 SPA-AREA初期化
       *  01.00.09    内田   08/05/25    長期欄の給付割合印字修正
+      *  01.00.10    内田   08/06/25    公費再掲欄の給付割合で、前期高齢９割は
+      *                                 ８割として扱う
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -951,7 +953,15 @@
                    RECE10-RJNHKNNUM NOT =  SPACE
                  MOVE     ZERO         TO  WRK-RATE
                ELSE
-                 COMPUTE  WRK-RATE      =  10  -  RECE10-KYURATE
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *           COMPUTE  WRK-RATE      =  10  -  RECE10-KYURATE
+                 IF   (RECE10-SRYYM   >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (2)  =  1)
+                   MOVE     2          TO  WRK-RATE
+                 ELSE
+                   COMPUTE  WRK-RATE      =  10  -  RECE10-KYURATE
+                 END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
                END-IF
       *
                DISPLAY  "患者番号=" RECE10-PTNUM
@@ -1216,7 +1226,15 @@
       **---(01.00.07) LINE ADD END   ------------------------------------
              EVALUATE  RECE10-KYURATE
                WHEN  9
-                 MOVE  1                TO  SKT0110TMP-T-RATE (IDX4)
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *           MOVE  1                TO  SKT0110TMP-T-RATE (IDX4)
+                 IF   (RECE10-SRYYM   >=  WRK-CONS-SRYYM-200804)
+                 AND  (RECE10-FLG (2)  =  1)
+                   MOVE  2              TO  SKT0110TMP-T-RATE (IDX4)
+                 ELSE
+                   MOVE  1              TO  SKT0110TMP-T-RATE (IDX4)
+                 END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
                WHEN  8
                  MOVE  2                TO  SKT0110TMP-T-RATE (IDX4)
                WHEN  OTHER
