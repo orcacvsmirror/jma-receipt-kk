@@ -27,6 +27,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/06/27  マル長欄追加対応
+      *                                  生活療養のみの場合でも食事印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -221,6 +223,14 @@
                    07  SUM-S-KKINGK            PIC  9(10).
                    07  SUM-S-KFTNGK            PIC  9(10).
                    07  SUM-KOH-MEISYO          PIC  X(44).
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
+      *        長期
+               05  SUM-TYOKI-TBL.
+                   07  SUM-TKENSU              PIC  9(06).
+                   07  SUM-TNISSU              PIC  9(06).
+                   07  SUM-TTENSU              PIC  9(10).
+                   07  SUM-TITBFTN             PIC  9(10).
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) end
       *
       *    キー領域
        01  KEY-AREA                    VALUE   LOW-VALUE.
@@ -367,7 +377,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU0115"    TO  JOB-PGID
-           MOVE    "広域連合・診療報酬請求書"
+           MOVE    "後期高齢者請求書"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -665,6 +675,19 @@
                    RECE10-KOHNUM (4)   NOT =   SPACE
                PERFORM 20012-KOH-SYUKEI-SEC
            END-IF
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
+      *    長期
+           IF      RECE10-ETC-KOHNUM(1)  =  "972"  OR
+                   RECE10-ETC-KOHNUM(2)  =  "972"  OR
+                   RECE10-ETC-KOHNUM(3)  =  "972"  OR
+                   RECE10-ETC-KOHNUM(4)  =  "972"  OR
+                   RECE10-ETC-KOHNUM(1)  =  "974"  OR
+                   RECE10-ETC-KOHNUM(2)  =  "974"  OR
+                   RECE10-ETC-KOHNUM(3)  =  "974"  OR
+                   RECE10-ETC-KOHNUM(4)  =  "974"
+               PERFORM 200122-TYOKI-SYUKEI-SEC
+           END-IF
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) end
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -909,11 +932,15 @@
       *    療養の給付：一部負担金
            ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
       *
-           IF      IDX3                   =   1 
-             IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+           IF      IDX3                   =   1
+      *=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) start
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      **    食事療養：件数
+      *         ADD     1                   TO  SUM-S-KENSU(IDX1)
+      *       END-IF
       *    食事療養：件数
-               ADD     1                   TO  SUM-S-KENSU(IDX1)
-             END-IF
+             ADD     1                     TO  SUM-S-KENSU(IDX1)
+      *=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) end
       *    食事療養：日数
              ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
       *    食事療養：金額
@@ -995,10 +1022,14 @@
            ADD  RECE10-FTNMONEY(IDY) TO  SUM-KITBFTN(IDX2 IDX3)
       *
            IF      IDX3              =   1 
-             IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      *=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) start
+      *       IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      **    公費再掲欄：食事療養：件数
+      *         ADD     1                     TO SUM-S-KKENSU(IDX2)
+      *       END-IF
       *    公費再掲欄：食事療養：件数
-               ADD     1                     TO SUM-S-KKENSU(IDX2)
-             END-IF
+             ADD     1                       TO SUM-S-KKENSU(IDX2)
+      *=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) end
       *    公費再掲欄：食事療養：日数
              ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
       *    公費再掲欄：食事療養：金額
@@ -1012,6 +1043,27 @@
        200121-KOH-SYUKEI-01-EXT.
            EXIT.
       *
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
+      *****************************************************************
+      *    長期集計処理
+      *****************************************************************
+       200122-TYOKI-SYUKEI-SEC        SECTION.
+      *
+      *    マル長欄：件数
+           ADD  1                    TO  SUM-TKENSU
+      *    マル長欄：日数
+           ADD  RECE10-JNISSU(1)     TO  SUM-TNISSU
+      *    マル長欄：点数
+           ADD  RECE10-TOTALTEN(1)   TO  SUM-TTENSU
+      *    マル長欄：一部負担金
+           ADD  RECE10-FTNMONEY(1)   TO  SUM-TITBFTN
+      *
+           MOVE    1               TO  FLG-UPD 
+           .
+       200122-TYOKI-SYUKEI-EXT.
+           EXIT.
+      *
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) end
       *****************************************************************
       *    請求ＤＢ更新用ファイル出力処理
       *****************************************************************
@@ -1134,7 +1186,21 @@
              MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT0115-S-FTNGK(IDZ)
            END-PERFORM
-      *     
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
+      *    マル長：件数
+           MOVE  SUM-TKENSU              TO  WRK-Z5
+           MOVE  WRK-Z5                  TO  SKT0115-TKENSU
+      *    マル長：診療実日数
+           MOVE  SUM-TNISSU              TO  WRK-Z5 
+           MOVE  WRK-Z5                  TO  SKT0115-TNISSU
+      *    マル長：点数
+           MOVE  SUM-TTENSU              TO  WRK-Z9
+           MOVE  WRK-Z9                  TO  SKT0115-TTENSU
+      *    マル長：一部負担金
+           MOVE  SUM-TITBFTN             TO  WRK-Z9
+           MOVE  WRK-Z9                  TO  SKT0115-TITBFTN
+      *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
+      *
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
            MOVE    1                     TO  IDX2
@@ -1297,26 +1363,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
