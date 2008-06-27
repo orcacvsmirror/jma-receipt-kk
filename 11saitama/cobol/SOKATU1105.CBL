@@ -46,6 +46,8 @@
       *  01.00.10    内田    08/05/14   請求額払い金額欄修正
       *                                 （前期高齢９割の特例措置対応）
       *                                 後期高齢の食事印字修正
+      *  01.00.11    内田    08/06/25   後期高齢のみの場合でも印字するよう修正
+      *                                 印字対象番号の追加（481等）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -412,7 +414,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *              UNTIL   FLG-END   =   1
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            PERFORM  300-END-SEC
       *
@@ -628,8 +632,9 @@
       *
            INITIALIZE             SUM-AREA
       *
-           MOVE     ZERO    TO        FLG-END
-      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO        FLG-END
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
@@ -915,6 +920,12 @@
                OR  RECE10-KOHNUM(IDX3)      = "281"
       *---(01.00.06) LINE ADD END   ------------------------------------
       ****2006/02/11 @@@@-BRAND END
+      *---(01.00.11) LINE ADD START ------------------------------------
+               OR  RECE10-KOHNUM(IDX3)      = "481"
+               OR  RECE10-KOHNUM(IDX3)      = "482"
+               OR  RECE10-KOHNUM(IDX3)      = "483"
+               OR  RECE10-KOHNUM(IDX3)      = "583"
+      *---(01.00.11) LINE ADD END   ------------------------------------
                     PERFORM  2202-SYORI-SEC
                END-IF
            END-PERFORM
@@ -998,6 +1009,12 @@
            AND  RECE10-KOHNUM(IDX3)  NOT =  "182"
            AND  RECE10-KOHNUM(IDX3)  NOT =  "183"
            AND  RECE10-KOHNUM(IDX3)  NOT =  "281"
+      *---(01.00.11) LINE ADD START ------------------------------------
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "481"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "482"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "483"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "583"
+      *---(01.00.11) LINE ADD END   ------------------------------------
              ADD     WRK-SEIKYUGK-G        TO  SKT1105TMP-SEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1033,6 +1050,12 @@
            AND  RECE10-KOHNUM(IDX3)  NOT =  "182"
            AND  RECE10-KOHNUM(IDX3)  NOT =  "183"
            AND  RECE10-KOHNUM(IDX3)  NOT =  "281"
+      *---(01.00.11) LINE ADD START ------------------------------------
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "481"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "482"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "483"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "583"
+      *---(01.00.11) LINE ADD END   ------------------------------------
              ADD     WRK-SEIKYUGK-G            TO  WRK-KOHSEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
