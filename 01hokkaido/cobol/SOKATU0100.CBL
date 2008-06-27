@@ -51,6 +51,7 @@
       *                                 SPA-AREA初期化
       *  01.00.15    内田   08/05/02    後期高齢者を障老人欄へ印字
       *  01.00.16    内田   08/05/28    区分３障の件数集計修正
+      *  01.00.17    内田   08/06/25    後期高齢のみの場合でも印字するよう修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -400,7 +401,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.17) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.17) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -622,7 +625,9 @@
            CLOSE            SKT0100TMP-FILE
            OPEN     I-O     SKT0100TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.17) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.17) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
