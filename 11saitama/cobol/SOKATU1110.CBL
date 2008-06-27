@@ -37,6 +37,7 @@
       *                                 医療機関情報を参照
       *  01.00.07    内田    08/03/12   特別療養費対応
       *  01.00.08    長屋    08/04/24   帳票様式に伴う修正
+      *  01.00.09    内田    08/06/20   印字対象番号の追加（481等）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -872,6 +873,12 @@
                    OR  RECE10-KOHNUM(IDX3)  =  "183"
                    OR  RECE10-KOHNUM(IDX3)  =  "281"
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *---(01.00.09) LINE ADD START ------------------------------------
+                   OR  RECE10-KOHNUM(IDX3)  =  "481"
+                   OR  RECE10-KOHNUM(IDX3)  =  "482"
+                   OR  RECE10-KOHNUM(IDX3)  =  "483"
+                   OR  RECE10-KOHNUM(IDX3)  =  "583"
+      *---(01.00.09) LINE ADD END   ------------------------------------
                    PERFORM VARYING IDX4    FROM    1   BY  1
                            UNTIL   IDX4    >       20
                            OR      SKT1110TMP-KOHNUM(IDX4) =   SPACE
