@@ -53,5 +53,27 @@ fi
 # ???
 cp -af ${SITELDDEFDIR} ${ORCA_DIR}
 
+
+#不要ＰＧ（ORCBM022,ORCBM037,ORCBM038）の削除
+for f in ${SITESRCDIR}/cobol/ORCBM022.CBL ; do
+  rm -rf $f
+done
+for f in ${SITESRCDIR}/cobol/ORCBM037.CBL ; do
+  rm -rf $f
+done
+for f in ${SITESRCDIR}/cobol/ORCBM038.CBL ; do
+  rm -rf $f
+done
+
+for f in ${SITELIBDIR}/ORCBM022.so ; do
+  rm -rf $f
+done
+for f in ${SITELIBDIR}/ORCBM037.so ; do
+  rm -rf $f
+done
+for f in ${SITELIBDIR}/ORCBM038.so ; do
+  rm -rf $f
+done
+
 sync
 echomsg "埼玉県（総括表・地方公費）プログラムコピー終了!!"
