@@ -29,6 +29,9 @@
       *  プログラム修正履歴
       *  [ORCA]ver          日付            内容
       *  01.00.01    内田    08/05/27    後期高齢者の取得条件修正
+      *  01.00.02    内田    08/06/27    後期高齢のみの場合でも印刷するよう修正
+      *                                  国保請求書に印字しない値は集計しない
+      *                                  SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -285,7 +288,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -301,6 +306,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.02) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -449,7 +457,9 @@
            CLOSE            SKT1700TMP-FILE
            OPEN     I-O     SKT1700TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-SYUKEI-SEC
@@ -643,14 +653,26 @@
               ADD  RECE10-TOTALTEN(1)  TO
                    SKT1700TMP-TENSU(IDX1 IDX2)
                    SKT1700TMP-TENSU(3 IDX2)
-              ADD  RECE10-FTNMONEY(1)  TO
-                   SKT1700TMP-ITBFTN(IDX1 IDX2)
-                   SKT1700TMP-ITBFTN(3 IDX2)
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *        ADD  RECE10-FTNMONEY(1)  TO
+      *             SKT1700TMP-ITBFTN(IDX1 IDX2)
+      *             SKT1700TMP-ITBFTN(3 IDX2)
+              IF  (RECE10-NYUGAIKBN  =  1  AND  RECE10-AGE  >=  70)
+              OR  (RECE10-NYUGAIKBN  =  2  AND  RECE10-AGE  >=  70
+              AND  RECE10-ZAITAKU  =  1)
+                ADD  RECE10-FTNMONEY(1)  TO
+                     SKT1700TMP-ITBFTN(IDX1 IDX2)
+                     SKT1700TMP-ITBFTN(3 IDX2)
+              END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *       食事療養
              IF  RECE10-SHOKUJINISSU(1)  >  0
               ADD  1                        TO
                    SKT1700TMP-SKENSU(IDX1)
                    SKT1700TMP-SKENSU(3)
+      *---(01.00.02) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
               ADD  RECE10-SHOKUJINISSU(1)   TO
                    SKT1700TMP-SKAISU(IDX1)
                    SKT1700TMP-SKAISU(3)
@@ -660,7 +682,9 @@
               ADD  RECE10-SHOKUJIFTN(1)     TO
                    SKT1700TMP-SFTNGK(IDX1)
                    SKT1700TMP-SFTNGK(3)
-             END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *       END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *     退職
             WHEN   2
       *       療養
@@ -673,14 +697,26 @@
               ADD  RECE10-TOTALTEN(1)  TO
                    SKT1700TMP-TENSU(IDX1 IDX2)
                    SKT1700TMP-TENSU(3 IDX2)
-              ADD  RECE10-FTNMONEY(1)  TO
-                   SKT1700TMP-ITBFTN(IDX1 IDX2)
-                   SKT1700TMP-ITBFTN(3 IDX2)
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *        ADD  RECE10-FTNMONEY(1)  TO
+      *             SKT1700TMP-ITBFTN(IDX1 IDX2)
+      *             SKT1700TMP-ITBFTN(3 IDX2)
+              IF  (RECE10-NYUGAIKBN  =  1  AND  RECE10-AGE  >=  70)
+              OR  (RECE10-NYUGAIKBN  =  2  AND  RECE10-AGE  >=  70
+              AND  RECE10-ZAITAKU  =  1)
+                ADD  RECE10-FTNMONEY(1)  TO
+                     SKT1700TMP-ITBFTN(IDX1 IDX2)
+                     SKT1700TMP-ITBFTN(3 IDX2)
+              END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *       食事療養
              IF  RECE10-SHOKUJINISSU(1)  >  0
               ADD  1                        TO
                    SKT1700TMP-SKENSU(IDX1)
                    SKT1700TMP-SKENSU(3)
+      *---(01.00.02) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
               ADD  RECE10-SHOKUJINISSU(1)   TO
                    SKT1700TMP-SKAISU(IDX1)
                    SKT1700TMP-SKAISU(3)
@@ -690,7 +726,9 @@
               ADD  RECE10-SHOKUJIFTN(1)     TO
                    SKT1700TMP-SFTNGK(IDX1)
                    SKT1700TMP-SFTNGK(3)
-             END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *       END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *     老人
             WHEN   3
       *       療養
@@ -706,13 +744,18 @@
              IF  RECE10-SHOKUJINISSU(1)  >  0
               ADD  1                        TO
                    SKT1700TMP-ROUSKENSU
+      *---(01.00.02) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
               ADD  RECE10-SHOKUJINISSU(1)   TO
                    SKT1700TMP-ROUSKAISU
               ADD  RECE10-SHOKUJIRYOYOHI(1) TO
                    SKT1700TMP-ROUSKINGK
               ADD  RECE10-SHOKUJIFTN(1)     TO
                    SKT1700TMP-ROUSFTNGK
-             END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *       END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *     後期
             WHEN   4
       *       療養
@@ -728,13 +771,18 @@
              IF  RECE10-SHOKUJINISSU(1)  >  0
               ADD  1                        TO
                    SKT1700TMP-KOUSKENSU
+      *---(01.00.02) LINE ADD START ------------------------------------
+             END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
               ADD  RECE10-SHOKUJINISSU(1)   TO
                    SKT1700TMP-KOUSKAISU
               ADD  RECE10-SHOKUJIRYOYOHI(1) TO
                    SKT1700TMP-KOUSKINGK
               ADD  RECE10-SHOKUJIFTN(1)     TO
                    SKT1700TMP-KOUSFTNGK
-             END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *       END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
            END-EVALUATE
            MOVE    1               TO  FLG-UPD
            .
