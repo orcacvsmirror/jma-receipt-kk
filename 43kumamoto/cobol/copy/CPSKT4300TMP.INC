@@ -19,10 +19,14 @@
       *    診療報酬請求書     COPY (CPSKT4300TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/07/04  H20年4月改正前は旧様式で印字
       ************************************************************
        01  SKT4300TMP-REC.
            03  SKT4300TMP-KEY.
+      *=== H20年4年改正前は旧様式で印字 by Yoshikawa(2008/07/04) start
+               05  SKT4300TMP-KBN                   PIC  9(01).
+      *=== H20年4年改正前は旧様式で印字 by Yoshikawa(2008/07/04) end
                05  SKT4300TMP-SRYYM                 PIC  9(06).
                05  SKT4300TMP-HKNJANUM              PIC  X(06).
                05  SKT4300TMP-KYURATE               PIC  9(03).

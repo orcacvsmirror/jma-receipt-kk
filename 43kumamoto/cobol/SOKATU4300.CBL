@@ -36,6 +36,7 @@
       *                                  SPA-AREA初期化
       *  01.00.04    吉川    08/05/29    国組3〜6歳を分けないように修正
       *  01.00.05    吉川    08/06/17    月遅れ及び返戻処理の修正
+      *  01.00.06    吉川    08/07/04    H20年4月改正前は旧様式で印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -704,8 +705,14 @@
       **---(01.00.03) LINE ADD END   ------------------------------------
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
                MOVE  "200803"    TO  SKT4300TMP-SRYYM
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+               MOVE  1           TO  SKT4300TMP-KBN
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
            ELSE
                MOVE   SPACE      TO  SKT4300TMP-SRYYM
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+               MOVE   2          TO  SKT4300TMP-KBN
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
            END-IF
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
            MOVE  RECE10-SKYYM        TO  SKT4300TMP-SKYYM
@@ -946,8 +953,14 @@
       **---(01.00.03) LINE ADD END   ------------------------------------
              IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
                  MOVE  "200803"    TO  KOH4300TMP-SRYYM
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+                 MOVE  1           TO  KOH4300TMP-KBN
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
              ELSE
                MOVE   SPACE      TO  KOH4300TMP-SRYYM
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+               MOVE    2           TO  KOH4300TMP-KBN
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
              END-IF
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *
@@ -1132,7 +1145,10 @@
                     AND       FLG-PRINT2  =  1
       *
       *      新様式か
-             IF  (WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804)
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+      *       IF  (WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804)
+             IF  SKT4300TMP-KBN  NOT =  1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
       *        帳票編集<見出し>処理
                PERFORM 310-HEAD-HEN-SEC
       *        帳票編集<明細>処理
@@ -1177,18 +1193,21 @@
            INITIALIZE                        SKT4300
            INITIALIZE                        SKT4310
       *    診療年月
+
       *---(01.00.03) LINE ADD START ------------------------------------
            IF  SKT4300TMP-SRYYM  NOT =  ZERO
                MOVE  SKT4300TMP-SRYYM    TO  WRK-SYMD (1:6)
            ELSE
                MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            END-IF
-           MOVE    "01"                  TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+      *     MOVE    "01"                  TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH 
       *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    WRK-SRYYMWH           TO  SKT4300-SRYYM
                                              SKT4310-SRYYM
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4300-HOSPCDN
                                              SKT4310-HOSPCDN
@@ -1208,10 +1227,13 @@
            MOVE    CNT-PAGE              TO  WRK-Z3
            MOVE    WRK-Z3                TO  SKT4300-NO
       *---(01.00.03) LINE ADD START ------------------------------------
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
       *     IF  (SKT4300TMP-SRYYM  >= WRK-CONS-SRYYM-200804)
-           IF  (WRK-SYMD (1:6)  >= WRK-CONS-SRYYM-200804)
+      *     IF  (WRK-SYMD (1:6)  >= WRK-CONS-SRYYM-200804)
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
+           IF  SKT4300TMP-KBN  NOT =  1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
              CONTINUE
            ELSE
              ADD     1                     TO  CNT-PAGE
@@ -1270,13 +1292,16 @@
       *    編集処理
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     8
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+                    OR       SKT4300TMP-KBN  NOT =  1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
                     OR       FLG-PRINT   =      1
       *
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
       **---(01.00.03) LINE ADD START ------------------------------------
       *       IF  (SKT4300TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
       **---(01.00.03) LINE ADD END   ------------------------------------
-             IF  (WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804)
+      *       IF  (WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804)
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) end
       *        保険者名
                MOVE     SKT4300TMP-HKNJANUM     TO  WRK-HKNJANUM
@@ -1348,6 +1373,9 @@
       *    公費分編集(１枚目)
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     6
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+                    OR       KOH4300TMP-KBN  NOT = 1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
                     OR       FLG-PRINT2  =      1
       *
       *    法別番号
@@ -1377,6 +1405,9 @@
       *    公費分編集(２枚目)
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     6
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
+                    OR       KOH4300TMP-KBN  NOT =  1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
                     OR       FLG-PRINT2  =      1
       *
       *    法別番号
