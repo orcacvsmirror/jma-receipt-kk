@@ -33,6 +33,8 @@
       *                                     医療機関情報を参照
       *                                     長期上位も長期と同じ箇所に集計
       *  01.00.03      長屋     08/04/24    帳票様式に伴う修正
+      *  01.00.04      内田     08/06/27    斜線部分の一部負担金は印字しない
+      *                                     SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -305,6 +307,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -761,7 +766,16 @@
       *    薬剤一部負担金
            ADD   RECE10-YKZFTN(1)    TO  SKT1710TMP-YKZFTN(IDX1 IDX2)
       *    一部負担金
-           ADD   RECE10-FTNMONEY(1)  TO  SKT1710TMP-ITBFTN(IDX1 IDX2)
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     ADD   RECE10-FTNMONEY(1)  TO  SKT1710TMP-ITBFTN(IDX1 IDX2)
+           IF  IDX1  =  12  OR  13
+             ADD   RECE10-FTNMONEY(1)  TO  SKT1710TMP-ITBFTN(IDX1 IDX2)
+           ELSE
+             IF  (IDX2  =  1)  AND  (IDX1 = 1 OR 2 OR 7 OR 8)
+               ADD  RECE10-FTNMONEY(1) TO  SKT1710TMP-ITBFTN(IDX1 IDX2)
+             END-IF
+           END-IF
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    長期
       *---(01.00.02) LINE ADD START ------------------------------------
