@@ -29,6 +29,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/13  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2008/07/08  医療機関コードはHOSPCDNを使用
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1036,9 +1037,12 @@
       *    電話番号
       *     MOVE    WRK-HOSPTEL         TO  SKT3625-TEL
       *    医療機関コード
-           MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
-           PERFORM  2009-HENKAN-SEC
-           MOVE     WRK-OUT-INPUT      TO  SKT3625-HOSPCDN
+      *=== 医療機関コードはHOSPCDNを使用 by Yoshikawa(2008/07/08) start
+      *     MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
+      *     PERFORM  2009-HENKAN-SEC
+      *     MOVE     WRK-OUT-INPUT      TO  SKT3625-HOSPCDN
+           MOVE     SYS-1001-HOSPCDN   TO  SKT3625-HOSPCDN
+      *=== 医療機関コードはHOSPCDNを使用 by Yoshikawa(2008/07/08) end
       *    保険者番号
            MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
