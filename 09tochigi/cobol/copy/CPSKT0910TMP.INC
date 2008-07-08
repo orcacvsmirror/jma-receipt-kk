@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT0910TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/07/07  H20年4月改正前は旧様式で印字
       ************************************************************
        01  SKT0910TMP-REC.
            03  SKT0910TMP-KEY.
@@ -28,7 +29,10 @@
                05  SKT0910TMP-KBN                   PIC  X(04).
                05  SKT0910TMP-PREFKBN               PIC  X(01).
                05  SKT0910TMP-ZAITAKU               PIC  X(01).
-           03  SKT0910TMP-HKN-AREA  OCCURS  7.
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *     03  SKT0910TMP-HKN-AREA  OCCURS  7.
+           03  SKT0910TMP-HKN-AREA  OCCURS  11.
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
                05  SKT0910TMP-NYUGAI-TBL  OCCURS  2.
                    07  SKT0910TMP-KENSU             PIC  9(05).
                    07  SKT0910TMP-NISSU             PIC  9(05).

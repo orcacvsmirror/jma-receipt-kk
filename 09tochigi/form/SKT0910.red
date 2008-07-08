@@ -47,7 +47,7 @@
       </appinfo>
     </element>
     <element name="HKN-TBL" occurs="1">
-      <element name="HKN-TBLG" occurs="7">
+      <element name="HKN-TBLG" occurs="9">
         <element name="HKN-G" occurs="2">
           <element name="KENSU" occurs="1">
             <appinfo>
@@ -73,7 +73,7 @@
       </element>
     </element>
     <element name="SYO-TBL" occurs="1">
-      <element name="SYO-TBLG" occurs="7">
+      <element name="SYO-TBLG" occurs="9">
         <element name="SYOKENSU" occurs="1">
           <appinfo>
             <embed object="string" length="6"/>

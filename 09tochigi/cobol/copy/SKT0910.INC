@@ -37,7 +37,10 @@
       *療養の給付
             02  SKT0910-HKN-TBL.
       *一覧
-              03  SKT0910-HKN-TBLG        OCCURS  7 TIMES.
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *        03  SKT0910-HKN-TBLG        OCCURS  7 TIMES.
+              03  SKT0910-HKN-TBLG        OCCURS  9 TIMES.
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *入院・外来テーブル
                 04  SKT0910-HKN-G           OCCURS  2 TIMES.
       *療養の給付：件数
@@ -51,7 +54,10 @@
       *食事療養
             02  SKT0910-SYO-TBL.
       *一覧
-              03  SKT0910-SYO-TBLG        OCCURS  7 TIMES.
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *        03  SKT0910-SYO-TBLG        OCCURS  7 TIMES.
+              03  SKT0910-SYO-TBLG        OCCURS  9 TIMES.
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *食事療養：件数
                 04  SKT0910-SYOKENSU    PIC X(6).
       *食事療養：日数

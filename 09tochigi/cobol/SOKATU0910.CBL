@@ -30,6 +30,7 @@
       * Maj/Min/Rev   修正者   日付         内容
       *  01.00.00      長屋   08/04/23    茨城県の元に新規作成
       *  01.00.01      内田   08/05/01    公費再掲欄は法別番号を印字
+      *  01.00.02      吉川   08/07/07    H20年4月改正前は旧様式で印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -101,6 +102,9 @@
       *
            COPY    "SKT0910.INC".
            COPY    "SKT0911.INC".
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           COPY    "SKT0911o.INC".
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -178,6 +182,9 @@
            03  WRK-HKNJANAME       PIC X(20).
            03  WRK-ITBFTN-G        PIC 9(09).
            03  WRK-ITBFTN          PIC 9(08).
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           03  WRK-MAX             PIC 9(02).
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z4              PIC ZZZZ.
@@ -599,6 +606,12 @@
            MOVE    RECE10-HKNJANUM-S       TO  SKT0910TMP-HKNJANUM1
       *
       *
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+               MOVE    4         TO  SKT0910TMP-SYUTURYOKU
+               MOVE    RECE10-ZAITAKU      TO  SKT0910TMP-ZAITAKU
+           ELSE
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *    一般と老人はセットを分ける
            IF      RECE10-RJNHKNNUM    =   SPACE
                MOVE    "1"       TO  SKT0910TMP-KBN
@@ -635,6 +648,9 @@
                    MOVE    3   TO  SKT0910TMP-SYUTURYOKU
                END-IF
            END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *
       *
            PERFORM  900-SKTTMP-READ-SEC
@@ -675,6 +691,16 @@
              MOVE  2      TO   IDX2
            END-IF
       *
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *    老人か
+           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+             IF  RECE10-KYURATE  =  9
+               MOVE    10      TO  IDX1
+             ELSE
+               MOVE    11      TO  IDX1
+             END-IF
+           ELSE
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *    一般国保か
              IF  RECE10-HKNNUM  =  "060"
                IF  RECE10-AGE  >= 70
@@ -697,6 +723,16 @@
                END-IF
       *
              ELSE
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+               IF  (RECE10-AGE  >=  70)
+               AND (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+                 IF  RECE10-KYURATE = 9
+                   MOVE  6    TO    IDX1
+                 ELSE
+                   MOVE  7    TO    IDX1
+                 END-IF
+               ELSE
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
                  IF  RECE10-HONKZKKBN  =  1
                    MOVE  5    TO   IDX1
                  ELSE
@@ -704,14 +740,31 @@
                    AND  (RECE10-FLG (1)   =  1)
                        MOVE  7     TO  IDX1
                    ELSE
-                     IF  RECE10-AGE  <  3
-                       MOVE  7  TO  IDX1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *               IF  RECE10-AGE  <  3
+      *                 MOVE  7  TO  IDX1
+      *               ELSE
+      *                 MOVE  6  TO  IDX1
+      *               END-IF
+                     IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+                       MOVE  6     TO  IDX1
                      ELSE
-                       MOVE  6  TO  IDX1
+                       IF  RECE10-AGE  <  3
+                         MOVE  9  TO  IDX1
+                       ELSE
+                         MOVE  8  TO  IDX1
+                       END-IF
                      END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
                     END-IF
                  END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+               END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
              END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *
            PERFORM  2101-SYUKEI-SEC
       *
@@ -847,6 +900,9 @@
            OPEN     INPUT       SKT0910TMP-FILE
       *
            MOVE     ZERO        TO       FLG-PRINT
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           MOVE     ZERO        TO       FLG-PASS
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
            MOVE     1           TO       WRK-CNT
            MOVE     1           TO       WRK-CNT1
       *
@@ -864,12 +920,29 @@
       *    公費が残っているか
              PERFORM  UNTIL  SKT0910TMP-KOHNUM (WRK-CNT) = SPACE
                       AND    FLG-PASS  =  1
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      **    帳票編集<見出し>処理
+      *         PERFORM 311-HEAD-HEN-SEC
+      **    帳票編集<明細>処理
+      *         PERFORM 321-BODY-HEN-SEC
+      **    帳票印刷処理
+      *         PERFORM 331-PRINT-OUT-SEC
+               IF  SKT0910TMP-SYUTURYOKU  =  4
+      *    帳票編集<見出し>処理(旧様式)
+                 PERFORM 312-HEAD-HEN-SEC
+      *    帳票編集<明細>処理(旧様式)
+                 PERFORM 322-BODY-HEN-SEC
+      *    帳票印刷処理(旧様式)
+                 PERFORM 332-PRINT-OUT-SEC
+               ELSE
       *    帳票編集<見出し>処理
-               PERFORM 311-HEAD-HEN-SEC
+                 PERFORM 311-HEAD-HEN-SEC
       *    帳票編集<明細>処理
-               PERFORM 321-BODY-HEN-SEC
+                 PERFORM 321-BODY-HEN-SEC
       *    帳票印刷処理
-               PERFORM 331-PRINT-OUT-SEC
+                 PERFORM 331-PRINT-OUT-SEC
+               END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
                MOVE  1  TO  FLG-PASS
              END-PERFORM
              MOVE  ZERO  TO  FLG-PASS
@@ -924,9 +997,19 @@
       *****************************************************************
        320-BODY-HEN-SEC      SECTION.
       *
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+           IF  SKT0910TMP-SYUTURYOKU  =  4
+               MOVE  9  TO  WRK-MAX
+           ELSE
+               MOVE  7  TO  WRK-MAX
+           END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *    編集処理
            PERFORM  VARYING  IDX1  FROM    1   BY  1
-                    UNTIL    IDX1  >  7
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *              UNTIL    IDX1  >  7
+                    UNTIL    IDX1  >  WRK-MAX
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
       *    療養の給付：件数
@@ -939,8 +1022,19 @@
                MOVE  SKT0910TMP-TENSU(IDX1 IDX2)  TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT0910-TENSU(IDX1 IDX2)
       *    療養の給付：一部負担金
-               MOVE  SKT0910TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
-               MOVE  WRK-Z9   TO  SKT0910-ITBFTN(IDX1 IDX2)
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+               IF   SKT0910TMP-SYUTURYOKU  =  4
+               AND (IDX1 = 3 OR IDX1 = 4 OR IDX1 = 5 OR
+                    IDX1 = 8 OR IDX1 = 9)
+               AND  IDX2 = 2
+                 CONTINUE
+               ELSE
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
+                 MOVE  SKT0910TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT0910-ITBFTN(IDX1 IDX2)
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+               END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
              END-PERFORM
       *    食事療養：件数
              MOVE  SKT0910TMP-S-KENSU(IDX1)  TO  WRK-Z5
@@ -981,7 +1075,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT0910.red"   TO  SPRT-PRTID
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *     MOVE   "SKT0910.red"   TO  SPRT-PRTID
+           IF  SKT0910TMP-SYUTURYOKU  =  4
+             MOVE  "SKT0910o.red"      TO  SPRT-PRTID
+           ELSE
+             MOVE  "SKT0910.red"       TO  SPRT-PRTID
+           END-IF
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
            MOVE    "国保請求書１"  TO  SPRT-TITLE
            MOVE    SKT0910             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1127,6 +1228,166 @@
        331-PRINT-OUT-EXT.
            EXIT.
 057400*
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理（旧帳票）
+      *****************************************************************
+       312-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1                       TO  CNT-PAGE
+      *
+           INITIALIZE                      SKT0911o
+      *    保険者番号
+           MOVE     SKT0910TMP-HKNJANUM1   TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT          TO  SKT0911o-HKNJANUM
+      *    医療機関コード
+           MOVE     SYS-1001-HOSPCD        TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT          TO  SKT0911o-HOSPCD
+           INITIALIZE                      IDX4
+      *
+      *    ページ番号
+           MOVE    CNT-PAGE                TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SKT0911o-NO
+      *
+           .
+       311-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<明細行>処理（旧帳票）
+      *****************************************************************
+       322-BODY-HEN-SEC      SECTION.
+      *
+      *    公費の為の２枚目以上か
+           IF  WRK-CNT  =  1
+      *    編集処理
+             PERFORM  VARYING  IDX1  FROM  10  BY  1
+                      UNTIL    IDX1  >     11
+               ADD  1  TO  IDX4
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *    療養の給付：件数
+                 MOVE  SKT0910TMP-KENSU (IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT0911o-HKN-KENSU(IDX4 IDX2)
+      *
+      *    療養の給付：日数
+                 MOVE  SKT0910TMP-NISSU (IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT0911o-HKN-NISSU(IDX4 IDX2)
+      *
+      *    療養の給付：点数
+                 MOVE  SKT0910TMP-TENSU (IDX1 IDX2)   TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT0911o-HKN-TENSU(IDX4 IDX2)
+      *
+      *    療養の給付：一部負担金
+                 MOVE  SKT0910TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT0911o-HKN-ITBFTN(IDX4 IDX2)
+               END-PERFORM
+      *
+      *    食事療養：件数
+               MOVE  SKT0910TMP-S-KKENSU (IDX1)       TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT0911o-HKN-SYOKENSU(IDX4)
+      *
+      *    食事療養：日数
+               MOVE  SKT0910TMP-S-KNISSU (IDX1)       TO  WRK-Z5
+               MOVE  WRK-Z5   TO  SKT0911o-HKN-SYONISSU(IDX4)
+      *
+      *    食事療養：金額
+               MOVE  SKT0910TMP-S-KKINGK (IDX1)      TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT0911o-HKN-SYOKINGAK(IDX4)
+      *
+      *    食事療養：標準負担額
+               MOVE  SKT0910TMP-S-KFTNGK (IDX1)      TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT0911o-HKN-SYOFTNGAK(IDX4)
+             END-PERFORM
+           END-IF
+      *
+      *    公費の印字
+             PERFORM  VARYING  IDX3  FROM  1  BY  1
+                      UNTIL    IDX3  >     2
+                      OR  WRK-CNT    >     20
+                      OR  SKT0910TMP-KOHNUM(WRK-CNT) = SPACE
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     2
+      *    療養の給付：件数
+                 MOVE  SKT0910TMP-KKENSU(WRK-CNT IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT0911o-KOH-KENSU(IDX3 IDX2)
+      *    療養の給付：日数
+                 MOVE  SKT0910TMP-KNISSU(WRK-CNT IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT0911o-KOH-NISSU(IDX3 IDX2)
+      *    療養の給付：点数
+                 MOVE  SKT0910TMP-KTENSU(WRK-CNT IDX2)   TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT0911o-KOH-TENSU(IDX3 IDX2)
+      *    療養の給付：一部負担金
+                 MOVE  SKT0910TMP-KITBFTN(WRK-CNT IDX2)  TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT0911o-KOH-ITBFTN(IDX3 IDX2)
+               END-PERFORM
+      *    食事療養：件数
+                MOVE  SKT0910TMP-S-KKENSU (WRK-CNT)        TO  WRK-Z5
+                MOVE  WRK-Z5   TO  SKT0911o-KOH-SYOKENSU(IDX3)
+      *    食事療養：日数
+                MOVE  SKT0910TMP-S-KNISSU (WRK-CNT)        TO  WRK-Z5
+                MOVE  WRK-Z5   TO  SKT0911o-KOH-SYONISSU(IDX3)
+      *    食事療養：金額
+               MOVE  SKT0910TMP-S-KKINGK (WRK-CNT)      TO  WRK-Z9
+               MOVE  WRK-Z9   TO   SKT0911o-KOH-SYOKINGAK(IDX3)
+      *    食事療養：標準負担額
+               MOVE  SKT0910TMP-S-KFTNGK (WRK-CNT)      TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT0911o-KOH-SYOFTNGAK(IDX3)
+      *    公費名
+               MOVE  SKT0910TMP-KOHNUM (WRK-CNT)  TO  WRK-KOHNUM
+               PERFORM  950-HKNNUM-SET-SEC
+               MOVE  HKN-HBTNUM         TO  SKT0911o-KOH-NUM(IDX3)
+               MOVE  HKN-TANSEIDONAME TO SKT0911o-KOH-NAME(IDX3)
+               ADD  1  TO  WRK-CNT
+             END-PERFORM
+           .
+       322-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理（旧帳票）
+      *****************************************************************
+       332-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT3"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT0911o.red"       TO  SPRT-PRTID
+           MOVE    "国保請求書２"      TO  SPRT-TITLE
+           MOVE    SKT0911o            TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       332-PRINT-OUT-EXT.
+           EXIT.
+      *
+      *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *****************************************************************
       *    エラー出力処理
       *****************************************************************
