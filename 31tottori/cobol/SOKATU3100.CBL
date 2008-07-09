@@ -31,7 +31,7 @@
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
       *                                    返戻対応
-      *  01.00.02    内田      08/06/27    後期高齢者も集計する
+      *  01.00.02    内田      08/07/04    後期高齢者も集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -647,13 +647,26 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *    後期高齢は最後
            IF  FLG-KOUKI  =  1
-               MOVE    9       TO  SKT3100TMP-SYUTURYOKU
+               MOVE    8       TO  SKT3100TMP-SYUTURYOKU
            END-IF
-      *---(01.00.02) LINE ADD START ------------------------------------
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
+      *
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *    小計集計
+           INITIALIZE       SKT3100TMP-REC
+           IF  FLG-KOUKI  =  1
+               MOVE    9       TO  SKT3100TMP-SYUTURYOKU
+           ELSE
+               MOVE    7       TO  SKT3100TMP-SYUTURYOKU
+           END-IF
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           PERFORM  210-HKN-SYUKEI-SEC
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -793,26 +806,35 @@
       *
       *        保険者名
       *---(01.00.02) LINE ADD START ------------------------------------
-             IF  SKT3100TMP-SYUTURYOKU  =  9
-               PERFORM  3201-KOUKINAME-SEC
-               STRING  WRK-KENNAME    DELIMITED  BY  SPACE
-                       "後期高齢"     DELIMITED  BY  SIZE
-                       INTO           SKT3100-HKNJANAME(IDX1)
-               END-STRING
-             ELSE
-      *---(01.00.02) LINE ADD END   ------------------------------------
-               MOVE    SKT3100TMP-HKNJANUM     TO  WRK-HKNJANUM
-               PERFORM 920-HKNJAINF-SET-SEC
-               MOVE    HKNJA-HKNJANAME     TO  SKT3100-HKNJANAME(IDX1)
-      *---(01.00.02) LINE ADD START ------------------------------------
-             END-IF
+      *         MOVE    SKT3100TMP-HKNJANUM     TO  WRK-HKNJANUM
+      *         PERFORM 920-HKNJAINF-SET-SEC
+      *         MOVE    HKNJA-HKNJANAME     TO  SKT3100-HKNJANAME(IDX1)
+               EVALUATE  SKT3100TMP-SYUTURYOKU
+                 WHEN  7
+                 WHEN  9
+                   MOVE  "小計"  TO  SKT3100-HKNJANAME(IDX1)
+                 WHEN  8
+                   PERFORM  3201-KOUKINAME-SEC
+                   STRING  WRK-KENNAME    DELIMITED  BY  SPACE
+                           "後期高齢"     DELIMITED  BY  SIZE
+                           INTO           SKT3100-HKNJANAME(IDX1)
+                   END-STRING
+                   ADD     SKT3100TMP-KENSU    TO  WRK-GKENSU
+                 WHEN  OTHER
+                   MOVE    SKT3100TMP-HKNJANUM  TO  WRK-HKNJANUM
+                   PERFORM 920-HKNJAINF-SET-SEC
+                   MOVE    HKNJA-HKNJANAME  TO  SKT3100-HKNJANAME(IDX1)
+                   ADD     SKT3100TMP-KENSU    TO  WRK-GKENSU
+               END-EVALUATE
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *        件数
                MOVE    SKT3100TMP-KENSU    TO  WRK-Z5
                MOVE    WRK-Z5              TO  SKT3100-KENSU(IDX1)
       *
-               ADD     SKT3100TMP-KENSU    TO  WRK-GKENSU
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *         ADD     SKT3100TMP-KENSU    TO  WRK-GKENSU
+      *---(01.00.02) LINE ADD START ------------------------------------
       *
       *        一時ファイル読込
                PERFORM  900-TMP-READ-SEC
