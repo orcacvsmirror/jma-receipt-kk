@@ -27,6 +27,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/07/11  公費番号を印字する
+      *                                  まとめ公費を使用した時の
+      *                                  まとめ公費以外の公費名称修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -368,7 +371,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU2915"    TO  JOB-PGID
-           MOVE    "広域連合・診療報酬請求書"
+           MOVE    "後期高齢者請求書"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -946,6 +949,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/07/11) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/07/11) end
       *      ０５１と０９１は同じ場所に集計する
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
@@ -1230,12 +1236,16 @@
       *
            MOVE    SPACE               TO  WRK-KOHKBN
       *
-      *-     MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
-      *-     MOVE    WRK-KOHNUM9         TO  SKT2915-HBTNUM (IDY)
+      *=== 公費番号を印字 by Yoshikawa(2008/07/11) start
+           MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+           MOVE    WRK-KOHNUM9         TO  SKT2915-HBTNUM (IDY)
+      *=== 公費番号を印字 by Yoshikawa(2008/07/11) end
       *
       *    特定疾患のとき 
            IF      SUM-KOHNUM (IDX2)  =   "051"
-      *-         MOVE    "51"            TO   SKT2915-HBTNUM (IDY)
+      *=== 公費番号を印字 by Yoshikawa(2008/07/11) start
+               MOVE    "51"            TO   SKT2915-HBTNUM (IDY)
+      *=== 公費番号を印字 by Yoshikawa(2008/07/11) end
                MOVE    "特定疾患"      TO   WRK-HKNNAME
            ELSE
       *      公費番号まとめ情報からの集計か
@@ -1274,7 +1284,9 @@
                  PERFORM  900-CLOSE-SEC
       *
       *          法別番号
-      *-           MOVE  HKN-HBTNUM         TO  SKT2915-HBTNUM(IDY)
+      *=== 公費番号を印字 by Yoshikawa(2008/07/11) start
+                 MOVE  HKN-HBTNUM         TO  SKT2915-HBTNUM(IDY)
+      *=== 公費番号を印字 by Yoshikawa(2008/07/11) end
              ELSE
       *          公費番号まとめ情報から公費名へ
                  MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
@@ -1319,26 +1331,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
