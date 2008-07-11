@@ -33,6 +33,8 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.02    内田    08/07/08    未就学児の場合、入外区分欄に
+      *                                  「３」、「４」を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -647,6 +649,9 @@
            MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBN
            MOVE  RECE02-PTNUM        TO  MF100-PTNUM
            MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+      *---(01.00.02) LINE ADD START ------------------------------------
+           MOVE  RECE02-RECESYUBETU  TO  MF100-RECESYUBETU
+      *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
       *
            MOVE  RECE02-PTID         TO  MF100-PTID
@@ -999,19 +1004,22 @@
                     OR  KEY-NEW NOT =  KEY-OLD
       *    入外区分
              IF  MF100-HONKZKKBN  =  "2"
-                 IF  MF100-AGE     <    3
-                     IF    MF100-NYUGAIKBN   =   "1"
-                       MOVE  "3"              TO  SC05-NYUGAIKBN(IDX1)
-                     ELSE
-                       MOVE  "4"              TO  SC05-NYUGAIKBN(IDX1)
-                     END-IF
-                 ELSE
-                     IF    MF100-NYUGAIKBN   =   "1"
-                       MOVE  "5"              TO  SC05-NYUGAIKBN(IDX1)
-                     ELSE
-                       MOVE  "6"              TO  SC05-NYUGAIKBN(IDX1)
-                     END-IF
-                 END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *           IF  MF100-AGE     <    3
+      *               IF    MF100-NYUGAIKBN   =   "1"
+      *                 MOVE  "3"              TO  SC05-NYUGAIKBN(IDX1)
+      *               ELSE
+      *                 MOVE  "4"              TO  SC05-NYUGAIKBN(IDX1)
+      *               END-IF
+      *           ELSE
+      *               IF    MF100-NYUGAIKBN   =   "1"
+      *                 MOVE  "5"              TO  SC05-NYUGAIKBN(IDX1)
+      *               ELSE
+      *                 MOVE  "6"              TO  SC05-NYUGAIKBN(IDX1)
+      *               END-IF
+      *           END-IF
+                 MOVE  MF100-RECESYUBETU(4:1) TO  SC05-NYUGAIKBN(IDX1)
+      *---(01.00.02) LINE ADD END   ------------------------------------
              END-IF
       *
       *    負担者番号
