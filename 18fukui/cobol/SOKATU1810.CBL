@@ -33,6 +33,7 @@
       *                                     医療機関情報を参照
       *  01.00.03      長屋     08/04/24    ４月改正に伴う修正
       *  01.00.04      内田     08/06/20    斜線部分の一部負担金は印字しない
+      *  01.00.05      内田     08/07/11    一部負担金が倍になるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -789,7 +790,9 @@
            ADD  RECE10-TOTALTEN(1)  TO  SKT1810TMP-TENSU(IDX1 IDX2)
       *    療養の給付：一部負担金
       *---(01.00.04) LINE ADD START ------------------------------------
-           ADD  RECE10-FTNMONEY(1)  TO  SKT1810TMP-ITBFTN(IDX1 IDX2)
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     ADD  RECE10-FTNMONEY(1)  TO  SKT1810TMP-ITBFTN(IDX1 IDX2)
+      *---(01.00.05) LINE ADD END   ------------------------------------
            IF  IDX1  =  1 OR 2 OR 7 OR 8 OR 11 OR 12
              ADD  RECE10-FTNMONEY(1)  TO  SKT1810TMP-ITBFTN(IDX1 IDX2)
            END-IF
