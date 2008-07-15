@@ -33,6 +33,7 @@
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
       *  01.00.04    伊藤    2008/04/29    帳票様式に伴う修正
+      *  01.00.05    内田    2008/07/15    後期高齢のみの場合でも印刷する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -292,7 +293,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -513,7 +516,9 @@
       *****************************************************************
        200-MAIN-SEC                SECTION.
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.05) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
@@ -1590,6 +1595,13 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *        県内かどうか
+               IF  RECE10-PREFKBN  =  "2"
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
@@ -1600,7 +1612,7 @@
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
                    GO  TO  950-SEIKYU-READ-SEC
-               END-IF   
+               END-IF
       *         
                ADD     1                   TO  CNT-RECE10   
            ELSE
