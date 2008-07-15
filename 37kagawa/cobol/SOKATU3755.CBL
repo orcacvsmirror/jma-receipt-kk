@@ -29,6 +29,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/13  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2008/07/11  在宅分もまとめて印字
+      *                                  再印刷画面の帳票タイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -551,16 +553,24 @@
            MOVE    1                   TO  WRK-INDEX
       *
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
-           EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
-               WHEN    "1"             ALSO    "1"
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "1"
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
-               WHEN    "1"             ALSO    "2"
+      *=== 在宅分もまとめて印字 by Yoshikawa(2008/07/11) start
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "1"
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE  
+           EVALUATE    WRK-SYOKBN
+               WHEN    "1"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "2"
+               WHEN    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
+      *=== 在宅分もまとめて印字 by Yoshikawa(2008/07/11) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -571,29 +581,31 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *    入院外集計（在総診または在医総を算定したレセ）
-      *    特別療養費の場合は在総診はなし
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
-                                       OR      FLG-ERR      =  1
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
+      *=== 在宅分もまとめて印字 by Yoshikawa(2008/07/11) start
+      **    入院外集計（在総診または在医総を算定したレセ）
+      **    特別療養費の場合は在総診はなし
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+      *                                 OR      FLG-ERR      =  1
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      *=== 在宅分もまとめて印字 by Yoshikawa(2008/07/11) end
       *     
            MOVE    1                   TO  FLG-END
       *
@@ -1305,29 +1317,54 @@
            MOVE    SKT3755               TO  SPRT-PRTDATA
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
                                             ALSO    WRK-PARA-SYOKBN1
+      *=== 再印刷画面の帳票タイトル修正 by Yoshikawa(2008/07/11) start
+      *         WHEN    1            ALSO    "1"     
+      *                                      ALSO   "1"
+      *             MOVE    "広域連合総括表"        TO  SPRT-TITLE
+      *         WHEN    2            ALSO    "1"
+      *                                      ALSO   "1"
+      *             MOVE    "広域連合総括表（在医総等）"
+      *                                         TO  SPRT-TITLE
+      *         WHEN    1            ALSO    "2"
+      *                                      ALSO   "1"
+      *             MOVE    "広域連合総括表［返戻分］" 
+      *                                         TO  SPRT-TITLE
+      *         WHEN    2            ALSO    "2"
+      *                                      ALSO   "1"
+      *             MOVE    "広域連合総括表（在医総等）［返戻分］"
+      *                                         TO  SPRT-TITLE
+      *         WHEN    1            ALSO    "1"     
+      *                                      ALSO   "2"
+      *             MOVE    "広域連合総括表［特別療養費］"
+      *                                         TO  SPRT-TITLE
+      *         WHEN    1            ALSO    "2"
+      *                                      ALSO   "2"
+      *             MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+      *                                         TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "広域連合請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "広域連合請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "広域連合請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "広域連合請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "広域連合請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "広域連合請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
+      *=== 再印刷画面の帳票タイトル修正 by Yoshikawa(2008/07/11) end
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
