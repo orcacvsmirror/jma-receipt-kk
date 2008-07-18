@@ -32,6 +32,9 @@
       *                                  まとめ公費以外の公費名称修正
       *  01.00.02    吉川    2008/06/24  公費負担者番号の頭2桁毎に集計する
       *                                  公費名称は印字しない
+      *  01.00.03    吉川    2008/07/15  返戻分は診療月毎に印字する
+      *                                  特定負無（公費番号０９１）が
+      *                                  正しく集計されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -39,6 +42,14 @@
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *    請求書一時ファイル
+           SELECT  SKT2815TMP-FILE ASSIGN    SKT2815TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT2815TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT2815.
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *    請求ＤＢ更新用ファイル
            SELECT  UPD-FILE        ASSIGN  RECEUPD
                                    ORGANIZATION    IS  LINE
@@ -52,6 +63,11 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+       FD  SKT2815TMP-FILE.
+           COPY    "CPSKT2815TMP.INC".
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
+      *
       *    請求ＤＢ更新用ファイル
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
@@ -62,6 +78,13 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *    請求書一時ファイル 名称領域
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT2815TP//.
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
       *    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -80,6 +103,9 @@
       *
       *    スパ領域
        01  STS-AREA.
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           03  STS-SKT2815         PIC X(02).
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
       *
@@ -91,6 +117,10 @@
            03  FLG-UPD             PIC 9(01).
       *     
            03  FLG-RECE10          PIC 9(01).
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           03  FLG-SKT2815TMP      PIC 9(01).
+           03  FLG-PRINT           PIC 9(01).
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            03  FLG-SYSKANRI        PIC 9(01). 
            03  FLG-HKNNUM          PIC 9(01).
            03  FLG-HKNJAINF        PIC 9(01).
@@ -109,6 +139,9 @@
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           03  IDX4                PIC 9(04).
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            03  IDXX                PIC 9(04).
            03  IDXY                PIC 9(04).
       *
@@ -390,6 +423,11 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           MOVE    "SKT2815"           TO  SKT2815TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT2815TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT2815TP-HOSPNUM
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
@@ -515,6 +553,21 @@
       *
            MOVE    IDX                     TO  WRK-2007-MAX
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "1"
+                   MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"
+                   MOVE    "key65"         TO  WRK-MCP-PATHNAME
+           END-EVALUATE
+      *
+           MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+           PERFORM 900-SEIKYU-SELECT-SEC
+           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            .
        100-INIT-EXT.
            EXIT.
@@ -526,21 +579,38 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *
-      *    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "2"
-                   MOVE    "2"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "1"
-                   MOVE    "1"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      **    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "2"
+      *             MOVE    "2"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "1"
+      *             MOVE    "1"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      **
+      *     CLOSE   UPD-FILE
+           OPEN    OUTPUT  SKT2815TMP-FILE
+           CLOSE           SKT2815TMP-FILE
+           OPEN    I-O     SKT2815TMP-FILE
+           
+           MOVE    ZERO                TO  FLG-UPD
+      *
+           PERFORM 2001-KOUKI-SYUKEI-SEC
+                   UNTIL   FLG-END  =  1
       *
            CLOSE   UPD-FILE
+           CLOSE   SKT2815TMP-FILE
+      *
+           IF       FLG-UPD   =       1
+                    PERFORM   2002-PRINT-SEC
+           END-IF
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
       *    請求ＤＢ更新
            IF      FLG-UPD        =   1
@@ -647,6 +717,9 @@
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+                                            SKT2815TMP-REC
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *    保険者番号
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM(1:6)
@@ -655,6 +728,32 @@
            END-IF
       *    代表番号セット
            PERFORM  200101-HKNJANUM-SET-SEC
+      *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           MOVE  WRK-HKNJANUM            TO  SKT2815TMP-HKNJANUM
+      *
+      *    返戻分は実際の診療年月を設定
+           IF  WRK-PARA-SYOKBN  =  "2"
+             MOVE  RECE10-SRYYM          TO   SKT2815TMP-SRYYM
+      *    当月分・月遅れ分は画面入力された診療年月を設定
+           ELSE
+             MOVE  LNK-PRTKANRI-SRYYM    TO   SKT2815TMP-SRYYM
+           END-IF
+      *
+      *    在宅
+           IF     RECE10-ZAITAKU    =    "1"
+             MOVE     "1"                TO   SKT2815TMP-ZAITAKU
+           ELSE
+             MOVE     "2"                TO   SKT2815TMP-ZAITAKU
+           END-IF
+      *
+      *    出力順
+           IF     RECE10-PREFKBN   =    "1"
+             MOVE     "1"                TO   SKT2815TMP-SYUTURYOKU
+           ELSE
+             MOVE     "2"                TO   SKT2815TMP-SYUTURYOKU
+           END-IF
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
       *    入外区分
            EVALUATE    RECE10-NYUGAIKBN
@@ -672,6 +771,10 @@
                    MOVE    2                   TO  IDX1
            END-EVALUATE
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
+      *
            PERFORM 20011-HKN-SYUKEI-SEC
       *
       *    公費負担分
@@ -681,6 +784,14 @@
                    RECE10-KOHNUM (4)   NOT =   SPACE
                PERFORM 20012-KOH-SYUKEI-SEC
            END-IF
+      *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           IF      FLG-SKT2815TMP  =  1
+               WRITE   SKT2815TMP-REC
+           ELSE
+               REWRITE SKT2815TMP-REC
+           END-IF
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -701,6 +812,9 @@
                END-STRING
                PERFORM 500-ERR-HENSYU-SEC
                PERFORM 500-COBABORT-SEC
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+               MOVE    1                   TO  FLG-END
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            END-IF 
            .
        2001-KOUKI-SYUKEI-EXT.
@@ -869,27 +983,48 @@
                PERFORM  20011-HKN-SYUKEI-EXT
            END-IF
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      **    療養の給付：件数
+      *     ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+      **    療養の給付：診療実日数
+      *     ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+      **    療養の給付：点数
+      *     ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+      **    療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+      **
+      *     IF      IDX3                   =   1 
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      **    食事療養：件数
+      *         ADD     1                   TO  SUM-S-KENSU(IDX1)
+      *       END-IF
+      **    食事療養：日数
+      *       ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+      **    食事療養：金額
+      *       ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+      **    食事療養：標準負担額
+      *       ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+      *     END-IF    
       *    療養の給付：件数
-           ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+           ADD  1                  TO  SKT2815TMP-KENSU(IDX1 IDX3)
       *    療養の給付：診療実日数
-           ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+           ADD  RECE10-JNISSU(1)   TO  SKT2815TMP-NISSU(IDX1 IDX3)
       *    療養の給付：点数
-           ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+           ADD  RECE10-TOTALTEN(1) TO  SKT2815TMP-TENSU(IDX1 IDX3)
       *    療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+           ADD  RECE10-FTNMONEY(1) TO  SKT2815TMP-ITBFTN(IDX1 IDX3)
       *
            IF      IDX3                   =   1 
-             IF      RECE10-SHOKUJINISSU(1)   >   ZERO
       *    食事療養：件数
-               ADD     1                   TO  SUM-S-KENSU(IDX1)
-             END-IF
+             ADD     1                     TO  SKT2815TMP-S-KENSU(IDX1)
       *    食事療養：日数
-             ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+             ADD  RECE10-SHOKUJINISSU(1)   TO  SKT2815TMP-S-NISSU(IDX1)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SKT2815TMP-S-KINGK(IDX1)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+             ADD  RECE10-SHOKUJIFTN(1)     TO  SKT2815TMP-S-FTNGK(IDX1)
            END-IF    
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -909,9 +1044,11 @@
              MOVE      SPACE             TO  WRK-MEISYO
       *===まとめ使用時の公費名不具合修正 by Yoshikawa(2008/05/21) end
       *      ０５１と０９１は同じ場所に集計する
-             IF      RECE10-KOHNUM (IDZ) =   "091"
-               MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
-             END-IF
+      *=== 特定負無(091)の集計不具合修正 by Yoshikawa(2008/07/15) start
+      *       IF      RECE10-KOHNUM (IDZ) =   "091"
+      *         MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
+      *       END-IF
+      *=== 特定負無(091)の集計不具合修正 by Yoshikawa(2008/07/15) end
       *
       *      公費番号まとめ情報があるとき
              IF        WRK-2007-MAX    >       ZERO
@@ -933,23 +1070,74 @@
                END-PERFORM
              END-IF
       *
-      *      公費番号格納
-             PERFORM VARYING   IDX2    FROM    1   BY  1
-                     UNTIL     IDX2 >          100
-      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
-               MOVE  RECE10-KOHNUM(IDZ)  TO  WRK-KOHNUM
-               PERFORM  900-PTKOHINF-SET-SEC
-               MOVE  WRK-FTNJANUM(1:2)   TO  RECE10-KOHNUM(IDZ)
-      *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
-               IF  SUM-KOHNUM (IDX2)   =   SPACE
-                 MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
-                 MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
-               END-IF
-               IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
-                 PERFORM 200121-KOH-SYUKEI-01-SEC
-                 MOVE    100             TO  IDX2
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      **      公費番号格納
+      *       PERFORM VARYING   IDX2    FROM    1   BY  1
+      *               UNTIL     IDX2 >          100
+      **=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
+      *         MOVE  RECE10-KOHNUM(IDZ)  TO  WRK-KOHNUM
+      *         PERFORM  900-PTKOHINF-SET-SEC
+      *         MOVE  WRK-FTNJANUM(1:2)   TO  RECE10-KOHNUM(IDZ)
+      **=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
+      *         IF  SUM-KOHNUM (IDX2)   =   SPACE
+      *           MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+      *           MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+      *         END-IF
+      *         IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+      *           PERFORM 200121-KOH-SYUKEI-01-SEC
+      *           MOVE    100             TO  IDX2
+      *         END-IF
+      *       END-PERFORM
+      *      負担者番号取得
+             MOVE  RECE10-KOHNUM(IDZ)  TO  WRK-KOHNUM
+             PERFORM  900-PTKOHINF-SET-SEC
+      *      公費判別
+             PERFORM VARYING  IDX4    FROM    1   BY  1
+                     UNTIL    IDX4    >       20
+                     OR       SKT2815TMP-KOHNUM(IDX4) = SPACE
+      *        公費負担者番号の頭2桁毎で集計する
+               IF  WRK-FTNJANUM(1:2)  =  SKT2815TMP-KOHNUM (IDX4)
+                   MOVE    IDX4    TO  CNT-KOH
+                   MOVE    20      TO  IDX4
                END-IF
              END-PERFORM
+      *
+      *      該当公費がなかった場合
+             IF  IDX4   <   20
+               MOVE  IDX4        TO  CNT-KOH
+      *        公費名称
+               MOVE  WRK-MEISYO  TO  SKT2815TMP-KOHNAME(CNT-KOH)
+             END-IF
+      *
+      *      公費番号
+             MOVE  WRK-FTNJANUM(1:2)  TO  SKT2815TMP-KOHNUM(CNT-KOH)
+      *      療養の給付：件数
+             ADD  1              TO  SKT2815TMP-KKENSU(CNT-KOH IDX3)
+      *      療養の給付:診療実日数
+             ADD  RECE10-JNISSU(IDZ + 1)
+                                 TO  SKT2815TMP-KNISSU(CNT-KOH IDX3)
+      *      療養の給付：点数
+             ADD  RECE10-TOTALTEN(IDZ + 1)
+                                 TO  SKT2815TMP-KTENSU(CNT-KOH IDX3)
+      *      療養の給付：一部負担金
+             ADD  RECE10-FTNMONEY(IDZ + 1)
+                                 TO  SKT2815TMP-KITBFTN(CNT-KOH IDX3)
+             IF      IDX3              =   1 
+      *        食事療養:件数
+               ADD  1            TO  SKT2815TMP-S-KKENSU(CNT-KOH)
+      *        食事療養:日数
+               ADD  RECE10-SHOKUJINISSU(IDZ + 1)
+                                 TO  SKT2815TMP-S-KNISSU(CNT-KOH)
+      *        食事療養：金額
+               ADD  RECE10-SHOKUJIRYOYOHI(IDZ + 1)
+                                 TO  SKT2815TMP-S-KKINGK(CNT-KOH)
+      *        食事療養：標準負担額
+               ADD  RECE10-SHOKUJIFTN(IDZ + 1)  
+                                 TO  SKT2815TMP-S-KFTNGK(CNT-KOH)
+             END-IF
+      *
+             MOVE    1           TO  FLG-UPD 
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            END-PERFORM
            .
        20012-KOH-SYUKEI-EXT.
@@ -1025,12 +1213,29 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+           OPEN     INPUT       SKT2815TMP-FILE
+      *
+           MOVE     ZERO        TO       FLG-PRINT
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
+      *
       *    帳票編集<見出し>処理
            PERFORM 20021-HEAD-HEN-SEC
       *    帳票編集<明細>処理
            PERFORM 20023-BODY-HEN-SEC
       *    帳票印刷処理
            PERFORM 20024-PRINT-OUT-SEC
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           END-PERFORM
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
            .
        2002-PRINT-EXT.
@@ -1045,7 +1250,13 @@
       *    請求年月日
            MOVE    WRK-SEIYMDWH        TO  SKT2815-SEIYMD
       *    診療年月
-           MOVE    WRK-SRYYMWH         TO  SKT2815-SRYYM
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *     MOVE    WRK-SRYYMWH         TO  SKT2815-SRYYM
+           MOVE    SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
+           MOVE    "01"                TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)   TO  SKT2815-SRYYM
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT2815-ADRS
       *    医療機関名
@@ -1060,7 +1271,10 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT2815-HOSPCD
       *    保険者番号
-           MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *     MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+           MOVE     SKT2815TMP-HKNJANUM TO  WRK-MAE-INPUT
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT2815-HKNJANUM
       *    保険者名(必要あらばコメントを外して下さい)
@@ -1078,7 +1292,10 @@
       *         END-STRING
       *     END-IF
       *    在総診・在医総
-           IF    WRK-INDEX  =  2
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *     IF    WRK-INDEX  =  2
+           IF    SKT2815TMP-ZAITAKU   =   "1"
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
              MOVE    "在"              TO  SKT2815-ZAI1
              MOVE    "◯"              TO  SKT2815-ZAI2
            END-IF
@@ -1100,40 +1317,121 @@
              ADD     1                   TO  IDZ    
              PERFORM VARYING IDY FROM    1   BY  1
                      UNTIL   IDY >       2
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      **    療養の給付：件数
+      *         MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT2815-KENSU(IDZ IDY)
+      **    療養の給付：診療実日数
+      *         MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
+      *         MOVE  WRK-Z5              TO  SKT2815-NISSU(IDZ IDY)
+      **    療養の給付：点数
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT2815-TENSU(IDZ IDY)
+      **    療養の給付：一部負担金
+      *         MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT2815-ITBFTN(IDZ IDY)
+      *       END-PERFORM
+      **
+      **    食事療養：件数
+      *       MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT2815-S-KENSU(IDZ)
+      **    食事療養：日数
+      *       MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT2815-S-NISSU(IDZ)
+      **    食事療養：金額
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2815-S-KINGK(IDZ)
+      **    食事療養：標準負担額
+      *       MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2815-S-FTNGK(IDZ)
+      *     END-PERFORM
+      **     
+      **    公費負担分編集処理
+      *     MOVE    ZERO                  TO  FLG-KOH-END
+      *     MOVE    1                     TO  IDX2
+      ** 
+      *     PERFORM 200231-KOH-HENSYU-SEC
+      *                             UNTIL   FLG-KOH-END   =   1
       *    療養の給付：件数
-               MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+               MOVE  SKT2815TMP-KENSU(IDX IDY)  TO  WRK-Z5
                MOVE  WRK-Z5              TO  SKT2815-KENSU(IDZ IDY)
       *    療養の給付：診療実日数
-               MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
+               MOVE  SKT2815TMP-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT2815-NISSU(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+               MOVE  SKT2815TMP-TENSU(IDX IDY)  TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT2815-TENSU(IDZ IDY)
       *    療養の給付：一部負担金
-               MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+               MOVE  SKT2815TMP-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT2815-ITBFTN(IDZ IDY)
              END-PERFORM
       *
       *    食事療養：件数
-             MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+             MOVE  SKT2815TMP-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT2815-S-KENSU(IDZ)
       *    食事療養：日数
-             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+             MOVE  SKT2815TMP-S-NISSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT2815-S-NISSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+             MOVE  SKT2815TMP-S-KINGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT2815-S-KINGK(IDZ)
       *    食事療養：標準負担額
-             MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+             MOVE  SKT2815TMP-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT2815-S-FTNGK(IDZ)
            END-PERFORM
-      *     
-      *    公費負担分編集処理
+      *
+      *    公費の印字
            MOVE    ZERO                  TO  FLG-KOH-END
            MOVE    1                     TO  IDX2
-      * 
-           PERFORM 200231-KOH-HENSYU-SEC
-                                   UNTIL   FLG-KOH-END   =   1
+      *
+           PERFORM VARYING IDY     FROM    1   BY  1
+                   UNTIL   IDY     >       7         
+                   OR      FLG-KOH-END     =   1
+             IF      SKT2815TMP-KOHNUM (IDX2)   =   SPACE
+               MOVE    1                     TO  FLG-KOH-END
+             ELSE    
+               PERFORM VARYING IDZ FROM    1   BY  1
+                       UNTIL   IDZ >       2
+      *    公費再掲欄：療養の給付：件数
+                 MOVE  SKT2815TMP-KKENSU(IDX2 IDZ)  TO WRK-Z5
+                 MOVE  WRK-Z5              TO SKT2815-KKENSU(IDY IDZ)
+      *    公費再掲欄：療養の給付：日数
+                 MOVE  SKT2815TMP-KNISSU(IDX2 IDZ)  TO WRK-Z5
+                 MOVE  WRK-Z5              TO SKT2815-KNISSU(IDY IDZ)
+      *    公費再掲欄：療養の給付：点数
+                 MOVE  SKT2815TMP-KTENSU(IDX2 IDZ)  TO WRK-Z9
+                 MOVE  WRK-Z9              TO SKT2815-KTENSU(IDY IDZ)
+      *    公費再掲欄：療養の給付：一部負担金
+                 MOVE  SKT2815TMP-KITBFTN(IDX2 IDZ) TO WRK-Z9
+                 MOVE  WRK-Z9              TO SKT2815-KITBFTN(IDY IDZ)
+               END-PERFORM
+      *
+      *    公費再掲欄：食事療養：件数
+               MOVE  SKT2815TMP-S-KKENSU(IDX2)    TO  WRK-Z5
+               MOVE  WRK-Z5                TO  SKT2815-S-KKENSU(IDY)
+      *    公費再掲欄：食事療養：日数
+               MOVE  SKT2815TMP-S-KNISSU(IDX2)    TO  WRK-Z5
+               MOVE  WRK-Z5                TO  SKT2815-S-KNISSU(IDY)
+      *    公費再掲欄：食事療養：金額
+               MOVE  SKT2815TMP-S-KKINGK(IDX2)    TO  WRK-Z9
+               MOVE  WRK-Z9                TO  SKT2815-S-KKINGK(IDY)
+      *    公費再掲欄：食事療養：標準負担額
+               MOVE  SKT2815TMP-S-KFTNGK(IDX2)    TO  WRK-Z9
+               MOVE  WRK-Z9                TO  SKT2815-S-KFTNGK(IDY)
+      *
+      *        備考欄記載用文字
+               IF  IDY  >  2
+                   MOVE  "入　院"          TO  SKT2815-NYUIN(IDY)
+                   MOVE  "入院外"          TO  SKT2815-NYUINGAI(IDY)
+               END-IF
+      *
+      *        法別番号
+               MOVE  SKT2815TMP-KOHNUM(IDX2)  TO  SKT2815-HBTNUM(IDY)
+      *
+               ADD     1                   TO  IDX2   
+             END-IF        
+           END-PERFORM
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *
            .
        20023-BODY-HEN-EXT.
@@ -1305,31 +1603,45 @@
            MOVE    WRK-PAGE            TO  SKT2815-NO
            MOVE    "SKT2815.red"         TO  SPRT-PRTID
            MOVE    SKT2815               TO  SPRT-PRTDATA
-           EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
-                                            ALSO    WRK-PARA-SYOKBN1
-               WHEN    1            ALSO    "1"     
-                                            ALSO   "1"
-                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
-               WHEN    2            ALSO    "1"
-                                            ALSO   "1"
-                   MOVE    "後期高齢者請求書（在医総等）"
-                                               TO  SPRT-TITLE
-               WHEN    1            ALSO    "2"
-                                            ALSO   "1"
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *     EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
+      *                                      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    1            ALSO    "1"     
+      *                                      ALSO   "1"
+      *             MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
+      *         WHEN    2            ALSO    "1"
+      *                                      ALSO   "1"
+      *             MOVE    "後期高齢者請求書（在医総等）"
+      *                                         TO  SPRT-TITLE
+      *         WHEN    1            ALSO    "2"
+      *                                      ALSO   "1"
+      *             MOVE    "後期高齢者請求書［返戻分］" 
+      *                                         TO  SPRT-TITLE
+      *         WHEN    2            ALSO    "2"
+      *                                      ALSO   "1"
+      *             MOVE    "後期高齢者請求書（在医総等）［返戻分］"
+      *                                         TO  SPRT-TITLE
+      *         WHEN    1            ALSO    "1"     
+      *                                      ALSO   "2"
+      *             MOVE    "後期高齢者請求書［特別療養費］"
+      *                                         TO  SPRT-TITLE
+      *         WHEN    1            ALSO    "2"
+      *                                      ALSO   "2"
+      *             MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
+      *                                         TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-SYOKBN1
+               WHEN   "1"  ALSO  "1"
+                   MOVE    "後期高齢者請求書"  TO  SPRT-TITLE
+               WHEN   "2"  ALSO  "1"
                    MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
-               WHEN    2            ALSO    "2"
-                                            ALSO   "1"
-                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
-                                               TO  SPRT-TITLE
-               WHEN    1            ALSO    "1"     
-                                            ALSO   "2"
+               WHEN   "1"  ALSO  "2"
                    MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
-               WHEN    1            ALSO    "2"
-                                            ALSO   "2"
+               WHEN   "2"  ALSO  "2"
                    MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1442,6 +1754,23 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT2815TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT2815TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT2815TMP
+           END-READ
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *****************************************************************
       *   請求管理ＤＢ更新処理
       *****************************************************************
@@ -1507,6 +1836,21 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT2815TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *      
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
       *****************************************************************
       *    請求管理読込
       *****************************************************************
@@ -1538,7 +1882,7 @@
            END-IF
       *
       *###
-           DISPLAY "SYOKBN=" WRK-SYOKBN " SYOKBN1=" WRK-PARA-SYOKBN1
+           DISPLAY "SYOKBN=" WRK-PARA-SYOKBN " SYOKBN1=" WRK-PARA-SYOKBN1
                    " SRYYM=" RECE10-SRYYM "-" RECE10-XXSRYYM 
                    " HKNNUM= " RECE10-HKNNUM
                    " PATHNAME=" WRK-MCP-PATHNAME
@@ -1553,6 +1897,9 @@
                MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
                PERFORM 900-SEIKYU-READ-SEC
            ELSE
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+               MOVE    1                   TO  FLG-END
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
                MOVE    1                   TO  FLG-RECE10
                MOVE    HIGH-VALUE      TO  KEY-NEW
            END-IF
@@ -1590,6 +1937,9 @@
                DISPLAY "PTNUM=" RECE10-PTNUM 
       *         
            ELSE
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
+               MOVE    1               TO  FLG-END
+      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
                MOVE    HIGH-VALUE      TO  KEY-NEW
                MOVE    1               TO  FLG-RECE10
            END-IF
