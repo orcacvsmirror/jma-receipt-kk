@@ -34,6 +34,7 @@
       *                                  医療機関情報を参照
       *  01.00.03    内田    08/04/23    ４月改正に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.04    吉川    08/07/09    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -542,6 +543,15 @@
            INITIALIZE       SKT3920TMP-REC
            INITIALIZE       SKT3920TMP-HKNJANUM
       *
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
+      *    H20年3月以前は旧様式
+           IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+             MOVE  1                     TO  SKT3920TMP-SYUTURYOKU
+           ELSE
+             MOVE  2                     TO  SKT3920TMP-SYUTURYOKU
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) end
+      *
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  SKT3920TMP-HKNJANUM(1:6)
            ELSE
@@ -1024,7 +1034,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT3920.red"            TO  SPRT-PRTID
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
+      *     MOVE   "SKT3920.red"            TO  SPRT-PRTID
+           IF  SKT3920TMP-SYUTURYOKU  =  1
+             MOVE  "SKT3920o.red"      TO  SPRT-PRTID
+           ELSE
+             MOVE  "SKT3920.red"       TO  SPRT-PRTID
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
            MOVE    "国保請求書"  TO  SPRT-TITLE
            MOVE    SKT3920             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1239,7 +1256,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT3930.red"            TO  SPRT-PRTID
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
+      *     MOVE   "SKT3930.red"            TO  SPRT-PRTID
+           IF  SKT3920TMP-SYUTURYOKU  =  1
+             MOVE  "SKT3930o.red"      TO  SPRT-PRTID
+           ELSE
+             MOVE  "SKT3930.red"       TO  SPRT-PRTID
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
            MOVE    "国保請求書"  TO  SPRT-TITLE
            MOVE    SKT3930             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID

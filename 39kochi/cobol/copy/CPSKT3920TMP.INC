@@ -19,10 +19,14 @@
       *    診療報酬請求書     COPY (CPSKT3750TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/07/09  帳票様式の変更に伴う修正
       ************************************************************
        01  SKT3920TMP-REC.
            03  SKT3920TMP-KEY.
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
+               05  SKT3920TMP-SYUTURYOKU            PIC  9(01).
+      *=== 帳票様式の変更 by Yoshikawa(2008/07/09) end
                05  SKT3920TMP-HKNJANUM              PIC  X(06).
                05  SKT3920TMP-ZAITAKU               PIC  X(01).
                05  SKT3920TMP-KYURATE               PIC  9(02).
