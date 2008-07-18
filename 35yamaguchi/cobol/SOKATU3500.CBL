@@ -31,7 +31,8 @@
       *  01.00.02    内田   2007/09/19    日レセver4.0対応
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
-      *  01.00.03    長屋   08/04/28      帳票様式に伴う修正
+      *  01.00.03    長屋     08/04/28    帳票様式に伴う修正
+      *  01.00.04    内田     08/07/18    後期高齢のみの場合でも印刷する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -285,7 +286,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -515,7 +518,9 @@
            CLOSE            SKT3500TMP-FILE
            OPEN     I-O     SKT3500TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            DISPLAY "ccccccccccccccccccccc"
