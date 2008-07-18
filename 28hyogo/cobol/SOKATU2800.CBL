@@ -47,6 +47,8 @@
       *  01.00.10    内田    08/04/30    レセ電時は請求書枚数は印字しない
       *  01.00.11    内田    08/05/20    福祉件数の対象公費に"380"を追加
       *  01.00.12    内田    08/06/20    後期高齢のみの場合も印字する
+      *  01.00.13    内田    08/07/11    県外保険者欄の後期分が国保分と
+      *                                  同一の数しか印字されないのを修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1568,17 +1570,25 @@
                     UNTIL    IDX3   >     12
              PERFORM  VARYING  IDX4   FROM  1  BY  1
                       UNTIL    IDX4   >     2
-                      OR       WRK-CNT-HKNJANUM(IDX4 WRK-CNT) = SPACE
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *                OR       WRK-CNT-HKNJANUM(IDX4 WRK-CNT) = SPACE
+      *---(01.00.13) LINE ADD END   ------------------------------------
                DISPLAY "県外保険者="  WRK-CNT-HKNJANUM(IDX4 WRK-CNT)
                DISPLAY "カウント="    WRK-CNT
-               MOVE  WRK-CNT-HKNJANUM(IDX4 WRK-CNT)  TO  WRK-HKNJANUM
-               PERFORM  920-HKNJAINF-SET-SEC
-               PERFORM  400-KENNAME-SEC
-               IF  IDX4  =  1
-                 MOVE  WRK-HKNJANAME  TO  SKT2800-KGIHKNJANAME(IDX3)
-               ELSE
-                 MOVE  WRK-HKNJANAME  TO  SKT2800-KGIKOUKINAME(IDX3)
+      *---(01.00.13) LINE ADD START ------------------------------------
+               IF  WRK-CNT-HKNJANUM(IDX4 WRK-CNT) NOT = SPACE
+      *---(01.00.13) LINE ADD END   ------------------------------------
+                 MOVE  WRK-CNT-HKNJANUM(IDX4 WRK-CNT)  TO  WRK-HKNJANUM
+                 PERFORM  920-HKNJAINF-SET-SEC
+                 PERFORM  400-KENNAME-SEC
+                 IF  IDX4  =  1
+                   MOVE  WRK-HKNJANAME  TO  SKT2800-KGIHKNJANAME(IDX3)
+                 ELSE
+                   MOVE  WRK-HKNJANAME  TO  SKT2800-KGIKOUKINAME(IDX3)
+                 END-IF
+      *---(01.00.13) LINE ADD START ------------------------------------
                END-IF
+      *---(01.00.13) LINE ADD END   ------------------------------------
              END-PERFORM
              ADD   1                   TO  WRK-CNT
            END-PERFORM
@@ -1695,10 +1705,13 @@
            WHEN  "47"  MOVE  "沖縄県"    TO  WRK-KENNAME
            END-EVALUATE
       *
-      *    国保組合は県名を印字しない
+      *    国保の場合、国保組合は県名を印字しない
       *---(01.00.09) LINE ADD START ------------------------------------
       *     IF     WRK-CNT-HKNJANUM(WRK-CNT)(3:1)  =  "3"
            IF     WRK-CNT-HKNJANUM(IDX4 WRK-CNT)(3:1)  =  "3"
+      *---(01.00.13) LINE ADD START ------------------------------------
+           AND    IDX4  =  1
+      *---(01.00.13) LINE ADD END   ------------------------------------
       *---(01.00.09) LINE ADD END   ------------------------------------
              MOVE  SPACE                 TO  WRK-KENNAME
            END-IF
