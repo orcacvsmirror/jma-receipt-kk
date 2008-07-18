@@ -33,6 +33,8 @@
       *  01.00.02    内田    2008/05/28    ４月改正対応
       *  01.00.03    内田    2008/06/13    後期高齢は「保険証・記号」には
       *                                    保険者番号を印字する
+      *  01.00.04    内田    2008/07/15    「保険証・記号」は
+      *                                    後期高齢者も社保国保と同様とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1068,17 +1070,20 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    １３．記号
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *     MOVE    MF101-KIGO              TO  WRK-DATA
-           IF  MF101-HKNNUM  =  "039"  OR  "040"
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *         MOVE    MF101-NUM           TO  WRK-DATA
-               MOVE    MF101-HKNJANUM      TO  WRK-DATA
-      *---(01.00.03) LINE ADD END   ------------------------------------
-           ELSE
-               MOVE    MF101-KIGO          TO  WRK-DATA
-           END-IF
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.04) LINE ADD START ------------------------------------
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **     MOVE    MF101-KIGO              TO  WRK-DATA
+      *     IF  MF101-HKNNUM  =  "039"  OR  "040"
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **         MOVE    MF101-NUM           TO  WRK-DATA
+      *         MOVE    MF101-HKNJANUM      TO  WRK-DATA
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *     ELSE
+      *         MOVE    MF101-KIGO          TO  WRK-DATA
+      *     END-IF
+      **---(01.00.02) LINE ADD END   ------------------------------------
+           MOVE    MF101-KIGO              TO  WRK-DATA
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1596,6 +1601,7 @@
       *****************************************************************
       *    公費請求マスタCLOSE
       *****************************************************************
+
        900-KOHSKY-CLOSE-SEC           SECTION.
       *
            MOVE    "DBCLOSECURSOR"       TO  MCP-FUNC
