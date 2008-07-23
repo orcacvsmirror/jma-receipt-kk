@@ -36,6 +36,8 @@
       *  01.00.05    内田    08/05/30    帳票様式の変更に伴う修正
       *  01.00.06    内田    08/06/18    ３月以前の返戻分を診療年月毎でなく
       *                                  まとめて印字する
+      *  01.00.07    内田    08/07/01    旧様式の２枚目が新様式で
+      *                                  印字されるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1355,7 +1357,10 @@
                                        TO  SPRT-PRIORITY
       *---(01.00.05) LINE ADD START ------------------------------------
       *     MOVE   "SKT4611.red"        TO  SPRT-PRTID
-           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *---(01.00.07) LINE ADD START ------------------------------------
+      *     IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+           IF  FLG-CHK  =  ZERO
+      *---(01.00.07) LINE ADD END   ------------------------------------
                MOVE   "SKT4611.red"    TO  SPRT-PRTID
            ELSE
                MOVE   "SKT4611o.red"   TO  SPRT-PRTID
