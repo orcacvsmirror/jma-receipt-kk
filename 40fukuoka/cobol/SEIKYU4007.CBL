@@ -44,6 +44,7 @@
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
       *  01.00.10    内田     08/05/02    表示を３歳から６歳へ変更
+      *  01.00.11    内田     08/07/09    表示を「高外一」「高外７」等へ変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1493,7 +1494,10 @@
            ELSE                                        
                EVALUATE    MF100-RECESYUBETU (4:1)
                    WHEN    "0"
-                       MOVE    "０高外８"     TO  HC06-HONKZK
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *                 MOVE    "０高外８"     TO  HC06-HONKZK
+                       MOVE    "０高外７"     TO  HC06-HONKZK
+      *---(01.00.11) LINE ADD END   ------------------------------------
                    WHEN    "2"
                        MOVE    "２本外"       TO  HC06-HONKZK
                    WHEN    "4"
@@ -1504,7 +1508,10 @@
                    WHEN    "6"
                        MOVE    "６家外"       TO  HC06-HONKZK
                    WHEN    "8"
-                       MOVE    "８高外９"     TO  HC06-HONKZK
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *                 MOVE    "８高外９"     TO  HC06-HONKZK
+                       MOVE    "８高外一"     TO  HC06-HONKZK
+      *---(01.00.11) LINE ADD END   ------------------------------------
                END-EVALUATE
            END-IF    
       *
@@ -1814,9 +1821,15 @@
                    WHEN    "5"
                        MOVE    "５家入"     TO  HCN06-HONKZK
                    WHEN    "7"
-                       MOVE    "７高入９"   TO  HCN06-HONKZK
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *                 MOVE    "７高入９"   TO  HCN06-HONKZK
+                       MOVE    "７高入一"   TO  HCN06-HONKZK
+      *---(01.00.11) LINE ADD END   ------------------------------------
                    WHEN    "9"
-                       MOVE    "９高入８"   TO  HCN06-HONKZK
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *                 MOVE    "９高入８"   TO  HCN06-HONKZK
+                       MOVE    "９高入７"   TO  HCN06-HONKZK
+      *---(01.00.11) LINE ADD END   ------------------------------------
                END-EVALUATE
            END-IF    
       *
