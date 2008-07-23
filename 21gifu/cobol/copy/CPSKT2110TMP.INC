@@ -28,6 +28,7 @@
                05  SKT2110TMP-KYURATE             PIC  9(03).
                05  SKT2110TMP-SYUBETU             PIC  9(01).
                05  SKT2110TMP-ZAITAKU             PIC  X(01).
+               05  SKT2110TMP-SRYYMFLG            PIC  9(01).
            03  SKT2110TMP-IPPAN-TBL  OCCURS  5.
                05  SKT2110TMP-NYUGAI-TBL  OCCURS  2.
                    07  SKT2110TMP-KENSU         PIC  9(06).
