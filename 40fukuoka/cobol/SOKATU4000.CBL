@@ -45,6 +45,8 @@
       *                                  SPA-AREA初期化
       *  01.00.11    内田    08/04/30    返戻対応
       *  01.00.12    内田    08/05/01    後期高齢印刷処理判定修正
+      *  01.00.13    内田    08/07/09    後期高齢のみ、乳障母のみの場合
+      *                                  でも印刷する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -360,6 +362,11 @@
            COPY    "CPSK1902.INC".
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *    レセプト・総括印刷情報
+           COPY    "CPSK2005.INC".
+      *---(01.00.13) LINE ADD END   ------------------------------------
+      *
            COPY    "CPRCF010.INC".
       *
       *    ジョブ管理マスタ
@@ -411,7 +418,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.13) LINE ADD START ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -596,6 +605,29 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *    レセプト・総括印刷情報
+           INITIALIZE                  SYS-2005-REC
+           MOVE    "2005"              TO  SYS-2005-KANRICD
+           MOVE    "*"                 TO  SYS-2005-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2005-STYUKYMD(1:6)
+                                           SYS-2005-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2005-STYUKYMD(7:2)
+                                           SYS-2005-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2005-HOSPNUM
+           MOVE    SYS-2005-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC        TO  SYS-2005-REC
+           ELSE
+               MOVE    "レセプト・総括印刷情報が取得できませんでした"
+                                           TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+               MOVE    1                   TO  FLG-END
+           END-IF
+      *---(01.00.13) LINE ADD END   ------------------------------------
+      *
            PERFORM  110-INI-FILE-SEC
       *
            PERFORM  111-INI-FILE-SEC
@@ -713,7 +745,9 @@
            OPEN     I-O     SKT4005TMP-FILE
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.13) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.13) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
@@ -764,6 +798,27 @@
       *
            IF       FLG-UPD   =       1
                     PERFORM   2002-PRINT-SEC
+      *---(01.00.13) LINE ADD START ------------------------------------
+           ELSE
+      *      レセ電で返戻、もしくは紙レセで当月か
+             IF  (WRK-PARA-SYOKBN  =  2  AND
+                  SYS-2005-KKHRECEKBN  NOT = ZERO  OR  SPACE)
+             OR  (WRK-PARA-SYOKBN  =  1  AND
+                  SYS-2005-KKHRECEKBN  =  ZERO  OR  SPACE)
+      *      乳障母のみの場合
+               IF  WRK-KOH-GKENSU(3)  >  ZERO
+      *    帳票編集<見出し>処理
+                 PERFORM 310-HEAD-HEN-SEC
+      *    明細
+                 MOVE    WRK-KOH-GKENSU(3)   TO  WRK-Z5
+                 MOVE    WRK-Z5              TO  SKT4000-KOH-GKENSU
+                 MOVE    WRK-KOH-GTENSU(3)   TO  WRK-Z9
+                 MOVE    WRK-Z9              TO  SKT4000-KOH-GTENSU
+      *    帳票印刷処理
+                 PERFORM 340-PRINT-OUT-SEC
+               END-IF
+             END-IF
+      *---(01.00.13) LINE ADD END   ------------------------------------
            END-IF
       *
            .
