@@ -24,6 +24,8 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/06/27  マル長欄追加対応
+      *  01.00.02    吉川    2008/07/23  備考欄に「超過」「標欠」印字対応
+      *                                  マル長欄削除。元に戻す
       ********************************************************************
        01  SKT0115.
       *    印刷年月
@@ -67,18 +69,20 @@
                05  SKT0115-S-KINGK         PIC X(09).
       *    標準負担金
                05  SKT0115-S-FTNGK         PIC X(09).
+      *=== マル長欄削除 by Yoshikawa(2008/07/23) start
       *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
       *    長期テーブル
-           03  SKT0115-TYOKI-TBL.
+      *     03  SKT0115-TYOKI-TBL.
       *    件数
-               05  SKT0115-TKENSU          PIC X(05).
+      *         05  SKT0115-TKENSU          PIC X(05).
       *    日数
-               05  SKT0115-TNISSU          PIC X(05).
+      *         05  SKT0115-TNISSU          PIC X(05).
       *    点数
-               05  SKT0115-TTENSU          PIC X(09).
+      *         05  SKT0115-TTENSU          PIC X(09).
       *    一部負担金
-               05  SKT0115-TITBFTN         PIC X(09).
+      *         05  SKT0115-TITBFTN         PIC X(09).
       *=== マル長欄追加対応 by Yoshikawa(2008/06/27) end
+      *=== マル長欄削除 by Yoshikawa(2008/07/23) end
       *    公費請求テーブル
            03   SKT0115-KOUHI-TBL   OCCURS  4.
       *    法別番号
@@ -102,3 +106,13 @@
                05  SKT0115-S-KKINGK        PIC X(09).
       *    公費標準負担金
                05  SKT0115-S-KFTNGK        PIC X(09).
+      *=== 備考欄に「超過」「標欠」印字対応 by Yoshikawa(2008/07/23) start
+      *    備考テーブル
+           03  SKT0115-BIKO-TBL.
+      *    超過
+               05  SKT0115-TYOKA           PIC X(04).
+               05  SKT0115-TYOKA-MARU      PIC X(02).
+      *    標欠
+               05  SKT0115-HYOKETU         PIC X(04).
+               05  SKT0115-HYOKETU-MARU    PIC X(02).
+      *=== 備考欄に「超過」「標欠」印字対応 by Yoshikawa(2008/07/23) end

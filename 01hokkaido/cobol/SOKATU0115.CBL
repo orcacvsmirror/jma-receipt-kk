@@ -29,6 +29,11 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/06/27  マル長欄追加対応
       *                                  生活療養のみの場合でも食事印字
+      *  01.00.02    吉川    2008/07/23  マル長欄を削除。再掲欄に印字
+      *                                  食事も生活療養もない場合は
+      *                                  何も印字しないように修正
+      *                                  定数超過または標欠の場合は
+      *                                  備考欄に「超過」「標欠」印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -94,6 +99,9 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) start
+           03  FLG-SYUNOU          PIC 9(01).
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
@@ -162,6 +170,9 @@
       *
            03  WRK-SYOKBN          PIC X(01).
            03  WRK-INDEX           PIC 9(02).
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) start
+           03  WRK-SEIKATU         PIC 9(07).
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) end
       *
       *    公費名称編集
            03  WRK-KOHKBN.
@@ -261,6 +272,12 @@
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
       *
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) start
+      *    収納情報
+       01  SYUNOU-REC.
+           COPY    "CPSYUNOU.INC".
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) end
+      *
       *    医療機関情報情報
            COPY    "CPSK1001.INC".
       *
@@ -281,6 +298,11 @@
       *
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
+      *
+      *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) start
+      *    医療機関情報−入院基本
+           COPY    "CPSK5000.INC".
+      *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -508,6 +530,29 @@
            PERFORM 900-CLOSE-SEC
       *
            MOVE    IDX                     TO  WRK-2007-MAX
+      *
+      *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) start
+      *    医療機関情報−入院基本
+           INITIALIZE                  SYS-5000-REC
+           MOVE    "5000"              TO  SYS-5000-KANRICD
+           MOVE    "*"                 TO  SYS-5000-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-5000-STYUKYMD(1:6)
+                                           SYS-5000-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-5000-STYUKYMD(7:2)
+                                           SYS-5000-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-5000-HOSPNUM
+           MOVE    SYS-5000-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-KEY10-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC        TO  SYS-5000-REC
+           ELSE
+               MOVE    "医療機関情報（入院基本）が取得できませんでした"
+                                           TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+               MOVE    1                   TO  FLG-END
+           END-IF
+      *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) end
       *
            .
        100-INIT-EXT.
@@ -939,8 +984,20 @@
       *         ADD     1                   TO  SUM-S-KENSU(IDX1)
       *       END-IF
       *    食事療養：件数
-             ADD     1                     TO  SUM-S-KENSU(IDX1)
-      *=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) end
+      *=== 生活療養と食事が無い場合印字無し by Yoshikawa(2008/07/23) start
+      *       ADD     1                     TO  SUM-S-KENSU(IDX1)
+      **=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) end
+             MOVE  SPACE                   TO  WRK-KOHNUM
+             MOVE  "key17"                 TO  WRK-PATH
+      *      収納テーブルから生活療養取得
+             PERFORM  900-SYUNOU-SET-SEC
+      *      生活療養がある場合は食事を印字する
+             IF  WRK-SEIKATU  >  ZERO  
+             OR  RECE10-SHOKUJINISSU(1)  >  ZERO
+      *    食事療養：件数
+               ADD     1                   TO  SUM-S-KENSU(IDX1)
+             END-IF
+      *=== 生活療養と食事が無い場合印字無し by Yoshikawa(2008/07/23) end
       *    食事療養：日数
              ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
       *    食事療養：金額
@@ -1028,8 +1085,20 @@
       *         ADD     1                     TO SUM-S-KKENSU(IDX2)
       *       END-IF
       *    公費再掲欄：食事療養：件数
-             ADD     1                       TO SUM-S-KKENSU(IDX2)
-      *=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) end
+      *=== 生活療養と食事が無い場合印字無し by Yoshikawa(2008/07/23) start
+      *       ADD     1                       TO SUM-S-KKENSU(IDX2)
+      **=== 生活療養のみでも食事印字 by Yoshikawa(2008/06/27) end
+             MOVE  RECE10-KOHNUM(IDZ)        TO  WRK-KOHNUM
+             MOVE    "key33"                 TO  WRK-PATH
+      *      収納テーブルから生活療養取得
+             PERFORM  900-SYUNOU-SET-SEC
+      *      生活療養がある場合は食事を印字する
+             IF  WRK-SEIKATU  >  ZERO
+             OR  RECE10-SHOKUJINISSU(IDY)  >  ZERO
+      *    食事療養：件数
+               ADD     1                     TO SUM-S-KKENSU(IDX2)
+             END-IF
+      *=== 生活療養と食事が無い場合印字無し by Yoshikawa(2008/07/23) end
       *    公費再掲欄：食事療養：日数
              ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
       *    公費再掲欄：食事療養：金額
@@ -1049,14 +1118,64 @@
       *****************************************************************
        200122-TYOKI-SYUKEI-SEC        SECTION.
       *
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) start
       *    マル長欄：件数
-           ADD  1                    TO  SUM-TKENSU
+      *     ADD  1                    TO  SUM-TKENSU
       *    マル長欄：日数
-           ADD  RECE10-JNISSU(1)     TO  SUM-TNISSU
+      *     ADD  RECE10-JNISSU(1)     TO  SUM-TNISSU
       *    マル長欄：点数
-           ADD  RECE10-TOTALTEN(1)   TO  SUM-TTENSU
+      *     ADD  RECE10-TOTALTEN(1)   TO  SUM-TTENSU
       *    マル長欄：一部負担金
-           ADD  RECE10-FTNMONEY(1)   TO  SUM-TITBFTN
+      *     ADD  RECE10-FTNMONEY(1)   TO  SUM-TITBFTN
+      *
+           PERFORM VARYING IDZ     FROM    1   BY  1
+                   UNTIL   IDZ     >       4
+                   OR  RECE10-ETC-KOHNUM (IDZ) =   SPACE
+      *
+      *      長期を０８０に置き換える
+             IF      RECE10-ETC-KOHNUM (IDZ)  =  "972"  OR  "974"
+               MOVE    "080"               TO  RECE10-ETC-KOHNUM (IDZ)
+             END-IF
+      *
+      *      公費番号格納
+             PERFORM VARYING   IDX2    FROM    1   BY  1
+                     UNTIL     IDX2 >          100
+               IF  SUM-KOHNUM (IDX2)   =   SPACE
+                 MOVE  RECE10-ETC-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+               END-IF
+               IF   RECE10-ETC-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+      *    公費再掲欄：療養の給付：件数
+                 ADD  1                  TO  SUM-KKENSU(IDX2 IDX3)
+      *    公費再掲欄：療養の給付：日数
+                 ADD  RECE10-JNISSU(1)   TO  SUM-KNISSU(IDX2 IDX3)
+      *    公費再掲欄：療養の給付：点数
+                 ADD  RECE10-TOTALTEN(1) TO  SUM-KTENSU(IDX2 IDX3)
+      *    公費再掲欄：療養の給付：一部負担金
+                 ADD  RECE10-FTNMONEY(1) TO  SUM-KITBFTN(IDX2 IDX3)
+      *
+                 IF  IDX3  =  1 
+                   MOVE  SPACE                   TO  WRK-KOHNUM
+                   MOVE  "key17"                 TO  WRK-PATH
+      *            収納テーブルから生活療養取得
+                   PERFORM  900-SYUNOU-SET-SEC
+      *            生活療養がある場合は食事を印字する
+                   IF  WRK-SEIKATU  >  ZERO
+                   OR  RECE10-SHOKUJINISSU(1)  >  ZERO
+      *    公費再掲欄：食事療養：件数
+                     ADD     1                   TO  SUM-S-KENSU(IDX2)
+                   END-IF
+      *    公費再掲欄：食事療養：日数
+                   ADD  RECE10-SHOKUJINISSU(1)   TO SUM-S-KNISSU(IDX2)
+      *    公費再掲欄：食事療養：金額
+                   ADD  RECE10-SHOKUJIRYOYOHI(1) TO SUM-S-KKINGK(IDX2)
+      *    公費再掲欄：食事療養：標準負担額
+                   ADD  RECE10-SHOKUJIFTN(1)     TO SUM-S-KFTNGK(IDX2)
+                 END-IF    
+                 MOVE    100             TO  IDX2
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -1186,20 +1305,34 @@
              MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT0115-S-FTNGK(IDZ)
            END-PERFORM
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) start
       *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
       *    マル長：件数
-           MOVE  SUM-TKENSU              TO  WRK-Z5
-           MOVE  WRK-Z5                  TO  SKT0115-TKENSU
+      *     MOVE  SUM-TKENSU              TO  WRK-Z5
+      *     MOVE  WRK-Z5                  TO  SKT0115-TKENSU
       *    マル長：診療実日数
-           MOVE  SUM-TNISSU              TO  WRK-Z5 
-           MOVE  WRK-Z5                  TO  SKT0115-TNISSU
+      *     MOVE  SUM-TNISSU              TO  WRK-Z5 
+      *     MOVE  WRK-Z5                  TO  SKT0115-TNISSU
       *    マル長：点数
-           MOVE  SUM-TTENSU              TO  WRK-Z9
-           MOVE  WRK-Z9                  TO  SKT0115-TTENSU
+      *     MOVE  SUM-TTENSU              TO  WRK-Z9
+      *     MOVE  WRK-Z9                  TO  SKT0115-TTENSU
       *    マル長：一部負担金
-           MOVE  SUM-TITBFTN             TO  WRK-Z9
-           MOVE  WRK-Z9                  TO  SKT0115-TITBFTN
+      *     MOVE  SUM-TITBFTN             TO  WRK-Z9
+      *     MOVE  WRK-Z9                  TO  SKT0115-TITBFTN
       *=== マル長欄追加対応 by Yoshikawa(2008/06/27) start
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) end
+      *
+      *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) start
+      *    備考欄（定数超過、標欠）
+           IF  SYS-5000-TEISUKBN  =  "1"
+             MOVE  "超過"  TO  SKT0115-TYOKA
+             MOVE  "○"    TO  SKT0115-TYOKA-MARU
+           END-IF
+           IF  SYS-5000-HYOUKETUKBN  NOT =  SPACE  AND  "0"
+             MOVE  "標欠"  TO  SKT0115-HYOKETU
+             MOVE  "○"    TO  SKT0115-HYOKETU-MARU
+           END-IF
+      *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) end
       *
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
@@ -1287,7 +1420,14 @@
                MOVE    "51"            TO   SKT0115-HBTNUM1(IDY)
                MOVE    "○"            TO   SKT0115-HBTNUM2(IDY)
                MOVE    "特定疾患"      TO   WRK-HKNNAME
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) start
+      *     ELSE
            ELSE
+            IF     SUM-KOHNUM (IDX2)  =   "080"
+               MOVE    "80"            TO   SKT0115-HBTNUM1(IDY)
+               MOVE    "○"            TO   SKT0115-HBTNUM2(IDY)
+            ELSE
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) end
       *      公費番号まとめ情報からの集計か
              IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
       *        保険番号読込み  
@@ -1327,6 +1467,9 @@
                  MOVE  HKN-HBTNUM         TO  SKT0115-HBTNUM1(IDY)
                  MOVE  "○"               TO  SKT0115-HBTNUM2(IDY)
              END-IF
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) start
+            END-IF
+      *=== 長期は再掲欄に集計 by Yoshikawa(2008/07/23) end
            END-IF
            . 
        2002311-HKNNUM-HENSYU-EXT.
@@ -1652,6 +1795,69 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) start
+      *****************************************************************
+      *  収納情報セット
+      *****************************************************************
+       900-SYUNOU-SET-SEC  SECTION.
+      *
+           INITIALIZE  SYUNOU-REC
+           MOVE  SPA-HOSPNUM              TO  SYU-HOSPNUM
+           MOVE  RECE10-NYUGAIKBN         TO  SYU-NYUGAIKBN
+           MOVE  RECE10-PTID              TO  SYU-PTID
+           MOVE  RECE10-SRYYM(1:6)        TO  SYU-SRYYMD(1:6)
+           MOVE  "__"                     TO  SYU-SRYYMD(7:2)
+           MOVE  WRK-KOHNUM               TO  SYU-KOH-HKNNUM(1)
+                                              SYU-KOH-HKNNUM(2)
+                                              SYU-KOH-HKNNUM(3)
+                                              SYU-KOH-HKNNUM(4)
+      *
+           MOVE  SYUNOU-REC               TO  MCPDATA-REC
+           MOVE    "tbl_syunou"           TO  MCP-TABLE
+           MOVE    WRK-PATH               TO  MCP-PATHNAME
+           PERFORM 900-DBSELECT-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_syunou"         TO  MCP-TABLE
+             MOVE    WRK-PATH             TO  MCP-PATHNAME
+             PERFORM  900-SYUNOU-READ-SEC
+             IF  FLG-SYUNOU  =  ZERO
+               IF  SYU-DENPJTIKBN   NOT =  "3"
+      *          生活療養費取得
+                 MOVE  SYU-RYOYOHI-LIFE   TO  WRK-SEIKATU
+               END-IF
+             END-IF
+           ELSE
+             DISPLAY  "SYUNOU SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE    "tbl_syunou"       TO  MCP-TABLE
+           MOVE    WRK-PATH           TO  MCP-PATHNAME
+           PERFORM 900-CLOSE-SEC
+      *
+           .
+       900-SYUNOU-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    収納読込
+      *****************************************************************
+       900-SYUNOU-READ-SEC  SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SYUNOU-REC
+             MOVE  ZERO         TO  FLG-SYUNOU
+           ELSE
+             INITIALIZE  SYUNOU-REC
+             MOVE  1  TO  FLG-SYUNOU
+           END-IF
+      *
+           .
+       900-SYUNOU-READ-EXT.
+           EXIT.
+      *
+      *=== 生活療養・食事が無い場合印字無し by Yoshikawa(2008/07/23) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
