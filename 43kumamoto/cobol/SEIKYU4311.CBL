@@ -31,6 +31,8 @@
       *  01.00.01    内田    07/09/09    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    内田    08/07/09    診療科は旧総合病院の場合に印字
+      *                                  頁数のカウントを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -640,6 +642,9 @@
              ADD    MF100-TOTALTEN      TO    SUM-GTENSU
              ADD    MF100-KESETEN       TO    SUM-GKESETEN
              WRITE  MF100-REC
+      *---(01.00.02) LINE ADD START ------------------------------------
+             ADD    1                   TO    CNT-RECE02
+      *---(01.00.02) LINE ADD END   ------------------------------------
            END-IF
       *
            .
@@ -805,9 +810,15 @@
              MOVE    WRK-OUT-INPUT         TO  SC11-KESETEN(IDX)
       *
       *    診療科目
-             IF     MF100-SRYKA      NOT   =   "00"
-               MOVE MF100-SRYKA            TO  SC11-SRYKA(IDX)
+      *---(01.00.02) LINE ADD START ------------------------------------
+             IF  SYS-1001-HOSPSBT1  =  1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+               IF     MF100-SRYKA      NOT   =   "00"
+                 MOVE MF100-SRYKA            TO  SC11-SRYKA(IDX)
+               END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
              END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    以前診療分
              IF     MF100-SRYYM      NOT   =   LNK-PRTKANRI-SRYYM
@@ -1289,7 +1300,9 @@
                      GO  TO  900-KOHSKY-READ-SEC
                    END-IF
       *
-                   ADD  1  TO  CNT-RECE02
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *             ADD  1  TO  CNT-RECE02
+      *---(01.00.02) LINE ADD END   ------------------------------------
                ELSE
                  GO  TO  900-KOHSKY-READ-SEC
                END-IF
