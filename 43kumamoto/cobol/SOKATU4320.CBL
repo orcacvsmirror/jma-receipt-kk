@@ -38,6 +38,8 @@
       *                                  旧帳票に値が印字されない不具合を修正
       *  01.00.05    内田    08/06/24    ３月以前の返戻分を診療年月毎でなく
       *                                  まとめて印字する
+      *  01.00.06    内田    08/07/23    網掛けの一部負担金欄には印字しない
+      *                                  在総診は分けずに合算して印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -674,8 +676,10 @@
            ELSE
              MOVE        2          TO   SKT4320TMP-SYUTURYOKU
            END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
       *    在宅
-           MOVE   RECE10-ZAITAKU    TO   SKT4320TMP-ZAITAKU
+      *     MOVE   RECE10-ZAITAKU    TO   SKT4320TMP-ZAITAKU
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *    診療年月
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -1060,12 +1064,14 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4320o-HOSPCDN
       *
-           IF     SKT4320TMP-ZAITAKU  =  "1"
-             MOVE  "在総診または在医総を算定したレセ"
-                                         TO    SKT4320o-ZAI
-           ELSE
-             MOVE  "その他のレセ"        TO    SKT4320o-ZAI
-           END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     IF     SKT4320TMP-ZAITAKU  =  "1"
+      *       MOVE  "在総診または在医総を算定したレセ"
+      *                                   TO    SKT4320o-ZAI
+      *     ELSE
+      *       MOVE  "その他のレセ"        TO    SKT4320o-ZAI
+      *     END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            .
        310-HEAD-HEN-EXT.
@@ -1220,13 +1226,14 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4330-HOSPCDN
       *
-           IF     SKT4320TMP-ZAITAKU  =  "1"
-             MOVE  "在総診または在医総を算定したレセ"
-                                         TO    SKT4330-ZAI
-           ELSE
-             MOVE  "その他のレセ"        TO    SKT4330-ZAI
-           END-IF
-      *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     IF     SKT4320TMP-ZAITAKU  =  "1"
+      *       MOVE  "在総診または在医総を算定したレセ"
+      *                                   TO    SKT4330-ZAI
+      *     ELSE
+      *       MOVE  "その他のレセ"        TO    SKT4330-ZAI
+      *     END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            .
        311-HEAD-HEN-EXT.
@@ -1415,12 +1422,14 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4320-HOSPCDN
       *
-           IF     SKT4320TMP-ZAITAKU  =  "1"
-             MOVE  "在総診または在医総を算定したレセ"
-                                         TO    SKT4320-ZAI
-           ELSE
-             MOVE  "その他のレセ"        TO    SKT4320-ZAI
-           END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     IF     SKT4320TMP-ZAITAKU  =  "1"
+      *       MOVE  "在総診または在医総を算定したレセ"
+      *                                   TO    SKT4320-ZAI
+      *     ELSE
+      *       MOVE  "その他のレセ"        TO    SKT4320-ZAI
+      *     END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            .
        312-HEAD-HEN-EXT.
@@ -1448,8 +1457,15 @@
                  MOVE  SKT4320TMP-TENSU(IDX1 IDX2)  TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT4320-TENSU(IDX1 IDX2)
       *    療養の給付：一部負担金
-                 MOVE  SKT4320TMP-ITBFTN(IDX1 IDX2) TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4320-ITBFTN(IDX1 IDX2)
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *           MOVE  SKT4320TMP-ITBFTN(IDX1 IDX2) TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4320-ITBFTN(IDX1 IDX2)
+      *          網掛け部分は印字しない
+                 IF  IDX1  =  1  OR  2
+                   MOVE  SKT4320TMP-ITBFTN(IDX1 IDX2) TO  WRK-Z9
+                   MOVE  WRK-Z9   TO  SKT4320-ITBFTN(IDX1 IDX2)
+                 END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
                END-PERFORM
       *    食事療養：件数
                MOVE  SKT4320TMP-SKENSU(IDX1)  TO  WRK-Z5
