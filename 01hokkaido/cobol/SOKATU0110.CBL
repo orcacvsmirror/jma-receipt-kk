@@ -47,6 +47,9 @@
       *  01.00.09    内田   08/05/25    長期欄の給付割合印字修正
       *  01.00.10    内田   08/06/25    公費再掲欄の給付割合で、前期高齢９割は
       *                                 ８割として扱う
+      *  01.00.11    内田   08/07/08    札幌市代表保険者番号変更
+      *                                 定数超過または標欠の場合、
+      *                                 備考欄に「超過」「標欠」印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -299,6 +302,11 @@
       *    医療機関情報−所在地、連絡先 
            COPY    "CPSK1002.INC".
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    医療機関情報−入院基本
+           COPY    "CPSK5000.INC".
+      *---(01.00.11) LINE ADD END   ------------------------------------
+      *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    医療機関編集情報
            COPY    "CPSK1900.INC".
@@ -384,6 +392,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *---(01.00.11) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -531,6 +542,29 @@
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF 
+      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    医療機関情報−入院基本
+           INITIALIZE                  SYS-5000-REC
+           MOVE    "5000"              TO  SYS-5000-KANRICD
+           MOVE    "*"                 TO  SYS-5000-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-5000-STYUKYMD(1:6)
+                                           SYS-5000-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-5000-STYUKYMD(7:2)
+                                           SYS-5000-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-5000-HOSPNUM
+           MOVE    SYS-5000-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC        TO  SYS-5000-REC
+           ELSE
+               MOVE    "医療機関情報（入院基本）が取得できませんでした"
+                                           TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+               MOVE    1                   TO  FLG-END
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
       *---(01.00.06) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -680,7 +714,10 @@
       *区の場合代表番号セット
       *    札幌市の場合、代表番号セット
            IF  WRK-HKNJANUM (1:3) = "014"
-             MOVE  "014001"  TO  WRK-HKNJANUM
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *       MOVE  "014001"  TO  WRK-HKNJANUM
+             MOVE  "010017"  TO  WRK-HKNJANUM
+      *---(01.00.11) LINE ADD END   ------------------------------------
            END-IF
            MOVE  WRK-HKNJANUM  TO  SKT0110TMP-HKNJANUM
       *
@@ -864,6 +901,13 @@
              PERFORM  22022-TYOKI-SEC
            END-IF
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    定数超過、標欠チェック
+           IF  SYS-5000-TEISUKBN  =  "1"
+           OR  (SYS-5000-HYOUKETUKBN  NOT =  SPACE  AND  "0")
+             MOVE    1       TO  SKT0110TMP-PAGE-FLG
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
            IF      FLG-SKT0110TMP  =  1
                    WRITE    SKT0110TMP-REC
            ELSE
@@ -1700,6 +1744,18 @@
       *
              ADD   1  TO  WRK-CNT
            END-PERFORM
+      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    備考欄（定数超過、標欠）
+           IF  SYS-5000-TEISUKBN  =  "1"
+             MOVE  "超過"  TO  SKT0120-TYOKA
+             MOVE  "○"    TO  SKT0120-TYOKA-MARU
+           END-IF
+           IF  SYS-5000-HYOUKETUKBN  NOT =  SPACE  AND  "0"
+             MOVE  "標欠"  TO  SKT0120-HYOKETU
+             MOVE  "○"    TO  SKT0120-HYOKETU-MARU
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            .
        321-KOH-HEN-EXT.

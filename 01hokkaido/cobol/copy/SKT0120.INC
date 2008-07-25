@@ -63,3 +63,8 @@
                     07  SKT0120-K-SNISSU        PIC X(05).
                     07  SKT0120-K-SKINGK        PIC X(09).
                     07  SKT0120-K-SFTNGK        PIC X(09).
+            03  SKT0120-BIKO-TBL.
+                05  SKT0120-TYOKA               PIC X(04).
+                05  SKT0120-TYOKA-MARU          PIC X(02).
+                05  SKT0120-HYOKETU             PIC X(04).
+                05  SKT0120-HYOKETU-MARU        PIC X(02).
