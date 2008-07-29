@@ -40,6 +40,8 @@
       *  01.00.08    ÆâÅÄ    07/12/18    ÀÁµá³Û£±£°±ßÌ¤Ëþ¤Ï°õ»úÂÐ¾Ý³°
       *                                  ¾®»ùËýÀ­¤Î¾ì¹ç¡¢È÷¹ÍÍó¤Ø¡ÖËý¡×°õ»ú
       *  01.00.09    ÆâÅÄ    08/04/06    SPA-AREA½é´ü²½
+      *  01.00.10    ÆâÅÄ    08/07/25    ÊÝ¸±ÈÖ¹æ£±£¸£²¤È¤ÎÊ»ÍÑ»þ¤Î
+      *                                  ½õÀ®¤ÎÍ­Ìµ¤ÎÈ½Äê½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1542,8 +1544,13 @@
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
                    SYU-KOH-HKNNUM(IDX) =   SPACE
-               IF  SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
-                   SYU-KOH-HKNNUM(IDX)     NOT =   "027"
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *         IF  SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
+      *             SYU-KOH-HKNNUM(IDX)     NOT =   "027"
+               IF  (SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
+                   SYU-KOH-HKNNUM(IDX)     NOT =   "027")
+               OR  (SYU-KOH-HKNNUM(IDX)  =  "182")
+      *---(01.00.10) LINE ADD END   ------------------------------------
                    MOVE    1       TO      FLG-HEIYOU
       *
                    IF  RECE02-FTNMONEY(1)  =   ZERO
