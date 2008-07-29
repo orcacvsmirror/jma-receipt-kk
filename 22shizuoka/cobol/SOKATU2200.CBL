@@ -41,8 +41,13 @@
       *  01.00.07    吉川    2008/05/27   県内2枚目に県外の後期高齢者が
       *                                   印字されてしまう不具合を修正
       *  01.00.08    吉川    2008/06/23   印刷処理の修正
-      *                                   H20年3月以前の返戻及び
+      *                                   H20年4月以前の返戻及び
       *                                   月遅れ処理の修正
+      *  01.00.09    吉川    2008/07/04   後期高齢のみの場合でも印刷するよう修正
+      *                                   H20年4月以降の返戻分が
+      *                                   旧帳票で印字される不具合を修正
+      *                                   県外の合計欄に県内分の合計が
+      *                                   加算される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -232,6 +237,10 @@
            03  WRK-TODOUHUKEN          PIC X(100).
            03  WRK-RETSU               PIC 9(02).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+           03  WRK-SRYYM-OLD         PIC X(06).
+           03  WRK-SRYYM-NEW         PIC X(06).
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -370,7 +379,9 @@
            PERFORM  100-INIT-SEC
       *
            PERFORM  200-MAIN-SEC
-                    UNTIL   FLG-END   =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2008/07/04) start
+      *              UNTIL   FLG-END   =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2008/07/04) end
       *
            PERFORM  300-END-SEC
       *
@@ -585,7 +596,9 @@
            OPEN     I-O     SKT2205TMP-FILE
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
-           MOVE     ZERO    TO      FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2008/07/04) start
+      *     MOVE     ZERO    TO      FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2008/07/04) end
            MOVE     ZERO    TO      FLG-UPD
            INITIALIZE             SUM-AREA
       *
@@ -719,7 +732,10 @@
              MOVE  "200803"            TO  SKT2200TMP-SRYYM
            ELSE
              IF  WRK-PARA-SYOKBN  =  "2"
-               MOVE  RECE10-SRYYM      TO  SKT2200TMP-SRYYM
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+      *         MOVE  RECE10-SRYYM      TO  SKT2200TMP-SRYYM
+               MOVE  "200804"      TO  SKT2200TMP-SRYYM
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
              END-IF
       *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
            END-IF
@@ -778,11 +794,13 @@
       *     MOVE  RECE10-HKNJANUM  TO  SKT2205TMP-HKNJANUM
            MOVE  RECE10-HKNJANUM(3:2)  TO  SKT2205TMP-HKNJANUM
       *
-      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
-           IF  WRK-PARA-SYOKBN  =  "2"
-               MOVE  RECE10-SRYYM      TO  SKT2205TMP-SRYYM
-           END-IF
-      *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+      **=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
+      *     IF  WRK-PARA-SYOKBN  =  "2"
+      *         MOVE  RECE10-SRYYM      TO  SKT2205TMP-SRYYM
+      *     END-IF
+      **=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
       *
            PERFORM  850-SKTTMP-READ-SEC
       *
@@ -1141,6 +1159,9 @@
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
            MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+           MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *
            PERFORM  950-TMP-READ-SEC
            MOVE  KEY-NEW2  TO  KEY-OLD2
@@ -1158,7 +1179,12 @@
       *          帳票編集<明細>処理
                  PERFORM  320-BODY-HEN-SEC
       *          帳票編集<合計>処理
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+      *           IF  FLG-PRINT  =  1
                  IF  FLG-PRINT  =  1
+                 OR  WRK-SRYYM-NEW  NOT =  WRK-SRYYM-OLD
+                 OR  SKT2200TMP-KBN  =  2
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                    PERFORM  325-SUM-HEN-SEC
                  END-IF
       *          帳票印刷処理
@@ -1166,6 +1192,9 @@
                ELSE
                  PERFORM  900-TMP-READ-SEC
                  MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                END-IF
              ELSE
       *
@@ -1175,6 +1204,9 @@
                        OR    FLG-PRINT = 1
                  PERFORM  900-TMP-READ-SEC
                  MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                END-PERFORM
                MOVE    ZERO       TO        FLG-PRINTCHK
                IF  SKT2200TMP-KBN  =  1  
@@ -1185,12 +1217,18 @@
       *          帳票編集<明細>処理
                  PERFORM  320-BODY-HEN-SEC
       *          帳票編集<合計>処理
-                 IF  FLG-PRINT  =  1
+      *=== 県内と県外の合計を分ける by Yoshikawa(2008/07/04) start
+      *           IF  FLG-PRINT  =  1
+                 IF  FLG-PRINT  =  1  OR  SKT2200TMP-KBN  =  2
+      *=== 県内と県外の合計を分ける by Yoshikawa(2008/07/04) end
                    PERFORM  325-SUM-HEN-SEC
                  END-IF
                ELSE
                  PERFORM  900-TMP-READ-SEC
                  MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                END-IF
       *
       *        後期高齢
@@ -1211,15 +1249,22 @@
       *          帳票編集処理（後期高齢）
                  PERFORM  320-BODY-HEN-KOUKI-SEC
       *          帳票編集<合計>処理（後期高齢）
-                 IF  FLG-PRINT2  =  1
+      *=== 県内と県外の合計を分ける by Yoshikawa(2008/07/04) start
+      *           IF  FLG-PRINT2  =  1
+                 IF  FLG-PRINT2  =  1  OR  SKT2205TMP-KBN  =  2
+      *=== 県内と県外の合計を分ける by Yoshikawa(2008/07/04) end
                    PERFORM  325-SUM-HEN-KOUKI-SEC
                  END-IF
                ELSE
                  PERFORM  950-TMP-READ-SEC
                  MOVE  KEY-NEW2  TO  KEY-OLD2
                END-IF
+      *
       *        国保か後期高齢のどちらかがあれば印刷
                IF  FLG-PRINTCHK  =  1
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  ZERO  TO  FLG-CHK
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *          帳票印刷処理
                  PERFORM  330-PRINT-OUT-SEC
                END-IF
@@ -1239,6 +1284,9 @@
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
            MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+           MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *
            PERFORM  950-TMP-READ-SEC
            MOVE  KEY-NEW2  TO  KEY-OLD2
@@ -1256,7 +1304,11 @@
       *          帳票編集<明細>処理
                  PERFORM  320-BODY-HEN-SEC
       *          帳票編集<合計>処理
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+      *           IF  FLG-PRINT  =  1
                  IF  FLG-PRINT  =  1
+                 OR  WRK-SRYYM-NEW  NOT =  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                    PERFORM  325-SUM-HEN-SEC
                  END-IF
       *          帳票印刷処理
@@ -1264,6 +1316,9 @@
                ELSE
                  PERFORM  900-TMP-READ-SEC
                  MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                END-IF
              ELSE
       *
@@ -1273,6 +1328,9 @@
                        OR    FLG-PRINT = 1
                  PERFORM  900-TMP-READ-SEC
                  MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                END-PERFORM
                MOVE    ZERO       TO        FLG-PRINTCHK
                IF  SKT2200TMP-KBN  =  2  
@@ -1283,12 +1341,19 @@
       *          帳票編集<明細>処理
                  PERFORM  320-BODY-HEN-SEC
       *          帳票編集<合計>処理
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+      *           IF  FLG-PRINT  =  1
                  IF  FLG-PRINT  =  1
+                 OR  WRK-SRYYM-NEW  NOT =  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                    PERFORM  325-SUM-HEN-SEC
                  END-IF
                ELSE
                  PERFORM  900-TMP-READ-SEC
                  MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                END-IF
       *
       *        後期高齢
@@ -1316,8 +1381,12 @@
                  PERFORM  950-TMP-READ-SEC
                  MOVE  KEY-NEW2  TO  KEY-OLD2
                END-IF
+      *
       *        国保か後期高齢のどちらかがあれば印刷
                IF  FLG-PRINTCHK  =  1
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                 MOVE  ZERO  TO  FLG-CHK
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *          帳票印刷処理
                  PERFORM  330-PRINT-OUT-SEC
                END-IF
@@ -1342,7 +1411,11 @@
       *    診療年月
       *---(01.00.04) LINE ADD START ------------------------------------
       *     MOVE    WRK-SRYYMWH           TO  SKT2200-PRTYM
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+      *     IF  SKT2200TMP-SRYYM  NOT =  ZERO
            IF  SKT2200TMP-SRYYM  NOT =  ZERO
+           AND SKT2200TMP-SRYYM  <      WRK-CONS-SRYYM-200804
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                MOVE  SKT2200TMP-SRYYM    TO  WRK-SYMD (1:6)
       *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
                MOVE  1                   TO  FLG-CHK
@@ -1441,6 +1514,9 @@
                     UNTIL    IDX1  >     WRK-RETSU  OR
       *---(01.00.05) LINE ADD END   ------------------------------------
                              KEY-NEW  NOT =  KEY-OLD  OR
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                             WRK-SRYYM-NEW  NOT = WRK-SRYYM-OLD  OR
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
                              FLG-PRINT  =  1
            DISPLAY "HKNJANUM =" SKT2200TMP-HKNJANUM
       *    保険者名
@@ -1568,6 +1644,9 @@
              INITIALIZE  SUM-GKENSU
              INITIALIZE  SUM-GTENSU
              MOVE  KEY-NEW  TO  KEY-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+             MOVE  WRK-SRYYM-NEW  TO  WRK-SRYYM-OLD
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *---(01.00.03) LINE ADD START ------------------------------------
       *     END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
@@ -2373,6 +2452,9 @@
       *=== 印刷処理の修正 by Yoshikawa(2008/06/23) end
                NOT  AT  END
                    MOVE  SKT2200TMP-KBN  TO  KEY-NEW
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
+                   MOVE  SKT2200TMP-SRYYM TO  WRK-SRYYM-NEW
+      *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
            END-READ
            .
        900-TMP-READ-EXT.

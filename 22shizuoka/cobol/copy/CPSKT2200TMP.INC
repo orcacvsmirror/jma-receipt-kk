@@ -24,9 +24,9 @@
                05  SKT2200TMP-ZAITAKU        PIC  X(01).
                05  SKT2200TMP-KBN            PIC  9(01).
                05  SKT2200TMP-KUMIAI         PIC  9(01).
+               05  SKT2200TMP-SRYYM          PIC  9(06).
                05  SKT2200TMP-HKNJANUM       PIC  X(06).
       *---(01.00.01) LINE ADD START ------------------------------------
-               05  SKT2200TMP-SRYYM          PIC  9(06).
       *     03  SKT2200TMP-DATA-TBL       OCCURS 22.
            03  SKT2200TMP-DATA-TBL       OCCURS 26.
       *---(01.00.01) LINE ADD END   ------------------------------------
