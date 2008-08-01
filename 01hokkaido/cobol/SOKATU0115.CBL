@@ -34,6 +34,7 @@
       *                                  何も印字しないように修正
       *                                  定数超過または標欠の場合は
       *                                  備考欄に「超過」「標欠」印字
+      *  01.00.03    吉川    2008/08/01  入院基本情報のエラーメッセージ削除
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -546,11 +547,13 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC        TO  SYS-5000-REC
-           ELSE
-               MOVE    "医療機関情報（入院基本）が取得できませんでした"
-                                           TO  WRK-RECEERR
-               PERFORM 500-ERR-HENSYU-SEC
-               MOVE    1                   TO  FLG-END
+      *=== エラーメッセージ削除 by Yoshikawa(2008/08/01) start
+      *     ELSE
+      *         MOVE    "医療機関情報（入院基本）が取得できませんでした"
+      *                                     TO  WRK-RECEERR
+      *         PERFORM 500-ERR-HENSYU-SEC
+      *         MOVE    1                   TO  FLG-END
+      *=== エラーメッセージ削除 by Yoshikawa(2008/08/01) end
            END-IF
       *=== 備考欄に超過or標欠印字対応 by Yoshikawa(2008/07/23) end
       *

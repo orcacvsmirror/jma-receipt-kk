@@ -50,6 +50,7 @@
       *  01.00.11    内田   08/07/08    札幌市代表保険者番号変更
       *                                 定数超過または標欠の場合、
       *                                 備考欄に「超過」「標欠」印字
+      *  01.00.12    内田   08/08/01    入院基本情報のエラーメッセージ削除
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -558,11 +559,13 @@
            PERFORM 910-SYSKANRI-INV-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC        TO  SYS-5000-REC
-           ELSE
-               MOVE    "医療機関情報（入院基本）が取得できませんでした"
-                                           TO  WRK-RECEERR
-               PERFORM 500-ERR-HENSYU-SEC
-               MOVE    1                   TO  FLG-END
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *     ELSE
+      *         MOVE    "医療機関情報（入院基本）が取得できませんでした"
+      *                                     TO  WRK-RECEERR
+      *         PERFORM 500-ERR-HENSYU-SEC
+      *         MOVE    1                   TO  FLG-END
+      *---(01.00.12) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.11) LINE ADD END   ------------------------------------
       *
