@@ -31,6 +31,8 @@
       *                                  在宅はまとめて印字する
       *  01.00.02    吉川    2008/05/20  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.03    吉川    2008/08/04  精神補助（１９３）を再掲欄に
+      *                                  記載しないように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -725,6 +727,11 @@
                WHEN "392"
                  MOVE  2                   TO  IDX4
                  PERFORM 20014-FUKUSI-SYUKEI-SEC
+      *=== １９３は指定の場所に記載 by Yoshikawa(2008/08/04) start
+               WHEN "193"
+                 MOVE  3                   TO  IDX4
+                 PERFORM 20014-FUKUSI-SYUKEI-SEC
+      *=== １９３は指定の場所に記載 by Yoshikawa(2008/08/04) end
              END-EVALUATE
            END-PERFORM
       *
@@ -1133,6 +1140,9 @@
                IF  RECE10-KOHNUM(IDZ)  =  "019" OR "191" OR "291"
                                        OR "391" OR "192" OR "292"
                                        OR "392"
+      *=== １９３は指定の場所に記載 by Yoshikawa(2008/08/04) start
+                                       OR "193"
+      *=== １９３は指定の場所に記載 by Yoshikawa(2008/08/04) end
                  CONTINUE
                ELSE
                  IF  SUM-KOHNUM (IDX2)   =   SPACE
