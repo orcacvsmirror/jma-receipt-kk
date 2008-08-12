@@ -39,6 +39,7 @@
       *                                   保険が県外でも県内として扱う
       *  01.00.07    長屋   08/04/23      帳票様式に伴う修正
       *  01.00.08    内田   08/05/17      保険番号186を福祉の集計対象とする
+      *  01.00.09    内田   08/08/12      後期高齢のみの場合も印刷するよう修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -315,7 +316,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -520,7 +523,9 @@
            CLOSE            SKT0800TMP-FILE
            OPEN     I-O     SKT0800TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     MOVE     ZERO    TO      FLG-END
+      *---(01.00.09) LINE ADD END   ------------------------------------
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-SYUKEI-SEC
