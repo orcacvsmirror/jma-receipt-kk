@@ -37,6 +37,8 @@
       *  01.00.04       内田     08/04/09    SPA-AREA初期化
       *  01.00.05       内田     08/04/23    帳票様式の変更に伴う修正
       *  01.00.06       内田     08/07/09    H20年3月以前分は請求書を分ける
+      *  01.00.07       吉川     08/08/07    請求区分が「2 請求済」に
+      *                                      ならない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1806,7 +1808,9 @@
       *                                     TO  MCP-PATH
       *             CALL    "MCPSUB"        USING
       *                                         MCPAREA
-                                               MCPDATA-REC
+      *=== 請求済にならない不具合修正 by Yoshikawa(2008/08/07) start
+      *                                         MCPDATA-REC
+      *=== 請求済にならない不具合修正 by Yoshikawa(2008/08/07) end
                    MOVE    "tbl_seikyu"    TO  MCP-TABLE
                    MOVE    "key"           TO  MCP-PATHNAME
                    CALL    "ORCDBMAIN"     USING
