@@ -33,6 +33,7 @@
       *  01.00.04    内田    07/09/30    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.05    内田    08/07/29    公費助成の有無の判定修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -712,7 +713,10 @@
            END-IF
       *
       *---(01.00.03) LINE ADD START -----------------------------------
-           INITIALIZE                          FLG-ERR
+      *---(01.00.05) LINE ADD START -----------------------------------
+      *     INITIALIZE                          FLG-ERR
+           MOVE    1                       TO  FLG-ERR
+      *---(01.00.05) LINE ADD END   -----------------------------------
       *    公費の助成があるかどうか
            MOVE    RECE10-KOHNUM (IDX)     TO  WRK-KOHNUM
            MOVE    RECE10-KOHID (IDX)      TO  WRK-KOHID
@@ -797,7 +801,10 @@
            MOVE    2                       TO  MF101-KBN
       *
       *---(01.00.03) LINE ADD START -----------------------------------
-           INITIALIZE                          FLG-ERR
+      *---(01.00.05) LINE ADD START -----------------------------------
+      *     INITIALIZE                          FLG-ERR
+           MOVE    1                       TO  FLG-ERR
+      *---(01.00.05) LINE ADD END   -----------------------------------
       *    公費の助成があるかどうか
            MOVE    RECE02-KOHNUM (IDX)     TO  WRK-KOHNUM
            MOVE    RECE02-KOHID (IDX)      TO  WRK-KOHID
@@ -1778,19 +1785,31 @@
       *    計算負担金に差が有る場合、地方公費の助成があったと判定する
              IF   SYU-KOH-HKNNUM(IDX3)     =  WRK-KOHNUM
                IF     IDX3                 =  1
+      *---(01.00.05) LINE ADD START -----------------------------------
+      *           IF  SYU-SYUCOMPFTN-ENTANI
+      *                                 > SYU-KOH-COMPFTN-ENTANI(IDX3)
+      *             CONTINUE
+      *           ELSE
+      *             MOVE     1          TO  FLG-ERR
+      *           END-IF
                  IF  SYU-SYUCOMPFTN-ENTANI
                                        > SYU-KOH-COMPFTN-ENTANI(IDX3)
-                   CONTINUE
-                 ELSE
-                   MOVE     1          TO  FLG-ERR
+                   MOVE     ZERO        TO  FLG-ERR
                  END-IF
+      *---(01.00.05) LINE ADD END   -----------------------------------
                ELSE
+      *---(01.00.05) LINE ADD START -----------------------------------
+      *           IF  SYU-KOH-COMPFTN-ENTANI(IDX3 - 1)
+      *                                >  SYU-KOH-COMPFTN-ENTANI(IDX3)
+      *             CONTINUE
+      *           ELSE
+      *             MOVE     1          TO  FLG-ERR
+      *           END-IF
                  IF  SYU-KOH-COMPFTN-ENTANI(IDX3 - 1)
                                       >  SYU-KOH-COMPFTN-ENTANI(IDX3)
-                   CONTINUE
-                 ELSE
-                   MOVE     1          TO  FLG-ERR
+                   MOVE     ZERO        TO  FLG-ERR
                  END-IF
+      *---(01.00.05) LINE ADD END   -----------------------------------
                END-IF
              END-IF
            END-PERFORM
