@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/08/12  医療機関ｺｰﾄﾞはHOSPCDを使用する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -368,7 +369,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU1615"    TO  JOB-PGID
-           MOVE    "広域連合・診療報酬請求書"
+           MOVE    "後期高齢者請求書"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -743,7 +744,12 @@
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1615-KAISETUNAME
       *    医療機関コード
-           MOVE    SYS-1001-HOSPCDN    TO  SKT1615-HOSPCD
+      *=== 医療機関コードはHOSPCDを使用 by Yoshikawa(2008/08/12) start
+      *     MOVE    SYS-1001-HOSPCDN    TO  SKT1615-HOSPCD
+           MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT      TO  SKT1615-HOSPCD
+      *=== 医療機関コードはHOSPCDを使用 by Yoshikawa(2008/08/12) end
       *    保険者番号
            MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
@@ -850,26 +856,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
