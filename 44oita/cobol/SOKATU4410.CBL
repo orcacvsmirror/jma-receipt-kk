@@ -32,6 +32,7 @@
       *                                  °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.02    ÆâÅÄ    08/04/30    £´·î²þÀµ¤ËÈ¼¤¦½¤Àµ
       *                                  SPA-AREA½é´ü²½
+      *  01.00.03    µÈÀî    08/08/01    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -109,6 +110,9 @@
       *
            COPY    "SKT4410.INC".
            COPY    "SKT4420.INC".
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+           COPY    "SKT4415.INC".
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
       *
       *    ¥¹¥ÑÎÎ°è
        01  STS-AREA.
@@ -647,6 +651,12 @@
                END-IF
            END-IF
       *
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+           IF  (RECE10-RJNHKNNUM  NOT =  SPACE)
+           OR  (RECE10-HKNNUM  =  "067"  AND  RECE10-AGE  >=  70)
+               MOVE    1                   TO  SKT4410TMP-SYUTURYOKU2
+           END-IF
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
       *    Ë¡Äê³°µëÉÕÈ½Äê
            IF     (RECE10-RJNHKNNUM        =   SPACE)
            AND    (RECE10-HKNJANUM-S(3:1)  =   "3"  )
@@ -755,7 +765,10 @@
                ELSE
                    MOVE    11      TO  IDX1
                END-IF
-               MOVE    1   TO  SKT4410TMP-PAGE-FLG2
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+      *         MOVE    1   TO  SKT4410TMP-PAGE-FLG2
+               MOVE    1   TO  SKT4410TMP-PAGE-FLG3
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
            ELSE
                MOVE    1   TO  SKT4410TMP-PAGE-FLG1
       *        °ìÈÌ¹ñÊÝ
@@ -786,9 +799,14 @@
                ELSE
                    IF      RECE10-AGE  >=  70
                        IF      RECE10-KYURATE  =   9
-                           MOVE    6       TO  IDX1
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+      *                     MOVE    6       TO  IDX1
+      *                 ELSE
+      *                     MOVE    7       TO  IDX1
+                           MOVE    5       TO  IDX1
                        ELSE
-                           MOVE    7       TO  IDX1
+                           MOVE    8       TO  IDX1
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
                        END-IF
                    ELSE
                        IF      RECE10-HONKZKKBN    =   "1"
@@ -1004,7 +1022,21 @@
                        MOVE  1  TO  FLG-PASS
                    END-PERFORM
                END-IF
-
+      *
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+               IF      SKT4410TMP-PAGE-FLG3   =   1
+      *
+      *            Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+                   PERFORM 312-HEAD-HEN-SEC
+      *
+      *            Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
+                   PERFORM 322-BODY-HEN-SEC
+      *
+      *            Ä¢É¼°õºþ½èÍý
+                   PERFORM 332-PRINT-OUT-SEC
+               END-IF
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
+      *
       *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
                PERFORM  900-TMP-READ-SEC
            END-PERFORM
@@ -1229,53 +1261,58 @@
       *****************************************************************
        321-BODY-HEN-SEC      SECTION.
       *
-      *    ¸øÈñ¤Î°Ù¤Î£²ËçÌÜ°Ê¾å¤«
-           IF      WRK-CNT     =   1
-               PERFORM VARYING IDX1    FROM    10  BY  1
-                       UNTIL   IDX1    >       11
-                   COMPUTE IDX4    =   IDX1    -   9
-                   PERFORM VARYING IDX2    FROM    1   BY  1
-                           UNTIL   IDX2    >       2
-      *
-      *                ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
-                       MOVE    SKT4410TMP-KENSU(IDX1 IDX2) TO  WRK-Z5
-                       MOVE    WRK-Z5  TO  SKT4420-KENSU(IDX4 IDX2)
-      *
-      *                ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
-                       MOVE    SKT4410TMP-NISSU(IDX1 IDX2) TO  WRK-Z5
-                       MOVE    WRK-Z5  TO  SKT4420-NISSU(IDX4 IDX2)
-      *
-      *                ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
-                       MOVE    SKT4410TMP-TENSU(IDX1 IDX2) TO  WRK-Z9
-                       MOVE    WRK-Z9  TO  SKT4420-TENSU(IDX4 IDX2)
-      *
-      *                ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
-                       MOVE    SKT4410TMP-ITBFTN(IDX1 IDX2)
-                                                           TO  WRK-Z9
-                       MOVE    WRK-Z9  TO  SKT4420-ITBFTN(IDX4 IDX2)
-                   END-PERFORM
-      *
-      *            ¿©»öÎÅÍÜ¡§·ï¿ô
-                   MOVE    SKT4410TMP-SKENSU(IDX1)     TO  WRK-Z5
-                   MOVE    WRK-Z5  TO  SKT4420-SKENSU(IDX4)
-      *
-      *            ¿©»öÎÅÍÜ¡§Æü¿ô
-                   MOVE    SKT4410TMP-SNISSU(IDX1)     TO  WRK-Z5
-                   MOVE    WRK-Z5  TO  SKT4420-SNISSU(IDX4)
-      *
-      *            ¿©»öÎÅÍÜ¡§¶â³Û
-                   MOVE    SKT4410TMP-SKINGK(IDX1)     TO  WRK-Z9
-                   MOVE    WRK-Z9  TO  SKT4420-SKINGK(IDX4)
-      *
-      *            ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
-                   MOVE    SKT4410TMP-SFTNGK(IDX1)     TO  WRK-Z9
-                   MOVE    WRK-Z9  TO  SKT4420-SFTNGK(IDX4)
-               END-PERFORM
-           END-IF
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+      **    ¸øÈñ¤Î°Ù¤Î£²ËçÌÜ°Ê¾å¤«
+      *     IF      WRK-CNT     =   1
+      *         PERFORM VARYING IDX1    FROM    10  BY  1
+      *                 UNTIL   IDX1    >       11
+      *             COMPUTE IDX4    =   IDX1    -   9
+      *             PERFORM VARYING IDX2    FROM    1   BY  1
+      *                     UNTIL   IDX2    >       2
+      **
+      **                ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+      *                 MOVE    SKT4410TMP-KENSU(IDX1 IDX2) TO  WRK-Z5
+      *                 MOVE    WRK-Z5  TO  SKT4420-KENSU(IDX4 IDX2)
+      **
+      **                ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
+      *                 MOVE    SKT4410TMP-NISSU(IDX1 IDX2) TO  WRK-Z5
+      *                 MOVE    WRK-Z5  TO  SKT4420-NISSU(IDX4 IDX2)
+      **
+      **                ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+      *                 MOVE    SKT4410TMP-TENSU(IDX1 IDX2) TO  WRK-Z9
+      *                 MOVE    WRK-Z9  TO  SKT4420-TENSU(IDX4 IDX2)
+      **
+      **                ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
+      *                 MOVE    SKT4410TMP-ITBFTN(IDX1 IDX2)
+      *                                                     TO  WRK-Z9
+      *                 MOVE    WRK-Z9  TO  SKT4420-ITBFTN(IDX4 IDX2)
+      *             END-PERFORM
+      **
+      **            ¿©»öÎÅÍÜ¡§·ï¿ô
+      *             MOVE    SKT4410TMP-SKENSU(IDX1)     TO  WRK-Z5
+      *             MOVE    WRK-Z5  TO  SKT4420-SKENSU(IDX4)
+      **
+      **            ¿©»öÎÅÍÜ¡§Æü¿ô
+      *             MOVE    SKT4410TMP-SNISSU(IDX1)     TO  WRK-Z5
+      *             MOVE    WRK-Z5  TO  SKT4420-SNISSU(IDX4)
+      **
+      **            ¿©»öÎÅÍÜ¡§¶â³Û
+      *             MOVE    SKT4410TMP-SKINGK(IDX1)     TO  WRK-Z9
+      *             MOVE    WRK-Z9  TO  SKT4420-SKINGK(IDX4)
+      **
+      **            ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+      *             MOVE    SKT4410TMP-SFTNGK(IDX1)     TO  WRK-Z9
+      *             MOVE    WRK-Z9  TO  SKT4420-SFTNGK(IDX4)
+      *         END-PERFORM
+      *     END-IF
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
       *
       *    ¸øÈñ¤Î°õ»ú
            PERFORM VARYING IDX3    FROM    1   BY  1
-                   UNTIL   IDX3    >       4
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+      *             UNTIL   IDX3    >       4
+                   UNTIL   IDX3    >       2
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
                    OR      WRK-CNT >       20
                    OR      SKT4410TMP-KOHNUM(WRK-CNT)  =   SPACE
                PERFORM VARYING IDX2    FROM    1   BY  1
@@ -1370,6 +1407,149 @@
        331-PRINT-OUT-EXT.
            EXIT.
 057400*
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) start
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<¥Ø¥Ã¥À¡¼Éô>½èÍý¡ÊµìÏ·¿Í¡Ë
+      *****************************************************************
+       312-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1                     TO  CNT-PAGE
+      *
+           INITIALIZE  SKT4415
+      *    ¿ÇÎÅÇ¯·î
+           MOVE    WRK-SRYYMWH             TO  SKT4415-SRYYM
+      *
+      *    ÀÁµáÇ¯·îÆü
+           MOVE    WRK-SEIYMDWH            TO  SKT4415-SEIYMD
+      *
+      *    °åÎÅµ¡´Ø¥³¡¼¥É
+           MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SKT4415-HOSPCD
+      *
+      *    °åÎÅµ¡´Ø½»½ê
+           MOVE    WRK-HOSPADRS            TO  SKT4415-ADRS
+      *
+      *    °åÎÅµ¡´ØÌ¾
+           MOVE    WRK-HOSPNAME            TO  SKT4415-HOSPNAME
+      *
+      *    ³«Àß¼ÔÌ¾
+           MOVE    SYS-1001-KAISETUNAME    TO  SKT4415-KAISETUNAME
+      *
+      *    ÊÝ¸±¼ÔÈÖ¹æ
+           MOVE    SKT4410TMP-HKNJANUM     TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SKT4415-HKNJANUM
+      *
+      *    ÊÝ¸±¼ÔÌ¾
+      *     MOVE    SKT4410TMP-HKNJANUM     TO  WRK-HKNJANUM
+      *     PERFORM 920-HKNJAINF-SET-SEC
+      *     MOVE    HKNJA-HKNJANAME         TO  SKT4415-HKNJANAME
+      *
+      *    ºßÁí¿Ç¡¦ºß°åÁí
+           IF      SKT4410TMP-ZAITAKU  =   "1"
+               MOVE    "ºß"                TO  SKT4415-ZAI1
+               MOVE    "¢þ"                TO  SKT4415-ZAI2
+           END-IF
+      *
+      *    ¥Ú¡¼¥¸ÈÖ¹æ
+           MOVE    CNT-PAGE                TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SKT4415-NO
+           .
+       312-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ¹Ô>½èÍý¡ÊµìÏ·¿Í¡Ë
+      *****************************************************************
+       322-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM VARYING IDX1    FROM    10  BY  1
+                   UNTIL   IDX1    >       11
+               COMPUTE IDX4    =   IDX1    -   9
+               PERFORM VARYING IDX2    FROM    1   BY  1
+                       UNTIL   IDX2    >       2
+      *
+      *            ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+                   MOVE    SKT4410TMP-KENSU(IDX1 IDX2) TO  WRK-Z5
+                   MOVE    WRK-Z5  TO  SKT4415-KENSU(IDX4 IDX2)
+      *
+      *            ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
+                   MOVE    SKT4410TMP-NISSU(IDX1 IDX2) TO  WRK-Z5
+                   MOVE    WRK-Z5  TO  SKT4415-NISSU(IDX4 IDX2)
+      *
+      *            ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+                   MOVE    SKT4410TMP-TENSU(IDX1 IDX2) TO  WRK-Z9
+                   MOVE    WRK-Z9  TO  SKT4415-TENSU(IDX4 IDX2)
+      *
+      *            ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
+                   MOVE    SKT4410TMP-ITBFTN(IDX1 IDX2)
+                                                       TO  WRK-Z9
+                   MOVE    WRK-Z9  TO  SKT4415-ITBFTN(IDX4 IDX2)
+               END-PERFORM
+      *
+      *        ¿©»öÎÅÍÜ¡§·ï¿ô
+               MOVE    SKT4410TMP-SKENSU(IDX1)     TO  WRK-Z5
+               MOVE    WRK-Z5  TO  SKT4415-S-KENSU(IDX4)
+      *
+      *        ¿©»öÎÅÍÜ¡§Æü¿ô
+               MOVE    SKT4410TMP-SNISSU(IDX1)     TO  WRK-Z5
+               MOVE    WRK-Z5  TO  SKT4415-S-NISSU(IDX4)
+      *
+      *        ¿©»öÎÅÍÜ¡§¶â³Û
+               MOVE    SKT4410TMP-SKINGK(IDX1)     TO  WRK-Z9
+               MOVE    WRK-Z9  TO  SKT4415-S-KINGK(IDX4)
+      *
+      *        ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
+               MOVE    SKT4410TMP-SFTNGK(IDX1)     TO  WRK-Z9
+               MOVE    WRK-Z9  TO  SKT4415-S-FTNGK(IDX4)
+           END-PERFORM
+      *
+           .
+       322-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼°õºþ½èÍý¡ÊµìÏ·¿Í¡Ë
+      *****************************************************************
+       332-PRINT-OUT-SEC                SECTION.
+      *
+           DISPLAY  "PRINT"
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE    "SKT4415.red"       TO  SPRT-PRTID
+           MOVE    "¿ÇÎÅÊó½·ÀÁµá½ñ"    TO  SPRT-TITLE
+           MOVE    SKT4415             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       332-PRINT-OUT-EXT.
+           EXIT.
+      *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/08/01) end
       *****************************************************************
       *    ¸øÈñ¥½¡¼¥È½èÍý
       *****************************************************************

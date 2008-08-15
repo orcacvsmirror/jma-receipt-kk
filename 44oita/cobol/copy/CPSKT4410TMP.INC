@@ -19,16 +19,23 @@
       *    診療報酬請求書     COPY (CPSKT4410TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/08/01  帳票様式の変更に伴う修正
       ************************************************************
        01  SKT4410TMP-REC.
            03  SKT4410TMP-KEY.
                05  SKT4410TMP-SYUTURYOKU            PIC  9(02).
                05  SKT4410TMP-HKNJANUM              PIC  X(06).
+      *=== 帳票様式の変更 by Yoshikawa(2008/08/01) start
+               05  SKT4410TMP-SYUTURYOKU2           PIC  9(01).
+      *=== 帳票様式の変更 by Yoshikawa(2008/08/01) end
                05  SKT4410TMP-ZAITAKU               PIC  X(01).
                05  SKT4410TMP-KYURATE               PIC  9(02).
            03  SKT4410TMP-PAGE-FLG1                 PIC  9(01).
            03  SKT4410TMP-PAGE-FLG2                 PIC  9(01).
+      *=== 帳票様式の変更 by Yoshikawa(2008/08/01) start
+           03  SKT4410TMP-PAGE-FLG3                 PIC  9(01).
+      *=== 帳票様式の変更 by Yoshikawa(2008/08/01) end
            03  SKT4410TMP-HKN-AREA  OCCURS  11.
                05  SKT4410TMP-NYUGAI-TBL  OCCURS  2.
                    07  SKT4410TMP-KENSU             PIC  9(05).
