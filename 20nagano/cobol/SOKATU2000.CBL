@@ -33,6 +33,7 @@
       *  01.00.02    内田    08/04/23    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.03    内田    08/05/28    後期高齢者のみでも印字する
+      *  01.00.04    内田    08/08/13    後期高齢者のみの場合でも印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -351,7 +352,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *             UNTIL       FLG-END     =   1
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            PERFORM 300-END-SEC
       *
@@ -612,7 +615,9 @@
            OPEN    I-O     SKT2001TMP-FILE
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-           MOVE    ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE    ZERO    TO      FLG-END
+      *---(01.00.04) LINE ADD END   ------------------------------------
            MOVE    ZERO    TO      FLG-UPD
       *
            PERFORM 2001-KOKUHO-SYUKEI-SEC
@@ -1008,6 +1013,9 @@
            IF      SKT2001TMP-GOKEIKBN     =   "1"
       *---(01.00.03) LINE ADD START ------------------------------------
              IF  SKT2001TMP-PREFKBN  =  SKT2000TMP-PREFKBN
+      *---(01.00.04) LINE ADD START ------------------------------------
+             OR  (SKT2000TMP-PREFKBN  NOT =  "1"  OR  "2")
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD END   ------------------------------------
                MOVE    SKT2001TMP-KENSU    TO  WRK-Z5
                MOVE    WRK-Z5              TO  SKT2000-KGKENSU
