@@ -59,9 +59,9 @@
       * ›∏±¡Ì≈¿øÙ
                05  SC15-TENSU.
                    07  SC15-TENSU-OCC  PIC  X(02) OCCURS 5.
-      *∑Î≥À°¶¿∫ø¿∂Ë ¨
-               05  SC15-KESEKBN        PIC  X(02) OCCURS 2.
-      *∑Î≥À°¶¿∫ø¿≈¿øÙ
+      *∏¯»Ò»÷πÊ
+               05  SC15-HBTNUM         PIC  X(02).
+      *∏¯»Ò…È√¥≈¿øÙ
                05  SC15-KESETEN        PIC  X(10).
       *ø«Œ≈≤ Ã‹
                05  SC15-SRYKA          PIC  X(02).

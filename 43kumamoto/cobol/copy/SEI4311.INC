@@ -132,3 +132,5 @@
            03  MF100-KESETEN             PIC  9(09).
       *∑Î≥À°¶¿∫ø¿∂Ë ¨
            03  MF100-KESEKBN             PIC  9(01).
+      *∏¯»Ò»÷πÊ
+           03  MF100-ETC-KOHNUM          PIC  X(03).

@@ -31,6 +31,8 @@
       *  01.00.01    内田    07/09/09    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    内田    08/08/07    帳票様式の変更に伴う修正
+      *                                  診療科は旧総合病院の場合に印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -101,6 +103,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *---(01.00.02) LINE ADD START ------------------------------------
+           03  FLG-HKNNUM     PIC 9(01).
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -227,6 +232,12 @@
       *　　保険者情報
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *
+      *　　保険情報
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    患者情報
        01  PTINF-REC.
@@ -782,13 +793,18 @@
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT         TO  SC15-TENSU(IDX)
       *
+      *---(01.00.02) LINE ADD START ------------------------------------
       *    結精区分
-             EVALUATE  MF100-KESEKBN
-             WHEN 1
-               MOVE    "○"                TO  SC15-KESEKBN(IDX 1)
-             WHEN 2
-               MOVE    "○"                TO  SC15-KESEKBN(IDX 2)
-             END-EVALUATE
+      *       EVALUATE  MF100-KESEKBN
+      *       WHEN 1
+      *         MOVE    "○"                TO  SC15-KESEKBN(IDX 1)
+      *       WHEN 2
+      *         MOVE    "○"                TO  SC15-KESEKBN(IDX 2)
+      *       END-EVALUATE
+      *    公費番号
+             PERFORM  900-HKNNUM-SET-SEC
+             MOVE  HKN-HBTNUM              TO  SC15-HBTNUM(IDX)
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    公費負担点数
              MOVE   MF100-KESETEN          TO  WRK-Z5
@@ -797,9 +813,15 @@
              MOVE    WRK-OUT-INPUT         TO  SC15-KESETEN(IDX)
       *
       *    診療科目
-             IF     MF100-SRYKA      NOT   =   "00"
-               MOVE MF100-SRYKA            TO  SC15-SRYKA(IDX)
+      *---(01.00.02) LINE ADD START ------------------------------------
+             IF  SYS-1001-HOSPSBT1  =  1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+               IF     MF100-SRYKA    NOT   =   "00"
+                 MOVE MF100-SRYKA          TO  SC15-SRYKA(IDX)
+               END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
              END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    以前診療分
              IF     MF100-SRYYM      NOT   =   LNK-PRTKANRI-SRYYM
@@ -925,16 +947,27 @@
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4 OR
                     SYU-KOH-HKNNUM(IDX)  =  SPACE
-             EVALUATE  SYU-KOH-HKNNUM(IDX)
-             WHEN "010"
-               MOVE    1                  TO  MF100-KESEKBN
-               ADD     SYU-TOTAL-HKNTEN   TO  MF100-KESETEN
-               MOVE    4                  TO  IDX
-             WHEN "021"
-               MOVE    2                  TO  MF100-KESEKBN
-               ADD     SYU-TOTAL-HKNTEN   TO  MF100-KESETEN
-               MOVE    4                  TO  IDX
-             END-EVALUATE
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *       EVALUATE  SYU-KOH-HKNNUM(IDX)
+      *       WHEN "010"
+      *         MOVE    1                  TO  MF100-KESEKBN
+      *         ADD     SYU-TOTAL-HKNTEN   TO  MF100-KESETEN
+      *         MOVE    4                  TO  IDX
+      *       WHEN "021"
+      *         MOVE    2                  TO  MF100-KESEKBN
+      *         ADD     SYU-TOTAL-HKNTEN   TO  MF100-KESETEN
+      *         MOVE    4                  TO  IDX
+      *       END-EVALUATE
+      *      全国公費チェック
+             IF   SYU-KOH-HKNNUM(IDX)  NOT =  "027"
+             AND  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0"
+               IF  MF100-ETC-KOHNUM  =  SPACE
+               OR  MF100-ETC-KOHNUM  =  SYU-KOH-HKNNUM(IDX)
+                 MOVE  SYU-KOH-HKNNUM(IDX)  TO  MF100-ETC-KOHNUM
+                 ADD   SYU-TOTAL-HKNTEN     TO  MF100-KESETEN
+                 MOVE  4                    TO  IDX
+             END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
            END-PERFORM
       *
@@ -1377,7 +1410,70 @@
            .
        800-PTINF-READ-EXT.
            EXIT.
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *****************************************************************
+      *   保険番号情報セット
+      *****************************************************************
+       900-HKNNUM-SET-SEC  SECTION.
       *
+           INITIALIZE  HKNNUM-REC
+           MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
+           MOVE  MF100-ETC-KOHNUM     TO  HKN-HKNNUM
+           MOVE  MF100-SRYYM          TO  HKN-TEKSTYMD(1:6)
+                                          HKN-TEKEDYMD(1:6)
+           MOVE  "99"                 TO  HKN-TEKSTYMD(7:2)
+           MOVE  "00"                 TO  HKN-TEKEDYMD(7:2)
+           MOVE  HKNNUM-REC           TO  MCPDATA-REC
+           MOVE  "DBSELECT"           TO  MCP-FUNC
+           MOVE  "tbl_hknnum"         TO  MCP-TABLE
+           MOVE  "key5"               TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  "tbl_hknnum"       TO  MCP-TABLE
+             MOVE  "key5"             TO  MCP-PATHNAME
+             PERFORM  900-HKNNUM-READ-SEC
+           ELSE
+             DISPLAY  "HKNNUM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"    TO  MCP-FUNC
+           MOVE  "tbl_hknnum"       TO  MCP-TABLE
+           MOVE  "key5"             TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+      *
+           .
+       900-HKNNUM-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険者情報読込
+      *****************************************************************
+       900-HKNNUM-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  HKNNUM-REC
+             MOVE  ZERO         TO  FLG-HKNNUM
+           ELSE
+             INITIALIZE   HKNNUM-REC
+             MOVE  1  TO  FLG-HKNNUM
+           END-IF
+      *
+           .
+       900-HKNNUM-READ-EXT.
+           EXIT.
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
