@@ -31,6 +31,7 @@
       *  01.00.01    内田    07/09/09    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.02    内田    08/08/07    診療科は旧総合病院の場合に印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -805,9 +806,15 @@
              MOVE    WRK-OUT-INPUT         TO  SC13-KESETEN(IDX)
       *
       *    診療科目
-             IF     MF100-SRYKA      NOT   =   "00"
-               MOVE MF100-SRYKA            TO  SC13-SRYKA(IDX)
+      *---(01.00.02) LINE ADD START ------------------------------------
+             IF  SYS-1001-HOSPSBT1  =  1
+      *---(01.00.02) LINE ADD END   ------------------------------------
+               IF     MF100-SRYKA      NOT   =   "00"
+                 MOVE MF100-SRYKA            TO  SC13-SRYKA(IDX)
+               END-IF
+      *---(01.00.02) LINE ADD START ------------------------------------
              END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    以前診療分
              IF     MF100-SRYYM      NOT   =   LNK-PRTKANRI-SRYYM
