@@ -40,6 +40,7 @@
       *                                  医療機関情報を参照
       *  01.00.06    内田    08/03/13    精神通院の場合、結精点数は印字しない
       *  01.00.07    内田    08/05/01    ３歳未満の判定を６歳へ
+      *  01.00.08    内田    08/08/15    ６５歳以上を印字対象とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -768,11 +769,26 @@
       *   給付割合設定
            EVALUATE  RECE02-KYURATE
            WHEN 10
-             MOVE    "9"     TO    MF101-KYURATE
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *       MOVE    "9"     TO    MF101-KYURATE
+             IF   (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+             AND  (RECE02-FLG (2)   =  1)
+                 MOVE    "8"     TO    MF101-KYURATE
+             ELSE
+                 MOVE    "9"     TO    MF101-KYURATE
+             END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            WHEN 20
              MOVE    "8"     TO    MF101-KYURATE
            WHEN 30
-             MOVE    SPACE   TO    MF101-KYURATE
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *       MOVE    SPACE   TO    MF101-KYURATE
+             IF  RECE02-AGE  >=  65
+               MOVE    "7"     TO    MF101-KYURATE
+             ELSE
+               MOVE    SPACE   TO    MF101-KYURATE
+             END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
            WHEN  0
              MOVE    "0"     TO    MF101-KYURATE
            END-EVALUATE
@@ -809,6 +825,12 @@
              END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
            END-IF
+      *---(01.00.08) LINE ADD START ------------------------------------
+      *    前期高齢者対応（5,6が不要な為、全てレセプト種別とはできない）
+           IF  RECE02-AGE  >=  70
+               MOVE  RECE02-RECESYUBETU (4:1)  TO  MF101-NYUGAIKBN
+           END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
@@ -1473,10 +1495,16 @@
                    AND     PTINF-TSTPTNUMKBN   =   "1"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF   
+      *---(01.00.08) LINE ADD START ------------------------------------
       *    ６５歳以上は老人に分類するので対象外
-                   IF    RECE02-AGE    >= 65
+      *             IF    RECE02-AGE    >= 65
+      *               GO    TO    900-KOHSKY-READ-SEC
+      *             END-IF
+                   IF   (RECE02-SRYYM  <  WRK-CONS-SRYYM-200804)
+                   AND  (RECE02-AGE    >= 65)
                      GO    TO    900-KOHSKY-READ-SEC
                    END-IF
+      *---(01.00.08) LINE ADD END   ------------------------------------
       * 
       *        個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
