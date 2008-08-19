@@ -18,6 +18,7 @@
       ************************************************************
       *    総括表一時ファイル           CPSKT2205TMP.INC           *
       *  01.00.01    伊藤    08/04/26    帳票様式に伴う修正
+      *  01.00.02    吉川    08/06/23    キーに診療年月追加
       ************************************************************
        01  SKT2205TMP-REC.
            03  SKT2205TMP-KEY.
@@ -25,6 +26,9 @@
                05  SKT2205TMP-KBN            PIC  9(01).
                05  SKT2205TMP-KUMIAI         PIC  9(01).
                05  SKT2205TMP-HKNJANUM       PIC  X(02).
+      *=== 診療年月追加 by Yoshikawa(2008/06/23) start
+               05  SKT2205TMP-SRYYM          PIC  9(06).
+      *=== 診療年月追加 by Yoshikawa(2008/06/23) end
            03  SKT2205TMP-DATA-TBL       OCCURS 26.
                05  SKT2205TMP-KENSU          PIC  9(06).
                05  SKT2205TMP-NISSU          PIC  9(10).

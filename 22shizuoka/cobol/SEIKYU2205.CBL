@@ -32,6 +32,7 @@
       *  01.00.01       吉川    2007/10/03   日レセver4.0対応
       *                                      システム管理マスタ「1901」の
       *                                      医療機関情報を参照
+      *  01.00.02       内田    2008/08/15   静岡市の保険者番号の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -762,6 +763,12 @@
       *    市町村名
            INITIALIZE                             WRK-HKNJANUM
            MOVE  MF100-FTNJANUM(3:5)         TO   WRK-HKNJANUM
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *    静岡市はまとめる（保険者番号の変更）
+           IF  MF100-FTNJANUM(3:5)  =  "22001"
+             MOVE  "22400"                   TO   WRK-HKNJANUM
+           END-IF
+      *---(01.00.02) LINE ADD END   ------------------------------------
            PERFORM  920-HKNJAINF-SET-SEC
            IF    HKNJA-HKNJANAME             =    SPACE
              MOVE  "長  様"                  TO   SC05-CITYNAME(14:6)
