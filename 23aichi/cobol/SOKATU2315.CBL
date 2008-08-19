@@ -29,6 +29,7 @@
       * Maj/Min/Rev  饯赖荚  泣烧        柒推
       *  01.00.01    等李    2008/05/20  付曲凤眶が磅机されない稍恶圭饯赖
       *  01.00.02    等李    2008/06/24  浩非腕に礁纷する滦据给锐纳裁
+      *  01.00.03    等李    2008/08/14  浩非腕に１８８澈碰荚纳裁
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -692,6 +693,9 @@
              OR  RECE10-KOHNUM(IDXX)  =  "053"
              OR  RECE10-KOHNUM(IDXX)  =  "091"
              OR  RECE10-KOHNUM(IDXX)  =  "189"
+      *=== 滦据给锐(188)纳裁 by Yoshikawa(2008/08/14) start
+             OR  RECE10-KOHNUM(IDXX)  =  "188"
+      *=== 滦据给锐(188)纳裁 by Yoshikawa(2008/08/14) end
                  ADD    1                      TO  SUM-KOHKENSU
       *=== 滦据给锐纳裁 by Yoshikawa(2008/06/24) end
              END-IF
