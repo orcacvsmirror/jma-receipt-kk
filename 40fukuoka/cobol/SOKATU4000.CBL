@@ -47,6 +47,8 @@
       *  01.00.12    内田    08/05/01    後期高齢印刷処理判定修正
       *  01.00.13    内田    08/07/09    後期高齢のみ、乳障母のみの場合
       *                                  でも印刷する
+      *  01.00.14    内田    08/08/15    紙レセ時、不要な紙が出るのを修正
+      *                                  後期高齢者の保険者番号の全角表示
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -802,7 +804,10 @@
            ELSE
       *      レセ電で返戻、もしくは紙レセで当月か
              IF  (WRK-PARA-SYOKBN  =  2  AND
-                  SYS-2005-KKHRECEKBN  NOT = ZERO  OR  SPACE)
+      *---(01.00.14) LINE ADD START ------------------------------------
+      *            SYS-2005-KKHRECEKBN  NOT = ZERO  OR  SPACE)
+                  SYS-2005-KKHRECEKBN  NOT = ZERO  AND  SPACE)
+      *---(01.00.14) LINE ADD END   ------------------------------------
              OR  (WRK-PARA-SYOKBN  =  1  AND
                   SYS-2005-KKHRECEKBN  =  ZERO  OR  SPACE)
       *      乳障母のみの場合
@@ -1354,7 +1359,13 @@
              END-IF
       *    後期高齢者
              IF  FLG-PRINT2  NOT =  1
-               MOVE  SKT4005TMP-PERFNUM  TO  SKT4000-KO-HKNJANUM(IDX1)
+      *---(01.00.14) LINE ADD START ------------------------------------
+      *         MOVE  SKT4005TMP-PERFNUM  TO  SKT4000-KO-HKNJANUM(IDX1)
+               INITIALIZE                       WRK-MAE-INPUT
+               MOVE    SKT4005TMP-PERFNUM  TO   WRK-MAE-INPUT
+               PERFORM 2009-HENKAN-SEC
+               MOVE    WRK-OUT-INPUT     TO   SKT4000-KO-HKNJANUM(IDX1)
+      *---(01.00.14) LINE ADD END   ------------------------------------
       *
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >     2
