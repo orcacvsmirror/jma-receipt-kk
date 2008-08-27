@@ -35,6 +35,8 @@
       *  01.00.04    内田    07/10/23    保険番号190の公費再掲欄は
       *                                  一部負担金を印字しない
       *  01.00.05    内田    08/05/03    帳票様式の変更に伴う修正
+      *  01.00.06    吉川    08/08/21    保険は県内でも公費が県外の場合
+      *                                  県外として集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -136,6 +138,10 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) start
+           03  FLG-PTKOHINF        PIC 9(01).
+           03  FLG-TAKOH           PIC 9(01).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -178,6 +184,10 @@
                05  WRK-KOHNUM      PIC  X(03).
                05  WRK-FTNRATE     PIC  9(01).
            03  WRK-KENNAME         PIC  X(10).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) start
+           03  WRK-PTKOHNUM        PIC X(03).
+           03  WRK-FTNJANUM        PIC X(08).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) end
       *    ファイル名称領域
            03  FILE-NAME           PIC X(512).
       *
@@ -260,6 +270,12 @@
       *    保険番号
        01  HKNNUM-REC.
            COPY    "CPHKNNUM.INC".
+      *
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) start
+      *    患者公費情報
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) end
       *
       *    医療機関情報情報
            COPY    "CPSK1001.INC".
@@ -642,11 +658,40 @@
            ELSE
                MOVE    1           TO  SKT4510TMP-SYUTURYOKU
            END-IF
-      *---(01.00.05) LINE ADD START ------------------------------------
-           IF  RECE10-PREFKBN  =  2
-               MOVE    2           TO  SKT4510TMP-SYUTURYOKU
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     IF  RECE10-PREFKBN  =  2
+      *         MOVE    2           TO  SKT4510TMP-SYUTURYOKU
+      *     END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *    県内・県外判定
+           IF  RECE10-PREFKBN  =  "1"
+      *        県外公費検索
+               MOVE   ZERO         TO  FLG-TAKOH
+               PERFORM  VARYING  IDX1  FROM  1  BY  1
+                        UNTIL    IDX1  >     4
+                        OR       RECE10-KOHNUM(IDX1)  =  SPACE
+                        OR       FLG-TAKOH            =  1
+      *          原爆を除く全国公費及び熊本県水俣病のみ対象
+                 IF  (RECE10-KOHNUM(IDX1)(1:1)  =  "0"  AND
+                      RECE10-KOHNUM(IDX1)   NOT =  "019")
+                 OR  RECE10-KOHNUM(IDX1)  =  "145"
+                   MOVE  RECE10-KOHNUM(IDX1)   TO  WRK-PTKOHNUM
+      *            患者公費情報読込
+                   PERFORM  900-PTKOHINF-SET-SEC
+                 END-IF
+               END-PERFORM
+      *
+      *        県外の公費があったか判定
+               IF  FLG-TAKOH  =  1
+                   MOVE  2     TO  SKT4510TMP-SYUTURYOKU
+               ELSE
+                   MOVE  1     TO  SKT4510TMP-SYUTURYOKU
+               END-IF
+           ELSE
+               MOVE    2       TO  SKT4510TMP-SYUTURYOKU
            END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) end
       *
       *    国保組合の法定外給付判定
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -2250,6 +2295,81 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) start
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-SET-SEC  SECTION.
+      *
+           INITIALIZE  PTKOHINF-REC
+           MOVE  SPA-HOSPNUM               TO  PTKOH-HOSPNUM
+           MOVE  RECE10-PTID               TO  PTKOH-PTID
+           MOVE  WRK-PTKOHNUM              TO  PTKOH-KOHNUM
+      *
+           MOVE  PTKOHINF-REC              TO  MCPDATA-REC
+           MOVE  "DBSELECT"                TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"               USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_ptkohinf"        TO  MCP-TABLE
+             MOVE    "key4"                TO  MCP-PATHNAME
+             PERFORM  900-PTKOHINF-READ-SEC
+             PERFORM  UNTIL  FLG-PTKOHINF    =  1
+                 IF  (PTKOH-TEKSTYMD(1:6)   <=  RECE10-SRYYM
+                 AND  PTKOH-TEKEDYMD(1:6)   >=  RECE10-SRYYM)
+                 AND  PTKOH-SAKJOKBN    NOT  =  "1"
+      *              公費負担者番号で判定
+                     IF  PTKOH-FTNJANUM (3:2)  NOT =  "45"
+      *                他県公費
+                       MOVE  1        TO  FLG-TAKOH
+                     END-IF
+                     MOVE    1        TO  FLG-PTKOHINF
+                 ELSE
+                     PERFORM  900-PTKOHINF-READ-SEC
+                 END-IF
+             END-PERFORM
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"           TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"               USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       900-PTKOHINF-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"  TO  MCP-FUNC
+           CALL  "ORCDBMAIN"      USING
+                                  MCPAREA
+                                  MCPDATA-REC
+                                  SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  PTKOHINF-REC
+             MOVE  ZERO         TO  FLG-PTKOHINF
+           ELSE
+             INITIALIZE  PTKOHINF-REC
+             MOVE  1  TO  FLG-PTKOHINF
+           END-IF
+      *
+           .
+       900-PTKOHINF-READ-EXT.
+           EXIT.
+      *
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/08/21) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
