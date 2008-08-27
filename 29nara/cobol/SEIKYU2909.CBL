@@ -28,11 +28,12 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
-      *  01.00.01    内田    07/08/14    日レセver4.0対応
-      *                                  システム管理マスタ「1901」の
-      *                                  医療機関情報を参照
-      *                                  長期上位（974）は長期と同様の
-      *                                  処理をする
+      *  01.00.01    内田    07/08/14  日レセver4.0対応
+      *                                システム管理マスタ「1901」の
+      *                                医療機関情報を参照
+      *                                長期上位（974）は長期と同様の
+      *                                処理をする
+      *  01.00.02    内田    08/08/12  実日数、点数は保険のデータとする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -245,6 +246,11 @@
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
       *
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *
+      *    請求管理情報
+           COPY    "CPRCF010.INC".
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
@@ -652,6 +658,11 @@
              END-IF
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *    実日数、点数は保険のそれが必要なため請求管理から取得
+           PERFORM  900-SEIKYU-SELECT-SEC
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
            MOVE    ZERO    TO  FLG-ERR
@@ -1370,6 +1381,50 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *---(01.00.02) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    請求管理読込
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC            SECTION.
+      *
+           INITIALIZE                  RECE10-REC
+           MOVE    RECE02-KEY          TO  RECE10-KEY
+           MOVE    RECE10-REC          TO  MCPDATA-REC
+      *
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"       TO  MCP-FUNC
+               MOVE    "tbl_seikyu"    TO  MCP-TABLE
+               MOVE    "key"           TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"     USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE  MCPDATA-REC   TO  RECE10-REC
+      *    実日数、点数
+                   MOVE  RECE10-JNISSU (1)    TO  MF100-JNISSU
+                   MOVE  RECE10-TOTALTEN (1)  TO  MF100-TOTALTEN
+               END-IF
+           END-IF
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *---(01.00.02) LINE ADD END   ------------------------------------
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
