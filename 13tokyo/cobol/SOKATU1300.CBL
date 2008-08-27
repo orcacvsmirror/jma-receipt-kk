@@ -27,15 +27,16 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
-      *  01.00.01     山口    2005/11/17    在宅分には"マル在"と印字され
-      *                                     るよう修正  
-      *  01.00.02     内田    2007/03/27    返戻対応
-      *  01.00.03     内田    2007/09/12    Ver4.0対応
-      *                                     システム管理マスタ「1901」の
-      *                                     医療機関情報を参照
-      *  01.00.04     内田    2008/04/22    帳票様式の変更に伴う修正
-      *                                     SPA-AREA初期化
-      *  01.00.05     吉川    2008/06/20    国保がない場合でも印字する
+      *  01.00.01    山口    2005/11/17    在宅分には"マル在"と印字され
+      *                                    るよう修正  
+      *  01.00.02    内田    2007/03/27    返戻対応
+      *  01.00.03    内田    2007/09/12    Ver4.0対応
+      *                                    システム管理マスタ「1901」の
+      *                                    医療機関情報を参照
+      *  01.00.04    内田    2008/04/22    帳票様式の変更に伴う修正
+      *                                    SPA-AREA初期化
+      *  01.00.05    吉川    2008/06/20    国保がない場合でも印字する
+      *  01.00.06    内田    2008/08/19    在総診の診療があれば別集計とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -127,6 +128,9 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            03  FLG-KOUKI           PIC 9(01).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD START ------------------------------------
+           03  FLG-SRYACT          PIC 9(01).
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -216,6 +220,15 @@
       *    固定項目
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    在宅総合・在宅末期（在医総）
+           03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+           03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+           03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+           03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+           03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+           03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.04) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
@@ -254,7 +267,12 @@
       *    患者情報
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
-
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *
+      *    診療行為
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *---(01.00.06) LINE ADD END   ------------------------------------
       * 
       ******************************************************************
       *    サブプロ用  領域
@@ -602,6 +620,12 @@
       *
            MOVE    RECE10-NYUGAIKBN    TO  SKT1300TMP-NYUGAIKBN
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    在総診・在医総か
+           IF  RECE10-ZAITAKU  =  SPACE
+             PERFORM  960-SRYACT-SET-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -1351,7 +1375,101 @@
            .
        800-PTINF-READ-EXT.
            EXIT.
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *****************************************************************
+      *  診療情報セット
+      *****************************************************************
+       960-SRYACT-SET-SEC  SECTION.
       *
+             INITIALIZE  SRYACT-REC
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE10-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE10-PTID           TO  SRY-PTID
+             MOVE  RECE10-SRYYM          TO  SRY-SRYYM
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key4"              TO  MCP-PATHNAME
+               PERFORM  965-SRYACT-READ-SEC
+      *    在総診の患者取得
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  965-ZAISOU-CHK-SEC
+      *
+                 MOVE  "tbl_sryact"      TO  MCP-TABLE
+                 MOVE  "key4"            TO  MCP-PATHNAME
+                 PERFORM  965-SRYACT-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       960-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       965-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       965-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    在総診チェック
+      *****************************************************************
+       965-ZAISOU-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL   (IDX3  >     5) OR
+                            (SRY-SRYCD(IDX3)  =  SPACE)
+             IF  SRY-SRYKBN  =  "14"
+               IF  SRY-SRYCD(IDX3)  =  WRK-CONS-ZAITAKU1  OR
+                                       WRK-CONS-ZAITAKU2  OR
+                                       WRK-CONS-ZAITAKU3  OR
+                                       WRK-CONS-ZAITAKU4  OR
+                                       WRK-CONS-ZAITAKU5  OR
+                                       WRK-CONS-ZAITAKU6
+                 MOVE  1           TO  SKT1300TMP-ZAITAKU
+                 MOVE  1           TO  SKT1300TMP-SYUTURYOKU
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       965-ZAISOU-CHK-EXT.
+           EXIT.
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *****************************************************************
       *    システム管理マスタ読込
       *****************************************************************
