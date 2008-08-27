@@ -35,6 +35,7 @@
       *  01.00.04    内田    08/04/22  帳票様式の変更に伴う修正
       *                                政令指定都市は市でまとめる
       *                                SPA-AREA初期化
+      *  01.00.05    内田    08/08/27  岩手宮城内陸地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -636,6 +637,13 @@
       *         MOVE      3          TO   SKT0410TMP-SYUTURYOKU
       *       END-IF
            END-IF
+      *
+      *---(01.00.05) LINE ADD START ------------------------------------
+      *    岩手宮城内陸地震の対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  "1"              TO  SKT0410TMP-GENMEN
+           END-IF
+      *---(01.00.05) LINE ADD END   ------------------------------------
       *    在宅
            MOVE     RECE10-ZAITAKU  TO   SKT0410TMP-ZAITAKU
       *

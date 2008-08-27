@@ -26,6 +26,8 @@
                05    SKT0410TMP-SYUTURYOKU    PIC 9(01).
                05    SKT0410TMP-HKNJANUM      PIC X(06).
                05    SKT0410TMP-ZAITAKU       PIC X(01).
+      *    ¥‰ºÍµ‹æÎ∆‚Œ¶√œøÃ∏∫Ã»
+               05    SKT0410TMP-GENMEN        PIC X(01).
       *
            03    SKT0410TMP-WARI              PIC 9(02).
            03    SKT0410TMP-SEIKYU-TBL        OCCURS 13.

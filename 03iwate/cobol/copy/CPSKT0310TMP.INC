@@ -28,6 +28,8 @@
                05  SKT0310TMP-SYUTURYOKU           PIC  9(01).
       *    保険者番号
                05  SKT0310TMP-HKNJANUM             PIC  X(06).
+      *    岩手宮城内陸地震減免
+               05  SKT0310TMP-GENMEN               PIC  X(01).
       *  請求テーブル
            03  SKT0310TMP-SEIKYU-TBL     OCCURS  13.
       *      入外テーブル
