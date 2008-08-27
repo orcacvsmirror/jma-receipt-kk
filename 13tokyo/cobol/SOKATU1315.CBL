@@ -28,6 +28,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/08  都外は県毎にまとめる
+      *  01.00.02    吉川    2008/08/13  電話番号を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1054,8 +1055,10 @@
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1315-KAISETUNAME
+      *=== 電話番号を印字する by Yoshikawa(2008/08/13) start
       *    電話番号
-      *     MOVE    WRK-HOSPTEL         TO  SKT1315-TEL
+           MOVE    WRK-HOSPTEL         TO  SKT1315-TEL
+      *=== 電話番号を印字する by Yoshikawa(2008/08/13) end
       *    医療機関コード
            MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
@@ -1339,8 +1342,10 @@
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1325-KAISETUNAME
+      *=== 電話番号を印字する by Yoshikawa(2008/08/13) start
       *    電話番号
-      *     MOVE    WRK-HOSPTEL         TO  SKT1325-TEL
+           MOVE    WRK-HOSPTEL         TO  SKT1325-TEL
+      *=== 電話番号を印字する by Yoshikawa(2008/08/13) end
       *    医療機関コード
            MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
