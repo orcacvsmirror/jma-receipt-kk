@@ -34,6 +34,7 @@
       *  01.00.03    内田    07/09/19    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.04    内田    08/09/02    200804以降は６５歳以上は一般
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -206,6 +207,11 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *---(01.00.04) LINE ADD START ------------------------------------
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    DB参照用
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -611,6 +617,9 @@
            MOVE  RECE02-KOHFTNJANUM(IDZ)(5:3)   TO  WRK-KOBETUCITYNUM
       *
            IF    RECE02-AGE    >=  65
+      *---(01.00.04) LINE ADD START ------------------------------------
+           AND   RECE02-SRYYM  <  WRK-CONS-SRYYM-200804
+      *---(01.00.04) LINE ADD END   ------------------------------------
                MOVE    "2"      TO     MF100-KBN
            ELSE
                MOVE    "1"      TO     MF100-KBN
@@ -675,6 +684,9 @@
       *       ADD    WRK-TENSU2        TO    MF100-TENSU
       *     END-IF
            IF     RECE02-AGE     <  65
+      *---(01.00.04) LINE ADD START ------------------------------------
+           OR   RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804
+      *---(01.00.04) LINE ADD END   ------------------------------------
              ADD    WRK-TENSU2        TO    MF100-TENSU
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
