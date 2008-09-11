@@ -18,6 +18,9 @@
       ************************************************************
       *    総括表一時ファイル                                    *
       *
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者   日付        内容
+      *  01.00.01    吉川     08/09/10   公費名称追加
       ************************************************************
        01  SKT2020TMP-REC.
            03  SKT2020TMP-KEY.
@@ -39,6 +42,9 @@
            03  SKT2020TMP-KOH-AREA.
              05  SKT2020TMP-KOH-TBL    OCCURS  20.
                  07  SKT2020TMP-KOHNUM           PIC  X(03).
+      *=== 公費名称追加 by Yoshikawa(2008/09/10) start
+                 07  SKT2020TMP-KOHNAME        PIC  X(12).
+      *=== 公費名称追加 by Yoshikawa(2008/09/10) end
                  07  SKT2020TMP-K-NYUGAI-TBL  OCCURS  2.
                    09  SKT2020TMP-K-KENSU      PIC  9(06).
                    09  SKT2020TMP-K-NISSU      PIC  9(06).
