@@ -35,6 +35,8 @@
       *                                    保険者番号を印字する
       *  01.00.04    内田    2008/07/15    「保険証・記号」は
       *                                    後期高齢者も社保国保と同様とする
+      *  01.00.05    吉川    2008/09/10    公費の点数・診療実日数が
+      *                                    出力されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1139,12 +1141,18 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ２２．公費１・診療実日数
-           MOVE    MF101-EJNISSU(1)        TO  WRK-NUM
+      *=== 公費日数の取得先修正 by Yoshikawa(2008/09/10) start
+      *     MOVE    MF101-EJNISSU(1)        TO  WRK-NUM
+           MOVE    MF101-ENISSU(1)         TO  WRK-NUM
+      *=== 公費日数の取得先修正 by Yoshikawa(2008/09/10) end
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ２３．公費２・診療実日数
-           MOVE    MF101-EJNISSU(2)        TO  WRK-NUM
+      *=== 公費日数の取得先修正 by Yoshikawa(2008/09/10) start
+      *     MOVE    MF101-EJNISSU(2)        TO  WRK-NUM
+           MOVE    MF101-ENISSU(2)         TO  WRK-NUM
+      *=== 公費日数の取得先修正 by Yoshikawa(2008/09/10) end
            MOVE    3                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -1154,12 +1162,18 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ２５．公費１・点数
-           MOVE    MF101-ETOTALTEN(1)      TO  WRK-NUM
+      *=== 公費点数の取得先修正 by Yoshikawa(2008/09/10) start
+      *     MOVE    MF101-ETOTALTEN(1)      TO  WRK-NUM
+           MOVE    MF101-ETENSU(1)         TO  WRK-NUM
+      *=== 公費点数の取得先修正 by Yoshikawa(2008/09/10) end
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ２６．公費２・点数
-           MOVE    MF101-ETOTALTEN(2)      TO  WRK-NUM
+      *=== 公費点数の取得先修正 by Yoshikawa(2008/09/10) start
+      *     MOVE    MF101-ETOTALTEN(2)      TO  WRK-NUM
+           MOVE    MF101-ETENSU(2)         TO  WRK-NUM
+      *=== 公費点数の取得先修正 by Yoshikawa(2008/09/10) end
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
