@@ -43,6 +43,8 @@
       *                                 （前期高齢９割の特例措置対応）
       *  01.00.09    内田    08/06/25   後期高齢のみの場合でも印字するよう修正
       *                                 印字対象番号の追加（481等）
+      *  01.00.10    内田    08/09/09   個別指定の保険者を後期高齢の抽出に
+      *                                 適用していたのを修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2206,13 +2208,17 @@
            MOVE   WRK-HKNNUM                   TO  RECE10-HKNNUM-S
                                               RECE10-HKNNUM
       *
-           IF    WRK-PARA-HKNJANUM  NOT = ZERO
-               MOVE    WRK-PARA-HKNJANUM  TO  RECE10-XXSTHKNJANUM
-                                              RECE10-XXEDHKNJANUM
-           ELSE
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *     IF    WRK-PARA-HKNJANUM  NOT = ZERO
+      *         MOVE    WRK-PARA-HKNJANUM  TO  RECE10-XXSTHKNJANUM
+      *                                        RECE10-XXEDHKNJANUM
+      *     ELSE
+      *---(01.00.10) LINE ADD END   ------------------------------------
                MOVE    SPACE              TO  RECE10-XXSTHKNJANUM
                MOVE    "99999999"         TO  RECE10-XXEDHKNJANUM
-           END-IF
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *     END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *
            MOVE    RECE10-REC              TO  MCPDATA-REC
            MOVE    "DBSELECT"              TO  MCP-FUNC
