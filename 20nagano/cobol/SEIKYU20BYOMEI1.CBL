@@ -45,6 +45,7 @@
       *  01.00.12    NACL-藤原    04/02/01  病名コード２１に変更
       *  01.00.13    内田         07/03/02  入院を印字対象とする
       *  01.00.14    内田         07/10/05  日レセver4.0対応
+      *  01.00.15    吉川         08/09/10  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -253,6 +254,9 @@
       *
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/10) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/10) end
       *
            MOVE    ZERO                TO  FLG-END
            MOVE    WRK-PARA-LINK       TO  WRK-PARA
