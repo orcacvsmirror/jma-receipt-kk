@@ -37,6 +37,7 @@
       *                                     ひとつだけ出力する
       *  01.00.04    NACL-藤原    03.03.12  補助区分の追加
       *  01.00.05    内田         07/10/05  日レセver4.0対応
+      *  01.00.06    吉川         08/09/09  SPA-AREA初期化
       *****************************************************************
 001200*
 001300 ENVIRONMENT             DIVISION.
@@ -231,7 +232,10 @@
       *
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
-      *
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/09) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/09) end
+     *
            MOVE    ZERO                TO  FLG-END
       *
            MOVE    COMMAND-PARAM       TO  WRK-PARA

@@ -39,6 +39,7 @@
       *                                  医療機関情報を参照
       *  01.00.06    内田    08/03/07    入院の保険種別の印字の修正
       *  01.00.07    内田    08/06/04    帳票様式の変更に伴う修正
+      *  01.00.08    吉川    08/09/09    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -403,6 +404,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/09) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/09) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
