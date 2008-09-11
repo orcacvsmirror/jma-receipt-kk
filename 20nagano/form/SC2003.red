@@ -7201,7 +7201,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#21#</string>
+            <string>#23#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7409,10 +7409,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O240">
       <attribute name="obj_pos">
-        <point val="2.14201,16.8059"/>
+        <point val="2.14201,16.7934"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.14201,16.567;2.44501,16.867"/>
+        <rectangle val="2.14201,16.5545;2.44501,16.8545"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -7426,7 +7426,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="2.14201,16.8059"/>
+            <point val="2.14201,16.7934"/>
           </attribute>
           <attribute name="color">
             <color val="#434343"/>
@@ -13178,7 +13178,7 @@
         <point val="8.58834,6.62853"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.58834,6.34982;10.0023,6.69982"/>
+        <rectangle val="8.58834,6.34983;10.0023,6.69983"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKKI-TBL[1].TOKKI#</string>
