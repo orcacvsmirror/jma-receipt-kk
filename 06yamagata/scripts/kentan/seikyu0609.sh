@@ -1,6 +1,5 @@
 #!/bin/bash
-
-. /etc/jma-receipt/jma-receipt.env
+. @jma-receipt-env@
 
 PREFNAME=yamagata
 PROGRAMID=SEIKYU0609
