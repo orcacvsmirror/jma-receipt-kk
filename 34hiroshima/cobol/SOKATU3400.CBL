@@ -36,6 +36,7 @@
       *  01.00.05    長屋     08/04/25    帳票様式に伴う修正
       *  01.00.06    内田     08/05/17    印字順序の修正
       *  01.00.07    内田     08/06/18    国保がない場合でも印字する
+      *  01.00.08    内田     08/09/09    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -410,6 +411,9 @@
            INITIALIZE                   CNT-AREA
            INITIALIZE                   SUM-AREA
            INITIALIZE                   IDX-AREA
+      *---(01.00.08) LINE ADD START ------------------------------------
+           INITIALIZE                   SPA-AREA
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *
            ACCEPT     SYS-TIME          FROM    TIME     
       *

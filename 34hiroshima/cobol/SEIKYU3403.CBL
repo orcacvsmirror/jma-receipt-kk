@@ -43,6 +43,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.09    内田    08/05/03    帳票様式の変更に伴う修正
+      *  01.00.10    内田    08/09/09    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -344,6 +345,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.10) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
