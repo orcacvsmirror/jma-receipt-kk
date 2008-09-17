@@ -17,6 +17,10 @@
       ********************************************************************
       ************************************************************
       *    総括表一時ファイル           CPSKT2210TMP.INC           *
+      *
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者   日付       内容
+      *  01.00.01    吉川     08/09/11   公費名称追加
       ************************************************************
        01  SKT2210TMP-REC.
            03  SKT2210TMP-KEY.
@@ -39,6 +43,9 @@
            03  SKT2210TMP-KOH-AREA.
                05  SKT2210TMP-KOH-TBL     OCCURS  20.
                    07  SKT2210TMP-KOHNUM             PIC  X(03).
+      *=== 公費名称追加 by Yoshikawa(2008/09/11) start
+                   07  SKT2210TMP-KOHNAME            PIC  X(08).
+      *=== 公費名称追加 by Yoshikawa(2008/09/11) end
                    07  SKT2210TMP-K-NYUGAI-TBL     OCCURS  2.
                        09  SKT2210TMP-K-KENSU        PIC  9(05).
                        09  SKT2210TMP-K-NISSU        PIC  9(05).
@@ -51,6 +58,9 @@
            03  SKT2210TMP-RKOH-AREA.
                05  SKT2210TMP-RKOH-TBL     OCCURS  20.
                    07  SKT2210TMP-RKOHNUM             PIC  X(03).
+      *=== 公費名称追加 by Yoshikawa(2008/09/11) start
+                   07  SKT2210TMP-RKOHNAME            PIC  X(08).
+      *=== 公費名称追加 by Yoshikawa(2008/09/11) end
                    07  SKT2210TMP-K-RNYUGAI-TBL     OCCURS  2.
                        09  SKT2210TMP-K-RKENSU        PIC  9(05).
                        09  SKT2210TMP-K-RNISSU        PIC  9(05).
