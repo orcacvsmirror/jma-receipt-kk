@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    内田     08/09/04   公費名称追加
       ************************************************************
        01  SKT0210TMP-REC.
            03  SKT0210TMP-KEY.
@@ -39,6 +40,9 @@
                05  SKT0210TMP-S-FTNGAKU            PIC  9(10).
            03  SKT0210TMP-KOH-TBL      OCCURS  20.
                05  SKT0210TMP-KOHNUM               PIC  X(03).
+      *---(01.00.01) LINE ADD START ------------------------------------
+               05  SKT0210TMP-KOHNAME              PIC  X(16).
+      *---(01.00.01) LINE ADD END   ------------------------------------
                05  SKT0210TMP-R-NYUGAI-TBL  OCCURS  2.
                    07  SKT0210TMP-KKENSU           PIC  9(06).
                    07  SKT0210TMP-KNISSU           PIC  9(06).
