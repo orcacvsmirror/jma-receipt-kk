@@ -39,6 +39,10 @@
       *                                  °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.07    Ä¹²°    08/04/24    Ä¢É¼ÍÍ¼°¤ËÈ¼¤¦½¤Àµ
       *  01.00.08    ÆâÅÄ    08/06/18    °õ»úÊÝ¸±ÈÖ¹æÄÉ²Ã¡Ê193¡Ë
+      *  01.00.09    ÆâÅÄ    08/09/17    ¸øÈñºÆ·ÇÍó¤Î¥½¡¼¥È½¤Àµ
+      *                                  SPA-AREA½é´ü²½
+      *                                  ¸øÈñºÆ·ÇÍó¤Î¿©»ö·ï¿ôÈ½Äê½¤Àµ
+      *                                  ¥·¥¹´É¡Ö2007¡×¤Î¸øÈñ¤Þ¤È¤áÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -151,6 +155,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *---(01.00.09) LINE ADD START ------------------------------------
+           03  IDZ1                PIC 9(04).
+           03  IDZ2                PIC 9(04).
+      *---(01.00.09) LINE ADD END   ------------------------------------
            03  IDX-MAX             PIC 9(02).
            03  IDX-MIN             PIC 9(02).
            03  IDX-MAX-RJNKOH      PIC 9(02).
@@ -193,6 +201,9 @@
            03  WRK-CNT             PIC 9(02).
            03  WRK-CNT2            PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
+      *---(01.00.09) LINE ADD START ------------------------------------
+           03  WRK-KOHNAME         PIC X(16).
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z4              PIC ZZZZ.
@@ -255,7 +266,17 @@
        01  WRK-TMP-AREA.
            03  WRK-TMP-TBL.
                05  WRK-TMP-KOHNUM                PIC  X(03).
-           
+      *
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    ¸øÈñÈÖ¹æ¤Þ¤È¤á¥¨¥ê¥¢
+       01  WRK-2007-AREA.
+           03  WRK-2007-TBL        OCCURS  100.
+               05  WRK-2007-MEISYO PIC X(44).
+               05  WRK-2007-KOH-AREA.
+                   07  WRK-2007-KOHNUM
+                                   PIC X(03)   OCCURS  10.
+           03  WRK-2007-MAX        PIC 9(03).
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *    ¥«¥¦¥ó¥ÈÎÎ°è
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -308,6 +329,10 @@
       *    °åÎÅµ¡´Ø¾ðÊó¡Ý½êºßÃÏ¡¢Ï¢ÍíÀè 
            COPY    "CPSK1002.INC".
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó
+           COPY    "CPSK2007.INC".
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD START ------------------------------------
       *    °åÎÅµ¡´ØÊÔ½¸¾ðÊó
            COPY    "CPSK1900.INC".
@@ -388,6 +413,9 @@
            INITIALIZE                  SORT-AREA
            INITIALIZE                  SORT-AREA2
            INITIALIZE                  IDX-AREA
+      *---(01.00.09) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -540,6 +568,57 @@
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF
+      *
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *
+      *    ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó
+           INITIALIZE                      WRK-2007-AREA
+      *
+           INITIALIZE                      SYS-2007-REC
+           MOVE    "2007"              TO  SYS-2007-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2007-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2007-STYUKYMD (7:2)
+           MOVE    SYS-2007-STYUKYMD   TO  SYS-2007-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2007-HOSPNUM
+           MOVE    SYS-2007-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX1
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX1           >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2007-REC
+      *
+               ADD     1                   TO  IDX1
+               MOVE    SYS-2007-MEISYO(1) TO  WRK-2007-MEISYO(IDX1)
+               PERFORM VARYING IDX2 FROM    1   BY  1
+                       UNTIL   IDX2 >       10
+                       OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
+                   MOVE    SYS-2007-KOHNUM (IDX2)
+                                           TO WRK-2007-KOHNUM(IDX1 IDX2)
+               END-PERFORM
+      *
+               MOVE    "tbl_syskanri"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX1                    TO  WRK-2007-MAX
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *---(01.00.06) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -960,6 +1039,32 @@
                PERFORM  2102-GENBAKU-SEC
            END-IF
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *    ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó¤¬¤¢¤ë¤È¤­
+           PERFORM VARYING IDX3     FROM    1   BY  1
+                   UNTIL   IDX3     >       4
+                   OR  RECE10-KOHNUM(IDX3)  =  SPACE
+               IF  WRK-2007-MAX  >  ZERO
+                 MOVE  SPACE     TO  WRK-KOHNAME
+                 PERFORM VARYING IDZ1    FROM    1   BY  1
+                         UNTIL   IDZ1    >       WRK-2007-MAX
+                   PERFORM VARYING IDZ2  FROM    1   BY  1
+                           UNTIL   IDZ2  >       5
+                           OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                     IF  RECE10-KOHNUM(IDX3)  
+                                   =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                       MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                   TO  RECE10-KOHNUM (IDX3)
+                       MOVE  WRK-2007-MEISYO (IDZ1)
+                                   TO  WRK-KOHNAME
+                       MOVE  5             TO  IDZ2
+                       MOVE  WRK-2007-MAX  TO  IDZ1
+                     END-IF
+                   END-PERFORM
+                 END-PERFORM
+               END-IF
+           END-PERFORM
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *    Ê¡»ã°åÎÅ
            IF  RECE10-KOHNUM (1) = "141" OR "241"
                                 OR "190" OR "290" OR "390"
@@ -1168,7 +1273,10 @@
                  ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
                                    SKT3410TMP-KITBFTN(CNT-KOH IDX2)
       *
-                 IF  RECE10-SHOKUJINISSU(1)  >  0
+      *---(01.00.09) LINE ADD START -----------------------------------
+      *           IF  RECE10-SHOKUJINISSU(1)  >  0
+                 IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *---(01.00.09) LINE ADD END   -----------------------------------
       *    ¿©»öÎÅÍÜ:·ï¿ô
                    ADD   1  TO  SKT3410TMP-S-KKENSU(CNT-KOH)
                  END-IF
@@ -1259,7 +1367,10 @@
                ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
                                  SKT3410TMP-GKITBFTN(IDX2)
       *
-               IF  RECE10-SHOKUJINISSU(1)  >  0
+      *---(01.00.09) LINE ADD START -----------------------------------
+      *         IF  RECE10-SHOKUJINISSU(1)  >  0
+               IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *---(01.00.09) LINE ADD END   -----------------------------------
       *    ¿©»öÎÅÍÜ:·ï¿ô
                  ADD   1  TO  SKT3410TMP-S-GKKENSU
                END-IF
@@ -1283,7 +1394,10 @@
                ADD  RECE10-TOTALTEN(IDX3 + 1)  TO
                                  SKT3410TMP-34TENSU(IDX2)
       *
-               IF  RECE10-SHOKUJINISSU(1)  >  0
+      *---(01.00.09) LINE ADD START -----------------------------------
+      *         IF  RECE10-SHOKUJINISSU(1)  >  0
+               IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *---(01.00.09) LINE ADD END   -----------------------------------
       *    ¿©»öÎÅÍÜ:·ï¿ô
                  ADD   1  TO  SKT3410TMP-S-34KENSU
                END-IF
@@ -1305,7 +1419,10 @@
                ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
                                  SKT3410TMP-35ITBFTN
       *
-               IF  RECE10-SHOKUJINISSU(1)  >  0
+      *---(01.00.09) LINE ADD START -----------------------------------
+      *         IF  RECE10-SHOKUJINISSU(1)  >  0
+               IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *---(01.00.09) LINE ADD END   -----------------------------------
       *    ¿©»öÎÅÍÜ:·ï¿ô
                  ADD   1  TO  SKT3410TMP-S-35KENSU
                END-IF
@@ -1367,7 +1484,10 @@
                  ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
                                  SKT3410TMP-RKITBFTN(CNT-KOH IDX2)
       *
-                 IF  RECE10-SHOKUJINISSU(1)  >  0
+      *---(01.00.09) LINE ADD START -----------------------------------
+      *           IF  RECE10-SHOKUJINISSU(1)  >  0
+                 IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      *---(01.00.09) LINE ADD END   -----------------------------------
       *    ¿©»öÎÅÍÜ:·ï¿ô
                    ADD   1  TO  SKT3410TMP-S-RKKENSU(CNT-KOH)
                  END-IF
@@ -1615,46 +1735,100 @@
       *****************************************************************
        KOH-SORT-SEC          SECTION.
       *
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *     INITIALIZE  SORT-AREA
+      *     INITIALIZE  SORT-AREA2
+      *    ¸øÈñ¿ô¤ò¼èÆÀ
+      *     MOVE    ZERO    TO    IDX-MAX
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >  20
+      *       IF  SKT3410TMP-KOHNUM(IDX1)  =  SPACE
+      *         MOVE  20    TO    IDX1
+      *       ELSE
+      *         ADD   1     TO    IDX-MAX
+      *       END-IF
+      *     END-PERFORM
+      *
+      *     DISPLAY "°ìÈÌ¥½¡¼¥ÈÁ°£±" SKT3410TMP-KOHNUM(1)
+      *     DISPLAY "°ìÈÌ¥½¡¼¥ÈÁ°£²" SKT3410TMP-KOHNUM(2)
+      *     DISPLAY "°ìÈÌ¥½¡¼¥ÈÁ°£³" SKT3410TMP-KOHNUM(3)
+      *
+      *     IF      IDX-MAX    >     ZERO
+      *       MOVE    1    TO    IDX1
+      *       MOVE    1    TO    IDX2
+      *       MOVE    1    TO    IDX3
+      *       MOVE   "999" TO    WRK-TMP-KOHNUM
+      *       MOVE   ZERO  TO    SORT-KOHNUM(1)
+      *       PERFORM    UNTIL    IDX1  >    IDX-MAX
+      *         PERFORM  UNTIL    IDX2  >    IDX-MAX
+      *           IF  SKT3410TMP-KOHNUM(IDX2)  >   SORT-KOHNUM(IDX1 - 1)
+      *             IF  SKT3410TMP-KOHNUM(IDX2)  <  WRK-TMP-KOHNUM
+      *               MOVE  SKT3410TMP-KOHNUM(IDX2)  TO WRK-TMP-KOHNUM
+      *               MOVE  IDX2          TO    IDX3
+      *             END-IF
+      *           END-IF
+      *           ADD    1    TO    IDX2
+      *         END-PERFORM
+      *         MOVE  SKT3410TMP-KOH-AREA(IDX3)  TO  SORT-KOH-TBL(IDX1)
+      *         MOVE  "999"  TO    WRK-TMP-KOHNUM
+      *         ADD   1    TO    IDX1
+      *         MOVE  1    TO    IDX2
+      *       END-PERFORM
+      *
+      *     END-IF
+      *
+      *     INITIALIZE             SKT3410TMP-KOH-TBL
+      *     MOVE  SORT-AREA  TO    SKT3410TMP-KOH-TBL
+      *
+      *     DISPLAY "°ìÈÌ¥½¡¼¥È¸å£±" SKT3410TMP-KOHNUM(1)
+      *     DISPLAY "°ìÈÌ¥½¡¼¥È¸å£²" SKT3410TMP-KOHNUM(2)
+      *     DISPLAY "°ìÈÌ¥½¡¼¥È¸å£³" SKT3410TMP-KOHNUM(3)
       *
            INITIALIZE  SORT-AREA
-           INITIALIZE  SORT-AREA2
       *    ¸øÈñ¿ô¤ò¼èÆÀ
            MOVE    ZERO    TO    IDX-MAX
+                                 IDX2 
+           MOVE    SPACE   TO    WRK-KOHNUM
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >  20
              IF  SKT3410TMP-KOHNUM(IDX1)  =  SPACE
                MOVE  20    TO    IDX1
              ELSE
+               IF    WRK-KOHNUM               =   SPACE   OR
+                     SKT3410TMP-KOHNUM(IDX1)  <   WRK-KOHNUM
+                 MOVE     IDX1                TO  IDX2
+                 MOVE     SKT3410TMP-KOHNUM(IDX1) TO  WRK-KOHNUM
+               END-IF
                ADD   1     TO    IDX-MAX
              END-IF
            END-PERFORM
-      *
+           IF     IDX2     >     ZERO
+             MOVE    SKT3410TMP-KOH-AREA(IDX2) TO  SORT-KOH-TBL(1)
+           END-IF
+      
            DISPLAY "°ìÈÌ¥½¡¼¥ÈÁ°£±" SKT3410TMP-KOHNUM(1)
            DISPLAY "°ìÈÌ¥½¡¼¥ÈÁ°£²" SKT3410TMP-KOHNUM(2)
            DISPLAY "°ìÈÌ¥½¡¼¥ÈÁ°£³" SKT3410TMP-KOHNUM(3)
       *
            IF      IDX-MAX    >     ZERO
-             MOVE    1    TO    IDX1
+             MOVE    2    TO    IDX1
              MOVE    1    TO    IDX2
              MOVE    1    TO    IDX3
-             MOVE   "999" TO    WRK-TMP-KOHNUM
-             MOVE   ZERO  TO    SORT-KOHNUM(1)
+             MOVE   "999"   TO    WRK-KOHNUM
              PERFORM    UNTIL    IDX1  >    IDX-MAX
-               PERFORM  UNTIL    IDX2  >    IDX-MAX
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >    IDX-MAX
                  IF  SKT3410TMP-KOHNUM(IDX2)  >   SORT-KOHNUM(IDX1 - 1)
-                   IF  SKT3410TMP-KOHNUM(IDX2)  <  WRK-TMP-KOHNUM
-                     MOVE  SKT3410TMP-KOHNUM(IDX2)  TO WRK-TMP-KOHNUM
+                   IF  SKT3410TMP-KOHNUM(IDX2)  <  WRK-KOHNUM
+                     MOVE  SKT3410TMP-KOHNUM(IDX2)  TO WRK-KOHNUM
                      MOVE  IDX2          TO    IDX3
                    END-IF
                  END-IF
-                 ADD    1    TO    IDX2
                END-PERFORM
                MOVE  SKT3410TMP-KOH-AREA(IDX3)  TO  SORT-KOH-TBL(IDX1)
-               MOVE  "999"  TO    WRK-TMP-KOHNUM
+               MOVE   "999"   TO    WRK-KOHNUM
                ADD   1    TO    IDX1
-               MOVE  1    TO    IDX2
              END-PERFORM
-      *
            END-IF
       *
            INITIALIZE             SKT3410TMP-KOH-TBL
@@ -1663,6 +1837,8 @@
            DISPLAY "°ìÈÌ¥½¡¼¥È¸å£±" SKT3410TMP-KOHNUM(1)
            DISPLAY "°ìÈÌ¥½¡¼¥È¸å£²" SKT3410TMP-KOHNUM(2)
            DISPLAY "°ìÈÌ¥½¡¼¥È¸å£³" SKT3410TMP-KOHNUM(3)
+      *
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            .
        KOH-SORT-EXT.
@@ -2876,6 +3052,47 @@
            .
        900-TMP-READ-EXT.
            EXIT.
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    ¥Æ¡¼¥Ö¥ë¥¢¥¯¥»¥¹½èÍý
+      *****************************************************************
+       900-ORCDBMAIN-SEC               SECTION.
+      *
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+      *
+       900-ORCDBMAIN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¥·¥¹¥Æ¥à´ÉÍý¥Þ¥¹¥¿ÆÉ¹þ¡Ê£Î£Å£Ø£Ô¡Ë
+      *****************************************************************
+       900-SYSKANRI-READ-N-SEC         SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-SYSKANRI
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+           .
+       900-SYSKANRI-READ-N-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    £Ä£Â£Æ£Å£Ô£Ã£È½èÍý
+      *****************************************************************
+       900-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-DBFETCH-EXT.
+           EXIT.
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD START ------------------------------------
       *****************************************************************
       *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
