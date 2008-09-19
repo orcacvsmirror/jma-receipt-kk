@@ -56,8 +56,12 @@
       *保険者番号
                   05  SC23-HKNJANUM     PIC  X(16).
       *記号・番号
-                  05  SC23-KIGO         PIC  X(20).
-                  05  SC23-BANGO        PIC  X(20).
+      *=== 記号番号を32バイトに変更 by Yoshikawa(2008/09/08) start
+      *            05  SC23-KIGO         PIC  X(20).
+      *            05  SC23-BANGO        PIC  X(20).
+                  05  SC23-KIGO         PIC  X(32).
+                  05  SC23-BANGO        PIC  X(32).
+      *=== 記号番号を32バイトに変更 by Yoshikawa(2008/09/08) start
       *市町村番号
                   05  SC23-CITYNUM      PIC  X(16).
       *老人医療・受給者番号

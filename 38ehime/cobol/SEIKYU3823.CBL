@@ -35,6 +35,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/02/10    月遅れ時の入院期間の印字修正
+      *  01.00.06    吉川    08/09/12    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -319,6 +320,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/12) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/12) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
