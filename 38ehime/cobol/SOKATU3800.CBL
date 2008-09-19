@@ -43,6 +43,7 @@
       *  01.00.09    長屋      08/04/29    帳票様式に伴う修正
       *  01.00.10    内田      08/05/07    後期高齢の公費再掲欄集計修正
       *  01.00.11    内田      08/06/20    後期高齢のみの場合でも印字する
+      *  01.00.12    吉川      08/09/12    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -410,6 +411,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/12) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/12) end
       *
            DISPLAY  "START"
       *

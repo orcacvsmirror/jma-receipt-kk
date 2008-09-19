@@ -44,6 +44,7 @@
       *                                  診療年月の表示修正
       *  01.00.12    内田    08/06/20    ３月以前の返戻分を診療年月毎でなく
       *                                  まとめて印字する
+      *  01.00.13    吉川    08/09/12    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -443,6 +444,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  WRK-TMP-REC
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/12) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/12) end
       *
            DISPLAY  "START"
       *
