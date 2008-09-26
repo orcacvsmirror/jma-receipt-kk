@@ -35,7 +35,7 @@
       *電話番号
            03  SKT0810-TEL                 PIC  X(15).
       *開設者氏名
-           03  SKT0810-KAISETUNAME         PIC  X(20).
+           03  SKT0810-KAISETUNAME         PIC  X(40).
       *保険者名
            03  SKT0810-HKNJANAME           PIC  X(24).
       *在総・在医総
