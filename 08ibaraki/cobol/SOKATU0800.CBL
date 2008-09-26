@@ -40,6 +40,7 @@
       *  01.00.07    長屋   08/04/23      帳票様式に伴う修正
       *  01.00.08    内田   08/05/17      保険番号186を福祉の集計対象とする
       *  01.00.09    内田   08/08/12      後期高齢のみの場合も印刷するよう修正
+      *  01.00.10    吉川   08/09/19      SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -334,6 +335,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/19) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/19) end
       *
            DISPLAY  "START"
       *
