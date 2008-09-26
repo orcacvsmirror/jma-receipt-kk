@@ -48,6 +48,7 @@
       *  01.00.09     内田     08/03/26    公費の助成がないなら集計しない(743)
       *  01.00.10     内田     08/05/02    後期高齢者を障老人欄へ印字
       *  01.00.11     内田     08/07/01    札幌市代表保険者番号変更
+      *  01.00.12     吉川     08/09/11    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -398,6 +399,9 @@
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/11) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/11) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

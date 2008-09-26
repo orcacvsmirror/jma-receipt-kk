@@ -34,6 +34,7 @@
       *  01.00.02    内田    07/04/25    帳票様式の変更に伴う修正
       *  01.00.03    内田    07/05/23    印字対象番号の追加
       *  01.00.04    内田    07/09/26    日レセver4.0対応
+      *  01.00.05    吉川    08/09/11    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -309,6 +310,9 @@
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/11) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/09/11) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
