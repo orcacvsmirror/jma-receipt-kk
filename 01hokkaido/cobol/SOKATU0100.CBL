@@ -53,6 +53,7 @@
       *  01.00.16    内田   08/05/28    区分３障の件数集計修正
       *  01.00.17    内田   08/06/25    後期高齢のみの場合でも印字するよう修正
       *  01.00.18    内田   08/07/01    札幌市代表保険者番号変更
+      *  01.00.19    吉川   08/09/22    請求書の枚数欄は保険者数を印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -243,6 +244,9 @@
            03  WRK-KOHKEI2             PIC 9(03).
            03  WRK-AMARI               PIC 9(02).
       *---(01.00.14) LINE ADD END   ------------------------------------
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) start
+           03  WRK-ZAIMAISU            PIC 9(03).
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -1719,41 +1723,59 @@
                     UNTIL    IDX1  >     2
       *
                INITIALIZE  WRK-MAISU
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) start
+               INITIALIZE  WRK-ZAIMAISU
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    SCNT-HKNJANUM(IDX1 IDX2)  =  SPACE
-                 IF  SKT0100TMP-ZAITAKU  =  SCNT-ZAITAKU(IDX1 IDX2)
-                   ADD  1  TO  WRK-MAISU
-      *          公費再掲欄を考慮
-                   COMPUTE  WRK-KOHKEI  =  SCNT-KOHSU(IDX1 IDX2)
-                                        +  SCNT-TUKI(IDX1 IDX2 1)
-                                        +  SCNT-TUKI(IDX1 IDX2 2)
-                                        +  SCNT-TUKI(IDX1 IDX2 3)
-                                        +  SCNT-TUKI(IDX1 IDX2 4)
-                                        +  SCNT-TUKI(IDX1 IDX2 5)
-                   IF  IDX1  =  1
-                     DIVIDE  WRK-KOHKEI  BY  5  GIVING  WRK-KOHKEI2
-                           REMAINDER   WRK-AMARI
-                   ELSE
-      *              １枚目に公費欄があるので４を引く
-                     IF  WRK-KOHKEI  >  4
-                       COMPUTE  WRK-KOHKEI  =  WRK-KOHKEI  -  4
-                       DIVIDE  WRK-KOHKEI  BY  4  GIVING  WRK-KOHKEI2
-                             REMAINDER   WRK-AMARI
-                     ELSE
-                       MOVE  ZERO  TO  WRK-KOHKEI2
-                       MOVE  ZERO  TO  WRK-AMARI
-                     END-IF
-                   END-IF
-      *            公費分の枚数を加算
-                   COMPUTE  WRK-MAISU  =  WRK-MAISU  +  WRK-KOHKEI2
-                   IF  WRK-AMARI  NOT =  ZERO
-                       ADD  1  TO  WRK-MAISU
-                   END-IF
-                 END-IF
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) start
+      *           IF  SKT0100TMP-ZAITAKU  =  SCNT-ZAITAKU(IDX1 IDX2)
+      *             ADD  1  TO  WRK-MAISU
+      **          公費再掲欄を考慮
+      *             COMPUTE  WRK-KOHKEI  =  SCNT-KOHSU(IDX1 IDX2)
+      *                                  +  SCNT-TUKI(IDX1 IDX2 1)
+      *                                  +  SCNT-TUKI(IDX1 IDX2 2)
+      *                                  +  SCNT-TUKI(IDX1 IDX2 3)
+      *                                  +  SCNT-TUKI(IDX1 IDX2 4)
+      *                                  +  SCNT-TUKI(IDX1 IDX2 5)
+      *             IF  IDX1  =  1
+      *               DIVIDE  WRK-KOHKEI  BY  5  GIVING  WRK-KOHKEI2
+      *                     REMAINDER   WRK-AMARI
+      *             ELSE
+      **              １枚目に公費欄があるので４を引く
+      *               IF  WRK-KOHKEI  >  4
+      *                 COMPUTE  WRK-KOHKEI  =  WRK-KOHKEI  -  4
+      *                 DIVIDE  WRK-KOHKEI  BY  4  GIVING  WRK-KOHKEI2
+      *                       REMAINDER   WRK-AMARI
+      *               ELSE
+      *                 MOVE  ZERO  TO  WRK-KOHKEI2
+      *                 MOVE  ZERO  TO  WRK-AMARI
+      *               END-IF
+      *             END-IF
+      **            公費分の枚数を加算
+      *             COMPUTE  WRK-MAISU  =  WRK-MAISU  +  WRK-KOHKEI2
+      *             IF  WRK-AMARI  NOT =  ZERO
+      *                 ADD  1  TO  WRK-MAISU
+      *             END-IF
+      *           END-IF
+      *           在宅は別で出力される為、集計領域を分ける
+                  IF  SCNT-ZAITAKU(IDX1 IDX2)  =  "1"
+                    ADD  1  TO  WRK-ZAIMAISU
+                  ELSE
+                    ADD  1  TO  WRK-MAISU
+                  END-IF
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
                END-PERFORM
       *
-               MOVE  WRK-MAISU      TO  WRK-Z5
-               MOVE  WRK-Z5         TO  SKT0100-MAISU (IDX1)
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) start
+      *         MOVE  WRK-MAISU        TO  WRK-Z5
+               IF  SKT0100TMP-ZAITAKU  =  "1"
+                 MOVE  WRK-ZAIMAISU   TO  WRK-Z5
+               ELSE
+                 MOVE  WRK-MAISU      TO  WRK-Z5
+               END-IF
+      *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
+               MOVE  WRK-Z5           TO  SKT0100-MAISU (IDX1)
            END-PERFORM
       *---(01.00.14) LINE ADD END   ------------------------------------
            .
