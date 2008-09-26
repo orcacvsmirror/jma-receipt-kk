@@ -35,6 +35,8 @@
       *                                  定数超過または標欠の場合は
       *                                  備考欄に「超過」「標欠」印字
       *  01.00.03    吉川    2008/08/01  入院基本情報のエラーメッセージ削除
+      *  01.00.04    吉川    2008/09/03  マル長の食事件数が後期高齢欄に
+      *                                  印字されてしまう不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1165,7 +1167,10 @@
                    IF  WRK-SEIKATU  >  ZERO
                    OR  RECE10-SHOKUJINISSU(1)  >  ZERO
       *    公費再掲欄：食事療養：件数
-                     ADD     1                   TO  SUM-S-KENSU(IDX2)
+      *=== マル長食事件数位置修正 by Yoshikawa(2008/09/03) start
+      *               ADD     1                   TO  SUM-S-KENSU(IDX2)
+                     ADD     1                   TO  SUM-S-KKENSU(IDX2)
+      *=== マル長食事件数位置修正 by Yoshikawa(2008/09/03) end
                    END-IF
       *    公費再掲欄：食事療養：日数
                    ADD  RECE10-SHOKUJINISSU(1)   TO SUM-S-KNISSU(IDX2)
