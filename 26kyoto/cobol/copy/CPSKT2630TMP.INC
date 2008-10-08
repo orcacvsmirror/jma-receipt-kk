@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      * 01.00.01     門間         08/09/25  公費名称追加
       ************************************************************
        01  SKT2630TMP-REC.
            03  SKT2630TMP-KEY.
@@ -38,6 +39,9 @@
                05  SKT2630TMP-S-FTNGAKU        PIC  9(10).
            03  SKT2630TMP-KOH   OCCURS  20.
                05  SKT2630TMP-KOHNUM           PIC  X(03).
+      *--- 01.00.01 公費名称追加 START MONMA ----------------------------
+               05  SKT2630TMP-KOHNAME          PIC  X(10).
+      *--- 01.00.01 公費名称追加 END   MONMA ----------------------------
                05  SKT2630TMP-K-NYUGAI-TBL   OCCURS  2.
                    07  SKT2630TMP-KKENSU       PIC  9(06).
                    07  SKT2630TMP-KNISSU       PIC  9(06).
