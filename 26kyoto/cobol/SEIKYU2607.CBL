@@ -31,6 +31,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/05/28    印字対象番号追加（245）
+      *  01.00.03    門間    08/09/25    SPA-AREAの初期化
+      *                                  診療年月の追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -175,7 +177,6 @@
       *         05  FILLER            PIC S9(09)  BINARY.
       *         05  FILLER            PIC S9(09)  BINARY.
            03  WRK-PATH              PIC  X(50).
-      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -315,6 +316,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *--- 01.00.03 SPA-AREA初期化 START MONMA -------------------------
+           INITIALIZE  SPA-AREA
+      *--- 01.00.03 SPA-AREA初期化 END   MONMA -------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -817,6 +821,10 @@
       *
            INITIALIZE                             SC07
            ADD     1       TO      CNT-PAGE
+      *--- 01.00.03 診療年月の追加 START MONMA -------------------------
+      *    診療年月
+           MOVE    WRK-SRYYMWH        TO  SC07-SRYYM
+      *--- 01.00.03 診療年月の追加 END   MONMA -------------------------
       *
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD          TO  SC07-HOSPCD
