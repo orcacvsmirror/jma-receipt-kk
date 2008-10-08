@@ -38,6 +38,7 @@
       *  01.00.04    内田    07/12/11    合計件数のバイト数増加（２→３）
       *  01.00.05    内田    08/01/27    「表示の確認」欄へ７９等の表示追加
       *                                  自己負担欄のバイト数増加（３→５）
+      *  01.00.06    門間    08/09/25    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -337,6 +338,9 @@
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
            INITIALIZE  SUM-G-AREA
+      *--- 01.00.06 SPA-AREA初期化 START MONMA -------------------------
+           INITIALIZE  SPA-AREA
+      *--- 01.00.06 SPA-AREA初期化 END   MONMA -------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
