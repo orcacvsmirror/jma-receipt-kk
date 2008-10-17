@@ -45,6 +45,7 @@
       *                                     システム管理マスタ「1901」の
       *                                     医療機関情報を参照
       *  01.01.04    内田         08/05/29  帳票様式の変更に伴う修正
+      *  01.01.05    吉川         08/10/08  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -372,6 +373,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) end
       *
       *---(01.01.03) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM

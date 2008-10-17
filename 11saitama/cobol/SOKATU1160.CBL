@@ -55,6 +55,7 @@
       *                                   医療機関情報を参照
       *  01.02.08    内田       08/04/30  ４月改正に伴う修正
       *  01.02.09    内田       08/05/29  帳票様式の変更に伴う修正
+      *  01.02.10    吉川       08/10/08  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -317,6 +318,9 @@
            INITIALIZE              SUM-AREA
            INITIALIZE              WRK-PARA
            INITIALIZE              WRK-TUIKA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) start
+           INITIALIZE              SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) end
       *
            PERFORM 100-DBOPEN-SEC
       *
