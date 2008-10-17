@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT1210TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    08/10/10  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT1210TMP-REC.
            03  SKT1210TMP-KEY.
@@ -54,6 +55,9 @@
                        09  SKT1210TMP-KOHNUM1           PIC  X(03).
                        09  SKT1210TMP-KOHNUM2           PIC  X(03).
       *****
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/10) start
+                   07  SKT1210TMP-KOHNAME               PIC  X(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/10) end
                    07  SKT1210TMP-K-KENSU               PIC  9(06).
                    07  SKT1210TMP-K-NISSU               PIC  9(06).
                    07  SKT1210TMP-K-TENSU               PIC  9(10).
@@ -76,6 +80,9 @@
                        09  SKT1210TMP-RKOHNUM1          PIC  X(03).
                        09  SKT1210TMP-RKOHNUM2          PIC  X(03).
       *****
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/10) start
+                   07  SKT1210TMP-RKOHNAME              PIC  X(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/10) end
                    07  SKT1210TMP-K-RKENSU              PIC  9(06).
                    07  SKT1210TMP-K-RNISSU              PIC  9(06).
                    07  SKT1210TMP-K-RTENSU              PIC  9(10).
