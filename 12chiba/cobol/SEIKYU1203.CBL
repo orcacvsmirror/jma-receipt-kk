@@ -35,6 +35,7 @@
       *                                    医療機関情報を参照
       *  01.00.03     内田     08/01/22    帳票様式の変更
       *                                    入院用帳票の追加
+      *  01.00.04     吉川     08/10/10    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -356,6 +357,9 @@
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/10) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/10) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
