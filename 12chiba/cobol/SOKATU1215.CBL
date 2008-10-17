@@ -31,6 +31,7 @@
       *                                  食事日数がゼロでも
       *                                  生活療養費を印字する
       *  01.00.02    吉川    2008/06/23  長期の再掲処理修正の取り消し
+      *  01.00.03    吉川    2008/10/10  食事がない場合は件数をカウントしない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -731,7 +732,13 @@
       *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
       *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) end
       *    食事療養：件数
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) start
+             IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) end
                ADD     1                     TO  SUM-S-KENSU(IDXX IDX1)
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) start
+             END-IF
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) end
       *    食事療養：日数
                ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDXX IDX1)
       *    食事療養：金額
@@ -844,7 +851,13 @@
       *       IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
       *=== 食事日数が0でも生活療養費印字 by Yoshikawa(2008/05/21) end
       *    公費再掲欄：食事療養：件数
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) start
+             IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) end
                ADD    1                       TO SUM-S-KKENSU(IDXX IDX2)
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) start
+             END-IF
+      *=== 食事なしはカウントしない by Yoshikawa(2008/10/10) end
       *    公費再掲欄：食事療養：日数
                ADD RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDXX IDX2)
       *    公費再掲欄：食事療養：金額
