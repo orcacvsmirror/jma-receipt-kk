@@ -50,6 +50,7 @@
       *                                   加算される不具合を修正
       *  01.00.10    吉川    2008/09/05   月遅れの患者を出力すると旧様式に
       *                                   合計が印字される不具合を修正
+      *  01.00.11    吉川    2008/10/02   最終ページに合計を印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1224,7 +1225,11 @@
                  IF  FLG-PRINT  =  1  OR  SKT2200TMP-KBN  =  2
       *=== 県内と県外の合計を分ける by Yoshikawa(2008/07/04) end
       *=== 合計が旧様式で出る不具合修正 by Yoshikawa(2008/09/05) start
-                 OR SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804
+      *=== 合計を最終ページに印字 by Yoshikawa(2008/10/02) start
+      *           OR  SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804
+                 OR  (SKT2200TMP-SRYYM  NOT =  ZERO
+                      AND  SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *=== 合計を最終ページに印字 by Yoshikawa(2008/10/02) end
       *=== 合計が旧様式で出る不具合修正 by Yoshikawa(2008/09/05) end
                    PERFORM  325-SUM-HEN-SEC
                  END-IF
@@ -1352,7 +1357,11 @@
                  OR  WRK-SRYYM-NEW  NOT =  WRK-SRYYM-OLD
       *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
       *=== 合計が旧様式で出る不具合修正 by Yoshikawa(2008/09/05) start
-                 OR SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804
+      *=== 合計を最終ページに印字 by Yoshikawa(2008/10/02) start
+      *           OR  SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804
+                 OR  (SKT2200TMP-SRYYM  NOT =  ZERO
+                      AND  SKT2200TMP-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *=== 合計を最終ページに印字 by Yoshikawa(2008/10/02) end
       *=== 合計が旧様式で出る不具合修正 by Yoshikawa(2008/09/05) end
                    PERFORM  325-SUM-HEN-SEC
                  END-IF
