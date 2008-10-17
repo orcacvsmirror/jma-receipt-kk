@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム饯赖旺悟
       * Maj/Min/Rev  饯赖荚  泣烧        柒推
+      *  01.00.01    等李    2008/10/07  下务は片ゼロ烧きで山す
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -654,8 +655,12 @@
       *    ２ˉ懒滇钳奉
            MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
            MOVE    "01"                    TO  WRK-SYMD(7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+           PERFORM   31011-SEIWA-HEN-SEC
+           EVALUATE  LNK-DAY1-GENKIGO
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            WHEN  "M"
              MOVE  "1"                     TO  WRK-NUM(1:1)
            WHEN  "T"
@@ -665,7 +670,10 @@
            WHEN  "H"
              MOVE  "4"                     TO  WRK-NUM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            MOVE    LNK-PRTKANRI-SRYYM(5:2) TO  WRK-NUM(4:2)
            MOVE    WRK-NUM                 TO  WRK-9
            MOVE    WRK-9                   TO  WRK-NUM
@@ -674,8 +682,12 @@
       *
       *    ３ˉ捏叫钳奉泣
            MOVE    LNK-PRTKANRI-SKYYMD     TO  WRK-SYMD
-           PERFORM 31012-SEIWA-HEN-SEC
-           EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+           PERFORM   31011-SEIWA-HEN-SEC
+           EVALUATE  LNK-DAY1-GENKIGO
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            WHEN  "M"
              MOVE  "1"                     TO  WRK-NUM(1:1)
            WHEN  "T"
@@ -685,7 +697,10 @@
            WHEN  "H"
              MOVE  "4"                     TO  WRK-NUM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            MOVE    LNK-PRTKANRI-SKYYMD(5:4) TO  WRK-NUM(4:4)
            MOVE    WRK-NUM                 TO  WRK-9
            MOVE    WRK-9                   TO  WRK-NUM
@@ -730,8 +745,12 @@
       *
       *    １０ˉ栏钳奉泣
            MOVE    MF101-BIRTHDAY          TO  WRK-SYMD
-           PERFORM 31012-SEIWA-HEN-SEC
-           EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+           PERFORM   31011-SEIWA-HEN-SEC
+           EVALUATE  LNK-DAY1-GENKIGO
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            WHEN  "M"
              MOVE  "1"                     TO  WRK-NUM(1:1)
            WHEN  "T"
@@ -741,7 +760,10 @@
            WHEN  "H"
              MOVE  "4"                     TO  WRK-NUM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            MOVE    MF101-BIRTHDAY(5:4)     TO  WRK-NUM(4:4)
            MOVE    WRK-NUM                 TO  WRK-9
            MOVE    WRK-9                   TO  WRK-NUM
@@ -793,8 +815,12 @@
       *    １６ˉ壳闻钳奉
            MOVE    MF101-SRYYM             TO  WRK-SYMD(1:6)
            MOVE    "01"                    TO  WRK-SYMD(7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     EVALUATE  LNK-DAY2-EDTYMD1(1:1)
+           PERFORM   31011-SEIWA-HEN-SEC
+           EVALUATE  LNK-DAY1-GENKIGO
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            WHEN  "M"
              MOVE  "1"                     TO  WRK-NUM(1:1)
            WHEN  "T"
@@ -804,7 +830,10 @@
            WHEN  "H"
              MOVE  "4"                     TO  WRK-NUM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *     MOVE    LNK-DAY2-EDTYMD1(2:2)   TO  WRK-NUM(2:2)
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
            MOVE    MF101-SRYYM(5:2)        TO  WRK-NUM(4:2)
            MOVE    WRK-NUM                 TO  WRK-9
            MOVE    WRK-9                   TO  WRK-NUM
@@ -898,6 +927,23 @@
        500-ERR-HENSYU-EXT.
            EXIT.
       *
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) start
+      *****************************************************************
+      *    谰务ˇ下务恃垂借妄
+      *****************************************************************
+       31011-SEIWA-HEN-SEC        SECTION.
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY1-AREA
+           MOVE    "11"                TO  LNK-DAY1-IRAI
+           MOVE    WRK-SYMD            TO  LNK-DAY1-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY1-AREA
+           .
+       31011-SEIWA-HEN-EXT.
+           EXIT.
+      *
+      *=== 下务は片ゼロ烧きで山す by Yoshikawa(2008/10/07) end
       *****************************************************************
       *    谰务泣塑胳恃垂借妄
       *****************************************************************
