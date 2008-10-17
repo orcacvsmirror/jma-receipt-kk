@@ -34,6 +34,8 @@
       *                                長期上位（974）は長期と同様の
       *                                処理をする
       *  01.00.02    内田    08/08/12  実日数、点数は保険のデータとする
+      *  01.00.03    門間    08/10/07  実日数が０の場合、実日数を０と印字する
+      *                                SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -174,6 +176,10 @@
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *--- 01.00.03 LINE ADD START MONMA -------------------------------
+           03  WRK-JNISSU            PIC Z9.
+      *--- 01.00.03 LINE ADD END   MONMA -------------------------------
+      *
       *    ＫＥＹ用エリア
        01  KEY-AREA.
            03  KEY-NEW.
@@ -312,6 +318,9 @@
            INITIALIZE  SUM-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  KEY-AREA
+      *--- 01.00.03 LINE ADD START MONMA -------------------------------
+           INITIALIZE  SPA-AREA
+      *--- 01.00.03 LINE ADD END   MONMA -------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -920,9 +929,13 @@
                MOVE    "３"               TO  SC09-KYURATE(IDX1)
              END-EVALUATE
       *
-      *    実日数
-             MOVE    MF100-JNISSU         TO  WRK-Z2
-             MOVE    WRK-Z2               TO  SC09-NISSU(IDX1)
+      *    実日数    
+      *--- 01.00.03 LINE ADD START MONMA -------------------------------
+      *        MOVE    MF100-JNISSU         TO  WRK-Z2
+      *        MOVE    WRK-Z2               TO  SC09-NISSU(IDX1)
+               MOVE    MF100-JNISSU         TO  WRK-JNISSU 
+               MOVE    WRK-JNISSU           TO  SC09-NISSU(IDX1)
+      *--- 01.00.03 LINE ADD END   MONMA -------------------------------
       *
       *    点数
              MOVE    MF100-TOTALTEN       TO  WRK-Z7
