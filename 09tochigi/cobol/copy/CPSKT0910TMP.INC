@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/07/07  H20年4月改正前は旧様式で印字
+      *  01.00.02    吉川    2008/10/09  公費名追加
       ************************************************************
        01  SKT0910TMP-REC.
            03  SKT0910TMP-KEY.
@@ -44,6 +45,9 @@
                05  SKT0910TMP-S-FTNGK               PIC  9(09).
            03  SKT0910TMP-KOH-AREA  OCCURS  20.
                05  SKT0910TMP-KOHNUM                PIC  X(03).
+      *=== 公費名追加 by Yoshikawa(2008/10/09) start
+               05  SKT0910TMP-KOHNAME               PIC  X(10).
+      *=== 公費名追加 by Yoshikawa(2008/10/09) end
                05  SKT0910TMP-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT0910TMP-KKENSU            PIC  9(05).
                    07  SKT0910TMP-KNISSU            PIC  9(05).
