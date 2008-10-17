@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT0600TMP.INC)            *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    08/10/08  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT1100TMP-REC.
            03      SKT1100TMP-KEY.
@@ -28,6 +29,9 @@
              05    SKT1100TMP-KBN2                  PIC  9(01).
              05    SKT1100TMP-HKNJANUM              PIC  X(06).
              05    SKT1100TMP-KYURATE               PIC  9(02).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/08) start
+           03      SKT1100TMP-KOHNAME               PIC  X(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
            03      SKT1100TMP-DATA.
              05    SKT1100TMP-GAIRAI.
                07  SKT1100TMP-KENSU               PIC  9(05).
