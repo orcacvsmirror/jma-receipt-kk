@@ -47,6 +47,7 @@
       *                                      取得しないように修正
       *  01.00.09       吉川    2008/07/14   本人家族区分は
       *                                      レセプト種別区分から取得する
+      *  01.00.10       吉川    2008/10/17   点数欄は保険の総点数を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1021,6 +1022,9 @@
               END-PERFORM
            END-IF
       *
+      *=== 点数は保険の総点数を印字 by Yoshikawa(2008/10/17) start
+           MOVE   RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
+      *=== 点数は保険の総点数を印字 by Yoshikawa(2008/10/17) end
            PERFORM   800-SYUNOU-SET-SEC
            MOVE   WRK-KOHFTN          TO   MF110-ITBFTN
            MOVE   WRK-YKZFTN          TO   MF110-YKZFTN
