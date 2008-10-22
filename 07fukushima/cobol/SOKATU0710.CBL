@@ -39,6 +39,8 @@
       *  01.00.05    内田    08/05/30    １０割の印字修正
       *  01.00.06    内田    08/07/18    国組・県外国保の未就学児は１０割
       *                                  ではなく、該当の箇所へ印字
+      *  01.00.07    吉川    08/10/09    シス管「2007」公費まとめ対応
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -163,6 +165,10 @@
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
            03  IDX6                PIC 9(01).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+           03  IDZ1                PIC 9(04).
+           03  IDZ2                PIC 9(04).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
        01  WRK-PARA.
            COPY    "CPORCSPRTLNK.INC".
@@ -194,6 +200,9 @@
       *
            03  WRK-CNT             PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+           03  WRK-KOHNAME         PIC X(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z4              PIC ZZZZ.
@@ -232,6 +241,17 @@
                05  WRK-HOSPADRS2       PIC X(50).
            03  WRK-HOSPTEL             PIC X(15).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *    公費番号まとめエリア
+       01  WRK-2007-AREA.
+           03  WRK-2007-TBL        OCCURS  100.
+               05  WRK-2007-MEISYO PIC X(44).
+               05  WRK-2007-KOH-AREA.
+                   07  WRK-2007-KOHNUM
+                                   PIC X(03)   OCCURS  10.
+           03  WRK-2007-MAX        PIC 9(03).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -284,6 +304,12 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *    公費番号まとめ情報
+           COPY    "CPSK2007.INC".
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
+      *
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            COPY    "CPRCF010.INC".
@@ -361,6 +387,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/09) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/09) end
       *
            DISPLAY  "START"
       *
@@ -500,6 +529,56 @@
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *    公費番号まとめ情報
+           INITIALIZE                      WRK-2007-AREA
+      *
+           INITIALIZE                      SYS-2007-REC
+           MOVE    "2007"              TO  SYS-2007-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2007-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2007-STYUKYMD (7:2)
+           MOVE    SYS-2007-STYUKYMD   TO  SYS-2007-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2007-HOSPNUM
+           MOVE    SYS-2007-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX1
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX1           >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2007-REC
+      *
+               ADD     1                   TO  IDX1
+               MOVE    SYS-2007-MEISYO(1) TO  WRK-2007-MEISYO(IDX1)
+               PERFORM VARYING IDX2 FROM    1   BY  1
+                       UNTIL   IDX2 >       10
+                       OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
+                   MOVE    SYS-2007-KOHNUM (IDX2)
+                                           TO WRK-2007-KOHNUM(IDX1 IDX2)
+               END-PERFORM
+      *
+               MOVE    "tbl_syskanri"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX1                    TO  WRK-2007-MAX
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
       *---(01.00.02) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -937,6 +1016,29 @@
                MOVE    "051"       TO    RECE10-KOHNUM(IDX3)
              END-IF
       *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *      公費番号まとめ情報があるとき
+             MOVE  SPACE     TO  WRK-KOHNAME
+             IF  WRK-2007-MAX  >  ZERO
+               PERFORM VARYING IDZ1    FROM    1   BY  1
+                       UNTIL   IDZ1    >       WRK-2007-MAX
+                 PERFORM VARYING IDZ2  FROM    1   BY  1
+                         UNTIL   IDZ2  >       5
+                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                   IF  RECE10-KOHNUM(IDX3)  
+                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                 TO  RECE10-KOHNUM (IDX3)
+                     MOVE  WRK-2007-MEISYO (IDZ1)
+                                 TO  WRK-KOHNAME
+                     MOVE  5             TO  IDZ2
+                     MOVE  WRK-2007-MAX  TO  IDZ1
+                   END-IF
+                 END-PERFORM
+               END-PERFORM
+             END-IF
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
+      *
       *    全国公費のみ
              IF  RECE10-KOHNUM (IDX3)(1:1) = "0" OR "9"
       *    公費判別
@@ -956,6 +1058,11 @@
       *    公費名
                MOVE  RECE10-KOHNUM(IDX3)
                                      TO  SKT0710TMP-KOHNUM(CNT-KOH)
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *    公費名称
+               MOVE  WRK-KOHNAME     TO  SKT0710TMP-KOHNAME(CNT-KOH)
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
       *    療養の給付：件数
                ADD  1                TO SKT0710TMP-KKENSU(CNT-KOH IDX2)
@@ -1241,7 +1348,15 @@
       *    公費名
              MOVE  SKT0710TMP-KOHNUM (WRK-CNT)  TO  WRK-KOHNUM
              PERFORM  950-HKNNUM-SET-SEC
-             MOVE  HKN-TANSEIDONAME   TO  SKT0710-KOHNAME (IDX3)
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *       MOVE  HKN-TANSEIDONAME   TO  SKT0710-KOHNAME (IDX3)
+             IF  SKT0710TMP-KOHNAME (WRK-CNT)  NOT =  SPACE
+               MOVE  SKT0710TMP-KOHNAME (WRK-CNT)
+                                        TO  SKT0710-KOHNAME (IDX3)
+             ELSE
+               MOVE  HKN-TANSEIDONAME   TO  SKT0710-KOHNAME (IDX3)
+             END-IF
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
              ADD  1  TO  WRK-CNT
            END-PERFORM
@@ -1388,7 +1503,15 @@
       *    公費名
              MOVE  SKT0710TMP-KOHNUM (WRK-CNT)  TO  WRK-KOHNUM
              PERFORM  950-HKNNUM-SET-SEC
-             MOVE  HKN-TANSEIDONAME   TO  SKT0720-KOHNAME (IDX3)
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *       MOVE  HKN-TANSEIDONAME   TO  SKT0720-KOHNAME (IDX3)
+             IF  SKT0710TMP-KOHNAME (WRK-CNT)  NOT =  SPACE
+               MOVE  SKT0710TMP-KOHNAME (WRK-CNT)
+                                        TO  SKT0720-KOHNAME (IDX3)
+             ELSE
+               MOVE  HKN-TANSEIDONAME   TO  SKT0720-KOHNAME (IDX3)
+             END-IF
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *
              ADD  1  TO  WRK-CNT
            END-PERFORM
@@ -2171,6 +2294,47 @@
            .
        2009-HENKAN-EXT.
            EXIT.
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
+      *****************************************************************
+      *    テーブルアクセス処理
+      *****************************************************************
+       900-ORCDBMAIN-SEC               SECTION.
+      *
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+      *
+       900-ORCDBMAIN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    システム管理マスタ読込（ＮＥＸＴ）
+      *****************************************************************
+       900-SYSKANRI-READ-N-SEC         SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-SYSKANRI
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+           .
+       900-SYSKANRI-READ-N-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢＦＥＴＣＨ処理
+      *****************************************************************
+       900-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-DBFETCH-EXT.
+           EXIT.
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *****************************************************************
       *    医療機関編集情報読み込み

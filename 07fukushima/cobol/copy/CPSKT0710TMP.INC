@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    長屋    08/04/29    帳票様式に伴う修正
+      *  01.00.02    吉川    08/10/09    公費名追加
       ************************************************************
        01  SKT0710TMP-REC.
            03  SKT0710TMP-KEY.
@@ -44,6 +45,9 @@
                05  SKT0710TMP-S-FTNGAKU            PIC  9(10).
            03  SKT0710TMP-KOH-TBL      OCCURS  20.
                05  SKT0710TMP-KOHNUM               PIC  X(03).
+      *=== 公費名追加 by Yoshikawa(2008/10/09) start
+               05  SKT0710TMP-KOHNAME              PIC  X(10).
+      *=== 公費名追加 by Yoshikawa(2008/10/09) end
                05  SKT0710TMP-R-NYUGAI-TBL  OCCURS  2.
                    07  SKT0710TMP-KKENSU           PIC  9(06).
                    07  SKT0710TMP-KNISSU           PIC  9(06).
