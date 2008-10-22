@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT4610TMP.INC)            *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    08/10/17  シス管「2007」対応
       ************************************************************
        01  SKT1810TMP-REC.
            03  SKT1810TMP-KEY.
@@ -46,6 +47,9 @@
            03  SKT1810TMP-KOH-AREA.
                05  SKT1810TMP-KOH-TBL  OCCURS  20.
                    07  SKT1810TMP-KOHNUM              PIC  X(03).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/17) start
+                   07  SKT1810TMP-KOHNAME             PIC  X(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/17) end
                    07  SKT1810TMP-K-KENSU             PIC  9(06).
                    07  SKT1810TMP-K-NISSU             PIC  9(06).
                    07  SKT1810TMP-K-TENSU             PIC  9(09).
