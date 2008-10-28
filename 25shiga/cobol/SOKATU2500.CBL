@@ -34,6 +34,7 @@
       *                                    医療機関情報を参照
       *  01.00.04    伊藤    2008/04/29    帳票様式に伴う修正
       *  01.00.05    内田    2008/07/15    後期高齢のみの場合でも印刷する
+      *  01.00.06    吉川    2008/10/20    SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -312,6 +313,9 @@
            INITIALIZE                  CNT-AREA
            INITIALIZE                  SUM-AREA
            INITIALIZE                  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/20) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/20) end
       *
            DISPLAY  "START"
       *
