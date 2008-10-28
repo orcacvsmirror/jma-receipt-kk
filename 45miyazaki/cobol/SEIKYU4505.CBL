@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 宮崎・乳幼児医療費請求書
-      *                      (181,281,381,195,190)
+      *                      (181,281,381,481,581,188,195,190)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/07/07    有村          再作成(2.5.0対応)
@@ -34,6 +34,9 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.04    内田    07/10/23    対象公費番号追加(190)
+      *  01.00.05    吉川    08/10/27    対象公費番号追加(188,481,581)
+      *                                  帳票レイアウト変更
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -82,7 +85,10 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    
-           COPY  "SKT4511.INC".
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
+      *     COPY  "SKT4511.INC".
+           COPY  "SKT4510.INC".
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -305,6 +311,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  KEY-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -584,9 +593,14 @@
       *         IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
       *                                OR "195"
       *---(01.00.02) LINE ADD END   ------------------------------------
-               IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
-                                      OR "195" OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+      *         IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
+      *                                OR "195" OR "190"
       *---(01.00.04) LINE ADD END   ------------------------------------
+               IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "188" 
+                                      OR "195" OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *****
                    PERFORM 20011-TMP-HEN-SEC
                END-IF
@@ -626,6 +640,10 @@
                    MOVE  "90"          TO  MF100-KOHNUM
                WHEN  "195"
                    MOVE  "95"          TO  MF100-KOHNUM
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+               WHEN  "188"
+                   MOVE  "88"          TO  MF100-KOHNUM
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
                WHEN  OTHER
                    MOVE  "81"          TO  MF100-KOHNUM
            END-EVALUATE
@@ -780,38 +798,80 @@
       *
            ADD     1   TO   CNT-PAGE
       *
-           INITIALIZE  SKT4511
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
+      *     INITIALIZE  SKT4511
+      **
+      **    対象年月
+      *     MOVE    MF100-SRYYM         TO  WRK-SYMD (1:6)
+      *     MOVE    "01"                TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)   TO  SKT4511-SRYYM
+      **
+      **    請求日付
+      *     MOVE    WRK-SEIYMDWH            TO  SKT4511-SEIYMD
+      **
+      **    医療機関コード
+      *     MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
+      *     PERFORM 2009-HENKAN-SEC
+      *     MOVE    WRK-OUT-INPUT           TO  SKT4511-HOSPCD
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **    医療機関住所
+      **     MOVE    SYS-1002-ADRS           TO  SKT4511-ADRS
+      **    医療機関名
+      **     MOVE    SYS-1001-HOSPNAME       TO  SKT4511-HOSPNAME
+      **    医療機関住所
+      *     MOVE  WRK-HOSPADRS              TO  SKT4511-ADRS
+      **    医療機関名
+      *     MOVE  WRK-HOSPNAME              TO  SKT4511-HOSPNAME
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      **    開設者名
+      *     MOVE    SYS-1001-KAISETUNAME    TO  SKT4511-KAISETU
+      **
+      **    保険者番号
+      *     MOVE    MF100-CITYNUM           TO  WRK-MAE-INPUT
+      *     PERFORM 2009-HENKAN-SEC
+      *     MOVE    WRK-OUT-INPUT           TO  SKT4511-HKNJANUM
+      **
+      **    保険者名
+      *     MOVE    MF100-CITYNUM           TO  WRK-HKNJANUM
+      *     PERFORM 920-HKNJAINF-SET-SEC
+      *     IF      HKNJA-HKNJANAME     NOT =   SPACE
+      **
+      **        県名編集
+      *         STRING  "宮崎県  "          DELIMITED BY SIZE
+      *                 HKNJA-HKNJANAME     DELIMITED BY SPACE
+      *                 "  殿"              DELIMITED BY SIZE
+      *                 INTO                SKT4511-HKNJANAME
+      *         END-STRING
+      *     ELSE
+      *         MOVE    "殿"    TO  SKT4511-HKNJANAME(25:2)
+      *     END-IF
+           INITIALIZE  SKT4510
       *
       *    対象年月
            MOVE    MF100-SRYYM         TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)   TO  SKT4511-SRYYM
+           MOVE    WRK-HENYMDG(1:16)   TO  SKT4510-SRYYM
       *
       *    請求日付
-           MOVE    WRK-SEIYMDWH            TO  SKT4511-SEIYMD
+           MOVE    WRK-SEIYMDWH            TO  SKT4510-SEIYMD
       *
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
-           MOVE    WRK-OUT-INPUT           TO  SKT4511-HOSPCD
-      *---(01.00.03) LINE ADD START ------------------------------------
+           MOVE    WRK-OUT-INPUT           TO  SKT4510-HOSPCD
       *    医療機関住所
-      *     MOVE    SYS-1002-ADRS           TO  SKT4511-ADRS
+           MOVE  WRK-HOSPADRS              TO  SKT4510-ADRS
       *    医療機関名
-      *     MOVE    SYS-1001-HOSPNAME       TO  SKT4511-HOSPNAME
-      *    医療機関住所
-           MOVE  WRK-HOSPADRS              TO  SKT4511-ADRS
-      *    医療機関名
-           MOVE  WRK-HOSPNAME              TO  SKT4511-HOSPNAME
-      *---(01.00.03) LINE ADD END   ------------------------------------
+           MOVE  WRK-HOSPNAME              TO  SKT4510-HOSPNAME
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME    TO  SKT4511-KAISETU
+           MOVE    SYS-1001-KAISETUNAME    TO  SKT4510-KAISETU
       *
       *    保険者番号
            MOVE    MF100-CITYNUM           TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
-           MOVE    WRK-OUT-INPUT           TO  SKT4511-HKNJANUM
+           MOVE    WRK-OUT-INPUT           TO  SKT4510-HKNJANUM
       *
       *    保険者名
            MOVE    MF100-CITYNUM           TO  WRK-HKNJANUM
@@ -822,11 +882,12 @@
                STRING  "宮崎県  "          DELIMITED BY SIZE
                        HKNJA-HKNJANAME     DELIMITED BY SPACE
                        "  殿"              DELIMITED BY SIZE
-                       INTO                SKT4511-HKNJANAME
+                       INTO                SKT4510-HKNJANAME
                END-STRING
            ELSE
-               MOVE    "殿"    TO  SKT4511-HKNJANAME(25:2)
+               MOVE    "殿"    TO  SKT4510-HKNJANAME(25:2)
            END-IF
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
       *
            .
        310-HEAD-HEN-EXT.
@@ -838,55 +899,101 @@
        320-BODY-HEN-SEC      SECTION.
       *
            MOVE    KEY-NEW    TO    KEY-OLD
-           PERFORM VARYING IDX1    FROM    1   BY  1
-                   UNTIL   IDX1    >       5
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
+      *     PERFORM VARYING IDX1    FROM    1   BY  1
+      *             UNTIL   IDX1    >       5
+           PERFORM VARYING IDX1    FROM    8   BY  1
+                   UNTIL   IDX1    >       9
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) end
                    OR      KEY-NEW     NOT =   KEY-OLD
                    OR      FLG-PRINT       =   1
                PERFORM VARYING IDX2    FROM    1   BY  1
                        UNTIL   IDX2    >       2
       *
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
+      **            療養の給付：件数
+      *             MOVE    MF100-KENSU(IDX2)   TO  WRK-Z5
+      *             MOVE    WRK-Z5      TO  SKT4511-K-KENSU(IDX1 IDX2)
+      **
+      **            療養の給付：日数
+      *             MOVE    MF100-NISSU(IDX2)   TO  WRK-Z5
+      *             MOVE    WRK-Z5      TO  SKT4511-K-NISSU(IDX1 IDX2)
+      **
+      **            療養の給付：点数
+      *             MOVE    MF100-TENSU(IDX2)   TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT4511-K-TENSU(IDX1 IDX2)
+      **
+      **            療養の給付：一部負担金
+      *             MOVE    MF100-ITBFTN(IDX2)  TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT4511-K-ITBFTN(IDX1 IDX2)
+      *         END-PERFORM
+      **
+      **        食事療養：件数
+      *         MOVE    MF100-SKENSU    TO  WRK-Z5
+      *         MOVE    WRK-Z5          TO  SKT4511-K-SKENSU(IDX1)
+      **
+      **        食事療養：日数
+      *         MOVE    MF100-SNISSU    TO  WRK-Z5
+      *         MOVE    WRK-Z5          TO  SKT4511-K-SNISSU(IDX1)
+      **
+      **        食事療養：金額
+      *         MOVE    MF100-SKINGK    TO  WRK-Z9
+      *         MOVE    WRK-Z9          TO  SKT4511-K-SKINGK(IDX1)
+      **
+      **        食事療養：標準負担額
+      *         MOVE    MF100-SFTNGK    TO  WRK-Z9
+      *         MOVE    WRK-Z9          TO  SKT4511-K-SFTNGK(IDX1)
+      **
+      **        法別番号
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **         MOVE    "81"    TO  SKT4511-HBTNUM(IDX1)
+      *         MOVE    MF100-KOHNUM    TO  SKT4511-HBTNUM(IDX1)
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      **
+      **        負担割合
+      *         MOVE    MF100-FTNRATE   TO  WRK-Z1
+      *         MOVE    WRK-Z1          TO  SKT4511-FTNRATE(IDX1)
+      **
       *            療養の給付：件数
                    MOVE    MF100-KENSU(IDX2)   TO  WRK-Z5
-                   MOVE    WRK-Z5      TO  SKT4511-K-KENSU(IDX1 IDX2)
+                   MOVE    WRK-Z5      TO  SKT4510-KENSU(IDX1 IDX2)
       *
       *            療養の給付：日数
                    MOVE    MF100-NISSU(IDX2)   TO  WRK-Z5
-                   MOVE    WRK-Z5      TO  SKT4511-K-NISSU(IDX1 IDX2)
+                   MOVE    WRK-Z5      TO  SKT4510-NISSU(IDX1 IDX2)
       *
       *            療養の給付：点数
                    MOVE    MF100-TENSU(IDX2)   TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT4511-K-TENSU(IDX1 IDX2)
+                   MOVE    WRK-Z9      TO  SKT4510-TENSU(IDX1 IDX2)
       *
       *            療養の給付：一部負担金
                    MOVE    MF100-ITBFTN(IDX2)  TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT4511-K-ITBFTN(IDX1 IDX2)
+                   MOVE    WRK-Z9      TO  SKT4510-ITBFTN(IDX1 IDX2)
                END-PERFORM
       *
       *        食事療養：件数
                MOVE    MF100-SKENSU    TO  WRK-Z5
-               MOVE    WRK-Z5          TO  SKT4511-K-SKENSU(IDX1)
+               MOVE    WRK-Z5          TO  SKT4510-SKENSU(IDX1)
       *
       *        食事療養：日数
                MOVE    MF100-SNISSU    TO  WRK-Z5
-               MOVE    WRK-Z5          TO  SKT4511-K-SNISSU(IDX1)
+               MOVE    WRK-Z5          TO  SKT4510-SNISSU(IDX1)
       *
       *        食事療養：金額
                MOVE    MF100-SKINGK    TO  WRK-Z9
-               MOVE    WRK-Z9          TO  SKT4511-K-SKINGK(IDX1)
+               MOVE    WRK-Z9          TO  SKT4510-SKINGK(IDX1)
       *
       *        食事療養：標準負担額
                MOVE    MF100-SFTNGK    TO  WRK-Z9
-               MOVE    WRK-Z9          TO  SKT4511-K-SFTNGK(IDX1)
+               MOVE    WRK-Z9          TO  SKT4510-SFTNGK(IDX1)
       *
       *        法別番号
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *         MOVE    "81"    TO  SKT4511-HBTNUM(IDX1)
-               MOVE    MF100-KOHNUM    TO  SKT4511-HBTNUM(IDX1)
-      *---(01.00.02) LINE ADD END   ------------------------------------
+               MOVE    MF100-KOHNUM    TO  SKT4510-HBTNUM(IDX1 - 7)
       *
       *        負担割合
                MOVE    MF100-FTNRATE   TO  WRK-Z1
-               MOVE    WRK-Z1          TO  SKT4511-FTNRATE(IDX1)
+               MOVE    WRK-Z1          TO  SKT4510-FTNRATE(IDX1 - 7)
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) end
       *
       *        一時ファイル読込
                PERFORM  900-TMP-READ-SEC
@@ -918,10 +1025,16 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4511.red"        TO  SPRT-PRTID
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
+      *     MOVE   "SKT4511.red"        TO  SPRT-PRTID
+           MOVE   "SKT4510.red"        TO  SPRT-PRTID
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) end
            MOVE    "乳幼児医療費請求書"
                                        TO  SPRT-TITLE
-           MOVE    SKT4511             TO  SPRT-PRTDATA
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) start
+      *     MOVE    SKT4511             TO  SPRT-PRTDATA
+           MOVE    SKT4510             TO  SPRT-PRTDATA
+      *=== 帳票レイアウト変更 by Yoshikawa(2008/10/27) end
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
@@ -1122,14 +1235,24 @@
       *         OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
       *         OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
       *---(01.00.02) LINE ADD END   ------------------------------------
-               IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+      *         IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+               IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *****
       *        テスト患者のときは読み飛ばす
