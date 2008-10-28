@@ -31,6 +31,8 @@
       *  •◊•Ì•∞•È•‡Ω§¿µÕ˙ŒÚ
       * Maj/Min/Rev	Ω§¿µº‘	∆¸…’		∆‚Õ∆
       *  01.00.01    ∆‚≈ƒ    08/05/21    ¿¡µ·«Ø∑Ó§Œ∞ıª˙Ω§¿µ
+      *  01.00.02    µ»¿Ó    08/10/20    ∑Î≥À°¶¿∫ø¿§Ú ªÕ—§∑§∆§§§∆§‚
+      *                                  ∏¯»Ò ¨¥µº‘…È√¥≥€§Ú∑◊ªª§π§Î
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1891,12 +1893,16 @@
                        MOVE    SYU-KOH-COMPFTN(IDX)
                                                TO  WRK-KOHFTNGK
                    ELSE
-                       IF      SYU-KOH-HKNNUM(IDX)  
-                                               NOT = "010" AND "011"
-                                               AND   "020" AND "021"
+      *=== ∑Î≥À°¶¿∫ø¿§‚…È√¥≥€§Ú∑◊ªª by Yoshikawa(2008/10/20) start
+      *                 IF      SYU-KOH-HKNNUM(IDX)  
+      *                                         NOT = "010" AND "011"
+      *                                         AND   "020" AND "021"
+      *=== ∑Î≥À°¶¿∫ø¿§‚…È√¥≥€§Ú∑◊ªª by Yoshikawa(2008/10/20) end
                            MOVE    SYU-KOH-COMPFTN(IDX)
                                                TO  WRK-KOHFTNGK
-                       END-IF
+      *=== ∑Î≥À°¶¿∫ø¿§‚…È√¥≥€§Ú∑◊ªª by Yoshikawa(2008/10/20) start
+      *                 END-IF
+      *=== ∑Î≥À°¶¿∫ø¿§‚…È√¥≥€§Ú∑◊ªª by Yoshikawa(2008/10/20) end
                    END-IF
                END-IF
       *
