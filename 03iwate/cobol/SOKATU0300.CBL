@@ -37,6 +37,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.07     長屋   08/04/27    ４月改正に伴う修正
+      *  01.00.08     門間   2008/10/09  SPA-AREAの初期化
+      *  01.00.09     吉川   2008/10/22  在総診以外の在宅は在医総とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -330,7 +332,10 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
-           INITIALIZE       SKT0300TMP-REC
+           INITIALIZE                  SKT0300TMP-REC
+      *--- 01.00.08 SPA-AREAの初期化 LINE ADD START MONMA --------------
+           INITIALIZE                  SPA-AREA
+      *--- 01.00.08 SPA-AREAの初期化 LINE ADD END   MONMA --------------
       *
            DISPLAY  "START"
       *
@@ -1488,11 +1493,14 @@
                IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
                                        CONS-ZAITAKU2
                  MOVE  1  TO  FLG-ZAIISO
-               END-IF
-               IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
-                                       CONS-ZAITAKU4  OR
-                                       CONS-ZAITAKU5  OR
-                                       CONS-ZAITAKU6
+      *=== 在総診以外は在医総 by Yoshikawa(2008/10/22) start
+      *         END-IF
+      *         IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
+      *                                 CONS-ZAITAKU4  OR
+      *                                 CONS-ZAITAKU5  OR
+      *                                 CONS-ZAITAKU6
+               ELSE
+      *=== 在総診以外は在医総 by Yoshikawa(2008/10/22) end
                  MOVE  1  TO  FLG-ZAIISO2
                END-IF
              END-IF
