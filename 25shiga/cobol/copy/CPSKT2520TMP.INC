@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT0710TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    08/10/20  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT2520TMP-REC.
            03  SKT2520TMP-KEY.
@@ -43,6 +44,9 @@
            03  SKT2520TMP-KOH-AREA.
                05  SKT2520TMP-KOH-TBL      OCCURS  20.
                    07  SKT2520TMP-KOHNUM       PIC  X(03).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/20) start
+                   07  SKT2520TMP-KOHNAME      PIC  X(12).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/20) end
                    07  SKT2520TMP-KKENSU       PIC  9(06).
                    07  SKT2520TMP-KNISSU       PIC  9(06).
                    07  SKT2520TMP-KTENSU       PIC  9(10).
