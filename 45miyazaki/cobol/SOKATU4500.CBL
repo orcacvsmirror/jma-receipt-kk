@@ -34,6 +34,7 @@
       *  01.00.03    長屋    08/05/02    帳票様式に伴う修正
       *  01.00.04    吉川    08/08/21    保険は県内でも公費が県外の場合
       *                                  県外として集計する
+      *  01.00.05    吉川    08/10/27    SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -353,6 +354,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) end
       *
            DISPLAY  "START"
       *
