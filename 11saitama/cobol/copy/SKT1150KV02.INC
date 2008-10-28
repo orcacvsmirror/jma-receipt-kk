@@ -31,3 +31,7 @@
             02  HCM2KV02-KENSUG PIC X(6).
             02  HCM2KV02-TITLE  PIC X(50).
             02  HCM2KV02-TITLE1 PIC X(10).
+      *=== H20”N10ŒŽ‰ü³‘Î‰ž by Yoshikawa(2008/10/24) start
+            02  HCM2KV02-SEIDONAME
+                    PIC X(8)    OCCURS  5 TIMES.
+      *=== H20”N10ŒŽ‰ü³‘Î‰ž by Yoshikawa(2008/10/24) start

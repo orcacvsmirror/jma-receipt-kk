@@ -44,6 +44,8 @@
       *                                     医療機関情報を参照
       *  01.01.04    内田         08/05/29  帳票様式の変更に伴う修正
       *  01.01.05    吉川         08/10/08  SPA-AREA初期化
+      *  01.01.06    吉川         08/10/24  平成20年10月改正対応
+      *                                     シス管「2007」公費まとめ対応
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -181,8 +183,15 @@
            COPY    "COMMON-SPA".
       *---(01.01.03) LINE ADD END   ------------------------------------
       *
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+      *    固定項目
+       01  WRK-CONS-AREA.
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
       *    ２００３年４月改正
            03  WRK-CONS-SRYYM-200304   PIC X(06)   VALUE   "200304".
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+           03  WRK-CONS-SRYYM-200810   PIC X(06)   VALUE   "200810".
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -298,6 +307,9 @@
                        09  SUM-KOH-SHOKUJIKENSU   PIC  9(06).
                        09  SUM-KOH-SHOKUJIRYOYOHI PIC  9(10).
                        09  SUM-KOH-SHOKUJIFTN     PIC  9(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+                       09  SUM-KOH-MEISYO         PIC  X(44).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *        老人保健（再掲）      
                05  SUM-ROU-KOH-TABLE           OCCURS  10. 
                    07  SUM-ROU-KOH-TBL.
@@ -522,6 +534,22 @@
        310-HEAD-HEN-01-SEC          SECTION.
       *
            INITIALIZE                      HCM2I      
+      *
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+           IF  LNK-PRTKANRI-SRYYM  <  WRK-CONS-SRYYM-200810
+             MOVE  "（政）"            TO  HCM2I-SEIDONAME (1)
+                                           HCM2I-SEIDONAME (2)
+                                           HCM2I-SEIDONAME (3)
+                                           HCM2I-SEIDONAME (4)
+                                           HCM2I-SEIDONAME (5)
+           ELSE
+             MOVE  "（協会）"          TO  HCM2I-SEIDONAME (1)
+                                           HCM2I-SEIDONAME (2)
+                                           HCM2I-SEIDONAME (3)
+                                           HCM2I-SEIDONAME (4)
+                                           HCM2I-SEIDONAME (5)
+           END-IF
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
       *
            MOVE    WRK-SEIYMDWH        TO  HCM2I-SEIYMD
       *
@@ -1025,47 +1053,53 @@
       *
            MOVE    SPACE               TO  WRK-KOHKBN
       *
-      *    保険番号読込み  
-           INITIALIZE                      HKNNUM-REC
-      *---(01.01.03) LINE ADD START ------------------------------------
-      *     MOVE   SYS-1001-HOSPID      TO    HKN-HOSPID
-           MOVE   SPA-HOSPNUM          TO    HKN-HOSPNUM
-      *---(01.01.03) LINE ADD END   ------------------------------------
-           MOVE   SUM-KOH-KOHNUM (IDX1 IDX IDX2)
-                                       TO    HKN-HKNNUM
-           MOVE   HKNNUM-REC           TO    MCPDATA-REC
-           MOVE   "DBSELECT"           TO    MCP-FUNC
-      *---(01.01.03) LINE ADD START ------------------------------------
-      *     MOVE   PATH-TBL-HKNNUM-KEY2 TO    MCP-PATH
-      *     CALL    "MCPSUB"            USING
-      *                                     MCPAREA
-      *                                     MCPDATA-REC
-           MOVE    "tbl_hknnum"            TO  MCP-TABLE
-           MOVE    "key2"                  TO  MCP-PATHNAME
-           CALL    "ORCDBMAIN"             USING
-                                           MCPAREA
-                                           MCPDATA-REC
-                                           SPA-AREA
-      *---(01.01.03) LINE ADD END   ------------------------------------
-           IF      MCP-RC              =   ZERO
-      *---(01.01.03) LINE ADD START ------------------------------------
-      *         MOVE    PATH-TBL-HKNNUM-KEY2
-      *                                     TO  MCP-PATH
-               MOVE    "tbl_hknnum"            TO  MCP-TABLE
-               MOVE    "key2"                  TO  MCP-PATHNAME
-      *---(01.01.03) LINE ADD END   ------------------------------------
-               PERFORM 900-HKNNUM-READ-SEC
-           ELSE
-               MOVE    1                  TO  FLG-HKNNUM
-           END-IF
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *    公費番号まとめ情報からの集計か
+           IF      SUM-KOH-MEISYO  (IDX1 IDX IDX2)
+                                       =   SPACE
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
-           PERFORM UNTIL       FLG-HKNNUM      =   1
-               IF    ( HKN-TEKSTYMD            <=  WRK-SRYYMD )
-               AND   ( HKN-TEKEDYMD            >=  WRK-SRYYMD )
-                   IF     SUM-KOH-KOHNUM (IDX1 IDX IDX2)    =   "027"
-      *                老人保険のとき 
-                       IF    ( SYS-1001-HOSPSBT    =   HKN-PAYKBN(1:1) )
-                       AND   ( SYS-1001-ROUPAYKBN  =   HKN-PAYKBN(2:1) )
+      *      保険番号読込み  
+             INITIALIZE                      HKNNUM-REC
+      *---(01.01.03) LINE ADD START ------------------------------------
+      *       MOVE   SYS-1001-HOSPID      TO    HKN-HOSPID
+             MOVE   SPA-HOSPNUM          TO    HKN-HOSPNUM
+      *---(01.01.03) LINE ADD END   ------------------------------------
+             MOVE   SUM-KOH-KOHNUM (IDX1 IDX IDX2)
+                                         TO    HKN-HKNNUM
+             MOVE   HKNNUM-REC           TO    MCPDATA-REC
+             MOVE   "DBSELECT"           TO    MCP-FUNC
+      *---(01.01.03) LINE ADD START ------------------------------------
+      *       MOVE   PATH-TBL-HKNNUM-KEY2 TO    MCP-PATH
+      *       CALL    "MCPSUB"            USING
+      *                                       MCPAREA
+      *                                       MCPDATA-REC
+             MOVE    "tbl_hknnum"            TO  MCP-TABLE
+             MOVE    "key2"                  TO  MCP-PATHNAME
+             CALL    "ORCDBMAIN"             USING
+                                             MCPAREA
+                                             MCPDATA-REC
+                                             SPA-AREA
+      *---(01.01.03) LINE ADD END   ------------------------------------
+             IF      MCP-RC              =   ZERO
+      *---(01.01.03) LINE ADD START ------------------------------------
+      *           MOVE    PATH-TBL-HKNNUM-KEY2
+      *                                       TO  MCP-PATH
+                 MOVE    "tbl_hknnum"            TO  MCP-TABLE
+                 MOVE    "key2"                  TO  MCP-PATHNAME
+      *---(01.01.03) LINE ADD END   ------------------------------------
+                 PERFORM 900-HKNNUM-READ-SEC
+             ELSE
+                 MOVE    1                  TO  FLG-HKNNUM
+             END-IF
+      *
+             PERFORM UNTIL       FLG-HKNNUM      =   1
+                 IF    ( HKN-TEKSTYMD            <=  WRK-SRYYMD )
+                 AND   ( HKN-TEKEDYMD            >=  WRK-SRYYMD )
+                     IF     SUM-KOH-KOHNUM (IDX1 IDX IDX2)    =   "027"
+      *                  老人保険のとき 
+                         IF  ( SYS-1001-HOSPSBT    =  HKN-PAYKBN(1:1) )
+                         AND ( SYS-1001-ROUPAYKBN  =  HKN-PAYKBN(2:1) )
                            STRING  "（"            DELIMITED  BY  SIZE
                                    HKN-TANSEIDONAME
                                                    DELIMITED  BY  SPACE
@@ -1073,61 +1107,68 @@
                                                    INTO   WRK-HKNNAME
                            END-STRING
                            MOVE    1                   TO  FLG-HKNNUM
-                       END-IF
-                   ELSE
-      *                特定疾患のとき 
-                       IF      SUM-KOH-KOHNUM (IDX1 IDX IDX2)
-                                                   =   "051"
-                           MOVE    "（特定疾患）"      TO   WRK-HKNNAME
-                       ELSE
-      *                その他の保険のとき 
+                         END-IF
+                     ELSE
+      *                  特定疾患のとき 
+                         IF      SUM-KOH-KOHNUM (IDX1 IDX IDX2)
+                                                     =   "051"
+                           MOVE    "（特定疾患）"    TO   WRK-HKNNAME
+                         ELSE
+      *                  その他の保険のとき 
                            STRING  "（"            DELIMITED  BY  SIZE
                                    HKN-TANSEIDONAME
                                                    DELIMITED  BY  SPACE
                                    "）"            DELIMITED  BY  SIZE
                                                    INTO   WRK-HKNNAME
                            END-STRING
-                       END-IF
-                       MOVE    1                   TO  FLG-HKNNUM 
-                   END-IF     
-               END-IF
+                         END-IF
+                         MOVE    1                   TO  FLG-HKNNUM 
+                     END-IF     
+                 END-IF
       *
-               IF      FLG-HKNNUM           =   ZERO
+                 IF      FLG-HKNNUM           =   ZERO
       *---(01.01.03) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-HKNNUM-KEY2
-      *                                     TO  MCP-PATH
-                   MOVE    "tbl_hknnum"            TO  MCP-TABLE
-                   MOVE    "key2"                  TO  MCP-PATHNAME
+      *               MOVE    PATH-TBL-HKNNUM-KEY2
+      *                                       TO  MCP-PATH
+                     MOVE    "tbl_hknnum"            TO  MCP-TABLE
+                     MOVE    "key2"                  TO  MCP-PATHNAME
       *---(01.01.03) LINE ADD END   ------------------------------------
-                   PERFORM 900-HKNNUM-READ-SEC
-               ELSE
-                   MOVE    HKN-HBTNUM      TO  WRK-Z9
-                   INITIALIZE                  ORCSKANACHKAREA
-                   MOVE    "2"                 TO  KANACHK-SYORI 
-                   MOVE    WRK-Z9 (4:2)    TO  KANACHK-MAE-INPUT 
-                   CALL    "ORCSKANACHK"   USING   ORCSKANACHKAREA
-                   IF    ( KANACHK-RC      =   ZERO )
-                   AND   ( KANACHK-MAX     >   ZERO )
-                       MOVE    KANACHK-OUT-INPUT(1:KANACHK-MAX)
-                                                   TO  WRK-KOHNUM
-                   END-IF    
-               END-IF 
-           END-PERFORM
+                     PERFORM 900-HKNNUM-READ-SEC
+                 ELSE
+                     MOVE    HKN-HBTNUM      TO  WRK-Z9
+                     INITIALIZE                  ORCSKANACHKAREA
+                     MOVE    "2"                 TO  KANACHK-SYORI 
+                     MOVE    WRK-Z9 (4:2)    TO  KANACHK-MAE-INPUT 
+                     CALL    "ORCSKANACHK"   USING   ORCSKANACHKAREA
+                     IF    ( KANACHK-RC      =   ZERO )
+                     AND   ( KANACHK-MAX     >   ZERO )
+                         MOVE    KANACHK-OUT-INPUT(1:KANACHK-MAX)
+                                                     TO  WRK-KOHNUM
+                     END-IF    
+                 END-IF 
+             END-PERFORM
       *    
-           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+             MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
       *---(01.01.03) LINE ADD START ------------------------------------
-      *     MOVE    PATH-TBL-HKNNUM-KEY2
-      *                                 TO  MCP-PATH
-      *     CALL    "MCPSUB"            USING
-      *                                     MCPAREA
-      *                                     MCPDATA-REC
-           MOVE    "tbl_hknnum"            TO  MCP-TABLE
-           MOVE    "key2"                  TO  MCP-PATHNAME
-           CALL    "ORCDBMAIN"             USING
-                                           MCPAREA
-                                           MCPDATA-REC
-                                           SPA-AREA
+      *       MOVE    PATH-TBL-HKNNUM-KEY2
+      *                                   TO  MCP-PATH
+      *       CALL    "MCPSUB"            USING
+      *                                       MCPAREA
+      *                                       MCPDATA-REC
+             MOVE    "tbl_hknnum"            TO  MCP-TABLE
+             MOVE    "key2"                  TO  MCP-PATHNAME
+             CALL    "ORCDBMAIN"             USING
+                                             MCPAREA
+                                             MCPDATA-REC
+                                             SPA-AREA
       *---(01.01.03) LINE ADD END   ------------------------------------
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+           ELSE
+               MOVE    SUM-KOH-MEISYO (IDX1 IDX IDX2)
+                                         TO   WRK-KOHKBN
+           END-IF
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
            MOVE    WRK-KOHKBN          TO  HCM2J-KOHKBN (IDX IDY)
            .

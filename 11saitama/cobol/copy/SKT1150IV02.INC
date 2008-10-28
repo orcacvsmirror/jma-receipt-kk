@@ -54,3 +54,7 @@
             02  HCM2IV02-NYUGAIKBN
                     PIC X(2)    OCCURS  2 TIMES.
             02  HCM2IV02-TITLE1 PIC X(10).
+      *=== H20”N10ŒŽ‰ü³‘Î‰ž by Yoshikawa(2008/10/24) start
+            02  HCM2IV02-SEIDONAME
+                    PIC X(8)    OCCURS  5 TIMES.
+      *=== H20”N10ŒŽ‰ü³‘Î‰ž by Yoshikawa(2008/10/24) start

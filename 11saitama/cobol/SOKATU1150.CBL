@@ -55,6 +55,8 @@
       *  01.02.07    内田       08/04/30  ４月改正に伴う修正
       *  01.02.08    内田       08/05/29  帳票様式の変更に伴う修正
       *  01.02.09    吉川       08/10/08  SPA-AREA初期化
+      *  01.02.10    吉川       08/10/24  平成20年10月改正対応
+      *                                   シス管「2007」公費まとめ対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -116,6 +118,9 @@
            03  FLG-ERR             PIC 9(01).
            03  FLG-PTINF           PIC 9(01).
            03  FLG-RECE10          PIC 9(01).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+           03  FLG-SYSKANRI        PIC 9(01).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -131,6 +136,11 @@
            03  IDY1                PIC 9(04).
            03  IDY2                PIC 9(04).
            03  IDY3                PIC 9(04).
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+           03  IDZ1                PIC 9(04).
+           03  IDZ2                PIC 9(04).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
       ***** 05/06/09 INS
        01  WRK-TUIKA-AREA.
@@ -151,6 +161,10 @@
            03  WRK-PARA-NYUGAIKBN  PIC X(01).
            03  WRK-PARA-SYOKBN     PIC X(01).
       *          
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+           03  WRK-MEISYO          PIC X(44).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-NYUGAIKBN       PIC X(01).
@@ -170,6 +184,11 @@
            03  WRK-SRYYM-FLG       PIC 9(01).
       *---(01.02.08) LINE ADD END   ------------------------------------
       *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+           03  WRK-MCP-TABLE       PIC X(64).
+           03  WRK-MCP-PATHNAME    PIC X(64).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
+      *
            03  WRK-INDEX           PIC 9(02).
            03  WRK-FTNMONEY        PIC 9(10).
            03  WRK-SYOKBN          PIC X(01).
@@ -178,6 +197,17 @@
        01  CNT-AREA.
            03  CNT-RECE10          PIC 9(06).
            03  CNT-UPDFILE         PIC 9(06).
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *    公費番号まとめ領域
+       01  WRK-2007-AREA.
+           03  WRK-2007-TBL        OCCURS  100.
+               05  WRK-2007-MEISYO PIC X(44).
+               05  WRK-2007-KOH-AREA.
+                   07  WRK-2007-KOHNUM
+                                   PIC X(03)   OCCURS  10.
+           03  WRK-2007-MAX        PIC 9(03).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
       *    集計領域
        01  SUM-AREA.
@@ -224,6 +254,9 @@
                        09  SUM-KOH-SHOKUJIKENSU   PIC  9(06).
                        09  SUM-KOH-SHOKUJIRYOYOHI PIC  9(10).
                        09  SUM-KOH-SHOKUJIFTN     PIC  9(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+                       09  SUM-KOH-MEISYO         PIC  X(44).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *        老人保健（再掲）      
                05  SUM-ROU-KOH-TABLE           OCCURS  10. 
                    07  SUM-ROU-KOH-TBL.
@@ -269,6 +302,16 @@
            COPY    "CPPTINF.INC".
       *
            COPY    "CPRCF010.INC".
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *    医療機関情報情報
+           COPY    "CPSK1001.INC".
+      *
+      *    公費まとめ情報
+           COPY    "CPSK2007.INC".
+      *
+           COPY    "CPSK2009.INC".
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -384,10 +427,73 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.02.06) LINE ADD END   ------------------------------------
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *    システム管理マスタ情報取得
+           PERFORM 110-SYSKANRI-GET-SEC
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
+      *
            .
        100-INIT-EXT.
            EXIT.
       *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *****************************************************************
+      *    システム管理マスタ情報取得
+      *****************************************************************
+       110-SYSKANRI-GET-SEC            SECTION.
+      *
+      *    公費番号まとめ情報
+           INITIALIZE                      WRK-2007-AREA
+      *
+           INITIALIZE                      SYS-2007-REC
+           MOVE    "2007"              TO  SYS-2007-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2007-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2007-STYUKYMD (7:2)
+           MOVE    SYS-2007-STYUKYMD   TO  SYS-2007-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2007-HOSPNUM
+           MOVE    SYS-2007-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  WRK-MCP-TABLE
+               MOVE    "key2"          TO  WRK-MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX            >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2007-REC
+      *
+               ADD     1                   TO  IDX
+               MOVE    SYS-2007-MEISYO (1) TO  WRK-2007-MEISYO   (IDX)
+               PERFORM VARYING IDY FROM    1   BY  1
+                       UNTIL   IDY >       10
+                       OR      SYS-2007-KOHNUM (IDY)   =   SPACE
+                   MOVE    SYS-2007-KOHNUM (IDY)
+                                           TO WRK-2007-KOHNUM (IDX IDY)
+               END-PERFORM
+      *
+               MOVE    "tbl_syskanri"  TO  WRK-MCP-TABLE
+               MOVE    "key2"          TO  WRK-MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           PERFORM 900-CLOSE-SEC
+      *
+           MOVE    IDX             TO  WRK-2007-MAX    
+           .
+       110-SYSKANRI-GET-EXT.
+           EXIT.
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -820,6 +926,9 @@
                        WHEN    1
                            EVALUATE    RECE10-HKNNUM
                                WHEN    "001"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+                               WHEN    "009"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
                                    MOVE    2               TO  IDY2
                                WHEN    "002"
                                    EVALUATE    RECE10-HOJOKBN
@@ -850,6 +959,9 @@
                        WHEN    2
                            EVALUATE    RECE10-HKNNUM
                                WHEN    "001"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+                               WHEN    "009"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
                                    MOVE    2               TO  IDY2
                                WHEN    "002"    
                                    EVALUATE    RECE10-HOJOKBN
@@ -887,6 +999,9 @@
                        WHEN    3
                            EVALUATE    RECE10-HKNNUM
                                WHEN    "001"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+                               WHEN    "009"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
                                    MOVE    2               TO  IDY2
                                WHEN    "002"    
                                    IF      RECE10-HOJOKBN  =   "1" OR
@@ -921,6 +1036,9 @@
                        WHEN    5
                            EVALUATE    RECE10-HKNNUM
                                WHEN    "001"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
+                               WHEN    "009"
+      *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
                                    MOVE    2               TO  IDY2
                                WHEN    "002"
                                    MOVE    3               TO  IDY2
@@ -1262,16 +1380,49 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+               MOVE    SPACE               TO  WRK-MEISYO
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
+      *
       *        特定疾患無しのとき 
                IF      RECE10-KOHNUM (IDZ) =   "091"
                    MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
                END-IF
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *        公費番号まとめ情報があるとき
+               IF      WRK-2007-MAX        >   ZERO
+                   PERFORM VARYING IDZ1    FROM    1   BY  1
+                           UNTIL   IDZ1    >       WRK-2007-MAX
+                       PERFORM VARYING IDZ2    FROM    1   BY  1
+                               UNTIL   IDZ2    >       5
+                               OR      WRK-2007-KOHNUM (IDZ1 IDZ2)
+                                               =   SPACE
+                           IF      RECE10-KOHNUM (IDZ)
+                                       =   WRK-2007-KOHNUM (IDZ1 IDZ2)
+                               MOVE    WRK-2007-KOHNUM (IDZ1 1)
+                                               TO  RECE10-KOHNUM (IDZ)
+                               MOVE    WRK-2007-MEISYO (IDZ1)
+                                               TO  WRK-MEISYO
+                               MOVE    5       TO  IDZ2
+                               MOVE    WRK-2007-MAX
+                                               TO  IDZ1
+                           END-IF
+                       END-PERFORM
+                   END-PERFORM
+               END-IF
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
                PERFORM VARYING IDX2    FROM    1   BY  1
                        UNTIL   IDX2 >          100
                    IF      SUM-KOH-KOHNUM (IDY3 IDX1 IDX2) =   SPACE
                        MOVE    RECE10-KOHNUM (IDZ)     TO 
                                        SUM-KOH-KOHNUM (IDY3 IDX1 IDX2)
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+                       MOVE    WRK-MEISYO              TO 
+                                       SUM-KOH-MEISYO
+                                                      (IDY3 IDX1 IDX2)
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
                    END-IF                                
                    IF      RECE10-KOHNUM (IDZ) 
                                    =   SUM-KOH-KOHNUM (IDY3 IDX1 IDX2)
@@ -1730,6 +1881,61 @@
        910-SEIKYU-INV-EXT.
            EXIT.
       *      
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+      *****************************************************************
+      *    システム管理マスタ読込（ＮＥＸＴ）
+      *****************************************************************
+       900-SYSKANRI-READ-N-SEC         SECTION.
+      *
+           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+           PERFORM 900-DBFETCH-SEC
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-SYSKANRI
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+           .
+       900-SYSKANRI-READ-N-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    テーブルアクセス処理
+      *****************************************************************
+       900-ORCDBMAIN-SEC               SECTION.
+      *
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+      *
+       900-ORCDBMAIN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢＦＥＴＣＨ処理
+      *****************************************************************
+       900-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-DBFETCH-EXT.
+           EXIT.
+      *****************************************************************
+      *    テーブルクローズ処理
+      *****************************************************************
+       900-CLOSE-SEC               SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-CLOSE-EXT.
+           EXIT.
+      *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************
