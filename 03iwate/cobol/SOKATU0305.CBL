@@ -30,6 +30,7 @@
       *  01.00.01    µ»¿Ó    2008/05/15  ∫ﬂ∞Â¡Ì§»∫ﬂ¡Ìø«§Œ∞ıª˙∞Ã√÷§¨
       *                                  µ’§À§ §√§∆§§§Î§Œ§ÚΩ§¿µ
       *                                  ¿¡µ·∫˝øÙ•´•¶•Û•»•ﬂ•πΩ§¿µ
+      *  01.00.02    µ»¿Ó    2008/10/22  ∫ﬂ¡Ìø«∞ ≥∞§Œ∫ﬂ¬§œ∫ﬂ∞Â¡Ì§»§π§Î
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1389,11 +1390,14 @@
                IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
                                        CONS-ZAITAKU2
                  MOVE  1  TO  FLG-ZAIISO
-               END-IF
-               IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
-                                       CONS-ZAITAKU4  OR
-                                       CONS-ZAITAKU5  OR
-                                       CONS-ZAITAKU6
+      *=== ∫ﬂ¡Ìø«∞ ≥∞§œ∫ﬂ∞Â¡Ì by Yoshikawa(2008/10/22) start
+      *         END-IF
+      *         IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
+      *                                 CONS-ZAITAKU4  OR
+      *                                 CONS-ZAITAKU5  OR
+      *                                 CONS-ZAITAKU6
+               ELSE
+      *=== ∫ﬂ¡Ìø«∞ ≥∞§œ∫ﬂ∞Â¡Ì by Yoshikawa(2008/10/22) end
                  MOVE  1  TO  FLG-ZAIISO2
                END-IF
              END-IF

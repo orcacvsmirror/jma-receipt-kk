@@ -35,6 +35,7 @@
       *                                  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
       *  01.00.03    吉川    2008/05/29  県内は保険者名を印字する
+      *  01.00.04    吉川    2008/10/22  在総診以外の在宅は在医総とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1930,11 +1931,14 @@
                IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
                                        CONS-ZAITAKU2
                  MOVE  1  TO  FLG-ZAIISO
-               END-IF
-               IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
-                                       CONS-ZAITAKU4  OR
-                                       CONS-ZAITAKU5  OR
-                                       CONS-ZAITAKU6
+      *=== 在総診以外は在医総 by Yoshikawa(2008/10/22) start
+      *         END-IF
+      *         IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
+      *                                 CONS-ZAITAKU4  OR
+      *                                 CONS-ZAITAKU5  OR
+      *                                 CONS-ZAITAKU6
+               ELSE
+      *=== 在総診以外は在医総 by Yoshikawa(2008/10/22) end
                  MOVE  1  TO  FLG-ZAIISO2
                END-IF
              END-IF
