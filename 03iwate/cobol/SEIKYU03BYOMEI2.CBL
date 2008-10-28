@@ -38,6 +38,7 @@
       *  01.00.04    NACL-藤原    03.03.12  補助区分の追加
       ****************************
       *  01.00.05    内田         07/10/06  日レセver4.0対応
+      *  01.00.06    門間         08/10/09  SPA-AREAの初期化
       *****************************************************************
 001200*
 001300 ENVIRONMENT             DIVISION.
@@ -231,6 +232,9 @@
       *
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
+      *--- 01.00.06 SPA-AREAの初期化 LINE ADD START MONMA --------------
+                                       SPA-AREA
+      *--- 01.00.06 SPA-AREAの初期化 LINE ADD END   MONMA --------------
       *
            MOVE    ZERO                TO  FLG-END
       *

@@ -36,6 +36,7 @@
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
       *  01.00.03     内田    2008/05/16  ４月改正対応
+      *  01.00.04     門間    2008/10/09  SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -468,6 +469,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *--- 01.00.04 SPA-AREAの初期化 LINE ADD START MONMA --------------
+           INITIALIZE  SPA-AREA
+      *--- 01.00.04 SPA-AREAの初期化 LINE ADD END   MONMA --------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

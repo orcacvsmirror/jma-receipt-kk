@@ -45,6 +45,7 @@
       *  01.00.12    NACL-藤原    04/02/01  病名コード２１に変更
       ****************************
       *  01.00.13    内田         07/08/21  日レセver4.0対応
+      *  01.00.14    門間         08/10/09  SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -251,6 +252,9 @@
       *
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
+      *--- 01.00.14 SPA-AREAの初期化 LINE ADD START MONMA --------------
+                                       SPA-AREA
+      *--- 01.00.14 SPA-AREAの初期化 LINE ADD END   MONMA --------------
       *
            MOVE    ZERO                TO  FLG-END
            MOVE    WRK-PARA-LINK       TO  WRK-PARA

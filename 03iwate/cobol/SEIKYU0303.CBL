@@ -29,9 +29,10 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
-      *  01.00.01    内田    07/08/21    日レセver4.0対応
-      *                                  システム管理マスタ「1901」の
-      *                                  医療機関情報を参照
+      *  01.00.01    内田    07/08/21   日レセver4.0対応
+      *                                 システム管理マスタ「1901」の
+      *                                 医療機関情報を参照
+      *  01.00.02    門間    08/10/09   SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -303,6 +304,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *--- 01.00.02 SPA-AREAの初期化 LINE ADD START MONMA --------------
+           INITIALIZE  SPA-AREA
+      *--- 01.00.02 SPA-AREAの初期化 LINE ADD END   MONMA --------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
