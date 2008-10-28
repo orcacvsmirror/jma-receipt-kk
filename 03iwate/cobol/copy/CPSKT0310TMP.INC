@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    門間         08/10/09  公費名称追加
       ************************************************************
        01  SKT0310TMP-REC.
       *  KEY
@@ -72,6 +73,9 @@
            03  SKT0310TMP-KOH-TBL      OCCURS  20.
       *      公費番号
                05  SKT0310TMP-KOHNUM               PIC  X(03).
+      *--- 01.00.01 公費名称追加 LINE ADD START MONMA -------------
+               05  SKT0310TMP-KOHNAME              PIC  X(10).
+      *--- 01.00.01 公費名称追加 LINE ADD END   MONMA -------------
       *      入外テーブル
                05  SKT0310TMP-R-NYUGAI-TBL  OCCURS  2.
       *          公費ー件数
