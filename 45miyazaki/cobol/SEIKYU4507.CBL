@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 宮崎・乳幼児医療等総括票
-      *                      (181,281,381,195,190)
+      *                      (181,281,381,481,581,188,195,190)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/07/07    有村          再作成(2.5.0対応)
@@ -34,6 +34,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.04    内田    07/10/23    対象公費番号追加(190)
+      *  01.00.05    吉川    08/10/27    対象公費番号追加(188,481,581)
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -278,6 +280,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -567,9 +572,14 @@
       *         IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
       *                                OR "195"
       *---(01.00.02) LINE ADD END   ------------------------------------
-               IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
-                                      OR "195" OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+      *         IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381"
+      *                                OR "195" OR "190"
       *---(01.00.04) LINE ADD END   ------------------------------------
+               IF  RECE02-KOHNUM (IDX) = "181" OR "281" OR "381" 
+                                      OR "481" OR "581" OR "188" 
+                                      OR "195" OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *****
                    DISPLAY "患者番号="     RECE02-PTNUM
                            "入外区分="     RECE02-NYUGAIKBN
@@ -595,7 +605,10 @@
       *                                         MF100-ITBFTN(3)
       *---(01.00.04) LINE ADD START ------------------------------------
       *               IF  RECE02-KOHNUM (IDX)  =  "195"
-                     IF  RECE02-KOHNUM (IDX)  =  "195"  OR  "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+      *               IF  RECE02-KOHNUM (IDX)  =  "195"  OR  "190"
+                     IF  RECE02-KOHNUM (IDX) = "195" OR "190" OR "188"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *                件数加算
                        ADD     1           TO  MF100-KENSU(IDX1 + 3)
@@ -1017,14 +1030,24 @@
       *         OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
       *         OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
       *---(01.00.02) LINE ADD END   ------------------------------------
-               IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+      *         IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+               IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *****
       *        テスト患者のときは読み飛ばす

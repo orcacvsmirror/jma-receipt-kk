@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 宮崎・複写式レセプト
-      *                      (181,281,381,195)
+      *                      (181,281,381,481,581,188,190,195)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/07/06    有村          再作成(2.5.0対応)
@@ -41,7 +41,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.07    内田    07/10/23    保険番号190は一部負担金を印字しない
-      *  01.00.08    内田    08/05/28    ４月改正対応
+      *  01.00.08    吉川    08/10/27    対象公費番号追加(188,481,581)
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -352,6 +353,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -725,6 +729,9 @@
                                     OR "190"
       *---(01.00.04) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+                                    OR "188" OR "481" OR "581"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *****
                IF  MF100-KOHNUM      = SPACE
                  MOVE  RECE02-KOHINF      (IDX)  TO  MF100-KOHINF
@@ -1013,17 +1020,11 @@
                WHEN    "2"
                    MOVE    "２本外"        TO  SC03-HONKZK
                WHEN    "4"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    "４三外"        TO  SC03-HONKZK
-                   MOVE    "４六外"        TO  SC03-HONKZK
-      *---(01.00.08) LINE ADD END   ------------------------------------
+                   MOVE    "４三外"        TO  SC03-HONKZK
                WHEN    "6"
                    MOVE    "６家外"        TO  SC03-HONKZK
                WHEN    "8"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    "８高外９"      TO  SC03-HONKZK
-                   MOVE    "８高外一"      TO  SC03-HONKZK
-      *---(01.00.08) LINE ADD END   ------------------------------------
+                   MOVE    "８高外９"      TO  SC03-HONKZK
            END-EVALUATE
       *
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -1319,17 +1320,11 @@
                WHEN    "1"
                    MOVE    "１本入"     TO  SC04-HONKZK
                WHEN    "3"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    "３三入"     TO  SC04-HONKZK
-                   MOVE    "３六入"     TO  SC04-HONKZK
-      *---(01.00.08) LINE ADD END   ------------------------------------
+                   MOVE    "３三入"     TO  SC04-HONKZK
                WHEN    "5"
                    MOVE    "５家入"     TO  SC04-HONKZK
                WHEN    "7"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    "７高入９"   TO  SC04-HONKZK
-                   MOVE    "７高入一"   TO  SC04-HONKZK
-      *---(01.00.08) LINE ADD END   ------------------------------------
+                   MOVE    "７高入９"   TO  SC04-HONKZK
                WHEN    "9"
       *---(01.00.03) LINE ADD START ------------------------------------
       *             MOVE    "９高入８"   TO  SC04-HONKZK
@@ -1847,14 +1842,24 @@
       *         OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
       *         OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
       *         OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
-               IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
-               OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
-                                   OR "190"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) start
+      *         IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+      *         OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "195"
+      *                             OR "190"
+               IF  RECE02-KOHNUM(1) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(2) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(3) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+               OR  RECE02-KOHNUM(4) = "181" OR "281" OR "381" OR "481"
+                                   OR "581" OR "188" OR "190" OR "195"
+      *=== 対象公費番号追加 by Yoshikawa(2008/10/27) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       *****
