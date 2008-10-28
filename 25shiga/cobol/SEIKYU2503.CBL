@@ -40,6 +40,9 @@
       *  01.00.04    内田    08/01/07    印字対象番号の追加（441,541）
       *  01.00.05    内田    08/07/09    前期高齢９割（軽減特例措置）は
       *                                  給付割合を８０と印字
+      *  01.00.06    吉川    08/10/20    結核・精神を併用していても
+      *                                  公費分患者負担額を計算する
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -342,6 +345,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/20) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/20) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -1547,12 +1553,16 @@
                        MOVE    SYU-KOH-COMPFTN(IDX)
                                                TO  WRK-KOHFTNGK
                    ELSE
-                       IF      SYU-KOH-HKNNUM(IDX)  
-                                               NOT = "010" AND "011"
-                                               AND   "020" AND "021"
+      *=== 結核・精神も負担額を記載 by Yoshikawa(2008/10/20) start
+      *                 IF      SYU-KOH-HKNNUM(IDX)  
+      *                                         NOT = "010" AND "011"
+      *                                         AND   "020" AND "021"
+      *=== 結核・精神も負担額を記載 by Yoshikawa(2008/10/20) end
                            MOVE    SYU-KOH-COMPFTN(IDX)
                                                TO  WRK-KOHFTNGK
-                       END-IF
+      *=== 結核・精神も負担額を記載 by Yoshikawa(2008/10/20) start
+      *                 END-IF
+      *=== 結核・精神も負担額を記載 by Yoshikawa(2008/10/20) end
                    END-IF
                END-IF
       *

@@ -53,7 +53,10 @@
       *記号
                 05  SC03-KIGO       PIC X(16).
       *番号
-                05  SC03-NUM        PIC X(16). 
+      *=== バイト数増加 by Yoshikawa(2008/10/20) start
+      *          05  SC03-NUM        PIC X(16). 
+                05  SC03-NUM        PIC X(24). 
+      *=== バイト数増加 by Yoshikawa(2008/10/20) end
       *診療年月
                 05  SC03-SRYYY      PIC X(02).
                 05  SC03-SRYMM      PIC X(02).
