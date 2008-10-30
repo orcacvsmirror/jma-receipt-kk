@@ -5719,18 +5719,18 @@
         <point val="23.6625,17.1875"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.6625,16.9884;27.854,17.2384"/>
+        <rectangle val="23.6625,17.0044;27.9833,17.2344"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#176;&#229;&#202;&#221; &#190;&#227;&#179;&#178;&#188;&#212;&#161;&#166;&#198;&#253;&#205;&#196;&#187;&#249;&#161;&#166;&#202;&#236;&#187;&#210;&#176;&#229;&#206;&#197;&#185;&#231;&#183;&#215;#</string>
+            <string>#&#176;&#229;&#202;&#221; &#190;&#227;&#179;&#178;&#188;&#212;&#161;&#166;&#198;&#253;&#205;&#196;&#187;&#249;&#161;&#166;&#164;&#210;&#164;&#200;&#164;&#234;&#191;&#198;&#176;&#229;&#206;&#197;&#185;&#231;&#183;&#215;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
           </attribute>
           <attribute name="height">
-            <real val="0.25"/>
+            <real val="0.23"/>
           </attribute>
           <attribute name="pos">
             <point val="23.6625,17.1875"/>
@@ -5742,10 +5742,10 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.1515"/>
+            <real val="0.13938"/>
           </attribute>
           <attribute name="multi">
-            <real val="0.12625"/>
+            <real val="0.11615"/>
           </attribute>
         </composite>
       </attribute>
