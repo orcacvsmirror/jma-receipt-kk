@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : レセプト
       *  コンポーネント名  : 福岡複写式レセ
-      *                      (180,181,190,281,290)
+      *                      (180,181,190,281,290,280,380,381,390,490)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/15    有村          再作成(入院用様式追加対応)
@@ -45,6 +45,9 @@
       *                                   医療機関情報を参照
       *  01.00.10    内田     08/05/02    表示を３歳から６歳へ変更
       *  01.00.11    内田     08/07/09    表示を「高外一」「高外７」等へ変更
+      *  01.00.12    内田     08/10/02    帳票様式の変更に伴う修正
+      *                                   印字対象番号の追加
+      *                                   （280,380,381,390,490）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -997,9 +1000,13 @@
       *       IF  RECE02-KOHNUM (IDZ) =  "180" OR "181" OR "190"
              IF  RECE02-KOHNUM(IDZ) = "180" OR "181" OR "190" OR "281"
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *---(01.00.07) LINE ADD START ------------------------------------
-                                   OR "290"
-      *---(01.00.07) LINE ADD END   ------------------------------------
+      *---(01.00.12) LINE ADD START ------------------------------------
+      **---(01.00.07) LINE ADD START ------------------------------------
+      *                             OR "290"
+      **---(01.00.07) LINE ADD END   ------------------------------------
+                                   OR "290" OR "280" OR "380" OR "381"
+                                   OR "390" OR "490"
+      *---(01.00.12) LINE ADD END   ------------------------------------
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1065,7 +1072,10 @@
            MOVE    RECE02-SHOSHINTIME       TO  MF100-SHOSHINTIME
            MOVE    RECE02-ZAITAKU           TO  MF100-ZAITAKU
            MOVE    RECE02-ZAITAKU-SAIKEI    TO  MF100-ZAITAKU-SAIKEI
-      *
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *    給付外の額
+           MOVE    RECE02-FTNMONEY (IDY)    TO  MF100-KYUFUGAITEN
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *
            MOVE    ZERO                TO  WRK-KYUFUGAI
                                            WRK-FTNMONEY-G
@@ -1087,7 +1097,9 @@
            END-IF
            PERFORM 920-SYUNOU-SET-SEC
            DISPLAY "給付外点数集計終了=" WRK-KYUFUGAI
-           MOVE    WRK-KYUFUGAI        TO  MF100-KYUFUGAITEN
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *     MOVE    WRK-KYUFUGAI        TO  MF100-KYUFUGAITEN
+      *---(01.00.12) LINE ADD END   ------------------------------------
            IF      RECE02-FTNMONEY(1)  >   ZERO
                IF      RECE02-FTNMONEY(1)  <   WRK-FTNMONEY-G
                    MOVE    RECE02-FTNMONEY(1)  TO  WRK-FTNMONEY-G
@@ -2493,66 +2505,68 @@
                      MOVE  "外・休・深"   TO  HC06-SHOSHINTIME
            END-EVALUATE
       *
-      *    初診、指導、在宅のみ印字
-           PERFORM  VARYING  IDX  FROM  1  BY  1
-                    UNTIL    IDX  >     13
-             IF    IDX =  1  OR 8 OR 9 OR 10
-               MOVE  MF100-KAISU(IDX)    TO  WRK-KAISUZ
-               MOVE  WRK-KAISUZ          TO  HC06-KAISU(IDX)
-               MOVE  MF100-TENSU(IDX 1)  TO  WRK-TENSUZ
-               MOVE  WRK-TENSU           TO  HC06-TENSU(IDX)
-             END-IF
-           END-PERFORM
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *    初診、指導、在宅のみ印字　→　印字しないへ変更
+      *     PERFORM  VARYING  IDX  FROM  1  BY  1
+      *              UNTIL    IDX  >     13
+      *       IF    IDX =  1  OR 8 OR 9 OR 10
+      *         MOVE  MF100-KAISU(IDX)    TO  WRK-KAISUZ
+      *         MOVE  WRK-KAISUZ          TO  HC06-KAISU(IDX)
+      *         MOVE  MF100-TENSU(IDX 1)  TO  WRK-TENSUZ
+      *         MOVE  WRK-TENSU           TO  HC06-TENSU(IDX)
+      *       END-IF
+      *     END-PERFORM
       *
-      *    指導は小児科外来診察料の初診点数のみを設定する
-           MOVE    ZERO         TO       WRK-SIDOU
-           PERFORM  VARYING  IDX  FROM  1  BY  1
-                    UNTIL    IDX  >     2
-             INITIALIZE                       SRYACT-REC
-      *---(01.00.09) LINE ADD START ------------------------------------
-      *       MOVE    MF100-HOSPID       TO  SRY-HOSPID
-             MOVE    MF100-HOSPNUM      TO  SRY-HOSPNUM
-      *---(01.00.09) LINE ADD END   ------------------------------------
-             MOVE    MF100-NYUGAIKBN    TO  SRY-NYUGAIKBN
-             MOVE    MF100-PTID         TO  SRY-PTID
-             MOVE    MF100-SRYYM        TO  SRY-SRYYM
+      **    指導は小児科外来診察料の初診点数のみを設定する
+      *     MOVE    ZERO         TO       WRK-SIDOU
+      *     PERFORM  VARYING  IDX  FROM  1  BY  1
+      *              UNTIL    IDX  >     2
+      *       INITIALIZE                       SRYACT-REC
+      **---(01.00.09) LINE ADD START ------------------------------------
+      **       MOVE    MF100-HOSPID       TO  SRY-HOSPID
+      *       MOVE    MF100-HOSPNUM      TO  SRY-HOSPNUM
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *       MOVE    MF100-NYUGAIKBN    TO  SRY-NYUGAIKBN
+      *       MOVE    MF100-PTID         TO  SRY-PTID
+      *       MOVE    MF100-SRYYM        TO  SRY-SRYYM
       *    小児科外来診察料の初診コード設定
-             IF    IDX  =  1
-               MOVE    "113003510"         TO  SRY-SRYCD(1)
-                                               SRY-SRYCD(2)
-                                               SRY-SRYCD(3)
-                                               SRY-SRYCD(4)
-                                               SRY-SRYCD(5)
-             ELSE
-               MOVE    "113003710"         TO  SRY-SRYCD(1)
-                                               SRY-SRYCD(2)
-                                               SRY-SRYCD(3)
-                                               SRY-SRYCD(4)
-                                               SRY-SRYCD(5)
-             END-IF
-             PERFORM  900-SRYACT-SELECT-SEC
-             PERFORM  UNTIL  FLG-SRYACT  =  1
-               PERFORM  900-SRYACCT-READ-SEC
-      *---(01.00.09) LINE ADD START ------------------------------------
+      *       IF    IDX  =  1
+      *         MOVE    "113003510"         TO  SRY-SRYCD(1)
+      *                                         SRY-SRYCD(2)
+      *                                         SRY-SRYCD(3)
+      *                                         SRY-SRYCD(4)
+      *                                         SRY-SRYCD(5)
+      *       ELSE
+      *         MOVE    "113003710"         TO  SRY-SRYCD(1)
+      *                                         SRY-SRYCD(2)
+      *                                         SRY-SRYCD(3)
+      *                                         SRY-SRYCD(4)
+      *                                         SRY-SRYCD(5)
+      *       END-IF
+      *       PERFORM  900-SRYACT-SELECT-SEC
+      *       PERFORM  UNTIL  FLG-SRYACT  =  1
+      *         PERFORM  900-SRYACCT-READ-SEC
+      **---(01.00.09) LINE ADD START ------------------------------------
       *         MOVE    ACCT-HOSPID         TO  WRK-HOSPID
-               MOVE    ACCT-HOSPNUM        TO  WRK-HOSPNUM
-      *---(01.00.09) LINE ADD END   ------------------------------------
-               MOVE    ACCT-PTID           TO  WRK-PTID
-               MOVE    ACCT-HKNCOMBI       TO  WRK-HKNCOMBI
-               PERFORM 910-HKNCOMBI-READ-SEC
-               IF      MF100-KOHID     =   COMB-KOHID(1)   OR
-                                           COMB-KOHID(2)   OR
-                                           COMB-KOHID(3)   OR
-                                           COMB-KOHID(4)
-                 COMPUTE  WRK-SIDOU  =  WRK-SIDOU +
-                          (ACCT-ZAITEN  *  ACCT-ZAIKAISU)
-               END-IF
-               PERFORM  900-SRYACT-FETCH-SEC
-             END-PERFORM
-             PERFORM  900-SRYACT-CLOSE-SEC
-           END-PERFORM
-           MOVE    WRK-SIDOU    TO    WRK-TENSUZ
-           MOVE    WRK-TENSUZ   TO    HC06-TENSU(7)
+      *         MOVE    ACCT-HOSPNUM        TO  WRK-HOSPNUM
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *         MOVE    ACCT-PTID           TO  WRK-PTID
+      *         MOVE    ACCT-HKNCOMBI       TO  WRK-HKNCOMBI
+      *         PERFORM 910-HKNCOMBI-READ-SEC
+      *         IF      MF100-KOHID     =   COMB-KOHID(1)   OR
+      *                                     COMB-KOHID(2)   OR
+      *                                     COMB-KOHID(3)   OR
+      *                                     COMB-KOHID(4)
+      *           COMPUTE  WRK-SIDOU  =  WRK-SIDOU +
+      *                    (ACCT-ZAITEN  *  ACCT-ZAIKAISU)
+      *         END-IF
+      *         PERFORM  900-SRYACT-FETCH-SEC
+      *       END-PERFORM
+      *       PERFORM  900-SRYACT-CLOSE-SEC
+      *     END-PERFORM
+      *     MOVE    WRK-SIDOU    TO    WRK-TENSUZ
+      *     MOVE    WRK-TENSUZ   TO    HC06-TENSU(7)
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD START ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
       *     END-IF
@@ -2607,11 +2621,13 @@
                      MOVE  "外・休・深"   TO  HCN06-SHOSHINTIME
            END-EVALUATE
       *
-      *    初診のみ印字
-           MOVE    MF100-KAISU(1)      TO  WRK-KAISUZ
-           MOVE    WRK-KAISUZ          TO  HCN06-KAISU(1)
-           MOVE    MF100-TENSU(1 1)    TO  WRK-TENSUZ
-           MOVE    WRK-TENSU           TO  HCN06-TENSU(1)
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *    初診のみ印字　→　印字しない
+      *     MOVE    MF100-KAISU(1)      TO  WRK-KAISUZ
+      *     MOVE    WRK-KAISUZ          TO  HCN06-KAISU(1)
+      *     MOVE    MF100-TENSU(1 1)    TO  WRK-TENSUZ
+      *     MOVE    WRK-TENSU           TO  HCN06-TENSU(1)
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD START ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
       *     END-IF
@@ -2987,14 +3003,28 @@
       *         OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
       *         OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
       *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
+      *---(01.00.12) LINE ADD START ------------------------------------
+      *         IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
+      *         OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
+      *         OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
+      *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
                IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
                OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
                OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
                OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
+      *---(01.00.12) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
