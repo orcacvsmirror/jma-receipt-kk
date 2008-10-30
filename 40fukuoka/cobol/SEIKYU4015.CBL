@@ -35,6 +35,7 @@
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
       *  01.00.03    内田     08/01/27    公費の負担者番号で市の判定をする
+      *  01.00.04    内田     08/10/04    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -317,6 +318,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.04) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.04) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

@@ -39,6 +39,7 @@
       *                                   処理をする
       *  01.00.05    内田     07/11/30    市町村番号上４桁を固定でなく
       *                                   負担者番号を印字
+      *  01.00.06    内田     08/10/04    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -321,6 +322,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *---(01.00.06) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
