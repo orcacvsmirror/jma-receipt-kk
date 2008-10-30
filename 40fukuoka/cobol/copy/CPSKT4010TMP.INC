@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      * 01.00.01     門間         08/10/29  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT4010TMP-REC.
            03  SKT4010TMP-KEY.
@@ -44,6 +45,9 @@
                05  SKT4010TMP-S-FTNGK               PIC  9(09).
            03  SKT4010TMP-KOH-AREA  OCCURS  20.
                05  SKT4010TMP-KOHNUM                PIC  X(03).
+      *--- (01.00.11) LINE ADD START MONMA -------------------------------
+               05  SKT4010TMP-KOHNAME               PIC  X(10).
+      *--- (01.00.11) LINE ADD END   MONMA -------------------------------
                05  SKT4010TMP-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT4010TMP-KKENSU            PIC  9(05).
                    07  SKT4010TMP-KNISSU            PIC  9(05).

@@ -22,6 +22,7 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.03    高嶋       05/10/31    ７割追加対応
       *                                     薬剤一部負担金削除対応
+      *  01.00.01    門間       08/10/29    シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT4020TMP-REC.
            03  SKT4020TMP-KEY.
@@ -51,6 +52,9 @@
                05  SKT4020TMP-S-FTNGK               PIC  9(09).
            03  SKT4020TMP-KOH-AREA  OCCURS  20.
                05  SKT4020TMP-KOHNUM                PIC  X(03).
+      *--- (01.00.11) LINE ADD START MONMA -------------------------------
+               05  SKT4020TMP-KOHNAME               PIC  X(10).
+      *--- (01.00.11) LINE ADD END   MONMA -------------------------------
                05  SKT4020TMP-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT4020TMP-KKENSU            PIC  9(05).
                    07  SKT4020TMP-KNISSU            PIC  9(05).
