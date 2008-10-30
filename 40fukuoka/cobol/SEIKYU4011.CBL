@@ -20,8 +20,8 @@
       *****************************************************************
       *  •∑•π•∆•‡Ãæ        : £œ£“£√£¡
       *  •µ•÷•∑•π•∆•‡Ãæ    : √œ ˝∏¯»Ò
-      *  •≥•Û•›°º•Õ•Û•»Ãæ  :  °≤¨°¶∆˝æ„ Ï∞ÂŒ≈»Ò¿¡µ·ΩÒ
-      *                      (180,181,190,281,290)
+      *  •≥•Û•›°º•Õ•Û•»Ãæ  :  °≤¨°¶∆˝æ„ø∆∞ÂŒ≈»Ò¿¡µ·ΩÒ
+      *                      (180,181,190,281,290,280,380,381,390,490)
       *  ¥…Õ˝º‘            : 
       *  ∫Ó¿Æ∆¸…’    ∫Ó∂»º‘        µ≠Ω“
       *  05/04/20    Õ≠¬º          ∫∆∫Ó¿Æ(2.5.0¬–±˛)
@@ -42,6 +42,10 @@
       *  01.00.10    ∆‚≈ƒ     07/10/10    ∆¸•Ï•ªver4.0¬–±˛
       *                                   •∑•π•∆•‡¥…Õ˝•ﬁ•π•ø°÷1901°◊§Œ
       *                                   ∞ÂŒ≈µ°¥ÿæ Û§Úª≤æ»
+      *  01.00.11    ∆‚≈ƒ     08/10/02    ƒ¢…ºÕÕº∞§Œ —ππ§À»º§¶Ω§¿µ
+      *                                   SPA-AREAΩÈ¥¸≤Ω
+      *                                   ∞ıª˙¬–æ›»÷πÊ§Œƒ…≤√
+      *                                   ° 280,380,381,390,490°À
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -327,6 +331,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(01.00.11) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -368,8 +375,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4011"    TO  JOB-PGID
-           MOVE    " °≤¨°¶∆˝æ„ Ï∞ÂŒ≈»Ò¿¡µ·ΩÒ" 
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *     MOVE    " °≤¨°¶∆˝æ„ Ï∞ÂŒ≈»Ò¿¡µ·ΩÒ" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    " °≤¨°¶∆˝æ„ø∆∞ÂŒ≈»Ò¿¡µ·ΩÒ" 
                                    TO  JOB-SHELLMSG
+      *---(01.00.11) LINE ADD END   ------------------------------------
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -607,9 +618,13 @@
       *       IF  RECE02-KOHNUM (IDZ) =  "180" OR "181" OR "190"
              IF  RECE02-KOHNUM(IDZ) = "180" OR "181" OR "190" OR "281"
       *---(01.00.07) LINE ADD END   ------------------------------------
-      *---(01.00.08) LINE ADD START ------------------------------------
-                                   OR "290"
-      *---(01.00.08) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+      **---(01.00.08) LINE ADD START ------------------------------------
+      *                             OR "290"
+      **---(01.00.08) LINE ADD END   ------------------------------------
+                                   OR "290" OR "280" OR "380" OR "381"
+                                   OR "390" OR "490"
+      *---(01.00.11) LINE ADD END   ------------------------------------
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -816,16 +831,27 @@
       *    ∏¯»Ò»ΩƒÍ
            EVALUATE    WRK-KOHNUM
                WHEN    "180"
+      *---(01.00.11) LINE ADD START ------------------------------------
+               WHEN    "280"
+               WHEN    "380"
+      *---(01.00.11) LINE ADD END   ------------------------------------
                    MOVE    2    TO    IDX1
                WHEN    "181"
       *---(01.00.07) LINE ADD START ------------------------------------
                WHEN    "281"
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+               WHEN    "381"
+      *---(01.00.11) LINE ADD END   ------------------------------------
                    MOVE    1    TO    IDX1
                WHEN    "190"
       *---(01.00.08) LINE ADD START ------------------------------------
                WHEN    "290"
       *---(01.00.08) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+               WHEN    "390"
+               WHEN    "490"
+      *---(01.00.11) LINE ADD END   ------------------------------------
                    MOVE    3    TO    IDX1
            END-EVALUATE
       *
@@ -879,12 +905,16 @@
       *---(01.00.07) LINE ADD START ------------------------------------
       *    …È√¥Ãµ§Œ£≤£∏£±§œΩ∏∑◊§∑§ §§
       *     ADD     WRK-KYUFUGAI    TO  MF100-KYUFUGAI(IDX1 IDX2)
-      *---(01.00.09) LINE ADD START ------------------------------------
-      *     IF  WRK-KOHNUM  NOT =  "281"
-           IF  WRK-KOHNUM  NOT =  "281"  AND  "290"
-      *---(01.00.09) LINE ADD END   ------------------------------------
-             ADD     WRK-KYUFUGAI    TO  MF100-KYUFUGAI(IDX1 IDX2)
-           END-IF
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    µÎ…’≥∞≈¿øÙ°°¢™°°µÎ…’≥∞§Œ≥€
+      **---(01.00.09) LINE ADD START ------------------------------------
+      **     IF  WRK-KOHNUM  NOT =  "281"
+      *     IF  WRK-KOHNUM  NOT =  "281"  AND  "290"
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *       ADD     WRK-KYUFUGAI    TO  MF100-KYUFUGAI(IDX1 IDX2)
+      *     END-IF
+           ADD   RECE02-FTNMONEY (IDY)  TO  MF100-KYUFUGAI(IDX1 IDX2)
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    πÁ∑◊≤√ªª
@@ -1028,17 +1058,21 @@
                MOVE    MF100-KYUFUGAI(IDX1 IDX2)  TO   WRK-Z7
                MOVE    WRK-Z7        TO   SC11-KYUFUGAI(IDX1 IDX2)
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
       *    ÃÙ∫ﬁ ¨
-               MOVE    MF100-YKZFTN(IDX1 IDX2)  TO   WRK-Z7
-               MOVE    WRK-Z7        TO   SC11-YKZFTN(IDX1 IDX2)
+      *         MOVE    MF100-YKZFTN(IDX1 IDX2)  TO   WRK-Z7
+      *         MOVE    WRK-Z7        TO   SC11-YKZFTN(IDX1 IDX2)
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
       *    ∞Ï…Ù…È√¥ ¨
                MOVE    MF100-ITBFTN(IDX1 IDX2)  TO   WRK-Z7
                MOVE    WRK-Z7        TO   SC11-ITBFTN(IDX1 IDX2)
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
       *    πÁ∑◊
-               MOVE    MF100-GOKEI(IDX1 IDX2)  TO   WRK-Z9
-               MOVE    WRK-Z9        TO   SC11-GOKEI(IDX1 IDX2)
+      *         MOVE    MF100-GOKEI(IDX1 IDX2)  TO   WRK-Z9
+      *         MOVE    WRK-Z9        TO   SC11-GOKEI(IDX1 IDX2)
+      *---(01.00.11) LINE ADD END   ------------------------------------
              END-PERFORM
            END-PERFORM
       *
@@ -1069,8 +1103,12 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4011.red"         TO  SPRT-PRTID
-           MOVE    "∆˝æ„ Ï∞ÂŒ≈»Ò¿¡µ·ΩÒ"
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *     MOVE    "∆˝æ„ Ï∞ÂŒ≈»Ò¿¡µ·ΩÒ"
+      *                                 TO  SPRT-TITLE
+           MOVE    "∆˝æ„ø∆∞ÂŒ≈»Ò¿¡µ·ΩÒ"
                                        TO  SPRT-TITLE
+      *---(01.00.11) LINE ADD END   ------------------------------------
            MOVE    SC11                TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1480,14 +1518,28 @@
       *         OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
       *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *         IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
+      *         OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
+      *         OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
+      *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290"
                IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
                OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
                OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
                OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *---(01.00.08) LINE ADD END   ------------------------------------
       *    πÒ ›§œ∞ıª˙¬–æ›≥∞
       *---(01.00.06) LINE ADD START ------------------------------------
