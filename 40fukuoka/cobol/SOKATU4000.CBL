@@ -49,6 +49,8 @@
       *                                  でも印刷する
       *  01.00.14    内田    08/08/15    紙レセ時、不要な紙が出るのを修正
       *                                  後期高齢者の保険者番号の全角表示
+      *  01.00.15    内田    08/10/04    印字対象番号の追加
+      *                                  （280,380,381,390,490）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -852,7 +854,11 @@
                IF  RECE02-KOHNUM (IDX3) = "180" OR "181" OR "190"
       *---(01.00.08) LINE ADD START ------------------------------------
       *                                 OR "281"
-                                       OR "281" OR "290"
+      *---(01.00.15) LINE ADD START ------------------------------------
+      *                                 OR "281" OR "290"
+                              OR "281" OR "290" OR "280" OR "380"
+                              OR "381" OR "390" OR "490"
+      *---(01.00.15) LINE ADD END   ------------------------------------
       *---(01.00.08) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
@@ -1070,7 +1076,11 @@
                                   "180" OR "181" OR "190" OR "281" OR
       *---(01.00.08) LINE ADD START ------------------------------------
       *                            "145"
-                                  "145" OR "290"
+      *---(01.00.15) LINE ADD START ------------------------------------
+      *                            "145" OR "290"
+                                  "145" OR "290" OR "280" OR "380" OR
+                                  "381" OR "390" OR "490"
+      *---(01.00.15) LINE ADD END   ------------------------------------
       *---(01.00.08) LINE ADD END   ------------------------------------
                  ADD  1                      TO  WRK-KOH-GKENSU(1)
                  ADD  RECE10-TOTALTEN(IDX3 + 1)  TO  WRK-TMP-TENSU
@@ -1954,7 +1964,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-      *---(01.00.06) LINE ADD START ------------------------------------
+      *---(01.00.15) LINE ADD START ------------------------------------
+      **---(01.00.06) LINE ADD START ------------------------------------
+      **         IF  RECE02-KOHNUM (1)  =  "180"  OR
+      **             RECE02-KOHNUM (2)  =  "180"  OR
+      **             RECE02-KOHNUM (3)  =  "180"  OR
+      **             RECE02-KOHNUM (4)  =  "180"  OR
+      **             RECE02-KOHNUM (1)  =  "181"  OR
+      **             RECE02-KOHNUM (2)  =  "181"  OR
+      **             RECE02-KOHNUM (3)  =  "181"  OR
+      **             RECE02-KOHNUM (4)  =  "181"  OR
+      **             RECE02-KOHNUM (1)  =  "190"  OR
+      **             RECE02-KOHNUM (2)  =  "190"  OR
+      **             RECE02-KOHNUM (3)  =  "190"  OR
+      **             RECE02-KOHNUM (4)  =  "190"
       *         IF  RECE02-KOHNUM (1)  =  "180"  OR
       *             RECE02-KOHNUM (2)  =  "180"  OR
       *             RECE02-KOHNUM (3)  =  "180"  OR
@@ -1966,30 +1989,31 @@
       *             RECE02-KOHNUM (1)  =  "190"  OR
       *             RECE02-KOHNUM (2)  =  "190"  OR
       *             RECE02-KOHNUM (3)  =  "190"  OR
-      *             RECE02-KOHNUM (4)  =  "190"
-               IF  RECE02-KOHNUM (1)  =  "180"  OR
-                   RECE02-KOHNUM (2)  =  "180"  OR
-                   RECE02-KOHNUM (3)  =  "180"  OR
-                   RECE02-KOHNUM (4)  =  "180"  OR
-                   RECE02-KOHNUM (1)  =  "181"  OR
-                   RECE02-KOHNUM (2)  =  "181"  OR
-                   RECE02-KOHNUM (3)  =  "181"  OR
-                   RECE02-KOHNUM (4)  =  "181"  OR
-                   RECE02-KOHNUM (1)  =  "190"  OR
-                   RECE02-KOHNUM (2)  =  "190"  OR
-                   RECE02-KOHNUM (3)  =  "190"  OR
-                   RECE02-KOHNUM (4)  =  "190"  OR
-                   RECE02-KOHNUM (1)  =  "281"  OR
-                   RECE02-KOHNUM (2)  =  "281"  OR
-                   RECE02-KOHNUM (3)  =  "281"  OR
-                   RECE02-KOHNUM (4)  =  "281"
-      *---(01.00.06) LINE ADD END   ------------------------------------
-      *---(01.00.08) LINE ADD START ------------------------------------
-               OR  RECE02-KOHNUM (1)  =  "290"
-               OR  RECE02-KOHNUM (2)  =  "290"
-               OR  RECE02-KOHNUM (3)  =  "290"
-               OR  RECE02-KOHNUM (4)  =  "290"
-      *---(01.00.08) LINE ADD END   ------------------------------------
+      *             RECE02-KOHNUM (4)  =  "190"  OR
+      *             RECE02-KOHNUM (1)  =  "281"  OR
+      *             RECE02-KOHNUM (2)  =  "281"  OR
+      *             RECE02-KOHNUM (3)  =  "281"  OR
+      *             RECE02-KOHNUM (4)  =  "281"
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      **---(01.00.08) LINE ADD START ------------------------------------
+      *         OR  RECE02-KOHNUM (1)  =  "290"
+      *         OR  RECE02-KOHNUM (2)  =  "290"
+      *         OR  RECE02-KOHNUM (3)  =  "290"
+      *         OR  RECE02-KOHNUM (4)  =  "290"
+      **---(01.00.08) LINE ADD END   ------------------------------------
+               IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
+               OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
+               OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
+               OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
+                                    OR "290" OR "280" OR "380" OR "381"
+                                    OR "390" OR "490"
+      *---(01.00.15) LINE ADD END   ------------------------------------
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
