@@ -1,6 +1,5 @@
 #!/bin/bash
-
-. /etc/jma-receipt/jma-receipt.env
+. @jma-receipt-env@
 
 PREFNAME=hyogo
 PROGRAMID=SEIKYU2807
