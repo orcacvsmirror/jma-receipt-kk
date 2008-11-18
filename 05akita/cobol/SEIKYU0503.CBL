@@ -38,6 +38,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.04    内田    08/05/16    ４月改正対応
+      *  01.00.05    吉川    08/10/22    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -331,6 +332,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/22) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/22) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

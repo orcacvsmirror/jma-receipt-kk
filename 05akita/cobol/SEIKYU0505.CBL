@@ -32,6 +32,7 @@
       *  01.00.01    有村     05/08/05    対象番号追加(474)
       *                                   集計方法修正
       *  01.00.02    内田     07/09/28    日レセver4.0対応
+      *  01.00.03    吉川     08/10/22    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -313,6 +314,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/22) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/22) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
