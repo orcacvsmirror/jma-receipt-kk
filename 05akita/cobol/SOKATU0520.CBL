@@ -27,12 +27,14 @@
       *                            (返戻対応含む)
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev	修正者	日付		内容
+      * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    有村    05/08/08    福祉対象番号追加(374)
       *  01.00.02    内田    07/09/28    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
-      *  01.00.03    長屋   08/05/02      帳票様式に伴う修正
+      *  01.00.03    長屋    08/05/02    帳票様式に伴う修正
+      *  01.00.04    吉川    08/10/22    国組3〜6歳を分けないように修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -315,6 +317,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/22) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/10/22) end
       *
            DISPLAY  "START"
       *
@@ -643,13 +648,32 @@
            MOVE  RECE10-SRYYM  TO    SKT0520TMP-SRYYM
       *
       *    法定外給付判定
-           IF  SKT0520TMP-HKNJANUM(3:1)  =  "3"    AND
-               RECE10-RJNHKNNUM          =  SPACE  AND
-               RECE10-AGE                >   2     AND
-               RECE10-AGE                <   70    AND
-               RECE10-KYURATE        NOT =   7
-             MOVE    RECE10-KYURATE      TO  SKT0520TMP-KYURATE
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/10/22) start
+      *     IF  SKT0520TMP-HKNJANUM(3:1)  =  "3"    AND
+      *         RECE10-RJNHKNNUM          =  SPACE  AND
+      *         RECE10-AGE                >   2     AND
+      *         RECE10-AGE                <   70    AND
+      *         RECE10-KYURATE        NOT =   7
+      *       MOVE    RECE10-KYURATE      TO  SKT0520TMP-KYURATE
+      *     END-IF
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+               IF  SKT0520TMP-HKNJANUM(3:1)  =  "3"    AND
+                   RECE10-RJNHKNNUM          =  SPACE  AND
+                   RECE10-FLG (1)        NOT =   1     AND
+                   RECE10-AGE                <   70    AND
+                   RECE10-KYURATE        NOT =   7
+                 MOVE  RECE10-KYURATE     TO    SKT0520TMP-KYURATE
+               END-IF
+           ELSE
+               IF  SKT0520TMP-HKNJANUM(3:1)  =  "3"    AND
+                   RECE10-RJNHKNNUM          =  SPACE  AND
+                   RECE10-AGE                >   2     AND
+                   RECE10-AGE                <   70    AND
+                   RECE10-KYURATE        NOT =   7
+                 MOVE  RECE10-KYURATE     TO    SKT0520TMP-KYURATE
+               END-IF
            END-IF
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/10/22) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
