@@ -29,6 +29,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/10/07  和暦は頭ゼロ付きで表す
+      *  01.00.02    吉川    2008/10/28  ファイル名に県番号と点数表追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1035,6 +1036,10 @@
            MOVE    LNK-PRTKANRI-SRYYM(5:2) TO  WRK-NUM(4:2)
            MOVE    WRK-NUM                 TO  WRK-SKYYM
            STRING  WRK-SKYYM               DELIMITED  BY  SIZE
+      *=== ファイル名修正 by Yoshikawa(2008/10/28) start
+                   "17"                    DELIMITED  BY  SIZE
+                   SYS-1001-TENHYOKBN      DELIMITED  BY  SIZE
+      *=== ファイル名修正 by Yoshikawa(2008/10/28) end
                    SYS-1001-HOSPCD         DELIMITED  BY  SIZE
                    WRK-SYUBETU             DELIMITED  BY  SIZE
                    ".CSV"                  DELIMITED  BY  SIZE
