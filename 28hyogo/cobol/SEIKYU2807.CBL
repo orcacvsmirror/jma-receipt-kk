@@ -38,6 +38,7 @@
       *                                  処理をする
       *  01.00.04    内田    08/02/23    再印刷の帳票タイトルの修正
       *                                  高額療養費の上限額を考慮する
+      *  01.00.05    吉川    08/11/04    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -331,6 +332,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/11/04) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2008/11/04) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
