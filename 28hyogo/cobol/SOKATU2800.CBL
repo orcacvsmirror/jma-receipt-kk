@@ -49,6 +49,7 @@
       *  01.00.12    内田    08/06/20    後期高齢のみの場合も印字する
       *  01.00.13    内田    08/07/11    県外保険者欄の後期分が国保分と
       *                                  同一の数しか印字されないのを修正
+      *  01.00.14    吉川    08/11/04    後期高齢の請求書枚数のカウント修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1509,22 +1510,24 @@
                  PERFORM  VARYING  IDX2  FROM  1  BY  1
                           UNTIL    SCNT-HKNJANUM(IDX1 IDX2)  =  SPACE
                      ADD  1  TO  WRK-MAISU
+      *=== 後期高齢請求書のカウント修正 by Yoshikawa(2008/11/04) start
       *            公費再掲欄を考慮
-                     COMPUTE  WRK-KOHKEI  =  SCNT-KOHSU(IDX1 IDX2)
+      *               COMPUTE  WRK-KOHKEI  =  SCNT-KOHSU(IDX1 IDX2)
       *            １枚目に公費欄があるので２を引く
-                     IF  SCNT-KOHSU(IDX1 IDX2)  >  2
-                         COMPUTE  WRK-KOHKEI  =  WRK-KOHKEI  -  2
-                         DIVIDE  WRK-KOHKEI  BY  2  GIVING  WRK-KOHKEI2
-                               REMAINDER   WRK-AMARI
-                     ELSE
-                         MOVE  ZERO  TO  WRK-KOHKEI2
-                         MOVE  ZERO  TO  WRK-AMARI
-                     END-IF
+      *               IF  SCNT-KOHSU(IDX1 IDX2)  >  2
+      *                   COMPUTE  WRK-KOHKEI  =  WRK-KOHKEI  -  2
+      *                   DIVIDE  WRK-KOHKEI  BY  2  GIVING  WRK-KOHKEI2
+      *                         REMAINDER   WRK-AMARI
+      *               ELSE
+      *                   MOVE  ZERO  TO  WRK-KOHKEI2
+      *                   MOVE  ZERO  TO  WRK-AMARI
+      *               END-IF
       *            公費分の枚数を加算
-                     COMPUTE  WRK-MAISU  =  WRK-MAISU  +  WRK-KOHKEI2
-                     IF  WRK-AMARI  NOT =  ZERO
-                         ADD  1  TO  WRK-MAISU
-                     END-IF
+      *               COMPUTE  WRK-MAISU  =  WRK-MAISU  +  WRK-KOHKEI2
+      *               IF  WRK-AMARI  NOT =  ZERO
+      *                   ADD  1  TO  WRK-MAISU
+      *               END-IF
+      *=== 後期高齢請求書のカウント修正 by Yoshikawa(2008/11/04) end
                  END-PERFORM
       *
                  ADD  WRK-MAISU       TO  WRK-GMAISU
