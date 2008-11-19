@@ -48,6 +48,10 @@
       *  01.00.09       吉川    2008/07/14   本人家族区分は
       *                                      レセプト種別区分から取得する
       *  01.00.10       吉川    2008/10/17   点数欄は保険の総点数を印字する
+      *  01.00.11       吉川    2008/11/17   収納テーブルの入院データが
+      *                                      正しく取得されないのを修正
+      *                                      同月内に保険を切替えた場合の
+      *                                      点数と負担金の不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1022,9 +1026,26 @@
               END-PERFORM
            END-IF
       *
-      *=== 点数は保険の総点数を印字 by Yoshikawa(2008/10/17) start
-           MOVE   RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
-      *=== 点数は保険の総点数を印字 by Yoshikawa(2008/10/17) end
+      *=== 使用key変更 by Yoshikawa(2008/11/17) start
+           IF      RECE01-NYUGAIKBN   =    "1"
+               MOVE    "key33"        TO   WRK-PATH
+           ELSE
+               MOVE    "key25"        TO   WRK-PATH
+           END-IF
+      *=== 使用key変更 by Yoshikawa(2008/11/17) end
+      *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) start
+      **=== 点数は保険の総点数を印字 by Yoshikawa(2008/10/17) start
+      *     MOVE   RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
+      **=== 点数は保険の総点数を印字 by Yoshikawa(2008/10/17) end
+           MOVE   MF110-KOHID         TO   WRK-KOHID
+      *
+      *    主保険の点数を取得
+           IF     RECE10-HKNNUM       =    MF110-HKNNUM
+           AND    RECE10-HKNJANUM     =    MF110-HKNJANUM-KEY
+           AND    RECE10-NYUGAIKBN    =    MF110-NYUGAIKBN
+             MOVE RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
+           END-IF
+      *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
            PERFORM   800-SYUNOU-SET-SEC
            MOVE   WRK-KOHFTN          TO   MF110-ITBFTN
            MOVE   WRK-YKZFTN          TO   MF110-YKZFTN
@@ -1708,6 +1729,14 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
              MOVE   RECE01-NYUGAIKBN    TO  SYU-NYUGAIKBN
              MOVE   RECE01-PTID         TO  SYU-PTID
+      *=== 使用key変更 by Yoshikawa(2008/11/17) start
+             MOVE   RECE01-SRYYM(1:6)   TO  SYU-SRYYMD(1:6)
+             MOVE   "__"                TO  SYU-SRYYMD(7:2)
+             MOVE   MF110-KOHHKNNUM     TO  SYU-KOH-HKNNUM(1)
+                                            SYU-KOH-HKNNUM(2)
+                                            SYU-KOH-HKNNUM(3)
+                                            SYU-KOH-HKNNUM(4)
+      *=== 使用key変更 by Yoshikawa(2008/11/17) end
              MOVE   SYUNOU-REC          TO  MCPDATA-REC
              MOVE   "DBSELECT"          TO  MCP-FUNC
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
@@ -1716,7 +1745,10 @@
       *                                   MCPAREA
       *                                   MCPDATA-REC
              MOVE  "tbl_syunou"         TO  MCP-TABLE
-             MOVE  "key2"               TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) start
+      *       MOVE  "key2"               TO  MCP-PATHNAME
+             MOVE  WRK-PATH             TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) end
              CALL  "ORCDBMAIN"          USING
                                         MCPAREA
                                         MCPDATA-REC
@@ -1726,16 +1758,38 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *         MOVE  PATH-TBL-SYUNOU-KEY2         TO  MCP-PATH
                MOVE  "tbl_syunou"       TO  MCP-TABLE
-               MOVE  "key2"             TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) start
+      *         MOVE  "key2"             TO  MCP-PATHNAME
+               MOVE  WRK-PATH           TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
                PERFORM  805-SYUNOU-READ-SEC
                PERFORM  UNTIL  FLG-SYUNOU  =  1
       *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) start
                  IF  SYU-DENPJTIKBN   NOT = "3"
       *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) end
-                   IF   MF110-SRYYM           =  SYU-SRYYMD(1:6)
-                     PERFORM  810-SEIKYU-SEC
-                   END-IF
+      *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) start
+      *             IF   MF110-SRYYM           =  SYU-SRYYMD(1:6)
+      *               PERFORM  810-SEIKYU-SEC
+      *             END-IF
+                   IF    SYU-HKNCOMBINUM  =  RECE01-HKNCOMBI(1) OR
+                                             RECE01-HKNCOMBI(2) OR
+                                             RECE01-HKNCOMBI(3) OR
+                                             RECE01-HKNCOMBI(4) OR
+                                             RECE01-HKNCOMBI(5) OR
+                                             RECE01-HKNCOMBI(6) OR
+                                             RECE01-HKNCOMBI(7) OR
+                                             RECE01-HKNCOMBI(8) OR
+                                             RECE01-HKNCOMBI(9) OR
+                                             RECE01-HKNCOMBI(10)
+                     PERFORM  910-HKNCOMBI-READ-SEC
+                     IF     COMB-KOHID(1)    =  WRK-KOHID   OR
+                            COMB-KOHID(2)    =  WRK-KOHID   OR
+                            COMB-KOHID(3)    =  WRK-KOHID   OR
+                            COMB-KOHID(4)    =  WRK-KOHID
+                        PERFORM  810-SEIKYU-SEC
+                     END-IF
+      *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
       *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) start
                  END-IF
       *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) end
@@ -1743,7 +1797,10 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *           MOVE  PATH-TBL-SYUNOU-KEY2         TO  MCP-PATH
                  MOVE  "tbl_syunou"     TO  MCP-TABLE
-                 MOVE  "key2"           TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) start
+      *           MOVE  "key2"           TO  MCP-PATHNAME
+                 MOVE  WRK-PATH         TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
                  PERFORM  805-SYUNOU-READ-SEC
                END-PERFORM
@@ -1759,7 +1816,10 @@
       *                                   MCPAREA
       *                                   MCPDATA-REC
              MOVE  "tbl_syunou"         TO  MCP-TABLE
-             MOVE  "key2"               TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) start
+      *       MOVE  "key2"               TO  MCP-PATHNAME
+             MOVE  WRK-PATH             TO  MCP-PATHNAME
+      *=== 使用key変更 by Yoshikawa(2008/11/17) end
              CALL  "ORCDBMAIN"          USING
                                         MCPAREA
                                         MCPDATA-REC
@@ -2173,6 +2233,56 @@
        910-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) start
+      *****************************************************************
+      *    保険組合せマスター読み込み
+      *****************************************************************
+       910-HKNCOMBI-READ-SEC         SECTION.
+      *
+           INITIALIZE                        HKNCOMBI-REC
+           MOVE    SPA-HOSPNUM           TO  COMB-HOSPNUM
+           MOVE    SYU-PTID              TO  COMB-PTID
+           MOVE    SYU-HKNCOMBINUM       TO  COMB-HKNCOMBINUM
+           MOVE    HKNCOMBI-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"            TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"        TO  MCP-TABLE
+           MOVE    "key"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           IF      MCP-RC            =   ZERO
+               MOVE    "DBFETCH"         TO  MCP-FUNC
+               MOVE    "tbl_hkncombi"    TO  MCP-TABLE
+               MOVE    "key"             TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"       USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF      MCP-RC        =   ZERO
+                   MOVE    MCPDATA-REC   TO  HKNCOMBI-REC
+                   MOVE    ZERO          TO  FLG-HKNCOMBI
+               ELSE
+                   INITIALIZE                HKNCOMBI-REC
+                   MOVE    1             TO  FLG-HKNCOMBI
+               END-IF
+           ELSE
+               INITIALIZE                    HKNCOMBI-REC
+               MOVE    1                 TO  FLG-HKNCOMBI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"        TO  MCP-TABLE
+           MOVE    "key"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       910-HKNCOMBI-READ-EXT.
+           EXIT.
+      *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
       *****************************************************************
       *    年齢計算処理
       *****************************************************************
