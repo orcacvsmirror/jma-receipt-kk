@@ -8,7 +8,7 @@
     </element>
     <element name="HKNJANUM" occurs="1">
       <appinfo>
-        <embed object="string" length="12"/>
+        <embed object="string" length="16"/>
       </appinfo>
     </element>
     <element name="HKNJANAME" occurs="1">
@@ -5541,10 +5541,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O196">
       <attribute name="obj_pos">
-        <point val="5.3,3.9"/>
+        <point val="5.297,3.86466"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.3,3.50185;8.33,4.00185"/>
+        <rectangle val="5.297,3.56207;8.3674,3.94207"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANUM#</string>
@@ -5555,16 +5555,16 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#163;&#177;&#163;&#178;&#163;&#179;&#163;&#180;&#163;&#181;&#163;&#182;#</string>
+            <string>#&#163;&#179;&#163;&#185;&#163;&#177;&#163;&#178;&#163;&#179;&#163;&#180;&#163;&#181;&#163;&#182;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
           </attribute>
           <attribute name="height">
-            <real val="0.5"/>
+            <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.3,3.9"/>
+            <point val="5.297,3.86466"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5573,10 +5573,10 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.303"/>
+            <real val="0.23028"/>
           </attribute>
           <attribute name="multi">
-            <real val="0.2525"/>
+            <real val="0.1919"/>
           </attribute>
         </composite>
       </attribute>

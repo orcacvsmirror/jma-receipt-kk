@@ -29,6 +29,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/27  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2008/11/19  保険者番号のバイト数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1109,7 +1110,11 @@
       *    保険者番号
            MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
-           MOVE     WRK-OUT-INPUT      TO  SKT2215-HKNJANUM
+      *=== 保険者番号のバイト数増加 by Yoshikawa(2008/11/19) start
+      *     MOVE     WRK-OUT-INPUT      TO  SKT2215-HKNJANUM
+           MOVE     "３９"             TO  SKT2215-HKNJANUM(1:4)
+           MOVE     WRK-OUT-INPUT      TO  SKT2215-HKNJANUM(5:)
+      *=== 保険者番号のバイト数増加 by Yoshikawa(2008/11/19) end
       *    保険者名(都道府県名)
            MOVE    WRK-HKNJANAME       TO  SKT2215-HKNJANAME
       *    在総診・在医総
