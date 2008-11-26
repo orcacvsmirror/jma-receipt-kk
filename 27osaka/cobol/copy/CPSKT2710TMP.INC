@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT2710TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者   日付        内容
+      * 01.00.01     門間     2008/11/20  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT2710TMP-REC.
            03  SKT2710TMP-KEY.
@@ -40,6 +41,9 @@
                05  SKT2710TMP-SFTNGK             PIC  9(09).
            03  SKT2710TMP-KOH-AREA  OCCURS  20.
                05  SKT2710TMP-KOHNUM                PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ----------------------------
+               05  SKT2710TMP-KOHNAME               PIC  X(08).
+      *--- (2008/11/20) LINE ADD END   MONMA ----------------------------
                05  SKT2710TMP-KNYUGAI-TBL  OCCURS  2.
                    07  SKT2710TMP-KKENSU            PIC  9(05).
                    07  SKT2710TMP-KNISSU            PIC  9(05).

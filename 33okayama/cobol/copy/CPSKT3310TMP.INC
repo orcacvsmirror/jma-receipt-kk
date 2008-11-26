@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT3330TMP.INC)          *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者   日付        内容
+      * 01.00.01     門間     2008/11/20  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT3310TMP-REC.
            03  SKT3310TMP-KEY.
@@ -47,6 +48,9 @@
            03  SKT3310TMP-KOH-AREA.
                05  SKT3310TMP-KOH-TBL      OCCURS  20.
                    07  SKT3310TMP-KOHNUM                 PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+                   07  SKT3310TMP-KOHNAME                PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                    07  SKT3310TMP-K-NYUGAI-TBL  OCCURS  2.
                        09  SKT3310TMP-K-KENSU            PIC  9(05).
                        09  SKT3310TMP-K-NISSU            PIC  9(05).
@@ -60,6 +64,9 @@
            03  SKT3310TMP-BIKO-AREA.
                05  SKT3310TMP-BIKO-TBL      OCCURS  20.
                    07  SKT3310TMP-BKOHNUM                PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+                   07  SKT3310TMP-BKOHNAME               PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                    07  SKT3310TMP-BNYUGAIKBN             PIC  X(01).
                    07  SKT3310TMP-BKENSU                 PIC  9(05).
                    07  SKT3310TMP-BITBFTN                PIC  9(09).
@@ -67,18 +74,27 @@
                05  SKT3310TMP-BIKO-TBL-R REDEFINES SKT3310TMP-BIKO-TBL.
                    07  SKT3310TMP-BIKO-TBL-RR  OCCURS  20.
                        09  SKT3310TMP-BKOHNUM-R          PIC  X(04).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+                       09  SKT3310TMP-BKOHNAME-R         PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                        09  SKT3310TMP-BKENSU-R           PIC  9(05).
                        09  SKT3310TMP-BITBFTN-R          PIC  9(09).
                        09  SKT3310TMP-BYKZFTN-R          PIC  9(09).
            03  SKT3310TMP-BIKO-AREA2.
                05  SKT3310TMP-BIKO-TBL2      OCCURS  20.
                    07  SKT3310TMP-BSKOHNUM               PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+                   07  SKT3310TMP-BSKOHNAME              PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                    07  SKT3310TMP-BSNYUGAIKBN            PIC  X(01).
                    07  SKT3310TMP-BSKENSU                PIC  9(05).
                    07  SKT3310TMP-BSKINGK                PIC  9(09).
                    07  SKT3310TMP-BSFTNGK                PIC  9(09).
            03  SKT3310TMP-41-TBL.
                05  SKT3310TMP-41-KOHNUM                  PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+               05  SKT3310TMP-41-KOHNAME                 PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                05  SKT3310TMP-41-NYUGAI-TBL  OCCURS  2.
                    07  SKT3310TMP-K41-KENSU              PIC  9(05).
                    07  SKT3310TMP-K41-NISSU              PIC  9(05).

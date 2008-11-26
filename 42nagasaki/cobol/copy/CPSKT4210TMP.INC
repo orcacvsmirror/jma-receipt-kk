@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT4210TMP.INC)            *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者    日付        内容
+      * 01.00.01     門間      2008/11/20  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT4210TMP-REC.
            03  SKT4210TMP-KEY.
@@ -46,6 +47,9 @@
            03  SKT4210TMP-KOH-AREA.
                05  SKT4210TMP-KOH-TBL  OCCURS  20.
                    07  SKT4210TMP-KOHNUM              PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+                   07  SKT4210TMP-KOHNAME             PIC  X(08).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                    07  SKT4210TMP-KOH-NYUGAI-TBL OCCURS 2.
                        09  SKT4210TMP-K-KENSU         PIC  9(05).
                        09  SKT4210TMP-K-NISSU         PIC  9(05).
@@ -59,6 +63,9 @@
            03  SKT4210TMP-RKOH-AREA.
                05  SKT4210TMP-RKOH-TBL  OCCURS  20.
                    07  SKT4210TMP-RKOHNUM              PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+                   07  SKT4210TMP-RKOHNAME             PIC  X(08).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                    07  SKT4210TMP-RKOH-NYUGAI-TBL OCCURS 2.
                        09  SKT4210TMP-RK-KENSU         PIC  9(05).
                        09  SKT4210TMP-RK-NISSU         PIC  9(05).

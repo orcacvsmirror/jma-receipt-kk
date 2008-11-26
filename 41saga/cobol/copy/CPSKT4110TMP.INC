@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT4110TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者   日付        内容
+      * 01.00.01     門間     2008/11/20  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT4110TMP-REC.
            03  SKT4110TMP-KEY.
@@ -47,6 +48,9 @@
       *公費請求テーブル
            03  SKT4110TMP-KOH-AREA  OCCURS  20.
                05  SKT4110TMP-KOHNUM                PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+               05  SKT4110TMP-KOHNAME               PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                05  SKT4110TMP-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT4110TMP-KKENSU            PIC  9(05).
                    07  SKT4110TMP-KNISSU            PIC  9(05).
@@ -74,6 +78,9 @@
       *老人公費請求テーブル２
            03  SKT4110TMP-R2-KOH-AREA  OCCURS  13.
                05  SKT4110TMP-R2-KOHNUM                PIC  X(03).
+      *--- (2008/11/20) LINE ADD START MONMA ---------------------------
+               05  SKT4110TMP-R2-KOHNAME               PIC  X(10).
+      *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
                05  SKT4110TMP-R2-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT4110TMP-R2-KKENSU            PIC  9(05).
                    07  SKT4110TMP-R2-KNISSU            PIC  9(05).
