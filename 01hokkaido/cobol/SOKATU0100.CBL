@@ -54,6 +54,10 @@
       *  01.00.17    内田   08/06/25    後期高齢のみの場合でも印字するよう修正
       *  01.00.18    内田   08/07/01    札幌市代表保険者番号変更
       *  01.00.19    吉川   08/09/22    請求書の枚数欄は保険者数を印字
+      *  01.00.20    吉川   08/11/18    高額療養費＋障害orひとり親の場合
+      *                                 割欄に点数が加算される不具合を修正
+      *                     08/11/25    長期等と併用した場合、公費の助成が
+      *                                 無くても印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1215,15 +1219,26 @@
              AND  RECE02-ZAITAKU  NOT =  "1"
                IF  RECE02-FTNMONEY (1)  NOT =  ZERO
                  MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) start
+                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) end
       *---(01.00.14) LINE ADD START ------------------------------------
       *           MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-TOTALTEN
                  MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
       *---(01.00.14) LINE ADD END   ------------------------------------
                ELSE
                  MOVE  ZERO                 TO  WRK-SEIKYUGK-G
-                 COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) start
+      *           COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+      *                                    *  RECE02-KYURATE  /  10
+                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
+                 COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
                                           *  RECE02-KYURATE  /  10
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) end
                END-IF
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) start
+               MOVE  2  TO  IDX1
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) end
              END-IF
            END-IF
       *---(01.00.12) LINE ADD END   ------------------------------------
@@ -1339,8 +1354,13 @@
       *---(01.00.14) LINE ADD END   ------------------------------------
                ELSE
                  MOVE  ZERO                 TO  WRK-SEIKYUGK-G
-                 COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) start
+      *           COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+      *                                    *  RECE02-KYURATE  /  10
+                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
+                 COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
                                           *  RECE02-KYURATE  /  10
+      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) end
                END-IF
       *---(01.00.16) LINE ADD START ------------------------------------
                MOVE  2  TO  IDX1
@@ -2571,14 +2591,20 @@
                END-IF
                ADD     SYU-TOTAL-HKNTEN      TO  WRK-KOHTENSU
                MOVE    1                     TO  FLG-KESE
-               MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
+      *         MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
              WHEN "972"
                MOVE    1                     TO  FLG-TYOKI
-               MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
+      *         MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
       *---(01.00.10) LINE ADD START ------------------------------------
              WHEN "974"
                MOVE    2                     TO  FLG-TYOKI
-               MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
+      *         MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
       *---(01.00.10) LINE ADD END   ------------------------------------
              END-EVALUATE
       *
