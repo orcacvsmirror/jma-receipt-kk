@@ -46,6 +46,9 @@
       *                                   SPA-AREA初期化
       *                                   印字対象番号の追加
       *                                   （280,380,381,390,490）
+      *  01.00.12    吉川     08/11/05    公費の助成がない場合は印字しない
+      *  01.00.13    吉川     08/11/06    公費助成有無の判定修正
+      *  01.00.14    吉川     08/11/21    FLG-ERR初期化位置修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -115,6 +118,9 @@
            03  FLG-BTPARA      PIC 9(01).
            03  FLG-SYORI       PIC 9(01).
            03  FLG-ERR         PIC 9(01).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
+           03  FLG-ERR2        PIC 9(01).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -122,6 +128,9 @@
            03  IDXX            PIC 9(04).
            03  IDX1            PIC 9(04).
            03  IDX2            PIC 9(04).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
+           03  IDX3            PIC 9(04).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
            03  IDX5            PIC 9(04).
            03  IDY             PIC 9(04).
            03  IDZ             PIC 9(04).
@@ -896,6 +905,9 @@
       *---(01.00.10) LINE ADD END   ------------------------------------
            END-IF
       *
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) start
+           MOVE    1               TO  FLG-ERR2
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) end
            PERFORM 920-SYUNOU-SET-SEC
       *
            COMPUTE WRK-ITBFTN-G2   =   WRK-ITBFTN-G    +   0.5
@@ -921,12 +933,21 @@
            ADD     WRK-YKZFTN       TO    MF100-GOKEI(IDX1 IDX2)
            ADD     WRK-ITBFTN-G2    TO    MF100-GOKEI(IDX1 IDX2)
       *
-           IF      FLG-MF100  =  1
+      *=== 公費助成有無判定修正 by Yoshikawa(2008/11/06) start
+           IF      FLG-ERR2   =  ZERO
+             IF      FLG-MF100  =  1
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
+      *     AND     FLG-ERR2   =  ZERO
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
+      *=== 公費助成有無判定修正 by Yoshikawa(2008/11/06) end
                WRITE   MF100-REC
                ADD     1       TO  CNT-MF100
-           ELSE
+             ELSE
                REWRITE  MF100-REC
+             END-IF
+      *=== 公費助成有無判定修正 by Yoshikawa(2008/11/06) start
            END-IF
+      *=== 公費助成有無判定修正 by Yoshikawa(2008/11/06) end
       *
            .
        210-SYUKEI-EXT.
@@ -1257,6 +1278,31 @@
       *
            ADD    WRK-ITBFTN             TO    WRK-ITBFTN-G
            ADD    SYU-KYUFUGAI-TEN(6)    TO    WRK-KYUFUGAI
+      *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) start
+      *     MOVE     1                  TO  FLG-ERR2
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) end
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL    IDX3  >     4  OR
+                    SYU-KOH-HKNNUM(IDX3)  =  SPACE
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX3)     =  WRK-KOHNUM
+             OR   SYU-KOH-HKNNUM(IDX3)(1:1) NOT = "0"
+               IF     IDX3                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX3)
+                   MOVE  ZERO          TO  FLG-ERR2
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX3 - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX3)
+                   MOVE  ZERO          TO  FLG-ERR2
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
       *
            .
        800-SEIKYU-SEC-EXT.

@@ -48,6 +48,10 @@
       *  01.00.12    内田     08/10/02    帳票様式の変更に伴う修正
       *                                   印字対象番号の追加
       *                                   （280,380,381,390,490）
+      *  01.00.13    吉川     08/11/05    公費の助成がない場合は印字しない
+      *  01.00.14    吉川     08/11/21    FLG-ERR初期化位置修正
+      *                                   保険番号180,181,190の場合
+      *                                   初診料等を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1095,6 +1099,9 @@
                MOVE    "key25"     TO  WRK-PATH
       *---(01.00.09) LINE ADD END   ------------------------------------
            END-IF
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) start
+           MOVE  1                 TO  FLG-ERR
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) end
            PERFORM 920-SYUNOU-SET-SEC
            DISPLAY "給付外点数集計終了=" WRK-KYUFUGAI
       *---(01.00.12) LINE ADD START ------------------------------------
@@ -2573,6 +2580,65 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) start
+           IF  MF100-KOHNUM  = "180" OR "181" OR "190"
+      *      初診、指導、在宅のみ印字
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >     13
+               IF    IDX =  1  OR 8 OR 9 OR 10
+                 MOVE  MF100-KAISU(IDX)    TO  WRK-KAISUZ
+                 MOVE  WRK-KAISUZ          TO  HC06-KAISU(IDX)
+                 MOVE  MF100-TENSU(IDX 1)  TO  WRK-TENSUZ
+                 MOVE  WRK-TENSU           TO  HC06-TENSU(IDX)
+               END-IF
+             END-PERFORM
+      *
+      *      指導は小児科外来診察料の初診点数のみを設定する
+             MOVE    ZERO         TO       WRK-SIDOU
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >     2
+               INITIALIZE                       SRYACT-REC
+               MOVE    MF100-HOSPNUM      TO  SRY-HOSPNUM
+               MOVE    MF100-NYUGAIKBN    TO  SRY-NYUGAIKBN
+               MOVE    MF100-PTID         TO  SRY-PTID
+               MOVE    MF100-SRYYM        TO  SRY-SRYYM
+      *      小児科外来診察料の初診コード設定
+               IF    IDX  =  1
+                 MOVE    "113003510"         TO  SRY-SRYCD(1)
+                                                 SRY-SRYCD(2)
+                                                 SRY-SRYCD(3)
+                                                 SRY-SRYCD(4)
+                                                 SRY-SRYCD(5)
+               ELSE
+                 MOVE    "113003710"         TO  SRY-SRYCD(1)
+                                                 SRY-SRYCD(2)
+                                                 SRY-SRYCD(3)
+                                                 SRY-SRYCD(4)
+                                                 SRY-SRYCD(5)
+               END-IF
+               PERFORM  900-SRYACT-SELECT-SEC
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  900-SRYACCT-READ-SEC
+                 MOVE    ACCT-HOSPNUM        TO  WRK-HOSPNUM
+                 MOVE    ACCT-PTID           TO  WRK-PTID
+                 MOVE    ACCT-HKNCOMBI       TO  WRK-HKNCOMBI
+                 PERFORM 910-HKNCOMBI-READ-SEC
+                 IF      MF100-KOHID     =   COMB-KOHID(1)   OR
+                                             COMB-KOHID(2)   OR
+                                             COMB-KOHID(3)   OR
+                                             COMB-KOHID(4)
+                   COMPUTE  WRK-SIDOU  =  WRK-SIDOU +
+                            (ACCT-ZAITEN  *  ACCT-ZAIKAISU)
+                 END-IF
+                 PERFORM  900-SRYACT-FETCH-SEC
+               END-PERFORM
+               PERFORM  900-SRYACT-CLOSE-SEC
+             END-PERFORM
+             MOVE    WRK-SIDOU    TO    WRK-TENSUZ
+             MOVE    WRK-TENSUZ   TO    HC06-TENSU(7)
+           END-IF
+      *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) end
+      *
       *        <請求点・一部負担金>
       *   保険
           MOVE    MF100-TOTALTEN      TO  WRK-KGK6
@@ -2633,6 +2699,15 @@
       *     END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) start
+           IF  MF100-KOHNUM  =  "180" OR "181" OR "190"
+      *      初診のみ印字
+             MOVE    MF100-KAISU(1)      TO  WRK-KAISUZ
+             MOVE    WRK-KAISUZ          TO  HCN06-KAISU(1)
+             MOVE    MF100-TENSU(1 1)    TO  WRK-TENSUZ
+             MOVE    WRK-TENSU           TO  HCN06-TENSU(1)
+           END-IF
+      *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) end
       *
       *        <請求点・一部負担金>
       *    保険
@@ -3364,6 +3439,13 @@
                          COMB-KOHID(2)    =  WRK-KOHID   OR
                          COMB-KOHID(3)    =  WRK-KOHID   OR
                          COMB-KOHID(4)    =  WRK-KOHID
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
+      *                  公費の助成があるかどうかチェック
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) start
+      *                   MOVE     1      TO  FLG-ERR
+      *=== FLG-ERR初期化位置修正 by Yoshikawa(2008/11/21) end
+                         PERFORM  800-SEIKYU-SEC
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
                          ADD    SYU-KYUFUGAI-TEN(6)    TO
                                 WRK-KYUFUGAI
                          ADD    SYU-KYUFUGAI-SIDOU-TEN TO
@@ -3436,6 +3518,35 @@
        925-SYUNOU-READ-EXT.
            EXIT.
       *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
+      *****************************************************************
+      *    請求点数集計処理
+      *****************************************************************
+       800-SEIKYU-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL    IDX3  >     4  OR
+                    SYU-KOH-HKNNUM(IDX3)  =  SPACE
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX3)     =  WRK-KOHNUM
+               IF     IDX3                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX3)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX3 - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX3)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+           .
+       800-SEIKYU-SEC-EXT.
+           EXIT.
+      *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
       *****************************************************************
       *    管理マスタ読み込み
       *****************************************************************
