@@ -27,6 +27,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2008/11/20  保険は県内でも公費が県外の場合
+      *                                  県外として集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -106,6 +108,10 @@
            03  FLG-PRINT1          PIC 9(01).
            03  FLG-PRINT2          PIC 9(01).
            03  FLG-PRTKBN          PIC 9(01).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) start
+           03  FLG-PTKOHINF        PIC 9(01).
+           03  FLG-TAKOH           PIC 9(01).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -160,6 +166,10 @@
            03  WRK-CNT             PIC 9(02).
            03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) start
+           03  WRK-PTKOHNUM        PIC X(03).
+           03  WRK-FTNJANUM        PIC X(08).
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) end
       *
            03  WRK-MAE-INPUT       PIC X(200).
            03  WRK-OUT-INPUT       PIC X(200).
@@ -205,6 +215,12 @@
       *    患者
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
+      *
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) start
+      *    患者公費情報
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) end
       *
       *    医療機関情報情報
            COPY    "CPSK1001.INC".
@@ -507,6 +523,31 @@
       *
            PERFORM             UNTIL   FLG-END     =   1
                                OR      FLG-RECE10  =   1
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) start
+      *        他県公費判定
+               MOVE   ZERO         TO  FLG-TAKOH
+               IF  RECE10-PREFKBN  =  "1"
+      *          県外公費検索
+                 PERFORM  VARYING  IDX1  FROM  1  BY  1
+                          UNTIL    IDX1  >     4
+                          OR       RECE10-KOHNUM(IDX1)  =  SPACE
+                          OR       FLG-TAKOH            =  1
+      *            原爆を除く全国公費及び熊本県水俣病のみ対象
+                   IF  (RECE10-KOHNUM(IDX1)(1:1)  =  "0"  AND
+                        RECE10-KOHNUM(IDX1)   NOT =  "019")
+                   OR  RECE10-KOHNUM(IDX1)  =  "145"
+                     MOVE  RECE10-KOHNUM(IDX1)   TO  WRK-PTKOHNUM
+      *              患者公費情報読込
+                     PERFORM  900-PTKOHINF-SET-SEC
+                   END-IF
+                 END-PERFORM
+               END-IF
+      *
+      *        他県公費があったかどうか
+               IF  FLG-TAKOH     =   1
+                   MOVE  "2"  TO  RECE10-PREFKBN
+               END-IF
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) end
                EVALUATE    RECE10-PREFKBN
                    WHEN    "1"
                        MOVE    1           TO  FLG-PRINT1
@@ -905,6 +946,69 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) start
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-SET-SEC  SECTION.
+      *
+           INITIALIZE  PTKOHINF-REC
+           MOVE  SPA-HOSPNUM               TO  PTKOH-HOSPNUM
+           MOVE  RECE10-PTID               TO  PTKOH-PTID
+           MOVE  WRK-PTKOHNUM              TO  PTKOH-KOHNUM
+      *
+           MOVE  PTKOHINF-REC              TO  MCPDATA-REC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           PERFORM 900-DBSELECT-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_ptkohinf"        TO  MCP-TABLE
+             MOVE    "key4"                TO  MCP-PATHNAME
+             PERFORM  900-PTKOHINF-READ-SEC
+             PERFORM  UNTIL  FLG-PTKOHINF    =  1
+                 IF  (PTKOH-TEKSTYMD(1:6)   <=  RECE10-SRYYM
+                 AND  PTKOH-TEKEDYMD(1:6)   >=  RECE10-SRYYM)
+                 AND  PTKOH-SAKJOKBN    NOT  =  "1"
+      *              公費負担者番号で判定
+                     IF  PTKOH-FTNJANUM (3:2)  NOT =  "45"
+      *                他県公費
+                       MOVE  1        TO  FLG-TAKOH
+                     END-IF
+                     MOVE    1        TO  FLG-PTKOHINF
+                 ELSE
+                     PERFORM  900-PTKOHINF-READ-SEC
+                 END-IF
+             END-PERFORM
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key4"                    TO  MCP-PATHNAME
+           PERFORM 900-CLOSE-SEC
+      *
+           .
+       900-PTKOHINF-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費の負担者番号取得
+      *****************************************************************
+       900-PTKOHINF-READ-SEC  SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  PTKOHINF-REC
+             MOVE  ZERO         TO  FLG-PTKOHINF
+           ELSE
+             INITIALIZE  PTKOHINF-REC
+             MOVE  1  TO  FLG-PTKOHINF
+           END-IF
+      *
+           .
+       900-PTKOHINF-READ-EXT.
+           EXIT.
+      *
+      *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
