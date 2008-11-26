@@ -49,6 +49,8 @@
       *  01.00.10     内田     08/05/02    後期高齢者を障老人欄へ印字
       *  01.00.11     内田     08/07/01    札幌市代表保険者番号変更
       *  01.00.12     吉川     08/09/11    SPA-AREA初期化
+      *  01.00.13     吉川     08/11/25    長期等と併用した場合、公費の助成が
+      *                                    無くても印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1963,14 +1965,20 @@
                END-IF
                ADD     SYU-TOTAL-HKNTEN      TO  WRK-KOHTENSU
                MOVE    SYU-KOH-HKNNUM(IDX)   TO  MF100-KESE-FLG
-               MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
+      *         MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
              WHEN "972"
                MOVE    1                     TO  FLG-TYOKI
-               MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
+      *         MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
       *---(01.00.05) LINE ADD START ------------------------------------
              WHEN "974"
                MOVE    2                     TO  FLG-TYOKI
-               MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
+      *         MOVE    ZERO                  TO  FLG-ERR
+      *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
       *---(01.00.05) LINE ADD END   ------------------------------------
              END-EVALUATE
       *
