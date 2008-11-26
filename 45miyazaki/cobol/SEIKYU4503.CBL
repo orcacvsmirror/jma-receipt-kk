@@ -43,6 +43,7 @@
       *  01.00.07    内田    07/10/23    保険番号190は一部負担金を印字しない
       *  01.00.08    吉川    08/10/27    対象公費番号追加(188,481,581)
       *                                  SPA-AREA初期化
+      *  01.00.09    内田    08/11/18    レセプト種別修正（３歳→６歳等）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1020,11 +1021,17 @@
                WHEN    "2"
                    MOVE    "２本外"        TO  SC03-HONKZK
                WHEN    "4"
-                   MOVE    "４三外"        TO  SC03-HONKZK
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *             MOVE    "４三外"        TO  SC03-HONKZK
+                   MOVE    "４六外"        TO  SC03-HONKZK
+      *---(01.00.09) LINE ADD END   ------------------------------------
                WHEN    "6"
                    MOVE    "６家外"        TO  SC03-HONKZK
                WHEN    "8"
-                   MOVE    "８高外９"      TO  SC03-HONKZK
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *             MOVE    "８高外９"      TO  SC03-HONKZK
+                   MOVE    "８高外一"      TO  SC03-HONKZK
+      *---(01.00.09) LINE ADD END   ------------------------------------
            END-EVALUATE
       *
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -1320,11 +1327,17 @@
                WHEN    "1"
                    MOVE    "１本入"     TO  SC04-HONKZK
                WHEN    "3"
-                   MOVE    "３三入"     TO  SC04-HONKZK
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *             MOVE    "３三入"     TO  SC04-HONKZK
+                   MOVE    "３六入"     TO  SC04-HONKZK
+      *---(01.00.09) LINE ADD END   ------------------------------------
                WHEN    "5"
                    MOVE    "５家入"     TO  SC04-HONKZK
                WHEN    "7"
-                   MOVE    "７高入９"   TO  SC04-HONKZK
+      *---(01.00.09) LINE ADD START ------------------------------------
+      *             MOVE    "７高入９"   TO  SC04-HONKZK
+                   MOVE    "７高入一"   TO  SC04-HONKZK
+      *---(01.00.09) LINE ADD END   ------------------------------------
                WHEN    "9"
       *---(01.00.03) LINE ADD START ------------------------------------
       *             MOVE    "９高入８"   TO  SC04-HONKZK
