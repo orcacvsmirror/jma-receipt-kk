@@ -44,6 +44,10 @@
       *  01.00.10    内田     08/04/25    帳票様式の変更に伴う修正
       *                                   SPA-AREA初期化
       *  01.00.11    門間     08/10/29    シス管「2007」公費まとめ対応
+      *  01.00.12    吉川     08/10/31    一部の公費番号がシス管「2007」の
+      *                                   まとめ対象にならないのを修正
+      *  01.00.13    吉川     08/11/26    印字対象番号の追加
+      *                                   （280,380,381,390,490）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -982,6 +986,29 @@
             IF    RECE10-KOHNUM(IDX3)  =  "091"
               MOVE    "051"       TO    RECE10-KOHNUM(IDX3)
             END-IF
+      *=== シス管「2007」判定の修正 by Yoshikawa(2008/10/31) start
+      *      公費番号まとめ情報があるとき
+            MOVE  SPACE     TO  WRK-KOHNAME
+            IF  WRK-2007-MAX  >  ZERO
+              PERFORM VARYING IDZ1    FROM    1   BY  1
+                      UNTIL   IDZ1    >       WRK-2007-MAX
+                PERFORM VARYING IDZ2  FROM    1   BY  1
+                        UNTIL   IDZ2  >       5
+                        OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                  IF  RECE10-KOHNUM(IDX3)  
+                                =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                    MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                TO  RECE10-KOHNUM (IDX3)
+                    MOVE  WRK-2007-MEISYO (IDZ1)
+                                TO  WRK-KOHNAME
+                    MOVE  5             TO  IDZ2
+                    MOVE  WRK-2007-MAX  TO  IDZ1
+                  END-IF
+                END-PERFORM
+              END-PERFORM
+            END-IF
+      *=== シス管「2007」判定の修正 by Yoshikawa(2008/10/31) end
+      *
             IF    RECE10-KOHNUM(IDX3)  =  "241" OR "341"
               MOVE    "141"       TO    RECE10-KOHNUM(IDX3)
             END-IF
@@ -1010,30 +1037,36 @@
       *---(01.00.06) LINE ADD END   ------------------------------------
                                 OR "145" OR "290"
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 印字対象番号追加 by Yoshikawa(2008/11/26) start
+                                OR "280" OR "380" OR "381" 
+                                OR "390" OR "490"
+      *=== 印字対象番号追加 by Yoshikawa(2008/11/26) end
                 MOVE    1    TO    SKT4010TMP-PAGE2-FLG
       *
-      *---(01.00.11) LINE ADD START MONMA ------------------------------
+      *=== シス管「2007」判定の修正 by Yoshikawa(2008/10/31) start
+      **---(01.00.11) LINE ADD START MONMA ------------------------------
       *      公費番号まとめ情報があるとき
-             IF  WRK-2007-MAX  >  ZERO
-               MOVE  SPACE     TO  WRK-KOHNAME
-               PERFORM VARYING IDZ1    FROM    1   BY  1
-                       UNTIL   IDZ1    >       WRK-2007-MAX
-                 PERFORM VARYING IDZ2  FROM    1   BY  1
-                         UNTIL   IDZ2  >       5
-                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
-                   IF  RECE10-KOHNUM(IDX3)  
-                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
-                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
-                                 TO  RECE10-KOHNUM (IDX3)
-                     MOVE  WRK-2007-MEISYO (IDZ1)
-                                 TO  WRK-KOHNAME
-                     MOVE  5             TO  IDZ2
-                     MOVE  WRK-2007-MAX  TO  IDZ1
-                   END-IF
-                 END-PERFORM
-               END-PERFORM
-             END-IF
-      *---(01.00.11) LINE ADD END    MONMA ------------------------------
+      *       IF  WRK-2007-MAX  >  ZERO
+      *         MOVE  SPACE     TO  WRK-KOHNAME
+      *         PERFORM VARYING IDZ1    FROM    1   BY  1
+      *                 UNTIL   IDZ1    >       WRK-2007-MAX
+      *           PERFORM VARYING IDZ2  FROM    1   BY  1
+      *                   UNTIL   IDZ2  >       5
+      *                   OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+      *             IF  RECE10-KOHNUM(IDX3)  
+      *                           =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+      *               MOVE  WRK-2007-KOHNUM(IDZ1 1)
+      *                           TO  RECE10-KOHNUM (IDX3)
+      *               MOVE  WRK-2007-MEISYO (IDZ1)
+      *                           TO  WRK-KOHNAME
+      *               MOVE  5             TO  IDZ2
+      *               MOVE  WRK-2007-MAX  TO  IDZ1
+      *             END-IF
+      *           END-PERFORM
+      *         END-PERFORM
+      *       END-IF
+      **---(01.00.11) LINE ADD END    MONMA ------------------------------
+      *=== シス管「2007」判定の修正 by Yoshikawa(2008/10/31) end
       *
       *    公費判別
                 PERFORM VARYING  IDX4  FROM  1  BY  1
