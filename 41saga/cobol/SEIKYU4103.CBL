@@ -34,6 +34,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/07/29    公費助成の有無の判定修正
+      *  01.00.06    門間    08/11/20    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -346,6 +347,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *---(2008/11/20) LINE ADD START MONMA ----------------------------
+           INITIALIZE  SPA-AREA
+      *---(2008/11/20) LINE ADD END   MONMA ----------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

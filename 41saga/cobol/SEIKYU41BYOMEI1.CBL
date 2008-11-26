@@ -46,6 +46,7 @@
       ************************    SEIKYU41BYOMEI1修正履歴    **********
       *  01.00.01    有村         05/05/06  DB参照方法修正(MCPSUB使用)
       *  01.00.02    内田         07/09/30  日レセver4.0対応
+      *  01.00.03    門間         08/11/20  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -257,6 +258,9 @@
       *
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
+      *---(2008/11/20) LINE ADD START MONMA ----------------------------
+                                       SPA-AREA
+      *---(2008/11/20) LINE ADD END   MONMA ----------------------------
       *
            MOVE    ZERO                TO  FLG-END
            MOVE    WRK-PARA-LINK       TO  WRK-PARA

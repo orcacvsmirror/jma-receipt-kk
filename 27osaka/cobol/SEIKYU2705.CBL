@@ -44,6 +44,7 @@
       *                                  市町村名「豊中市」の印字
       *                                   (負担者番号から保険者を特定できない)
       *  01.00.06    内田    08/02/08    返戻分は印字対象外とする
+      *  01.00.07    門間    08/11/20    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -373,6 +374,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *---(2008/11/20) LINE ADD START MONMA ----------------------------
+           INITIALIZE  SPA-AREA
+      *---(2008/11/20) LINE ADD END   MONMA ----------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
