@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/08/01  帳票様式の変更に伴う修正
+      *  01.00.02    吉川    2008/11/20  シス管「2007」公費まとめ対応
       ************************************************************
        01  SKT4410TMP-REC.
            03  SKT4410TMP-KEY.
@@ -49,6 +50,9 @@
            03  SKT4410TMP-KOH-AREA.
                05  SKT4410TMP-KOH-TBL  OCCURS  20.
                    07  SKT4410TMP-KOHNUM              PIC  X(03).
+      *=== シス管「2007」対応 by Yoshikawa(2008/11/20) start
+                   07  SKT4410TMP-KOHNAME             PIC  X(10).
+      *=== シス管「2007」対応 by Yoshikawa(2008/11/20) end
                    07  SKT4410TMP-KOH-NYUGAI-TBL OCCURS 2.
                        09  SKT4410TMP-K-KENSU         PIC  9(05).
                        09  SKT4410TMP-K-NISSU         PIC  9(05).
