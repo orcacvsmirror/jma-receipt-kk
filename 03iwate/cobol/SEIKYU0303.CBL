@@ -33,6 +33,8 @@
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
       *  01.00.02    門間    08/10/09   SPA-AREAの初期化
+      *  01.00.03    吉川    08/12/03   市町村を外部ファイルから
+      *                                 取得するよう修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -51,6 +53,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *    岩手保険番号データ
+           SELECT  TOWN-FILE     ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-TOWN.
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -64,8 +74,18 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *    岩手保険番号データ
+       FD  TOWN-FILE.
+           COPY  "TOWN0302.INC".
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
+      *
        WORKING-STORAGE  SECTION.
       *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *    岩手保険番号データ
+           COPY  "TOWN0301.INC".
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
            COPY  "CPCOMMONDAT2.INC"
                    REPLACING  //RECE01//
@@ -88,6 +108,9 @@
            03  STS-MF100   PIC X(02).
            03  STS-RECE02  PIC X(02).
            03  STS-RECEERR  PIC X(02).
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+           03  STS-TOWN    PIC X(02).
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -102,6 +125,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+           03  FLG-TOWN       PIC 9(01).
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -179,6 +205,16 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *    パラメータファイル名
+           03  FILE-NAME             PIC X(512).
+      *
+      *    ファイル名
+       01  DATA-FILE.
+           03  FILLER      PIC X(05)  VALUE  "data/".
+           03  FILLER      PIC X(12)  VALUE  "TOWN0301.TXT".
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -267,6 +303,11 @@
            COPY    "CPORCSLNK.INC".      
       *
            COPY  "MCPDATA.INC".
+      *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
@@ -441,6 +482,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *    市町村情報
+           PERFORM 110-TOWNINF-GET-SEC
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
+      *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -449,6 +495,37 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *****************************************************************
+      *    公費保険番号データ読込
+      *****************************************************************
+       110-TOWNINF-GET-SEC  SECTION.
+      *
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  DATA-FILE     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           OPEN  INPUT  TOWN-FILE
+      *
+           MOVE  ZERO   TO  FLG-TOWN
+           PERFORM VARYING IDX FROM 1 BY 1 
+                   UNTIL FLG-TOWN = 1
+             READ TOWN-FILE NEXT
+               AT END
+                 MOVE  1         TO  FLG-TOWN
+               NOT AT END
+                 MOVE  TOWN-REC  TO  TOWN-TBL(IDX)
+             END-READ
+           END-PERFORM
+      *
+           CLOSE TOWN-FILE
+           .
+       110-TOWNINF-GET-EXT.
+           EXIT.
+      *
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *****************************************************************
       *    パラメタ編集処理
       *****************************************************************
@@ -697,8 +774,19 @@
        200111-HKNJANUM-CHK-SEC                SECTION.
       *
            INITIALIZE      WRK-HKNJANUM
-           MOVE    "030"                    TO  WRK-HKNJANUM(1:3)
-           MOVE    WRK-CITYNUM              TO  WRK-HKNJANUM(4:2)
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *     MOVE    "030"                    TO  WRK-HKNJANUM(1:3)
+      *     MOVE    WRK-CITYNUM              TO  WRK-HKNJANUM(4:2)
+           PERFORM  VARYING  IDX    FROM    1    BY    1
+                    UNTIL    IDX    >    100
+             IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+                 MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
+                 MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
+                 MOVE    TOWN-NAME(IDX)           TO  MF100-CITYNAME
+                 MOVE    100                      TO  IDX
+             END-IF
+           END-PERFORM
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
            IF  WRK-PARA-SYORIFLG       =   "1"
                AND FLG-SYORI           =    1
@@ -815,13 +903,17 @@
            END-EVALUATE
       *
       *    市町村名／市町村番号
-           MOVE    "030"                   TO  WRK-HKNJANUM(1:3)
-           MOVE    MF100-CITYNUM           TO  WRK-HKNJANUM(4:2)
-           PERFORM 920-HKNJAINF-SET-SEC
-           MOVE    HKNJA-HKNJANAME         TO  SC03-CITYNAME
-           MOVE    HKNJA-HKNJANUM(3:4)     TO  WRK-MAE-INPUT
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
+      *     MOVE    "030"                   TO  WRK-HKNJANUM(1:3)
+      *     MOVE    MF100-CITYNUM           TO  WRK-HKNJANUM(4:2)
+      *     PERFORM 920-HKNJAINF-SET-SEC
+      *     MOVE    HKNJA-HKNJANAME         TO  SC03-CITYNAME
+      *     MOVE    HKNJA-HKNJANUM(3:4)     TO  WRK-MAE-INPUT
+           MOVE    MF100-CITYNAME          TO  SC03-CITYNAME
+           MOVE    MF100-CITYNUM2(3:4)     TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  SC03-CITYNUM
+      *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
       *
       * 
            .
