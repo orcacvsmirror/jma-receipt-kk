@@ -42,10 +42,16 @@
                 05  SC01-SRYYM      PIC X(4).
                 05  SC01-HKNJANAME  PIC X(32).
             03  SC01-GOKEI-TBL          OCCURS  2 TIMES.
-                05  SC01-GNISSU     PIC X(03).
+      *--- (2008/12/02) line add&del start monma ---------------------------
+      *          05  SC01-GNISSU     PIC X(03).
+                05  SC01-GNISSU     PIC X(04).
+      *--- (2008/12/02) line add&del end   monma ---------------------------
                 05  SC01-GTENSU     PIC X(09).
                 05  SC01-GKOHFTNGK  PIC X(09).
                 05  SC01-GITBFTN    PIC X(09).
-                05  SC01-GNNISSU    PIC X(03).
+      *--- (2008/12/02) line add&del start monma ---------------------------
+      *          05  SC01-GNNISSU    PIC X(03).
+                05  SC01-GNNISSU    PIC X(04).
+      *--- (2008/12/02) line add&del end   monma ---------------------------
                 05  SC01-GNYUFTNGK  PIC X(09).
                 05  SC01-GSEIKYUGK  PIC X(09).

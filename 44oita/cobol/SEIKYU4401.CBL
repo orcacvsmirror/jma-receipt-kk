@@ -37,6 +37,8 @@
       *  01.00.03     ÆâÅÄ     08/05/21    °ìÉôÉéÃ´³ÛÍó¤ò£±±ßÃ±°Ì»Í¼Î¸ÞÆþ
       *                                    ¼ÒÊÝ¤ÎÊÝ¸±¼ÔÌ¾¤¬°õ»ú¤µ¤ì¤Ê¤«¤Ã¤¿
       *                                    ¤Î¤ò½¤Àµ
+      *  01.00.04     µÈÀî     08/11/20    SPA-AREA½é´ü²½
+      *  01.00.05     Ìç´Ö     08/12/02    ¾®·×¡¦¹ç·×Æü¿ô¤ò£³Ž¹ŽÀ¢ª£´Ž¹ŽÀ¤Ë½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -136,6 +138,9 @@
            03  WRK-RECEERR         PIC  X(200).
            03  WRK-Z2              PIC ZZ.
            03  WRK-Z3              PIC ZZZ.
+      *--- (2008/12/02) line add start monma ---------------------------
+           03  WRK-Z4              PIC ZZZZ.
+      *--- (2008/12/02) line add end   monma ---------------------------
            03  WRK-Z6              PIC ZZ,ZZZ.
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
@@ -213,26 +218,38 @@
       *
        01  SUM-AREA  VALUE   ZERO.
            03  SUM-GOKEI.
-               05  SUM-GNISSU          PIC 9(03).
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *         05  SUM-GNISSU          PIC 9(03).
+               05  SUM-GNISSU          PIC 9(04).
+      *--- (2008/12/02) line add&del end   monma -----------------------
                05  SUM-GTENSU          PIC 9(07).
                05  SUM-GKOHFTNGK       PIC 9(07).
                05  SUM-GITBFTN         PIC 9(07).
       *---(01.00.01) LINE ADD START ------------------------------------
       *         05  SUM-GSNISSU         PIC 9(03).
       *         05  SUM-GSKJFTNGK       PIC 9(07).
-               05  SUM-GNNISSU         PIC 9(03).
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *         05  SUM-GNNISSU         PIC 9(03).
+               05  SUM-GNNISSU         PIC 9(04).
+      *--- (2008/12/02) line add&del end   monma -----------------------
                05  SUM-GNYUFTNGK       PIC 9(07).
       *---(01.00.01) LINE ADD END   ------------------------------------
                05  SUM-GSEIKYUGK       PIC 9(07).
            03  SUM-SYOKEI.
-               05  SUM-SNISSU          PIC 9(03).
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *         05  SUM-SNISSU          PIC 9(03).
+               05  SUM-SNISSU          PIC 9(04).
+      *--- (2008/12/02) line add&del end   monma -----------------------
                05  SUM-STENSU          PIC 9(07).
                05  SUM-SKOHFTNGK       PIC 9(07).
                05  SUM-SITBFTN         PIC 9(07).
       *---(01.00.01) LINE ADD START ------------------------------------
       *         05  SUM-SSNISSU         PIC 9(03).
       *         05  SUM-SSKJFTNGK       PIC 9(07).
-               05  SUM-SNNISSU         PIC 9(03).
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *         05  SUM-SNNISSU          PIC 9(03).
+               05  SUM-SNNISSU          PIC 9(04).
+      *--- (2008/12/02) line add&del end   monma -----------------------
                05  SUM-SNYUFTNGK       PIC 9(07).
       *---(01.00.01) LINE ADD END   ------------------------------------
                05  SUM-SSEIKYUGK       PIC 9(07).
@@ -364,6 +381,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *=== SPA-AREA½é´ü²½ by Yoshikawa(2008/11/20) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA½é´ü²½ by Yoshikawa(2008/11/20) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -1118,8 +1138,12 @@
       *
       *    ¾®·×ÊÔ½¸
       *    Æü¿ô
-           MOVE    SUM-SNISSU              TO  WRK-Z3
-           MOVE    WRK-Z3                  TO  SC01-GNISSU(1)
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *     MOVE    SUM-SNISSU              TO  WRK-Z3
+      *     MOVE    WRK-Z3                  TO  SC01-GNISSU(1)
+           MOVE    SUM-SNISSU              TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SC01-GNISSU(1)
+      *--- (2008/12/02) line add&del end   monma -----------------------
       *
       *    ÅÀ¿ô
            MOVE    SUM-STENSU              TO  WRK-Z9
@@ -1146,8 +1170,12 @@
       *     MOVE    SUM-SSEIKYUGK           TO  WRK-Z9 
       *     MOVE    WRK-Z9                  TO  SC01-GSEIKYUGK(1)
       *    ÆýÍÄ»ù¡ÝÆü¿ô
-           MOVE    SUM-SNNISSU             TO  WRK-Z3
-           MOVE    WRK-Z3                  TO  SC01-GNNISSU(1)
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *     MOVE    SUM-SNNISSU             TO  WRK-Z3
+      *     MOVE    WRK-Z3                  TO  SC01-GNNISSU(1)
+           MOVE    SUM-SNNISSU             TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SC01-GNNISSU(1)
+      *--- (2008/12/02) line add&del end   monma -----------------------
       *
       *    ÆýÍÄ»ù¡Ý°ìÉôÉéÃ´³Û
            MOVE    SUM-SNYUFTNGK           TO  WRK-Z9
@@ -1170,8 +1198,12 @@
        325-SYOKEI-HEN-SEC  SECTION.
       *
       *    Æü¿ô
-           MOVE    SUM-GNISSU              TO  WRK-Z3
-           MOVE    WRK-Z3                  TO  SC01-GNISSU(2)
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *     MOVE    SUM-GNISSU              TO  WRK-Z3
+      *     MOVE    WRK-Z3                  TO  SC01-GNISSU(2)
+           MOVE    SUM-GNISSU              TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SC01-GNISSU(2)
+      *--- (2008/12/02) line add&del end   monma -----------------------
       *
       *    ÅÀ¿ô
            MOVE    SUM-GTENSU              TO  WRK-Z9
@@ -1198,8 +1230,12 @@
       *     MOVE    SUM-GSEIKYUGK           TO  WRK-Z9 
       *     MOVE    WRK-Z9                  TO  SC01-GSEIKYUGK(2)
       *    ÆýÍÄ»ù¡ÝÆü¿ô
-           MOVE    SUM-GNNISSU             TO  WRK-Z3
-           MOVE    WRK-Z3                  TO  SC01-GNNISSU(2)
+      *--- (2008/12/02) line add&del start monma -----------------------
+      *     MOVE    SUM-GNNISSU             TO  WRK-Z3
+      *     MOVE    WRK-Z3                  TO  SC01-GNNISSU(2)
+           MOVE    SUM-GNNISSU             TO  WRK-Z4
+           MOVE    WRK-Z4                  TO  SC01-GNNISSU(2)
+      *--- (2008/12/02) line add&del end   monma -----------------------
       *
       *    ÆýÍÄ»ù¡Ý°ìÉôÉéÃ´³Û
            MOVE    SUM-GNYUFTNGK           TO  WRK-Z9
