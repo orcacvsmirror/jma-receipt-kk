@@ -29,6 +29,9 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/11/20  保険は県内でも公費が県外の場合
       *                                  県外として集計する
+      *  01.00.02    吉川    2008/12/08  在宅が印字されない不具合を修正
+      *                                  公費番号欄に法別番号ではなく
+      *                                  保険番号が印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -611,6 +614,9 @@
            AND   ( WRK-PARA-SYOKBN1    =   "1"  )
                MOVE    LOW-VALUE           TO  KEY-AREA
                MOVE    2                   TO  WRK-INDEX
+      *=== 在宅が印字されない不具合修正 by Yoshikawa(2008/12/08) start
+               MOVE    1                   TO  FLG-SYORIKBN
+      *=== 在宅が印字されない不具合修正 by Yoshikawa(2008/12/08) end
       *         
                EVALUATE    WRK-SYOKBN
                    WHEN    "1"
@@ -627,6 +633,21 @@
            MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
+      *
+      *=== 在宅が印字されない不具合修正 by Yoshikawa(2008/12/08) start
+      *      県内保険かつ県外公費患者集計
+             MOVE    LOW-VALUE           TO  KEY-AREA
+             MOVE    2                   TO  FLG-SYORIKBN
+      *
+             PERFORM 900-SEIKYU-SELECT-SEC
+      *
+             PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =   1 
+                                     OR      FLG-ERR      =   1
+      *
+             MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+             MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+             PERFORM 900-CLOSE-SEC
+      *=== 在宅が印字されない不具合修正 by Yoshikawa(2008/12/08) end
            END-IF
       *     
            MOVE    1                   TO  FLG-END
@@ -925,6 +946,9 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2008/12/08) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2008/12/08) end
       *      ０５１と０９１は同じ場所に集計する
              IF      RECE10-KOHNUM (IDZ) =   "091"
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
