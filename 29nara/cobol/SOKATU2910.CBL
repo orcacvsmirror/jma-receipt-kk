@@ -33,6 +33,7 @@
       *                                     医療機関情報を参照
       *  01.00.03    安藤   2008/04/22    帳票様式の変更に伴う修正
       *  01.00.04    門間     08/10/07    SPA-AREAの初期化
+      *  01.00.05    吉川     08/12/09    国組3〜6歳を分けないように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -632,13 +633,32 @@
            END-IF
       *
       *    法定外給付判定
-           IF      SKT2910TMP-HKNJANUM(3:1)    =   "3"     AND
-                   RECE10-RJNHKNNUM            =   SPACE   AND
-                   RECE10-AGE                  <   70      AND
-                   RECE10-AGE                  >   2       AND
-                   RECE10-KYURATE          NOT =   7
-               MOVE    RECE10-KYURATE      TO  SKT2910TMP-KYURATE
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/12/09) start
+      *     IF      SKT2910TMP-HKNJANUM(3:1)    =   "3"     AND
+      *             RECE10-RJNHKNNUM            =   SPACE   AND
+      *             RECE10-AGE                  <   70      AND
+      *             RECE10-AGE                  >   2       AND
+      *             RECE10-KYURATE          NOT =   7
+      *         MOVE    RECE10-KYURATE      TO  SKT2910TMP-KYURATE
+      *     END-IF
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+               IF  SKT2910TMP-HKNJANUM(3:1)  =  "3"    AND
+                   RECE10-RJNHKNNUM          =  SPACE  AND
+                   RECE10-AGE                <   70    AND
+                   RECE10-FLG (1)        NOT =   1     AND
+                   RECE10-KYURATE        NOT =   7
+                 MOVE  RECE10-KYURATE     TO    SKT2910TMP-KYURATE
+               END-IF
+           ELSE
+               IF  SKT2910TMP-HKNJANUM(3:1)  =  "3"    AND
+                   RECE10-RJNHKNNUM          =  SPACE  AND
+                   RECE10-AGE                <   70    AND
+                   RECE10-AGE                >   2     AND
+                   RECE10-KYURATE        NOT =   7
+                 MOVE  RECE10-KYURATE     TO    SKT2910TMP-KYURATE
+               END-IF
            END-IF
+      *=== 国組3〜6歳は分けない by Yoshikawa(2008/12/09) end
       *
            PERFORM 900-SKTTMP-READ-SEC
       *
