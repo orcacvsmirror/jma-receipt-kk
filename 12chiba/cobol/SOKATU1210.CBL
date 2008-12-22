@@ -39,6 +39,7 @@
       *  01.00.07    内田    08/05/21    公費欄の３未を６未へ変更
       *                                  公費欄を別掲から再掲へ変更
       *  01.00.08    吉川    08/10/10    シス管「2007」公費まとめ対応
+      *  01.00.09    吉川    08/11/27    公費欄の集計方法変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1035,8 +1036,11 @@
        220-KOH-SYUKEI-SEC        SECTION.
       *
            PERFORM VARYING IDX3     FROM    1   BY  1
-                   UNTIL   IDX3     >       1
-                   OR  RECE10-KOHNUM (IDX3) =   SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *             UNTIL   IDX3     >       1
+                   UNTIL   IDX3     >       4
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
+                  OR  RECE10-KOHNUM (IDX3) =   SPACE
       *    ０５１と０９１は同じ場所に集計する
              IF    RECE10-KOHNUM(IDX3)  =  "091"
                MOVE    "051"    TO    RECE10-KOHNUM(IDX3)
@@ -1064,18 +1068,26 @@
              END-IF
       *=== シス管「2007」対応 by Yoshikawa(2008/10/10) end
       *
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *       INITIALIZE        WRK-KOH-KEY
+      ****** 05/06/27 yamaguchi INS
+      **     IDX1をキーに設定し、本人、家族等で別々に配列をとる
+      *       MOVE    IDX1(3:2)       TO  WRK-K-KBN
+      ******
+      *       MOVE  RECE10-KOHNUM(1)  TO  WRK-KOHNUM1
+      *       MOVE  RECE10-KOHNUM(2)  TO  WRK-KOHNUM2
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *    公費判別
-             INITIALIZE        WRK-KOH-KEY
-      ***** 05/06/27 yamaguchi INS
-      *     IDX1をキーに設定し、本人、家族等で別々に配列をとる
-             MOVE    IDX1(3:2)       TO  WRK-K-KBN
-      *****
-             MOVE  RECE10-KOHNUM(1)  TO  WRK-KOHNUM1
-             MOVE  RECE10-KOHNUM(2)  TO  WRK-KOHNUM2
              PERFORM  VARYING  IDX4  FROM  1  BY  1
                       UNTIL    IDX4  >     20
-                      OR       SKT1210TMP-KOH-KEY(IDX4) = SPACE
-               IF  WRK-KOH-KEY  =  SKT1210TMP-KOH-KEY(IDX4)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *                OR       SKT1210TMP-KOH-KEY(IDX4) = SPACE
+                      OR       SKT1210TMP-KOHNUM1(IDX4)  = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         IF  WRK-KOH-KEY  =  SKT1210TMP-KOH-KEY(IDX4)
+               IF  RECE10-KOHNUM(IDX3)  =  SKT1210TMP-KOHNUM1(IDX4)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                    MOVE  IDX4  TO  CNT-KOH
                    MOVE  20    TO  IDX4
                END-IF
@@ -1086,7 +1098,10 @@
                MOVE  IDX4  TO  CNT-KOH
              END-IF
       *    公費名
-             MOVE  WRK-KOH-KEY  TO  SKT1210TMP-KOH-KEY(CNT-KOH)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *       MOVE  WRK-KOH-KEY  TO  SKT1210TMP-KOH-KEY(CNT-KOH)
+             MOVE  RECE10-KOHNUM(IDX3) TO  SKT1210TMP-KOHNUM1(CNT-KOH)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *=== シス管「2007」対応 by Yoshikawa(2008/10/10) start
       *    公費名称
              MOVE  WRK-KOHNAME  TO  SKT1210TMP-KOHNAME(CNT-KOH)
@@ -1135,7 +1150,10 @@
        220-RKOH-SYUKEI-SEC        SECTION.
       *
            PERFORM VARYING IDX3     FROM    1   BY  1
-                   UNTIL   IDX3     >       1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *             UNTIL   IDX3     >       1
+                   UNTIL   IDX3     >       4
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                    OR  RECE10-KOHNUM (IDX3) =   SPACE
       *    ０５１と０９１は同じ場所に集計する
              IF    RECE10-KOHNUM(IDX3)  =  "091"
@@ -1164,18 +1182,26 @@
              END-IF
       *=== シス管「2007」対応 by Yoshikawa(2008/10/10) end
       *
-      *    公費判別
-             INITIALIZE        WRK-KOH-KEY
-      ***** 05/06/27 yamaguchi INS
-      *     IDX1をキーに設定し、本人、家族等で別々に配列をとる
-             MOVE    IDX1(3:2)            TO  WRK-K-KBN
-      *****
-             MOVE  RECE10-KOHNUM(1)  TO  WRK-KOHNUM1
-             MOVE  RECE10-KOHNUM(2)  TO  WRK-KOHNUM2
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      **    公費判別
+      *       INITIALIZE        WRK-KOH-KEY
+      ****** 05/06/27 yamaguchi INS
+      **     IDX1をキーに設定し、本人、家族等で別々に配列をとる
+      *       MOVE    IDX1(3:2)            TO  WRK-K-KBN
+      ******
+      *       MOVE  RECE10-KOHNUM(1)  TO  WRK-KOHNUM1
+      *       MOVE  RECE10-KOHNUM(2)  TO  WRK-KOHNUM2
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
              PERFORM  VARYING  IDX4  FROM  1  BY  1
                       UNTIL    IDX4  >     20
-                      OR       SKT1210TMP-RKOH-KEY(IDX4) = SPACE
-               IF  WRK-KOH-KEY  =  SKT1210TMP-RKOH-KEY(IDX4)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *                OR       SKT1210TMP-RKOH-KEY(IDX4) = SPACE
+                      OR       SKT1210TMP-RKOHNUM1(IDX4) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         IF  WRK-KOH-KEY  =  SKT1210TMP-RKOH-KEY(IDX4)
+               IF  RECE10-KOHNUM(IDX3)  =  SKT1210TMP-RKOHNUM1(IDX4)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                    MOVE  IDX4  TO  CNT-KOH
                    MOVE  20    TO  IDX4
                END-IF
@@ -1187,7 +1213,10 @@
              END-IF
       *
       *    公費名
-             MOVE  WRK-KOH-KEY  TO  SKT1210TMP-RKOH-KEY(CNT-KOH)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *       MOVE  WRK-KOH-KEY  TO  SKT1210TMP-RKOH-KEY(CNT-KOH)
+             MOVE  RECE10-KOHNUM(IDX3) TO  SKT1210TMP-RKOHNUM1(CNT-KOH)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
       *=== シス管「2007」対応 by Yoshikawa(2008/10/10) start
       *    公費名称
@@ -1348,8 +1377,12 @@
              PERFORM  KOH-SORT-SEC
       *
              PERFORM  UNTIL  FLG-PASS  =  1
-                      AND     SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
-                      AND    SKT1210TMP-RKOH-KEY(WRK-CNT2) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *                AND     SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+      *                AND    SKT1210TMP-RKOH-KEY(WRK-CNT2) = SPACE
+                      AND    SKT1210TMP-KOHNUM1(WRK-CNT) = SPACE
+                      AND    SKT1210TMP-RKOHNUM1(WRK-CNT2) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
                IF    SKT1210TMP-NYUGAIKBN  =  "1"
       *    帳票編集<見出し>処理(入院用)
@@ -1507,7 +1540,10 @@
       *    公費の印字
            PERFORM  UNTIL   IDX3   >     5
                     OR  WRK-CNT    >    20
-                    OR  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *              OR  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+                    OR  SKT1210TMP-KOHNUM1(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *    療養の給付：件数
              MOVE  SKT1210TMP-K-KENSU (WRK-CNT)  TO  WRK-Z5
              MOVE  WRK-Z5   TO  SKT1210-K-KENSU (IDX3)
@@ -1557,68 +1593,85 @@
       *       MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)
       **
       ***** 05/06/27 yamaguchi INS
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      **    公費名
+      *       INITIALIZE  WRK-KOHNAME
+      *       IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
+      *         MOVE  SKT1210TMP-KOHNUM1(WRK-CNT)  TO  WRK-KOHNUM
+      *         PERFORM  950-HKNNUM-SET-SEC
+      *         MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
+      *         IF    SKT1210TMP-KOHNUM2(WRK-CNT) NOT  = SPACE
+      *           MOVE  SKT1210TMP-KOHNUM2(WRK-CNT)  TO  WRK-KOHNUM
+      *           PERFORM  950-HKNNUM-SET-SEC
+      *           STRING  WRK-KOHNAME  DELIMITED BY SPACE
+      *                   "+"          DELIMITED BY SIZE
+      *                   HKN-HBTNUM   DELIMITED BY SIZE
+      *                   INTO         WRK-KOHNAME
+      *           END-STRING
+      *         END-IF 
+      *       ELSE
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      **      前期高齢者には"67+"を最初に付ける
+      *       IF  SKT1210TMP-K-KBN(WRK-CNT)  =  "05" OR "06" OR "07"
+      *                                      OR "08" OR "09"
+      *         MOVE  "67+"             TO    SKT1210-KOHNAME(IDX3)(1:3)
+      *         MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)(4:)
+      *       ELSE
+      *         MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)
+      *       END-IF
+      **
+      **      区分
+      *       EVALUATE  SKT1210TMP-K-KBN(WRK-CNT)
+      *       WHEN  "01"
+      *       WHEN  "06"
+      *           MOVE  "高９"        TO    SKT1210-K-KBN(IDX3)
+      *       WHEN  "02"
+      *       WHEN  "07"
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **           MOVE  "高８"        TO    SKT1210-K-KBN(IDX3)
+      *           MOVE  "高７"        TO    SKT1210-K-KBN(IDX3)
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *       WHEN  "04"
+      *       WHEN  "09"
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **           MOVE  "３未"        TO    SKT1210-K-KBN(IDX3)
+      *           MOVE  "６未"        TO    SKT1210-K-KBN(IDX3)
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *       WHEN  "05"
+      *           MOVE  "本人"        TO    SKT1210-K-KBN(IDX3)
+      *       WHEN  "08"
+      *           MOVE  "家族"        TO    SKT1210-K-KBN(IDX3)
+      *       WHEN  OTHER
+      *           MOVE  SPACE         TO    SKT1210-K-KBN(IDX3)
+      *       END-EVALUATE
+      ******
       *    公費名
-             INITIALIZE  WRK-KOHNAME
              IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
                MOVE  SKT1210TMP-KOHNUM1(WRK-CNT)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
-               MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
-               IF    SKT1210TMP-KOHNUM2(WRK-CNT) NOT  = SPACE
-                 MOVE  SKT1210TMP-KOHNUM2(WRK-CNT)  TO  WRK-KOHNUM
-                 PERFORM  950-HKNNUM-SET-SEC
-                 STRING  WRK-KOHNAME  DELIMITED BY SPACE
-                         "+"          DELIMITED BY SIZE
-                         HKN-HBTNUM   DELIMITED BY SIZE
-                         INTO         WRK-KOHNAME
-                 END-STRING
-               END-IF 
+               MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
              ELSE
                MOVE  "61"            TO    WRK-KOHNAME
              END-IF
-      *      前期高齢者には"67+"を最初に付ける
-             IF  SKT1210TMP-K-KBN(WRK-CNT)  =  "05" OR "06" OR "07"
-                                            OR "08" OR "09"
-               MOVE  "67+"             TO    SKT1210-KOHNAME(IDX3)(1:3)
-               MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)(4:)
-             ELSE
-               MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)
-             END-IF
-      *
-      *      区分
-             EVALUATE  SKT1210TMP-K-KBN(WRK-CNT)
-             WHEN  "01"
-             WHEN  "06"
-                 MOVE  "高９"        TO    SKT1210-K-KBN(IDX3)
-             WHEN  "02"
-             WHEN  "07"
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *           MOVE  "高８"        TO    SKT1210-K-KBN(IDX3)
-                 MOVE  "高７"        TO    SKT1210-K-KBN(IDX3)
-      *---(01.00.03) LINE ADD END   ------------------------------------
-             WHEN  "04"
-             WHEN  "09"
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *           MOVE  "３未"        TO    SKT1210-K-KBN(IDX3)
-                 MOVE  "６未"        TO    SKT1210-K-KBN(IDX3)
-      *---(01.00.07) LINE ADD END   ------------------------------------
-             WHEN  "05"
-                 MOVE  "本人"        TO    SKT1210-K-KBN(IDX3)
-             WHEN  "08"
-                 MOVE  "家族"        TO    SKT1210-K-KBN(IDX3)
-             WHEN  OTHER
-                 MOVE  SPACE         TO    SKT1210-K-KBN(IDX3)
-             END-EVALUATE
-      *****
+             MOVE    WRK-KOHNAME     TO    SKT1210-KOHNAME(IDX3)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
              ADD  1  TO  WRK-CNT
                          IDX3
            END-PERFORM
       *
       *    老人公費の印字(一般併用分の後に印字する)
-           IF  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *     IF  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+           IF  SKT1210TMP-KOHNUM1(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
              PERFORM  UNTIL   IDX3   >     5
                       OR  WRK-CNT2   >    20
-                      OR  SKT1210TMP-RKOH-KEY (WRK-CNT2) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *                OR  SKT1210TMP-RKOH-KEY (WRK-CNT2) = SPACE
+                      OR  SKT1210TMP-RKOHNUM1(WRK-CNT2) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *    療養の給付：件数
                MOVE  SKT1210TMP-K-RKENSU (WRK-CNT2)  TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT1210-K-KENSU (IDX3)
@@ -1647,37 +1700,47 @@
                MOVE  SKT1210TMP-K-RSFTNGK (WRK-CNT2)  TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT1210-K-SFTNGK(IDX3)
       *    公費名
-             INITIALIZE  WRK-KOHNAME
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *       INITIALIZE  WRK-KOHNAME
+      *       IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+      *         MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
+      *         PERFORM  950-HKNNUM-SET-SEC
+      *         MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
+      *         IF    SKT1210TMP-RKOHNUM2(WRK-CNT2) NOT  = SPACE
+      *           MOVE  SKT1210TMP-RKOHNUM2(WRK-CNT2)  TO  WRK-KOHNUM
+      *           PERFORM  950-HKNNUM-SET-SEC
+      *           STRING  WRK-KOHNAME  DELIMITED BY SPACE
+      *                   "+"          DELIMITED BY SIZE
+      *                   HKN-HBTNUM   DELIMITED BY SIZE
+      *                   INTO         WRK-KOHNAME
+      *           END-STRING
+      *         END-IF
+      *       ELSE
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      *       MOVE  "27+"             TO    SKT1210-KOHNAME(IDX3)(1:3)
+      *       MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)(4:)
+      *
+      ****** 05/06/24 yamaguchi INS
+      **      区分
+      *       IF  SKT1210TMP-K-RKBN(WRK-CNT2)  =  "10"
+      *           MOVE  "高９"        TO    SKT1210-K-KBN(IDX3)
+      *       ELSE
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **           MOVE  "高８"        TO    SKT1210-K-KBN(IDX3)
+      *           MOVE  "高７"        TO    SKT1210-K-KBN(IDX3)
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *       END-IF
+      ******
              IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
                MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
-               MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
-               IF    SKT1210TMP-RKOHNUM2(WRK-CNT2) NOT  = SPACE
-                 MOVE  SKT1210TMP-RKOHNUM2(WRK-CNT2)  TO  WRK-KOHNUM
-                 PERFORM  950-HKNNUM-SET-SEC
-                 STRING  WRK-KOHNAME  DELIMITED BY SPACE
-                         "+"          DELIMITED BY SIZE
-                         HKN-HBTNUM   DELIMITED BY SIZE
-                         INTO         WRK-KOHNAME
-                 END-STRING
-               END-IF
+               MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
              ELSE
                MOVE  "61"            TO    WRK-KOHNAME
              END-IF
-             MOVE  "27+"             TO    SKT1210-KOHNAME(IDX3)(1:3)
-             MOVE  WRK-KOHNAME       TO    SKT1210-KOHNAME(IDX3)(4:)
-      *
-      ***** 05/06/24 yamaguchi INS
-      *      区分
-             IF  SKT1210TMP-K-RKBN(WRK-CNT2)  =  "10"
-                 MOVE  "高９"        TO    SKT1210-K-KBN(IDX3)
-             ELSE
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *           MOVE  "高８"        TO    SKT1210-K-KBN(IDX3)
-                 MOVE  "高７"        TO    SKT1210-K-KBN(IDX3)
-      *---(01.00.03) LINE ADD END   ------------------------------------
-             END-IF
-      *****
+             MOVE    WRK-KOHNAME     TO    SKT1210-KOHNAME(IDX3)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
       *
                ADD  1  TO  WRK-CNT2
@@ -1863,7 +1926,10 @@
       *    公費の印字
            PERFORM  UNTIL   IDX3   >     5
                     OR  WRK-CNT    >    20
-                    OR  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *              OR  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+                    OR  SKT1210TMP-KOHNUM1(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
       *    療養の給付：件数
              MOVE  SKT1210TMP-K-KENSU (WRK-CNT)  TO  WRK-Z5
@@ -1903,71 +1969,88 @@
       *       END-IF
       *       MOVE  WRK-KOHNAME       TO    SKT1220-KOHNAME(IDX3)
       ***** 05/06/27 yamaguchi INS
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      **    公費名
+      *       INITIALIZE  WRK-KOHNAME
+      *       IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
+      *         DISPLAY "NOT 972"
+      *         MOVE  SKT1210TMP-KOHNUM1(WRK-CNT)  TO  WRK-KOHNUM
+      *         PERFORM  950-HKNNUM-SET-SEC
+      *         MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
+      *         IF    SKT1210TMP-KOHNUM2(WRK-CNT) NOT  = SPACE
+      *           MOVE  SKT1210TMP-KOHNUM2(WRK-CNT)  TO  WRK-KOHNUM
+      *           PERFORM  950-HKNNUM-SET-SEC
+      *           STRING  WRK-KOHNAME  DELIMITED BY SPACE
+      *                   "+"          DELIMITED BY SIZE
+      *                   HKN-HBTNUM   DELIMITED BY SIZE
+      *                   INTO         WRK-KOHNAME
+      *           END-STRING
+      *         END-IF
+      *       ELSE
+      *         DISPLAY "= 972"
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      **     前期高齢者には"67+"を最初に付ける
+      *       IF  SKT1210TMP-K-KBN(WRK-CNT)  =  "05" OR "06" OR "07"
+      *                                      OR "08" OR "09"
+      *         MOVE  "67+"           TO    SKT1220-KOHNAME(IDX3)(1:3)
+      *         MOVE  WRK-KOHNAME     TO    SKT1220-KOHNAME(IDX3)(4:)
+      *       ELSE
+      *         MOVE  WRK-KOHNAME       TO    SKT1220-KOHNAME(IDX3)
+      *       END-IF
+      **
+      **      区分
+      *       EVALUATE  SKT1210TMP-K-KBN(WRK-CNT)
+      *       WHEN  "01"
+      *       WHEN  "06"
+      *           MOVE  "高９"        TO    SKT1220-K-KBN(IDX3)
+      *       WHEN  "02"
+      *       WHEN  "07"
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **           MOVE  "高８"        TO    SKT1220-K-KBN(IDX3)
+      *           MOVE  "高７"        TO    SKT1220-K-KBN(IDX3)
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *       WHEN  "04"
+      *       WHEN  "09"
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **           MOVE  "３未"        TO    SKT1220-K-KBN(IDX3)
+      *           MOVE  "６未"        TO    SKT1220-K-KBN(IDX3)
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *       WHEN  "05"
+      *           MOVE  "本人"        TO    SKT1220-K-KBN(IDX3)
+      *       WHEN  "08"
+      *           MOVE  "家族"        TO    SKT1220-K-KBN(IDX3)
+      *       WHEN  OTHER
+      *           MOVE  SPACE         TO    SKT1220-K-KBN(IDX3)
+      *       END-EVALUATE
+      ******
       *    公費名
-             INITIALIZE  WRK-KOHNAME
              IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
-               DISPLAY "NOT 972"
                MOVE  SKT1210TMP-KOHNUM1(WRK-CNT)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
-               MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
-               IF    SKT1210TMP-KOHNUM2(WRK-CNT) NOT  = SPACE
-                 MOVE  SKT1210TMP-KOHNUM2(WRK-CNT)  TO  WRK-KOHNUM
-                 PERFORM  950-HKNNUM-SET-SEC
-                 STRING  WRK-KOHNAME  DELIMITED BY SPACE
-                         "+"          DELIMITED BY SIZE
-                         HKN-HBTNUM   DELIMITED BY SIZE
-                         INTO         WRK-KOHNAME
-                 END-STRING
-               END-IF
+               MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
              ELSE
-               DISPLAY "= 972"
                MOVE  "61"            TO    WRK-KOHNAME
              END-IF
-      *     前期高齢者には"67+"を最初に付ける
-             IF  SKT1210TMP-K-KBN(WRK-CNT)  =  "05" OR "06" OR "07"
-                                            OR "08" OR "09"
-               MOVE  "67+"           TO    SKT1220-KOHNAME(IDX3)(1:3)
-               MOVE  WRK-KOHNAME     TO    SKT1220-KOHNAME(IDX3)(4:)
-             ELSE
-               MOVE  WRK-KOHNAME       TO    SKT1220-KOHNAME(IDX3)
-             END-IF
-      *
-      *      区分
-             EVALUATE  SKT1210TMP-K-KBN(WRK-CNT)
-             WHEN  "01"
-             WHEN  "06"
-                 MOVE  "高９"        TO    SKT1220-K-KBN(IDX3)
-             WHEN  "02"
-             WHEN  "07"
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *           MOVE  "高８"        TO    SKT1220-K-KBN(IDX3)
-                 MOVE  "高７"        TO    SKT1220-K-KBN(IDX3)
-      *---(01.00.03) LINE ADD END   ------------------------------------
-             WHEN  "04"
-             WHEN  "09"
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *           MOVE  "３未"        TO    SKT1220-K-KBN(IDX3)
-                 MOVE  "６未"        TO    SKT1220-K-KBN(IDX3)
-      *---(01.00.07) LINE ADD END   ------------------------------------
-             WHEN  "05"
-                 MOVE  "本人"        TO    SKT1220-K-KBN(IDX3)
-             WHEN  "08"
-                 MOVE  "家族"        TO    SKT1220-K-KBN(IDX3)
-             WHEN  OTHER
-                 MOVE  SPACE         TO    SKT1220-K-KBN(IDX3)
-             END-EVALUATE
-      *****
+             MOVE    WRK-KOHNAME     TO    SKT1220-KOHNAME(IDX3)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
              ADD  1  TO  WRK-CNT
                          IDX3
            END-PERFORM
       *
       *    老人公費の印字(一般併用分の後に印字する)
-           IF  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *     IF  SKT1210TMP-KOH-KEY(WRK-CNT) = SPACE
+           IF  SKT1210TMP-KOHNUM1(WRK-CNT) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
              PERFORM  UNTIL   IDX3   >     5
                       OR  WRK-CNT2    >    20
-                      OR  SKT1210TMP-RKOH-KEY(WRK-CNT2) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *                OR  SKT1210TMP-RKOH-KEY(WRK-CNT2) = SPACE
+                      OR  SKT1210TMP-RKOHNUM1(WRK-CNT2) = SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
              DISPLAY "老人公費"
       *    療養の給付：件数
@@ -1986,37 +2069,47 @@
                MOVE  SKT1210TMP-K-RKOHTENSU (WRK-CNT2)   TO  WRK-Z7
                MOVE  WRK-Z7   TO  SKT1220-K-KOHTENSU(IDX3)
       *    公費名
-               INITIALIZE  WRK-KOHNAME
-               IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
-                 MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
-                 PERFORM  950-HKNNUM-SET-SEC
-                 MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
-                 IF    SKT1210TMP-RKOHNUM2(WRK-CNT2) NOT  = SPACE
-                   MOVE  SKT1210TMP-RKOHNUM2(WRK-CNT2)  TO  WRK-KOHNUM
-                   PERFORM  950-HKNNUM-SET-SEC
-                   STRING  WRK-KOHNAME  DELIMITED BY SPACE
-                           "+"          DELIMITED BY SIZE
-                           HKN-HBTNUM   DELIMITED BY SIZE
-                           INTO         WRK-KOHNAME
-                   END-STRING
-                 END-IF
-               ELSE
-                 MOVE  "61"            TO    WRK-KOHNAME
-               END-IF
-               MOVE  "27+"             TO    SKT1220-KOHNAME(IDX3)(1:3)
-               MOVE  WRK-KOHNAME       TO    SKT1220-KOHNAME(IDX3)(4:)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         INITIALIZE  WRK-KOHNAME
+      *         IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+      *           MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
+      *           PERFORM  950-HKNNUM-SET-SEC
+      *           MOVE  HKN-HBTNUM        TO  WRK-KOHNAME
+      *           IF    SKT1210TMP-RKOHNUM2(WRK-CNT2) NOT  = SPACE
+      *             MOVE  SKT1210TMP-RKOHNUM2(WRK-CNT2)  TO  WRK-KOHNUM
+      *             PERFORM  950-HKNNUM-SET-SEC
+      *             STRING  WRK-KOHNAME  DELIMITED BY SPACE
+      *                     "+"          DELIMITED BY SIZE
+      *                     HKN-HBTNUM   DELIMITED BY SIZE
+      *                     INTO         WRK-KOHNAME
+      *             END-STRING
+      *           END-IF
+      *         ELSE
+      *           MOVE  "61"            TO    WRK-KOHNAME
+      *         END-IF
+      *         MOVE  "27+"             TO    SKT1220-KOHNAME(IDX3)(1:3)
+      *         MOVE  WRK-KOHNAME       TO    SKT1220-KOHNAME(IDX3)(4:)
       *
-      ***** 05/06/24 yamaguchi INS
-      *      区分
-             IF  SKT1210TMP-K-RKBN(WRK-CNT2)  =  "10"
-                 MOVE  "高９"        TO    SKT1220-K-KBN(IDX3)
+      ****** 05/06/24 yamaguchi INS
+      **      区分
+      *       IF  SKT1210TMP-K-RKBN(WRK-CNT2)  =  "10"
+      *           MOVE  "高９"        TO    SKT1220-K-KBN(IDX3)
+      *       ELSE
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **           MOVE  "高８"        TO    SKT1220-K-KBN(IDX3)
+      *           MOVE  "高７"        TO    SKT1220-K-KBN(IDX3)
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *       END-IF
+      ******
+             IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+               MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
+               PERFORM  950-HKNNUM-SET-SEC
+               MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
              ELSE
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *           MOVE  "高８"        TO    SKT1220-K-KBN(IDX3)
-                 MOVE  "高７"        TO    SKT1220-K-KBN(IDX3)
-      *---(01.00.03) LINE ADD END   ------------------------------------
+               MOVE  "61"            TO    WRK-KOHNAME
              END-IF
-      *****
+             MOVE    WRK-KOHNAME     TO    SKT1220-KOHNAME(IDX3)
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
                ADD  1  TO  WRK-CNT2
                            IDX3
@@ -2088,16 +2181,29 @@
       *    一般公費数と最小公費を取得
            MOVE    ZERO    TO    IDX-MAX
                                  IDX2 
-           MOVE    SPACE    TO    WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *     MOVE    SPACE    TO    WRK-KOH-KEY
+           MOVE    SPACE    TO    WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >  20
-             IF  SKT1210TMP-KOH-KEY(IDX1)  =  SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *       IF  SKT1210TMP-KOH-KEY(IDX1)  =  SPACE
+             IF  SKT1210TMP-KOHNUM1(IDX1)  =  SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                MOVE  20    TO    IDX1
              ELSE
-               IF    WRK-KOH-KEY              =   SPACE   OR
-                     SKT1210TMP-KOH-KEY(IDX1) <   WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         IF    WRK-KOH-KEY              =   SPACE   OR
+      *               SKT1210TMP-KOH-KEY(IDX1) <   WRK-KOH-KEY
+               IF    WRK-KOHNUM1              =   SPACE   OR
+                     SKT1210TMP-KOHNUM1(IDX1) <   WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                  MOVE     IDX1                TO  IDX2
-                 MOVE    SKT1210TMP-KOH-KEY(IDX1) TO  WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *           MOVE    SKT1210TMP-KOH-KEY(IDX1) TO  WRK-KOH-KEY
+                 MOVE    SKT1210TMP-KOHNUM1(IDX1) TO  WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                END-IF
                ADD   1     TO    IDX-MAX
              END-IF
@@ -2107,11 +2213,11 @@
            END-IF
       *
       *
-           DISPLAY "一般ソート前１" SKT1210TMP-KOH-KEY(1)
-           DISPLAY "一般ソート前２" SKT1210TMP-KOH-KEY(2)
-           DISPLAY "一般ソート前３" SKT1210TMP-KOH-KEY(3)
-           DISPLAY "一般ソート前４" SKT1210TMP-KOH-KEY(4)
-           DISPLAY "一般ソート前５" SKT1210TMP-KOH-KEY(5)
+           DISPLAY "一般ソート前１" SKT1210TMP-KOHNUM1(1)
+           DISPLAY "一般ソート前２" SKT1210TMP-KOHNUM1(2)
+           DISPLAY "一般ソート前３" SKT1210TMP-KOHNUM1(3)
+           DISPLAY "一般ソート前４" SKT1210TMP-KOHNUM1(4)
+           DISPLAY "一般ソート前５" SKT1210TMP-KOHNUM1(5)
       *
       *    公費が無い場合はソートしない
            IF      IDX-MAX    >    ZERO
@@ -2120,16 +2226,26 @@
              MOVE    1    TO    IDX3
       ***** 05/06/27 yamaguchi UPD
       *       MOVE   "999999"   TO    WRK-KOH-KEY
-             MOVE   "99999999"   TO    WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *      MOVE   "99999999"   TO    WRK-KOH-KEY
+             MOVE   "999"       TO    WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *****
              PERFORM    UNTIL    IDX1  >    IDX-MAX
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >    IDX-MAX
-                 IF  SKT1210TMP-KOH-KEY(IDX2)  > 
-                                             SORT-KOH-KEY1(IDX1 - 1)
-                   IF  SKT1210TMP-KOH-KEY(IDX2)  <  WRK-KOH-KEY
-                     INITIALIZE                     WRK-KOH-KEY
-                     MOVE  SKT1210TMP-KOH-KEY(IDX2)  TO WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *           IF  SKT1210TMP-KOH-KEY(IDX2)  > 
+      *                                       SORT-KOH-KEY1(IDX1 - 1)
+      *             IF  SKT1210TMP-KOH-KEY(IDX2)  <  WRK-KOH-KEY
+      *               INITIALIZE                     WRK-KOH-KEY
+      *               MOVE  SKT1210TMP-KOH-KEY(IDX2)  TO WRK-KOH-KEY
+                 IF  SKT1210TMP-KOHNUM1(IDX2)  > 
+                                             SORT-KOHNUM11(IDX1 - 1)
+                   IF  SKT1210TMP-KOHNUM1(IDX2)  <  WRK-KOHNUM1
+                     INITIALIZE                     WRK-KOHNUM1
+                     MOVE  SKT1210TMP-KOHNUM1(IDX2)  TO WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                      MOVE  IDX2          TO    IDX3
                    END-IF
                  END-IF
@@ -2137,7 +2253,10 @@
                MOVE  SKT1210TMP-KOH-TBL(IDX3)  TO  SORT-KOH-TBL(IDX1)
       ***** 05/06/27 yamaguchi UPD
       *         MOVE   "999999"   TO    WRK-KOH-KEY
-               MOVE   "99999999"   TO    WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         MOVE   "99999999"   TO    WRK-KOH-KEY
+               MOVE   "999"        TO    WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *****
                ADD   1    TO    IDX1
              END-PERFORM
@@ -2147,26 +2266,39 @@
              MOVE  SORT-AREA  TO    SKT1210TMP-KOH-AREA
       * 
            END-IF
-           DISPLAY "一般ソート後１" SKT1210TMP-KOH-KEY(1)
-           DISPLAY "一般ソート後２" SKT1210TMP-KOH-KEY(2)
-           DISPLAY "一般ソート後３" SKT1210TMP-KOH-KEY(3)
-           DISPLAY "一般ソート後４" SKT1210TMP-KOH-KEY(4)
-           DISPLAY "一般ソート後５" SKT1210TMP-KOH-KEY(5)
+           DISPLAY "一般ソート後１" SKT1210TMP-KOHNUM1(1)
+           DISPLAY "一般ソート後２" SKT1210TMP-KOHNUM1(2)
+           DISPLAY "一般ソート後３" SKT1210TMP-KOHNUM1(3)
+           DISPLAY "一般ソート後４" SKT1210TMP-KOHNUM1(4)
+           DISPLAY "一般ソート後５" SKT1210TMP-KOHNUM1(5)
       *
       *
       *    老人併用公費数と最小公費を取得
            MOVE    ZERO    TO    IDX-MAX
                                  IDX2
-           MOVE    SPACE   TO    WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *     MOVE    SPACE   TO    WRK-KOH-KEY
+           MOVE    SPACE   TO    WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >  20
-             IF  SKT1210TMP-RKOH-KEY(IDX1)  =  SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *       IF  SKT1210TMP-RKOH-KEY(IDX1)  =  SPACE
+             IF  SKT1210TMP-RKOHNUM1(IDX1)  =  SPACE
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                MOVE  20    TO    IDX1
              ELSE
-               IF    WRK-KOH-KEY               =   SPACE   OR
-                     SKT1210TMP-RKOH-KEY(IDX1)  <   WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         IF    WRK-KOH-KEY               =   SPACE   OR
+      *               SKT1210TMP-RKOH-KEY(IDX1)  <   WRK-KOH-KEY
+               IF    WRK-KOHNUM1               =   SPACE   OR
+                     SKT1210TMP-RKOHNUM1(IDX1)  <   WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                  MOVE     IDX1                TO  IDX2
-                 MOVE     SKT1210TMP-RKOH-KEY(IDX1) TO  WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *           MOVE     SKT1210TMP-RKOH-KEY(IDX1) TO  WRK-KOH-KEY
+                 MOVE     SKT1210TMP-RKOHNUM1(IDX1) TO  WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                END-IF
                ADD   1     TO    IDX-MAX
              END-IF
@@ -2177,11 +2309,11 @@
            END-IF
       *
       *
-           DISPLAY "老人併用ソート前１" SKT1210TMP-RKOH-KEY(1)
-           DISPLAY "老人併用ソート前２" SKT1210TMP-RKOH-KEY(2)
-           DISPLAY "老人併用ソート前３" SKT1210TMP-RKOH-KEY(3)
-           DISPLAY "老人併用ソート前４" SKT1210TMP-RKOH-KEY(4)
-           DISPLAY "老人併用ソート前５" SKT1210TMP-RKOH-KEY(5)
+           DISPLAY "老人併用ソート前１" SKT1210TMP-RKOHNUM1(1)
+           DISPLAY "老人併用ソート前２" SKT1210TMP-RKOHNUM1(2)
+           DISPLAY "老人併用ソート前３" SKT1210TMP-RKOHNUM1(3)
+           DISPLAY "老人併用ソート前４" SKT1210TMP-RKOHNUM1(4)
+           DISPLAY "老人併用ソート前５" SKT1210TMP-RKOHNUM1(5)
       *
       *    公費が無い場合はソートしない
            IF      IDX-MAX    >    ZERO
@@ -2190,15 +2322,23 @@
              MOVE    1    TO    IDX3
       ***** 05/06/27 yamaguchi UPD
       *       MOVE   "999999"   TO    WRK-KOH-KEY
-             MOVE   "99999999"   TO    WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+             MOVE   "999"      TO    WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *****
              PERFORM    UNTIL    IDX1  >    IDX-MAX
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >    IDX-MAX
-                 IF  SKT1210TMP-RKOH-KEY(IDX2)  >
-                                          SORT-KOH-KEY2(IDX1 - 1)
-                   IF  SKT1210TMP-RKOH-KEY(IDX2)  <  WRK-KOH-KEY
-                     MOVE  SKT1210TMP-RKOH-KEY(IDX2)  TO WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *           IF  SKT1210TMP-RKOH-KEY(IDX2)  >
+      *                                    SORT-KOH-KEY2(IDX1 - 1)
+      *             IF  SKT1210TMP-RKOH-KEY(IDX2)  <  WRK-KOH-KEY
+      *               MOVE  SKT1210TMP-RKOH-KEY(IDX2)  TO WRK-KOH-KEY
+                 IF  SKT1210TMP-RKOHNUM1(IDX2)  >
+                                          SORT-KOHNUM21(IDX1 - 1)
+                   IF  SKT1210TMP-RKOHNUM1(IDX2)  <  WRK-KOHNUM1
+                     MOVE  SKT1210TMP-RKOHNUM1(IDX2)  TO WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
                      MOVE  IDX2          TO    IDX3
                    END-IF
                  END-IF
@@ -2207,7 +2347,10 @@
                                          TO  SORT-KOH-TBL2(IDX1)
       ***** 05/06/27 yamaguchi UPD
       *         MOVE   "999999"   TO    WRK-KOH-KEY
-               MOVE   "99999999"   TO    WRK-KOH-KEY
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) start
+      *         MOVE   "99999999"   TO    WRK-KOH-KEY
+               MOVE   "999"        TO    WRK-KOHNUM1
+      *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *****
                ADD   1    TO    IDX1
              END-PERFORM
@@ -2217,11 +2360,11 @@
              MOVE  SORT-AREA2  TO   SKT1210TMP-RKOH-AREA
       * 
            END-IF
-           DISPLAY "老人併用ソート後１" SKT1210TMP-RKOH-KEY(1)
-           DISPLAY "老人併用ソート後２" SKT1210TMP-RKOH-KEY(2)
-           DISPLAY "老人併用ソート後３" SKT1210TMP-RKOH-KEY(3)
-           DISPLAY "老人併用ソート後４" SKT1210TMP-RKOH-KEY(4)
-           DISPLAY "老人併用ソート後５" SKT1210TMP-RKOH-KEY(5)
+           DISPLAY "老人併用ソート後１" SKT1210TMP-RKOHNUM1(1)
+           DISPLAY "老人併用ソート後２" SKT1210TMP-RKOHNUM1(2)
+           DISPLAY "老人併用ソート後３" SKT1210TMP-RKOHNUM1(3)
+           DISPLAY "老人併用ソート後４" SKT1210TMP-RKOHNUM1(4)
+           DISPLAY "老人併用ソート後５" SKT1210TMP-RKOHNUM1(5)
       *
            .
        KOH-SORT-EXT.
