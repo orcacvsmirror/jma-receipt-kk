@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 千葉・乳幼児医療費総括表
-      *                      (183,283,383,483)
+      *                      (183,283,383,483,583,683)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/05/25    山口       ORCAのバージョンアップによる(2.5.0)再作成
@@ -34,6 +34,7 @@
       *                                    システム管理マスタ「1901」の
       *                                    医療機関情報を参照
       *  01.00.03     吉川     08/10/10    SPA-AREA初期化
+      *  01.00.04     吉川     08/12/02    印字対象番号の追加(583,683)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -656,6 +657,9 @@
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
              IF  RECE02-KOHNUM (IDZ) =   "183" OR "283"OR "383"OR "483"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/02) start
+                                      OR "583" OR "683"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/02) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1395,10 +1399,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "183" OR "283" OR "383" OR "483"
-                OR RECE02-KOHNUM(2) = "183" OR "283" OR "383" OR "483"
-                OR RECE02-KOHNUM(3) = "183" OR "283" OR "383" OR "483"
-                OR RECE02-KOHNUM(4) = "183" OR "283" OR "383" OR "483"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/02) start
+      *         IF  RECE02-KOHNUM(1) = "183" OR "283" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(2) = "183" OR "283" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(3) = "183" OR "283" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(4) = "183" OR "283" OR "383" OR "483"
+               IF  RECE02-KOHNUM(1) = "183" OR "283" OR "383"
+                                   OR "483" OR "583" OR "683"
+                OR RECE02-KOHNUM(2) = "183" OR "283" OR "383"
+                                   OR "483" OR "583" OR "683"
+                OR RECE02-KOHNUM(3) = "183" OR "283" OR "383"
+                                   OR "483" OR "583" OR "683"
+                OR RECE02-KOHNUM(4) = "183" OR "283" OR "383"
+                                   OR "483" OR "583" OR "683"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/02) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
