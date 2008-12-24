@@ -21,7 +21,8 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : レセプト
       *  コンポーネント名  : 福岡複写式レセ
-      *                      (180,181,190,281,290,280,380,381,390,490)
+      *                      (180,181,190,281,290,280,380,381,390,490
+      *                       480,491,590)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/15    有村          再作成(入院用様式追加対応)
@@ -51,7 +52,9 @@
       *  01.00.13    吉川     08/11/05    公費の助成がない場合は印字しない
       *  01.00.14    吉川     08/11/21    FLG-ERR初期化位置修正
       *                                   保険番号180,181,190の場合
-      *                                   初診料等を印字する
+      *                                   初診料を印字する
+      *  01.00.15    吉川     08/12/11    医学管理、在宅を印字する
+      *                                   印字対象番号の追加（480,481,590）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1011,6 +1014,9 @@
                                    OR "290" OR "280" OR "380" OR "381"
                                    OR "390" OR "490"
       *---(01.00.12) LINE ADD END   ------------------------------------
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) start
+                                   OR "480" OR "481" OR "590"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -2585,7 +2591,10 @@
       *      初診、指導、在宅のみ印字
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     13
-               IF    IDX =  1  OR 8 OR 9 OR 10
+      *=== 医学管理、在宅を印字 by Yoshikawa(2008/12/11) start
+      *         IF    IDX =  1  OR 8 OR 9 OR 10
+               IF    IDX  =  1 OR 7 OR 8 OR 9 OR 10 OR 11 OR 12 OR 13
+      *=== 医学管理、在宅を印字 by Yoshikawa(2008/12/11) end
                  MOVE  MF100-KAISU(IDX)    TO  WRK-KAISUZ
                  MOVE  WRK-KAISUZ          TO  HC06-KAISU(IDX)
                  MOVE  MF100-TENSU(IDX 1)  TO  WRK-TENSUZ
@@ -2593,49 +2602,51 @@
                END-IF
              END-PERFORM
       *
-      *      指導は小児科外来診察料の初診点数のみを設定する
-             MOVE    ZERO         TO       WRK-SIDOU
-             PERFORM  VARYING  IDX  FROM  1  BY  1
-                      UNTIL    IDX  >     2
-               INITIALIZE                       SRYACT-REC
-               MOVE    MF100-HOSPNUM      TO  SRY-HOSPNUM
-               MOVE    MF100-NYUGAIKBN    TO  SRY-NYUGAIKBN
-               MOVE    MF100-PTID         TO  SRY-PTID
-               MOVE    MF100-SRYYM        TO  SRY-SRYYM
-      *      小児科外来診察料の初診コード設定
-               IF    IDX  =  1
-                 MOVE    "113003510"         TO  SRY-SRYCD(1)
-                                                 SRY-SRYCD(2)
-                                                 SRY-SRYCD(3)
-                                                 SRY-SRYCD(4)
-                                                 SRY-SRYCD(5)
-               ELSE
-                 MOVE    "113003710"         TO  SRY-SRYCD(1)
-                                                 SRY-SRYCD(2)
-                                                 SRY-SRYCD(3)
-                                                 SRY-SRYCD(4)
-                                                 SRY-SRYCD(5)
-               END-IF
-               PERFORM  900-SRYACT-SELECT-SEC
-               PERFORM  UNTIL  FLG-SRYACT  =  1
-                 PERFORM  900-SRYACCT-READ-SEC
-                 MOVE    ACCT-HOSPNUM        TO  WRK-HOSPNUM
-                 MOVE    ACCT-PTID           TO  WRK-PTID
-                 MOVE    ACCT-HKNCOMBI       TO  WRK-HKNCOMBI
-                 PERFORM 910-HKNCOMBI-READ-SEC
-                 IF      MF100-KOHID     =   COMB-KOHID(1)   OR
-                                             COMB-KOHID(2)   OR
-                                             COMB-KOHID(3)   OR
-                                             COMB-KOHID(4)
-                   COMPUTE  WRK-SIDOU  =  WRK-SIDOU +
-                            (ACCT-ZAITEN  *  ACCT-ZAIKAISU)
-                 END-IF
-                 PERFORM  900-SRYACT-FETCH-SEC
-               END-PERFORM
-               PERFORM  900-SRYACT-CLOSE-SEC
-             END-PERFORM
-             MOVE    WRK-SIDOU    TO    WRK-TENSUZ
-             MOVE    WRK-TENSUZ   TO    HC06-TENSU(7)
+      *=== 医学管理、在宅を印字 by Yoshikawa(2008/12/11) start
+      **      指導は小児科外来診察料の初診点数のみを設定する
+      *       MOVE    ZERO         TO       WRK-SIDOU
+      *       PERFORM  VARYING  IDX  FROM  1  BY  1
+      *                UNTIL    IDX  >     2
+      *         INITIALIZE                       SRYACT-REC
+      *         MOVE    MF100-HOSPNUM      TO  SRY-HOSPNUM
+      *         MOVE    MF100-NYUGAIKBN    TO  SRY-NYUGAIKBN
+      *         MOVE    MF100-PTID         TO  SRY-PTID
+      *         MOVE    MF100-SRYYM        TO  SRY-SRYYM
+      **      小児科外来診察料の初診コード設定
+      *         IF    IDX  =  1
+      *           MOVE    "113003510"         TO  SRY-SRYCD(1)
+      *                                           SRY-SRYCD(2)
+      *                                           SRY-SRYCD(3)
+      *                                           SRY-SRYCD(4)
+      *                                           SRY-SRYCD(5)
+      *         ELSE
+      *           MOVE    "113003710"         TO  SRY-SRYCD(1)
+      *                                           SRY-SRYCD(2)
+      *                                           SRY-SRYCD(3)
+      *                                           SRY-SRYCD(4)
+      *                                           SRY-SRYCD(5)
+      *         END-IF
+      *         PERFORM  900-SRYACT-SELECT-SEC
+      *         PERFORM  UNTIL  FLG-SRYACT  =  1
+      *           PERFORM  900-SRYACCT-READ-SEC
+      *           MOVE    ACCT-HOSPNUM        TO  WRK-HOSPNUM
+      *           MOVE    ACCT-PTID           TO  WRK-PTID
+      *           MOVE    ACCT-HKNCOMBI       TO  WRK-HKNCOMBI
+      *           PERFORM 910-HKNCOMBI-READ-SEC
+      *           IF      MF100-KOHID     =   COMB-KOHID(1)   OR
+      *                                       COMB-KOHID(2)   OR
+      *                                       COMB-KOHID(3)   OR
+      *                                       COMB-KOHID(4)
+      *             COMPUTE  WRK-SIDOU  =  WRK-SIDOU +
+      *                      (ACCT-ZAITEN  *  ACCT-ZAIKAISU)
+      *           END-IF
+      *           PERFORM  900-SRYACT-FETCH-SEC
+      *         END-PERFORM
+      *         PERFORM  900-SRYACT-CLOSE-SEC
+      *       END-PERFORM
+      *       MOVE    WRK-SIDOU    TO    WRK-TENSUZ
+      *       MOVE    WRK-TENSUZ   TO    HC06-TENSU(7)
+      *=== 医学管理、在宅を印字 by Yoshikawa(2008/12/11) end
            END-IF
       *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) end
       *
@@ -2701,12 +2712,22 @@
       *---(01.00.06) LINE ADD END   ------------------------------------
       *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) start
            IF  MF100-KOHNUM  =  "180" OR "181" OR "190"
-      *      初診のみ印字
-             MOVE    MF100-KAISU(1)      TO  WRK-KAISUZ
-             MOVE    WRK-KAISUZ          TO  HCN06-KAISU(1)
-             MOVE    MF100-TENSU(1 1)    TO  WRK-TENSUZ
-             MOVE    WRK-TENSU           TO  HCN06-TENSU(1)
+      *=== 医学管理、在宅を印字 by Yoshikawa(2008/12/11) start
+      **      初診のみ印字
+      *       MOVE    MF100-KAISU(1)      TO  WRK-KAISUZ
+      *       MOVE    WRK-KAISUZ          TO  HCN06-KAISU(1)
+      *       MOVE    MF100-TENSU(1 1)    TO  WRK-TENSUZ
+      *       MOVE    WRK-TENSU           TO  HCN06-TENSU(1)
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >     3
+      *        初診、医学管理、在宅を印字
+               MOVE  MF100-KAISU(IDX)    TO  WRK-KAISUZ
+               MOVE  WRK-KAISUZ          TO  HCN06-KAISU(IDX)
+               MOVE  MF100-TENSU(IDX 1)  TO  WRK-TENSUZ
+               MOVE  WRK-TENSU           TO  HCN06-TENSU(IDX)
+             END-PERFORM
            END-IF
+      *=== 医学管理、在宅を印字 by Yoshikawa(2008/12/11) end
       *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) end
       *
       *        <請求点・一部負担金>
@@ -3087,18 +3108,36 @@
       *                              OR "290"
       *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
       *                              OR "290"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) start
+      *         IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490"
+      *         OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490"
+      *         OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490"
+      *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490"
                IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
                                     OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490"
+                                    OR "390" OR "490" OR "480" OR "481"
+                                    OR "590"
                OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
                                     OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490"
+                                    OR "390" OR "490" OR "480" OR "481"
+                                    OR "590"
                OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
                                     OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490"
+                                    OR "390" OR "490" OR "480" OR "481"
+                                    OR "590"
                OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
                                     OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490"
+                                    OR "390" OR "490" OR "480" OR "481"
+                                    OR "590"
+      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
       *---(01.00.12) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD END   ------------------------------------
