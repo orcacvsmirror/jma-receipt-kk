@@ -39,6 +39,9 @@
                05  SKT3750TMP-S-FTNGK               PIC  9(09).
            03  SKT3750TMP-KOH-AREA  OCCURS  20.
                05  SKT3750TMP-KOHNUM                PIC  X(03).
+      *--- (2008/12/17) line add start monma ---------------------------
+               05  SKT3750TMP-KOHNAME               PIC  X(10).
+      *--- (2008/12/17) line add end   monma ---------------------------
                05  SKT3750TMP-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT3750TMP-KKENSU            PIC  9(05).
                    07  SKT3750TMP-KNISSU            PIC  9(05).

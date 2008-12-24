@@ -44,6 +44,9 @@
            03  SKT4600TMP-KOH-AREA.
                05  SKT4600TMP-KOH-TBL  OCCURS  20.
                    07  SKT4600TMP-KOHNUM            PIC  X(03).
+      *--- (2008/12/16) line add start monma ---------------------------
+                   07  SKT4600TMP-KOHNAME           PIC  X(10).
+      *--- (2008/12/16) line add end   monma ---------------------------
                    07  SKT4600TMP-KOH-NYUGAI-TBL OCCURS 2.
                        09  SKT4600TMP-K-KENSU       PIC  9(06).
                        09  SKT4600TMP-K-TENSU       PIC  9(10).
@@ -55,6 +58,9 @@
            03  SKT4600TMP-ZKOH-AREA.
                05  SKT4600TMP-ZKOH-TBL  OCCURS  20.
                    07  SKT4600TMP-ZKOHNUM           PIC  X(03).
+      *--- (2008/12/16) line add start monma ---------------------------
+                   07  SKT4600TMP-ZKOHNAME          PIC  X(10).
+      *--- (2008/12/16) line add end   monma ---------------------------
                    07  SKT4600TMP-ZK-KENSU          PIC  9(06).
                    07  SKT4600TMP-ZK-ITBFTN         PIC  9(10).
            03  SKT4600TMP-GENBK                     PIC  9(06).

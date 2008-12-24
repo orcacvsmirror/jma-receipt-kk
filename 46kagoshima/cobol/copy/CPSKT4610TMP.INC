@@ -46,6 +46,9 @@
            03  SKT4610TMP-KOH-AREA.
                05  SKT4610TMP-KOH-TBL  OCCURS  20.
                    07  SKT4610TMP-KOHNUM              PIC  X(03).
+      *--- (2008/12/16) line add start monma ---------------------------
+                   07  SKT4610TMP-KOHNAME             PIC  X(10).
+      *--- (2008/12/16) line add end   monma ---------------------------
                    07  SKT4610TMP-KOH-NYUGAI-TBL OCCURS 2.
                        09  SKT4610TMP-K-KENSU         PIC  9(05).
                        09  SKT4610TMP-K-NISSU         PIC  9(05).

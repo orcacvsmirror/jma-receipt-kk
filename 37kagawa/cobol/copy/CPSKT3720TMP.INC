@@ -48,6 +48,10 @@
            03  SKT3720TMP-KOH-AREA  OCCURS  20.
       *给锐戎规
                05  SKT3720TMP-KOHNUM      PIC X(03).
+      *--- (2008/12/17) line add start monma ---------------------------
+      *给锐叹疚
+               05  SKT3720TMP-KOHNAME     PIC X(10).
+      *--- (2008/12/17) line add end   monma ---------------------------
       *给锐】凤眶
                05  SKT3720TMP-KKENSU      PIC 9(05).
       *给锐】垛驰

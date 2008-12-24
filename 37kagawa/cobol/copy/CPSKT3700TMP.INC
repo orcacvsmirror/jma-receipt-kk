@@ -54,6 +54,10 @@
            03  SKT3700TMP-KOH-AREA  OCCURS  20.
       *给锐戎规
                05  SKT3700TMP-KOHNUM           PIC X(03).
+      *--- (2008/12/16) line add start monma --------------------------
+      *给锐叹疚
+               05  SKT3700TMP-KOHNAME          PIC X(10).
+      *--- (2008/12/16) line add end   monma --------------------------
                05  SKT3700TMP-K-NYUGAI-TBL  OCCURS  2.
       *给锐】凤眶
                    07  SKT3700TMP-K-KENSU      PIC 9(05).

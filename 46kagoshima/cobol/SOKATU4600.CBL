@@ -38,6 +38,7 @@
       *  01.00.06    内田    08/06/20    国保がない場合でも印字する
       *                                  返戻分は合算する
       *  01.00.07    内田    08/07/18    在総診分を明細書枚数欄に集計する
+      *  01.00.08    門間    08/12/16    シス管「2007」公費まとめ対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -169,6 +170,10 @@
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
            03  IDX-MAX             PIC 9(04).
+      *--- (2008/12/16) line add start monma ---------------------------
+           03  IDZ1                PIC 9(04).
+           03  IDZ2                PIC 9(04).
+      *--- (2008/12/16) line add end   monma ---------------------------
       *
       *##  パラメタ領域
        01  WRK-PARA.
@@ -203,6 +208,9 @@
            03  WRK-PATH2               PIC X(50).
            03  WRK-HKNNUM              PIC X(03).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *--- (2008/12/16) line add start monma ---------------------------
+           03  WRK-KOHNAME         PIC X(10).
+      *--- (2008/12/16) line add end   monma ---------------------------
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -247,6 +255,17 @@
       *
            03  WRK-RECEERR         PIC X(200).
       *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *    公費番号まとめエリア
+       01  WRK-2007-AREA.
+           03  WRK-2007-TBL        OCCURS  100.
+               05  WRK-2007-MEISYO PIC X(44).
+               05  WRK-2007-KOH-AREA.
+                   07  WRK-2007-KOHNUM
+                                   PIC X(03)   OCCURS  10.
+           03  WRK-2007-MAX        PIC 9(03).
+      *--- (2008/12/16) line add end   monma ---------------------------
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -263,6 +282,9 @@
        01  SORT-AREA.
            03  SORT-KOH-TBL  OCCURS 20.
                05  SORT-KOHNUM                PIC  X(03).
+      *--- (2008/12/16) line add start monma ---------------------------
+               05  SORT-KOHNAME               PIC  X(10).
+      *--- (2008/12/16) line add end   monma ---------------------------
                05  SORT-KOH-NYUGAI-TBL OCCURS 2.
                    07  SORT-K-KENSU           PIC  9(06).
                    07  SORT-K-TENSU           PIC  9(10).
@@ -323,6 +345,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *    公費番号まとめ情報
+           COPY    "CPSK2007.INC".
+      *--- (2008/12/16) line add end   monma --------------------------
       *
       *    請求管理
            COPY    "CPRCF010.INC".
@@ -533,6 +560,56 @@
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF 
+      *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *    公費番号まとめ情報
+           INITIALIZE                      WRK-2007-AREA
+      *
+           INITIALIZE                      SYS-2007-REC
+           MOVE    "2007"              TO  SYS-2007-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2007-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2007-STYUKYMD (7:2)
+           MOVE    SYS-2007-STYUKYMD   TO  SYS-2007-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2007-HOSPNUM
+           MOVE    SYS-2007-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX1
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX1           >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2007-REC
+      *
+               ADD     1                   TO  IDX1
+               MOVE    SYS-2007-MEISYO(1) TO  WRK-2007-MEISYO(IDX1)
+               PERFORM VARYING IDX2 FROM    1   BY  1
+                       UNTIL   IDX2 >       10
+                       OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
+                   MOVE    SYS-2007-KOHNUM (IDX2)
+                                           TO WRK-2007-KOHNUM(IDX1 IDX2)
+               END-PERFORM
+      *
+               MOVE    "tbl_syskanri"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX1                    TO  WRK-2007-MAX
+      *--- (2008/12/16) line add end   monma ---------------------------
       *
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -1033,6 +1110,29 @@
                    MOVE    "051"       TO  RECE10-KOHNUM(IDX3)
                END-IF
       *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *      公費番号まとめ情報があるとき
+             IF  WRK-2007-MAX  >  ZERO
+               MOVE  SPACE     TO  WRK-KOHNAME
+               PERFORM VARYING IDZ1    FROM    1   BY  1
+                       UNTIL   IDZ1    >       WRK-2007-MAX
+                 PERFORM VARYING IDZ2  FROM    1   BY  1
+                         UNTIL   IDZ2  >       5
+                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                   IF  RECE10-KOHNUM(IDX3)  
+                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                 TO  RECE10-KOHNUM (IDX3)
+                     MOVE  WRK-2007-MEISYO (IDZ1)
+                                 TO  WRK-KOHNAME
+                     MOVE  5             TO  IDZ2
+                     MOVE  WRK-2007-MAX  TO  IDZ1
+                   END-IF
+                 END-PERFORM
+               END-PERFORM
+             END-IF
+      *--- (2008/12/16) line add end    monma --------------------------
+      *
       *    公費判別
                PERFORM VARYING IDX4    FROM    1   BY  1
                        UNTIL   IDX4    >       20
@@ -1052,6 +1152,10 @@
       *    公費名
                MOVE    RECE10-KOHNUM(IDX3) 
                                TO  SKT4600TMP-ZKOHNUM(CNT-KOH)
+      *--- (2008/12/16) line add start monma ---------------------------
+      *    公費名称
+               MOVE  WRK-KOHNAME  TO  SKT4600TMP-KOHNAME(CNT-KOH)
+      *--- (2008/12/16) line add end   monma ---------------------------
       *
       *    療養の給付：件数
                ADD     1       TO  SKT4600TMP-ZK-KENSU (CNT-KOH)
@@ -1149,6 +1253,29 @@
                    MOVE    "051"       TO  RECE10-KOHNUM(IDX3)
                END-IF
       *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *      公費番号まとめ情報があるとき
+             IF  WRK-2007-MAX  >  ZERO
+               MOVE  SPACE     TO  WRK-KOHNAME
+               PERFORM VARYING IDZ1    FROM    1   BY  1
+                       UNTIL   IDZ1    >       WRK-2007-MAX
+                 PERFORM VARYING IDZ2  FROM    1   BY  1
+                         UNTIL   IDZ2  >       5
+                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                   IF  RECE10-KOHNUM(IDX3)  
+                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                 TO  RECE10-KOHNUM (IDX3)
+                     MOVE  WRK-2007-MEISYO (IDZ1)
+                                 TO  WRK-KOHNAME
+                     MOVE  5             TO  IDZ2
+                     MOVE  WRK-2007-MAX  TO  IDZ1
+                   END-IF
+                 END-PERFORM
+               END-PERFORM
+             END-IF
+      *--- (2008/12/16) line add end    monma --------------------------
+      *
       *        公費判別
                PERFORM VARYING IDX4    FROM    1   BY  1
                        UNTIL   IDX4    >       20
@@ -1169,6 +1296,11 @@
       *        公費名
                MOVE    RECE10-KOHNUM(IDX3)
                                TO  SKT4600TMP-KOHNUM(CNT-KOH)
+      *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *    公費名称
+               MOVE  WRK-KOHNAME  TO  SKT4600TMP-KOHNAME(CNT-KOH)
+      *--- (2008/12/16) line add end   monma ---------------------------
       *
       *        療養の給付：件数
                ADD     1       TO  SKT4600TMP-K-KENSU(CNT-KOH IDX2)
@@ -1672,6 +1804,14 @@
                MOVE    HKN-HBTNUM          TO  SKT4601-HBTNUM(IDX3)
                MOVE    HKN-TANSEIDONAME    TO  SKT4601-KOHNAME(IDX3)
       *
+      *--- (2008/12/16) line add start monma ---------------------------   
+             IF  SKT4600TMP-KOHNAME(WRK-CNT)  NOT =  SPACE
+               MOVE  SKT4600TMP-KOHNAME(WRK-CNT)
+                                        TO  SKT4601-KOHNAME(IDX3)
+             ELSE
+               MOVE  HKN-TANSEIDONAME   TO  SKT4601-KOHNAME(IDX3)
+             END-IF
+      *--- (2008/12/16) line add end   monma ---------------------------
                ADD  1  TO  WRK-CNT
            END-PERFORM
       *
@@ -1695,6 +1835,14 @@
                MOVE    HKN-HBTNUM          TO  SKT4601-Z-HBTNUM(IDX3)
                MOVE    HKN-TANSEIDONAME    TO  SKT4601-Z-KOHNAME(IDX3)
       *
+      *--- (2008/12/16) line add start monma ---------------------------   
+             IF  SKT4600TMP-ZKOHNAME(WRK-CNT)  NOT =  SPACE
+               MOVE  SKT4600TMP-ZKOHNAME(WRK-CNT)
+                                        TO  SKT4601-Z-KOHNAME(IDX3)
+             ELSE
+               MOVE  HKN-TANSEIDONAME   TO  SKT4601-Z-KOHNAME(IDX3)
+             END-IF
+      *--- (2008/12/16) line add end   monma ---------------------------
                ADD     1   TO  WRK-CNT2
            END-PERFORM
       *
@@ -2444,7 +2592,49 @@
            .
        901-TMP-READ-EXT.
            EXIT.
-      *      
+      *
+      *--- (2008/12/16) line add start monma ---------------------------
+      *****************************************************************
+      *    テーブルアクセス処理
+      *****************************************************************
+       900-ORCDBMAIN-SEC               SECTION.
+      *
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+      *
+       900-ORCDBMAIN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    システム管理マスタ読込（ＮＥＸＴ）
+      *****************************************************************
+       900-SYSKANRI-READ-N-SEC         SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-SYSKANRI
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+           .
+       900-SYSKANRI-READ-N-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢＦＥＴＣＨ処理
+      *****************************************************************
+       900-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-DBFETCH-EXT.
+           EXIT.
+      *--- (2008/12/16) line add end   monma --------------------------
+      *
       *****************************************************************
       *    請求管理ＤＢ更新用ファイル読込
       *****************************************************************
