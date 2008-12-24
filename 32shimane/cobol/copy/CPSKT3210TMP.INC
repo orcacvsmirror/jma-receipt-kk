@@ -43,6 +43,9 @@
                05  SKT3210TMP-S-FTNGAKU         PIC  9(10).
            03  SKT3210TMP-KOH-TBL  OCCURS  20.
                05  SKT3210TMP-KOHNUM            PIC  X(03).
+      *--- (2008/12/15) line add start monma --------------------------
+               05  SKT3210TMP-KOHNAME           PIC  X(08).
+      *--- (2008/12/15) line add end   monma --------------------------
                05  SKT3210TMP-KKENSU            PIC  9(06).
                05  SKT3210TMP-KNISSU            PIC  9(06).
                05  SKT3210TMP-KTENSU            PIC  9(10).

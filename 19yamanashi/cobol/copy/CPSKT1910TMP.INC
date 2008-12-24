@@ -22,6 +22,7 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         08/05/26  帳票様式の変更に伴う修正
       *  01.00.02    吉川         08/06/09  改正前の月遅れ分は旧様式に印字
+      *  01.00.03    門間         08/12/11  公費名称の追加
       ************************************************************
        01  SKT1910TMP-REC.
            03  SKT1910TMP-KEY.
@@ -46,6 +47,9 @@
            03  SKT1910TMP-KOH-AREA.
                05  SKT1910TMP-KOH-TBL  OCCURS  20.
                    07  SKT1910TMP-KOHNUM            PIC  X(03).
+      *--- (2008/12/11) line add start monma ---------------------------
+                   07  SKT1910TMP-KOHNAME           PIC  X(20).
+      *--- (2008/12/11) line add end   monma ---------------------------
                    07  SKT1910TMP-KKENSU            PIC  9(05).
                    07  SKT1910TMP-KNISSU            PIC  9(05).
                    07  SKT1910TMP-KTENSU            PIC  9(11).
@@ -66,6 +70,9 @@
            03  SKT1910TMP-KOH2-AREA.
                05  SKT1910TMP-KOH2-TBL  OCCURS  20.
                    07  SKT1910TMP-KOHNUM2           PIC  X(03).
+      *--- (2008/12/11) line add start monma --------------------------
+                   07  SKT1910TMP-KOHNAME2          PIC  X(20).
+      *--- (2008/12/11) line add end   monma --------------------------
                    07  SKT1910TMP-KNYUGAI-TBL  OCCURS  2.
                        09  SKT1910TMP-KKENSU2       PIC  9(05).
                        09  SKT1910TMP-KNISSU2       PIC  9(05).
