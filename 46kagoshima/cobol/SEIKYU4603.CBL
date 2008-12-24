@@ -31,6 +31,8 @@
       *  01.00.01    内田    07/09/14    日レセver4.0対応
       *                                  Ver4.0からのファイル保存対応
       *  01.00.02    内田    08/01/09    csvファイル名の修正
+      *  01.00.03    内田    08/01/29    csvファイル名の修正（西暦→和暦）
+      *  01.00.04    門間    08/12/16    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -188,6 +190,9 @@
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.01) LINE ADD END   ------------------------------------
            03  WRK-CSVSRYYM        PIC 9(05).
+      *---(01.00.03) LINE ADD START ------------------------------------
+           03  WRK-WAREKI          PIC 9(04).
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            03  WRK-REC             PIC X(500).
            03  WRK-REC-LENGTH      PIC 9(04).
@@ -374,6 +379,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *--- (2008/12/16) line add start monma ---------------------------
+           INITIALIZE  SPA-AREA
+      *--- (2008/12/16) line add end   monma ---------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -435,6 +443,10 @@
            PERFORM 31012-SEIWA-HEN-SEC
            MOVE    LNK-DAY2-EDTYMD1    TO  WRK-HENYMDG1
            MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH
+      *---(01.00.03) LINE ADD START ------------------------------------
+           MOVE    LNK-DAY2-EDTYMD1 (2:2)    TO  WRK-WAREKI (1:2)
+           MOVE    LNK-PRTKANRI-SRYYM (5:2)  TO  WRK-WAREKI (3:2)
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            INITIALIZE                      STS-AREA-DAY
            INITIALIZE                      LNK-DAY2-AREA
@@ -1276,7 +1288,10 @@
                    SYS-1001-TENHYOKBN  DELIMITED  BY  SIZE
                    SYS-1001-HOSPCD     DELIMITED  BY  SIZE
                    "-1-"               DELIMITED  BY  SIZE
-                   LNK-PRTKANRI-SRYYM  DELIMITED  BY  SIZE
+      *---(01.00.03) LINE ADD START ------------------------------------
+      *             LNK-PRTKANRI-SRYYM  DELIMITED  BY  SIZE
+                   WRK-WAREKI          DELIMITED  BY  SIZE
+      *---(01.00.03) LINE ADD END   ------------------------------------
                    ".CSV"              DELIMITED  BY  SIZE
                    INTO                WRK-FILENAME
            END-STRING

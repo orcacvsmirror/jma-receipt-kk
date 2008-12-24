@@ -42,6 +42,7 @@
       *                 吉川     08/06/06  後期高齢は保険者番号を印字しない
       *                                    改正前の月遅れ分は旧様式に印字
       *                                    ページ番号を印字
+      *  01.00.10       門間     08/12/11  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -403,6 +404,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  SUM-AREA
+      *--- (2008/12/11) line add start monma ---------------------------
+           INITIALIZE                  SPA-AREA
+      *--- (2008/12/11) line add end   monma ---------------------------
       *
            DISPLAY  "START"
       *

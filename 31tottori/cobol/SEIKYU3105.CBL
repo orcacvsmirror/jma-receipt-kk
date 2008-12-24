@@ -36,6 +36,7 @@
       *  01.00.04    内田    07/08/22    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.05    門間    08/12/15    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -323,6 +324,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *--- (2008/12/15) line add start monma ---------------------------
+           INITIALIZE  SPA-AREA
+      *--- (2008/12/15) line add end   monma ---------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

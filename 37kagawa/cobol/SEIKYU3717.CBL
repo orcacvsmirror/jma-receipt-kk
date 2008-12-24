@@ -31,6 +31,7 @@
       *  01.00.01    内田    07/09/07    日レセver4.0対応
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.02    門間    08/12/17    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -347,6 +348,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  KEY-AREA
+      *---(2008/12/17) line add start monma ----------------------------
+           INITIALIZE  SPA-AREA
+      *---(2008/12/17) line add end   monma ----------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

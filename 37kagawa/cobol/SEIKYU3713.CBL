@@ -34,6 +34,7 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.02    門間    08/12/17    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -328,6 +329,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *---(2008/12/17) line add start monma ----------------------------
+           INITIALIZE  SPA-AREA
+      *---(2008/12/17) line add end   monma ----------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
