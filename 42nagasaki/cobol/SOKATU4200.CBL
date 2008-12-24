@@ -38,6 +38,7 @@
       *  01.00.03    内田    08/05/20    帳票様式の変更に伴う修正
       *  01.00.04    内田    08/06/20    ３歳未満の年齢判定修正
       *                                  後期高齢のみの場合でも印字する
+      *  01.00.05    吉川    08/12/15    請求書枚数に在宅分も含める
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -150,9 +151,17 @@
                05  WRK-TENSU          PIC 9(10).
            03  WRK-KOGAKU-TBL  OCCURS  4.
                07  WRK-KOGAKU         PIC 9(05).
-           03  WRK-HKNJANUM           PIC X(06).
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
+      *     03  WRK-HKNJANUM           PIC X(06).
+           03  WRK-HKNJA-TBL.
+               05  WRK-HKNJANUM       PIC X(06).
+               05  WRK-ZAITAKU        PIC X(01).
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
            03  WRK-CHK-HKNJA-TBL  OCCURS 100.
                05  WRK-CHK-HKNJANUM   PIC X(06).
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
+               05  WRK-CHK-ZAITAKU    PIC X(01).
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
            03  WRK-KENNAI             PIC 9(03).
            03  WRK-KENGAI             PIC 9(03).
       *
@@ -721,19 +730,31 @@
              MOVE  RECE10-HKNJANUM (1:4)   TO  WRK-HKNJANUM (1:4)
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
+           MOVE  RECE10-ZAITAKU            TO  WRK-ZAITAKU
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
       *
            PERFORM  VARYING  IDX1  FROM  1   BY  1
                     UNTIL    IDX1  >     100
-             IF    WRK-CHK-HKNJANUM(IDX1) = SPACE
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
+      *       IF    WRK-CHK-HKNJANUM(IDX1) = SPACE
+             IF    WRK-CHK-HKNJA-TBL(IDX1) = SPACE
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
                IF  RECE10-PREFKBN         = "1"
                  ADD   1                 TO WRK-KENNAI
                ELSE
                  ADD   1                 TO WRK-KENGAI
                END-IF
                MOVE    WRK-HKNJANUM    TO  WRK-CHK-HKNJANUM(IDX1)
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
+               MOVE    WRK-ZAITAKU     TO  WRK-CHK-ZAITAKU(IDX1)
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
                MOVE    100             TO  IDX1
              ELSE
-               IF  WRK-CHK-HKNJANUM(IDX1) =  WRK-HKNJANUM
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
+      *         IF  WRK-CHK-HKNJANUM(IDX1) =  WRK-HKNJANUM
+               IF  WRK-CHK-HKNJA-TBL(IDX1) =  WRK-HKNJA-TBL
+      *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
                  MOVE  100             TO  IDX1
                END-IF
              END-IF
