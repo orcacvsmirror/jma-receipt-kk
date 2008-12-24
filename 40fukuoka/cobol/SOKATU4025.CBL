@@ -29,6 +29,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/04/29  原爆データを記載外公費ではなく
       *                                  通常の公費から取得するよう修正
+      *  01.00.02    吉川    2008/12/10  公費番号欄に法別番号ではなく
+      *                                  保険番号が印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -924,6 +926,9 @@
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
              END-IF
       *
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2008/12/10) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2008/12/10) end
       *      公費番号まとめ情報があるとき
              IF        WRK-2007-MAX    >       ZERO
                PERFORM VARYING IDZ1    FROM    1   BY  1
