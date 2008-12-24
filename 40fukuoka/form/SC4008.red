@@ -4623,7 +4623,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#161;&#161; &#187;&#216;&#161;&#161;&#161;&#161;&#198;&#179;#</string>
+            <string>#&#161;&#161; &#176;&#229;&#179;&#216;&#180;&#201;&#205;&#253;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
