@@ -58,6 +58,8 @@
       *  01.02.10    吉川       08/10/08  SPA-AREA初期化
       *  01.02.11    吉川       08/10/24  平成20年10月改正対応
       *                                   シス管「2007」公費まとめ対応
+      *  01.02.12    吉川       08/12/15  平成20年3月以前の月遅れ分は
+      *                                   旧様式で帳票を分けるように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -284,6 +286,9 @@
       *---(01.02.08) LINE ADD START ------------------------------------
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.02.08) LINE ADD END   ------------------------------------
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+           03  WRK-CONS-SRYYM-200810   PIC X(06)   VALUE   "200810".
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
       *     
       *---(01.02.07) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".         
@@ -615,7 +620,11 @@
       *     MOVE  2              TO     WRK-NYUGAIKBN
            MOVE  "2"              TO     WRK-NYUGAIKBN
       ****2006/04/19 @@@@-BRAND END
-           MOVE   2              TO     WRK-PRTFLG
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+      *     MOVE   2              TO     WRK-PRTFLG
+           PERFORM  VARYING  WRK-PRTFLG  FROM  1  BY  1
+                    UNTIL    WRK-PRTFLG  >     2
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
            PERFORM 2001-GAIRAI-SYUKEI-SEC
            IF      CNT-RECE10          >   ZERO 
                    CALL    "SOKATU1161"        USING 
@@ -626,6 +635,9 @@
                                                WRK-SRYYM-FLG
       *---(01.02.09) LINE ADD END   ------------------------------------
            END-IF    
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+           END-PERFORM
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
       *****
       *
            .
@@ -1632,13 +1644,24 @@
       *---(01.02.07) LINE ADD END   ------------------------------------
            MOVE    LNK-PRTKANRI-SRYYM  TO  RECE10-SKYYM
            IF      WRK-PRTFLG          =   1
-               MOVE    WRK-CONS-SRYYM-200210
-                                           TO  RECE10-SRYYM
-               MOVE    WRK-CONS-SRYYM-200304
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+      *         MOVE    WRK-CONS-SRYYM-200210
+      *                                     TO  RECE10-SRYYM
+      *         MOVE    WRK-CONS-SRYYM-200304
+      *                                     TO  RECE10-XXSRYYM
+      *        平成20年3月以前
+               MOVE    000000              TO  RECE10-SRYYM
+               MOVE    WRK-CONS-SRYYM-200804
                                            TO  RECE10-XXSRYYM
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
            ELSE
-               MOVE    WRK-CONS-SRYYM-200304
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+      *         MOVE    WRK-CONS-SRYYM-200304
+      *                                     TO  RECE10-SRYYM
+      *        平成20年4月以降
+               MOVE    WRK-CONS-SRYYM-200804
                                            TO  RECE10-SRYYM
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
                MOVE    999999              TO  RECE10-XXSRYYM
            END-IF
            MOVE    WRK-NYUGAIKBN        TO  RECE10-NYUGAIKBN
@@ -1725,6 +1748,14 @@
       *---(01.02.09) LINE ADD START ------------------------------------
                IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
                  MOVE  1  TO  WRK-SRYYM-FLG
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+               ELSE
+                 IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200810
+                   MOVE  2  TO  WRK-SRYYM-FLG
+                 ELSE
+                   MOVE  3  TO  WRK-SRYYM-FLG
+                 END-IF
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
                END-IF
       *---(01.02.09) LINE ADD END   ------------------------------------
       *         

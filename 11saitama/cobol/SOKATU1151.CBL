@@ -46,6 +46,8 @@
       *  01.01.05    吉川         08/10/08  SPA-AREA初期化
       *  01.01.06    吉川         08/10/24  平成20年10月改正対応
       *                                     シス管「2007」公費まとめ対応
+      *  01.01.07    吉川         08/12/15  平成20年3月以前の月遅れ分は
+      *                                     旧様式で帳票を分けるように修正
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -536,7 +538,10 @@
            INITIALIZE                      HCM2I      
       *
       *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
-           IF  LNK-PRTKANRI-SRYYM  <  WRK-CONS-SRYYM-200810
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+      *     IF  LNK-PRTKANRI-SRYYM  <  WRK-CONS-SRYYM-200810
+           IF  WRK-SRYYM-FLG  <  3
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
              MOVE  "（政）"            TO  HCM2I-SEIDONAME (1)
                                            HCM2I-SEIDONAME (2)
                                            HCM2I-SEIDONAME (3)
@@ -1223,7 +1228,10 @@
       *         MOVE    "HCM2IV02.red"      TO  SPRT-PRTID
       *---(01.01.04) LINE ADD START ------------------------------------
       *         MOVE    "SKT1150IV02.red"   TO  SPRT-PRTID
-               IF  WRK-SRYYM-FLG  =  1
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+      *         IF  WRK-SRYYM-FLG  =  1
+               IF  WRK-SRYYM-FLG  <  2
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
                  MOVE  "SKT1150IV02o.red"  TO  SPRT-PRTID
                ELSE
                  MOVE  "SKT1150IV02.red"   TO  SPRT-PRTID
@@ -1239,7 +1247,10 @@
       *         MOVE    "HCM2JV03.red"      TO  SPRT-PRTID
       *---(01.01.04) LINE ADD START ------------------------------------
       *         MOVE    "SKT1150JV03.red"   TO  SPRT-PRTID
-               IF  WRK-SRYYM-FLG  =  1
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
+      *         IF  WRK-SRYYM-FLG  =  1
+               IF  WRK-SRYYM-FLG  <  2
+      *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
                  MOVE  "SKT1150JV03o.red"  TO  SPRT-PRTID
                ELSE
                  MOVE  "SKT1150JV03.red"   TO  SPRT-PRTID
