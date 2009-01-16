@@ -35,6 +35,7 @@
       *  01.00.02    門間    08/10/09   SPA-AREAの初期化
       *  01.00.03    吉川    08/12/03   市町村を外部ファイルから
       *                                 取得するよう修正
+      *  01.00.04    吉川    09/01/13   １・２割欄は公費を問わず集計
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -722,12 +723,19 @@
                    MOVE    4                   TO  IDX2
            END-EVALUATE
       *
-           IF      WRK-KOHNUM          =     "130"
-             IF      RECE02-AGE            >=  70  OR
-                 RECE02-RJNHKNNUM     NOT  =   SPACE
-               MOVE  1                     TO  IDX2
-             END-IF
+      *=== 公費の種類を問わずに集計 by Yoshikawa(2009/01/13) start
+      *     IF      WRK-KOHNUM          =     "130"
+      *       IF      RECE02-AGE            >=  70  OR
+      *           RECE02-RJNHKNNUM     NOT  =   SPACE
+      *         MOVE  1                     TO  IDX2
+      *       END-IF
+      *     END-IF
+           IF  RECE02-AGE                >=  70     OR
+               RECE02-RJNHKNNUM     NOT  =   SPACE  OR
+               RECE02-HKNNUM             =   "039"  OR  "040"
+             MOVE  1                     TO  IDX2
            END-IF
+      *=== 公費の種類を問わずに集計 by Yoshikawa(2009/01/13) end
       *
       *    データ加算
            ADD     1                       TO  MF100-KENSU(IDX1 IDX2)
