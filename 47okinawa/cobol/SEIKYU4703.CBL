@@ -34,6 +34,7 @@
       *                                  医療機関情報を参照
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
+      *  01.00.03    吉川    09/01/14    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -313,6 +314,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SUM-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/01/14) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/01/14) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

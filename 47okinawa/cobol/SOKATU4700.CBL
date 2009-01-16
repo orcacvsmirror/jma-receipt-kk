@@ -32,7 +32,8 @@
       *  01.00.03     内田    07/08/10  Ver4.0対応
       *                                 システム管理マスタ「1901」の
       *                                 医療機関情報を参照
-      *  01.00.04    長屋     08/05/02  帳票様式に伴う修正
+      *  01.00.04     長屋    08/05/02  帳票様式に伴う修正
+      *  01.00.05     吉川    09/01/14  SPA-AREA初期化
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -332,6 +333,9 @@
            INITIALIZE                  IDX-AREA
       *     INITIALIZE                  SUM-AREA
            INITIALIZE                  SORT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/01/14) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/01/14) end
       *
            DISPLAY  "START"
       *
