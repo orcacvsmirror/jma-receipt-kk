@@ -37,6 +37,7 @@
       *  01.00.05    吉川    08/10/27    対象公費番号追加(188,481,581)
       *                                  帳票レイアウト変更
       *                                  SPA-AREA初期化
+      *  01.00.06    吉川    09/01/16    電話番号を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -867,6 +868,10 @@
            MOVE  WRK-HOSPNAME              TO  SKT4510-HOSPNAME
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO  SKT4510-KAISETU
+      *=== 電話番号を印字 by Yoshikawa(2009/01/16) start
+      *    電話番号
+           MOVE    WRK-HOSPTEL             TO  SKT4510-TEL
+      *=== 電話番号を印字 by Yoshikawa(2009/01/16) end
       *
       *    保険者番号
            MOVE    MF100-CITYNUM           TO  WRK-MAE-INPUT
