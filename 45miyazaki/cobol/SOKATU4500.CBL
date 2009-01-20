@@ -35,6 +35,8 @@
       *  01.00.04    吉川    08/08/21    保険は県内でも公費が県外の場合
       *                                  県外として集計する
       *  01.00.05    吉川    08/10/27    SPA-AREA初期化
+      *  01.00.06    吉川    09/01/16    後期高齢のみの場合でも
+      *                                  印字するように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -338,7 +340,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2009/01/16) start
+      *             UNTIL       FLG-END     =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2009/01/16) start
       *
            PERFORM 300-END-SEC
       *
@@ -612,7 +616,9 @@
            CLOSE           SKT4500TMP-FILE
            OPEN    I-O     SKT4500TMP-FILE
       *
-           MOVE    ZERO    TO  FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2009/01/16) start
+      *     MOVE    ZERO    TO  FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2009/01/16) end
            MOVE    ZERO    TO  FLG-UPD
       *
            PERFORM 2001-KOKUHO-SYUKEI-SEC
