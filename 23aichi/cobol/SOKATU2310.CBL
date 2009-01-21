@@ -39,6 +39,9 @@
       *  01.00.04    安藤     08/04/22    帳票様式の変更に伴う修正
       *  01.00.05    内田     08/05/17    福祉欄に１８５、１８９該当者追加
       *                                   前期高齢者食事欄の印字修正
+      *  01.00.06    内田     09/01/16    一部負担金欄は一般＋５１等だけでなく
+      *                                   前期＋５１等の場合も集計する
+      *                                   SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -348,6 +351,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.06) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
@@ -867,9 +873,11 @@
       *    療養の給付：一部負担金
            ADD   RECE10-FTNMONEY(1)  TO  SKT2310TMP-ITBFTN(IDX1 IDX2)
       *
+      *---(01.00.06) LINE ADD START ------------------------------------
       *    前期高齢者・老人以外は４１老人と５１の一部負担金を集計する
-           IF    RECE10-RJNHKNNUM  =  SPACE  AND
-                 RECE10-AGE        <  70
+      *     IF    RECE10-RJNHKNNUM  =  SPACE  AND
+      *           RECE10-AGE        <  70
+      *---(01.00.06) LINE ADD END   ------------------------------------
              PERFORM  VARYING  IDX3 FROM  1  BY  1
                       UNTIL    IDX3 >     4
                IF    RECE10-KOHNUM(IDX3)    =  "051" OR "141" 
@@ -878,7 +886,9 @@
                                        SKT2310TMP-ITBFTN(IDX1 IDX2)
                END-IF
              END-PERFORM
-           END-IF
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
            IF  RECE10-SHOKUJINISSU(1)  >  0
       *
       *    食事療養：件数
