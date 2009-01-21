@@ -33,6 +33,7 @@
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/07/09    診療科は旧総合病院の場合に印字
       *                                  頁数のカウントを修正
+      *  01.00.03    門間    09/01/20    SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -303,6 +304,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  SUM-AREA
+      *--- (2009/01/20) line add start monma ---------------------------
+           INITIALIZE  SPA-AREA
+      *--- (2009/01/20) line add end   monma ---------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
