@@ -39,6 +39,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.06    内田    08/05/06    印字対象番号の追加（185,285）
+      *  01.00.07    内田    09/01/16    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -371,6 +372,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  CITY-AREA
            INITIALIZE  KEY-AREA
+      *---(01.00.07) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.07) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
