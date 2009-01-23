@@ -51,6 +51,8 @@
       *  01.00.12     吉川     08/09/11    SPA-AREA初期化
       *  01.00.13     吉川     08/11/25    長期等と併用した場合、公費の助成が
       *                                    無くても印字される不具合を修正
+      *  01.00.14     吉川     09/01/15    外来で全国公費併用の場合は、
+      *                                    公費の助成がなくても印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1968,6 +1970,11 @@
       *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
       *         MOVE    ZERO                  TO  FLG-ERR
       *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
+      *=== 外来更生等は記載する by Yoshikawa(2009/01/15) start
+               IF  RECE02-NYUGAIKBN  =  "2"
+                 MOVE  ZERO                  TO  FLG-ERR
+               END-IF
+      *=== 外来更生等は記載する by Yoshikawa(2009/01/15) end
              WHEN "972"
                MOVE    1                     TO  FLG-TYOKI
       *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
