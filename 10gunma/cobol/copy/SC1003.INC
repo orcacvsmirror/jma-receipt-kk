@@ -69,6 +69,8 @@
                05  SC03-BIKO            PIC  X(06).
       *    È÷¹Í£²
                05  SC03-BIKO2           PIC  X(10).
+      *    È÷¹Í£³
+               05  SC03-BIKO3           PIC  X(06).
       *    È÷¹Í¡ÊÀÇ¡¢Â¿¡Ë
                05  SC03-TEI-TBL        OCCURS 2.
                    07  SC03-TEI         PIC  X(02).

@@ -129,6 +129,11 @@
           <embed object="string" length="10"/>
         </appinfo>
       </element>
+      <element name="BIKO3" occurs="1">
+        <appinfo>
+          <embed object="string" length="6"/>
+        </appinfo>
+      </element>
       <element name="TEI-TBL" occurs="2">
         <element name="TEI" occurs="1">
           <appinfo>
@@ -9432,7 +9437,7 @@
         <point val="15.0175,24.8498"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.0175,24.6666;18.502,24.8966"/>
+        <rectangle val="15.0175,24.6667;18.502,24.8967"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -21745,10 +21750,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O619">
       <attribute name="obj_pos">
-        <point val="18.1524,10.7208"/>
+        <point val="17.9274,10.7208"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1524,10.4819;18.4554,10.7819"/>
+        <rectangle val="17.9274,10.4819;18.2304,10.7819"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].TEI-TBL[0].TEI#</string>
@@ -21768,7 +21773,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1524,10.7208"/>
+            <point val="17.9274,10.7208"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -21787,10 +21792,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O620">
       <attribute name="obj_pos">
-        <point val="18.6774,10.7208"/>
+        <point val="18.3024,10.7208"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6774,10.4819;18.9804,10.7819"/>
+        <rectangle val="18.3024,10.4819;18.6054,10.7819"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].TEI-TBL[1].TEI#</string>
@@ -21810,7 +21815,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6774,10.7208"/>
+            <point val="18.3024,10.7208"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -21829,10 +21834,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O621">
       <attribute name="obj_pos">
-        <point val="18.0774,10.7708"/>
+        <point val="17.8524,10.7708"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0774,10.4125;18.5319,10.8625"/>
+        <rectangle val="17.8524,10.4125;18.3069,10.8625"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].TEI-TBL[0].MARU#</string>
@@ -21852,7 +21857,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0774,10.7708"/>
+            <point val="17.8524,10.7708"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -21871,10 +21876,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O622">
       <attribute name="obj_pos">
-        <point val="18.6274,10.7708"/>
+        <point val="18.2524,10.7708"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6274,10.4125;19.0819,10.8625"/>
+        <rectangle val="18.2524,10.4125;18.7069,10.8625"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].TEI-TBL[1].MARU#</string>
@@ -21894,7 +21899,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6274,10.7708"/>
+            <point val="18.2524,10.7708"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -21913,10 +21918,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O623">
       <attribute name="obj_pos">
-        <point val="18.1549,11.7853"/>
+        <point val="17.9299,11.7853"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,11.5464;18.4579,11.8464"/>
+        <rectangle val="17.9299,11.5464;18.2329,11.8464"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].TEI-TBL[0].TEI#</string>
@@ -21936,7 +21941,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,11.7853"/>
+            <point val="17.9299,11.7853"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -21955,10 +21960,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O624">
       <attribute name="obj_pos">
-        <point val="18.6799,11.7853"/>
+        <point val="18.3049,11.7853"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,11.5464;18.9829,11.8464"/>
+        <rectangle val="18.3049,11.5464;18.6079,11.8464"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].TEI-TBL[1].TEI#</string>
@@ -21978,7 +21983,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,11.7853"/>
+            <point val="18.3049,11.7853"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -21997,10 +22002,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O625">
       <attribute name="obj_pos">
-        <point val="18.0799,11.8353"/>
+        <point val="17.8549,11.8353"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0799,11.477;18.5344,11.927"/>
+        <rectangle val="17.8549,11.477;18.3094,11.927"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].TEI-TBL[0].MARU#</string>
@@ -22020,7 +22025,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0799,11.8353"/>
+            <point val="17.8549,11.8353"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22039,10 +22044,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O626">
       <attribute name="obj_pos">
-        <point val="18.6299,11.8353"/>
+        <point val="18.2549,11.8353"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6299,11.477;19.0844,11.927"/>
+        <rectangle val="18.2549,11.477;18.7094,11.927"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].TEI-TBL[1].MARU#</string>
@@ -22062,7 +22067,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6299,11.8353"/>
+            <point val="18.2549,11.8353"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22081,10 +22086,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O627">
       <attribute name="obj_pos">
-        <point val="18.1549,12.8853"/>
+        <point val="17.9299,12.8853"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,12.6464;18.4579,12.9464"/>
+        <rectangle val="17.9299,12.6464;18.2329,12.9464"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].TEI-TBL[0].TEI#</string>
@@ -22104,7 +22109,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,12.8853"/>
+            <point val="17.9299,12.8853"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22123,10 +22128,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O628">
       <attribute name="obj_pos">
-        <point val="18.6799,12.8853"/>
+        <point val="18.3049,12.8853"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,12.6464;18.9829,12.9464"/>
+        <rectangle val="18.3049,12.6464;18.6079,12.9464"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].TEI-TBL[1].TEI#</string>
@@ -22146,7 +22151,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,12.8853"/>
+            <point val="18.3049,12.8853"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22165,10 +22170,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O629">
       <attribute name="obj_pos">
-        <point val="18.0799,12.9353"/>
+        <point val="17.8549,12.9353"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0799,12.577;18.5344,13.027"/>
+        <rectangle val="17.8549,12.577;18.3094,13.027"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].TEI-TBL[0].MARU#</string>
@@ -22188,7 +22193,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0799,12.9353"/>
+            <point val="17.8549,12.9353"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22207,10 +22212,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O630">
       <attribute name="obj_pos">
-        <point val="18.6299,12.9353"/>
+        <point val="18.2549,12.9353"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6299,12.577;19.0844,13.027"/>
+        <rectangle val="18.2549,12.577;18.7094,13.027"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].TEI-TBL[1].MARU#</string>
@@ -22230,7 +22235,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6299,12.9353"/>
+            <point val="18.2549,12.9353"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22249,10 +22254,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O631">
       <attribute name="obj_pos">
-        <point val="18.1549,13.9816"/>
+        <point val="17.9299,13.9816"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,13.7427;18.4579,14.0427"/>
+        <rectangle val="17.9299,13.7427;18.2329,14.0427"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].TEI-TBL[0].TEI#</string>
@@ -22272,7 +22277,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,13.9816"/>
+            <point val="17.9299,13.9816"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22291,10 +22296,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O632">
       <attribute name="obj_pos">
-        <point val="18.6799,13.9816"/>
+        <point val="18.3049,13.9816"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,13.7427;18.9829,14.0427"/>
+        <rectangle val="18.3049,13.7427;18.6079,14.0427"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].TEI-TBL[1].TEI#</string>
@@ -22314,7 +22319,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,13.9816"/>
+            <point val="18.3049,13.9816"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22333,10 +22338,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O633">
       <attribute name="obj_pos">
-        <point val="18.0799,14.0316"/>
+        <point val="17.8549,14.0316"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0799,13.6733;18.5344,14.1233"/>
+        <rectangle val="17.8549,13.6733;18.3094,14.1233"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].TEI-TBL[0].MARU#</string>
@@ -22356,7 +22361,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0799,14.0316"/>
+            <point val="17.8549,14.0316"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22375,10 +22380,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O634">
       <attribute name="obj_pos">
-        <point val="18.6299,14.0316"/>
+        <point val="18.2549,14.0316"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6299,13.6733;19.0844,14.1233"/>
+        <rectangle val="18.2549,13.6733;18.7094,14.1233"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].TEI-TBL[1].MARU#</string>
@@ -22398,7 +22403,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6299,14.0316"/>
+            <point val="18.2549,14.0316"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22417,10 +22422,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O635">
       <attribute name="obj_pos">
-        <point val="18.1549,15.1316"/>
+        <point val="17.9299,15.1316"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,14.8927;18.4579,15.1927"/>
+        <rectangle val="17.9299,14.8927;18.2329,15.1927"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].TEI-TBL[0].TEI#</string>
@@ -22440,7 +22445,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,15.1316"/>
+            <point val="17.9299,15.1316"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22459,10 +22464,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O636">
       <attribute name="obj_pos">
-        <point val="18.6799,15.1316"/>
+        <point val="18.3049,15.1316"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,14.8927;18.9829,15.1927"/>
+        <rectangle val="18.3049,14.8927;18.6079,15.1927"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].TEI-TBL[1].TEI#</string>
@@ -22482,7 +22487,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,15.1316"/>
+            <point val="18.3049,15.1316"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22501,10 +22506,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O637">
       <attribute name="obj_pos">
-        <point val="18.0799,15.1816"/>
+        <point val="17.8549,15.1816"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0799,14.8233;18.5344,15.2733"/>
+        <rectangle val="17.8549,14.8233;18.3094,15.2733"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].TEI-TBL[0].MARU#</string>
@@ -22524,7 +22529,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0799,15.1816"/>
+            <point val="17.8549,15.1816"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22543,10 +22548,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O638">
       <attribute name="obj_pos">
-        <point val="18.6299,15.1816"/>
+        <point val="18.2549,15.1816"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6299,14.8233;19.0844,15.2733"/>
+        <rectangle val="18.2549,14.8233;18.7094,15.2733"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].TEI-TBL[1].MARU#</string>
@@ -22566,7 +22571,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6299,15.1816"/>
+            <point val="18.2549,15.1816"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22585,10 +22590,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O639">
       <attribute name="obj_pos">
-        <point val="18.1549,16.2566"/>
+        <point val="17.9299,16.2566"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,16.0177;18.4579,16.3177"/>
+        <rectangle val="17.9299,16.0177;18.2329,16.3177"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[5].TEI-TBL[0].TEI#</string>
@@ -22608,7 +22613,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,16.2566"/>
+            <point val="17.9299,16.2566"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22627,10 +22632,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O640">
       <attribute name="obj_pos">
-        <point val="18.6799,16.2566"/>
+        <point val="18.3049,16.2566"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,16.0177;18.9829,16.3177"/>
+        <rectangle val="18.3049,16.0177;18.6079,16.3177"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[5].TEI-TBL[1].TEI#</string>
@@ -22650,7 +22655,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,16.2566"/>
+            <point val="18.3049,16.2566"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22669,10 +22674,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O641">
       <attribute name="obj_pos">
-        <point val="18.0799,16.3066"/>
+        <point val="17.8549,16.3066"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0799,15.9483;18.5344,16.3983"/>
+        <rectangle val="17.8549,15.9483;18.3094,16.3983"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[5].TEI-TBL[0].MARU#</string>
@@ -22692,7 +22697,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0799,16.3066"/>
+            <point val="17.8549,16.3066"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22711,10 +22716,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O642">
       <attribute name="obj_pos">
-        <point val="18.6299,16.3066"/>
+        <point val="18.2549,16.3066"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6299,15.9483;19.0844,16.3983"/>
+        <rectangle val="18.2549,15.9483;18.7094,16.3983"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[5].TEI-TBL[1].MARU#</string>
@@ -22734,7 +22739,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6299,16.3066"/>
+            <point val="18.2549,16.3066"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22753,10 +22758,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O643">
       <attribute name="obj_pos">
-        <point val="18.1549,17.3509"/>
+        <point val="17.9299,17.3509"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,17.112;18.4579,17.412"/>
+        <rectangle val="17.9299,17.112;18.2329,17.412"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[6].TEI-TBL[0].TEI#</string>
@@ -22776,7 +22781,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,17.3509"/>
+            <point val="17.9299,17.3509"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22795,10 +22800,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O644">
       <attribute name="obj_pos">
-        <point val="18.6799,17.3509"/>
+        <point val="18.3049,17.3509"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,17.112;18.9829,17.412"/>
+        <rectangle val="18.3049,17.112;18.6079,17.412"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[6].TEI-TBL[1].TEI#</string>
@@ -22818,7 +22823,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,17.3509"/>
+            <point val="18.3049,17.3509"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22837,10 +22842,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O645">
       <attribute name="obj_pos">
-        <point val="18.0799,17.4009"/>
+        <point val="17.8549,17.4009"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.0799,17.0426;18.5344,17.4926"/>
+        <rectangle val="17.8549,17.0426;18.3094,17.4926"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[6].TEI-TBL[0].MARU#</string>
@@ -22860,7 +22865,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.0799,17.4009"/>
+            <point val="17.8549,17.4009"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22879,10 +22884,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O646">
       <attribute name="obj_pos">
-        <point val="18.6299,17.4009"/>
+        <point val="18.2549,17.4009"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6299,17.0426;19.0844,17.4926"/>
+        <rectangle val="18.2549,17.0426;18.7094,17.4926"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[6].TEI-TBL[1].MARU#</string>
@@ -22902,7 +22907,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6299,17.4009"/>
+            <point val="18.2549,17.4009"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22921,10 +22926,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O647">
       <attribute name="obj_pos">
-        <point val="18.2049,18.427"/>
+        <point val="17.9799,18.427"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.2049,18.1881;18.5079,18.4881"/>
+        <rectangle val="17.9799,18.1881;18.2829,18.4881"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[7].TEI-TBL[0].TEI#</string>
@@ -22944,7 +22949,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.2049,18.427"/>
+            <point val="17.9799,18.427"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -22963,10 +22968,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O648">
       <attribute name="obj_pos">
-        <point val="18.7299,18.427"/>
+        <point val="18.3549,18.427"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.7299,18.1881;19.0329,18.4881"/>
+        <rectangle val="18.3549,18.1881;18.6579,18.4881"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[7].TEI-TBL[1].TEI#</string>
@@ -22986,7 +22991,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.7299,18.427"/>
+            <point val="18.3549,18.427"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23005,10 +23010,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O649">
       <attribute name="obj_pos">
-        <point val="18.1299,18.477"/>
+        <point val="17.9049,18.477"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1299,18.1187;18.5844,18.5687"/>
+        <rectangle val="17.9049,18.1187;18.3594,18.5687"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[7].TEI-TBL[0].MARU#</string>
@@ -23028,7 +23033,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1299,18.477"/>
+            <point val="17.9049,18.477"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23047,10 +23052,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O650">
       <attribute name="obj_pos">
-        <point val="18.6799,18.477"/>
+        <point val="18.3049,18.477"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,18.1187;19.1344,18.5687"/>
+        <rectangle val="18.3049,18.1187;18.7594,18.5687"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[7].TEI-TBL[1].MARU#</string>
@@ -23070,7 +23075,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,18.477"/>
+            <point val="18.3049,18.477"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23089,10 +23094,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O651">
       <attribute name="obj_pos">
-        <point val="18.2049,19.5411"/>
+        <point val="17.9799,19.5411"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.2049,19.3022;18.5079,19.6022"/>
+        <rectangle val="17.9799,19.3022;18.2829,19.6022"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[8].TEI-TBL[0].TEI#</string>
@@ -23112,7 +23117,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.2049,19.5411"/>
+            <point val="17.9799,19.5411"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23131,10 +23136,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O652">
       <attribute name="obj_pos">
-        <point val="18.7299,19.5411"/>
+        <point val="18.3549,19.5411"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.7299,19.3022;19.0329,19.6022"/>
+        <rectangle val="18.3549,19.3022;18.6579,19.6022"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[8].TEI-TBL[1].TEI#</string>
@@ -23154,7 +23159,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.7299,19.5411"/>
+            <point val="18.3549,19.5411"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23173,10 +23178,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O653">
       <attribute name="obj_pos">
-        <point val="18.1299,19.5911"/>
+        <point val="17.9049,19.5911"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1299,19.2328;18.5844,19.6828"/>
+        <rectangle val="17.9049,19.2328;18.3594,19.6828"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[8].TEI-TBL[0].MARU#</string>
@@ -23196,7 +23201,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1299,19.5911"/>
+            <point val="17.9049,19.5911"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23215,10 +23220,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O654">
       <attribute name="obj_pos">
-        <point val="18.6799,19.5911"/>
+        <point val="18.3049,19.5911"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,19.2328;19.1344,19.6828"/>
+        <rectangle val="18.3049,19.2328;18.7594,19.6828"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[8].TEI-TBL[1].MARU#</string>
@@ -23238,7 +23243,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,19.5911"/>
+            <point val="18.3049,19.5911"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23257,10 +23262,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O655">
       <attribute name="obj_pos">
-        <point val="18.2299,20.6213"/>
+        <point val="18.0049,20.6213"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.2299,20.3824;18.5329,20.6824"/>
+        <rectangle val="18.0049,20.3824;18.3079,20.6824"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[9].TEI-TBL[0].TEI#</string>
@@ -23280,7 +23285,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.2299,20.6213"/>
+            <point val="18.0049,20.6213"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23299,10 +23304,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O656">
       <attribute name="obj_pos">
-        <point val="18.7549,20.6213"/>
+        <point val="18.3799,20.6213"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.7549,20.3824;19.0579,20.6824"/>
+        <rectangle val="18.3799,20.3824;18.6829,20.6824"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[9].TEI-TBL[1].TEI#</string>
@@ -23322,7 +23327,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.7549,20.6213"/>
+            <point val="18.3799,20.6213"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23341,10 +23346,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O657">
       <attribute name="obj_pos">
-        <point val="18.1549,20.6713"/>
+        <point val="17.9299,20.6713"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1549,20.313;18.6094,20.763"/>
+        <rectangle val="17.9299,20.313;18.3844,20.763"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[9].TEI-TBL[0].MARU#</string>
@@ -23364,7 +23369,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1549,20.6713"/>
+            <point val="17.9299,20.6713"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23383,10 +23388,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O658">
       <attribute name="obj_pos">
-        <point val="18.7049,20.6713"/>
+        <point val="18.3299,20.6713"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.7049,20.313;19.1594,20.763"/>
+        <rectangle val="18.3299,20.313;18.7844,20.763"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[9].TEI-TBL[1].MARU#</string>
@@ -23406,7 +23411,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.7049,20.6713"/>
+            <point val="18.3299,20.6713"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23425,10 +23430,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O659">
       <attribute name="obj_pos">
-        <point val="18.2049,21.7463"/>
+        <point val="17.9799,21.7463"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.2049,21.5074;18.5079,21.8074"/>
+        <rectangle val="17.9799,21.5074;18.2829,21.8074"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[10].TEI-TBL[0].TEI#</string>
@@ -23448,7 +23453,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.2049,21.7463"/>
+            <point val="17.9799,21.7463"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23467,10 +23472,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O660">
       <attribute name="obj_pos">
-        <point val="18.7299,21.7463"/>
+        <point val="18.3549,21.7463"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.7299,21.5074;19.0329,21.8074"/>
+        <rectangle val="18.3549,21.5074;18.6579,21.8074"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[10].TEI-TBL[1].TEI#</string>
@@ -23490,7 +23495,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.7299,21.7463"/>
+            <point val="18.3549,21.7463"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23509,10 +23514,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O661">
       <attribute name="obj_pos">
-        <point val="18.1299,21.7963"/>
+        <point val="17.9049,21.7963"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1299,21.438;18.5844,21.888"/>
+        <rectangle val="17.9049,21.438;18.3594,21.888"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[10].TEI-TBL[0].MARU#</string>
@@ -23532,7 +23537,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1299,21.7963"/>
+            <point val="17.9049,21.7963"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23551,10 +23556,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O662">
       <attribute name="obj_pos">
-        <point val="18.6799,21.7963"/>
+        <point val="18.3049,21.7963"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6799,21.438;19.1344,21.888"/>
+        <rectangle val="18.3049,21.438;18.7594,21.888"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[10].TEI-TBL[1].MARU#</string>
@@ -23574,7 +23579,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6799,21.7963"/>
+            <point val="18.3049,21.7963"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23593,10 +23598,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O663">
       <attribute name="obj_pos">
-        <point val="18.1799,22.8463"/>
+        <point val="17.9549,22.8463"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1799,22.6074;18.4829,22.9074"/>
+        <rectangle val="17.9549,22.6074;18.2579,22.9074"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[11].TEI-TBL[0].TEI#</string>
@@ -23616,7 +23621,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1799,22.8463"/>
+            <point val="17.9549,22.8463"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23635,10 +23640,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O664">
       <attribute name="obj_pos">
-        <point val="18.7049,22.8463"/>
+        <point val="18.3299,22.8463"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.7049,22.6074;19.0079,22.9074"/>
+        <rectangle val="18.3299,22.6074;18.6329,22.9074"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[11].TEI-TBL[1].TEI#</string>
@@ -23658,7 +23663,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.7049,22.8463"/>
+            <point val="18.3299,22.8463"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23677,10 +23682,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O665">
       <attribute name="obj_pos">
-        <point val="18.1049,22.8963"/>
+        <point val="17.8799,22.8963"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.1049,22.538;18.5594,22.988"/>
+        <rectangle val="17.8799,22.538;18.3344,22.988"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[11].TEI-TBL[0].MARU#</string>
@@ -23700,7 +23705,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.1049,22.8963"/>
+            <point val="17.8799,22.8963"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23719,10 +23724,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O666">
       <attribute name="obj_pos">
-        <point val="18.6549,22.8963"/>
+        <point val="18.2799,22.8963"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6549,22.538;19.1094,22.988"/>
+        <rectangle val="18.2799,22.538;18.7344,22.988"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[11].TEI-TBL[1].MARU#</string>
@@ -23742,7 +23747,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.6549,22.8963"/>
+            <point val="18.2799,22.8963"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -23755,6 +23760,510 @@
           </attribute>
           <attribute name="multi">
             <real val="0.22725"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O667">
+      <attribute name="obj_pos">
+        <point val="18.725,10.717"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.725,10.4781;19.634,10.7781"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[0].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.725,10.717"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O668">
+      <attribute name="obj_pos">
+        <point val="18.715,11.7907"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.715,11.5518;19.624,11.8518"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[1].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.715,11.7907"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O669">
+      <attribute name="obj_pos">
+        <point val="18.715,12.8814"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.715,12.6425;19.624,12.9425"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[2].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.715,12.8814"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O670">
+      <attribute name="obj_pos">
+        <point val="18.74,13.9564"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.74,13.7175;19.649,14.0175"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[3].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.74,13.9564"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O671">
+      <attribute name="obj_pos">
+        <point val="18.74,15.1499"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.74,14.911;19.649,15.211"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[4].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.74,15.1499"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O672">
+      <attribute name="obj_pos">
+        <point val="18.74,16.2489"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.74,16.01;19.649,16.31"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[5].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.74,16.2489"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O673">
+      <attribute name="obj_pos">
+        <point val="18.74,17.3239"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.74,17.085;19.649,17.385"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[6].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.74,17.3239"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O674">
+      <attribute name="obj_pos">
+        <point val="18.765,18.4239"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.765,18.185;19.674,18.485"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[7].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.765,18.4239"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O675">
+      <attribute name="obj_pos">
+        <point val="18.765,19.5239"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.765,19.285;19.674,19.585"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[8].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.765,19.5239"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O676">
+      <attribute name="obj_pos">
+        <point val="18.765,20.6239"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.765,20.385;19.674,20.685"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[9].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.765,20.6239"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O677">
+      <attribute name="obj_pos">
+        <point val="18.74,21.7489"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.74,21.51;19.649,21.81"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[10].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.74,21.7489"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O678">
+      <attribute name="obj_pos">
+        <point val="18.74,22.8239"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.74,22.585;19.649,22.885"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL[11].BIKO3#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.74,22.8239"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
           </attribute>
         </composite>
       </attribute>
