@@ -48,6 +48,8 @@
       *  01.00.08    内田    08/05/07    年齢判定修正
       *  01.00.09    内田    08/05/21    「市町村長殿」を「市町村長様」へ変更
       *  01.00.10    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
+      *  01.00.11    内田    09/01/14    備考欄へ「高半」の印字対応
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -415,6 +417,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *---(01.00.11) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -873,6 +878,18 @@
              END-IF
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    高半チェック
+           PERFORM  900-SEIKYU-SELECT-SEC
+           IF  RECE10-TOKKI(1)  =  "21"
+           OR  RECE10-TOKKI(2)  =  "21"
+           OR  RECE10-TOKKI(3)  =  "21"
+           OR  RECE10-TOKKI(4)  =  "21"
+           OR  RECE10-TOKKI(5)  =  "21"
+               MOVE  1  TO  MF100-KOUHAN
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
@@ -1388,6 +1405,12 @@
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    高半
+             IF  MF100-KOUHAN  =  1
+               MOVE  "高半"          TO  SC03-BIKO3(IDX)
+             END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *    小計
       *    公費分点数
              IF  MF100-COMBIKBN  NOT =   SPACE
@@ -1733,6 +1756,13 @@
                MOVE  "○"              TO  SC04-MARU (IDX 2)
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    高半
+             IF  MF100-KOUHAN  =  1
+               MOVE  "高半"          TO  SC04-BIKO3(IDX)
+             END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
       *    小計
       *    公費分点数
@@ -2598,6 +2628,16 @@
            ELSE
                MOVE    1               TO  FLG-RECE10
            END-IF
+      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *---(01.00.11) LINE ADD END   ------------------------------------
            .
        900-SEIKYU-SELECT-EXT.
            EXIT.
