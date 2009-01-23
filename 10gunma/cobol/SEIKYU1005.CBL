@@ -44,6 +44,7 @@
       *  01.00.07    内田    08/05/07    年齢判定修正
       *  01.00.08    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
       *  01.00.09    内田    08/08/19    ２割の６歳は７０歳以上の次に印字
+      *  01.00.10    内田    09/01/14    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -370,6 +371,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *---(01.00.10) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.10) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
