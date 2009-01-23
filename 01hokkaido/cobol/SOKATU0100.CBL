@@ -58,6 +58,9 @@
       *                                 割欄に点数が加算される不具合を修正
       *                     08/11/25    長期等と併用した場合、公費の助成が
       *                                 無くても印字される不具合を修正
+      *  01.00.21    吉川   09/01/15    返戻分の請求書枚数カウント修正
+      *                                 外来で全国公費併用の場合は、
+      *                                 公費の助成がなくても印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -251,6 +254,10 @@
       *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) start
            03  WRK-ZAIMAISU            PIC 9(03).
       *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
+           03  WRK-HENREIYM            PIC X(06).
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -1436,13 +1443,25 @@
                END-IF
            END-IF
       *
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
+      *    返戻分を返戻年月毎でカウントしないようにする
+           IF  RECE10-HENREIYM  NOT =  "000000"
+               MOVE  "999999"                TO  WRK-HENREIYM
+           ELSE
+               MOVE  "000000"                TO  WRK-HENREIYM
+           END-IF
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) end
+      *
       *    重複データか
            PERFORM  VARYING  IDX2  FROM  1  BY  1
                      UNTIL    IDX2  >     50
                      OR       SCNT-HKNJANUM (IDX1 IDX2)  =  SPACE
                IF   (SCNT-HKNJANUM (IDX1 IDX2)  =  WRK-HKNJANUM)
                AND  (SCNT-ZAITAKU  (IDX1 IDX2)  =  RECE10-ZAITAKU)
-               AND  (SCNT-SRYYM    (IDX1 IDX2)  =  RECE10-HENREIYM)
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
+      *         AND  (SCNT-SRYYM    (IDX1 IDX2)  =  RECE10-HENREIYM)
+               AND  (SCNT-SRYYM    (IDX1 IDX2)  =  WRK-HENREIYM)
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) end
                    MOVE  IDX2  TO  WRK-CNT
                    MOVE  50  TO  IDX2
                END-IF
@@ -1452,7 +1471,10 @@
                MOVE  IDX2             TO  WRK-CNT
                MOVE  WRK-HKNJANUM     TO  SCNT-HKNJANUM (IDX1 WRK-CNT)
                MOVE  RECE10-ZAITAKU   TO  SCNT-ZAITAKU (IDX1 WRK-CNT)
-               MOVE  RECE10-HENREIYM  TO  SCNT-SRYYM (IDX1 WRK-CNT)
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
+      *         MOVE  RECE10-HENREIYM  TO  SCNT-SRYYM (IDX1 WRK-CNT)
+               MOVE  WRK-HENREIYM     TO  SCNT-SRYYM (IDX1 WRK-CNT)
+      *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) end
            END-IF
       *    重複公費か
            PERFORM  VARYING  IDX3  FROM  1  BY  1
@@ -2594,6 +2616,11 @@
       *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
       *         MOVE    ZERO                  TO  FLG-ERR
       *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) end
+      *=== 外来更生等は記載する by Yoshikawa(2009/01/15) start
+               IF  RECE02-NYUGAIKBN  =  "2"
+                 MOVE  ZERO                  TO  FLG-ERR
+               END-IF
+      *=== 外来更生等は記載する by Yoshikawa(2009/01/15) end
              WHEN "972"
                MOVE    1                     TO  FLG-TYOKI
       *=== 長期等＋公費助成無しは印字しない by Yoshikawa(2008/11/25) start
