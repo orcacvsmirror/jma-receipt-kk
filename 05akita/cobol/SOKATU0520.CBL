@@ -35,6 +35,7 @@
       *  01.00.03    長屋    08/05/02    帳票様式に伴う修正
       *  01.00.04    吉川    08/10/22    国組3〜6歳を分けないように修正
       *                                  SPA-AREA初期化
+      *  01.00.05    吉川    09/01/21    月遅れ分は当月に合算する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -645,7 +646,14 @@
            END-IF
       *
       *    診療年月
-           MOVE  RECE10-SRYYM  TO    SKT0520TMP-SRYYM
+      *=== 月遅れ分は当月に合算 by Yoshikawa(2009/01/21) start
+      *     MOVE  RECE10-SRYYM  TO    SKT0520TMP-SRYYM
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+             MOVE  LNK-PRTKANRI-SRYYM    TO  SKT0520TMP-SRYYM
+           ELSE
+             MOVE  RECE10-SRYYM          TO  SKT0520TMP-SRYYM
+           END-IF
+      *=== 月遅れ分は当月に合算 by Yoshikawa(2009/01/21) end
       *
       *    法定外給付判定
       *=== 国組3〜6歳は分けない by Yoshikawa(2008/10/22) start
