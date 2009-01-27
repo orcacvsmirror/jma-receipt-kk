@@ -64,6 +64,8 @@
                 05  SC03-ITBFTN         PIC X(07)    OCCURS  3 TIMES.
                 05  SC03-TYOKI          PIC X(02).
                 05  SC03-KEIKA          PIC X(02).
+                05  SC03-KOUHAN         PIC X(06).
                 05  SC03-BIKO1          PIC X(20).
                 05  SC03-BIKO2          PIC X(04).
                 05  SC03-BIKO3          PIC X(02).
+                05  SC03-BIKO4          PIC X(02).

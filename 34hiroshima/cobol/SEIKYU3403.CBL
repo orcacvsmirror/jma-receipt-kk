@@ -44,6 +44,7 @@
       *                                  医療機関情報を参照
       *  01.00.09    内田    08/05/03    帳票様式の変更に伴う修正
       *  01.00.10    内田    08/09/09    SPA-AREA初期化
+      *  01.00.11    内田    09/01/21    備考欄へ「高半」の印字対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -116,6 +117,9 @@
            03  FLG-SRYACCT    PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *---(01.00.11) LINE ADD START ------------------------------------
+           03  FLG-RECE10     PIC 9(01).
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
       *    添字領域
        01  IDX-AREA.
@@ -274,6 +278,10 @@
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    請求管理
+           COPY    "CPRCF010.INC".
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *    保険組合せ
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
@@ -794,6 +802,15 @@
            PERFORM  200112-HOUMON-CHK-SEC
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    高半チェック処理
+      *   （公費請求から取得したいが不具合があり請求管理より取得）
+           PERFORM  900-SEIKYU-SELECT-SEC
+           IF  RECE10-FLG (3)  =  "1" OR "2" OR "3"
+               MOVE  1           TO  MF100-KOUHAN
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
+      *
            IF      FLG-ERR            =     ZERO
              WRITE    MF100-REC 
              ADD      1                 TO    CNT-MF100
@@ -1288,6 +1305,13 @@
                MOVE  "日"          TO  SC03-BIKO1(13:)
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *    高半
+           IF  MF100-KOUHAN  =  1
+               MOVE  "高半21"      TO  SC03-KOUHAN
+               MOVE  "○"          TO  SC03-BIKO4
+           END-IF
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
            .
        320-BODY-HEN-EXT.
@@ -2200,6 +2224,75 @@
        945-SRYACCT-READ-EXT.
            EXIT.
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *
+      *---(01.00.11) LINE ADD START ------------------------------------
+      *****************************************************************
+      *    請求管理読込
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC             SECTION.
+      *
+      *    請求管理ＤＢ検索
+           INITIALIZE                  RECE10-REC
+      *
+           MOVE   RECE02-HOSPNUM       TO  RECE10-HOSPNUM
+           MOVE   RECE02-SRYYM         TO  RECE10-SRYYM
+           MOVE   RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+           MOVE   RECE02-PTID          TO  RECE10-PTID
+           MOVE   RECE02-RECEKA        TO  RECE10-RECEKA
+           MOVE   RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+           MOVE   RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+           MOVE   RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+           MOVE   RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+           MOVE   RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+      *
+           MOVE    RECE10-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 900-SEIKYU-READ-SEC
+           ELSE
+               MOVE    1               TO  FLG-RECE10
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    請求マスター読込
+      *****************************************************************
+       900-SEIKYU-READ-SEC           SECTION.
+      *
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-RECE10
+               MOVE    MCPDATA-REC         TO  RECE10-REC
+           ELSE
+               MOVE    1                   TO  FLG-RECE10
+           END-IF
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *---(01.00.11) LINE ADD END   ------------------------------------
       *
       *****************************************************************
       *    月末日算出処理

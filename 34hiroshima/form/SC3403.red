@@ -164,6 +164,11 @@
           <embed object="string" length="2"/>
         </appinfo>
       </element>
+      <element name="KOUHAN" occurs="1">
+        <appinfo>
+          <embed object="string" length="6"/>
+        </appinfo>
+      </element>
       <element name="BIKO1" occurs="1">
         <appinfo>
           <embed object="string" length="20"/>
@@ -175,6 +180,11 @@
         </appinfo>
       </element>
       <element name="BIKO3" occurs="1">
+        <appinfo>
+          <embed object="string" length="2"/>
+        </appinfo>
+      </element>
+      <element name="BIKO4" occurs="1">
         <appinfo>
           <embed object="string" length="2"/>
         </appinfo>
@@ -8738,6 +8748,90 @@
           </attribute>
           <attribute name="multi">
             <real val="0.3535"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O251">
+      <attribute name="obj_pos">
+        <point val="12.4792,23.575"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.4792,23.3361;13.4488,23.6361"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL.KOUHAN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#185;&#226;&#200;&#190;21#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="12.4792,23.575"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O252">
+      <attribute name="obj_pos">
+        <point val="12.5042,23.775"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.5042,23.138;13.3122,23.938"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#MEISAI-TBL.BIKO4#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#251;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.8"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="12.5042,23.775"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.4848"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.404"/>
           </attribute>
         </composite>
       </attribute>

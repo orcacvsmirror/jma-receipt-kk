@@ -139,6 +139,8 @@
            03  MF100-TYOKI               PIC  9(01).
       *経過措置フラグ
            03  MF100-KEIKA               PIC  9(01).
+      *高半フラグ
+           03  MF100-KOUHAN              PIC  9(01).
       
       *他法公費情報
            03  MF100-TAHO-TBL.
