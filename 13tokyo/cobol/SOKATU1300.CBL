@@ -37,6 +37,10 @@
       *                                    SPA-AREA初期化
       *  01.00.05    吉川    2008/06/20    国保がない場合でも印字する
       *  01.00.06    内田    2008/08/19    在総診の診療があれば別集計とする
+      *  01.00.07    吉川    2009/01/26    食事が無く生活療養のみの場合は
+      *                                    金額を集計しない
+      *                                    在宅でも患者負担金が無い場合は
+      *                                    通常請求分に集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -131,6 +135,10 @@
       *---(01.00.06) LINE ADD START ------------------------------------
            03  FLG-SRYACT          PIC 9(01).
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+           03  FLG-SYUNOU          PIC 9(01).
+           03  FLG-KANJAFTN        PIC 9(01).
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -191,6 +199,12 @@
            03  WRK-PATH2               PIC X(50).
            03  WRK-HKNNUM              PIC X(03).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+           03  WRK-PATH3               PIC X(50).
+           03  WRK-SEIKYU              PIC 9(07).
+           03  WRK-KOHNUM              PIC X(03).
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME            PIC X(100).
            03  WRK-HOSPNAME-R          REDEFINES   WRK-HOSPNAME.
@@ -273,6 +287,12 @@
        01  SRYACT-REC.
            COPY    "CPSRYACT.INC".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+      *    収納情報
+       01  SYUNOU-REC.
+           COPY    "CPSYUNOU.INC".
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
       * 
       ******************************************************************
       *    サブプロ用  領域
@@ -605,6 +625,31 @@
       *
            INITIALIZE       SKT1300TMP-REC
       *
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+      *    患者負担フラグを初期化(0=負担なし 1=負担あり)
+           MOVE     1                    TO  FLG-KANJAFTN
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     4
+             IF     RECE10-KOHNUM(IDX1)  NOT =  SPACE
+               MOVE   RECE10-KOHNUM(IDX1)  TO  WRK-KOHNUM
+               IF     RECE10-NYUGAIKBN     =   "1"
+                   MOVE  "key33"         TO  WRK-PATH3
+               ELSE
+                   MOVE  "key25"         TO  WRK-PATH3
+               END-IF
+      *
+      *        収納情報チェック
+               PERFORM 920-SYUNOU-SET-SEC
+             END-IF
+      *
+           END-PERFORM
+      *
+      *    患者負担金がない場合は在宅フラグを消す
+           IF  FLG-KANJAFTN  =  ZERO
+               MOVE  SPACE             TO  RECE10-ZAITAKU
+           END-IF
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+      *
       *    在宅→外来→入院の順で印刷
            IF      RECE10-ZAITAKU      =   "1"
                MOVE    1               TO  SKT1300TMP-SYUTURYOKU
@@ -622,7 +667,11 @@
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    在総診・在医総か
-           IF  RECE10-ZAITAKU  =  SPACE
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+      *     IF  RECE10-ZAITAKU  =  SPACE
+           IF  RECE10-ZAITAKU  =  SPACE  AND  
+               FLG-KANJAFTN    NOT =  ZERO
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
              PERFORM  960-SRYACT-SET-SEC
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -750,10 +799,15 @@
       *    食事件数
            IF      RECE10-SHOKUJINISSU(1)  NOT =   ZERO
                ADD     1               TO  SKT1300TMP-KO-SKENSU(IDX1)
-           END-IF
+      *=== 食事がない場合は金額記載なし by Yoshikawa(2008/01/26) start
+      *     END-IF
+      *=== 食事がない場合は金額記載なし by Yoshikawa(2008/01/26) end
       *    金額
-           ADD     RECE10-SHOKUJIRYOYOHI(1)
+               ADD     RECE10-SHOKUJIRYOYOHI(1)
                                        TO  SKT1300TMP-KO-SKINGK(IDX1)
+      *=== 食事がない場合は金額記載なし by Yoshikawa(2008/01/26) start
+           END-IF
+      *=== 食事がない場合は金額記載なし by Yoshikawa(2008/01/26) end
       *    公費件数
            PERFORM VARYING IDX3    FROM    1   BY  1
                    UNTIL   IDX3    >       4
@@ -1375,6 +1429,114 @@
            .
        800-PTINF-READ-EXT.
            EXIT.
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+      *****************************************************************
+      *    請求額集計処理
+      *****************************************************************
+       800-SEIKYU-SEC  SECTION.
+      *
+           MOVE    ZERO                           TO  WRK-SEIKYU
+      *
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL    IDX3  >     4  OR
+                    SYU-KOH-HKNNUM(IDX3) =  SPACE
+      *
+             IF   SYU-KOH-HKNNUM(IDX3)   =  WRK-KOHNUM
+               IF  RECE10-FTNMONEY(IDX3)  >  ZERO
+                 MOVE  SYU-KOH-COMPFTN(IDX3)    TO  WRK-SEIKYU
+               ELSE
+                 MOVE  SYU-KOH-COMPFTN-ENTANI(IDX3)  
+                                                TO  WRK-SEIKYU
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           IF  WRK-SEIKYU  =  ZERO
+               MOVE  ZERO  TO  FLG-KANJAFTN
+           END-IF
+      *
+           .
+       800-SEIKYU-SEC-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *  収納情報セット
+      *****************************************************************
+       920-SYUNOU-SET-SEC  SECTION.
+      *
+           INITIALIZE  SYUNOU-REC
+           MOVE  SPA-HOSPNUM        TO  SYU-HOSPNUM
+           MOVE  RECE10-NYUGAIKBN   TO  SYU-NYUGAIKBN
+           MOVE  RECE10-PTID        TO  SYU-PTID
+           MOVE  RECE10-SRYYM(1:6)  TO  SYU-SRYYMD(1:6)
+           MOVE  "__"               TO  SYU-SRYYMD(7:2)
+           MOVE  WRK-KOHNUM         TO  SYU-KOH-HKNNUM(1)
+                                        SYU-KOH-HKNNUM(2)
+                                        SYU-KOH-HKNNUM(3)
+                                        SYU-KOH-HKNNUM(4)
+           MOVE  SYUNOU-REC         TO  MCPDATA-REC
+           MOVE  "DBSELECT"         TO  MCP-FUNC
+           MOVE  "tbl_syunou"       TO  MCP-TABLE
+           MOVE  WRK-PATH3          TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"            USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_syunou"       TO  MCP-TABLE
+             MOVE    WRK-PATH3          TO  MCP-PATHNAME
+             PERFORM  925-SYUNOU-READ-SEC
+      *
+             PERFORM  UNTIL  FLG-SYUNOU  =  1
+      *
+               IF  SYU-DENPJTIKBN   NOT = "3"
+                   PERFORM  800-SEIKYU-SEC
+               END-IF
+      *
+               MOVE    "tbl_syunou"       TO  MCP-TABLE
+               MOVE    WRK-PATH3          TO  MCP-PATHNAME
+               PERFORM   925-SYUNOU-READ-SEC
+             END-PERFORM
+           ELSE
+             DISPLAY  "SYUNOU SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_syunou"       TO  MCP-TABLE
+           MOVE    WRK-PATH3          TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"        USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       920-SYUNOU-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    収納読込
+      *****************************************************************
+       925-SYUNOU-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"         TO  MCP-FUNC
+           CALL    "ORCDBMAIN"        USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SYUNOU-REC
+             MOVE  ZERO         TO  FLG-SYUNOU
+           ELSE
+             INITIALIZE  SYUNOU-REC
+             MOVE  1  TO  FLG-SYUNOU
+           END-IF
+      *
+           .
+       925-SYUNOU-READ-EXT.
+           EXIT.
+      *
+      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
       *---(01.00.06) LINE ADD START ------------------------------------
       *****************************************************************
       *  診療情報セット
@@ -1460,8 +1622,7 @@
                                        WRK-CONS-ZAITAKU4  OR
                                        WRK-CONS-ZAITAKU5  OR
                                        WRK-CONS-ZAITAKU6
-                 MOVE  1           TO  SKT1300TMP-ZAITAKU
-                 MOVE  1           TO  SKT1300TMP-SYUTURYOKU
+                 MOVE  1  TO  SKT1300TMP-ZAITAKU
                END-IF
              END-IF
            END-PERFORM
