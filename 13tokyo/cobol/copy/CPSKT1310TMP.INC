@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT1310TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    09/01/26  公費名称追加
       ************************************************************
        01  SKT1310TMP-REC.
            03  SKT1310TMP-KEY.
@@ -40,6 +41,9 @@
            03  SKT1310TMP-KOH-AREA.
                05  SKT1310TMP-KOH-TBL      OCCURS  20.
                    07  SKT1310TMP-KOHNUM           PIC  X(03).
+      *=== 公費名称追加 by Yoshikawa(2009/01/26) start
+                   07  SKT1310TMP-KOHNAME          PIC  X(10).
+      *=== 公費名称追加 by Yoshikawa(2009/01/26) end
                    07  SKT1310TMP-KKENSU           PIC  9(06).
                    07  SKT1310TMP-KNISSU           PIC  9(06).
                    07  SKT1310TMP-KTENSU           PIC  9(10).
