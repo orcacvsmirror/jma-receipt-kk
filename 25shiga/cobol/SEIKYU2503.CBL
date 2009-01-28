@@ -43,6 +43,8 @@
       *  01.00.06    吉川    08/10/20    結核・精神を併用していても
       *                                  公費分患者負担額を計算する
       *                                  SPA-AREA初期化
+      *  01.00.07    内田    09/01/20    「公」欄は２７のみの印字で
+      *                                  全国公費は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1004,10 +1006,12 @@
                    MOVE    MF100-FTNMONEY      TO  WRK-Z7
                    MOVE    WRK-Z7              TO  SC03-KOHPTFTN(IDX 2)
       *
+      *---(01.00.07) LINE ADD START ------------------------------------
       *            他法法別番号
-                   MOVE    MF100-TAHONUM       TO  WRK-KOHNUM
-                   PERFORM 950-HKNNUM-SET-SEC
-                   MOVE    HKN-HBTNUM          TO  SC03-TAHONUM(IDX)
+      *             MOVE    MF100-TAHONUM       TO  WRK-KOHNUM
+      *             PERFORM 950-HKNNUM-SET-SEC
+      *             MOVE    HKN-HBTNUM          TO  SC03-TAHONUM(IDX)
+      *---(01.00.07) LINE ADD END   ------------------------------------
                ELSE
       *
       *            負担者番号
