@@ -39,6 +39,7 @@
       *                                  返戻分は合算する
       *  01.00.07    内田    08/07/18    在総診分を明細書枚数欄に集計する
       *  01.00.08    門間    08/12/16    シス管「2007」公費まとめ対応
+      *  01.00.09    吉川    09/02/06    斜線部分の一部負担金は印字しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1199,11 +1200,17 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    療養の給付：一部負担金
-           ADD     RECE10-FTNMONEY(1)  TO  SKT4600TMP-ITBFTN(IDX1 IDX2)
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *                                     SKT4600TMP-ITBFTN(12 IDX2)
-                                           SKT4600TMP-ITBFTN(13 IDX2)
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 斜線部分は印字しない by Yoshikawa(2009/02/06) start
+      *    ADD     RECE10-FTNMONEY(1)  TO  SKT4600TMP-ITBFTN(IDX1 IDX2)
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **                                     SKT4600TMP-ITBFTN(12 IDX2)
+      *                                     SKT4600TMP-ITBFTN(13 IDX2)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+           IF  IDX1  =  1  OR  2  OR  6  OR  7  OR  10 OR  11
+             ADD  RECE10-FTNMONEY(1)  TO  SKT4600TMP-ITBFTN(IDX1 IDX2)
+                                          SKT4600TMP-ITBFTN(13 IDX2)
+           END-IF
+      *=== 斜線部分は印字しない by Yoshikawa(2009/02/06) end
       *
            IF      RECE10-SHOKUJINISSU(1)  >   ZERO
       *
