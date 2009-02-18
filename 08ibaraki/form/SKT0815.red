@@ -18,7 +18,7 @@
     </element>
     <element name="KAISETUNAME" occurs="1">
       <appinfo>
-        <embed object="string" length="40"/>
+        <embed object="string" length="60"/>
       </appinfo>
     </element>
     <element name="HOSPCD" occurs="1">
@@ -5848,8 +5848,8 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#202;&#221;&#183;&#242;&#176;&#229;&#206;&#197;&#181;&#161;&#180;&#216;&#164;&#206;
-&#189;&#234;&#186;&#223;&#181;&#218;&#164;&#211;&#204;&#190;&#190;&#206;#</string>
+            <string>#&#202;&#221;&#184;&#177;&#176;&#229;&#206;&#197;&#181;&#161;&#180;&#216;&#164;&#206;
+&#189;&#234;&#186;&#223;&#195;&#207;&#181;&#218;&#164;&#211;&#204;&#190;&#190;&#206;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5913,10 +5913,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O208">
       <attribute name="obj_pos">
-        <point val="18.5294,5.1"/>
+        <point val="19.1301,5.47102"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.5294,4.86111;18.8324,5.16111"/>
+        <rectangle val="19.1301,5.23213;19.4331,5.53213"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5930,7 +5930,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.5294,5.1"/>
+            <point val="19.1301,5.47102"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8920,7 +8920,7 @@
         <point val="12.1169,5.075"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.1169,4.83611;18.1769,5.13611"/>
+        <rectangle val="12.1169,4.87593;19.6919,5.12593"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETUNAME#</string>
@@ -8931,13 +8931,13 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
           </attribute>
           <attribute name="height">
-            <real val="0.3"/>
+            <real val="0.25"/>
           </attribute>
           <attribute name="pos">
             <point val="12.1169,5.075"/>
@@ -8949,10 +8949,10 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.1818"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
-            <real val="0.1515"/>
+            <real val="0.12625"/>
           </attribute>
         </composite>
       </attribute>

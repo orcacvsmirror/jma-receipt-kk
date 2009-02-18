@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  プログラム修正履歴
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    09/02/06  開設者名バイト数増加
+      *****************************************************************
        01  SKT0810.
       *診療年月
            03  SKT0810-SRYYM               PIC  X(16).
@@ -35,7 +39,10 @@
       *電話番号
            03  SKT0810-TEL                 PIC  X(15).
       *開設者氏名
-           03  SKT0810-KAISETUNAME         PIC  X(40).
+      *=== バイト数増加 by Yoshikawa(2009/02/06) start
+      *     03  SKT0810-KAISETUNAME         PIC  X(40).
+           03  SKT0810-KAISETUNAME         PIC  X(60).
+      *=== バイト数増加 by Yoshikawa(2009/02/06) end
       *保険者名
            03  SKT0810-HKNJANAME           PIC  X(24).
       *在総・在医総

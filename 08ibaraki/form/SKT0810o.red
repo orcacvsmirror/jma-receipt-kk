@@ -38,7 +38,7 @@
     </element>
     <element name="KAISETUNAME" occurs="1">
       <appinfo>
-        <embed object="string" length="40"/>
+        <embed object="string" length="60"/>
       </appinfo>
     </element>
     <element name="HKNJANAME" occurs="1">
@@ -7333,10 +7333,10 @@
     <group>
       <object type="Standard - Text" version="0" id="O278">
         <attribute name="obj_pos">
-          <point val="19.0955,6.3534"/>
+          <point val="19.0955,6.22973"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="19.0955,6.17025;19.3278,6.40025"/>
+          <rectangle val="19.0955,6.04658;19.3278,6.27658"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -7350,7 +7350,7 @@
               <real val="0.23"/>
             </attribute>
             <attribute name="pos">
-              <point val="19.0955,6.3534"/>
+              <point val="19.0955,6.22973"/>
             </attribute>
             <attribute name="color">
               <color val="#000000"/>
@@ -7369,10 +7369,10 @@
       </object>
       <object type="Standard - Text" version="0" id="O279">
         <attribute name="obj_pos">
-          <point val="19.033,6.39091"/>
+          <point val="19.033,6.26724"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="19.033,6.11221;19.3865,6.46221"/>
+          <rectangle val="19.033,5.98853;19.3865,6.33853"/>
         </attribute>
         <attribute name="text">
           <composite type="text">
@@ -7386,7 +7386,7 @@
               <real val="0.35"/>
             </attribute>
             <attribute name="pos">
-              <point val="19.033,6.39091"/>
+              <point val="19.033,6.26724"/>
             </attribute>
             <attribute name="color">
               <color val="#000000"/>
@@ -7938,7 +7938,7 @@
         <point val="12.1128,6.63526"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.1128,6.43619;14.6378,6.68619"/>
+        <rectangle val="12.1128,6.43619;19.6878,6.68619"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETUNAME#</string>
@@ -7949,7 +7949,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
