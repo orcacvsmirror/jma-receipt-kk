@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    09/02/13    第二公費以降が印字されない不具合修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -356,7 +357,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU1415"    TO  JOB-PGID
-           MOVE    "広域連合・診療報酬請求書"
+           MOVE    "後期高齢者請求書"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -878,11 +879,16 @@
       *****************************************************************
        20012-KOH-SYUKEI-SEC        SECTION.
       *
-           PERFORM  VARYING  IDXX  FROM  1  BY  1
-                    UNTIL    IDXX  >  4
-                    OR       RECE10-KOHNUM(IDXX)  =   SPACE
-      *      感染37条の2
-             EVALUATE  RECE10-KOHNUM(IDXX)
+      *=== 第二公費が印字されない不具合修正 by Yoshikawa(2008/01/23) start
+      *     PERFORM  VARYING  IDXX  FROM  1  BY  1
+      *              UNTIL    IDXX  >  4
+      *              OR       RECE10-KOHNUM(IDXX)  =   SPACE
+      *       EVALUATE  RECE10-KOHNUM(IDXX)
+           PERFORM  VARYING  IDXY  FROM  1  BY  1
+                    UNTIL    IDXY  >  4
+                    OR       RECE10-KOHNUM(IDXY)  =   SPACE
+             EVALUATE  RECE10-KOHNUM(IDXY)
+      *=== 第二公費が印字されない不具合修正 by Yoshikawa(2008/01/23) end
       *        結核
                WHEN  "010"   MOVE  1   TO  IDXX
       *        命入
@@ -1123,26 +1129,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
