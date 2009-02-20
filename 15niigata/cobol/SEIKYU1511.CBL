@@ -34,6 +34,8 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/06/24    公費の助成がない場合は印字対象外
+      *  01.00.03    内田    08/01/28    助成の有無の判定修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -304,6 +306,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
+      *---(01.00.03) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.03) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -666,7 +671,13 @@
              IF  FLG-ERR2         =  ZERO
              OR  ((MF100-NYUGAIKBN =   "1" )   AND
                   (MF100-KOHNUM    =  "261" OR "361" OR "264" OR "364"))
-               WRITE    MF100-REC 
+      *---(01.00.03) LINE ADD START ------------------------------------
+             OR  RECE02-KOHNUM (1)  =  "463" OR "465" OR "490"
+             OR  RECE02-KOHNUM (2)  =  "463" OR "465" OR "490"
+             OR  RECE02-KOHNUM (3)  =  "463" OR "465" OR "490"
+             OR  RECE02-KOHNUM (4)  =  "463" OR "465" OR "490"
+      *---(01.00.03) LINE ADD END   ------------------------------------
+               WRITE    MF100-REC
                ADD      1                 TO    CNT-MF100
              ELSE
                DISPLAY "助成対象外患者=" MF100-PTNUM

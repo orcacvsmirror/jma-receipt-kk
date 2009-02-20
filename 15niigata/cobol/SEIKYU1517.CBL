@@ -52,6 +52,8 @@
       *                                  一部負担金欄は０の場合は０印字
       *                                  保険番号１６０等使用時、
       *                                  負担金が印字されないのを修正
+      *  01.00.09    内田    09/01/28    助成の有無の判定修正
+      *                                  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -365,6 +367,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *---(01.00.09) LINE ADD START ------------------------------------
+           INITIALIZE  SPA-AREA
+      *---(01.00.09) LINE ADD END   ------------------------------------
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -806,6 +811,12 @@
              IF  FLG-ERR2             =   ZERO
              OR  ((MF100-NYUGAIKBN =   "1" )   AND
                   (MF100-KOHNUM    =  "261" OR "361" OR "264" OR "364"))
+      *---(01.00.09) LINE ADD START ------------------------------------
+             OR  RECE02-KOHNUM (1)  =  "463" OR "465" OR "490"
+             OR  RECE02-KOHNUM (2)  =  "463" OR "465" OR "490"
+             OR  RECE02-KOHNUM (3)  =  "463" OR "465" OR "490"
+             OR  RECE02-KOHNUM (4)  =  "463" OR "465" OR "490"
+      *---(01.00.09) LINE ADD END   ------------------------------------
                MOVE     FLG-ERR2     TO  MF100-JOSEI
                WRITE    MF100-REC 
                ADD      1                 TO    CNT-MF100
