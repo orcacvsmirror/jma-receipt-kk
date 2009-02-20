@@ -35,6 +35,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.05    長屋    08/04/27    帳票様式に伴う修正
+      *  01.00.06    内田    09/01/28    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -344,6 +345,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *---(01.00.06) LINE ADD START ------------------------------------
+           INITIALIZE                  SPA-AREA
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            DISPLAY  "START"
       *
