@@ -45,6 +45,8 @@
       *  01.00.08    µÈÀî    08/10/17    ´µ¼ÔÉéÃ´³Û¤¬¾å¸Â³Û¤òÄ¶¤¨¤¿¾ì¹ç¡¢
       *                                  ÉéÃ´³Û¤Ï¤½¤Î¾å¸Â³Û¤Þ¤Ç¤È¤¹¤ë
       *  01.00.09    µÈÀî    08/12/10    ¶¨²ñ¤±¤ó¤ÝÂÐ±þ
+      *  01.00.10    ÆâÅÄ    09/01/16    ¸øÈñÊ¬´µ¼ÔÉéÃ´³ÛÍó¤Ë¤ÆÁ°´ü¹âÎð¼Ô
+      *                                  ·Ú¸ºÆÃÎãÁ¼ÃÖ¤ÇÄ¹´ü¤Î¾ì¹ç¤Î¾å¸Â¤ò¹ÍÎ¸
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -710,6 +712,26 @@
            IF  WRK-ETCKOHFTN-G2  =  ZERO
              IF  RECE02-FLG (2)  =  1
                MOVE  MF100-TOTALTEN    TO  MF100-ETCKOHFTN
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *      Ä¹´ü¾å¸Â¹ÍÎ¸
+               PERFORM  900-SEIKYU-SET-SEC
+               IF  RECE10-ETC-KOHNUM (1)  =  "972"
+               OR  RECE10-ETC-KOHNUM (2)  =  "972"
+               OR  RECE10-ETC-KOHNUM (3)  =  "972"
+               OR  RECE10-ETC-KOHNUM (4)  =  "972"
+                 IF  MF100-ETCKOHFTN  >  10000
+                     MOVE  "10000"        TO  MF100-ETCKOHFTN
+                 END-IF
+               END-IF
+               IF  RECE10-ETC-KOHNUM (1)  =  "974"
+               OR  RECE10-ETC-KOHNUM (2)  =  "974"
+               OR  RECE10-ETC-KOHNUM (3)  =  "974"
+               OR  RECE10-ETC-KOHNUM (4)  =  "974"
+                 IF  MF100-ETCKOHFTN  >  20000
+                     MOVE  "20000"        TO  MF100-ETCKOHFTN
+                 END-IF
+               END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
              END-IF
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -750,6 +772,26 @@
       *    Á°´ü¹âÎð¼Ô·Ú¸ºÆÃÎãÁ¼ÃÖ¤Ï´µ¼ÔÉéÃ´³Û°õ»ú
                    IF  RECE02-FLG (2)  =  1
                      MOVE  MF100-TOTALTEN  TO  MF100-ETCKOHFTN
+      *---(01.00.10) LINE ADD START ------------------------------------
+      *      Ä¹´ü¾å¸Â¹ÍÎ¸
+                     PERFORM  900-SEIKYU-SET-SEC
+                     IF  RECE10-ETC-KOHNUM (1)  =  "972"
+                     OR  RECE10-ETC-KOHNUM (2)  =  "972"
+                     OR  RECE10-ETC-KOHNUM (3)  =  "972"
+                     OR  RECE10-ETC-KOHNUM (4)  =  "972"
+                       IF  MF100-ETCKOHFTN  >  10000
+                           MOVE  "10000"        TO  MF100-ETCKOHFTN
+                       END-IF
+                     END-IF
+                     IF  RECE10-ETC-KOHNUM (1)  =  "974"
+                     OR  RECE10-ETC-KOHNUM (2)  =  "974"
+                     OR  RECE10-ETC-KOHNUM (3)  =  "974"
+                     OR  RECE10-ETC-KOHNUM (4)  =  "974"
+                       IF  MF100-ETCKOHFTN  >  20000
+                           MOVE  "20000"        TO  MF100-ETCKOHFTN
+                       END-IF
+                     END-IF
+      *---(01.00.10) LINE ADD END   ------------------------------------
                    END-IF
                    MOVE    SPACE           TO  MF100-ETCKOHNUM
       *---(01.00.06) LINE ADD END   ------------------------------------
