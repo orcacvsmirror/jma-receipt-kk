@@ -36,6 +36,7 @@
       *  01.00.04    ÆâÅÄ    07/10/23    ÂÐ¾Ý¸øÈñÈÖ¹æÄÉ²Ã(190)
       *  01.00.05    µÈÀî    08/10/27    ÂÐ¾Ý¸øÈñÈÖ¹æÄÉ²Ã(188,481,581)
       *                                  SPA-AREA½é´ü²½
+      *  01.00.06    µÈÀî    09/02/16    ¸øÈñ¤Î½õÀ®¤¬¤Ê¤¤¾ì¹ç¤Ï°õ»ú¤·¤Ê¤¤
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -102,6 +103,10 @@
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
            03  FLG-ERR        PIC 9(01).
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+           03  FLG-SYUNOU     PIC 9(01).
+           03  FLG-HKNCOMBI   PIC 9(01).
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -110,6 +115,9 @@
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
            03  IDX3           PIC 9(04).
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+           03  IDX4           PIC 9(04).
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
       *
@@ -152,6 +160,11 @@
                05  WRK-TMM           PIC 9(02).
                05  WRK-TDD           PIC 9(02).
            03  WRK-HKNJANUM          PIC X(08).
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+           03  WRK-KOHID             PIC 9(10).
+           03  WRK-KOHNUM            PIC X(03).
+           03  WRK-PATH              PIC X(50).
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
       *
       *    Ê¸»úÊÑ´¹
            03  WRK-MAE-INPUT           PIC X(200).
@@ -217,6 +230,16 @@
       *    ´µ¼Ô¾ðÊó
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
+      *
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+      *    ¼ýÇ¼¾ðÊó
+       01  SYUNOU-REC.
+           COPY    "CPSYUNOU.INC".
+      *
+      *    ÊÝ¸±ÁÈ¹ç¤»
+       01  HKNCOMBI-REC.
+           COPY    "CPHKNCOMBI.INC".
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
       *
       *    ¸øÈñÀÁµá½ñ
            COPY    "CPKOHSKY.INC"
@@ -586,7 +609,21 @@
                            "¿ÇÎÅÇ¯·î="     RECE02-SRYYM
                            "ÅÀ¿ô="         RECE02-TOTALTEN(IDX + 1)
                            "ÉéÃ´¼ÔÈÖ¹æ="   RECE02-KOHFTNJANUM(IDX)
-                   MOVE    ZERO    TO  FLG-ERR
+      *
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+      *             MOVE    ZERO    TO  FLG-ERR
+                   MOVE    1                       TO  FLG-ERR
+      *            ¸øÈñ¤Î½õÀ®¤¬¤¢¤ë¤«¤É¤¦¤«
+                   MOVE    RECE02-KOHNUM (IDX)     TO  WRK-KOHNUM
+                   MOVE    RECE02-KOHID (IDX)      TO  WRK-KOHID
+                   IF      RECE02-NYUGAIKBN    =   "1"
+                       MOVE    "key33"             TO  WRK-PATH
+                   ELSE
+                       MOVE    "key25"             TO  WRK-PATH
+                   END-IF
+                   PERFORM  920-SYUNOU-SET-SEC
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
+      *
                    PERFORM 200111-HKNJANUM-CHK-SEC
                    IF      FLG-ERR     =   ZERO
       *
@@ -648,12 +685,18 @@
              END-IF
            END-PERFORM
       *    ½ñ¤­½Ð¤·
-           IF      FLG-MF100        =  1
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+           IF      FLG-ERR     =   ZERO
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
+             IF    FLG-MF100        =  1
                    WRITE    MF100-REC
                    ADD      1                TO  CNT-MF100
-           ELSE
+             ELSE
                    REWRITE  MF100-REC
+             END-IF
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
            END-IF
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
       *
            PERFORM  900-KOHSKY-READ-SEC
       *
@@ -956,6 +999,174 @@
        900-TMP-READ-EXT.
            EXIT.
       *      
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
+      *****************************************************************
+      *    ÀÁµáÅÀ¿ô½¸·×½èÍý
+      *****************************************************************
+       800-SEIKYU-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >     4  OR
+                    SYU-KOH-HKNNUM(IDX4)  =  SPACE
+      *    ·×»»ÉéÃ´¶â¤Ëº¹¤¬Í­¤ë¾ì¹ç¡¢ÃÏÊý¸øÈñ¤Î½õÀ®¤¬¤¢¤Ã¤¿¤ÈÈ½Äê¤¹¤ë
+             IF   SYU-KOH-HKNNUM(IDX4)     =  WRK-KOHNUM
+               IF     IDX4                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX4)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX4 - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX4)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+           .
+       800-SEIKYU-SEC-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *  ¼ýÇ¼¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       920-SYUNOU-SET-SEC  SECTION.
+      *
+             INITIALIZE  SYUNOU-REC
+             MOVE  SPA-HOSPNUM        TO  SYU-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN   TO  SYU-NYUGAIKBN
+             MOVE  RECE02-PTID        TO  SYU-PTID
+             MOVE  RECE02-SRYYM(1:6)  TO  SYU-SRYYMD(1:6)
+             MOVE  "__"               TO  SYU-SRYYMD(7:2)
+             MOVE  WRK-KOHNUM         TO  SYU-KOH-HKNNUM(1)
+                                          SYU-KOH-HKNNUM(2)
+                                          SYU-KOH-HKNNUM(3)
+                                          SYU-KOH-HKNNUM(4)
+             MOVE  SYUNOU-REC         TO  MCPDATA-REC
+             MOVE  "DBSELECT"         TO  MCP-FUNC
+             MOVE    "tbl_syunou"     TO  MCP-TABLE
+             MOVE    WRK-PATH         TO  MCP-PATHNAME
+             CALL    "ORCDBMAIN"      USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+             IF  MCP-RC  =  ZERO
+               PERFORM  925-SYUNOU-READ-SEC
+      *
+               PERFORM  UNTIL  FLG-SYUNOU  =  1
+                 IF  SYU-DENPJTIKBN   NOT = "3"
+                   IF    SYU-HKNCOMBINUM  =  RECE02-HKNCOMBI(1) OR
+                                             RECE02-HKNCOMBI(2) OR
+                                             RECE02-HKNCOMBI(3) OR
+                                             RECE02-HKNCOMBI(4) OR
+                                             RECE02-HKNCOMBI(5) OR
+                                             RECE02-HKNCOMBI(6) OR
+                                             RECE02-HKNCOMBI(7) OR
+                                             RECE02-HKNCOMBI(8) OR
+                                             RECE02-HKNCOMBI(9) OR
+                                             RECE02-HKNCOMBI(10) 
+                     PERFORM  910-HKNCOMBI-READ-SEC
+                     IF  COMB-KOHID(1)    =  WRK-KOHID   OR
+                         COMB-KOHID(2)    =  WRK-KOHID   OR
+                         COMB-KOHID(3)    =  WRK-KOHID   OR
+                         COMB-KOHID(4)    =  WRK-KOHID
+                       PERFORM  800-SEIKYU-SEC
+                     END-IF
+                   END-IF
+                 END-IF
+      *
+                 PERFORM   925-SYUNOU-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SYUNOU SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+             MOVE    "tbl_syunou"       TO  MCP-TABLE
+             MOVE    WRK-PATH           TO  MCP-PATHNAME
+             CALL    "ORCDBMAIN"        USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       920-SYUNOU-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¼ýÇ¼ÆÉ¹þ
+      *****************************************************************
+       925-SYUNOU-READ-SEC  SECTION.
+      *
+           MOVE  "tbl_syunou"   TO  MCP-TABLE
+           MOVE  WRK-PATH       TO  MCP-PATHNAME
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"    USING
+                                MCPAREA
+                                MCPDATA-REC
+                                SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SYUNOU-REC
+             MOVE  ZERO         TO  FLG-SYUNOU
+           ELSE
+             INITIALIZE  SYUNOU-REC
+             MOVE  1  TO  FLG-SYUNOU
+           END-IF
+      *
+           .
+       925-SYUNOU-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ÊÝ¸±ÁÈ¹ç¤»¥Þ¥¹¥¿¡¼ÆÉ¤ß¹þ¤ß
+      *****************************************************************
+       910-HKNCOMBI-READ-SEC         SECTION.
+      *
+           INITIALIZE                      HKNCOMBI-REC
+           MOVE    SPA-HOSPNUM            TO  COMB-HOSPNUM
+           MOVE    SYU-PTID               TO  COMB-PTID
+           MOVE    SYU-HKNCOMBINUM        TO  COMB-HKNCOMBINUM
+           MOVE    HKNCOMBI-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"             TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"         TO  MCP-TABLE
+           MOVE    "key"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"              TO  MCP-FUNC
+               MOVE    "tbl_hkncombi"     TO  MCP-TABLE
+               MOVE    "key"              TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"        USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  HKNCOMBI-REC
+                   MOVE    ZERO            TO  FLG-HKNCOMBI
+               ELSE
+                   INITIALIZE                  HKNCOMBI-REC
+                   MOVE    1               TO  FLG-HKNCOMBI
+               END-IF
+           ELSE
+               INITIALIZE                 HKNCOMBI-REC
+               MOVE    1              TO  FLG-HKNCOMBI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"    TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"     TO  MCP-TABLE
+           MOVE    "key"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"        USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       910-HKNCOMBI-READ-EXT.
+           EXIT.
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
       *****************************************************************
       *    ¸øÈñÀÁµá½ñ¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
