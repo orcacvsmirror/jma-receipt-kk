@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /etc/jma-receipt/jma-receipt.env
+. @jma-receipt-env@
 
 PREFNAME=kochi
 PROGRAMID=SEIKYU3915
