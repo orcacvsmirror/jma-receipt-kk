@@ -37,6 +37,7 @@
       *                                    ¸å´ü¹âÎð¼Ô¤â¼ÒÊÝ¹ñÊÝ¤ÈÆ±ÍÍ¤È¤¹¤ë
       *  01.00.05    µÈÀî    2008/09/10    ¸øÈñ¤ÎÅÀ¿ô¡¦¿ÇÎÅ¼ÂÆü¿ô¤¬
       *                                    ½ÐÎÏ¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç¤ò½¤Àµ
+      *  01.00.06    ÆâÅÄ    2009/02/24    ¿©»öÎÅÍÜÈñÅù¤Ï£°±ß¤Ê¤é£°¤Èµ­Ï¿¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -651,6 +652,9 @@
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     2  OR
                       RECE10-KOHNUM(IDX)  =  SPACE
+      *---(01.00.01) LINE ADD START ------------------------------------
+               MOVE    RECE10-KOHNUM(IDX)         TO  MF101-EKOHNUM(IDX)
+      *---(01.00.01) LINE ADD END   ------------------------------------
                MOVE    RECE10-JNISSU(IDX + 1)     TO  MF101-ENISSU(IDX)
                MOVE    RECE10-TOTALTEN(IDX + 1)   TO  MF101-ETENSU(IDX)
                MOVE    RECE10-FTNMONEY(IDX + 1)   TO  MF101-EITBFTN(IDX)
@@ -1208,34 +1212,106 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    £³£³¡¥¸øÈñ£±¡¦¿©»öÆü¿ô
-           MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
-           MOVE    3                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
+      *     MOVE    3                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           IF   MF101-EKOHNUM (1)  NOT =  SPACE
+           AND  MF101-E-SHOKUJINISSU(1)  =  0
+             MOVE    "0"                   TO  WRK-DATA
+             MOVE    1                     TO  WRK-NAGASA
+             PERFORM 5004-MOJI-HENSYU-SEC
+           ELSE
+             MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
+             MOVE    3                       TO  WRK-NAGASA
+             PERFORM 5005-NUM-HENSYU-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    £³£´¡¥¸øÈñ£±¡¦¿©»ö´ð½à³Û
-           MOVE    MF101-E-SHOKUJIRYOYOHI(1)   TO  WRK-NUM
-           MOVE    8                           TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    MF101-E-SHOKUJIRYOYOHI(1)   TO  WRK-NUM
+      *     MOVE    8                           TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           IF   MF101-EKOHNUM (1)  NOT =  SPACE
+           AND  MF101-E-SHOKUJIRYOYOHI(1)  =  0
+             MOVE    "0"                   TO  WRK-DATA
+             MOVE    1                     TO  WRK-NAGASA
+             PERFORM 5004-MOJI-HENSYU-SEC
+           ELSE
+             MOVE    MF101-E-SHOKUJIRYOYOHI(1)   TO  WRK-NUM
+             MOVE    8                           TO  WRK-NAGASA
+             PERFORM 5005-NUM-HENSYU-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    £³£µ¡¥¸øÈñ£±¡¦¿©»öÉ¸½àÉéÃ´³Û
-           MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
-           MOVE    8                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
+      *     MOVE    8                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           IF   MF101-EKOHNUM (1)  NOT =  SPACE
+           AND  MF101-E-SHOKUJIFTN(1)  =  0
+             MOVE    "0"                   TO  WRK-DATA
+             MOVE    1                     TO  WRK-NAGASA
+             PERFORM 5004-MOJI-HENSYU-SEC
+           ELSE
+             MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
+             MOVE    8                       TO  WRK-NAGASA
+             PERFORM 5005-NUM-HENSYU-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    £³£¶¡¥¸øÈñ£²¡¦¿©»öÆü¿ô
-           MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
-           MOVE    3                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    MF101-E-SHOKUJINISSU(1) TO  WRK-NUM
+      *     MOVE    3                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           IF   MF101-EKOHNUM (2)  NOT =  SPACE
+           AND  MF101-E-SHOKUJINISSU(2)  =  0
+             MOVE    "0"                   TO  WRK-DATA
+             MOVE    1                     TO  WRK-NAGASA
+             PERFORM 5004-MOJI-HENSYU-SEC
+           ELSE
+             MOVE    MF101-E-SHOKUJINISSU(2) TO  WRK-NUM
+             MOVE    3                       TO  WRK-NAGASA
+             PERFORM 5005-NUM-HENSYU-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    £³£·¡¥¸øÈñ£²¡¦¿©»ö´ð½à³Û
-           MOVE    MF101-E-SHOKUJIRYOYOHI(2)   TO  WRK-NUM
-           MOVE    8                           TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    MF101-E-SHOKUJIRYOYOHI(2)   TO  WRK-NUM
+      *     MOVE    8                           TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           IF   MF101-EKOHNUM (2)  NOT =  SPACE
+           AND  MF101-E-SHOKUJIRYOYOHI(2)  =  0
+             MOVE    "0"                   TO  WRK-DATA
+             MOVE    1                     TO  WRK-NAGASA
+             PERFORM 5004-MOJI-HENSYU-SEC
+           ELSE
+             MOVE    MF101-E-SHOKUJIRYOYOHI(2)   TO  WRK-NUM
+             MOVE    8                           TO  WRK-NAGASA
+             PERFORM 5005-NUM-HENSYU-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    £³£¸¡¥¸øÈñ£²¡¦¿©»öÉ¸½àÉéÃ´³Û
-           MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
-           MOVE    8                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    MF101-E-SHOKUJIFTN(1)   TO  WRK-NUM
+      *     MOVE    8                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           IF   MF101-EKOHNUM (2)  NOT =  SPACE
+           AND  MF101-E-SHOKUJIFTN(2)  =  0
+             MOVE    "0"                   TO  WRK-DATA
+             MOVE    1                     TO  WRK-NAGASA
+             PERFORM 5004-MOJI-HENSYU-SEC
+           ELSE
+             MOVE    MF101-E-SHOKUJIFTN(2)   TO  WRK-NUM
+             MOVE    8                       TO  WRK-NAGASA
+             PERFORM 5005-NUM-HENSYU-SEC
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    £³£¹¡¥¸øÈñ£±¡¦ÂÐ¾Ý°ìÉôÉéÃ´¶â
            MOVE    ZERO                    TO  WRK-NUM
