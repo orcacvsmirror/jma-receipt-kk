@@ -35,6 +35,7 @@
       *  01.00.03    内田    08/04/23    ４月改正に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.04    吉川    08/07/09    帳票様式の変更に伴う修正
+      *  01.00.05    門間    09/02/20    国組3〜6歳を分けないように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -561,16 +562,36 @@
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU        TO  SKT3920TMP-ZAITAKU
       *
-      *    法定外給付チェック
-           IF  SKT3920TMP-HKNJANUM(3:1) = "3"
-             IF  RECE10-RJNHKNNUM  =  SPACE
-               IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
-                 IF  RECE10-KYURATE  NOT =  7
-                     MOVE  RECE10-KYURATE TO  SKT3920TMP-KYURATE
-                 END-IF
+      *--- (2009/02/20) line change start ------------------------------
+      **    法定外給付チェック
+      *     IF  SKT3920TMP-HKNJANUM(3:1) = "3"
+      *       IF  RECE10-RJNHKNNUM  =  SPACE
+      *         IF  (RECE10-AGE  >  2)  AND  (RECE10-AGE  <  70)
+      *           IF  RECE10-KYURATE  NOT =  7
+      *               MOVE  RECE10-KYURATE TO  SKT3920TMP-KYURATE
+      *           END-IF
+      *         END-IF
+      *       END-IF
+      *     END-IF
+      *
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804
+               IF  SKT3920TMP-HKNJANUM(3:1)  =  "3"    AND
+                   RECE10-RJNHKNNUM          =  SPACE  AND
+                   RECE10-AGE                <   70    AND
+                   RECE10-FLG (1)        NOT =   1     AND
+                   RECE10-KYURATE        NOT =   7
+                 MOVE  RECE10-KYURATE     TO    SKT3920TMP-KYURATE
                END-IF
-             END-IF
+           ELSE
+               IF  SKT3920TMP-HKNJANUM(3:1)  =  "3"    AND
+                   RECE10-RJNHKNNUM          =  SPACE  AND
+                   RECE10-AGE                <   70    AND
+                   RECE10-AGE                >   2     AND
+                   RECE10-KYURATE        NOT =   7
+                 MOVE  RECE10-KYURATE     TO    SKT3920TMP-KYURATE
+               END-IF
            END-IF
+      *--- (2009/02/20) line change end --------------------------------
       *
       *
            PERFORM  900-SKTTMP-READ-SEC
