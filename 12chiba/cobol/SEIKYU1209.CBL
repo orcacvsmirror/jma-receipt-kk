@@ -37,6 +37,7 @@
       *  01.00.04     内田    08/06/10    ４月改正対応
       *                                   SPA-AREA初期化
       *  01.00.05     吉川    08/12/02    印字対象番号の追加(583,683)
+      *  01.00.06     吉川    09/02/18    公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -745,6 +746,9 @@
            MOVE    MF100-KOHID     TO    WRK-KOHID
            MOVE    ZERO            TO    WRK-SEIKYUGK-G
                                          FLG-TYOKI
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) start
+           MOVE    1               TO    FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) end
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.03) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -806,7 +810,9 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
-           MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) start
+      *     MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR    =    ZERO
@@ -1256,6 +1262,22 @@
                MOVE    2     TO    FLG-TYOKI
              END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX)      =  WRK-KOHNUM
+               IF     IDX                  =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) end
            END-PERFORM
       *
            IF    FLG-HEIYOU    =    ZERO
