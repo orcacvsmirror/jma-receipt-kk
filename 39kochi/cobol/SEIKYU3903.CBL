@@ -40,6 +40,7 @@
       *  01.00.05    内田    08/05/16    備考欄へ”指定公費”の印字
       *                                  ４月以降は備考欄へ”３歳未満”
       *                                  を印字しない
+      *  01.00.06    門間    09/02/25    SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -308,6 +309,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
+      *--- SPA-AREAの初期化 By Monma (2009/02/25) start
+           INITIALIZE  SPA-AREA
+      *--- SPA-AREAの初期化 By Monma (2009/02/25) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

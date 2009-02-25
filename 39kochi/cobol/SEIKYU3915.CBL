@@ -37,6 +37,7 @@
       *  01.00.03     内田    08/03/26    保険者名取得の修正
       *  01.00.04     内田    08/06/27    ４月以降は備考欄へ”３歳未満”
       *                                   を印字しない
+      *  01.00.05     門間    09/02/25    SPA-AREAの初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -306,6 +307,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *--- SPA-AREAの初期化 By Monma (2009/02/25) start
+           INITIALIZE  SPA-AREA
+      *--- SPA-AREAの初期化 By Monma (2009/02/25) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

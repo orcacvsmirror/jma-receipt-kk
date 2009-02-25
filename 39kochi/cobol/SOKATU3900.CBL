@@ -34,6 +34,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.04    内田    07/11/30    ７０歳未満は一部負担金欄へ集計しない
+      *  01.00.05    門間    09/02/25    SPA-AREAの初期化
       ****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -302,6 +303,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *--- SPA-AREAの初期化 By Monma (2009/02/25) start
+           INITIALIZE                  SPA-AREA
+      *--- SPA-AREAの初期化 By Monma (2009/02/25) end
       *
            DISPLAY  "START"
       *
