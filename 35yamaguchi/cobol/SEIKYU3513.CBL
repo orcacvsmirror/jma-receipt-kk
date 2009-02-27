@@ -35,6 +35,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.04    内田    08/09/02    200804以降は６５歳以上は一般
+      *  01.00.05    吉川    09/02/25    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -323,6 +324,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/02/25) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/02/25) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC

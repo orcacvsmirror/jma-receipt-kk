@@ -33,6 +33,7 @@
       *                                   医療機関情報を参照
       *  01.00.03    長屋     08/04/28    帳票様式に伴う修正
       *  01.00.04    内田     08/07/18    後期高齢のみの場合でも印刷する
+      *  01.00.05    吉川     09/02/25    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -303,6 +304,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/02/25) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/02/25) end
       *
       *
            PERFORM 100-DBOPEN-SEC
