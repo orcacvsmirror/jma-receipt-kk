@@ -35,6 +35,7 @@
       *                                医療機関情報を参照
       *  01.00.04    吉川   08/09/09   SPA-AREA初期化
       *  01.00.05    吉川   08/10/14   札幌市代表保険者番号変更
+      *  01.00.06    内田   09/02/25   返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -511,7 +512,15 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       ****
-      *  
+      *---(01.00.06) LINE ADD START ------------------------------------
+           EVALUATE    WRK-PARA-SYOKBN
+              WHEN    "2" 
+                MOVE    "key37"                  TO  WRK-PATH
+              WHEN    "1" 
+                MOVE    "key38"                  TO  WRK-PATH
+           END-EVALUATE
+      *---(01.00.06) LINE ADD END   ------------------------------------
+      *
            PERFORM  900-SEIKYU-SELECT-SEC
       *
            .
@@ -613,13 +622,15 @@
       *県内／県外判定
            MOVE  RECE10-PREFKBN  TO  SKT0600TMP-KBN
       *
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *    レセ電の場合、返戻年月を入れる
-           IF   SYS-2005-KKHRECEKBN  NOT =  "0"
-           AND  SYS-2005-KKHRECEKBN  NOT =  SPACE
-               MOVE  RECE10-HENREIYM  TO  SKT0600TMP-HENREIYM
-           END-IF
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD START ------------------------------------
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **    レセ電の場合、返戻年月を入れる
+      *     IF   SYS-2005-KKHRECEKBN  NOT =  "0"
+      *     AND  SYS-2005-KKHRECEKBN  NOT =  SPACE
+      *         MOVE  RECE10-HENREIYM  TO  SKT0600TMP-HENREIYM
+      *     END-IF
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM  900-TMP-READ-SEC
            PERFORM  220-HKN-SYUKEI-SEC
