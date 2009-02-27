@@ -41,6 +41,8 @@
       *                                    金額を集計しない
       *                                    在宅でも患者負担金が無い場合は
       *                                    通常請求分に集計する
+      *  01.00.08    吉川    2009/02/25    09/01/26に変更した在総診の
+      *                                    集計方法を元に戻す
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -625,30 +627,32 @@
       *
            INITIALIZE       SKT1300TMP-REC
       *
-      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
-      *    患者負担フラグを初期化(0=負担なし 1=負担あり)
-           MOVE     1                    TO  FLG-KANJAFTN
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     4
-             IF     RECE10-KOHNUM(IDX1)  NOT =  SPACE
-               MOVE   RECE10-KOHNUM(IDX1)  TO  WRK-KOHNUM
-               IF     RECE10-NYUGAIKBN     =   "1"
-                   MOVE  "key33"         TO  WRK-PATH3
-               ELSE
-                   MOVE  "key25"         TO  WRK-PATH3
-               END-IF
-      *
-      *        収納情報チェック
-               PERFORM 920-SYUNOU-SET-SEC
-             END-IF
-      *
-           END-PERFORM
-      *
-      *    患者負担金がない場合は在宅フラグを消す
-           IF  FLG-KANJAFTN  =  ZERO
-               MOVE  SPACE             TO  RECE10-ZAITAKU
-           END-IF
-      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+      *=== 在宅の集計仕様を戻す by Yoshikawa(2009/02/25) start
+      **=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+      **    患者負担フラグを初期化(0=負担なし 1=負担あり)
+      *     MOVE     1                    TO  FLG-KANJAFTN
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     4
+      *       IF     RECE10-KOHNUM(IDX1)  NOT =  SPACE
+      *         MOVE   RECE10-KOHNUM(IDX1)  TO  WRK-KOHNUM
+      *         IF     RECE10-NYUGAIKBN     =   "1"
+      *             MOVE  "key33"         TO  WRK-PATH3
+      *         ELSE
+      *             MOVE  "key25"         TO  WRK-PATH3
+      *         END-IF
+      **
+      **        収納情報チェック
+      *         PERFORM 920-SYUNOU-SET-SEC
+      *       END-IF
+      **
+      *     END-PERFORM
+      **
+      **    患者負担金がない場合は在宅フラグを消す
+      *     IF  FLG-KANJAFTN  =  ZERO
+      *         MOVE  SPACE             TO  RECE10-ZAITAKU
+      *     END-IF
+      **=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+      *=== 在宅の集計仕様を戻す by Yoshikawa(2009/02/25) end
       *
       *    在宅→外来→入院の順で印刷
            IF      RECE10-ZAITAKU      =   "1"
@@ -667,11 +671,14 @@
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    在総診・在医総か
-      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
-      *     IF  RECE10-ZAITAKU  =  SPACE
-           IF  RECE10-ZAITAKU  =  SPACE  AND  
-               FLG-KANJAFTN    NOT =  ZERO
-      *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+      *=== 在宅の集計仕様を戻す by Yoshikawa(2009/02/25) start
+      **=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
+      **     IF  RECE10-ZAITAKU  =  SPACE
+      *     IF  RECE10-ZAITAKU  =  SPACE  AND  
+      *         FLG-KANJAFTN    NOT =  ZERO
+      **=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+           IF  RECE10-ZAITAKU  =  SPACE
+      *=== 在宅の集計仕様を戻す by Yoshikawa(2009/02/25) end
              PERFORM  960-SRYACT-SET-SEC
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
