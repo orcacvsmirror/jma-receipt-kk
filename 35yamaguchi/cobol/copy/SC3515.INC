@@ -21,7 +21,7 @@
             03  SC15-PRTMM                     PIC X(02).
             03  SC15-PRTDD                     PIC X(02).
       *»ÔÄ®Â¼Ì¾
-            03  SC15-CITYNAME                  PIC X(10).
+            03  SC15-CITYNAME                  PIC X(16).
       *ÉéÃ´¼ÔÈÖ¹æ
             03  SC15-FTNJANUM.
                 05  SC15-FTNJANUM1             PIC X(01).
