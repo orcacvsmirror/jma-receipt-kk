@@ -29,6 +29,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/03/05  口座名義人追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -68,7 +69,10 @@
       *    金融機関ファイル
        FD  KINYU-FILE.
        01  KINYU-REC.
-           03  KINYU-KINYUDATA           PIC X(20).
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
+      *     03  KINYU-KINYUDATA           PIC X(20).
+           03  KINYU-KINYUDATA           PIC X(40).
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
            03  FILLER                    PIC X(01).
       *
        WORKING-STORAGE  SECTION.
@@ -169,7 +173,10 @@
       *
       *    ファイル名称用エリア
            03  FILE-NAME             PIC X(512).
-           03  WRK-KINYUDATA         PIC X(20) OCCURS 4.
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
+      *     03  WRK-KINYUDATA         PIC X(20) OCCURS 4.
+           03  WRK-KINYUDATA         PIC X(40) OCCURS 5.
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
@@ -470,7 +477,10 @@
            OPEN  INPUT  KINYU-FILE
       *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     4
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
+      *              UNTIL    IDX1  >     4
+                    UNTIL    IDX1  >     5
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
              READ KINYU-FILE
                AT END
                  INITIALIZE        KINYU-REC
@@ -490,6 +500,7 @@
            DISPLAY "支店名 ="  WRK-KINYUDATA(2)
            DISPLAY "普・当 ="  WRK-KINYUDATA(3)
            DISPLAY "口座番号 ="  WRK-KINYUDATA(4)
+           DISPLAY "口座名義人 =" WRK-KINYUDATA(5)
       *
            .
        111-INI-FILE-EXT.
@@ -859,8 +870,20 @@
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC23-HOSPNAME
       *
-      *    開設者名
-           MOVE     SYS-1001-KAISETUNAME   TO  SC23-KAISETU
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
+      **    開設者名
+      *     MOVE     SYS-1001-KAISETUNAME   TO  SC23-KAISETU
+      *    代表者名（口座名義人）
+           IF  WRK-KINYUDATA(5)  =  SPACE
+             MOVE  SYS-1001-KAISETUNAME    TO  SC23-KAISETU
+           ELSE
+             STRING  SYS-1001-KAISETUNAME  DELIMITED  BY  SPACE
+                     "（" WRK-KINYUDATA(5) DELIMITED  BY  SPACE
+                     "）"                  DELIMITED  BY  SIZE
+                                           INTO  SC23-KAISETU
+             END-STRING
+           END-IF
+      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
       *
       *    銀行名
            MOVE  WRK-KINYUDATA(1)          TO  SC23-GINKOU
