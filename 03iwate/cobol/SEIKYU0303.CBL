@@ -36,6 +36,7 @@
       *  01.00.03    吉川    08/12/03   市町村を外部ファイルから
       *                                 取得するよう修正
       *  01.00.04    吉川    09/01/13   １・２割欄は公費を問わず集計
+      *  01.00.05    吉川    09/03/02   帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -129,6 +130,10 @@
       *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) start
            03  FLG-TOWN       PIC 9(01).
       *=== 外部ファイルから市町村取得 by Yoshikawa(2008/12/03) end
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+           03  FLG-TYOKI1     PIC 9(01).
+           03  FLG-TYOKI2     PIC 9(01).
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -671,6 +676,10 @@
        20011-SYUKEI-SEC  SECTION.
       *
            INITIALIZE       WRK-TAIHI-AREA
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+                            FLG-TYOKI1
+                            FLG-TYOKI2
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
       *
            MOVE    RECE02-SRYYM                TO  WRK-SRYYM
            MOVE    RECE02-KOHNUM(IDZ)          TO  WRK-KOHNUM
@@ -715,12 +724,20 @@
            END-IF
       *
            EVALUATE    RECE02-KYURATE
-               WHEN 10
-                   MOVE    2                   TO  IDX2
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *         WHEN 10
+      *             MOVE    2                   TO  IDX2
+      *         WHEN 20
+      *             MOVE    3                   TO  IDX2
+      *         WHEN OTHER
+      *             MOVE    4                   TO  IDX2
                WHEN 20
+                   MOVE    2                   TO  IDX2
+               WHEN 30
                    MOVE    3                   TO  IDX2
                WHEN OTHER
-                   MOVE    4                   TO  IDX2
+                   MOVE    3                   TO  IDX2
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
            END-EVALUATE
       *
       *=== 公費の種類を問わずに集計 by Yoshikawa(2009/01/13) start
@@ -739,21 +756,44 @@
       *
       *    データ加算
            ADD     1                       TO  MF100-KENSU(IDX1 IDX2)
-                                               MF100-KENSU(IDX1 5)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *                                         MF100-KENSU(IDX1 5)
+                                               MF100-KENSU(IDX1 4)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
            ADD     WRK-TENSU               TO  MF100-TENSU(IDX1 IDX2)
-                                               MF100-TENSU(IDX1 5)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *                                         MF100-TENSU(IDX1 5)
+                                               MF100-TENSU(IDX1 4)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
            IF      IDX2                    =   1
                ADD     WRK-ITBFTN          TO  MF100-ITBFTN(IDX1 IDX2)
                IF      IDX1                =   2
-                   ADD     WRK-ITBFTN      TO  MF100-ITBFTN(IDX1 5)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *             ADD     WRK-ITBFTN      TO  MF100-ITBFTN(IDX1 5)
+                   ADD     WRK-ITBFTN      TO  MF100-ITBFTN(IDX1 4)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
                END-IF
            ELSE
                IF      WRK-KOHNUM          =   "150"   AND
                        IDX1                =   2
                    ADD     WRK-ITBFTN      TO  MF100-ITBFTN(IDX1 IDX2)
-                                               MF100-ITBFTN(IDX1 5)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *                                         MF100-ITBFTN(IDX1 5)
+                                               MF100-ITBFTN(IDX1 4)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
                END-IF
            END-IF
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *    長期
+           IF  FLG-TYOKI1                  =   1
+               ADD     1                   TO  MF100-TYOKI1(IDX1)
+           END-IF
+      *    長期上位
+           IF  FLG-TYOKI2                  =   1
+               ADD     1                   TO  MF100-TYOKI2(IDX1)
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
       *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
@@ -936,7 +976,10 @@
            PERFORM     VARYING IDX1    FROM    1   BY  1
                        UNTIL   IDX1    >       2
                PERFORM VARYING IDX2    FROM    1   BY  1
-                       UNTIL   IDX2    >       5
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *                 UNTIL   IDX2    >       5
+                       UNTIL   IDX2    >       4
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
       *
       *     件数
                    MOVE    MF100-KENSU(IDX1 IDX2)  TO  WRK-Z6
@@ -950,6 +993,14 @@
                    MOVE    MF100-ITBFTN(IDX1 IDX2) TO    WRK-Z9
                    MOVE    WRK-Z9      TO  SC03-ITBFTN(IDX1 IDX2)
                END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *     長期件数
+               MOVE    MF100-TYOKI1(IDX1)          TO  WRK-Z6
+               MOVE    WRK-Z6          TO  SC03-TYOKI1(IDX1)
+      *     長期上位件数
+               MOVE    MF100-TYOKI2(IDX1)          TO  WRK-Z6
+               MOVE    WRK-Z6          TO  SC03-TYOKI2(IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
            END-PERFORM
       *
       *
@@ -1385,6 +1436,16 @@
       *
              END-IF
       *
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) start
+      *      長期
+             IF  SYU-KOH-HKNNUM(IDX)  =  "972"
+               MOVE    1               TO    FLG-TYOKI1
+             END-IF
+      *      長期上位
+             IF  SYU-KOH-HKNNUM(IDX)  =  "974"
+               MOVE    1               TO    FLG-TYOKI2
+             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/03/02) end
            END-PERFORM
       *
            ADD    WRK-ITBFTN              TO    WRK-ITBFTN-G

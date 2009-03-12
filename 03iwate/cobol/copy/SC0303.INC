@@ -40,10 +40,14 @@
            03  SC03-CITYNUM            PIC  X(08).
       *請求テーブル
            03  SC03-NYUGAI-TBL  OCCURS 2.
-               05  SC03-SEIKYU-TBL     OCCURS 5.
+               05  SC03-SEIKYU-TBL     OCCURS 4.
       *件数
                    07  SC03-KENSU      PIC X(06).
       *点数
                    07  SC03-TENSU      PIC X(10).
       *一部負担金
                    07  SC03-ITBFTN     PIC X(09).
+      *長期件数
+               05  SC03-TYOKI1         PIC X(06).
+      *長期上位件数
+               05  SC03-TYOKI2         PIC X(06).
