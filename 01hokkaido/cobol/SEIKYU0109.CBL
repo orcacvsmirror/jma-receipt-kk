@@ -37,6 +37,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.05    吉川    08/09/11    SPA-AREA初期化
+      *  01.00.06    内田    09/03/03    円単位で公費の助成の判定をする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1238,11 +1239,19 @@
                END-IF
       *
                IF     IDX                 =  1
-                 IF  SYU-SYUCOMPFTN       >  SYU-KOH-COMPFTN(IDX)
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *           IF  SYU-SYUCOMPFTN       >  SYU-KOH-COMPFTN(IDX)
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE     ZERO         TO  FLG-ERR
                  END-IF
                ELSE
-                 IF  SYU-KOH-COMPFTN(IDX - 1) >  SYU-KOH-COMPFTN(IDX)
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *           IF  SYU-KOH-COMPFTN(IDX - 1) >  SYU-KOH-COMPFTN(IDX)
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+      *---(01.00.06) LINE ADD END   ------------------------------------
                    MOVE     ZERO         TO  FLG-ERR
                  END-IF
                END-IF
