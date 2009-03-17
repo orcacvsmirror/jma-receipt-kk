@@ -40,6 +40,8 @@
       *                                   SPA-AREA初期化
       *  01.00.05    内田     08/06/14    ３月以前の返戻分を診療年月毎でなく
       *                                   まとめて印字する
+      *  01.00.06    内田     09/03/12    公費の負担金欄は保険がある場合は
+      *                                   保険、無い場合は公費の値を印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -885,7 +887,15 @@
       *     ADD  RECE10-YKZFTN(1)    TO  SKT2700TMP-YKZFTN(IDX1)
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(1)  TO  SKT2700TMP-FTNMONEY(IDX1)
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *     ADD  RECE10-FTNMONEY(1)  TO  SKT2700TMP-FTNMONEY(IDX1)
+      *    公費の一部負担金がある場合は加算しない
+           IF   RECE10-FTNMONEY (2)  =  0
+           AND  RECE10-FTNMONEY (3)  =  0
+           AND  RECE10-FTNMONEY (4)  =  0
+             ADD  RECE10-FTNMONEY(1)  TO  SKT2700TMP-FTNMONEY(IDX1)
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *    公費併用の一部負担金
       *---(01.00.04) LINE ADD START ------------------------------------
       *     IF  IDX1  =  3  OR  9  OR  18  OR  25
