@@ -31,6 +31,7 @@
       *                                  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
       *  01.00.02    吉川    2008/09/09  在宅は合算して印字する
+      *  01.00.03    吉川    2009/03/12  点数表区分追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1096,6 +1097,15 @@
                                        TO  SKT0615-KAISETUNAME
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN    TO  SKT0615-HOSPCD
+      *=== 点数表区分追加 by Yoshikawa(2009/03/12) start
+      *    点数表区分
+           EVALUATE SYS-1001-TENHYOKBN
+             WHEN    1
+               MOVE    "○"            TO  SKT0615-TENHYOKBN(1)
+             WHEN    3
+               MOVE    "○"            TO  SKT0615-TENHYOKBN(2)
+           END-EVALUATE
+      *=== 点数表区分追加 by Yoshikawa(2009/03/12) end
       *    保険者名(都道府県名)
            INITIALIZE                      HKNJAINF-REC
            IF      WRK-HKNJANAME   NOT   =   SPACE

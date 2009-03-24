@@ -28,6 +28,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/06/10  県外分の集計の不具合を修正
+      *  01.00.02    吉川    2009/03/12  点数表区分追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -938,6 +939,18 @@
            MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT0605-HOSPCD
+      *=== 点数表区分追加 by Yoshikawa(2009/03/12) start
+           EVALUATE SYS-1001-TENHYOKBN
+             WHEN    1
+               MOVE    "○"            TO  SKT0605-TENHYOKBN(1)
+             WHEN    3
+               MOVE    "○"            TO  SKT0605-TENHYOKBN(2)
+             WHEN    4
+               MOVE    "○"            TO  SKT0605-TENHYOKBN(3)
+             WHEN    6
+               MOVE    "○"            TO  SKT0605-TENHYOKBN(4)
+           END-EVALUATE
+      *=== 点数表区分追加 by Yoshikawa(2009/03/12) end
       *
            .
        20021-HEAD-HEN-EXT.
