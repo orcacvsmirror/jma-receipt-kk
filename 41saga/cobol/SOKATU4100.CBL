@@ -39,6 +39,8 @@
       *  01.00.05    内田       08/05/11    国組３〜６歳は帳票を分けない
       *  01.00.06    内田       08/06/18    国保がない場合でも印字する
       *  01.00.07    吉川       08/12/24    特別療養費国保対応
+      *  01.00.08    吉川       09/03/19    札幌市と仙台市の
+      *                                     代表保険者番号変更
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1080,12 +1082,18 @@
       *
       *    札幌市の場合、代表番号セット
            IF  SKT4100TMP-HKNJANUM (1:3) = "014"
-             MOVE  "014001"  TO  SKT4100TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *       MOVE  "014001"  TO  SKT4100TMP-HKNJANUM
+             MOVE  "010017"  TO  SKT4100TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
            END-IF
       *
       *    仙台市の場合、代表番号セット
            IF  SKT4100TMP-HKNJANUM (1:3) = "044"
-             MOVE  "044008"  TO  SKT4100TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *       MOVE  "044008"  TO  SKT4100TMP-HKNJANUM
+             MOVE  "040014"  TO  SKT4100TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
            END-IF
       *
       *    さいたま市の場合、代表番号セット

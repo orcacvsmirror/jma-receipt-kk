@@ -39,6 +39,8 @@
       *  01.00.06    内田       08/05/11    ４月改正対応
       *  01.00.08    門間       08/11/20    シス管「2007」公費まとめ対応
       *                                     SPA-AREA初期化
+      *  01.00.09    吉川       09/03/19    札幌市と仙台市の
+      *                                     代表保険者番号変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -816,12 +818,18 @@
       *
       *    札幌市の場合、代表番号セット
            IF  SKT4110TMP-HKNJANUM (1:3) = "014"
-             MOVE  "014001"  TO  SKT4110TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *       MOVE  "014001"  TO  SKT4110TMP-HKNJANUM
+             MOVE  "010017"  TO  SKT4110TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
            END-IF
       *
       *    仙台市の場合、代表番号セット
            IF  SKT4110TMP-HKNJANUM (1:3) = "044"
-             MOVE  "044008"  TO  SKT4110TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *       MOVE  "044008"  TO  SKT4110TMP-HKNJANUM
+             MOVE  "040014"  TO  SKT4110TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
            END-IF
       *
       *    さいたま市の場合、代表番号セット
@@ -1558,12 +1566,18 @@
        3101-HKNJANUM-CHANG-SEC          SECTION.
       *
       *    札幌市
-           IF  SKT4110TMP-HKNJANUM  = "014001"
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *     IF  SKT4110TMP-HKNJANUM  = "014001"
+           IF  SKT4110TMP-HKNJANUM  = "010017"
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
              MOVE  "014019"  TO  SKT4110TMP-HKNJANUM
            END-IF
       *
       *    仙台市
-           IF  SKT4110TMP-HKNJANUM  = "044008"
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *     IF  SKT4110TMP-HKNJANUM  = "044008"
+           IF  SKT4110TMP-HKNJANUM  = "040014"
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
              MOVE  "044016"  TO  SKT4110TMP-HKNJANUM
            END-IF
       *
