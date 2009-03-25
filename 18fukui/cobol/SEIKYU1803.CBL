@@ -37,6 +37,8 @@
       *                                      帳票に表示させないように修正
       *  01.00.04       吉川    2008/02/26   負担金が発生しない場合は
       *                                      印字対象外とする
+      *  01.00.05       吉川    2009/03/18   退院していない入院患者が
+      *                                      取得されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -719,6 +721,13 @@
       *
            MOVE    4                           TO  IDX
       *
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
+           IF      RECE02-NYUGAIKBN   =    "1"
+             MOVE  "key33"            TO   WRK-PATH
+           ELSE
+             MOVE  "key25"            TO   WRK-PATH
+           END-IF
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) end
            PERFORM  800-SYUNOU-SET-SEC
            MOVE  WRK-KOHFTN  TO  MF100-ITBFTN
            MOVE  WRK-YKZFTN  TO  MF100-YKZFTN
@@ -1078,6 +1087,14 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
              MOVE  RECE02-NYUGAIKBN   TO  SYU-NYUGAIKBN
              MOVE  RECE02-PTID        TO  SYU-PTID
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
+             MOVE  RECE02-SRYYM(1:6)  TO  SYU-SRYYMD(1:6)
+             MOVE  "__"               TO  SYU-SRYYMD(7:2)
+             MOVE  RECE02-KOHNUM(IDX) TO  SYU-KOH-HKNNUM(1)
+                                          SYU-KOH-HKNNUM(2)
+                                          SYU-KOH-HKNNUM(3)
+                                          SYU-KOH-HKNNUM(4)
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) end
              MOVE  SYUNOU-REC         TO  MCPDATA-REC
              MOVE  "DBSELECT"         TO  MCP-FUNC
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
@@ -1086,7 +1103,10 @@
       *                                   MCPAREA
       *                                   MCPDATA-REC
              MOVE  "tbl_syunou"       TO  MCP-TABLE
-             MOVE  "key2"             TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
+      *       MOVE  "key2"             TO  MCP-PATHNAME
+             MOVE  WRK-PATH           TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) end
              CALL  "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
@@ -1096,7 +1116,10 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *         MOVE  PATH-TBL-SYUNOU-KEY2         TO  MCP-PATH
                MOVE  "tbl_syunou"     TO  MCP-TABLE
-               MOVE  "key2"           TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
+      *         MOVE  "key2"           TO  MCP-PATHNAME
+               MOVE  WRK-PATH         TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
                PERFORM  805-SYUNOU-READ-SEC
       *
@@ -1108,7 +1131,10 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *           MOVE  PATH-TBL-SYUNOU-KEY2         TO  MCP-PATH
                  MOVE  "tbl_syunou"   TO  MCP-TABLE
-                 MOVE  "key2"         TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
+      *           MOVE  "key2"         TO  MCP-PATHNAME
+                  MOVE  WRK-PATH      TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
                  PERFORM   805-SYUNOU-READ-SEC
                END-PERFORM
@@ -1124,7 +1150,10 @@
       *                                   MCPAREA
       *                                   MCPDATA-REC
              MOVE  "tbl_syunou"       TO  MCP-TABLE
-             MOVE  "key2"             TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
+      *       MOVE  "key2"             TO  MCP-PATHNAME
+             MOVE  WRK-PATH           TO  MCP-PATHNAME
+      *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) end
              CALL  "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
