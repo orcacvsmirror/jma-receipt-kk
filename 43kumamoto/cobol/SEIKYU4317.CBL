@@ -34,6 +34,8 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    門間    09/01/20    SPA-AREAの初期化
+      *  01.00.03    吉川    09/03/25    入院と外来の3併の患者を出力すると
+      *                                  処理が止まる不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1349,6 +1351,10 @@
       *     CALL  "MCPSUB"         USING
       *                            MCPAREA
       *                            MCPDATA-REC
+      *=== MCPAREAのパラメタ不足対応 by Yoshikawa(2009/03/25) start
+           MOVE    "tbl_hknnum"         TO  MCP-TABLE
+           MOVE    "key2"               TO  MCP-PATHNAME
+      *=== MCPAREAのパラメタ不足対応 by Yoshikawa(2009/03/25) end
            CALL    "ORCDBMAIN"           USING
                                          MCPAREA
                                          MCPDATA-REC
