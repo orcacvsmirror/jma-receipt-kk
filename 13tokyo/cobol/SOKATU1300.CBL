@@ -43,6 +43,8 @@
       *                                    通常請求分に集計する
       *  01.00.08    吉川    2009/02/25    09/01/26に変更した在総診の
       *                                    集計方法を元に戻す
+      *  01.00.09    吉川    2009/03/27    70歳未満と70歳以上の在宅が
+      *                                    別れて印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1629,6 +1631,9 @@
                                        WRK-CONS-ZAITAKU4  OR
                                        WRK-CONS-ZAITAKU5  OR
                                        WRK-CONS-ZAITAKU6
+      *=== 在宅判定修正 by Yoshikawa(2009/03/27) start
+                 MOVE  1  TO  SKT1300TMP-SYUTURYOKU
+      *=== 在宅判定修正 by Yoshikawa(2009/03/27) end
                  MOVE  1  TO  SKT1300TMP-ZAITAKU
                END-IF
              END-IF
