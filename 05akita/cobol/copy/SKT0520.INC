@@ -22,6 +22,9 @@
            03  SKT0520-SRYYM             PIC  X(16).
       *    請求年月日
            03  SKT0520-SEIYMD            PIC  X(22).
+      *    点数表区分
+           03  SKT0520-TENHYOKBN-TBL     OCCURS  2.
+               05  SKT0520-TENHYOKBN     PIC  X(02).
       *    診療科名
            03  SKT0520-SRYKANAME         PIC  X(20).
       *    医療機関コード
