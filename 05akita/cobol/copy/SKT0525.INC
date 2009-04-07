@@ -29,6 +29,9 @@
             03  SKT0525-SRYYM             PIC X(16).
       *    ¿‹”NŒŽ“ú
             03  SKT0525-SEIYMD            PIC X(22).
+      *    “_”•\‹æ•ª
+            03  SKT0525-TENHYOKBN-TBL     OCCURS  2.
+                05  SKT0525-TENHYOKBN     PIC X(02).
       *    •ÛŒ¯ŽÒ–¼
             03  SKT0525-HKNJANAME         PIC X(30).
       *    •ÛŒ¯ŽÒ”Ô†
