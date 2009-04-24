@@ -29,6 +29,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/22  印刷ジョブ・タイトル名修正
       *                                  公費名は印字しない
+      *  01.00.02    吉川    2009/04/08  公費番号欄に法別番号ではなく
+      *                                  保険番号が印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -948,6 +950,9 @@
              END-IF
       *
       *      公費番号まとめ情報があるとき
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2009/04/08) start
+             MOVE      SPACE             TO  WRK-MEISYO
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2009/04/08) end
              IF        WRK-2007-MAX    >       ZERO
                PERFORM VARYING IDZ1    FROM    1   BY  1
                        UNTIL   IDZ1    >       WRK-2007-MAX
