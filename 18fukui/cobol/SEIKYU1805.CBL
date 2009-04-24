@@ -52,6 +52,7 @@
       *                                      正しく取得されないのを修正
       *                                      同月内に保険を切替えた場合の
       *                                      点数と負担金の不具合を修正
+      *  01.00.12       吉川    2009/04/02   特定負無の法別と点数を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -953,9 +954,17 @@
            IF   MF110-RJNHBTNUM   =   "027"
               PERFORM  VARYING  IDX  FROM    1    BY    1
                         UNTIL   IDX >       4
-                IF   RECE10-KOHNUM (IDX)  NOT   =   "091"
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) start
+      *          IF   RECE10-KOHNUM (IDX)  NOT   =   "091"
+                IF       RECE10-KOHNUM (IDX)  =  "091"
+                  MOVE   "51"  TO            MF110-RECEKOHHBTNUM(2)
+                ELSE
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) end
                   MOVE   RECE10-KOHNUM (IDX)(2:2)    TO
                                              MF110-RECEKOHHBTNUM(2)
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) start
+                END-IF
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) end
       *
                   MOVE   RECE10-JNISSU (IDX + 1)         TO
                                              MF110-RECEJNISSU(2)
@@ -978,7 +987,9 @@
                   IF   MF110-RECEKOHHBTNUM (2)  NOT  =  SPACE
                     MOVE   4                   TO    IDX
                   END-IF
-                END-IF
+      *=== 特定負無の法別及び点数を記載 by Yoshikawa(2009/04/02) start
+      *          END-IF
+      *=== 特定負無の法別及び点数を記載 by Yoshikawa(2009/04/02) end
               END-PERFORM
            ELSE
       *       長期区分
@@ -996,9 +1007,17 @@
               MOVE    2                   TO    IDY
               PERFORM  VARYING  IDX  FROM    1    BY    1
                         UNTIL   IDX >       4
-                IF   RECE10-KOHNUM  NOT  =   "091"
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) start
+      *          IF   RECE10-KOHNUM  NOT  =   "091"
+                IF   RECE10-KOHNUM (IDX)  =  "091"
+                  MOVE   "51"  TO        MF110-RECEKOHHBTNUM(IDY - 1)
+                ELSE
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) end
                   MOVE   RECE10-KOHNUM (IDX)(2:2)   TO
                                          MF110-RECEKOHHBTNUM(IDY - 1)
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) start
+                END-IF
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) end
       *
                   MOVE   RECE10-JNISSU (IDY)         TO
                                          MF110-RECEJNISSU(IDY - 1)
@@ -1022,7 +1041,9 @@
                     MOVE   4                   TO    IDX
                   END-IF
                   ADD   1                   TO    IDY
-                END-IF
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) start
+      *          END-IF
+      *=== 特定負無の法別及び点数記載 by Yoshikawa(2009/04/02) end
               END-PERFORM
            END-IF
       *
