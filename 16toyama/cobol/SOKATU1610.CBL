@@ -34,6 +34,7 @@
       *                                医療機関情報を参照
       *  01.00.03    長屋    08/04/22  帳票様式に伴う修正
       *  01.00.04    内田    08/05/16  国組３〜６歳の帳票を分けないように修正
+      *  01.00.05    吉川    09/04/08  SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -311,6 +312,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/04/08) start
+           INITIALIZE                  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/04/08) end
       *
            DISPLAY  "START"
       *
