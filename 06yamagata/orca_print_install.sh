@@ -50,8 +50,5 @@ else
 	exit
 fi
 
-# ???
-cp -af ${SITELDDEFDIR} ${ORCA_DIR}
-
 sync
 echomsg "山形県地方公費・総括表プログラムコピー終了!!"

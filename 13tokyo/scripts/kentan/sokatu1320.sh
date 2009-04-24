@@ -1,12 +1,13 @@
 #!/bin/bash
+
 . @jma-receipt-env@
 
-PREFNAME=hokkaido
-PROGRAMID=SOKATU0110
-LOG_FILE="/var/log/jma-receipt/${15}sokatu0110"
+PREFNAME=tokyo
+PROGRAMID=SOKATU1320
+LOG_FILE="/var/log/jma-receipt/${15}sokatu1320"
 RENNUM=0
--------------------------------------------#
-#    国保・診療報酬請求書（北海道）
+#-------------------------------------------#
+#    レセ電国保総括表作成（東京）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
 #        ${12} ジョブＩＤ
@@ -27,7 +28,7 @@ RENNUM=0
         if  [ -e ${16} ]; then
             rm  ${16}
         fi
-        
+
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
