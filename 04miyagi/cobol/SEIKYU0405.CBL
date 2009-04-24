@@ -35,6 +35,7 @@
       *                                  処理をする
       *  01.00.02    内田    08/07/08    未就学児の場合、入外区分欄に
       *                                  「３」、「４」を印字
+      *  01.00.03    吉川    09/04/08    SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -353,6 +354,9 @@
            INITIALIZE  SUM-AREA
            INITIALIZE  KEY-AREA
            INITIALIZE  IDX-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/04/08) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2009/04/08) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
