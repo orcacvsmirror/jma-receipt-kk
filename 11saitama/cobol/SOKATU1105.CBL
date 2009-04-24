@@ -53,6 +53,7 @@
       *  01.00.13    吉川    08/10/08   印字対象番号の追加（581）
       *                                 シス管「2007」の公費まとめ対応
       *                                 SPA-AREA初期化
+      *  01.00.14    内田    09/04/22   印字対象番号の追加（352,353,354）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1033,6 +1034,11 @@
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
                OR  RECE10-KOHNUM(IDX3)      = "581"
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      *=== 印字対象番号追加 by Uchida(2009/04/22) start
+               OR  RECE10-KOHNUM(IDX3)      = "352"
+               OR  RECE10-KOHNUM(IDX3)      = "353"
+               OR  RECE10-KOHNUM(IDX3)      = "354"
+      *=== 印字対象番号追加 by Uchida(2009/04/22) end
                     PERFORM  2202-SYORI-SEC
                END-IF
            END-PERFORM
@@ -1130,6 +1136,11 @@
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
            AND  RECE10-KOHNUM(IDX3)  NOT =  "581"
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      *=== 印字対象番号追加 by Uchida(2009/04/22) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "352"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
+      *=== 印字対象番号追加 by Uchida(2009/04/22) end
              ADD     WRK-SEIKYUGK-G        TO  SKT1105TMP-SEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1174,6 +1185,11 @@
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
            AND  RECE10-KOHNUM(IDX3)  NOT =  "581"
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      *=== 印字対象番号追加 by Uchida(2009/04/22) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "352"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
+      *=== 印字対象番号追加 by Uchida(2009/04/22) end
              ADD     WRK-SEIKYUGK-G            TO  WRK-KOHSEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------

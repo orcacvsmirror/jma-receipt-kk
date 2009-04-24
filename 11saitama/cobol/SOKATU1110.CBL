@@ -41,6 +41,7 @@
       *  01.00.10    吉川    08/10/08   印字対象番号の追加（581）
       *                                 シス管「2007」の公費まとめ対応
       *                                 SPA-AREA初期化
+      *  01.00.11    内田    09/04/22   印字対象番号の追加（352,353,354）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -987,6 +988,11 @@
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
                    OR  RECE10-KOHNUM(IDX3)  =  "581"
       *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      *=== 印字対象番号追加 by Uchida(2009/04/22) start
+                   OR  RECE10-KOHNUM(IDX3)  =  "352"
+                   OR  RECE10-KOHNUM(IDX3)  =  "353"
+                   OR  RECE10-KOHNUM(IDX3)  =  "354"
+      *=== 印字対象番号追加 by Uchida(2009/04/22) end
       *
                    PERFORM VARYING IDX4    FROM    1   BY  1
                            UNTIL   IDX4    >       20
