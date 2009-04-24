@@ -35,6 +35,7 @@
       *  01.00.03      長屋     08/04/24    帳票様式に伴う修正
       *  01.00.04      内田     08/06/27    斜線部分の一部負担金は印字しない
       *                                     SPA-AREA初期化
+      *  01.00.05      吉川     09/04/01    県外用の帳票追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -111,6 +112,9 @@
            COPY    "CPCOMMONSHELL.INC".
       *
            COPY    "SKT1710.INC".
+      *=== 県外用帳票追加 by Yoshikawa(2009/04/01) start
+           COPY    "SKT1720.INC".
+      *=== 県外用帳票追加 by Yoshikawa(2009/04/01) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -956,6 +960,15 @@
                PERFORM 320-BODY-HEN-SEC
       *    帳票印刷処理
                PERFORM 330-PRINT-OUT-SEC
+      *=== 県外用帳票追加 by Yoshikawa(2009/04/01) start
+      *        県外かどうか
+               IF  SKT1710TMP-SYUTURYOKU  =  1
+      *    帳票編集<見出し>処理
+                 PERFORM 311-HEAD-HEN-SEC
+      *    帳票印刷処理
+                 PERFORM 331-PRINT-OUT-SEC
+               END-IF
+      *=== 県外用帳票追加 by Yoshikawa(2009/04/01) end
       *    一時ファイル読込
              PERFORM  900-TMP-READ-SEC
            END-PERFORM
@@ -1154,6 +1167,73 @@
            .
        330-PRINT-OUT-EXT.
            EXIT.
+      *
+      *=== 県外用帳票追加 by Yoshikawa(2009/04/01) start
+      *****************************************************************
+      *    帳票編集<ヘッダー部>処理（県外用二枚目）
+      *****************************************************************
+       311-HEAD-HEN-SEC          SECTION.
+      *
+           ADD     1                     TO  CNT-PAGE
+      *
+           INITIALIZE                    SKT1720
+      *
+      *    診療年月
+           MOVE    WRK-SRYYMWH           TO  SKT1720-SRYYM
+      *
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCD       TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT         TO  SKT1720-HOSPCD
+      *
+      *    ページ番号を設定
+           MOVE    CNT-PAGE              TO  WRK-Z4
+           MOVE    WRK-Z4                TO  SKT1720-NO
+      *
+           .
+       311-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理（県外用二枚目）
+      *****************************************************************
+       331-PRINT-OUT-SEC                SECTION.
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SKT1720.red"        TO  SPRT-PRTID
+           MOVE    "国保請求書"        TO  SPRT-TITLE
+           MOVE    SKT1720             TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       331-PRINT-OUT-EXT.
+           EXIT.
+      *=== 県外用帳票追加 by Yoshikawa(2009/04/01) end
       *
       *****************************************************************
       *    エラー出力処理
