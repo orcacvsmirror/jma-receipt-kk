@@ -31,6 +31,7 @@
       *                                  在宅時、○は指定の場所に印字
       *  01.00.02    吉川    2008/05/23  公費負担者番号の頭2桁毎に集計する
       *                                  点数等のバイト数増加
+      *  01.00.03    吉川    2009/04/10  WRK-MEISYO初期化
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -973,6 +974,9 @@
              END-IF
       *
       *      公費番号まとめ情報があるとき
+      *=== WRK-MEISYO初期化 by Yoshikawa(2009/04/10) start
+             MOVE  SPACE                   TO  WRK-MEISYO
+      *=== WRK-MEISYO初期化 by Yoshikawa(2009/04/10) start
              IF        WRK-2007-MAX    >       ZERO
                PERFORM VARYING IDZ1    FROM    1   BY  1
                        UNTIL   IDZ1    >       WRK-2007-MAX
