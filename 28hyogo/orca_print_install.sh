@@ -50,8 +50,5 @@ else
 	exit
 fi
 
-# ???
-cp -af ${SITELDDEFDIR} ${ORCA_DIR}
-
 sync
 echomsg "始杆俯孟数给锐ˇ另崇山プログラムコピ〖姜位!!"
