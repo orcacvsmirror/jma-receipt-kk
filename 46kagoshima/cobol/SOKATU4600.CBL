@@ -40,6 +40,7 @@
       *  01.00.07    内田    08/07/18    在総診分を明細書枚数欄に集計する
       *  01.00.08    門間    08/12/16    シス管「2007」公費まとめ対応
       *  01.00.09    吉川    09/02/06    斜線部分の一部負担金は印字しない
+      *  01.00.10    吉川    09/04/17    返戻分は分けて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -637,9 +638,19 @@
       **---(01.00.05) LINE ADD END   ------------------------------------
       *     END-EVALUATE
       *---(01.00.03) LINE ADD END   ------------------------------------
-            MOVE    "key4"              TO  WRK-PATH
-            MOVE    "key65"             TO  WRK-PATH2
-      *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 返戻分は分けて印字する by Yoshikawa(2009/04/17) start
+      *      MOVE    "key4"              TO  WRK-PATH
+      *      MOVE    "key65"             TO  WRK-PATH2
+      **---(01.00.06) LINE ADD END   ------------------------------------
+           EVALUATE    WRK-PARA-SYOKBN 
+               WHEN    "2"
+                   MOVE    "key37"      TO  WRK-PATH
+                   MOVE    "key65"      TO  WRK-PATH2
+               WHEN    "1"
+                   MOVE    "key38"      TO  WRK-PATH
+                   MOVE    "key66"      TO  WRK-PATH2
+           END-EVALUATE
+      *=== 返戻分は分けて印字する by Yoshikawa(2009/04/17) end
       *
            OPEN    OUTPUT  UPD-FILE
       *
@@ -722,21 +733,23 @@
                     UNTIL   FLG-END   =   1
            PERFORM  950-SEIKYU-CLOSE-SEC
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *---(01.00.06) LINE ADD START ------------------------------------
-           MOVE    "key66"  TO        WRK-PATH2
-           MOVE     ZERO    TO        FLG-END
-           MOVE    "039"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE    "040"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
-      *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 返戻分は分けて印字する by Yoshikawa(2009/04/17) start
+      **---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE    "key66"  TO        WRK-PATH2
+      *     MOVE     ZERO    TO        FLG-END
+      *     MOVE    "039"    TO        WRK-HKNNUM
+      *     PERFORM  950-SEIKYU-SELECT-SEC
+      *     PERFORM  2001-KOKUHO-SYUKEI-SEC
+      *              UNTIL   FLG-END   =   1
+      *     PERFORM  950-SEIKYU-CLOSE-SEC
+      *     MOVE     ZERO    TO        FLG-END
+      *     MOVE    "040"    TO        WRK-HKNNUM
+      *     PERFORM  950-SEIKYU-SELECT-SEC
+      *     PERFORM  2001-KOKUHO-SYUKEI-SEC
+      *              UNTIL   FLG-END   =   1
+      *     PERFORM  950-SEIKYU-CLOSE-SEC
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 返戻分は分けて印字する by Yoshikawa(2009/04/17) end
            CLOSE   UPD-FILE
            CLOSE   SKT4600TMP-FILE
            CLOSE   SKT4610TMP-FILE
@@ -2783,12 +2796,6 @@
        950-SEIKYU-SELECT-SEC             SECTION.
       *
       *    請求管理ＤＢ検索
-      *     DISPLAY "SPA-HOSPNUM"SPA-HOSPNUM
-      *     DISPLAY "WRK-CONS-SRYYM-200804"WRK-CONS-SRYYM-200804
-      *     DISPLAY "LNK-PRTKANRI-SRYYM"LNK-PRTKANRI-SRYYM
-      *     DISPLAY "WRK-HKNNUM"WRK-HKNNUM
-      *     DISPLAY "WRK-PARA-HKNJANUM"WRK-PARA-HKNJANUM
-      *     DISPLAY "WRK-PATH2"WRK-PATH2
            INITIALIZE         RECE10-REC.
            MOVE   SPA-HOSPNUM             TO  RECE10-HOSPNUM
            MOVE   LNK-PRTKANRI-SRYYM      TO  RECE10-SKYYM
