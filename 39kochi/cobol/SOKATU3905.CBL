@@ -36,6 +36,7 @@
       *                                  食事日数がゼロでも
       *                                  食事療養費を印字する
       *  01.00.04    吉川    2008/07/09  請求区分が請求済みにならない不具合を修正
+      *  01.00.05    吉川    2009/04/24  在宅は合算して印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -559,16 +560,24 @@
            MOVE    1                   TO  WRK-INDEX
       *
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
-           EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
-               WHEN    "1"             ALSO    "1"
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "1"
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
-               WHEN    "1"             ALSO    "2"
+      *=== 在宅は合算して印字 by Yoshikawa(2009/04/24) start
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "1"
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE  
+           EVALUATE    WRK-SYOKBN
+               WHEN    "1"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "2"
+               WHEN    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
+      *=== 在宅は合算して印字 by Yoshikawa(2009/04/24) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -580,32 +589,34 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *    入院外集計（在総診または在医総を算定したレセ）
-      *    特別療養費の場合は在総診はなし
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-      *=== 請求済みにならない不具合修正 by Yoshikawa(2008/07/09) start
-      *         PERFORM 200-HENSYU-SEC
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10  =  1
-                                       OR      FLG-ERR     =  1
-      *=== 請求済みにならない不具合修正 by Yoshikawa(2008/07/09) end
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
+      *=== 在宅は合算して印字 by Yoshikawa(2009/04/24) start
+      **    入院外集計（在総診または在医総を算定したレセ）
+      **    特別療養費の場合は在総診はなし
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      **=== 請求済みにならない不具合修正 by Yoshikawa(2008/07/09) start
+      **         PERFORM 200-HENSYU-SEC
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10  =  1
+      *                                 OR      FLG-ERR     =  1
+      **=== 請求済みにならない不具合修正 by Yoshikawa(2008/07/09) end
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      *=== 在宅は合算して印字 by Yoshikawa(2009/04/24) end
       *     
            MOVE    1                   TO  FLG-END
       *
