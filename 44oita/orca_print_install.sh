@@ -50,8 +50,5 @@ else
 	exit
 fi
 
-# ???
-cp -af ${SITELDDEFDIR} ${ORCA_DIR}
-
 sync
 echomsg "大分県（総括表・地方公費）プログラムコピー終了!!"
