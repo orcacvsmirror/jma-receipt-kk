@@ -35,6 +35,7 @@
       *                                  医療機関情報を参照
       *  01.00.04    内田    07/11/30    ７０歳未満は一部負担金欄へ集計しない
       *  01.00.05    門間    09/02/25    SPA-AREAの初期化
+      *  01.00.06    内田    09/04/24    ７０歳未満も一部負担金欄へ集計する
       ****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -680,14 +681,18 @@
            ADD   RECE10-YKZFTN (1)  TO  SKT3900TMP-YKZFTN (IDX1)
       *
       *    一部負担金(老人＋健診)
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *      ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
-      *    ７０歳未満は集計しない
-           IF  RECE10-RJNHKNNUM  NOT =  SPACE
-           OR  RECE10-AGE  >= 70
-             ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
-           END-IF
-      *---(01.00.04) LINE ADD END   ------------------------------------
+      *---(01.00.06) LINE ADD START ------------------------------------
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **      ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
+      **    ７０歳未満は集計しない
+      *     IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      *     OR  RECE10-AGE  >= 70
+      *       ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
+      *     END-IF
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *    ７０歳以上未満問わず集計
+            ADD   RECE10-FTNMONEY(1)   TO  SKT3900TMP-RJNFTN (IDX1)
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    食事療養費：件数
       *---(01.00.02) LINE ADD START ------------------------------------
