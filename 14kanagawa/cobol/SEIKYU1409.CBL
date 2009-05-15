@@ -39,6 +39,8 @@
       *                                   システム管理マスタ「1901」の
       *                                   医療機関情報を参照
       *  01.00.07    内田     08/09/17    SPA-AREA初期化
+      *  01.00.08    吉川     09/05/01    病名数が2頁以降までまたがると
+      *                                   1頁目が印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -962,13 +964,18 @@
       *    帳票編集<見出し>処理
                PERFORM  310-HEAD-HEN-SEC
       *    帳票編集<明細>処理
-               PERFORM  320-BODY-HEN-SEC
+      *=== 病名による改頁不具合の修正 by Yoshikawa(2009/05/01) start
+      *         PERFORM  320-BODY-HEN-SEC
+      *=== 病名による改頁不具合の修正 by Yoshikawa(2009/05/01) end
       *
                IF      MF101-NYUGAIKBN =   "1"
                    MOVE    "SC1410.red"    TO  WRK-PRTID
                ELSE
                    MOVE    "SC1409.red"    TO  WRK-PRTID
                END-IF
+      *=== 病名による改頁不具合の修正 by Yoshikawa(2009/05/01) start
+               PERFORM  320-BODY-HEN-SEC
+      *=== 病名による改頁不具合の修正 by Yoshikawa(2009/05/01) end
       *    帳票印刷処理
                PERFORM  330-PRINT-OUT-SEC
       *    一時ファイル読込
