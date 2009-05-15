@@ -37,6 +37,7 @@
       *  01.00.05    吉川    08/10/27    SPA-AREA初期化
       *  01.00.06    吉川    09/01/16    後期高齢のみの場合でも
       *                                  印字するように修正
+      *  01.00.07    吉川    09/05/07    帳票様式の変更に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -830,20 +831,32 @@
            IF    IDX1   = 5
       *    件数
               ADD  1                   TO   SKT4500TMP-KENSU(IDX1 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+                                            SKT4500TMP-KENSU(6 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                                             SKT4500TMP-GKENSU(2)
       *
       *    点数
               ADD  RECE10-TOTALTEN(1)  TO  SKT4500TMP-TENSU(IDX1 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+                                           SKT4500TMP-TENSU(6 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                                            SKT4500TMP-GTENSU(2)
            ELSE
       *    件数
               ADD     1                TO  SKT4500TMP-KENSU(IDX1 IDX2)
                                            SKT4500TMP-KENSU(4 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+                                           SKT4500TMP-KENSU(6 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                                            SKT4500TMP-GKENSU(1)
       *
       *    点数
               ADD  RECE10-TOTALTEN(1)  TO  SKT4500TMP-TENSU(IDX1 IDX2)
                                            SKT4500TMP-TENSU(4 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+                                           SKT4500TMP-TENSU(6 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                                            SKT4500TMP-GTENSU(1)
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
@@ -987,10 +1000,13 @@
        320-BODY-HEN-SEC      SECTION.
       *
            PERFORM VARYING IDX1    FROM    1   BY  1
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *             UNTIL   IDX1    >       4
-                   UNTIL   IDX1    >       5
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **             UNTIL   IDX1    >       4
+      *             UNTIL   IDX1    >       5
+      **---(01.00.03) LINE ADD END   ------------------------------------
+                   UNTIL   IDX1    >       6
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                    AFTER   IDX2    FROM    1   BY  1
                    UNTIL   IDX2    >       2
       *

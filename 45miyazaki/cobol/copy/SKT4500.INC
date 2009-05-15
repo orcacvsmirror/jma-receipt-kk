@@ -15,7 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      *  01.00.01    長屋   08/05/03      帳票様式に伴う修正
+      *  コピー句修正履歴
+      * Maj/Min/Rev    修正者  日付      内容
+      *  01.00.01      長屋    08/05/03  帳票様式に伴う修正
+      *  01.00.02      吉川    09/05/07  帳票様式の変更に伴う修正
       *****************************************************************
         01  SKT4500.
             03  SKT4500-SRYYM           PIC X(16)   OCCURS  2 TIMES.
@@ -33,10 +36,13 @@
             03  SKT4500-KENGAI          PIC X(02)   OCCURS  2 TIMES.
             03  SKT4500-HYOUBOUKA       PIC X(20)   OCCURS  3 TIMES.
             03  SKT4500-SRYKA           PIC X(28).
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *      03  SKT4500-SEIKYU-TBL      OCCURS  4 TIMES.
-            03  SKT4500-SEIKYU-TBL      OCCURS  5 TIMES.
-      *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **      03  SKT4500-SEIKYU-TBL      OCCURS  4 TIMES.
+      *      03  SKT4500-SEIKYU-TBL      OCCURS  5 TIMES.
+      **---(01.00.01) LINE ADD END   ------------------------------------
+            03  SKT4500-SEIKYU-TBL      OCCURS  6 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                 05  SKT4500-NYUGAI-TBL  OCCURS  2 TIMES.
                     07  SKT4500-KENSU   PIC X(06).
                     07  SKT4500-TENSU   PIC X(10).

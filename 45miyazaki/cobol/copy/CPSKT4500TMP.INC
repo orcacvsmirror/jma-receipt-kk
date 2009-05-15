@@ -21,15 +21,19 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    長屋   08/05/03      帳票様式に伴う修正
+      *  01.00.02    吉川   09/05/07      帳票様式の変更に伴う修正
       ************************************************************
        01  SKT4500TMP-REC.
            03  SKT4500TMP-KEY.
                05  SKT4500TMP-KENKBN                PIC  9(01).
                05  SKT4500TMP-RECEKA                PIC  X(02).
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *     03  SKT4500TMP-SEIKYU-TBL      OCCURS  4.
-           03  SKT4500TMP-SEIKYU-TBL      OCCURS  5.
-      *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) start
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **     03  SKT4500TMP-SEIKYU-TBL      OCCURS  4.
+      *     03  SKT4500TMP-SEIKYU-TBL      OCCURS  5.
+      **---(01.00.01) LINE ADD END   ------------------------------------
+           03  SKT4500TMP-SEIKYU-TBL      OCCURS  6.
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/07) end
                05  SKT4500TMP-NYUGAIKBN   OCCURS  2.
                    07  SKT4500TMP-KENSU             PIC  9(06).
                    07  SKT4500TMP-TENSU             PIC  9(10).
