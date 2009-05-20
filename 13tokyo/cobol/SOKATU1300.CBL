@@ -45,6 +45,8 @@
       *                                    集計方法を元に戻す
       *  01.00.09    吉川    2009/03/27    70歳未満と70歳以上の在宅が
       *                                    別れて印字される不具合を修正
+      *  01.00.10    吉川    2009/05/12    公害保険等で在宅を算定しても
+      *                                    在宅として記載される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -143,6 +145,10 @@
            03  FLG-SYUNOU          PIC 9(01).
            03  FLG-KANJAFTN        PIC 9(01).
       *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) end
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) start
+           03  FLG-HKNCOMBI        PIC 9(01).
+           03  FLG-SRYACCT         PIC 9(01).
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -298,6 +304,16 @@
            COPY    "CPSYUNOU.INC".
       *=== 患者負担がない場合は通常請求 by Yoshikawa(2009/01/26) start
       * 
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) start
+      *    保険組合せ
+       01  HKNCOMBI-REC.
+           COPY    "CPHKNCOMBI.INC".
+      *
+      *    診療会計マスタ
+       01  SRYACCT-REC.
+           COPY    "CPSRYACCT.INC".
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) end
+      *
       ******************************************************************
       *    サブプロ用  領域
       *****************************************************************
@@ -1631,10 +1647,17 @@
                                        WRK-CONS-ZAITAKU4  OR
                                        WRK-CONS-ZAITAKU5  OR
                                        WRK-CONS-ZAITAKU6
-      *=== 在宅判定修正 by Yoshikawa(2009/03/27) start
-                 MOVE  1  TO  SKT1300TMP-SYUTURYOKU
-      *=== 在宅判定修正 by Yoshikawa(2009/03/27) end
-                 MOVE  1  TO  SKT1300TMP-ZAITAKU
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) start
+      **=== 在宅判定修正 by Yoshikawa(2009/03/27) start
+      *           MOVE  1  TO  SKT1300TMP-SYUTURYOKU
+      **=== 在宅判定修正 by Yoshikawa(2009/03/27) end
+      *           MOVE  1  TO  SKT1300TMP-ZAITAKU
+      *
+      *          診療会計テーブルから、保険組合わせ番号を取得
+                 PERFORM  900-SRYACCT-SELECT-SEC
+      *          保険組合わせテーブルから、保険番号を取得
+                 PERFORM  910-HKNCOMBI-SELECT-SEC
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) end
                END-IF
              END-IF
            END-PERFORM
@@ -1643,6 +1666,159 @@
        965-ZAISOU-CHK-EXT.
            EXIT.
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) start
+      *****************************************************************
+      *    診療会計情報SELECT  
+      *****************************************************************
+       900-SRYACCT-SELECT-SEC         SECTION.
+      *
+           INITIALIZE                          SRYACCT-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  ACCT-HOSPNUM
+           MOVE    SRY-NYUGAIKBN           TO  ACCT-NYUGAIKBN
+           MOVE    SRY-PTID                TO  ACCT-PTID
+           MOVE    SRY-SRYKA               TO  ACCT-SRYKA
+           MOVE    SRY-SRYYM               TO  ACCT-SRYYM
+           MOVE    SRY-ZAINUM              TO  ACCT-ZAINUM
+           MOVE    SRYACCT-REC             TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_sryacct"           TO  MCP-TABLE
+           MOVE    "key5"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC           =   ZERO
+                   MOVE   ZERO             TO  FLG-SRYACCT
+                   PERFORM  900-SRYACCT-FETCH-SEC
+           ELSE
+                   MOVE   1                TO  FLG-SRYACCT
+           END-IF
+      *
+           PERFORM  900-SRYACCT-CLOSE-SEC
+      *
+           .
+       900-SRYACCT-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療会計情報１件読み込み
+      *****************************************************************
+       900-SRYACCT-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_sryacct"           TO  MCP-TABLE
+           MOVE    "key5"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  SRYACCT-REC
+                   MOVE    ZERO            TO  FLG-SRYACCT
+           ELSE
+                   MOVE    1               TO  FLG-SRYACCT
+           END-IF
+      *
+           .
+       900-SRYACCT-FETCH-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療会計情報クローズ  
+      *****************************************************************
+       900-SRYACCT-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_sryacct"           TO  MCP-TABLE
+           MOVE    "key5"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+       900-SRYACCT-CLOSE-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険組合せ情報読み込み
+      *****************************************************************
+       910-HKNCOMBI-SELECT-SEC         SECTION.
+      *
+           INITIALIZE                          HKNCOMBI-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  COMB-HOSPNUM
+           MOVE    RECE10-PTID             TO  COMB-PTID
+           MOVE    ACCT-HKNCOMBI           TO  COMB-HKNCOMBINUM
+           MOVE    HKNCOMBI-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"          TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE     ZERO               TO  FLG-HKNCOMBI
+               PERFORM  910-HKNCOMBI-FETCH-SEC
+           ELSE
+               MOVE     1                  TO  FLG-HKNCOMBI
+           END-IF
+      *
+      *    国保及び後期高齢との組合わせの場合のみ在宅フラグセット
+           IF  COMB-HKNNUM  =  "060" OR "067" OR "068" OR "069"
+                            OR "039" OR "040"
+               MOVE     1                  TO  SKT1300TMP-SYUTURYOKU
+               MOVE     1                  TO  SKT1300TMP-ZAITAKU
+           END-IF
+      *
+           PERFORM  910-HKNCOMBI-CLOSE-SEC
+      *
+           .
+       910-HKNCOMBI-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険組合せ情報１件読み込み
+      *****************************************************************
+       910-HKNCOMBI-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"          TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    MCPDATA-REC         TO  HKNCOMBI-REC
+               MOVE    ZERO                TO  FLG-HKNCOMBI
+           ELSE
+               MOVE    1                   TO  FLG-HKNCOMBI
+           END-IF
+      *
+           .
+       910-HKNCOMBI-FETCH-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険組合わせ情報クローズ  
+      *****************************************************************
+       910-HKNCOMBI-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"        TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"         TO  MCP-TABLE
+           MOVE    "key"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+           .
+      *
+       910-HKNCOMBI-CLOSE-EXT.
+           EXIT.
+      *
+      *=== 在宅判定は国保及び後期のみ by Yoshikawa(2009/05/12) end
       *****************************************************************
       *    システム管理マスタ読込
       *****************************************************************
