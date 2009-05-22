@@ -33,6 +33,7 @@
       *                                      システム管理マスタ「1901」の
       *                                      医療機関情報を参照
       *  01.00.02       内田    2008/08/15   静岡市の保険者番号の変更
+      *  01.00.03       吉川    2009/05/13   食事療養費の算出方法変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -630,6 +631,14 @@
            MOVE  RECE02-TOTALTEN    (IDY)  TO  MF100-TOTALTEN
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
+      *
+      *=== 食事療養費の算出変更 by Yoshikawa(2009/05/13) start
+      *    食事療養費は保険及び上位公費の差で計算する
+           COMPUTE  MF100-SHOKUJIRYOYOHI  =  RECE02-SHOKUJIRYOYOHI(IDZ)
+                                          -  RECE02-SHOKUJIRYOYOHI(IDY)
+           COMPUTE  MF100-SHOKUJIFTN      =  RECE02-SHOKUJIFTN(IDZ)
+                                          -  RECE02-SHOKUJIFTN(IDY)
+      *=== 食事療養費の算出変更 by Yoshikawa(2009/05/13) end
       *
       *    個別発行用市町村番号
            MOVE  MF100-KOHFTNJANUM(5:3)     TO  WRK-KOBETUCITYNUM
