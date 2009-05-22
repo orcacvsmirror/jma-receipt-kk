@@ -19,7 +19,8 @@
       *    診療報酬請求書     COPY (CPSKT4100TMP.INC)              *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/05/15  帳票様式の変更に伴う修正
       ************************************************************
        01  SKT4100TMP-REC.
            03  SKT4100TMP-KEY.
@@ -36,3 +37,7 @@
                    07  SKT4100TMP-TENSU             PIC  9(10).
            03  SKT4100TMP-KENNAI                    PIC  9(06).
            03  SKT4100TMP-KENGAI                    PIC  9(06).
+      *=== 帳票様式変更 by Yoshikawa(2009/05/15) start
+           03  SKT4100TMP-KOUKENGAI                 PIC  9(06).
+           03  SKT4100TMP-KOUKENNAI                 PIC  9(06).
+      *=== 帳票様式変更 by Yoshikawa(2009/05/15) end

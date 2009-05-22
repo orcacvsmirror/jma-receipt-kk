@@ -41,6 +41,7 @@
       *  01.00.07    吉川       08/12/24    特別療養費国保対応
       *  01.00.08    吉川       09/03/19    札幌市と仙台市の
       *                                     代表保険者番号変更
+      *  01.00.09    吉川       09/05/15    帳票様式の変更に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1232,6 +1233,16 @@
                ADD    1       TO    SKT4100TMP-KENGAI
              END-IF
            END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/15) start
+           IF     SKT4100TMP-SYUTURYOKU   =   ZERO
+                  AND  FLG-KOUKI          =   1
+             IF  RECE10-PREFKBN  =  "1"
+               ADD    1       TO    SKT4100TMP-KOUKENNAI
+             ELSE
+               ADD    1       TO    SKT4100TMP-KOUKENGAI
+             END-IF
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/15) end
       *
            MOVE    1               TO  FLG-UPD
            .
@@ -1381,6 +1392,14 @@
              MOVE    WRK-Z6               TO  SKT4100-GKENNAI
              MOVE    SKT4100TMP-KENGAI    TO  WRK-Z6
              MOVE    WRK-Z6               TO  SKT4100-GKENGAI
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/15) start
+      *    後期高齢 県内・県外総件数
+             MOVE    SKT4100TMP-KOUKENNAI TO  WRK-Z6
+             MOVE    WRK-Z6               TO  SKT4100-GKOUKENNAI
+             MOVE    SKT4100TMP-KOUKENGAI TO  WRK-Z6
+             MOVE    WRK-Z6               TO  SKT4100-GKOUKENGAI
+      *=== 帳票様式の変更 by Yoshikawa(2009/05/15) end
+      *
       *    一時ファイル読込
              PERFORM  900-TMP-READ-SEC
            END-IF
