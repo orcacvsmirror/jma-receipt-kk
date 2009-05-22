@@ -24,6 +24,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/11/19  保険者番号のバイト数増加
+      *  01.00.02    吉川    2009/05/13  食事回数と金額のバイト数増加
       ********************************************************************
        01  SKT2215.
       *    診療年月
@@ -65,9 +66,13 @@
       *    件数
                05  SKT2215-S-KENSU      PIC X(05).
       *    診療実日数
-               05  SKT2215-S-NISSU      PIC X(05).
+      *=== バイト数増加 by Yoshikawa(2009/05/13) start
+      *         05  SKT2215-S-NISSU      PIC X(05).
+               05  SKT2215-S-NISSU      PIC X(06).
       *    金額
-               05  SKT2215-S-KINGK      PIC X(09).
+      *         05  SKT2215-S-KINGK      PIC X(09).
+               05  SKT2215-S-KINGK      PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2009/05/13) end
       *    標準負担額
                05  SKT2215-S-FTNGK      PIC X(09).
       *    公費テーブル
@@ -89,9 +94,13 @@
       *    件数
                05  SKT2215-S-KKENSU     PIC X(05).
       *    診療実日数
-               05  SKT2215-S-KNISSU    PIC X(05).
+      *=== バイト数増加 by Yoshikawa(2009/05/13) start
+      *         05  SKT2215-S-KNISSU    PIC X(05).
+               05  SKT2215-S-KNISSU     PIC X(06).
       *    金額
-               05  SKT2215-S-KKINGK     PIC X(09).
+      *         05  SKT2215-S-KKINGK     PIC X(09).
+               05  SKT2215-S-KKINGK     PIC X(11).
+      *=== バイト数増加 by Yoshikawa(2009/05/13) end
       *    標準負担額
                05  SKT2215-S-KFTNGK     PIC X(09).
       *    長期

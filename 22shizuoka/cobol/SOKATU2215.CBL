@@ -30,6 +30,7 @@
       *  01.00.01    吉川    2008/05/27  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
       *  01.00.02    吉川    2008/11/19  保険者番号のバイト数増加
+      *  01.00.03    吉川    2009/05/13  食事回数と金額のバイト数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -148,6 +149,10 @@
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
+      *=== バイト数増加 by Yoshikawa(2009/05/13) start
+           03  WRK-Z6              PIC ZZ,ZZZ.
+           03  WRK-Z11             PIC ZZZ,ZZZ,ZZZ.
+      *=== バイト数増加 by Yoshikawa(2009/05/13) end
            03  WRK-KOHNUM9         PIC Z9.
            03  WRK-PAGE            PIC ZZZ9.
       *
@@ -1158,11 +1163,17 @@
              MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT2215-S-KENSU(IDZ)
       *    食事療養：日数
-             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
-             MOVE  WRK-Z5                TO  SKT2215-S-NISSU(IDZ)
+      *=== バイト数増加 by Yoshikawa(2009/05/13) start
+      *       MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT2215-S-NISSU(IDZ)
+             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z6
+             MOVE  WRK-Z6                TO  SKT2215-S-NISSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
-             MOVE  WRK-Z9                TO  SKT2215-S-KINGK(IDZ)
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2215-S-KINGK(IDZ)
+             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z11
+             MOVE  WRK-Z11               TO  SKT2215-S-KINGK(IDZ)
+      *=== バイト数増加 by Yoshikawa(2009/05/13) end
       *    食事療養：標準負担額
              MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT2215-S-FTNGK(IDZ)
@@ -1217,11 +1228,17 @@
                MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT2215-S-KKENSU(IDY)
       *    公費再掲欄：食事療養：日数
-               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
-               MOVE  WRK-Z5                TO  SKT2215-S-KNISSU(IDY)
+      *=== バイト数増加 by Yoshikawa(2009/05/13) start
+      *         MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
+      *         MOVE  WRK-Z5                TO  SKT2215-S-KNISSU(IDY)
+               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z6
+               MOVE  WRK-Z6                TO  SKT2215-S-KNISSU(IDY)
       *    公費再掲欄：食事療養：金額
-               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
-               MOVE  WRK-Z9                TO  SKT2215-S-KKINGK(IDY)
+      *         MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
+      *         MOVE  WRK-Z9                TO  SKT2215-S-KKINGK(IDY)
+               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z11
+               MOVE  WRK-Z11               TO  SKT2215-S-KKINGK(IDY)
+      *=== バイト数増加 by Yoshikawa(2009/05/13) end
       *    公費再掲欄：食事療養：標準負担額
                MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
                MOVE  WRK-Z9                TO  SKT2215-S-KFTNGK(IDY)
