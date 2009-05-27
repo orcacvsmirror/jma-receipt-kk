@@ -18,7 +18,7 @@
     </element>
     <element name="KAISETUNAME" occurs="1">
       <appinfo>
-        <embed object="string" length="40"/>
+        <embed object="string" length="80"/>
       </appinfo>
     </element>
     <element name="HKNJANUM" occurs="1">
@@ -4177,10 +4177,13 @@
         <point val="11.7,5.40389"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.7,5.12519;18.77,5.47519"/>
+        <rectangle val="11.7,5.12519;18.77,5.82519"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETUNAME#</string>
+      </attribute>
+      <attribute name="embed_text_column">
+        <int val="40"/>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -4188,7 +4191,8 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;
+&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>

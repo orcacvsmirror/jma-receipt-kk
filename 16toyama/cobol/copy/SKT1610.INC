@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句正履歴
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/05/13  開設者名のバイト数増加
+      *****************************************************************
         01  SKT1610.
             03  SKT1610-NO              PIC X(04).
             03  SKT1610-SRYYM           PIC X(16).
@@ -22,7 +26,10 @@
             03  SKT1610-HOSPCD          PIC X(14).
             03  SKT1610-HOSPADRS        PIC X(100).
             03  SKT1610-HOSPNAME        PIC X(100).
-            03  SKT1610-KAISETU         PIC X(40).
+      *=== バイト数増加 by Yoshikawa(2009/05/13) start
+      *      03  SKT1610-KAISETU         PIC X(40).
+            03  SKT1610-KAISETU         PIC X(80).
+      *=== バイト数増加 by Yoshikawa(2009/05/13) end
             03  SKT1610-HKNJANUM        PIC X(12).
             03  SKT1610-HKNJANAME       PIC X(26).
             03  SKT1610-SEIKYU          OCCURS  11 TIMES.
