@@ -152,3 +152,7 @@
       *外来診療日情報
            03  MF100-SRYDAY-TBL.
                05  MF100-SRYDAY OCCURS 31 PIC 9(01).
+      *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/26) start
+      *備考
+           03  MF100-BIKO               PIC  X(20).
+      *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/26) end

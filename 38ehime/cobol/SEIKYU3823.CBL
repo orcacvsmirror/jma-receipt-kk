@@ -36,6 +36,7 @@
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/02/10    月遅れ時の入院期間の印字修正
       *  01.00.06    吉川    08/09/12    SPA-AREA初期化
+      *  01.00.07    内田    09/05/26    平成２１年５月特定疾患改正の対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -733,6 +734,18 @@
                  PERFORM 20013-YMDSET-SEC
              END-IF
       *
+      *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/26) start
+      *    特定疾患等での特記事項編集
+           EVALUATE  RECE02-FLG (4)
+             WHEN  "1"  MOVE  3            TO  MF100-TYOKI
+             WHEN  "2"  MOVE  4            TO  MF100-TYOKI
+             WHEN  "3"  MOVE  5            TO  MF100-TYOKI
+             WHEN  "4"  MOVE  "「２２」"   TO  MF100-BIKO
+             WHEN  "5"  MOVE  "「２３」"   TO  MF100-BIKO
+             WHEN  "6"  MOVE  "「２４」"   TO  MF100-BIKO
+           END-EVALUATE
+      *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/26) end
+      *
              WRITE   MF100-REC
              ADD     1                   TO  CNT-MF100
       *
@@ -1136,6 +1149,11 @@
              WHEN  "5"  MOVE  "５"   TO  SC23-TOKUTEI
            END-EVALUATE
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/26) start
+      *    備考
+           MOVE  MF100-BIKO    TO  SC23-BIKO
+      *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/26) end
       *
       *    在宅チェック
            IF    MF100-ZAITAKU =   1
