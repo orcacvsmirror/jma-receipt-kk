@@ -56,6 +56,7 @@
       *  01.00.15    吉川     08/12/11    医学管理、在宅を印字する
       *                                   印字対象番号の追加（480,481,590）
       *  01.00.16    吉川     09/05/14    特記事項を印字する
+      *  01.00.17    吉川     09/05/27    H21年5月特定疾患改正対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -489,11 +490,27 @@
            03  FILLER              PIC X(10)   VALUE   "１９低所".
            03  FILLER              PIC X(02)   VALUE   "20".
            03  FILLER              PIC X(10)   VALUE   "２０二割".
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
+           03  FILLER              PIC X(02)   VALUE   "21".
+           03  FILLER              PIC X(10)   VALUE   "２１高半".
+           03  FILLER              PIC X(02)   VALUE   "22".
+           03  FILLER              PIC X(10)   VALUE   "２２多上".
+           03  FILLER              PIC X(02)   VALUE   "23".
+           03  FILLER              PIC X(10)   VALUE   "２３多一".
+           03  FILLER              PIC X(02)   VALUE   "24".
+           03  FILLER              PIC X(10)   VALUE   "２４多低".
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
-           03  TBL-TOKKI       OCCURS   18.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
+      *     03  TBL-TOKKI       OCCURS   18.
+           03  TBL-TOKKI       OCCURS   22.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
                05  TBL-TOKKICD     PIC X(02).
                05  TBL-TOKKINAME   PIC X(10).
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   18.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
+      * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   18.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
       *=== 特記事項印字 by Yoshikawa(2009/05/14) end
       *
        01  TABLE-AREA.
@@ -1512,7 +1529,10 @@
                       UNTIL    IDY2  >   TBL-TOKKI-MAX
                IF  MF100-TOKKI(IDX2)  =  TBL-TOKKICD(IDY2)
                  MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
-                 MOVE  19  TO  IDY2
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
+      *           MOVE  19  TO  IDY2
+                 MOVE  TBL-TOKKI-MAX  TO  IDY2
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
                END-IF
              END-PERFORM
            END-PERFORM
@@ -1843,7 +1863,10 @@
                       UNTIL    IDY2  >   TBL-TOKKI-MAX
                IF  MF100-TOKKI(IDX2)  =  TBL-TOKKICD(IDY2)
                  MOVE  TBL-TOKKINAME(IDY2)   TO  HCN06-TOKKI(IDX2)
-                 MOVE  19  TO  IDY2
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
+      *           MOVE  19  TO  IDY2
+                 MOVE  TBL-TOKKI-MAX  TO  IDY2
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
                END-IF
              END-PERFORM
            END-PERFORM
