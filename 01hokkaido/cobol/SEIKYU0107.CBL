@@ -53,6 +53,10 @@
       *                                    無くても印字される不具合を修正
       *  01.00.14     吉川     09/01/15    外来で全国公費併用の場合は、
       *                                    公費の助成がなくても印字
+      *  01.00.15     内田     09/05/22    公費の助成がなくても印字
+      *                                    上限達した時の旭川市の備考欄印字修正
+      *                                    「在」に○がある場合、
+      *                                    「２・３割」に○は不要
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -802,19 +806,21 @@
       *
       *    一部負担金がある公費を使用している場合は助成対象判定を行う
            MOVE     ZERO                       TO  FLG-ERR
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *     IF   MF100-KOHNUM  =  "143"                         OR
-      *          MF100-KOHNUM  =  "343"
-           IF   MF100-KOHNUM  =  "143"
-           OR   MF100-KOHNUM  =  "343"
-           OR   MF100-KOHNUM  =  "643"
-      *---(01.00.09) LINE ADD START ------------------------------------
-           OR   MF100-KOHNUM  =  "743"
-      *---(01.00.09) LINE ADD END   ------------------------------------
-           OR   MF100-KOHNUM  =  "843"
-      *---(01.00.07) LINE ADD END   ------------------------------------
-             MOVE      1                       TO  FLG-ERR
-           END-IF
+      *=== 公費の助成がなくても印字 by Uchida(2009/05/22) start
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **     IF   MF100-KOHNUM  =  "143"                         OR
+      **          MF100-KOHNUM  =  "343"
+      *     IF   MF100-KOHNUM  =  "143"
+      *     OR   MF100-KOHNUM  =  "343"
+      *     OR   MF100-KOHNUM  =  "643"
+      **---(01.00.09) LINE ADD START ------------------------------------
+      *     OR   MF100-KOHNUM  =  "743"
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *     OR   MF100-KOHNUM  =  "843"
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *       MOVE      1                       TO  FLG-ERR
+      *     END-IF
+      *=== 公費の助成がなくても印字 by Uchida(2009/05/22) end
       *
       *    長期・結核・精神編集
            MOVE     ZERO                       TO  FLG-TYOKI
@@ -863,7 +869,11 @@
       *    旭川の場合、初診再診判定
            IF  MF100-KOHNUM  =  "643" OR "743"
              COMPUTE  WRK-SHOSAI  =  RECE02-TOTALTEN (IDY) / 10 * 10
+      *=== 上限達した時の旭川市の備考欄印字修正 by Uchida(2009/05/22) start
+      *       IF  RECE02-FTNMONEY (IDY)  <  WRK-SHOSAI
              IF  RECE02-FTNMONEY (IDY)  <  WRK-SHOSAI
+             AND  WRK-SHOSAI <= 12000
+      *=== 上限達した時の旭川市の備考欄印字修正 by Uchida(2009/05/22) end
                MOVE  1  TO  MF100-SHOSAISIN
              END-IF
            END-IF
@@ -1462,6 +1472,9 @@
              IF     MF100-ZAITAKU  =  "1"
       *---(01.00.05) LINE ADD END   ------------------------------------
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 2)
+      *=== 「在」に○がある場合「割」に○不要 by Uchida(2009/05/22) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
+      *=== 「在」に○がある場合「割」に○不要 by Uchida(2009/05/22) end
              END-IF
       *
              IF     MF100-TYOKI         =  1
