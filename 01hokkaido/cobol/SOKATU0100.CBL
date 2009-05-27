@@ -61,6 +61,7 @@
       *  01.00.21    吉川   09/01/15    返戻分の請求書枚数カウント修正
       *                                 外来で全国公費併用の場合は、
       *                                 公費の助成がなくても印字
+      *  01.00.22    内田   09/05/13    障害は公費の助成がなくても印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1115,19 +1116,27 @@
       *          RECE02-KOHNUM (IDZ)  =  "344"         OR
       *          RECE02-KOHNUM (IDZ)  =  "143"         OR
       *          RECE02-KOHNUM (IDZ)  =  "343"        
+      *=== 障害は公費の助成がなくても印字 by Uchida(2009/05/13) start
+      *     IF   RECE02-KOHNUM (IDZ)  =  "144"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "344"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "644"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "744"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "844"         OR
+      **---(01.00.11) LINE ADD START ------------------------------------
+      *          RECE02-KOHNUM (IDZ)  =  "143"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "343"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "643"         OR
+      **---(01.00.13) LINE ADD START ------------------------------------
+      *          RECE02-KOHNUM (IDZ)  =  "743"         OR
+      **---(01.00.13) LINE ADD END   ------------------------------------
+      *          RECE02-KOHNUM (IDZ)  =  "843"
+      **---(01.00.11) LINE ADD END   ------------------------------------
            IF   RECE02-KOHNUM (IDZ)  =  "144"         OR
                 RECE02-KOHNUM (IDZ)  =  "344"         OR
                 RECE02-KOHNUM (IDZ)  =  "644"         OR
                 RECE02-KOHNUM (IDZ)  =  "744"         OR
-                RECE02-KOHNUM (IDZ)  =  "844"         OR
-                RECE02-KOHNUM (IDZ)  =  "143"         OR
-                RECE02-KOHNUM (IDZ)  =  "343"         OR
-                RECE02-KOHNUM (IDZ)  =  "643"         OR
-      *---(01.00.13) LINE ADD START ------------------------------------
-                RECE02-KOHNUM (IDZ)  =  "743"         OR
-      *---(01.00.13) LINE ADD END   ------------------------------------
-                RECE02-KOHNUM (IDZ)  =  "843"
-      *---(01.00.11) LINE ADD END   ------------------------------------
+                RECE02-KOHNUM (IDZ)  =  "844"
+      *=== 障害は公費の助成がなくても印字 by Uchida(2009/05/13) end
              MOVE      1                       TO  FLG-ERR
            END-IF
       *
