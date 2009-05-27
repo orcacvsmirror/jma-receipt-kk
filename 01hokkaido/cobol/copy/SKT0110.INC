@@ -20,6 +20,7 @@
             03  SKT0110-SRYYM           PIC X(16).
             03  SKT0110-HKNJANUM        PIC X(12).
             03  SKT0110-HKNJANAME       PIC X(30).
+            03  SKT0110-HKNJANAME2      PIC X(12).
             03  SKT0110-SEIYMD          PIC X(22).
             03  SKT0110-HOSPCD          PIC X(07).
             03  SKT0110-ADRS            PIC X(100).

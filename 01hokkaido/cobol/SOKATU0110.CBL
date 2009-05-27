@@ -52,6 +52,7 @@
       *                                 備考欄に「超過」「標欠」印字
       *  01.00.12    内田   08/08/01    入院基本情報のエラーメッセージ削除
       *  01.00.13    吉川   08/09/11    シス管「2007」の公費まとめ対応
+      *  01.00.14    内田   09/05/12    後志広域連合対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1538,6 +1539,34 @@
       *    保険者名
            MOVE  SKT0110TMP-HKNJANUM  TO  WRK-HKNJANUM
            PERFORM  920-HKNJAINF-SET-SEC
+      *---(01.00.14) LINE ADD START ------------------------------------
+      *    後志広域連合かどうか
+           IF  SKT0110TMP-HKNJANUM  =  "010835"
+           OR  SKT0110TMP-HKNJANUM  =  "010850"
+           OR  SKT0110TMP-HKNJANUM  =  "010868"
+           OR  SKT0110TMP-HKNJANUM  =  "010876"
+           OR  SKT0110TMP-HKNJANUM  =  "010884"
+           OR  SKT0110TMP-HKNJANUM  =  "010892"
+           OR  SKT0110TMP-HKNJANUM  =  "010900"
+           OR  SKT0110TMP-HKNJANUM  =  "010918"
+           OR  SKT0110TMP-HKNJANUM  =  "010926"
+           OR  SKT0110TMP-HKNJANUM  =  "010934"
+           OR  SKT0110TMP-HKNJANUM  =  "010959"
+           OR  SKT0110TMP-HKNJANUM  =  "010967"
+           OR  SKT0110TMP-HKNJANUM  =  "010975"
+           OR  SKT0110TMP-HKNJANUM  =  "010983"
+           OR  SKT0110TMP-HKNJANUM  =  "010999"
+           OR  SKT0110TMP-HKNJANUM  =  "011015"
+             STRING  "（"             DELIMITED  BY  SIZE
+                     HKNJA-HKNJANAME  DELIMITED  BY  SPACE
+                     "）"             DELIMITED  BY  SIZE
+                     INTO            SKT0110-HKNJANAME
+             END-STRING
+             MOVE  "後志広域連合"    TO  SKT0110-HKNJANAME2
+           ELSE
+             MOVE  HKNJA-HKNJANAME   TO  SKT0110-HKNJANAME
+           END-IF
+      *---(01.00.14) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD START ------------------------------------
       *    在総診
            IF      SKT0110TMP-ZAITAKU     =    "1"
@@ -2121,7 +2150,9 @@
              MOVE    "key"                TO  MCP-PATHNAME
       *---(01.00.06) LINE ADD END   ------------------------------------
              PERFORM  925-HKNJAINF-READ-SEC
-             MOVE  HKNJA-HKNJANAME   TO  SKT0110-HKNJANAME
+      *---(01.00.14) LINE ADD START ------------------------------------
+      *       MOVE  HKNJA-HKNJANAME   TO  SKT0110-HKNJANAME
+      *---(01.00.14) LINE ADD END   ------------------------------------
            ELSE
              DISPLAY  "HKNJAINF SELECT ERR"
            END-IF

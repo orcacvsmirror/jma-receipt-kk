@@ -21,6 +21,11 @@
         <embed object="string" length="30"/>
       </appinfo>
     </element>
+    <element name="HKNJANAME2" occurs="1">
+      <appinfo>
+        <embed object="string" length="12"/>
+      </appinfo>
+    </element>
     <element name="SEIYMD" occurs="1">
       <appinfo>
         <embed object="string" length="22"/>
@@ -11563,5 +11568,47 @@
         </attribute>
       </object>
     </group>
+    <object type="Embed - Text" version="0" id="O344">
+      <attribute name="obj_pos">
+        <point val="1.6,4.225"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="1.6,3.93833;3.7816,4.29833"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#HKNJANAME2#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.36"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="1.6,4.225"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.21816"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1818"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
   </layer>
 </diagram>
