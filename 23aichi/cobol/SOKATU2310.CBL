@@ -42,6 +42,8 @@
       *  01.00.06    内田     09/01/16    一部負担金欄は一般＋５１等だけでなく
       *                                   前期＋５１等の場合も集計する
       *                                   SPA-AREA初期化
+      *  01.00.07    吉川     09/05/22    長期及び長期上位（972、974）は
+      *                                   公費再掲欄にカウントしない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -967,10 +969,13 @@
            PERFORM  VARYING IDX3 FROM 1 BY 1
                     UNTIL   IDX3 >    4
                IF  RECE10-KOHNUM(IDX3)(1:1)  =  "0" OR
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *             RECE10-ETC-KOHNUM(IDX3)   =  "019" OR "972"
-                   RECE10-ETC-KOHNUM(IDX3)  =  "019" OR "972" OR "974"
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 長期はカウントしない by Yoshikawa(2009/05/22) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **             RECE10-ETC-KOHNUM(IDX3)   =  "019" OR "972"
+      *             RECE10-ETC-KOHNUM(IDX3)  =  "019" OR "972" OR "974"
+      **---(01.00.03) LINE ADD END   ------------------------------------
+                   RECE10-ETC-KOHNUM(IDX3)  =  "019"
+      *=== 長期はカウントしない by Yoshikawa(2009/05/22) end
                    MOVE    1         TO    FLG-KOH1
                    MOVE    4         TO    IDX3
                END-IF
