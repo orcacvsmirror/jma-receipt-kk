@@ -49,6 +49,7 @@
       *                                    初に○付加
       *  01.00.10     内田     08/07/01    札幌市代表保険者番号変更
       *  01.00.11     吉川     08/09/11    SPA-AREA初期化
+      *  01.00.12     内田     09/05/22    上限達した時の旭川市の備考欄印字修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -856,7 +857,11 @@
       *    旭川の場合、初診再診判定
            IF  MF100-KOHNUM  =  "644"
              COMPUTE  WRK-SHOSAI  =  RECE02-TOTALTEN (IDY) / 10 * 10
+      *=== 上限達した時の旭川市の備考欄印字修正 by Uchida(2009/05/22) start
+      *       IF  RECE02-FTNMONEY (IDY)  <  WRK-SHOSAI
              IF  RECE02-FTNMONEY (IDY)  <  WRK-SHOSAI
+             AND  WRK-SHOSAI <= 12000
+      *=== 上限達した時の旭川市の備考欄印字修正 by Uchida(2009/05/22) end
                MOVE  1  TO  MF100-SHOSAISIN
              END-IF
            END-IF
