@@ -44,6 +44,9 @@
       *  02.05.08    吉川    08/06/03    特記事項印字修正
       *              内田    08/06/13    診療年月欄に診療年月を印字する
       *                                  SPA-AREA初期化
+      *  02.05.09    吉川    09/06/02    H21年5月特定疾患改正対応
+      *                                  入院の後期高齢の場合保険種別が
+      *                                  「1社・国」に○が付く不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -336,11 +339,27 @@
            03  FILLER          PIC X(10)   VALUE   "１９低所".
            03  FILLER          PIC X(02)   VALUE   "20".
            03  FILLER          PIC X(10)   VALUE   "２０二割".
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+           03  FILLER          PIC X(02)   VALUE   "21".
+           03  FILLER          PIC X(10)   VALUE   "２１高半".
+           03  FILLER          PIC X(02)   VALUE   "22".
+           03  FILLER          PIC X(10)   VALUE   "２２多上".
+           03  FILLER          PIC X(02)   VALUE   "23".
+           03  FILLER          PIC X(10)   VALUE   "２３多一".
+           03  FILLER          PIC X(02)   VALUE   "24".
+           03  FILLER          PIC X(10)   VALUE   "２４多低".
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
-           03  TBL-TOKKI       OCCURS   18.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+      *     03  TBL-TOKKI       OCCURS   18.
+           03  TBL-TOKKI       OCCURS   22.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
                05  TBL-TOKKICD             PIC X(02).
                05  TBL-TOKKINAME           PIC X(10).
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   18.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   18.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
       *=== 特記事項印字修正 by Yoshikawa(2008/06/03) end
       * OCR編集領域
        01  OCR-HENSYU-TBL.
@@ -1526,10 +1545,16 @@
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >  3
              PERFORM  VARYING  IDY  FROM  1  BY  1
-                      UNTIL  IDY  >  18
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+      *                UNTIL  IDY  >  18
+                      UNTIL  IDY  >  TBL-TOKKI-MAX
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
                IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
                    MOVE  TBL-TOKKINAME(IDY)   TO  SC03-TOKKI(IDX)
-                   MOVE  19  TO  IDY
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+      *             MOVE  19  TO  IDY
+                   MOVE  TBL-TOKKI-MAX  TO  IDY
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
                END-IF
              END-PERFORM
            END-PERFORM
@@ -2065,6 +2090,9 @@
       *    保険種別区分
            EVALUATE  TRUE
 	     WHEN  MF101-RJNHKNNUM = "027"
+      *=== 後期高齢保険種別印字不具合修正 by Yoshikawa(2009/06/02) start
+           WHEN  MF101-HKNNUM  = "039"  OR  "040"
+      *=== 後期高齢保険種別印字不具合修正 by Yoshikawa(2009/06/02) end
 	       MOVE  "○"  TO  SC04-HKNKBN (3)
 	     WHEN  MF101-HKNNUM = "063" OR "072" OR "073" OR
 	                          "067" OR "074" OR "075"
@@ -2209,10 +2237,16 @@
        PERFORM  VARYING  IDX  FROM  1  BY  1
                 UNTIL    IDX  >  3
          PERFORM  VARYING  IDY  FROM  1  BY  1
-                  UNTIL  IDY  >  18
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+      *            UNTIL  IDY  >  18
+                  UNTIL  IDY  >  TBL-TOKKI-MAX
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
            IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
                MOVE  TBL-TOKKINAME(IDY)   TO  SC04-TOKKI(IDX)
-               MOVE  19  TO  IDY
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
+      *         MOVE  19  TO  IDY
+               MOVE  TBL-TOKKI-MAX  TO  IDY
+      *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
            END-IF
          END-PERFORM
        END-PERFORM
