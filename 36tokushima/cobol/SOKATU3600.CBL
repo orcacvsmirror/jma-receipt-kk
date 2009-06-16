@@ -41,6 +41,7 @@
       *  01.00.08    内田    08/07/04    後期高齢のみの場合でも印刷するよう修正
       *                                  シス管「2007」の公費まとめ対応
       *                                  保険番号748は公費再掲欄に印字しない
+      *  01.00.09    吉川    09/06/08    点数、金額、食事回数のバイト数増加
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -184,6 +185,10 @@
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+           03  WRK-Z6              PIC ZZ,ZZZ.
+           03  WRK-Z10             PIC ZZ,ZZZ,ZZZ.
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
            03  WRK-RECEERR         PIC X(200).
       *
@@ -1309,8 +1314,12 @@
                    MOVE    WRK-Z5      TO  SKT3605-NISSU (IDX2 IDX3)
       *
       *            療養の給付：点数
-                   MOVE    SKT3600TMP-TENSU (IDX2 IDX3)    TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT3605-TENSU (IDX2 IDX3)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *             MOVE    SKT3600TMP-TENSU (IDX2 IDX3)    TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT3605-TENSU (IDX2 IDX3)
+                   MOVE    SKT3600TMP-TENSU (IDX2 IDX3)    TO  WRK-Z10
+                   MOVE    WRK-Z10     TO  SKT3605-TENSU (IDX2 IDX3)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *            療養の給付：一部負担金
                    MOVE    SKT3600TMP-ITBFTN (IDX2 IDX3)   TO  WRK-Z9
@@ -1325,12 +1334,20 @@
                MOVE    WRK-Z5      TO  SKT3605-SKENSU (IDX2)
       *
       *        食事療養：日数
-               MOVE    SKT3600TMP-SNISSU (IDX2)    TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3605-SNISSU (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-SNISSU (IDX2)    TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3605-SNISSU (IDX2)
+               MOVE    SKT3600TMP-SNISSU (IDX2)    TO  WRK-Z6
+               MOVE    WRK-Z6     TO  SKT3605-SNISSU (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：金額
-               MOVE    SKT3600TMP-SKINGK (IDX2)    TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3605-SKINGK (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-SKINGK (IDX2)    TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3605-SKINGK (IDX2)
+               MOVE    SKT3600TMP-SKINGK (IDX2)    TO  WRK-Z10
+               MOVE    WRK-Z10     TO  SKT3605-SKINGK (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：標準負担額
                MOVE    SKT3600TMP-SFTNGK (IDX2)    TO  WRK-Z9
@@ -1460,9 +1477,14 @@
                    MOVE    WRK-Z5      TO  SKT3605-K-NISSU (IDX2 IDX3)
       *
       *            療養の給付：点数
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *             MOVE    SKT3600TMP-K-TENSU(CNT-KOH IDX3)
+      *                                                 TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT3605-K-TENSU (IDX2 IDX3)
                    MOVE    SKT3600TMP-K-TENSU(CNT-KOH IDX3)
-                                                       TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT3605-K-TENSU (IDX2 IDX3)
+                                                       TO  WRK-Z10
+                   MOVE    WRK-Z10     TO  SKT3605-K-TENSU (IDX2 IDX3)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *            療養の給付：一部負担金
                    MOVE    SKT3600TMP-K-ITBFTN(CNT-KOH IDX3)
@@ -1475,12 +1497,20 @@
                MOVE    WRK-Z5      TO  SKT3605-K-SKENSU (IDX2)
       *
       *        食事療養：日数
-               MOVE    SKT3600TMP-K-SNISSU(CNT-KOH)    TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3605-K-SNISSU  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-K-SNISSU(CNT-KOH)    TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3605-K-SNISSU  (IDX2)
+               MOVE    SKT3600TMP-K-SNISSU(CNT-KOH)    TO  WRK-Z6
+               MOVE    WRK-Z6      TO  SKT3605-K-SNISSU  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：金額
-               MOVE    SKT3600TMP-K-SKINGK(CNT-KOH)    TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3605-K-SKINGK  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-K-SKINGK(CNT-KOH)    TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3605-K-SKINGK  (IDX2)
+               MOVE    SKT3600TMP-K-SKINGK(CNT-KOH)    TO  WRK-Z10
+               MOVE    WRK-Z10     TO  SKT3605-K-SKINGK  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：標準負担額
                MOVE    SKT3600TMP-K-SFTNGK(CNT-KOH)    TO  WRK-Z9
@@ -1615,8 +1645,12 @@
                    MOVE    WRK-Z5   TO  SKT3600-NISSU (IDX2 IDX3)
       *
       *            療養の給付：点数
-                   MOVE    SKT3600TMP-TENSU (IDX2 IDX3)    TO  WRK-Z9
-                   MOVE    WRK-Z9   TO  SKT3600-TENSU (IDX2 IDX3)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *             MOVE    SKT3600TMP-TENSU (IDX2 IDX3)    TO  WRK-Z9
+      *             MOVE    WRK-Z9   TO  SKT3600-TENSU (IDX2 IDX3)
+                   MOVE    SKT3600TMP-TENSU (IDX2 IDX3)    TO  WRK-Z10
+                   MOVE    WRK-Z10  TO  SKT3600-TENSU (IDX2 IDX3)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *---(01.00.06) LINE ADD START ------------------------------------
       *            療養の給付：一部負担金
                    MOVE    SKT3600TMP-ITBFTN (IDX2 IDX3)  TO  WRK-Z9
@@ -1636,12 +1670,20 @@
                MOVE    WRK-Z5      TO  SKT3600-SKENSU (IDX2)
       *
       *        食事療養：日数
-               MOVE    SKT3600TMP-SNISSU (IDX2)    TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3600-SNISSU (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-SNISSU (IDX2)    TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3600-SNISSU (IDX2)
+               MOVE    SKT3600TMP-SNISSU (IDX2)    TO  WRK-Z6
+               MOVE    WRK-Z6      TO  SKT3600-SNISSU (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：金額
-               MOVE    SKT3600TMP-SKINGK (IDX2)    TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3600-SKINGK (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-SKINGK (IDX2)    TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3600-SKINGK (IDX2)
+               MOVE    SKT3600TMP-SKINGK (IDX2)    TO  WRK-Z10
+               MOVE    WRK-Z10     TO  SKT3600-SKINGK (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：標準負担額
                MOVE    SKT3600TMP-SFTNGK (IDX2)    TO  WRK-Z9
@@ -1771,9 +1813,14 @@
                    MOVE    WRK-Z5      TO  SKT3600-K-NISSU (IDX2 IDX3)
       *
       *            療養の給付：点数
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *             MOVE    SKT3600TMP-K-TENSU(CNT-KOH IDX3)
+      *                                                 TO  WRK-Z9
+      *             MOVE    WRK-Z9      TO  SKT3600-K-TENSU (IDX2 IDX3)
                    MOVE    SKT3600TMP-K-TENSU(CNT-KOH IDX3)
-                                                       TO  WRK-Z9
-                   MOVE    WRK-Z9      TO  SKT3600-K-TENSU (IDX2 IDX3)
+                                                       TO  WRK-Z10
+                   MOVE    WRK-Z10     TO  SKT3600-K-TENSU (IDX2 IDX3)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *            療養の給付：一部負担金
                    MOVE    SKT3600TMP-K-ITBFTN(CNT-KOH IDX3)
@@ -1786,12 +1833,18 @@
                MOVE    WRK-Z5      TO  SKT3600-K-SKENSU (IDX2)
       *
       *        食事療養：日数
-               MOVE    SKT3600TMP-K-SNISSU(CNT-KOH)    TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3600-K-SNISSU  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+      *         MOVE    SKT3600TMP-K-SNISSU(CNT-KOH)    TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3600-K-SNISSU  (IDX2)
+               MOVE    SKT3600TMP-K-SNISSU(CNT-KOH)    TO  WRK-Z6
+               MOVE    WRK-Z6      TO  SKT3600-K-SNISSU  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：金額
-               MOVE    SKT3600TMP-K-SKINGK(CNT-KOH)    TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3600-K-SKINGK  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) start
+               MOVE    SKT3600TMP-K-SKINGK(CNT-KOH)    TO  WRK-Z10
+               MOVE    WRK-Z10     TO  SKT3600-K-SKINGK  (IDX2)
+      *=== バイト数増加 by Yoshikawa(2009/06/08) end
       *
       *        食事療養：標準負担額
                MOVE    SKT3600TMP-K-SFTNGK(CNT-KOH)    TO  WRK-Z9

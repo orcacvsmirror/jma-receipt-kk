@@ -22,7 +22,8 @@
       *  08/04/17    大竹          新規作成(後期高齢者対応)
       ********************************************************************
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/06/08  点数、金額、食事回数のバイト数増加
       ********************************************************************
         01  SKT3625.
       *    診療年月
@@ -55,15 +56,15 @@
       *    診療実日数
                 07  SKT3625-NISSU   PIC X(5).
       *    点数
-                07  SKT3625-TENSU   PIC X(9).
+                07  SKT3625-TENSU   PIC X(10).
       *    一部負担金
                 07  SKT3625-ITBFTN  PIC X(9).
       *    食事療養：件数
               05  SKT3625-S-KENSU PIC X(5).
       *    食事療養：日数
-              05  SKT3625-S-NISSU PIC X(5).
+              05  SKT3625-S-NISSU PIC X(6).
       *    食事療養：金額
-              05  SKT3625-S-KINGK PIC X(9).
+              05  SKT3625-S-KINGK PIC X(10).
       *    食事療養：標準負担額
               05  SKT3625-S-FTNGK PIC X(9).
       *    公費請求テーブル
@@ -75,7 +76,7 @@
       *    診療実日数
                 07  SKT3625-KNISSU  PIC X(5).
       *    点数
-                07  SKT3625-KTENSU  PIC X(9).
+                07  SKT3625-KTENSU  PIC X(10).
       *    一部負担金
                 07  SKT3625-KITBFTN PIC X(9).
       *    公費名
@@ -84,8 +85,8 @@
       *    食事療養：件数
               05  SKT3625-S-KKENSU    PIC X(5).
       *    食事療養：日数
-              05  SKT3625-S-KNISSU    PIC X(5).
+              05  SKT3625-S-KNISSU    PIC X(6).
       *    食事療養：金額
-              05  SKT3625-S-KKINGK    PIC X(9).
+              05  SKT3625-S-KKINGK    PIC X(10).
       *    食事療養：標準負担額
               05  SKT3625-S-KFTNGK    PIC X(9).

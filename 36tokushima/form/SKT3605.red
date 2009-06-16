@@ -70,7 +70,7 @@
         </element>
         <element name="TENSU" occurs="1">
           <appinfo>
-            <embed object="string" length="9"/>
+            <embed object="string" length="10"/>
           </appinfo>
         </element>
         <element name="ITBFTN2" occurs="1">
@@ -91,12 +91,12 @@
       </element>
       <element name="SNISSU" occurs="1">
         <appinfo>
-          <embed object="string" length="5"/>
+          <embed object="string" length="6"/>
         </appinfo>
       </element>
       <element name="SKINGK" occurs="1">
         <appinfo>
-          <embed object="string" length="9"/>
+          <embed object="string" length="10"/>
         </appinfo>
       </element>
       <element name="SFTNGK" occurs="1">
@@ -129,7 +129,7 @@
         </element>
         <element name="K-TENSU" occurs="1">
           <appinfo>
-            <embed object="string" length="9"/>
+            <embed object="string" length="10"/>
           </appinfo>
         </element>
         <element name="K-ITBFTN" occurs="1">
@@ -145,12 +145,12 @@
       </element>
       <element name="K-SNISSU" occurs="1">
         <appinfo>
-          <embed object="string" length="5"/>
+          <embed object="string" length="6"/>
         </appinfo>
       </element>
       <element name="K-SKINGK" occurs="1">
         <appinfo>
-          <embed object="string" length="9"/>
+          <embed object="string" length="10"/>
         </appinfo>
       </element>
       <element name="K-SFTNGK" occurs="1">
@@ -5699,174 +5699,6 @@
     </object>
     <object type="Embed - Text" version="0" id="O189">
       <attribute name="obj_pos">
-        <point val="10.25,10.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,9.78148;10.25,10.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[0].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,10.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O190">
-      <attribute name="obj_pos">
-        <point val="14.05,10.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.838,9.78148;14.05,10.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[0].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.05,10.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O191">
-      <attribute name="obj_pos">
-        <point val="15.45,10.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.238,9.78148;15.45,10.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[0].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.45,10.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O192">
-      <attribute name="obj_pos">
-        <point val="17.8309,10.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,9.78148;17.8309,10.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[0].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,10.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O193">
-      <attribute name="obj_pos">
         <point val="19.875,10.1"/>
       </attribute>
       <attribute name="obj_bb">
@@ -5907,7 +5739,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O194">
+    <object type="Embed - Text" version="0" id="O190">
       <attribute name="obj_pos">
         <point val="6.35,10.6206"/>
       </attribute>
@@ -5949,7 +5781,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O195">
+    <object type="Embed - Text" version="0" id="O191">
       <attribute name="obj_pos">
         <point val="7.75215,10.6206"/>
       </attribute>
@@ -5991,49 +5823,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O196">
-      <attribute name="obj_pos">
-        <point val="10.25,10.6206"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,10.3021;10.25,10.7021"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[0].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,10.6206"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O197">
+    <object type="Embed - Text" version="0" id="O192">
       <attribute name="obj_pos">
         <point val="6.35,11.1412"/>
       </attribute>
@@ -6075,7 +5865,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O198">
+    <object type="Embed - Text" version="0" id="O193">
       <attribute name="obj_pos">
         <point val="7.75215,11.1412"/>
       </attribute>
@@ -6117,180 +5907,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O199">
+    <object type="Embed - Text" version="0" id="O194">
       <attribute name="obj_pos">
-        <point val="10.25,11.1412"/>
+        <point val="19.903,11.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,10.8227;10.25,11.2227"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[1].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,11.1412"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O200">
-      <attribute name="obj_pos">
-        <point val="14.05,11.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.838,10.8815;14.05,11.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[1].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.05,11.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O201">
-      <attribute name="obj_pos">
-        <point val="15.45,11.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.238,10.8815;15.45,11.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[1].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.45,11.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O202">
-      <attribute name="obj_pos">
-        <point val="17.8309,11.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,10.8815;17.8309,11.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[1].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,11.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O203">
-      <attribute name="obj_pos">
-        <point val="19.85,11.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,10.9213;19.85,11.2713"/>
+        <rectangle val="17.9941,10.9213;19.903,11.2713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].SFTNGK#</string>
@@ -6310,7 +5932,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,11.2"/>
+            <point val="19.903,11.2"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6327,7 +5949,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O204">
+    <object type="Embed - Text" version="0" id="O195">
       <attribute name="obj_pos">
         <point val="6.35,11.6618"/>
       </attribute>
@@ -6369,7 +5991,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O205">
+    <object type="Embed - Text" version="0" id="O196">
       <attribute name="obj_pos">
         <point val="7.75215,11.6618"/>
       </attribute>
@@ -6411,49 +6033,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O206">
-      <attribute name="obj_pos">
-        <point val="10.25,11.6618"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,11.3433;10.25,11.7433"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[1].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,11.6618"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O207">
+    <object type="Embed - Text" version="0" id="O197">
       <attribute name="obj_pos">
         <point val="6.35,12.1824"/>
       </attribute>
@@ -6495,7 +6075,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O208">
+    <object type="Embed - Text" version="0" id="O198">
       <attribute name="obj_pos">
         <point val="7.75215,12.1824"/>
       </attribute>
@@ -6537,180 +6117,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O209">
+    <object type="Embed - Text" version="0" id="O199">
       <attribute name="obj_pos">
-        <point val="10.25,12.1824"/>
+        <point val="19.903,12.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,11.8639;10.25,12.2639"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[2].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,12.1824"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O210">
-      <attribute name="obj_pos">
-        <point val="14.05,12.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.838,11.8815;14.05,12.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[2].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.05,12.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O211">
-      <attribute name="obj_pos">
-        <point val="15.45,12.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.238,11.8815;15.45,12.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[2].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.45,12.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O212">
-      <attribute name="obj_pos">
-        <point val="17.8309,12.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,11.8815;17.8309,12.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[2].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,12.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O213">
-      <attribute name="obj_pos">
-        <point val="19.85,12.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,11.9213;19.85,12.2713"/>
+        <rectangle val="17.9941,11.9213;19.903,12.2713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].SFTNGK#</string>
@@ -6730,7 +6142,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,12.2"/>
+            <point val="19.903,12.2"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6747,7 +6159,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O214">
+    <object type="Embed - Text" version="0" id="O200">
       <attribute name="obj_pos">
         <point val="6.35,12.7029"/>
       </attribute>
@@ -6789,7 +6201,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O215">
+    <object type="Embed - Text" version="0" id="O201">
       <attribute name="obj_pos">
         <point val="7.75215,12.7029"/>
       </attribute>
@@ -6831,49 +6243,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O216">
-      <attribute name="obj_pos">
-        <point val="10.25,12.7029"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,12.3844;10.25,12.7844"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[2].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,12.7029"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O217">
+    <object type="Embed - Text" version="0" id="O202">
       <attribute name="obj_pos">
         <point val="6.35,13.2235"/>
       </attribute>
@@ -6915,7 +6285,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O218">
+    <object type="Embed - Text" version="0" id="O203">
       <attribute name="obj_pos">
         <point val="7.75215,13.2235"/>
       </attribute>
@@ -6957,180 +6327,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O219">
+    <object type="Embed - Text" version="0" id="O204">
       <attribute name="obj_pos">
-        <point val="10.25,13.2235"/>
+        <point val="19.903,13.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,12.905;10.25,13.305"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[3].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,13.2235"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O220">
-      <attribute name="obj_pos">
-        <point val="14.05,13.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.838,12.9315;14.05,13.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[3].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.05,13.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O221">
-      <attribute name="obj_pos">
-        <point val="15.45,13.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.238,12.9315;15.45,13.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[3].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.45,13.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O222">
-      <attribute name="obj_pos">
-        <point val="17.8309,13.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,12.9315;17.8309,13.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[3].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,13.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O223">
-      <attribute name="obj_pos">
-        <point val="19.85,13.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,12.9713;19.85,13.3213"/>
+        <rectangle val="17.9941,12.9713;19.903,13.3213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].SFTNGK#</string>
@@ -7150,7 +6352,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,13.25"/>
+            <point val="19.903,13.25"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7167,7 +6369,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O224">
+    <object type="Embed - Text" version="0" id="O205">
       <attribute name="obj_pos">
         <point val="6.35,13.7441"/>
       </attribute>
@@ -7209,7 +6411,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O225">
+    <object type="Embed - Text" version="0" id="O206">
       <attribute name="obj_pos">
         <point val="7.75215,13.7441"/>
       </attribute>
@@ -7251,49 +6453,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O226">
-      <attribute name="obj_pos">
-        <point val="10.25,13.7441"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,13.4256;10.25,13.8256"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[3].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,13.7441"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O227">
+    <object type="Embed - Text" version="0" id="O207">
       <attribute name="obj_pos">
         <point val="6.35,14.2647"/>
       </attribute>
@@ -7335,7 +6495,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O228">
+    <object type="Embed - Text" version="0" id="O208">
       <attribute name="obj_pos">
         <point val="7.75215,14.2647"/>
       </attribute>
@@ -7377,180 +6537,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O229">
+    <object type="Embed - Text" version="0" id="O209">
       <attribute name="obj_pos">
-        <point val="10.25,14.2647"/>
+        <point val="19.903,14.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,13.9462;10.25,14.3462"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[4].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,14.2647"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O230">
-      <attribute name="obj_pos">
-        <point val="14.05,14.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.838,13.9815;14.05,14.3815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[4].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.05,14.3"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O231">
-      <attribute name="obj_pos">
-        <point val="15.45,14.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.238,13.9815;15.45,14.3815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[4].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.45,14.3"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O232">
-      <attribute name="obj_pos">
-        <point val="17.8309,14.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,13.9815;17.8309,14.3815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[4].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,14.3"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O233">
-      <attribute name="obj_pos">
-        <point val="19.85,14.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,14.0213;19.85,14.3713"/>
+        <rectangle val="17.9941,14.0213;19.903,14.3713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].SFTNGK#</string>
@@ -7570,7 +6562,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,14.3"/>
+            <point val="19.903,14.3"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7587,7 +6579,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O234">
+    <object type="Embed - Text" version="0" id="O210">
       <attribute name="obj_pos">
         <point val="6.35,14.7853"/>
       </attribute>
@@ -7629,7 +6621,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O235">
+    <object type="Embed - Text" version="0" id="O211">
       <attribute name="obj_pos">
         <point val="7.75215,14.7853"/>
       </attribute>
@@ -7671,49 +6663,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O236">
-      <attribute name="obj_pos">
-        <point val="10.25,14.7853"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,14.4668;10.25,14.8668"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[4].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,14.7853"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O237">
+    <object type="Embed - Text" version="0" id="O212">
       <attribute name="obj_pos">
         <point val="6.35,15.3059"/>
       </attribute>
@@ -7755,7 +6705,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O238">
+    <object type="Embed - Text" version="0" id="O213">
       <attribute name="obj_pos">
         <point val="7.75215,15.3059"/>
       </attribute>
@@ -7797,180 +6747,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O239">
+    <object type="Embed - Text" version="0" id="O214">
       <attribute name="obj_pos">
-        <point val="10.25,15.3059"/>
+        <point val="19.903,15.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,14.9874;10.25,15.3874"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[5].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,15.3059"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O240">
-      <attribute name="obj_pos">
-        <point val="14.0441,15.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.8321,14.9815;14.0441,15.3815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[5].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.0441,15.3"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O241">
-      <attribute name="obj_pos">
-        <point val="15.4441,15.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.2321,14.9815;15.4441,15.3815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[5].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.4441,15.3"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O242">
-      <attribute name="obj_pos">
-        <point val="17.8309,15.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,14.9815;17.8309,15.3815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[5].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,15.3"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O243">
-      <attribute name="obj_pos">
-        <point val="19.85,15.3"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,15.0213;19.85,15.3713"/>
+        <rectangle val="17.9941,15.0213;19.903,15.3713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[5].SFTNGK#</string>
@@ -7990,7 +6772,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,15.3"/>
+            <point val="19.903,15.3"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8007,7 +6789,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O244">
+    <object type="Embed - Text" version="0" id="O215">
       <attribute name="obj_pos">
         <point val="6.35,15.8265"/>
       </attribute>
@@ -8049,7 +6831,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O245">
+    <object type="Embed - Text" version="0" id="O216">
       <attribute name="obj_pos">
         <point val="7.75215,15.8265"/>
       </attribute>
@@ -8091,49 +6873,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O246">
-      <attribute name="obj_pos">
-        <point val="10.25,15.8265"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,15.508;10.25,15.908"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[5].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,15.8265"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O247">
+    <object type="Embed - Text" version="0" id="O217">
       <attribute name="obj_pos">
         <point val="6.35,16.3471"/>
       </attribute>
@@ -8175,7 +6915,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O248">
+    <object type="Embed - Text" version="0" id="O218">
       <attribute name="obj_pos">
         <point val="7.75215,16.3471"/>
       </attribute>
@@ -8217,180 +6957,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O249">
+    <object type="Embed - Text" version="0" id="O219">
       <attribute name="obj_pos">
-        <point val="10.25,16.3471"/>
+        <point val="19.903,16.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,16.0286;10.25,16.4286"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[6].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,16.3471"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O250">
-      <attribute name="obj_pos">
-        <point val="14.0441,16.35"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.8321,16.0315;14.0441,16.4315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[6].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.0441,16.35"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O251">
-      <attribute name="obj_pos">
-        <point val="15.4441,16.35"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.2321,16.0315;15.4441,16.4315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[6].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.4441,16.35"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O252">
-      <attribute name="obj_pos">
-        <point val="17.8309,16.35"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,16.0315;17.8309,16.4315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[6].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,16.35"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O253">
-      <attribute name="obj_pos">
-        <point val="19.85,16.35"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,16.0713;19.85,16.4213"/>
+        <rectangle val="17.9941,16.0713;19.903,16.4213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[6].SFTNGK#</string>
@@ -8410,7 +6982,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,16.35"/>
+            <point val="19.903,16.35"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8427,7 +6999,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O254">
+    <object type="Embed - Text" version="0" id="O220">
       <attribute name="obj_pos">
         <point val="6.35,16.8676"/>
       </attribute>
@@ -8469,7 +7041,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O255">
+    <object type="Embed - Text" version="0" id="O221">
       <attribute name="obj_pos">
         <point val="7.75215,16.8676"/>
       </attribute>
@@ -8511,49 +7083,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O256">
-      <attribute name="obj_pos">
-        <point val="10.25,16.8676"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,16.5491;10.25,16.9491"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[6].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,16.8676"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O257">
+    <object type="Embed - Text" version="0" id="O222">
       <attribute name="obj_pos">
         <point val="6.35,17.3882"/>
       </attribute>
@@ -8595,7 +7125,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O258">
+    <object type="Embed - Text" version="0" id="O223">
       <attribute name="obj_pos">
         <point val="7.75215,17.3882"/>
       </attribute>
@@ -8637,180 +7167,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O259">
+    <object type="Embed - Text" version="0" id="O224">
       <attribute name="obj_pos">
-        <point val="10.25,17.3882"/>
+        <point val="19.903,17.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,17.0697;10.25,17.4697"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[7].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,17.3882"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O260">
-      <attribute name="obj_pos">
-        <point val="14.0441,17.4"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.8321,17.0815;14.0441,17.4815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[7].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.0441,17.4"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O261">
-      <attribute name="obj_pos">
-        <point val="15.4441,17.4"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.2321,17.0815;15.4441,17.4815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[7].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.4441,17.4"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O262">
-      <attribute name="obj_pos">
-        <point val="17.8309,17.4"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,17.0815;17.8309,17.4815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[7].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,17.4"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O263">
-      <attribute name="obj_pos">
-        <point val="19.85,17.4"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,17.1213;19.85,17.4713"/>
+        <rectangle val="17.9941,17.1213;19.903,17.4713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[7].SFTNGK#</string>
@@ -8830,7 +7192,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,17.4"/>
+            <point val="19.903,17.4"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8847,7 +7209,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O264">
+    <object type="Embed - Text" version="0" id="O225">
       <attribute name="obj_pos">
         <point val="6.35,17.9088"/>
       </attribute>
@@ -8889,7 +7251,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O265">
+    <object type="Embed - Text" version="0" id="O226">
       <attribute name="obj_pos">
         <point val="7.75215,17.9088"/>
       </attribute>
@@ -8931,49 +7293,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O266">
-      <attribute name="obj_pos">
-        <point val="10.25,17.9088"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,17.5903;10.25,17.9903"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[7].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,17.9088"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O267">
+    <object type="Embed - Text" version="0" id="O227">
       <attribute name="obj_pos">
         <point val="6.35,18.4294"/>
       </attribute>
@@ -9015,7 +7335,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O268">
+    <object type="Embed - Text" version="0" id="O228">
       <attribute name="obj_pos">
         <point val="7.75215,18.4294"/>
       </attribute>
@@ -9057,180 +7377,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O269">
+    <object type="Embed - Text" version="0" id="O229">
       <attribute name="obj_pos">
-        <point val="10.25,18.4294"/>
+        <point val="19.903,18.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.0684,18.1109;10.25,18.5109"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[8].NYUGAIKBN[0].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,18.4294"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O270">
-      <attribute name="obj_pos">
-        <point val="14.0441,18.45"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="12.8321,18.1315;14.0441,18.5315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[8].SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.0441,18.45"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O271">
-      <attribute name="obj_pos">
-        <point val="15.4441,18.45"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.2321,18.1315;15.4441,18.5315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[8].SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.4441,18.45"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O272">
-      <attribute name="obj_pos">
-        <point val="17.8309,18.45"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6493,18.1315;17.8309,18.5315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[8].SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8309,18.45"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O273">
-      <attribute name="obj_pos">
-        <point val="19.85,18.45"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9411,18.1713;19.85,18.5213"/>
+        <rectangle val="17.9941,18.1713;19.903,18.5213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[8].SFTNGK#</string>
@@ -9250,7 +7402,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.85,18.45"/>
+            <point val="19.903,18.45"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -9267,7 +7419,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O274">
+    <object type="Embed - Text" version="0" id="O230">
       <attribute name="obj_pos">
         <point val="6.35,18.95"/>
       </attribute>
@@ -9309,7 +7461,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O275">
+    <object type="Embed - Text" version="0" id="O231">
       <attribute name="obj_pos">
         <point val="7.75215,18.95"/>
       </attribute>
@@ -9351,49 +7503,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O276">
-      <attribute name="obj_pos">
-        <point val="10.25,18.95"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,18.6315;10.25,19.0315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#SEIKYU[8].NYUGAIKBN[1].TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,18.95"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O277">
+    <object type="Embed - Text" version="0" id="O232">
       <attribute name="obj_pos">
         <point val="6.35,19.95"/>
       </attribute>
@@ -9435,7 +7545,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O278">
+    <object type="Embed - Text" version="0" id="O233">
       <attribute name="obj_pos">
         <point val="6.35,20.5"/>
       </attribute>
@@ -9477,7 +7587,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O279">
+    <object type="Embed - Text" version="0" id="O234">
       <attribute name="obj_pos">
         <point val="7.75429,19.95"/>
       </attribute>
@@ -9519,7 +7629,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O280">
+    <object type="Embed - Text" version="0" id="O235">
       <attribute name="obj_pos">
         <point val="7.75429,20.5"/>
       </attribute>
@@ -9561,91 +7671,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O281">
-      <attribute name="obj_pos">
-        <point val="10.25,19.95"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,19.6315;10.25,20.0315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[0].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,19.95"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O282">
-      <attribute name="obj_pos">
-        <point val="10.25,20.5"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,20.1815;10.25,20.5815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[0].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,20.5"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O283">
+    <object type="Embed - Text" version="0" id="O236">
       <attribute name="obj_pos">
         <point val="12.5059,19.95"/>
       </attribute>
@@ -9687,7 +7713,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O284">
+    <object type="Embed - Text" version="0" id="O237">
       <attribute name="obj_pos">
         <point val="12.5059,20.5"/>
       </attribute>
@@ -9729,138 +7755,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O285">
+    <object type="Embed - Text" version="0" id="O238">
       <attribute name="obj_pos">
-        <point val="14.0691,19.95"/>
+        <point val="19.9221,19.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8571,19.6315;14.0691,20.0315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[0].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.0691,19.95"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O286">
-      <attribute name="obj_pos">
-        <point val="15.4691,19.95"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.2571,19.6315;15.4691,20.0315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[0].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.4691,19.95"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O287">
-      <attribute name="obj_pos">
-        <point val="17.85,19.95"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6684,19.6315;17.85,20.0315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[0].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.85,19.95"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O288">
-      <attribute name="obj_pos">
-        <point val="19.8691,19.95"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9602,19.6713;19.8691,20.0213"/>
+        <rectangle val="18.0132,19.6713;19.9221,20.0213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[0].K-SFTNGK#</string>
@@ -9880,7 +7780,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.8691,19.95"/>
+            <point val="19.9221,19.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -9897,7 +7797,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O289">
+    <object type="Embed - Text" version="0" id="O239">
       <attribute name="obj_pos">
         <point val="6.35,21.1"/>
       </attribute>
@@ -9939,7 +7839,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O290">
+    <object type="Embed - Text" version="0" id="O240">
       <attribute name="obj_pos">
         <point val="6.35,21.65"/>
       </attribute>
@@ -9981,7 +7881,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O291">
+    <object type="Embed - Text" version="0" id="O241">
       <attribute name="obj_pos">
         <point val="7.75429,21.1"/>
       </attribute>
@@ -10023,7 +7923,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O292">
+    <object type="Embed - Text" version="0" id="O242">
       <attribute name="obj_pos">
         <point val="7.75429,21.65"/>
       </attribute>
@@ -10065,91 +7965,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O293">
-      <attribute name="obj_pos">
-        <point val="10.25,21.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,20.7815;10.25,21.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[1].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,21.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O294">
-      <attribute name="obj_pos">
-        <point val="10.25,21.65"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,21.3315;10.25,21.7315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[1].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,21.65"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O295">
+    <object type="Embed - Text" version="0" id="O243">
       <attribute name="obj_pos">
         <point val="12.5059,21.1"/>
       </attribute>
@@ -10191,7 +8007,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O296">
+    <object type="Embed - Text" version="0" id="O244">
       <attribute name="obj_pos">
         <point val="12.5059,21.65"/>
       </attribute>
@@ -10233,138 +8049,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O297">
+    <object type="Embed - Text" version="0" id="O245">
       <attribute name="obj_pos">
-        <point val="14.1,21.1"/>
+        <point val="19.953,21.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.888,20.7815;14.1,21.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[1].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.1,21.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O298">
-      <attribute name="obj_pos">
-        <point val="15.5,21.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.288,20.7815;15.5,21.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[1].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.5,21.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O299">
-      <attribute name="obj_pos">
-        <point val="17.8809,21.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6993,20.7815;17.8809,21.1815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[1].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8809,21.1"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O300">
-      <attribute name="obj_pos">
-        <point val="19.9,21.1"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9911,20.8213;19.9,21.1713"/>
+        <rectangle val="18.0441,20.8213;19.953,21.1713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[1].K-SFTNGK#</string>
@@ -10384,7 +8074,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.9,21.1"/>
+            <point val="19.953,21.1"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -10401,7 +8091,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O301">
+    <object type="Embed - Text" version="0" id="O246">
       <attribute name="obj_pos">
         <point val="6.35,22.15"/>
       </attribute>
@@ -10443,7 +8133,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O302">
+    <object type="Embed - Text" version="0" id="O247">
       <attribute name="obj_pos">
         <point val="6.35,22.7"/>
       </attribute>
@@ -10485,7 +8175,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O303">
+    <object type="Embed - Text" version="0" id="O248">
       <attribute name="obj_pos">
         <point val="7.75429,22.15"/>
       </attribute>
@@ -10527,7 +8217,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O304">
+    <object type="Embed - Text" version="0" id="O249">
       <attribute name="obj_pos">
         <point val="7.75429,22.7"/>
       </attribute>
@@ -10569,91 +8259,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O305">
-      <attribute name="obj_pos">
-        <point val="10.25,22.15"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,21.8315;10.25,22.2315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[2].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,22.15"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O306">
-      <attribute name="obj_pos">
-        <point val="10.25,22.7"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,22.3815;10.25,22.7815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[2].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,22.7"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O307">
+    <object type="Embed - Text" version="0" id="O250">
       <attribute name="obj_pos">
         <point val="12.5059,22.175"/>
       </attribute>
@@ -10695,7 +8301,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O308">
+    <object type="Embed - Text" version="0" id="O251">
       <attribute name="obj_pos">
         <point val="12.5059,22.7"/>
       </attribute>
@@ -10737,138 +8343,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O309">
+    <object type="Embed - Text" version="0" id="O252">
       <attribute name="obj_pos">
-        <point val="14.1,22.15"/>
+        <point val="19.953,22.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.888,21.8315;14.1,22.2315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[2].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.1,22.15"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O310">
-      <attribute name="obj_pos">
-        <point val="15.5,22.15"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.288,21.8315;15.5,22.2315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[2].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.5,22.15"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O311">
-      <attribute name="obj_pos">
-        <point val="17.8809,22.15"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6993,21.8315;17.8809,22.2315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[2].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8809,22.15"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O312">
-      <attribute name="obj_pos">
-        <point val="19.9,22.15"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9911,21.8713;19.9,22.2213"/>
+        <rectangle val="18.0441,21.8713;19.953,22.2213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[2].K-SFTNGK#</string>
@@ -10888,7 +8368,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.9,22.15"/>
+            <point val="19.953,22.15"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -10905,7 +8385,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O313">
+    <object type="Embed - Text" version="0" id="O253">
       <attribute name="obj_pos">
         <point val="6.35,23.2"/>
       </attribute>
@@ -10947,7 +8427,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O314">
+    <object type="Embed - Text" version="0" id="O254">
       <attribute name="obj_pos">
         <point val="6.35,23.7"/>
       </attribute>
@@ -10989,7 +8469,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O315">
+    <object type="Embed - Text" version="0" id="O255">
       <attribute name="obj_pos">
         <point val="7.75429,23.2"/>
       </attribute>
@@ -11031,7 +8511,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O316">
+    <object type="Embed - Text" version="0" id="O256">
       <attribute name="obj_pos">
         <point val="7.75429,23.7"/>
       </attribute>
@@ -11073,91 +8553,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O317">
-      <attribute name="obj_pos">
-        <point val="10.25,23.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,22.8815;10.25,23.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[3].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,23.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O318">
-      <attribute name="obj_pos">
-        <point val="10.25,23.7"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,23.3815;10.25,23.7815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[3].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,23.7"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O319">
+    <object type="Embed - Text" version="0" id="O257">
       <attribute name="obj_pos">
         <point val="12.5059,23.2"/>
       </attribute>
@@ -11199,7 +8595,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O320">
+    <object type="Embed - Text" version="0" id="O258">
       <attribute name="obj_pos">
         <point val="12.5059,23.7"/>
       </attribute>
@@ -11241,138 +8637,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O321">
+    <object type="Embed - Text" version="0" id="O259">
       <attribute name="obj_pos">
-        <point val="14.1,23.2"/>
+        <point val="19.953,23.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.888,22.8815;14.1,23.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[3].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.1,23.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O322">
-      <attribute name="obj_pos">
-        <point val="15.5,23.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.288,22.8815;15.5,23.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[3].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.5,23.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O323">
-      <attribute name="obj_pos">
-        <point val="17.8809,23.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6993,22.8815;17.8809,23.2815"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[3].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8809,23.2"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O324">
-      <attribute name="obj_pos">
-        <point val="19.9,23.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9911,22.9213;19.9,23.2713"/>
+        <rectangle val="18.0441,22.9213;19.953,23.2713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[3].K-SFTNGK#</string>
@@ -11392,7 +8662,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.9,23.2"/>
+            <point val="19.953,23.2"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -11409,7 +8679,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O325">
+    <object type="Embed - Text" version="0" id="O260">
       <attribute name="obj_pos">
         <point val="1.9525,24.512"/>
       </attribute>
@@ -11451,7 +8721,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O326">
+    <object type="Embed - Text" version="0" id="O261">
       <attribute name="obj_pos">
         <point val="1.9275,25.512"/>
       </attribute>
@@ -11493,7 +8763,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O327">
+    <object type="Embed - Text" version="0" id="O262">
       <attribute name="obj_pos">
         <point val="6.35,24.2152"/>
       </attribute>
@@ -11535,7 +8805,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O328">
+    <object type="Embed - Text" version="0" id="O263">
       <attribute name="obj_pos">
         <point val="6.35,24.7152"/>
       </attribute>
@@ -11577,7 +8847,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O329">
+    <object type="Embed - Text" version="0" id="O264">
       <attribute name="obj_pos">
         <point val="7.75429,24.2152"/>
       </attribute>
@@ -11619,7 +8889,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O330">
+    <object type="Embed - Text" version="0" id="O265">
       <attribute name="obj_pos">
         <point val="7.75429,24.7152"/>
       </attribute>
@@ -11661,91 +8931,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O331">
-      <attribute name="obj_pos">
-        <point val="10.25,24.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,23.8967;10.25,24.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[4].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,24.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O332">
-      <attribute name="obj_pos">
-        <point val="10.25,24.7152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,24.3967;10.25,24.7967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[4].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,24.7152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O333">
+    <object type="Embed - Text" version="0" id="O266">
       <attribute name="obj_pos">
         <point val="12.5059,24.2152"/>
       </attribute>
@@ -11787,7 +8973,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O334">
+    <object type="Embed - Text" version="0" id="O267">
       <attribute name="obj_pos">
         <point val="12.5059,24.7152"/>
       </attribute>
@@ -11829,138 +9015,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O335">
+    <object type="Embed - Text" version="0" id="O268">
       <attribute name="obj_pos">
-        <point val="14.1145,24.2152"/>
+        <point val="19.9675,24.2152"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.9025,23.8967;14.1145,24.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[4].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.1145,24.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O336">
-      <attribute name="obj_pos">
-        <point val="15.5145,24.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.3025,23.8967;15.5145,24.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[4].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.5145,24.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O337">
-      <attribute name="obj_pos">
-        <point val="17.8954,24.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.7138,23.8967;17.8954,24.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[4].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8954,24.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O338">
-      <attribute name="obj_pos">
-        <point val="19.9145,24.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="18.0056,23.9365;19.9145,24.2865"/>
+        <rectangle val="18.0586,23.9365;19.9675,24.2865"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[4].K-SFTNGK#</string>
@@ -11980,7 +9040,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.9145,24.2152"/>
+            <point val="19.9675,24.2152"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -11997,7 +9057,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O339">
+    <object type="Embed - Text" version="0" id="O269">
       <attribute name="obj_pos">
         <point val="6.35,25.2152"/>
       </attribute>
@@ -12039,7 +9099,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O340">
+    <object type="Embed - Text" version="0" id="O270">
       <attribute name="obj_pos">
         <point val="6.35,25.7152"/>
       </attribute>
@@ -12081,7 +9141,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O341">
+    <object type="Embed - Text" version="0" id="O271">
       <attribute name="obj_pos">
         <point val="7.75429,25.2152"/>
       </attribute>
@@ -12123,7 +9183,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O342">
+    <object type="Embed - Text" version="0" id="O272">
       <attribute name="obj_pos">
         <point val="7.75429,25.7152"/>
       </attribute>
@@ -12165,91 +9225,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O343">
-      <attribute name="obj_pos">
-        <point val="10.25,25.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,24.8967;10.25,25.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[5].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,25.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O344">
-      <attribute name="obj_pos">
-        <point val="10.25,25.7152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,25.3967;10.25,25.7967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[5].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,25.7152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O345">
+    <object type="Embed - Text" version="0" id="O273">
       <attribute name="obj_pos">
         <point val="12.5059,25.2152"/>
       </attribute>
@@ -12291,7 +9267,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O346">
+    <object type="Embed - Text" version="0" id="O274">
       <attribute name="obj_pos">
         <point val="12.5059,25.7152"/>
       </attribute>
@@ -12333,138 +9309,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O347">
+    <object type="Embed - Text" version="0" id="O275">
       <attribute name="obj_pos">
-        <point val="14.1145,25.2152"/>
+        <point val="19.9675,25.2152"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.9025,24.8967;14.1145,25.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[5].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.1145,25.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O348">
-      <attribute name="obj_pos">
-        <point val="15.5145,25.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.3025,24.8967;15.5145,25.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[5].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.5145,25.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O349">
-      <attribute name="obj_pos">
-        <point val="17.8954,25.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.7138,24.8967;17.8954,25.2967"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[5].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8954,25.2152"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O350">
-      <attribute name="obj_pos">
-        <point val="19.9145,25.2152"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="18.0056,24.9365;19.9145,25.2865"/>
+        <rectangle val="18.0586,24.9365;19.9675,25.2865"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[5].K-SFTNGK#</string>
@@ -12484,7 +9334,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.9145,25.2152"/>
+            <point val="19.9675,25.2152"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -12501,7 +9351,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O351">
+    <object type="Embed - Text" version="0" id="O276">
       <attribute name="obj_pos">
         <point val="6.35,26.25"/>
       </attribute>
@@ -12543,7 +9393,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O352">
+    <object type="Embed - Text" version="0" id="O277">
       <attribute name="obj_pos">
         <point val="6.35,26.75"/>
       </attribute>
@@ -12585,7 +9435,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O353">
+    <object type="Embed - Text" version="0" id="O278">
       <attribute name="obj_pos">
         <point val="7.75429,26.25"/>
       </attribute>
@@ -12627,7 +9477,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O354">
+    <object type="Embed - Text" version="0" id="O279">
       <attribute name="obj_pos">
         <point val="7.75429,26.75"/>
       </attribute>
@@ -12669,91 +9519,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O355">
-      <attribute name="obj_pos">
-        <point val="10.25,26.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,25.9315;10.25,26.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[6].K-NYUGAI[0].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,26.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O356">
-      <attribute name="obj_pos">
-        <point val="10.25,26.75"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="8.0684,26.4315;10.25,26.8315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[6].K-NYUGAI[1].K-TENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="10.25,26.75"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O357">
+    <object type="Embed - Text" version="0" id="O280">
       <attribute name="obj_pos">
         <point val="12.5059,26.25"/>
       </attribute>
@@ -12795,7 +9561,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O358">
+    <object type="Embed - Text" version="0" id="O281">
       <attribute name="obj_pos">
         <point val="12.5059,26.75"/>
       </attribute>
@@ -12837,138 +9603,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O359">
+    <object type="Embed - Text" version="0" id="O282">
       <attribute name="obj_pos">
-        <point val="14.075,26.25"/>
+        <point val="19.928,26.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.863,25.9315;14.075,26.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[6].K-SKENSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="14.075,26.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O360">
-      <attribute name="obj_pos">
-        <point val="15.475,26.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="14.263,25.9315;15.475,26.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[6].K-SNISSU#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="15.475,26.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O361">
-      <attribute name="obj_pos">
-        <point val="17.8559,26.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="15.6743,25.9315;17.8559,26.3315"/>
-      </attribute>
-      <attribute name="dnode_path">
-        <string>#KOH-TBL[6].K-SKINGK#</string>
-      </attribute>
-      <attribute name="embed_text_string">
-        <enum val="0"/>
-      </attribute>
-      <attribute name="text">
-        <composite type="text">
-          <attribute name="string">
-            <string>#1,234,567#</string>
-          </attribute>
-          <attribute name="font">
-            <font name="Courier"/>
-          </attribute>
-          <attribute name="height">
-            <real val="0.4"/>
-          </attribute>
-          <attribute name="pos">
-            <point val="17.8559,26.25"/>
-          </attribute>
-          <attribute name="color">
-            <color val="#000000"/>
-          </attribute>
-          <attribute name="alignment">
-            <enum val="2"/>
-          </attribute>
-          <attribute name="single">
-            <real val="0.2424"/>
-          </attribute>
-          <attribute name="multi">
-            <real val="0.202"/>
-          </attribute>
-        </composite>
-      </attribute>
-    </object>
-    <object type="Embed - Text" version="0" id="O362">
-      <attribute name="obj_pos">
-        <point val="19.875,26.25"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="17.9661,25.9713;19.875,26.3213"/>
+        <rectangle val="18.0191,25.9713;19.928,26.3213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-SFTNGK#</string>
@@ -12988,7 +9628,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.875,26.25"/>
+            <point val="19.928,26.25"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13005,7 +9645,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O363">
+    <object type="Embed - Text" version="0" id="O283">
       <attribute name="obj_pos">
         <point val="1.95,26.5"/>
       </attribute>
@@ -13047,12 +9687,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O364">
+    <object type="Embed - Text" version="0" id="O284">
       <attribute name="obj_pos">
-        <point val="12.55,10.05"/>
+        <point val="12.55,10.103"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,9.75537;12.55,10.1254"/>
+        <rectangle val="10.532,9.80837;12.55,10.1784"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAIKBN[0].ITBFTN2#</string>
@@ -13072,7 +9712,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,10.05"/>
+            <point val="12.55,10.103"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13089,12 +9729,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O365">
+    <object type="Embed - Text" version="0" id="O285">
       <attribute name="obj_pos">
-        <point val="12.55,10.5735"/>
+        <point val="12.55,10.6265"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,10.2789;12.55,10.6489"/>
+        <rectangle val="10.532,10.3319;12.55,10.7019"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAIKBN[1].ITBFTN2#</string>
@@ -13114,7 +9754,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,10.5735"/>
+            <point val="12.55,10.6265"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13131,12 +9771,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O366">
+    <object type="Embed - Text" version="0" id="O286">
       <attribute name="obj_pos">
-        <point val="12.55,11.0971"/>
+        <point val="12.55,11.1501"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,10.8025;12.55,11.1725"/>
+        <rectangle val="10.532,10.8555;12.55,11.2255"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAIKBN[0].ITBFTN2#</string>
@@ -13156,7 +9796,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,11.0971"/>
+            <point val="12.55,11.1501"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13173,12 +9813,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O367">
+    <object type="Embed - Text" version="0" id="O287">
       <attribute name="obj_pos">
-        <point val="12.55,11.6206"/>
+        <point val="12.55,11.6736"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,11.326;12.55,11.696"/>
+        <rectangle val="10.532,11.379;12.55,11.749"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAIKBN[1].ITBFTN2#</string>
@@ -13198,7 +9838,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,11.6206"/>
+            <point val="12.55,11.6736"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13215,12 +9855,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O368">
+    <object type="Embed - Text" version="0" id="O288">
       <attribute name="obj_pos">
-        <point val="12.55,12.1441"/>
+        <point val="12.55,12.1971"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,11.8495;12.55,12.2195"/>
+        <rectangle val="10.532,11.9025;12.55,12.2725"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].NYUGAIKBN[0].ITBFTN2#</string>
@@ -13240,7 +9880,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,12.1441"/>
+            <point val="12.55,12.1971"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13257,12 +9897,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O369">
+    <object type="Embed - Text" version="0" id="O289">
       <attribute name="obj_pos">
-        <point val="12.55,12.6676"/>
+        <point val="12.55,12.7206"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,12.373;12.55,12.743"/>
+        <rectangle val="10.532,12.426;12.55,12.796"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].NYUGAIKBN[1].ITBFTN2#</string>
@@ -13282,7 +9922,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,12.6676"/>
+            <point val="12.55,12.7206"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13299,12 +9939,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O370">
+    <object type="Embed - Text" version="0" id="O290">
       <attribute name="obj_pos">
-        <point val="12.55,13.1912"/>
+        <point val="12.55,13.2089"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,12.8966;12.55,13.2666"/>
+        <rectangle val="10.532,12.9142;12.55,13.2842"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].NYUGAIKBN[0].ITBFTN2#</string>
@@ -13324,7 +9964,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,13.1912"/>
+            <point val="12.55,13.2089"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13341,12 +9981,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O371">
+    <object type="Embed - Text" version="0" id="O291">
       <attribute name="obj_pos">
-        <point val="12.55,13.7147"/>
+        <point val="12.55,13.7324"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,13.4201;12.55,13.7901"/>
+        <rectangle val="10.532,13.4377;12.55,13.8077"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].NYUGAIKBN[1].ITBFTN2#</string>
@@ -13366,7 +10006,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,13.7147"/>
+            <point val="12.55,13.7324"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13383,12 +10023,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O372">
+    <object type="Embed - Text" version="0" id="O292">
       <attribute name="obj_pos">
-        <point val="12.55,14.2382"/>
+        <point val="12.55,14.2559"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,13.9436;12.55,14.3136"/>
+        <rectangle val="10.532,13.9612;12.55,14.3312"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].NYUGAIKBN[0].ITBFTN2#</string>
@@ -13408,7 +10048,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,14.2382"/>
+            <point val="12.55,14.2559"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13425,12 +10065,12 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O373">
+    <object type="Embed - Text" version="0" id="O293">
       <attribute name="obj_pos">
-        <point val="12.55,14.7618"/>
+        <point val="12.55,14.7795"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,14.4672;12.55,14.8372"/>
+        <rectangle val="10.532,14.4848;12.55,14.8548"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].NYUGAIKBN[1].ITBFTN2#</string>
@@ -13450,7 +10090,7 @@
             <real val="0.37"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.55,14.7618"/>
+            <point val="12.55,14.7795"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13467,7 +10107,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O374">
+    <object type="Embed - Text" version="0" id="O294">
       <attribute name="obj_pos">
         <point val="12.55,15.2853"/>
       </attribute>
@@ -13509,7 +10149,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O375">
+    <object type="Embed - Text" version="0" id="O295">
       <attribute name="obj_pos">
         <point val="12.55,15.8088"/>
       </attribute>
@@ -13551,7 +10191,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O376">
+    <object type="Embed - Text" version="0" id="O296">
       <attribute name="obj_pos">
         <point val="12.55,16.3324"/>
       </attribute>
@@ -13593,7 +10233,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O377">
+    <object type="Embed - Text" version="0" id="O297">
       <attribute name="obj_pos">
         <point val="12.55,16.8559"/>
       </attribute>
@@ -13635,7 +10275,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O378">
+    <object type="Embed - Text" version="0" id="O298">
       <attribute name="obj_pos">
         <point val="12.55,17.3794"/>
       </attribute>
@@ -13677,7 +10317,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O379">
+    <object type="Embed - Text" version="0" id="O299">
       <attribute name="obj_pos">
         <point val="12.55,17.9029"/>
       </attribute>
@@ -13719,7 +10359,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O380">
+    <object type="Embed - Text" version="0" id="O300">
       <attribute name="obj_pos">
         <point val="12.55,18.4265"/>
       </attribute>
@@ -13761,7 +10401,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O381">
+    <object type="Embed - Text" version="0" id="O301">
       <attribute name="obj_pos">
         <point val="12.55,18.95"/>
       </attribute>
@@ -13803,7 +10443,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O382">
+    <object type="Embed - Text" version="0" id="O302">
       <attribute name="obj_pos">
         <point val="1.95,20.125"/>
       </attribute>
@@ -13849,7 +10489,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O383">
+    <object type="Embed - Text" version="0" id="O303">
       <attribute name="obj_pos">
         <point val="1.9,21.1139"/>
       </attribute>
@@ -13895,7 +10535,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O384">
+    <object type="Embed - Text" version="0" id="O304">
       <attribute name="obj_pos">
         <point val="1.875,22.2139"/>
       </attribute>
@@ -13941,7 +10581,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O385">
+    <object type="Embed - Text" version="0" id="O305">
       <attribute name="obj_pos">
         <point val="1.925,23.2639"/>
       </attribute>
@@ -13987,7 +10627,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O386">
+    <object type="Embed - Text" version="0" id="O306">
       <attribute name="obj_pos">
         <point val="1.925,24.3389"/>
       </attribute>
@@ -14033,7 +10673,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O387">
+    <object type="Embed - Text" version="0" id="O307">
       <attribute name="obj_pos">
         <point val="1.9,25.3389"/>
       </attribute>
@@ -14079,7 +10719,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O388">
+    <object type="Embed - Text" version="0" id="O308">
       <attribute name="obj_pos">
         <point val="1.9,26.3389"/>
       </attribute>
@@ -14125,7 +10765,7 @@
         </composite>
       </attribute>
     </object>
-    <object type="Embed - Text" version="0" id="O389">
+    <object type="Embed - Text" version="0" id="O309">
       <attribute name="obj_pos">
         <point val="17.4875,1.525"/>
       </attribute>
@@ -14163,6 +10803,3366 @@
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O310">
+      <attribute name="obj_pos">
+        <point val="10.25,10.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.0078,9.80537;10.25,10.1754"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[0].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#12,345,678#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,10.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O311">
+      <attribute name="obj_pos">
+        <point val="10.25,10.6206"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,10.326;10.25,10.696"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[0].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,10.6206"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O312">
+      <attribute name="obj_pos">
+        <point val="10.25,11.1412"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,10.8466;10.25,11.2166"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[1].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,11.1412"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O313">
+      <attribute name="obj_pos">
+        <point val="10.25,11.6618"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,11.3672;10.25,11.7372"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[1].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,11.6618"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O314">
+      <attribute name="obj_pos">
+        <point val="10.25,12.1824"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,11.8878;10.25,12.2578"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[2].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,12.1824"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O315">
+      <attribute name="obj_pos">
+        <point val="10.25,12.7029"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,12.4083;10.25,12.7783"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[2].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,12.7029"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O316">
+      <attribute name="obj_pos">
+        <point val="10.25,13.2235"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,12.9289;10.25,13.2989"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[3].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,13.2235"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O317">
+      <attribute name="obj_pos">
+        <point val="10.25,13.7441"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,13.4495;10.25,13.8195"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[3].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,13.7441"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O318">
+      <attribute name="obj_pos">
+        <point val="10.25,14.2647"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,13.9701;10.25,14.3401"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[4].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,14.2647"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O319">
+      <attribute name="obj_pos">
+        <point val="10.25,14.7853"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,14.4907;10.25,14.8607"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[4].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,14.7853"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O320">
+      <attribute name="obj_pos">
+        <point val="10.25,15.3059"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,15.0113;10.25,15.3813"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[5].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,15.3059"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O321">
+      <attribute name="obj_pos">
+        <point val="10.25,15.8265"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,15.5319;10.25,15.9019"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[5].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,15.8265"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O322">
+      <attribute name="obj_pos">
+        <point val="10.25,16.3471"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,16.0525;10.25,16.4225"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[6].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,16.3471"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O323">
+      <attribute name="obj_pos">
+        <point val="10.25,16.8676"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,16.573;10.25,16.943"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[6].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,16.8676"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O324">
+      <attribute name="obj_pos">
+        <point val="10.25,17.3882"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,17.0936;10.25,17.4636"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[7].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,17.3882"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O325">
+      <attribute name="obj_pos">
+        <point val="10.25,17.9088"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,17.6142;10.25,17.9842"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[7].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,17.9088"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O326">
+      <attribute name="obj_pos">
+        <point val="10.25,18.4294"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,18.1348;10.25,18.5048"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[8].NYUGAIKBN[0].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,18.4294"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O327">
+      <attribute name="obj_pos">
+        <point val="10.25,18.95"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,18.6554;10.25,19.0254"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[8].NYUGAIKBN[1].TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,18.95"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O328">
+      <attribute name="obj_pos">
+        <point val="10.25,19.95"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,19.6554;10.25,20.0254"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[0].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,19.95"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O329">
+      <attribute name="obj_pos">
+        <point val="10.25,20.5"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,20.2054;10.25,20.5754"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[0].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,20.5"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O330">
+      <attribute name="obj_pos">
+        <point val="10.25,21.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,20.8054;10.25,21.1754"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[1].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,21.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O331">
+      <attribute name="obj_pos">
+        <point val="10.25,21.65"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,21.3554;10.25,21.7254"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[1].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,21.65"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O332">
+      <attribute name="obj_pos">
+        <point val="10.25,22.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,21.8554;10.25,22.2254"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[2].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,22.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O333">
+      <attribute name="obj_pos">
+        <point val="10.25,22.7"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,22.4054;10.25,22.7754"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[2].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,22.7"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O334">
+      <attribute name="obj_pos">
+        <point val="10.25,23.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,22.9054;10.25,23.2754"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[3].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,23.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O335">
+      <attribute name="obj_pos">
+        <point val="10.25,23.7"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,23.4054;10.25,23.7754"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[3].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,23.7"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O336">
+      <attribute name="obj_pos">
+        <point val="10.25,24.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,23.9206;10.25,24.2906"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[4].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,24.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O337">
+      <attribute name="obj_pos">
+        <point val="10.25,24.7152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,24.4206;10.25,24.7906"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[4].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,24.7152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O338">
+      <attribute name="obj_pos">
+        <point val="10.25,25.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,24.9206;10.25,25.2906"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[5].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,25.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O339">
+      <attribute name="obj_pos">
+        <point val="10.25,25.7152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,25.4206;10.25,25.7906"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[5].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,25.7152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O340">
+      <attribute name="obj_pos">
+        <point val="10.25,26.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,25.9554;10.25,26.3254"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[6].K-NYUGAI[0].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,26.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O341">
+      <attribute name="obj_pos">
+        <point val="10.25,26.75"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.23202,26.4554;10.25,26.8254"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[6].K-NYUGAI[1].K-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.37"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="10.25,26.75"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.22422"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.18685"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O342">
+      <attribute name="obj_pos">
+        <point val="14.05,10.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9895,9.8213;14.05,10.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[0].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.05,10.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O343">
+      <attribute name="obj_pos">
+        <point val="15.45,10.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.1774,9.8213;15.45,10.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[0].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#12,345#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.45,10.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O344">
+      <attribute name="obj_pos">
+        <point val="17.8309,10.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.7099,9.8213;17.8309,10.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[0].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#12,345,678#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,10.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O345">
+      <attribute name="obj_pos">
+        <point val="14.05,11.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9895,10.9213;14.05,11.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[1].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.05,11.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O346">
+      <attribute name="obj_pos">
+        <point val="15.45,11.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3895,10.9213;15.45,11.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[1].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.45,11.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O347">
+      <attribute name="obj_pos">
+        <point val="17.8309,11.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,10.9213;17.8309,11.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[1].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,11.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O348">
+      <attribute name="obj_pos">
+        <point val="14.05,12.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9895,11.9213;14.05,12.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[2].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.05,12.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O349">
+      <attribute name="obj_pos">
+        <point val="15.45,12.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3895,11.9213;15.45,12.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[2].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.45,12.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O350">
+      <attribute name="obj_pos">
+        <point val="17.8309,12.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,11.9213;17.8309,12.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[2].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,12.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O351">
+      <attribute name="obj_pos">
+        <point val="14.05,13.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9895,12.9713;14.05,13.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[3].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.05,13.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O352">
+      <attribute name="obj_pos">
+        <point val="15.45,13.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3895,12.9713;15.45,13.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[3].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.45,13.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O353">
+      <attribute name="obj_pos">
+        <point val="17.8309,13.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,12.9713;17.8309,13.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[3].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,13.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O354">
+      <attribute name="obj_pos">
+        <point val="14.05,14.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9895,14.0213;14.05,14.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[4].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.05,14.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O355">
+      <attribute name="obj_pos">
+        <point val="15.45,14.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3895,14.0213;15.45,14.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[4].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.45,14.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O356">
+      <attribute name="obj_pos">
+        <point val="17.8309,14.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,14.0213;17.8309,14.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[4].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,14.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O357">
+      <attribute name="obj_pos">
+        <point val="14.0441,15.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9836,15.0213;14.0441,15.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[5].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.0441,15.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O358">
+      <attribute name="obj_pos">
+        <point val="15.4441,15.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3836,15.0213;15.4441,15.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[5].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.4441,15.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O359">
+      <attribute name="obj_pos">
+        <point val="17.8309,15.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,15.0213;17.8309,15.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[5].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,15.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O360">
+      <attribute name="obj_pos">
+        <point val="14.0441,16.35"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9836,16.0713;14.0441,16.4213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[6].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.0441,16.35"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O361">
+      <attribute name="obj_pos">
+        <point val="15.4441,16.35"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3836,16.0713;15.4441,16.4213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[6].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.4441,16.35"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O362">
+      <attribute name="obj_pos">
+        <point val="17.8309,16.35"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,16.0713;17.8309,16.4213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[6].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,16.35"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O363">
+      <attribute name="obj_pos">
+        <point val="14.0441,17.4"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9836,17.1213;14.0441,17.4713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[7].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.0441,17.4"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O364">
+      <attribute name="obj_pos">
+        <point val="15.4441,17.4"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3836,17.1213;15.4441,17.4713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[7].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.4441,17.4"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O365">
+      <attribute name="obj_pos">
+        <point val="17.8309,17.4"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,17.1213;17.8309,17.4713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[7].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,17.4"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O366">
+      <attribute name="obj_pos">
+        <point val="14.0441,18.45"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.9836,18.1713;14.0441,18.5213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[8].SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.0441,18.45"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O367">
+      <attribute name="obj_pos">
+        <point val="15.4441,18.45"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3836,18.1713;15.4441,18.5213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[8].SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.4441,18.45"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O368">
+      <attribute name="obj_pos">
+        <point val="17.8309,18.45"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.922,18.1713;17.8309,18.5213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#SEIKYU[8].SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8309,18.45"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O369">
+      <attribute name="obj_pos">
+        <point val="14.0691,19.95"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.0086,19.6713;14.0691,20.0213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[0].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.0691,19.95"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O370">
+      <attribute name="obj_pos">
+        <point val="15.4691,19.95"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.1965,19.6713;15.4691,20.0213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[0].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#12,345#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.4691,19.95"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O371">
+      <attribute name="obj_pos">
+        <point val="17.85,19.95"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.729,19.6713;17.85,20.0213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[0].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#12,345,678#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.85,19.95"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O372">
+      <attribute name="obj_pos">
+        <point val="14.1,21.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.0395,20.8213;14.1,21.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[1].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.1,21.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O373">
+      <attribute name="obj_pos">
+        <point val="15.5,21.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.4395,20.8213;15.5,21.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[1].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.5,21.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O374">
+      <attribute name="obj_pos">
+        <point val="17.8809,21.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.972,20.8213;17.8809,21.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[1].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8809,21.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O375">
+      <attribute name="obj_pos">
+        <point val="14.1,22.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.0395,21.8713;14.1,22.2213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[2].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.1,22.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O376">
+      <attribute name="obj_pos">
+        <point val="15.5,22.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.4395,21.8713;15.5,22.2213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[2].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.5,22.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O377">
+      <attribute name="obj_pos">
+        <point val="17.8809,22.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.972,21.8713;17.8809,22.2213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[2].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8809,22.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O378">
+      <attribute name="obj_pos">
+        <point val="14.1,23.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.0395,22.9213;14.1,23.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[3].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.1,23.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O379">
+      <attribute name="obj_pos">
+        <point val="15.5,23.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.4395,22.9213;15.5,23.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[3].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.5,23.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O380">
+      <attribute name="obj_pos">
+        <point val="17.8809,23.2"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.972,22.9213;17.8809,23.2713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[3].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8809,23.2"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O381">
+      <attribute name="obj_pos">
+        <point val="14.1145,24.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.054,23.9365;14.1145,24.2865"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[4].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.1145,24.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O382">
+      <attribute name="obj_pos">
+        <point val="15.5145,24.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.454,23.9365;15.5145,24.2865"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[4].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.5145,24.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O383">
+      <attribute name="obj_pos">
+        <point val="17.8954,24.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.9865,23.9365;17.8954,24.2865"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[4].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8954,24.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O384">
+      <attribute name="obj_pos">
+        <point val="14.1145,25.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.054,24.9365;14.1145,25.2865"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[5].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.1145,25.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O385">
+      <attribute name="obj_pos">
+        <point val="15.5145,25.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.454,24.9365;15.5145,25.2865"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[5].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.5145,25.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O386">
+      <attribute name="obj_pos">
+        <point val="17.8954,25.2152"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.9865,24.9365;17.8954,25.2865"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[5].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8954,25.2152"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O387">
+      <attribute name="obj_pos">
+        <point val="14.075,26.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.0145,25.9713;14.075,26.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[6].K-SKENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.075,26.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O388">
+      <attribute name="obj_pos">
+        <point val="15.475,26.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.4145,25.9713;15.475,26.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[6].K-SNISSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.475,26.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O389">
+      <attribute name="obj_pos">
+        <point val="17.8559,26.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.947,25.9713;17.8559,26.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOH-TBL[6].K-SKINGK#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#1,234,567#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.8559,26.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
           </attribute>
         </composite>
       </attribute>
