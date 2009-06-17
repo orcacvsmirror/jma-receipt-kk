@@ -45,6 +45,7 @@
       *                                  SPA-AREA初期化
       *  01.00.09    内田    08/11/18    レセプト種別修正（３歳→６歳等）
       *  01.00.10    吉川    09/02/16    公費の助成がない場合は印字しない
+      *  01.00.11    吉川    09/06/09    190は助成の有無に関わらず記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -804,6 +805,11 @@
                  MOVE  RECE02-SHOKUJIINF(IDY)  TO  MF100-T-SHOKUJIINF
       *---(01.00.04) LINE ADD END   ------------------------------------
                END-IF
+      *=== 190は助成の有無に関わらず記載 by Yoshikawa(2009/06/09) start
+               IF  RECE02-KOHNUM (IDX)  = "190"
+                 MOVE  ZERO                    TO  FLG-ERR
+               END-IF
+      *=== 190は助成の有無に関わらず記載 by Yoshikawa(2009/06/09) end
              END-IF
            END-PERFORM
       *      出力順設定
