@@ -35,6 +35,8 @@
       *  01.00.04    伊藤    2008/04/29    帳票様式に伴う修正
       *  01.00.05    内田    2008/07/15    後期高齢のみの場合でも印刷する
       *  01.00.06    吉川    2008/10/20    SPA-AREA初期化
+      *  01.00.07    吉川    2009/06/01    レセ電時は件数を印字しない
+      *                      2009/06/10    「愛荘町」の保険者番号修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -108,6 +110,9 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            03  FLG-KOUKI           PIC 9(01).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+           03  FLG-KOURECEDEN      PIC 9(01).
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -241,6 +246,11 @@
       *
       *    レセプト・総括印刷情報
            COPY    "CPSK2005.INC".
+      *
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           COPY    "CPSK200501.INC".
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
       *    請求管理情報
            COPY    "CPRCF010.INC".
@@ -479,6 +489,27 @@
                MOVE    0                   TO  FLG-RECEDEN
            END-IF 
       *
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           INITIALIZE                     SYS-200501-REC
+           MOVE     "2005"        TO      SYS-200501-KANRICD
+           MOVE     "01"          TO      SYS-200501-KBNCD
+           MOVE     LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-200501-STYUKYMD(1:6)
+                                          SYS-200501-EDYUKYMD(1:6)
+           MOVE     "01"          TO      SYS-200501-STYUKYMD(7:2)
+                                          SYS-200501-EDYUKYMD(7:2)
+           MOVE     SPA-HOSPNUM   TO      SYS-200501-HOSPNUM
+           MOVE     SYS-200501-REC  TO      MCPDATA-REC
+           PERFORM  910-SYSKANRI-INV-SEC
+           IF       FLG-SYSKANRI       =  ZERO
+               MOVE    MCPDATA-REC   TO    SYS-200501-REC
+               MOVE    SYS-200501-KOUIKIRECEKBN TO  FLG-KOURECEDEN
+           ELSE
+               MOVE    ZERO                     TO  FLG-KOURECEDEN
+           END-IF 
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
+      *
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
@@ -527,7 +558,6 @@
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
-      *---(01.00.04) LINE ADD START ------------------------------------
            PERFORM  900-SEIKYU-CLOSE-SEC
            MOVE     ZERO    TO        FLG-END
            MOVE     1       TO        FLG-KOUKI
@@ -765,7 +795,10 @@
                WHEN    "250621"    MOVE    20  TO  IDX1
                WHEN    "250647"    MOVE    21  TO  IDX1
                WHEN    "250654"    MOVE    22  TO  IDX1
-               WHEN    "250721"    MOVE    23  TO  IDX1
+      *=== 「愛荘町」の保険者番号修正 by Yoshikawa(2009/06/10) start
+      *         WHEN    "250721"    MOVE    23  TO  IDX1
+               WHEN    "250712"    MOVE    23  TO  IDX1
+      *=== 「愛荘町」の保険者番号修正 by Yoshikawa(2009/06/10) end
                WHEN    "250738"    MOVE    24  TO  IDX1
                WHEN    "250746"    MOVE    25  TO  IDX1
                WHEN    "250753"    MOVE    26  TO  IDX1
@@ -791,10 +824,17 @@
            END-EVALUATE
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-           IF      IDX1    >   ZERO
-               ADD     1   TO  SUM-KENSU(IDX1)
-                               SUM-GKENSU
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+           IF  FLG-RECEDEN      =  ZERO
+           OR  WRK-PARA-SYOKBN  =  "2"
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
+             IF      IDX1    >   ZERO
+                 ADD     1   TO  SUM-KENSU(IDX1)
+                                 SUM-GKENSU
+             END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
            END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
            MOVE    1    TO  FLG-UPD 
       *
@@ -808,14 +848,21 @@
        220-KOUKI-SYUKEI-SEC               SECTION.
       *
       *    県内時集計
-           IF      RECE10-HKNJANUM(3:2) = "25"
-               IF  RECE10-HKNNUM  =  "039"
-                   ADD  1  TO  SUM-GKENSUK
-               END-IF
-               IF  RECE10-HKNNUM  =  "040"
-                   ADD  1  TO  SUM-TOKGKENSUK
-               END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+           IF  FLG-KOURECEDEN      =  ZERO
+           OR  WRK-PARA-SYOKBN  =  "2"
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
+             IF      RECE10-HKNJANUM(3:2) = "25"
+                 IF  RECE10-HKNNUM  =  "039"
+                     ADD  1  TO  SUM-GKENSUK
+                 END-IF
+                 IF  RECE10-HKNNUM  =  "040"
+                     ADD  1  TO  SUM-TOKGKENSUK
+                 END-IF
+             END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
            END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
            MOVE    1    TO  FLG-UPD 
       *
