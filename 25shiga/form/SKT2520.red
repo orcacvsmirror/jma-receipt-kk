@@ -38,7 +38,7 @@
     </element>
     <element name="HKNJANAME" occurs="1">
       <appinfo>
-        <embed object="string" length="24"/>
+        <embed object="string" length="40"/>
       </appinfo>
     </element>
     <element name="HKNJANUM" occurs="6">
@@ -7109,13 +7109,16 @@
     </object>
     <object type="Embed - Text" version="0" id="O230">
       <attribute name="obj_pos">
-        <point val="1.01413,4.03786"/>
+        <point val="1.01413,3.84351"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.01413,3.71934;5.86213,4.11934"/>
+        <rectangle val="1.01413,3.525;6.26613,4.325"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANAME#</string>
+      </attribute>
+      <attribute name="embed_text_column">
+        <int val="26"/>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -7123,7 +7126,8 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#187;&#212;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;
+&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7132,7 +7136,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.01413,4.03786"/>
+            <point val="1.01413,3.84351"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
