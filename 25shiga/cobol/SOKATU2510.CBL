@@ -39,6 +39,8 @@
       *  01.00.08    伊藤      08/04/29    帳票様式に伴う修正
       *  01.00.09    内田    2008/07/15    後期高齢のみの場合でも印刷する
       *  01.00.10    内田    2008/07/31    福祉のみの場合でも印刷する
+      *  01.00.11    吉川    2009/06/01    帳票様式の変更に伴う修正
+      *                                    レセ電時は件数を印字しない
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -156,8 +158,10 @@
            03  FLG-KOUKI           PIC 9(01).
            03  FLG-SKT2515TMP      PIC 9(01).
       *---(01.00.08) LINE ADD END   ------------------------------------
-
-           
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+           03  FLG-RECEDEN         PIC 9(01).
+           03  FLG-KOURECEDEN      PIC 9(01).
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -308,6 +312,14 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+      *    レセプト・総括印刷情報
+           COPY    "CPSK2005.INC".
+      *
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           COPY    "CPSK200501.INC".
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -523,6 +535,46 @@
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF 
+      *
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+      *    レセプト・総括印刷情報　レセ電か
+           INITIALIZE                  SYS-2005-REC
+           MOVE    "2005"              TO  SYS-2005-KANRICD
+           MOVE    "*"                 TO  SYS-2005-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2005-STYUKYMD(1:6)
+                                           SYS-2005-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2005-STYUKYMD(7:2)
+                                           SYS-2005-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2005-HOSPNUM
+           MOVE    SYS-2005-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2005-REC
+               MOVE    SYS-2005-KKHRECEKBN TO  FLG-RECEDEN
+           ELSE
+               MOVE    ZERO                TO  FLG-RECEDEN
+           END-IF 
+      *
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           INITIALIZE                     SYS-200501-REC
+           MOVE     "2005"        TO      SYS-200501-KANRICD
+           MOVE     "01"          TO      SYS-200501-KBNCD
+           MOVE     LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-200501-STYUKYMD(1:6)
+                                          SYS-200501-EDYUKYMD(1:6)
+           MOVE     "01"          TO      SYS-200501-STYUKYMD(7:2)
+                                          SYS-200501-EDYUKYMD(7:2)
+           MOVE     SPA-HOSPNUM   TO      SYS-200501-HOSPNUM
+           MOVE     SYS-200501-REC  TO      MCPDATA-REC
+           PERFORM  910-SYSKANRI-INV-SEC
+           IF       FLG-SYSKANRI       =  ZERO
+               MOVE    MCPDATA-REC   TO    SYS-200501-REC
+               MOVE    SYS-200501-KOUIKIRECEKBN TO  FLG-KOURECEDEN
+           ELSE
+               MOVE    ZERO                     TO  FLG-KOURECEDEN
+           END-IF 
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -929,59 +981,85 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
       *
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      *    岡山市の場合
+           IF      SKT2510TMP-HKNJANUM         = "330019"
+               MOVE    1           TO  SKT2510TMP-KBN
+               MOVE    15          TO  SKT2510TMP-IDX
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
+      *
       *    広島市の場合、代表番号セット
            IF      SKT2510TMP-HKNJANUM(1:3)    = "344"
                MOVE    "344002"    TO  SKT2510TMP-HKNJANUM
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    13          TO  SKT2510TMP-IDX
-               MOVE    15          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    13          TO  SKT2510TMP-IDX
+      *         MOVE    15          TO  SKT2510TMP-IDX
+               MOVE    16          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
       *    北九州市の場合、代表番号セット
            IF      SKT2510TMP-HKNJANUM(1:3)    =    "404"
                MOVE    "404004"    TO  SKT2510TMP-HKNJANUM
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    14          TO  SKT2510TMP-IDX
-               MOVE    16          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    14          TO  SKT2510TMP-IDX
+      *         MOVE    16          TO  SKT2510TMP-IDX
+               MOVE    17          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
       *    福岡市の場合、代表番号セット
            IF      SKT2510TMP-HKNJANUM(1:3)    =   "405"
                MOVE    "405001"    TO  SKT2510TMP-HKNJANUM
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    15          TO  SKT2510TMP-IDX
-               MOVE    17          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    15          TO  SKT2510TMP-IDX
+      *         MOVE    17          TO  SKT2510TMP-IDX
+               MOVE    18          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
       *    帳票固定国保組合
            IF      SKT2510TMP-HKNJANUM =   "133231"
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    16          TO  SKT2510TMP-IDX
-               MOVE    18          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    16          TO  SKT2510TMP-IDX
+      *         MOVE    18          TO  SKT2510TMP-IDX
+               MOVE    19          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
            IF      SKT2510TMP-HKNJANUM =   "133280"
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    17          TO  SKT2510TMP-IDX
-               MOVE    19          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    17          TO  SKT2510TMP-IDX
+      *         MOVE    19          TO  SKT2510TMP-IDX
+               MOVE    20          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
            IF      SKT2510TMP-HKNJANUM =   "233064"
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    18          TO  SKT2510TMP-IDX
-               MOVE    20          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    18          TO  SKT2510TMP-IDX
+      *         MOVE    20          TO  SKT2510TMP-IDX
+               MOVE    21          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -998,19 +1076,25 @@
       *     END-IF
            IF      SKT2510TMP-HKNJANUM =   "263129"
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    19          TO  SKT2510TMP-IDX
-               MOVE    21          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    19          TO  SKT2510TMP-IDX
+      *         MOVE    21          TO  SKT2510TMP-IDX
+               MOVE    22          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
            IF      SKT2510TMP-HKNJANUM =   "273102"
                MOVE    1           TO  SKT2510TMP-KBN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         MOVE    20          TO  SKT2510TMP-IDX
-               MOVE    22          TO  SKT2510TMP-IDX
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         MOVE    20          TO  SKT2510TMP-IDX
+      *         MOVE    22          TO  SKT2510TMP-IDX
+               MOVE    23          TO  SKT2510TMP-IDX
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
       *    帳票固定保険者では無い場合、市町村は給付割合を印字しない
@@ -1080,8 +1164,7 @@
                PERFORM  850-SKTTMP-READ-SEC
       *
                PERFORM  220-KOUKI-SYUKEI-SEC
-           END-IF
-      *
+      * 
       *    集計の対象にならなかったとき
            IF     FLG-UPD        =       1
                   PERFORM   230-UPD-FILE-HENSYU-SEC
@@ -1113,8 +1196,15 @@
        210-HKN-SYUKEI-SEC          SECTION.
       *
       *    件数
-           ADD     1   TO  SKT2510TMP-KENSU
-                           WRK-GKENSU
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+      *     ADD     1   TO  SKT2510TMP-KENSU
+      *                     WRK-GKENSU
+           IF  FLG-RECEDEN         =  ZERO
+           OR  WRK-PARA-SYOKBN     =  "2"
+             ADD     1   TO  SKT2510TMP-KENSU
+                             WRK-GKENSU
+           END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
            IF      FLG-SKT2510TMP  =   1
                WRITE   SKT2510TMP-REC
@@ -1134,8 +1224,15 @@
       *****************************************************************
        220-KOUKI-SYUKEI-SEC               SECTION.
       *
-           ADD     1       TO  SKT2515TMP-KENSU
-                           WRK-GKENSUK
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
+      *     ADD     1       TO  SKT2515TMP-KENSU
+      *                     WRK-GKENSUK
+           IF  FLG-KOURECEDEN      =  ZERO
+           OR  WRK-PARA-SYOKBN     =  "2"
+             ADD     1       TO  SKT2515TMP-KENSU
+                             WRK-GKENSUK
+           END-IF
+      *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
       *
            IF      FLG-SKT2515TMP  =  1
                    WRITE    SKT2515TMP-REC
