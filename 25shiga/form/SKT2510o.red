@@ -36,7 +36,7 @@
         <embed object="string" length="22"/>
       </appinfo>
     </element>
-    <element name="KOTEI-TBL" occurs="22">
+    <element name="KOTEI-TBL" occurs="23">
       <element name="K-KENSU" occurs="1">
         <appinfo>
           <embed object="string" length="5"/>

@@ -15,6 +15,13 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      ************************************************************
+      *                     COPY (CPSKT2510TMP.INC)              *
+      *
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/06/01  帳票様式の変更に伴う修正
+      ************************************************************
        01  SKT2510.
       *診療年月
            03  SKT2510-SRYYM               PIC  X(16).
@@ -31,7 +38,10 @@
       *請求年月日
            03  SKT2510-SEIYMD              PIC  X(22).
       *帳票固定エリア
-           03  SKT2510-KOTEI-TBL  OCCURS 22.
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) start
+      *     03  SKT2510-KOTEI-TBL  OCCURS 22.
+           03  SKT2510-KOTEI-TBL  OCCURS 23.
+      *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
                05  SKT2510-K-KENSU         PIC  X(05).
       *請求エリア
            03  SKT2510-SEIKYU-TBL  OCCURS 50.
