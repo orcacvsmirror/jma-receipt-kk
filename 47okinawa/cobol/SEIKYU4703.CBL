@@ -35,6 +35,8 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.03    吉川    09/01/14    SPA-AREA初期化
+      *  01.00.04    吉川    09/06/04    帳票様式の変更に伴う修正
+      *                      09/06/24    金額は１０円未満を四捨五入する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -675,8 +677,10 @@
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-      *    老人は１円の位を四捨五入し、その他は小数点まで記載する
-           IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== １０円未満を四捨五入する by Yoshikawa(2009/06/24) start
+      **    老人は１円の位を四捨五入し、その他は小数点まで記載する
+      *     IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== １０円未満を四捨五入する by Yoshikawa(2009/06/24) end
                MOVE    WRK-SEIKYUGK-G  TO  WRK-SEIKYUGK-G2
                DIVIDE  WRK-SEIKYUGK-G2 BY  10
                        GIVING              WRK-KEISAN
@@ -687,9 +691,11 @@
                    ADD     10          TO  WRK-SEIKYUGK-G2
                END-IF
                MOVE    WRK-SEIKYUGK-G2 TO  MF100-SEIKYUGK
-           ELSE
-               MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
-           END-IF
+      *=== １０円未満を四捨五入する by Yoshikawa(2009/06/24) start
+      *     ELSE
+      *         MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
+      *     END-IF
+      *=== １０円未満を四捨五入する by Yoshikawa(2009/06/24) end
            DISPLAY "集計結果=" MF100-SEIKYUGK
       *
       *
@@ -818,6 +824,9 @@
                END-IF
       *
                IF      MF100-RJNHKNNUM NOT = SPACE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/06/04) start
+               OR      MF100-HKNNUM  =  "039" OR "040"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/06/04) end
                    MOVE    7           TO  IDX2
                ELSE
                    EVALUATE    MF100-HKNNUM
