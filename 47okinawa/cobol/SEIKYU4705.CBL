@@ -1179,6 +1179,9 @@
       *            帳票編集<摘要欄>処理
                    PERFORM 350-HC101-TEKIYO-HEN-SEC
       *
+      *            帳票印刷処理
+                   PERFORM 390-PRINT-OUT-SEC
+      *
       *         ELSE
       *            帳票編集<ヘッダー部>処理
       *             PERFORM 310N-HC101-HEAD-HEN-SEC
@@ -1195,9 +1198,6 @@
       *            帳票編集<摘要欄>処理
       *             PERFORM 350N-HC101-TEKIYO-HEN-SEC
                END-IF
-      *
-      *            帳票印刷処理
-               PERFORM 390-PRINT-OUT-SEC
       *
       *        一時ファイル読込
                PERFORM  900-TMP-READ-SEC
@@ -2307,12 +2307,18 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE02-REC
+      *
                IF  RECE02-KOHNUM(1)  = "121"
                OR  RECE02-KOHNUM(2)  = "121"
                OR  RECE02-KOHNUM(3)  = "121"
                OR  RECE02-KOHNUM(4)  = "121"
       *
-      *        個別発行で患者番号指定の場合、対象判定を行う
+      *            入院は対象外
+                   IF  RECE02-NYUGAIKBN  =  "1"
+                     PERFORM  900-KOHSKY-READ-SEC
+                   END-IF
+      *
+      *            個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
                    IF      WRK-PARA-SYORIFLG   =   "1"
                    AND     FLG-SYORI           =    2
