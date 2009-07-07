@@ -33,6 +33,7 @@
       *  01.00.02    内田    08/01/09    csvファイル名の修正
       *  01.00.03    内田    08/01/29    csvファイル名の修正（西暦→和暦）
       *  01.00.04    門間    08/12/16    SPA-AREA初期化
+      *  01.00.05    吉川    09/07/01    生年月日は頭ゼロ付きで表す
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -958,8 +959,12 @@
       *
       *        生年月日
                MOVE    MF100-BIRTHDAY     TO  WRK-SYMD
-               PERFORM 31012-SEIWA-HEN-SEC
-               EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
+      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) start
+      *         PERFORM 31012-SEIWA-HEN-SEC
+      *         EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
+               PERFORM   31011-SEIWA-HEN-SEC
+               EVALUATE  LNK-DAY1-GENKIGO
+      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
                  WHEN  "M"
                    MOVE  "1"               TO  WRK-NUM (1:1)
                  WHEN  "T"
@@ -969,7 +974,10 @@
                  WHEN  "H"
                    MOVE  "4"               TO  WRK-NUM (1:1)
                END-EVALUATE
-               MOVE    LNK-DAY2-EDTYMD1 (2:2)  TO  WRK-NUM (2:2)
+      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) start
+      *         MOVE    LNK-DAY2-EDTYMD1 (2:2)  TO  WRK-NUM (2:2)
+               MOVE    LNK-DAY1-WYMD (2:2)     TO  WRK-NUM (2:2)
+      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
                MOVE    MF100-BIRTHDAY (5:4)    TO  WRK-NUM (4:4)
                MOVE    WRK-NUM                 TO  WRK-9
                MOVE    WRK-9                   TO  WRK-NUM
@@ -1192,6 +1200,23 @@
        500-ERR-HENSYU-EXT.
            EXIT.
       *
+      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) start
+      *****************************************************************
+      *    西暦・和暦変換処理
+      *****************************************************************
+       31011-SEIWA-HEN-SEC        SECTION.
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY1-AREA
+           MOVE    "11"                TO  LNK-DAY1-IRAI
+           MOVE    WRK-SYMD            TO  LNK-DAY1-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY1-AREA
+           .
+       31011-SEIWA-HEN-EXT.
+           EXIT.
+      *
+      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
       *****************************************************************
       *    西暦日本語変換処理
       *****************************************************************
