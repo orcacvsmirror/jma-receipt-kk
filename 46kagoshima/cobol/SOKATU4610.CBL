@@ -41,6 +41,8 @@
       *  01.00.08    門間    08/12/16    SPA-AREA初期化
       *                                  シス管「2007」公費まとめ対応
       *  01.00.09    吉川    09/02/06    斜線部分の一部負担金は印字しない
+      *  01.00.10    吉川    09/07/01    入院の場合は斜線部分の
+      *                                  一部負担金を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -890,6 +892,9 @@
       *=== 斜線部分は印字しない by Yoshikawa(2009/02/06) start
       *     ADD     RECE10-FTNMONEY(1)  TO  SKT4610TMP-ITBFTN(IDX1 IDX2)
            IF  IDX1  =  1  OR  2
+      *=== 入院は斜線部分も印字する by Yoshikawa(2009/07/01) start
+           OR  (IDX2  =  1)
+      *=== 入院は斜線部分も印字する by Yoshikawa(2009/07/01) end
              ADD   RECE10-FTNMONEY(1)  TO  SKT4610TMP-ITBFTN(IDX1 IDX2)
            END-IF
       *=== 斜線部分は印字しない by Yoshikawa(2009/02/06) end
