@@ -52,6 +52,8 @@
       *  01.00.13       吉川      08/06/09     改正前の月遅れ分は旧様式に印字
       *  01.00.14       門間      08/12/11     シス管「2007」公費まとめ対応
       *                                        SPA-AREA初期化
+      *  01.00.15       吉川      09/06/30     改正後の返戻分が旧様式で
+      *                                        印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1432,7 +1434,10 @@
       *    診療年月
       *=== 月遅れは旧様式に印字 by Yoshikawa(2008/06/09) start
       *     MOVE    WRK-SRYYMWH           TO  SKT1920-SRYYM
-           IF  WRK-PARA-SYOKBN  =  "2"
+      *=== 改正後の返戻分は新様式に印字 by Yoshikawa(2009/06/30) start
+      *     IF  WRK-PARA-SYOKBN  =  "2"
+           IF  SKT1910TMP-SRYYM  NOT  =  SPACE
+      *=== 改正後の返戻分は新様式に印字 by Yoshikawa(2009/06/30) end
                MOVE  SKT1910TMP-SRYYM    TO  WRK-SYMD
                MOVE  "01"                TO  WRK-SYMD (7:2)
                PERFORM 31012-SEIWA-HEN-SEC

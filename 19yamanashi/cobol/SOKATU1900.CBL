@@ -43,6 +43,8 @@
       *                                    改正前の月遅れ分は旧様式に印字
       *                                    ページ番号を印字
       *  01.00.10       門間     08/12/11  SPA-AREA初期化
+      *  01.00.15       吉川     09/06/30  改正後の返戻分が旧様式で
+      *                                    印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1069,13 +1071,16 @@
            ADD     1                     TO  CNT-PAGE
       *
            INITIALIZE                    SKT1900
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
-           IF  WRK-SRYYMD  NOT =  SPACE
-               MOVE  WRK-SRYYMD(1:6)     TO  WRK-SYMD (1:6)
-           ELSE
-               MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
-           END-IF
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) start
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *     IF  WRK-SRYYMD  NOT =  SPACE
+      *         MOVE  WRK-SRYYMD(1:6)     TO  WRK-SYMD (1:6)
+      *     ELSE
+      *         MOVE  LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *     END-IF
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) end
+           MOVE  LNK-PRTKANRI-SRYYM      TO  WRK-SYMD (1:6)
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) end
       *    診療年月
            MOVE    WRK-SRYYMWH           TO  SKT1900-SRYYM
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -1111,12 +1116,15 @@
       *    編集処理
       *
            INITIALIZE    SUM-SGOKEI-AREA
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
-           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
-               MOVE  10  TO  WRK-MAX1
-           ELSE
-               MOVE  7   TO  WRK-MAX1
-           END-IF
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) start
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      *     IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *         MOVE  10  TO  WRK-MAX1
+      *     ELSE
+      *         MOVE  7   TO  WRK-MAX1
+      *     END-IF
+           MOVE  10  TO  WRK-MAX1
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) end
       *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
       *              UNTIL    IDX1  >     7  OR
@@ -1158,11 +1166,14 @@
       *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
       *         PERFORM  VARYING  IDX2  FROM  1  BY  1
       *                UNTIL    IDX2  >     6
-             IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
-                 MOVE  9  TO  WRK-MAX2
-             ELSE
-                 MOVE  6  TO  WRK-MAX2
-             END-IF
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) start
+      *       IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *           MOVE  9  TO  WRK-MAX2
+      *       ELSE
+      *           MOVE  6  TO  WRK-MAX2
+      *       END-IF
+             MOVE  9  TO  WRK-MAX2
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) end
       *
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >    WRK-MAX2
@@ -1277,14 +1288,17 @@
                                        TO  SPRT-PRIORITY
       ***** 05/02/22 UPD
       *     MOVE   "SKT1900"            TO  SPRT-PRTID
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) start
-      *     MOVE   "SKT1900.red"        TO  SPRT-PRTID
-           IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
-               MOVE   "SKT1900.red"    TO  SPRT-PRTID
-           ELSE
-               MOVE   "SKT1900o.red"   TO  SPRT-PRTID
-           END-IF
-      *=== 帳票様式変更 by Yoshikawa(2008/05/27) end
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) start
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) start
+      **     MOVE   "SKT1900.red"        TO  SPRT-PRTID
+      *     IF  WRK-SYMD (1:6)   >=  WRK-CONS-SRYYM-200804
+      *         MOVE   "SKT1900.red"    TO  SPRT-PRTID
+      *     ELSE
+      *         MOVE   "SKT1900o.red"   TO  SPRT-PRTID
+      *     END-IF
+      **=== 帳票様式変更 by Yoshikawa(2008/05/27) end
+           MOVE    "SKT1900.red"       TO  SPRT-PRTID
+      *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) end
       *****
            MOVE    "国保総括表"  TO  SPRT-TITLE
            MOVE    SKT1900             TO  SPRT-PRTDATA
