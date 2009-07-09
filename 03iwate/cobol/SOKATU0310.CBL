@@ -42,6 +42,8 @@
       *  01.00.08    門間    2008/10/09  シス管「2007」公費まとめ対応
       *                                  SPA-AREAの初期化
       *  01.00.09    吉川    2008/10/22  在総診以外の在宅は在医総とする
+      *  01.00.10    吉川    2009/07/03  在総診と在医総の2つがある場合、
+      *                                  在総診とするように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -907,14 +909,7 @@
       *    在総診・在医総か
            IF  RECE10-ZAITAKU  NOT = SPACE
              PERFORM  960-SRYACT-SET-SEC
-             IF  FLG-ZAIISO  NOT = ZERO
-      *在総診 ２、一般在宅 ４、退職在宅  ６、老人在宅
-               EVALUATE  TRUE
-                 WHEN  IDX1  <  7       MOVE  2  TO  WRK-CNT
-                 WHEN  IDX1  <  12      MOVE  4  TO  WRK-CNT
-                 WHEN  OTHER            MOVE  6  TO  WRK-CNT
-               END-EVALUATE
-             END-IF
+      *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) start
              IF  FLG-ZAIISO2 NOT = ZERO
       *在医総 １、一般在宅 ３、退職在宅 ５、老人在宅
                EVALUATE  TRUE
@@ -923,6 +918,25 @@
                  WHEN  OTHER            MOVE  5  TO  WRK-CNT
                END-EVALUATE
              END-IF
+      *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) end
+             IF  FLG-ZAIISO  NOT = ZERO
+      *在総診 ２、一般在宅 ４、退職在宅  ６、老人在宅
+               EVALUATE  TRUE
+                 WHEN  IDX1  <  7       MOVE  2  TO  WRK-CNT
+                 WHEN  IDX1  <  12      MOVE  4  TO  WRK-CNT
+                 WHEN  OTHER            MOVE  6  TO  WRK-CNT
+               END-EVALUATE
+             END-IF
+      *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) start
+      *       IF  FLG-ZAIISO2 NOT = ZERO
+      **在医総 １、一般在宅 ３、退職在宅 ５、老人在宅
+      *         EVALUATE  TRUE
+      *           WHEN  IDX1  <  7       MOVE  1  TO  WRK-CNT
+      *           WHEN  IDX1  <  12      MOVE  3  TO  WRK-CNT
+      *           WHEN  OTHER            MOVE  5  TO  WRK-CNT
+      *         END-EVALUATE
+      *       END-IF
+      *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) end
              PERFORM  2103-ZAI-SEC
            ELSE
              PERFORM  2102-SYUKEI-SEC
