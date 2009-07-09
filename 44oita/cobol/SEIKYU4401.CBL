@@ -39,6 +39,8 @@
       *                                    のを修正
       *  01.00.04     吉川     08/11/20    SPA-AREA初期化
       *  01.00.05     門間     08/12/02    小計・合計日数を３ｹﾀ→４ｹﾀに修正
+      *  01.00.06     吉川     09/07/03    豊後大野市、由布市、国東市の
+      *                                    市町村名を取得できるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -266,6 +268,22 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== 豊後大野市等の市町村名取得 by Yoshikawa(2009/07/03) start
+      *    固定領域
+      01   CONS-AREA.
+      *    市町村番号(FTN=負担者番号、CITY=保険者番号)
+           03  CONS-CITYNUM.
+      *        豊後大野
+               05  CONS-BUNGO-FTN      PIC X(02)  VALUE  "36".
+               05  CONS-BUNGO-CITY     PIC X(03)  VALUE  "101".
+      *        由布
+               05  CONS-YUFU-FTN       PIC X(02)  VALUE  "25".
+               05  CONS-YUFU-CITY      PIC X(03)  VALUE  "102".
+      *        国東
+               05  CONS-KUNISAKI-FTN   PIC X(02)  VALUE  "17".
+               05  CONS-KUNISAKI-CITY  PIC X(03)  VALUE  "103".
+      *=== 豊後大野市等の市町村名取得 by Yoshikawa(2009/07/03) end
       *
       *    DB参照用
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -956,7 +974,23 @@
       *
       *    市町村名
            MOVE    "440"                   TO  WRK-HKNJANUM(1:3)
-           MOVE    MF100-FTNJANUM(6:2)     TO  WRK-HKNJANUM(4:2)
+      *=== 豊後大野市等の市町村名取得 by Yoshikawa(2009/07/03) start
+      *     MOVE    MF100-FTNJANUM(6:2)     TO  WRK-HKNJANUM(4:2)
+           EVALUATE  MF100-FTNJANUM(6:2)
+      *      豊後大野市
+             WHEN  CONS-BUNGO-FTN
+                 MOVE  CONS-BUNGO-CITY     TO  WRK-HKNJANUM(3:3)
+      *      由布市
+             WHEN  CONS-YUFU-FTN
+                 MOVE  CONS-YUFU-CITY      TO  WRK-HKNJANUM(3:3)
+      *      国東市
+             WHEN  CONS-KUNISAKI-FTN
+                 MOVE  CONS-KUNISAKI-CITY  TO  WRK-HKNJANUM(3:3)
+      *      その他
+             WHEN  OTHER
+                 MOVE  MF100-FTNJANUM(6:2) TO  WRK-HKNJANUM(4:2)
+           END-EVALUATE
+      *=== 豊後大野市等の市町村名取得 by Yoshikawa(2009/07/03) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *     MOVE    PATH-TBL-HKNJAINF-KEY2  TO  WRK-PATH
            MOVE    "key2"                  TO  WRK-PATH
