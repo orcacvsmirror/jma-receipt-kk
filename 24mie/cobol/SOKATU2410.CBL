@@ -31,6 +31,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    安藤    08/04/22    帳票様式の変更に伴う修正
+      *  01.00.03    吉川    09/07/02    原爆は原件数欄に集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -814,17 +815,28 @@
                     END-IF
            END-IF
       *
-      *    全国公費のみ対象とする
-           IF      (RECE10-KOHNUM(1) NOT  =     SPACE
-             AND    RECE10-KOHNUM(1)(1:1) =     "0")
-             OR    (RECE10-KOHNUM(2) NOT  =     SPACE
-             AND    RECE10-KOHNUM(2)(1:1) =     "0")
-             OR    (RECE10-KOHNUM(3) NOT  =     SPACE
-             AND    RECE10-KOHNUM(3)(1:1) =     "0")
-             OR    (RECE10-KOHNUM(4) NOT  =     SPACE
-             AND    RECE10-KOHNUM(4)(1:1) =     "0")
-                    ADD   1      TO      SKT2410TMP-KOHI
+      *=== 原爆は原件数欄に集計 by Yoshikawa(2009/07/02) start
+           IF       RECE10-KOHNUM(1)  =  "019"
+             OR     RECE10-KOHNUM(2)  =  "019"
+             OR     RECE10-KOHNUM(3)  =  "019"
+             OR     RECE10-KOHNUM(4)  =  "019"
+                    ADD   1        TO      SKT2410TMP-GENBAKU
+           ELSE
+      *=== 原爆は原件数欄に集計 by Yoshikawa(2009/07/02) end
+      *      全国公費のみ対象とする
+             IF      (RECE10-KOHNUM(1) NOT  =     SPACE
+               AND    RECE10-KOHNUM(1)(1:1) =     "0")
+               OR    (RECE10-KOHNUM(2) NOT  =     SPACE
+               AND    RECE10-KOHNUM(2)(1:1) =     "0")
+               OR    (RECE10-KOHNUM(3) NOT  =     SPACE
+               AND    RECE10-KOHNUM(3)(1:1) =     "0")
+               OR    (RECE10-KOHNUM(4) NOT  =     SPACE
+               AND    RECE10-KOHNUM(4)(1:1) =     "0")
+                      ADD   1      TO      SKT2410TMP-KOHI
+             END-IF
+      *=== 原爆は原件数欄に集計 by Yoshikawa(2009/07/02) start
            END-IF
+      *=== 原爆は原件数欄に集計 by Yoshikawa(2009/07/02) end
       *
            .
        220-KOH-SYUKEI-EXT.
