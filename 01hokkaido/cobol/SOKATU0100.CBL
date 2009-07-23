@@ -62,6 +62,8 @@
       *                                 外来で全国公費併用の場合は、
       *                                 公費の助成がなくても印字
       *  01.00.22    内田   09/05/13    障害は公費の助成がなくても印字
+      *  01.00.23    吉川   09/07/08    公費の助成がなくても印字するのは
+      *                                 函館市等８市のみにする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1131,14 +1133,25 @@
       **---(01.00.13) LINE ADD END   ------------------------------------
       *          RECE02-KOHNUM (IDZ)  =  "843"
       **---(01.00.11) LINE ADD END   ------------------------------------
-           IF   RECE02-KOHNUM (IDZ)  =  "144"         OR
-                RECE02-KOHNUM (IDZ)  =  "344"         OR
-                RECE02-KOHNUM (IDZ)  =  "644"         OR
-                RECE02-KOHNUM (IDZ)  =  "744"         OR
-                RECE02-KOHNUM (IDZ)  =  "844"
-      *=== 障害は公費の助成がなくても印字 by Uchida(2009/05/13) end
-             MOVE      1                       TO  FLG-ERR
+      *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) start
+      *     IF   RECE02-KOHNUM (IDZ)  =  "144"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "344"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "644"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "744"         OR
+      *          RECE02-KOHNUM (IDZ)  =  "844"
+      **=== 障害は公費の助成がなくても印字 by Uchida(2009/05/13) end
+      *       MOVE      1                       TO  FLG-ERR
+      *     END-IF
+      *    函館、小樽、室蘭、釧路、江別、根室、登別、北広島は、
+      *    助成対象判定を行わない
+           IF  RECE02-KOHFTNJANUM(IDZ)(1:3)  =  "002" OR "003" OR "005"
+                                             OR "006" OR "017" OR "023" 
+                                             OR "030" OR "051"
+               CONTINUE
+           ELSE
+               MOVE     1                      TO  FLG-ERR
            END-IF
+      *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
       *
       *    長期・結核・精神編集
            MOVE    RECE02-KOHNUM (IDZ)          TO  WRK-KOHNUM
