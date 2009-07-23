@@ -57,6 +57,10 @@
       *                                    上限達した時の旭川市の備考欄印字修正
       *                                    「在」に○がある場合、
       *                                    「２・３割」に○は不要
+      *  01.00.16     吉川     09/07/10    公費の助成がなくても印字するのは
+      *                                    函館市等８市のみにする
+      *                                    「２・３割」以外に○がある場合、
+      *                                    「２・３割」に○は不要
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -821,6 +825,16 @@
       *       MOVE      1                       TO  FLG-ERR
       *     END-IF
       *=== 公費の助成がなくても印字 by Uchida(2009/05/22) end
+      *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) start
+      *    函館、小樽、室蘭、釧路、江別、根室、登別、北広島は、
+      *    助成対象判定を行わない
+           IF  WRK-KOBETUCITYNUM  =  "002" OR "003" OR "005" OR "006"
+                                 OR  "017" OR "023" OR "030" OR "051"
+               CONTINUE
+           ELSE
+               MOVE     1                        TO  FLG-ERR
+           END-IF
+      *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
       *
       *    長期・結核・精神編集
            MOVE     ZERO                       TO  FLG-TYOKI
@@ -1479,18 +1493,30 @@
       *
              IF     MF100-TYOKI         =  1
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 3)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
              END-IF
       *
              EVALUATE  MF100-KESE-FLG
              WHEN  "010"
              WHEN  "011"
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 4)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
              WHEN  "020"
              WHEN  "021"
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 5)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
              WHEN  "015"
              WHEN  "016"
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 6)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
+      *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
              END-EVALUATE
       *
              IF    (MF100-KOHNUM  =  "243"  AND
