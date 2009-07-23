@@ -34,6 +34,7 @@
       *                                      医療機関情報を参照
       *  01.00.02       内田    2008/08/15   静岡市の保険者番号の変更
       *  01.00.03       吉川    2009/05/13   食事療養費の算出方法変更
+      *  01.00.04       吉川    2009/07/07   浜松市の保険者番号の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -778,6 +779,12 @@
              MOVE  "22400"                   TO   WRK-HKNJANUM
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 浜松市の保険者の番号変更 by Yoshikawa(2009/07/07) start
+      *    浜松市
+           IF  MF100-FTNJANUM(3:5)  =  "22002"
+             MOVE  "22500"                   TO   WRK-HKNJANUM
+           END-IF
+      *=== 浜松市の保険者の番号変更 by Yoshikawa(2009/07/07) end
            PERFORM  920-HKNJAINF-SET-SEC
            IF    HKNJA-HKNJANAME             =    SPACE
              MOVE  "長  様"                  TO   SC05-CITYNAME(14:6)

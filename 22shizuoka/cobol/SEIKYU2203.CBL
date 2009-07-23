@@ -33,6 +33,7 @@
       *                                      システム管理マスタ「1901」の
       *                                      医療機関情報を参照
       *  01.00.02       内田    2008/07/18   静岡市の保険者番号の変更
+      *  01.00.03       吉川    2009/07/07   浜松市の保険者番号の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -768,6 +769,12 @@
              MOVE  "22400"                   TO   WRK-HKNJANUM
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 浜松市の保険者の番号変更 by Yoshikawa(2009/07/07) start
+      *    浜松市
+           IF  MF100-FTNJANUM(3:5)  =  "22002"
+             MOVE  "22500"                   TO   WRK-HKNJANUM
+           END-IF
+      *=== 浜松市の保険者の番号変更 by Yoshikawa(2009/07/07) end
            PERFORM  920-HKNJAINF-SET-SEC
            IF    HKNJA-HKNJANAME             =    SPACE
              MOVE  "長  様"                  TO   SC03-CITYNAME(13:6)
