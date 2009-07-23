@@ -21,7 +21,7 @@
       *  •∑•π•∆•‡Ãæ        : £œ£“£√£¡
       *  •µ•÷•∑•π•∆•‡Ãæ    : √œ ˝∏¯»Ò
       *  •≥•Û•›°º•Õ•Û•»Ãæ  : ª≥∏˝°¶ °ª„∞ÂŒ≈»Ò¿¡µ·ΩÒ(∞Ï»Ã)
-      *                      (181,281,381,481,581)
+      *                      (181,281,381,481,581,681)
       *  ¥…Õ˝º‘            : 
       *  ∫Ó¿Æ∆¸…’    ∫Ó∂»º‘        µ≠Ω“
       *  05/07/13    ª≥∏˝          ORCA§Œ•–°º•∏•Á•Û•¢•√•◊(2.5.0)§À§Ë§Î∫∆∫Ó¿Æ
@@ -44,6 +44,8 @@
       *  01.00.09    µ»¿Ó    09/02/25     ÷Ã·µ⁄§”∑Ó√Ÿ§Ï§ŒæÏπÁ∆˛±°∆¸§¨
       *                                  ¿µ§∑§ØºË∆¿§µ§Ï§ §§…‘∂ÒπÁ§ÚΩ§¿µ
       *                                  SPA-AREAΩÈ¥¸≤Ω
+      *  01.00.10    ∆‚≈ƒ    09/07/09    ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚∞ıª˙
+      *                                  ∞ıª˙¬–æ›»÷πÊ§Œƒ…≤√(681)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -145,6 +147,9 @@
            03  WRK-Z2                PIC Z(02).
            03  WRK-Z6                PIC Z(06).
            03  WRK-Z7                PIC Z(07).
+      *=== ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚§Ú∞ıª˙ by Uchida(2009/07/09) start
+           03  WRK-Z69               PIC ZZZZZ9.
+      *=== ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚§Ú∞ıª˙ by Uchida(2009/07/09) end
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
            03  WRK-SEIYMDWH2         PIC X(09).
@@ -616,6 +621,9 @@
                     UNTIL    IDZ  >     4
              IF  RECE02-KOHNUM (IDZ) = "181" OR "281" OR "381" OR
                                        "481" OR "581"
+      *=== ∞ıª˙¬–æ›»÷πÊ§Œƒ…≤√ by Uchida(2009/07/09) start
+                                    OR "681"
+      *=== ∞ıª˙¬–æ›»÷πÊ§Œƒ…≤√ by Uchida(2009/07/09) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1071,8 +1079,12 @@
              MOVE    WRK-Z7               TO  SC15-YKZFTN(IDX1)
       *
       *    ∑Î≥À¿∫ø¿ÃÙ∫ﬁ…È√¥≥€
-             MOVE    MF101-KESEYKZFTN     TO  WRK-Z6
-             MOVE    WRK-Z6               TO  SC15-KESEYKZFTN(IDX1)
+      *=== ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚§Ú∞ıª˙ by Uchida(2009/07/09) start
+      *       MOVE    MF101-KESEYKZFTN     TO  WRK-Z6
+      *       MOVE    WRK-Z6               TO  SC15-KESEYKZFTN(IDX1)
+             MOVE    MF101-KESEYKZFTN     TO  WRK-Z69
+             MOVE    WRK-Z69              TO  SC15-KESEYKZFTN(IDX1)
+      *=== ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚§Ú∞ıª˙ by Uchida(2009/07/09) end
       *
              PERFORM   900-TMP-READ-SEC
            END-PERFORM
@@ -1210,6 +1222,9 @@
                    COMPUTE  WRK-TENSU  =  WRK-TENSU  +
                      (SYU-KOH-COMPFTN(IDX - 1) - SYU-KOH-COMPFTN(IDX))
                  END-IF
+      *=== ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚§Ú∞ıª˙ by Uchida(2009/07/09) start
+                 ADD  SYU-KOH-COMPFTN(IDX)  TO  WRK-KESEYKZFTN
+      *=== ∑Î¿∫ÃÙ∫ﬁ…È√¥≥€ÕÛ§ÿ∞Ï…Ù…È√¥∂‚§Ú∞ıª˙ by Uchida(2009/07/09) end
              WHEN "972"
                MOVE    1     TO    FLG-TYOKI
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -1479,14 +1494,24 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
+      *=== ∞ıª˙¬–æ›»÷πÊ§Œƒ…≤√ by Uchida(2009/07/09) start
+      *         IF  RECE02-KOHNUM (1)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR
+      *             RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR
+      *             RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
+      *                               OR "481" OR "581" OR
+      *             RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581"
                IF  RECE02-KOHNUM (1)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581" OR
-                   RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581" OR
-                   RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581" OR
-                   RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581"
+                                      OR "481" OR "581" OR "681"
+               OR  RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "681"
+               OR  RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "681"
+               OR  RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "681"
+      *=== ∞ıª˙¬–æ›»÷πÊ§Œƒ…≤√ by Uchida(2009/07/09) end
       *        •∆•π•»¥µº‘§Œ§»§≠§œ∆…§ﬂ»Ù§–§π
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC

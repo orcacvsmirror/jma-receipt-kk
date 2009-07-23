@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 山口・福祉医療費総括表
-      *                      (181,281,381,481,581)
+      *                      (181,281,381,481,581,681)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/07/13    山口          ORCAのバージョンアップ(2.5.0)による再作成
@@ -36,6 +36,8 @@
       *                                  医療機関情報を参照
       *  01.00.04    内田    08/09/02    200804以降は６５歳以上は一般
       *  01.00.05    吉川    09/02/25    SPA-AREA初期化
+      *  01.00.06    内田    09/07/09    結精薬剤負担額欄へ一部負担金印字
+      *                                  印字対象番号の追加(681)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -135,6 +137,9 @@
            03  WRK-Z4                 PIC Z(04).
            03  WRK-Z7                 PIC Z(07).
            03  WRK-Z8                 PIC Z(08).
+      *=== 結精薬剤負担額欄へ一部負担金を印字 by Uchida(2009/07/09) start
+           03  WRK-Z79                PIC ZZZZZZ9.
+      *=== 結精薬剤負担額欄へ一部負担金を印字 by Uchida(2009/07/09) end
            03  WRK-SRYYMWH            PIC X(16).
            03  WRK-SRYYMWH2           PIC X(09).
            03  WRK-HENYMDG            PIC X(22).
@@ -588,6 +593,9 @@
                     UNTIL    IDZ  >     4
              IF  RECE02-KOHNUM (IDZ) = "181" OR "281" OR "381" OR
                                        "481" OR "581"
+      *=== 印字対象番号の追加 by Uchida(2009/07/07) start
+                                    OR "681"
+      *=== 印字対象番号の追加 by Uchida(2009/07/07) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -857,8 +865,12 @@
              MOVE    WRK-Z8          TO  SC13-YKZFTN(IDX1)
       *
       *    結核精神薬剤一部負担金
-             MOVE    MF100-KESEYKZFTN    TO  WRK-Z7
-             MOVE    WRK-Z7              TO  SC13-KESEYKZFTN(IDX1)
+      *=== 結精薬剤負担額欄へ一部負担金を印字 by Uchida(2009/07/09) start
+      *       MOVE    MF100-KESEYKZFTN    TO  WRK-Z7
+      *       MOVE    WRK-Z7              TO  SC13-KESEYKZFTN(IDX1)
+             MOVE    MF100-KESEYKZFTN    TO  WRK-Z79
+             MOVE    WRK-Z79             TO  SC13-KESEYKZFTN(IDX1)
+      *=== 結精薬剤負担額欄へ一部負担金を印字 by Uchida(2009/07/09) end
       *
       *    食事助成額
              MOVE    MF100-JOSEIGK   TO  WRK-Z7
@@ -1031,7 +1043,11 @@
                MOVE    1     TO    FLG-TYOKI
              WHEN "974"
                MOVE    2     TO    FLG-TYOKI
-             END-EVALUATE
+      *=== 印字対象番号の追加 by Uchida(2009/07/09) start
+             WHEN  WRK-KOHNUM
+               ADD  SYU-KOH-COMPFTN(IDX)  TO  WRK-KESEYKZFTN
+      *=== 印字対象番号の追加 by Uchida(2009/07/09) end
+            END-EVALUATE
       *---(01.00.02) LINE ADD START ------------------------------------
       *    全国公費使用時
              IF   SYU-KOH-HKNNUM(IDX)(1:1)  =  "0"
@@ -1293,14 +1309,24 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
+      *=== 印字対象番号の追加 by Uchida(2009/07/09) start
+      *         IF  RECE02-KOHNUM (1)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR
+      *             RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR
+      *             RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR
+      *             RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581"
                IF  RECE02-KOHNUM (1)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581" OR
-                   RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581" OR
-                   RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581" OR
-                   RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
-                                      OR "481" OR "581"
+                                      OR "481" OR "581" OR "681"
+               OR  RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "681"
+               OR  RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "681"
+               OR  RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
+                                      OR "481" OR "581" OR "681"
+      *=== 印字対象番号の追加 by Uchida(2009/07/09) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
