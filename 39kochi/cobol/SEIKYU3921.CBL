@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 高知・市町村単の幼児福祉医療費請求書
-      *                      (750)
+      *                      (750,760)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/10/28    山口          新規作成
@@ -38,6 +38,8 @@
       *  01.00.04     内田    08/06/27    ４月以降は備考欄へ”３歳未満”
       *                                   を印字しない
       *  01.00.05     門間    09/02/25    SPA-AREAの初期化
+      *  01.00.06     吉川    09/07/06    印字対象番号の追加（760）
+      *                                   実日数がゼロの場合は0を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -134,6 +136,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) start
+           03  WRK-Z9                PIC Z9.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) end
            03  WRK-Z5                PIC ZZZZZ.
            03  WRK-Z6                PIC ZZZZZZ.
            03  WRK-SRYYMWH           PIC X(16).
@@ -574,7 +579,10 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-             IF  RECE02-KOHNUM (IDZ) = "750"
+      *=== 印字対象番号追加 by Yoshikawa(2009/07/06) start
+      *       IF  RECE02-KOHNUM (IDZ) = "750"
+             IF  RECE02-KOHNUM (IDZ) = "750" OR "760"
+      *=== 印字対象番号追加 by Yoshikawa(2009/07/06) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -866,8 +874,12 @@
            END-IF
       *
       *    実日数
-           MOVE     MF100-JNISSU               TO   WRK-Z2
-           MOVE     WRK-Z2                     TO   WRK-MAE-INPUT
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) start
+      *     MOVE     MF100-JNISSU               TO   WRK-Z2
+      *     MOVE     WRK-Z2                     TO   WRK-MAE-INPUT
+           MOVE     MF100-JNISSU               TO   WRK-Z9
+           MOVE     WRK-Z9                     TO   WRK-MAE-INPUT
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) end
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT              TO   SC21-NISSU(IDX)
       *
@@ -1350,10 +1362,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "750"  OR
-                   RECE02-KOHNUM (2)  =  "750"  OR
-                   RECE02-KOHNUM (3)  =  "750"  OR
-                   RECE02-KOHNUM (4)  =  "750"
+      *=== 印字対象番号追加 by Yoshikawa(2009/07/06) start
+      *         IF  RECE02-KOHNUM (1)  =  "750"  OR
+      *             RECE02-KOHNUM (2)  =  "750"  OR
+      *             RECE02-KOHNUM (3)  =  "750"  OR
+      *             RECE02-KOHNUM (4)  =  "750"
+               IF  RECE02-KOHNUM (1)  =  "750" OR "760" OR
+                   RECE02-KOHNUM (2)  =  "750" OR "760" OR
+                   RECE02-KOHNUM (3)  =  "750" OR "760" OR
+                   RECE02-KOHNUM (4)  =  "750" OR "760"
+      *=== 印字対象番号追加 by Yoshikawa(2009/07/06) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
