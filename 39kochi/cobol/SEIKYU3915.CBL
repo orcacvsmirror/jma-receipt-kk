@@ -38,6 +38,7 @@
       *  01.00.04     内田    08/06/27    ４月以降は備考欄へ”３歳未満”
       *                                   を印字しない
       *  01.00.05     門間    09/02/25    SPA-AREAの初期化
+      *  01.00.06     吉川    09/07/06    実日数がゼロの場合は0を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -134,6 +135,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) start
+           03  WRK-Z9                PIC Z9.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) end
            03  WRK-Z5                PIC ZZZZZ.
            03  WRK-Z6                PIC ZZZZZZ.
            03  WRK-SRYYMWH           PIC X(16).
@@ -882,8 +886,12 @@
            END-IF
       *
       *    実日数
-           MOVE     MF100-JNISSU               TO   WRK-Z2
-           MOVE     WRK-Z2                     TO   WRK-MAE-INPUT
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) start
+      *     MOVE     MF100-JNISSU               TO   WRK-Z2
+      *     MOVE     WRK-Z2                     TO   WRK-MAE-INPUT
+           MOVE     MF100-JNISSU               TO   WRK-Z9
+           MOVE     WRK-Z9                     TO   WRK-MAE-INPUT
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2009/07/06) end
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT              TO   SC15-NISSU(IDX)
       *
