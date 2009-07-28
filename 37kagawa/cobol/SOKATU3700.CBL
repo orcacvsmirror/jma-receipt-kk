@@ -40,6 +40,7 @@
       *  01.00.06    内田K   08/04/26    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.07    門間    08/12/17    シス管「2007」公費まとめ対応
+      *  01.00.08    吉川    09/07/14    精神の一部負担金を印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -854,7 +855,10 @@
       *                             TO  SKT3700TMP-Z-YKZFTN (IDX4 IDX5)
       *---(01.00.02) LINE ADD START ------------------------------------
       *    療養の給付：一部負担金 (結核・精神は表示しない)
-               IF  RECE10-KOHNUM (IDX1) NOT = "010" AND "021"
+      *=== 精神の一部負担金を表示 by Yoshikawa(2009/07/14) start
+      *         IF  RECE10-KOHNUM (IDX1) NOT = "010" AND "021"
+               IF  RECE10-KOHNUM (IDX1) NOT = "010"
+      *=== 精神の一部負担金を表示 by Yoshikawa(2009/07/14) end
                  ADD  RECE10-FTNMONEY (IDX1 + 1)
                                    TO  SKT3700TMP-Z-ITBFTN (IDX4 IDX5)
                END-IF
