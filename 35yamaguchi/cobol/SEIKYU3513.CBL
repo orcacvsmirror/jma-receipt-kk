@@ -38,6 +38,8 @@
       *  01.00.05    等李    09/02/25    SPA-AREA介袋步
       *  01.00.06    柒拍    09/07/09    冯篮挑恨砷么驰腕へ办婶砷么垛磅机
       *                                  磅机滦据戎规の纳裁(681)
+      *  01.00.07    等李    09/07/28    省汇板闻锐懒滇驰腕は
+      *                                  给锐の锦喇尸を磅机する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -140,6 +142,9 @@
       *=== 冯篮挑恨砷么驰腕へ办婶砷么垛を磅机 by Uchida(2009/07/09) start
            03  WRK-Z79                PIC ZZZZZZ9.
       *=== 冯篮挑恨砷么驰腕へ办婶砷么垛を磅机 by Uchida(2009/07/09) end
+      *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) start
+           03  WRK-Z89                PIC ZZZZZZZ9.
+      *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) end
            03  WRK-SRYYMWH            PIC X(16).
            03  WRK-SRYYMWH2           PIC X(09).
            03  WRK-HENYMDG            PIC X(22).
@@ -706,10 +711,15 @@
            PERFORM  950-HKNNUM-SET-SEC
       *
            ADD    WRK-KESETENSU  TO     MF100-KESETENSU
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *     ADD    WRK-YKZFTN     TO     MF100-YKZFTN
+      *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) start
+      **---(01.00.01) LINE ADD START -----------------------------------
+      **     ADD    WRK-YKZFTN     TO     MF100-YKZFTN
+      *     ADD    WRK-SEIKYUGK-G2  TO   MF100-YKZFTN
+      **---(01.00.01) LINE ADD END   -----------------------------------
+           COMPUTE  WRK-SEIKYUGK-G2  =  WRK-SEIKYUGK-G2  -
+                                        WRK-KESEYKZFTN
            ADD    WRK-SEIKYUGK-G2  TO   MF100-YKZFTN
-      *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) end
            ADD    WRK-KESEYKZFTN TO     MF100-KESEYKZFTN
            IF    RECE02-NYUGAIKBN   =  "1"
              COMPUTE  MF100-JOSEIGK  =  MF100-JOSEIGK +
@@ -860,9 +870,14 @@
              MOVE    MF100-KESETENSU TO  WRK-Z7
              MOVE    WRK-Z7          TO  SC13-KESETENSU(IDX1)
       *
-      *    挑恨办婶砷么垛
-             MOVE    MF100-YKZFTN    TO  WRK-Z8
-             MOVE    WRK-Z8          TO  SC13-YKZFTN(IDX1)
+      *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) start
+      **    挑恨办婶砷么垛
+      *       MOVE    MF100-YKZFTN    TO  WRK-Z8
+      *       MOVE    WRK-Z8          TO  SC13-YKZFTN(IDX1)
+      *    省汇板闻锐懒滇驰
+             MOVE    MF100-YKZFTN    TO  WRK-Z89
+             MOVE    WRK-Z89         TO  SC13-YKZFTN(IDX1)
+      *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) end
       *
       *    冯乘篮坷挑恨办婶砷么垛
       *=== 冯篮挑恨砷么驰腕へ办婶砷么垛を磅机 by Uchida(2009/07/09) start
