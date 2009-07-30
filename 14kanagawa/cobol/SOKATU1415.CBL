@@ -28,6 +28,8 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    09/02/13    第二公費以降が印字されない不具合修正
+      *  01.00.02    吉川    09/07/13    印字対象番号追加（385）
+      *                                  シス管「2007」の公費まとめ対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -887,6 +889,30 @@
            PERFORM  VARYING  IDXY  FROM  1  BY  1
                     UNTIL    IDXY  >  4
                     OR       RECE10-KOHNUM(IDXY)  =   SPACE
+      *
+      *=== まとめ公費も考慮する by Yoshikawa(2009/07/13) start
+      *      公費番号まとめ情報があるとき
+             MOVE      SPACE             TO  WRK-MEISYO
+             IF        WRK-2007-MAX    >       ZERO
+               PERFORM VARYING IDZ1    FROM    1   BY  1
+                       UNTIL   IDZ1    >       WRK-2007-MAX
+                 PERFORM VARYING IDZ2  FROM    1   BY  1
+                         UNTIL   IDZ2  >       5
+                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                   IF  RECE10-KOHNUM(IDXY)  
+                                       =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                         TO  RECE10-KOHNUM (IDXY)
+                     MOVE  WRK-2007-MEISYO (IDZ1)
+                                         TO  WRK-MEISYO
+                     MOVE  5             TO  IDZ2
+                     MOVE  WRK-2007-MAX  TO  IDZ1
+                   END-IF
+                 END-PERFORM
+               END-PERFORM
+             END-IF
+      *=== まとめ公費も考慮する by Yoshikawa(2009/07/13) end
+      *
              EVALUATE  RECE10-KOHNUM(IDXY)
       *=== 第二公費が印字されない不具合修正 by Yoshikawa(2008/01/23) end
       *        結核
@@ -925,7 +951,11 @@
                WHEN  "280"   MOVE  16  TO  IDXX
       *        マル親
                WHEN  "185"
-               WHEN  "285"   MOVE  17  TO  IDXX
+      *=== 印字対象番号追加 by yoshikawa(2009/07/13) start
+      *         WHEN  "285"   MOVE  17  TO  IDXX
+               WHEN  "285"
+               WHEN  "385"   MOVE  17  TO  IDXX
+      *=== 印字対象番号追加 by yoshikawa(2009/07/13) end
       *        マル成、マルぜ
                WHEN  "189"
                WHEN  "289"   MOVE  18  TO  IDXX
