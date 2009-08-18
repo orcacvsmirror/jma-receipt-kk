@@ -18,9 +18,12 @@
         01  SC05.
       *診療年月日
             03  SC05-SRYYM                          PIC X(16).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) start
       *医療機関点数表区分
-            03  SC05-TENHYOKBN-TBL                  OCCURS  4 TIMES.
-              05  SC05-TENHYOKBN                    PIC X(02).
+      *      03  SC05-TENHYOKBN-TBL                  OCCURS  4 TIMES.
+      *        05  SC05-TENHYOKBN                    PIC X(02).
+            03  SC05-TENHYOKBN                      PIC X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) end
       *医療機関コード
             03  SC05-HOSPCD                         PIC X(40).
       *医療機関住所
@@ -32,13 +35,18 @@
       *開設者名
             03  SC05-KANRINAME                      PIC X(40).
       *請求テーブル
-            03  SC05-TBL                            OCCURS  25 TIMES.
-      *市町村名
-              05  SC05-TOWNNAME                     PIC X(16).
-      *記号
-              05  SC05-KIGO                         PIC X(02).
-      *区分
-              05  SC05-KBN                          PIC X(01).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) start
+      *      03  SC05-TBL                            OCCURS  25 TIMES.
+      **市町村名
+      *        05  SC05-TOWNNAME                     PIC X(16).
+      **記号
+      *        05  SC05-KIGO                         PIC X(02).
+      **区分
+      *        05  SC05-KBN                          PIC X(01).
+            03  SC05-TBL                            OCCURS  20 TIMES.
+      *保険者番号
+              05  SC05-HKNJANUM                     PIC X(12).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) start
       *給付割合
               05  SC05-KYUFURATE-TBL                OCCURS  5 TIMES.
                 07  SC05-KYURATE                    PIC X(02).

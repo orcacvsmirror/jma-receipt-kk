@@ -38,14 +38,23 @@
       *    その他公費番号
            03  SC04-ETCKOHNUM           PIC  X(04).
       *    受給者資格証記号
-           03  SC04-JKYSKIGO            PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *     03  SC04-JKYSKIGO            PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *
-           03  SC04-MEISAI-TBL         OCCURS  12.
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *     03  SC04-MEISAI-TBL         OCCURS  12.
+           03  SC04-MEISAI-TBL         OCCURS  10.
+      *    負担者番号
+               05  SC04-FTNJANUM        PIC  X(16).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    受給者番号
                05  SC04-JKYSNUM         PIC  X(14).
       *    保険種別
-               05  SC04-HKNKBN-TBL     OCCURS  5.
-                   07  SC04-HKNKBN      PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *         05  SC04-HKNKBN-TBL     OCCURS  5.
+      *             07  SC04-HKNKBN      PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    氏名
                05  SC04-NAME            PIC  X(30).
       *    性別
@@ -65,6 +74,10 @@
                05  SC04-SEIKYUGK        PIC  X(07).
       *    食事日数
                05  SC04-SNISSU          PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *    保険者番号
+               05  SC04-HKNJANUM        PIC  X(16).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    備考
                05  SC04-BIKO            PIC  X(06).
       *    備考２

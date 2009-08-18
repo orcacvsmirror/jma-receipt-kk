@@ -50,6 +50,7 @@
       *  01.00.10    ÆâÅÄ    08/06/25    Á°´ü¹âÎð¼Ô£¹³ä¡ÊÆÃÎãÁ¼ÃÖ¡Ë¤Ï£¸³ä¤Ç½¸·×
       *  01.00.11    ÆâÅÄ    09/01/14    È÷¹ÍÍó¤Ø¡Ö¹âÈ¾¡×¤Î°õ»úÂÐ±þ
       *                                  SPA-AREA½é´ü²½
+      *  01.00.12    µÈÀî    09/07/24    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -241,14 +242,20 @@
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
                05  KEY-N-NYUGAIKBN  PIC  X(01).
-               05  KEY-N-CITYNUM    PIC  X(02).
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *         05  KEY-N-CITYNUM    PIC  X(02).
+               05  KEY-N-CITYNUM    PIC  X(03).
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
                05  KEY-N-SORTKEY.
                    07  KEY-N-RATE   PIC  9(01).
                    07  KEY-N-KBN    PIC  9(01).
                05  KEY-N-COMBIKBN   PIC  X(02).
            03  KEY-OLD.
                05  KEY-O-NYUGAIKBN  PIC  X(01).
-               05  KEY-O-CITYNUM    PIC  X(02).
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *         05  KEY-O-CITYNUM    PIC  X(02).
+               05  KEY-O-CITYNUM    PIC  X(03).
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
                05  KEY-O-SORTKEY.
                    07  KEY-O-RATE   PIC  9(01).
                    07  KEY-O-KBN    PIC  9(01).
@@ -760,7 +767,9 @@
            MOVE  RECE02-RJNHKN        TO  MF100-RJNHKN
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
-                                               MF100-CITYNUM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *                                         MF100-CITYNUM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
       *
@@ -847,6 +856,24 @@
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *    »ÔÄ®Â¼ÈÖ¹æ¥»¥Ã¥È½èÍý
+           IF  MF100-FTNJANUM(3:1)  NOT =  SPACE
+      *      ÉéÃ´¼ÔÈÖ¹æ¤¬8·å¤Î¾ì¹ç¡Ê¿·¡Ë
+             MOVE  MF100-FTNJANUM(3:5)    TO  MF100-CITYNUM2
+           ELSE
+      *      ÉéÃ´¼ÔÈÖ¹æ¤¬2·å¤Î¾ì¹ç¡Êµì¡Ë
+             MOVE  MF100-FTNJANUM         TO  MF100-CITYNUM
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX   >    100
+               IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+                 MOVE  TOWN-CITYNUM(IDX)(1:5)  TO  MF100-CITYNUM2
+                 MOVE  100                TO  IDX
+               END-IF
+             END-PERFORM
+           END-IF
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
+      *
       *    ¥½¡¼¥È¤¹¤ë¤¿¤á¥­¡¼¤ò¥»¥Ã¥È
            PERFORM  960-SORTKEY-SEC
       *
@@ -908,14 +935,17 @@
       *
            INITIALIZE      WRK-HKNJANUM
       *
-           PERFORM  VARYING  IDX    FROM    1    BY    1
-                    UNTIL    IDX    >    100
-             IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
-                 MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
-                 MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
-                 MOVE    100                            TO  IDX
-             END-IF
-           END-PERFORM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     PERFORM  VARYING  IDX    FROM    1    BY    1
+      *              UNTIL    IDX    >    100
+      *       IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+      *           MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
+      *           MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
+      *           MOVE    100                            TO  IDX
+      *       END-IF
+      *     END-PERFORM
+           MOVE    MF100-CITYNUM2                 TO  WRK-HKNJANUM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *
            IF  WRK-PARA-SYORIFLG       =   "1"
                AND FLG-SYORI           =    1
@@ -1219,29 +1249,43 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    ¼õµë»ñ³Ê¼Ô¾Úµ­¹æ¡Ê»ÔÄ®Â¼ÈÖ¹æ¡Ë
-           MOVE  MF100-CITYNUM         TO  SC03-JKYSKIGO
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     MOVE  MF100-CITYNUM         TO  SC03-JKYSKIGO
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    ³ä¹ç¡¦¶èÊ¬
       *---(01.00.01) LINE ADD START ------------------------------------
       *     MOVE  "¡û"  TO  SC03-KYURATE (MF100-SORTKEY)
-           EVALUATE  MF100-RATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     EVALUATE  MF100-RATE
+      *       WHEN  1
+      *         MOVE  "¡û"  TO  SC03-KYURATE (1)
+      *       WHEN  2
+      *         MOVE  "¡û"  TO  SC03-KYURATE (2)
+      *       WHEN  3
+      *         MOVE  "¡û"  TO  SC03-KYURATE (3)
+      *     END-EVALUATE
+      *     EVALUATE  MF100-KBN
+      *       WHEN  1
+      *         MOVE  "¡û"  TO  SC03-KYURATE (4)
+      *       WHEN  2
+      *         MOVE  "¡û"  TO  SC03-KYURATE (5)
+      *       WHEN  3
+      *         MOVE  "¡û"  TO  SC03-KYURATE (6)
+      *       WHEN  4
+      *         MOVE  "¡û"  TO  SC03-KYURATE (7)
+      *     END-EVALUATE
+           EVALUATE  MF100-KBN
              WHEN  1
                MOVE  "¡û"  TO  SC03-KYURATE (1)
              WHEN  2
                MOVE  "¡û"  TO  SC03-KYURATE (2)
              WHEN  3
                MOVE  "¡û"  TO  SC03-KYURATE (3)
-           END-EVALUATE
-           EVALUATE  MF100-KBN
-             WHEN  1
-               MOVE  "¡û"  TO  SC03-KYURATE (4)
-             WHEN  2
-               MOVE  "¡û"  TO  SC03-KYURATE (5)
-             WHEN  3
-               MOVE  "¡û"  TO  SC03-KYURATE (6)
              WHEN  4
-               MOVE  "¡û"  TO  SC03-KYURATE (7)
+               MOVE  "¡û"  TO  SC03-KYURATE (4)
            END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *---(01.00.01) LINE ADD START ------------------------------------
       *
       *    ¤½¤ÎÂ¾¸øÈñÈÖ¹æ
@@ -1268,9 +1312,19 @@
        320-BODY-HEN-SEC      SECTION.
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
-                    UNTIL    IDX  >     12
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *              UNTIL    IDX  >     12
+                    UNTIL    IDX  >     10
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
                     OR       KEY-NEW    NOT   =    KEY-OLD
                     OR       FLG-PRINT        =    1
+      *
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *    ÉéÃ´¼ÔÈÖ¹æ
+           MOVE    MF100-KOHFTNJANUM    TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT        TO  SC03-FTNJANUM (IDX)
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    ¼õµë¼ÔÈÖ¹æ
            MOVE    MF100-KOHJKYSNUM     TO  WRK-MAE-INPUT
@@ -1278,38 +1332,40 @@
            MOVE    WRK-OUT-INPUT        TO  SC03-JKYSNUM (IDX)
       *
       *    ÊÝ¸±ÈÖ¹æ¶èÊ¬
-             IF  MF100-KOHNUM = "245"  OR  "246"  OR  "243"
-      *
-               IF    MF100-HKNJANUM(7:2)  =  SPACE
-                 MOVE  MF100-HKNJANUM(1:6)  
-                              TO      WRK-HKNJANUM(1:6)
-               ELSE
-                 MOVE  MF100-HKNJANUM(3:6)  
-                              TO      WRK-HKNJANUM(1:6)
-               END-IF
-      *
-               IF    WRK-HKNJANUM(3:1)  =  "3"
-                 MOVE  "¡û"      TO  SC03-HKNKBN(IDX 5)
-               ELSE
-                 MOVE  "¡û"      TO  SC03-HKNKBN(IDX 4)
-               END-IF
-      *
-             ELSE
-               EVALUATE  MF100-HKNNUM
-                 WHEN  "006"
-                   MOVE  "¡û"  TO  SC03-HKNKBN(IDX 2)
-                 WHEN  "031"
-                   MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
-                 WHEN  "032"
-                   MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
-                 WHEN  "033"
-                   MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
-                 WHEN  "034"
-                   MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
-                 WHEN OTHER
-                   MOVE  "¡û"  TO  SC03-HKNKBN(IDX 1)
-               END-EVALUATE
-             END-IF
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *       IF  MF100-KOHNUM = "245"  OR  "246"  OR  "243"
+      **
+      *         IF    MF100-HKNJANUM(7:2)  =  SPACE
+      *           MOVE  MF100-HKNJANUM(1:6)  
+      *                        TO      WRK-HKNJANUM(1:6)
+      *         ELSE
+      *           MOVE  MF100-HKNJANUM(3:6)  
+      *                        TO      WRK-HKNJANUM(1:6)
+      *         END-IF
+      **
+      *         IF    WRK-HKNJANUM(3:1)  =  "3"
+      *           MOVE  "¡û"      TO  SC03-HKNKBN(IDX 5)
+      *         ELSE
+      *           MOVE  "¡û"      TO  SC03-HKNKBN(IDX 4)
+      *         END-IF
+      **
+      *       ELSE
+      *         EVALUATE  MF100-HKNNUM
+      *           WHEN  "006"
+      *             MOVE  "¡û"  TO  SC03-HKNKBN(IDX 2)
+      *           WHEN  "031"
+      *             MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
+      *           WHEN  "032"
+      *             MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
+      *           WHEN  "033"
+      *             MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
+      *           WHEN  "034"
+      *             MOVE  "¡û"  TO  SC03-HKNKBN(IDX 3)
+      *           WHEN OTHER
+      *             MOVE  "¡û"  TO  SC03-HKNKBN(IDX 1)
+      *         END-EVALUATE
+      *       END-IF
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    »áÌ¾
              MOVE  MF100-NAME  TO  SC03-NAME (IDX)
@@ -1363,6 +1419,13 @@
                MOVE    MF100-SEIKYUGK  TO  WRK-Z7
                MOVE    WRK-Z7          TO  SC03-SEIKYUGK(IDX)
              END-IF
+      *
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *    ÊÝ¸±¼ÔÈÖ¹æ
+           MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT       TO  SC03-HKNJANUM(IDX)
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    È÷¹Í
              IF    MF100-SRYYM  NOT  =  LNK-PRTKANRI-SRYYM
@@ -1569,29 +1632,43 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    ¼õµë»ñ³Ê¼Ô¾Úµ­¹æ¡Ê»ÔÄ®Â¼ÈÖ¹æ¡Ë
-           MOVE  MF100-CITYNUM         TO  SC04-JKYSKIGO
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     MOVE  MF100-CITYNUM         TO  SC04-JKYSKIGO
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    ³ä¹ç¡¦¶èÊ¬
       *---(01.00.01) LINE ADD START ------------------------------------
       *     MOVE  "¡û"  TO  SC04-KYURATE (MF100-SORTKEY)
-           EVALUATE  MF100-RATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     EVALUATE  MF100-RATE
+      *       WHEN  1
+      *         MOVE  "¡û"  TO  SC04-KYURATE (1)
+      *       WHEN  2
+      *         MOVE  "¡û"  TO  SC04-KYURATE (2)
+      *       WHEN  3
+      *         MOVE  "¡û"  TO  SC04-KYURATE (3)
+      *     END-EVALUATE
+      *     EVALUATE  MF100-KBN
+      *       WHEN  1
+      *         MOVE  "¡û"  TO  SC04-KYURATE (4)
+      *       WHEN  2
+      *         MOVE  "¡û"  TO  SC04-KYURATE (5)
+      *       WHEN  3
+      *         MOVE  "¡û"  TO  SC04-KYURATE (6)
+      *       WHEN  4
+      *         MOVE  "¡û"  TO  SC04-KYURATE (7)
+      *     END-EVALUATE
+           EVALUATE  MF100-KBN
              WHEN  1
                MOVE  "¡û"  TO  SC04-KYURATE (1)
              WHEN  2
                MOVE  "¡û"  TO  SC04-KYURATE (2)
              WHEN  3
                MOVE  "¡û"  TO  SC04-KYURATE (3)
-           END-EVALUATE
-           EVALUATE  MF100-KBN
-             WHEN  1
-               MOVE  "¡û"  TO  SC04-KYURATE (4)
-             WHEN  2
-               MOVE  "¡û"  TO  SC04-KYURATE (5)
-             WHEN  3
-               MOVE  "¡û"  TO  SC04-KYURATE (6)
              WHEN  4
-               MOVE  "¡û"  TO  SC04-KYURATE (7)
+               MOVE  "¡û"  TO  SC04-KYURATE (4)
            END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *---(01.00.01) LINE ADD START ------------------------------------
       *
       *    ¤½¤ÎÂ¾¸øÈñÈÖ¹æ
@@ -1618,9 +1695,19 @@
        321-BODY-HEN-SEC      SECTION.
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
-                    UNTIL    IDX  >     12
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *              UNTIL    IDX  >     12
+                    UNTIL    IDX  >     10
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
                     OR       KEY-NEW    NOT   =    KEY-OLD
                     OR       FLG-PRINT        =    1
+      *
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *    ÉéÃ´¼ÔÈÖ¹æ
+           MOVE    MF100-KOHFTNJANUM    TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT        TO  SC04-FTNJANUM (IDX)
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    ¼õµë¼ÔÈÖ¹æ
            MOVE    MF100-KOHJKYSNUM     TO  WRK-MAE-INPUT
@@ -1628,38 +1715,40 @@
            MOVE    WRK-OUT-INPUT        TO  SC04-JKYSNUM (IDX)
       *
       *    ÊÝ¸±ÈÖ¹æ¶èÊ¬
-             IF  MF100-KOHNUM = "245"  OR  "246"  OR  "243"
-      *
-               IF    MF100-HKNJANUM(7:2)  =  SPACE
-                 MOVE  MF100-HKNJANUM(1:6)  
-                              TO      WRK-HKNJANUM(1:6)
-               ELSE
-                 MOVE  MF100-HKNJANUM(3:6)  
-                              TO      WRK-HKNJANUM(1:6)
-               END-IF
-      *
-               IF    WRK-HKNJANUM(3:1)  =  "3"
-                 MOVE  "¡û"      TO  SC04-HKNKBN(IDX 5)
-               ELSE
-                 MOVE  "¡û"      TO  SC04-HKNKBN(IDX 4)
-               END-IF
-      *
-             ELSE
-               EVALUATE  MF100-HKNNUM
-                 WHEN  "006"
-                   MOVE  "¡û"  TO  SC04-HKNKBN(IDX 2)
-                 WHEN  "031"
-                   MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
-                 WHEN  "032"
-                   MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
-                 WHEN  "033"
-                   MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
-                 WHEN  "034"
-                   MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
-                 WHEN OTHER
-                   MOVE  "¡û"  TO  SC04-HKNKBN(IDX 1)
-               END-EVALUATE
-             END-IF
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *       IF  MF100-KOHNUM = "245"  OR  "246"  OR  "243"
+      **
+      *         IF    MF100-HKNJANUM(7:2)  =  SPACE
+      *           MOVE  MF100-HKNJANUM(1:6)  
+      *                        TO      WRK-HKNJANUM(1:6)
+      *         ELSE
+      *           MOVE  MF100-HKNJANUM(3:6)  
+      *                        TO      WRK-HKNJANUM(1:6)
+      *         END-IF
+      **
+      *         IF    WRK-HKNJANUM(3:1)  =  "3"
+      *           MOVE  "¡û"      TO  SC04-HKNKBN(IDX 5)
+      *         ELSE
+      *           MOVE  "¡û"      TO  SC04-HKNKBN(IDX 4)
+      *         END-IF
+      **
+      *       ELSE
+      *         EVALUATE  MF100-HKNNUM
+      *           WHEN  "006"
+      *             MOVE  "¡û"  TO  SC04-HKNKBN(IDX 2)
+      *           WHEN  "031"
+      *             MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
+      *           WHEN  "032"
+      *             MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
+      *           WHEN  "033"
+      *             MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
+      *           WHEN  "034"
+      *             MOVE  "¡û"  TO  SC04-HKNKBN(IDX 3)
+      *           WHEN OTHER
+      *             MOVE  "¡û"  TO  SC04-HKNKBN(IDX 1)
+      *         END-EVALUATE
+      *       END-IF
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    »áÌ¾
              MOVE  MF100-NAME  TO  SC04-NAME (IDX)
@@ -1715,6 +1804,13 @@
                MOVE    MF100-SEIKYUGK  TO  WRK-Z7
                MOVE    WRK-Z7          TO  SC04-SEIKYUGK(IDX)
              END-IF
+      *
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *    ÊÝ¸±¼ÔÈÖ¹æ
+           MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT       TO  SC04-HKNJANUM(IDX)
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    È÷¹Í
              IF    MF100-SRYYM  NOT  =  LNK-PRTKANRI-SRYYM
@@ -2217,7 +2313,10 @@
              NOT AT  END
                ADD  1                 TO  CNT-MF100
                MOVE  MF100-NYUGAIKBN  TO  KEY-N-NYUGAIKBN
-               MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *         MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
+               MOVE  MF100-CITYNUM2(3:3)  TO  KEY-N-CITYNUM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
                MOVE  MF100-SORTKEY    TO  KEY-N-SORTKEY
                MOVE  MF100-COMBIKBN   TO  KEY-N-COMBIKBN
            END-READ
@@ -2532,7 +2631,10 @@
       *                                MCPAREA
       *                                MCPDATA-REC
            MOVE    "tbl_hknjainf"         TO  MCP-TABLE
-           MOVE    "key"                  TO  MCP-PATHNAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     MOVE    "key"                  TO  MCP-PATHNAME
+           MOVE    "key2"                 TO  MCP-PATHNAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
            CALL    "ORCDBMAIN"            USING
                                           MCPAREA
                                           MCPDATA-REC
@@ -2542,10 +2644,22 @@
       *---(01.00.04) LINE ADD START ------------------------------------
       *       MOVE  PATH-TBL-HKNJAINF-KEY     TO  MCP-PATH
              MOVE    "tbl_hknjainf"         TO  MCP-TABLE
-             MOVE    "key"                  TO  MCP-PATHNAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *       MOVE    "key"                  TO  MCP-PATHNAME
+             MOVE    "key2"                 TO  MCP-PATHNAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *---(01.00.04) LINE ADD END   ------------------------------------
              PERFORM  925-HKNJAINF-READ-SEC
-             MOVE  HKNJA-HKNJANAME  TO  WRK-HKNJANAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *       MOVE  HKNJA-HKNJANAME  TO  WRK-HKNJANAME
+             PERFORM  UNTIL  FLG-HKNJAINF  =  1
+               IF  HKNJA-HKNNUM  =  "060"
+                   MOVE  HKNJA-HKNJANAME    TO  WRK-HKNJANAME
+                   MOVE  1                  TO  FLG-HKNJAINF
+               END-IF
+               PERFORM  925-HKNJAINF-READ-SEC
+             END-PERFORM
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
            ELSE
              DISPLAY  "HKNJAINF SELECT ERR"
            END-IF
@@ -2558,7 +2672,10 @@
       *                            MCPAREA
       *                            MCPDATA-REC
            MOVE    "tbl_hknjainf"         TO  MCP-TABLE
-           MOVE    "key"                  TO  MCP-PATHNAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *     MOVE    "key"                  TO  MCP-PATHNAME
+           MOVE    "key2"                 TO  MCP-PATHNAME
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
            CALL    "ORCDBMAIN"            USING
                                           MCPAREA
                                           MCPDATA-REC
@@ -2678,14 +2795,19 @@
       *         MOVE  7  TO  MF100-SORTKEY
       *       END-IF
              EVALUATE  RECE02-KYURATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *         WHEN  "010"
+      *           MOVE  1   TO  MF100-RATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
                WHEN  "010"
-                 MOVE  1   TO  MF100-RATE
                WHEN  "020"
                  MOVE  2   TO  MF100-RATE
                WHEN  "030"
                  MOVE  3   TO  MF100-RATE
              END-EVALUATE
-             MOVE  4       TO  MF100-KBN
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      *       MOVE  4       TO  MF100-KBN
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *---(01.00.01) LINE ADD END   ------------------------------------
            ELSE
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -2711,53 +2833,79 @@
       *           MOVE  8  TO  MF100-SORTKEY
       *       END-EVALUATE
       *
-      *    ³ä¹ç¡¦Ç¯Îð¥Á¥§¥Ã¥¯
-             EVALUATE  RECE02-KYURATE
-               WHEN  "010"
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *             MOVE  1  TO  MF100-RATE
-      *            £·£°ºÐ°Ê¾å¤ÏÆÃÎãÁ¼ÃÖ¤Ê°Ù£²³ä¤Ø
-      *---(01.00.10) LINE ADD START ------------------------------------
-      *             IF  RECE02-AGE  >=  70
-                   IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
-                   AND  (RECE02-FLG (2)  =  1)
-      *---(01.00.10) LINE ADD END   ------------------------------------
-                       MOVE  2  TO  MF100-RATE
-                   ELSE
-                       MOVE  1  TO  MF100-RATE
-                   END-IF
-      *---(01.00.07) LINE ADD END   ------------------------------------
-               WHEN  "020"
-                   MOVE  2  TO  MF100-RATE
-               WHEN  "030"
-                   MOVE  3  TO  MF100-RATE
-             END-EVALUATE
-      *
-             IF  RECE02-AGE  >=  70
-               MOVE  2      TO  MF100-KBN
-             ELSE
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *         IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
-      *         AND  (RECE10-FLG (1)   =  1)
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
+      **    ³ä¹ç¡¦Ç¯Îð¥Á¥§¥Ã¥¯
+      *       EVALUATE  RECE02-KYURATE
+      *         WHEN  "010"
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **             MOVE  1  TO  MF100-RATE
+      **            £·£°ºÐ°Ê¾å¤ÏÆÃÎãÁ¼ÃÖ¤Ê°Ù£²³ä¤Ø
+      **---(01.00.10) LINE ADD START ------------------------------------
+      **             IF  RECE02-AGE  >=  70
+      *             IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
+      *             AND  (RECE02-FLG (2)  =  1)
+      **---(01.00.10) LINE ADD END   ------------------------------------
+      *                 MOVE  2  TO  MF100-RATE
+      *             ELSE
+      *                 MOVE  1  TO  MF100-RATE
+      *             END-IF
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *         WHEN  "020"
+      *             MOVE  2  TO  MF100-RATE
+      *         WHEN  "030"
+      *             MOVE  3  TO  MF100-RATE
+      *       END-EVALUATE
+      **
+      *       IF  RECE02-AGE  >=  70
+      *         MOVE  2      TO  MF100-KBN
+      *       ELSE
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **         IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      **         AND  (RECE10-FLG (1)   =  1)
+      **             MOVE  3     TO  MF100-KBN
+      **         ELSE
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *         IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *         AND  (RECE02-FLG (1)   =  1)
       *             MOVE  3     TO  MF100-KBN
       *         ELSE
-      *---(01.00.07) LINE ADD END   ------------------------------------
-               IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
-               AND  (RECE02-FLG (1)   =  1)
-                   MOVE  3     TO  MF100-KBN
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *           IF  RECE02-AGE  <  3
+      *             MOVE  3    TO  MF100-KBN
+      *           ELSE
+      *             MOVE  1    TO  MF100-KBN
+      *           END-IF
+      **---(01.00.07) LINE ADD START ------------------------------------
+      *         END-IF
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *       END-IF
+      **---(01.00.01) LINE ADD END   ------------------------------------
+      *      ³ä¹ç¶èÊ¬¥Á¥§¥Ã¥¯
+             IF  RECE02-AGE  >=  70
+               IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
+               AND  RECE02-FLG (2)  =  1
+                 MOVE  2      TO  MF100-KBN
                ELSE
-      *---(01.00.08) LINE ADD END   ------------------------------------
-                 IF  RECE02-AGE  <  3
+                 IF  RECE02-KYURATE  =  "030"
                    MOVE  3    TO  MF100-KBN
+                 ELSE
+                   MOVE  2    TO  MF100-KBN
+                 END-IF
+               END-IF
+             ELSE
+               IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
+               AND  RECE02-FLG (1)  =  1
+                 MOVE  4      TO  MF100-KBN
+               ELSE
+                 IF  RECE02-AGE  <  3
+                   MOVE  4    TO  MF100-KBN
                  ELSE
                    MOVE  1    TO  MF100-KBN
                  END-IF
-      *---(01.00.07) LINE ADD START ------------------------------------
                END-IF
-      *---(01.00.07) LINE ADD END   ------------------------------------
              END-IF
-      *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
            END-IF
       *
            .

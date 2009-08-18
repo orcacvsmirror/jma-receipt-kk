@@ -40,14 +40,23 @@
       *    その他公費番号
            03  SC03-ETCKOHNUM           PIC  X(04).
       *    受給者資格証記号
-           03  SC03-JKYSKIGO            PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *     03  SC03-JKYSKIGO            PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *
-           03  SC03-MEISAI-TBL         OCCURS  12.
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *     03  SC03-MEISAI-TBL         OCCURS  12.
+           03  SC03-MEISAI-TBL         OCCURS  10.
+      *    負担者番号
+               05  SC03-FTNJANUM        PIC  X(16).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    受給者番号
                05  SC03-JKYSNUM         PIC  X(14).
       *    保険種別
-               05  SC03-HKNKBN-TBL     OCCURS  5.
-                   07  SC03-HKNKBN      PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *         05  SC03-HKNKBN-TBL     OCCURS  5.
+      *             07  SC03-HKNKBN      PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    氏名
                05  SC03-NAME            PIC  X(30).
       *    性別
@@ -65,6 +74,10 @@
       *         05  SC03-YKZFTN          PIC  X(06).
       *    福祉医療費請求額
                05  SC03-SEIKYUGK        PIC  X(07).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *    保険者番号
+               05  SC03-HKNJANUM        PIC  X(16).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    備考
                05  SC03-BIKO            PIC  X(06).
       *    備考２
@@ -81,6 +94,8 @@
                05  SC03-GTENSU-TBL     OCCURS 2.
                    07  SC03-GTENSU      PIC  X(09).
       *    合計−薬剤一部負担金
-               05  SC03-GYKZFTN         PIC  X(07).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) start
+      *         05  SC03-GYKZFTN         PIC  X(07).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/16) end
       *    合計−福祉医療費請求額
                05  SC03-GSEIKYUGK       PIC  X(09).

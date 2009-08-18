@@ -37,12 +37,18 @@
       *    医療機関コード
            03  SC09-HOSPCD              PIC  X(14).
       *    点数表区分
-           03  SC09-TENHYOKBN-TBL        OCCURS  4.
-               05  SC09-TENHYOKBN       PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) start
+      *     03  SC09-TENHYOKBN-TBL        OCCURS  4.
+      *         05  SC09-TENHYOKBN       PIC  X(02).
+           03  SC09-TENHYOKBN           PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) end
       *    その他公費番号
            03  SC09-ETCKOHNUM           PIC  X(02).
       *    請求テーブル
-           03  SC09-SEIKYU-TBL      OCCURS  22.
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) start
+      *     03  SC09-SEIKYU-TBL      OCCURS  22.
+           03  SC09-SEIKYU-TBL      OCCURS  8.
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/17) end
       *    件数
                05  SC09-KENSU           PIC  X(05).
       *    点数

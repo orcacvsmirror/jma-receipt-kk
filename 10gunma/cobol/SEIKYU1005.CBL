@@ -45,6 +45,7 @@
       *  01.00.08    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
       *  01.00.09    内田    08/08/19    ２割の６歳は７０歳以上の次に印字
       *  01.00.10    内田    09/01/14    SPA-AREA初期化
+      *  01.00.11    吉川    09/07/24    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -223,13 +224,19 @@
       *    キー用エリア
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
-               05  KEY-N-CITYNUM    PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         05  KEY-N-CITYNUM    PIC  X(02).
+               05  KEY-N-CITYNUM    PIC  X(03).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                05  KEY-N-KBN        PIC  9(01).
                05  KEY-N-WARIAI     PIC  9(01).
                05  KEY-N-COMBIKBN   PIC  X(02).
                05  KEY-N-NYUGAIKBN  PIC  9(01).
            03  KEY-OLD.
-               05  KEY-O-CITYNUM    PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         05  KEY-O-CITYNUM    PIC  X(02).
+               05  KEY-O-CITYNUM    PIC  X(03).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                05  KEY-O-KBN        PIC  9(01).
                05  KEY-O-WARIAI     PIC  9(01).
                05  KEY-O-COMBIKBN   PIC  X(02).
@@ -715,7 +722,9 @@
            MOVE  RECE02-RJNHKN        TO  MF100-RJNHKN
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
-                                               MF100-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *                                         MF100-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
       *
@@ -786,6 +795,24 @@
              MOVE             ZERO    TO    MF100-FUKUSHIGAITEN
            END-IF
       *
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *    市町村番号セット処理
+           IF  MF100-FTNJANUM(3:1)  NOT =  SPACE
+      *      負担者番号が8桁の場合（新）
+             MOVE  MF100-FTNJANUM(3:5)    TO  MF100-CITYNUM2
+           ELSE
+      *      負担者番号が2桁の場合（旧）
+             MOVE  MF100-FTNJANUM         TO  MF100-CITYNUM
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX   >    100
+               IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+                 MOVE  TOWN-CITYNUM(IDX)(1:5)  TO  MF100-CITYNUM2
+                 MOVE  100                TO  IDX
+               END-IF
+             END-PERFORM
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
+      *
       *    ソートするためキーをセット
            PERFORM  960-SORTKEY-SEC
       *
@@ -809,117 +836,155 @@
       *****************************************************************
        960-SORTKEY-SEC  SECTION.
       *
-      *    区分
-           IF     RECE02-RJNHKNNUM  NOT  =  SPACE
-             MOVE      6    TO   MF100-KBN
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *       MOVE      4    TO   MF100-JYUNJO
-      *---(01.00.01) LINE ADD END   ------------------------------------
-      *---(01.00.02) LINE ADD END   ------------------------------------
-           ELSE
-             IF     RECE02-AGE   >=  70
-               MOVE    7    TO   MF100-KBN
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *         MOVE    2    TO   MF100-JYUNJO
-      *---(01.00.01) LINE ADD END   ------------------------------------
-      *---(01.00.02) LINE ADD END   ------------------------------------
-             ELSE
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *---(01.00.06) LINE ADD START ------------------------------------
-      *         IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
-      *         AND  (RECE10-FLG (1)   =  1)
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      **    区分
+      *     IF     RECE02-RJNHKNNUM  NOT  =  SPACE
+      *       MOVE      6    TO   MF100-KBN
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **       MOVE      4    TO   MF100-JYUNJO
+      **---(01.00.01) LINE ADD END   ------------------------------------
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *     ELSE
+      *       IF     RECE02-AGE   >=  70
+      *         MOVE    7    TO   MF100-KBN
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **         MOVE    2    TO   MF100-JYUNJO
+      **---(01.00.01) LINE ADD END   ------------------------------------
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *       ELSE
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **---(01.00.06) LINE ADD START ------------------------------------
+      **         IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      **         AND  (RECE10-FLG (1)   =  1)
+      **             MOVE  3     TO  MF100-KBN
+      **         ELSE
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      *         IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *         AND  (RECE02-FLG (1)   =  1)
       *             MOVE  3     TO  MF100-KBN
       *         ELSE
-      *---(01.00.06) LINE ADD END   ------------------------------------
-               IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
-               AND  (RECE02-FLG (1)   =  1)
-                   MOVE  3     TO  MF100-KBN
-               ELSE
-      *---(01.00.07) LINE ADD END   ------------------------------------
-                 IF  RECE02-AGE    <   3
-                   MOVE  3    TO   MF100-KBN
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *           MOVE  3    TO   MF100-JYUNJO
-      *---(01.00.01) LINE ADD END   ------------------------------------
-      *---(01.00.02) LINE ADD END   ------------------------------------
-                 ELSE
-                   MOVE  0    TO   MF100-KBN
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *             MOVE  1    TO   MF100-JYUNJO
-      *---(01.00.01) LINE ADD END   ------------------------------------
-      *---(01.00.02) LINE ADD END   ------------------------------------
-                 END-IF
-      *---(01.00.06) LINE ADD START ------------------------------------
-               END-IF
-      *---(01.00.06) LINE ADD END   ------------------------------------
-             END-IF
-           END-IF
-      *
-      *    割合
-           EVALUATE  RECE02-KYURATE
-           WHEN 10
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *       MOVE      1    TO   MF100-WARIAI
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *           IF  RECE02-AGE    <   3
+      *             MOVE  3    TO   MF100-KBN
       **---(01.00.02) LINE ADD START ------------------------------------
-      *       MOVE      1    TO   MF100-JYUNJO
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **           MOVE  3    TO   MF100-JYUNJO
+      **---(01.00.01) LINE ADD END   ------------------------------------
       **---(01.00.02) LINE ADD END   ------------------------------------
-      *    前期９割（特例措置）は８割
-             IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
-             AND  (RECE02-FLG (2)  =  1)
-               MOVE      2    TO   MF100-WARIAI
-               MOVE      4    TO   MF100-JYUNJO
-             ELSE
-               MOVE      1    TO   MF100-WARIAI
-               MOVE      1    TO   MF100-JYUNJO
-             END-IF
-      *---(01.00.08) LINE ADD END   ------------------------------------
-           WHEN 20
-             MOVE      2    TO   MF100-WARIAI
-      *---(01.00.02) LINE ADD START ------------------------------------
-             MOVE      4    TO   MF100-JYUNJO
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      *---(01.00.09) LINE ADD START ------------------------------------
-      *    ２割６歳は７０歳以上の次に印字
-             IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
-             AND  (RECE02-FLG (1)  =  1)
-               MOVE  6      TO  MF100-JYUNJO
-             ELSE
-               IF  RECE02-AGE  <  3
-                 MOVE  6    TO  MF100-JYUNJO
-               END-IF
-             END-IF
-      *---(01.00.09) LINE ADD END   ------------------------------------
-           WHEN OTHER
-             MOVE      3    TO   MF100-WARIAI
-      *---(01.00.09) LINE ADD START ------------------------------------
+      *           ELSE
+      *             MOVE  0    TO   MF100-KBN
       **---(01.00.02) LINE ADD START ------------------------------------
-      *       MOVE      7    TO   MF100-JYUNJO
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **             MOVE  1    TO   MF100-JYUNJO
+      **---(01.00.01) LINE ADD END   ------------------------------------
       **---(01.00.02) LINE ADD END   ------------------------------------
-             MOVE      8    TO   MF100-JYUNJO
-      *---(01.00.09) LINE ADD END    ------------------------------------
-           END-EVALUATE
+      *           END-IF
+      **---(01.00.06) LINE ADD START ------------------------------------
+      *         END-IF
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      *       END-IF
+      *     END-IF
+      **
+      **    割合
+      *     EVALUATE  RECE02-KYURATE
+      *     WHEN 10
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **       MOVE      1    TO   MF100-WARIAI
+      ***---(01.00.02) LINE ADD START ------------------------------------
+      **       MOVE      1    TO   MF100-JYUNJO
+      ***---(01.00.02) LINE ADD END   ------------------------------------
+      **    前期９割（特例措置）は８割
+      *       IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
+      *       AND  (RECE02-FLG (2)  =  1)
+      *         MOVE      2    TO   MF100-WARIAI
+      *         MOVE      4    TO   MF100-JYUNJO
+      *       ELSE
+      *         MOVE      1    TO   MF100-WARIAI
+      *         MOVE      1    TO   MF100-JYUNJO
+      *       END-IF
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *     WHEN 20
+      *       MOVE      2    TO   MF100-WARIAI
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *       MOVE      4    TO   MF100-JYUNJO
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      **---(01.00.09) LINE ADD START ------------------------------------
+      **    ２割６歳は７０歳以上の次に印字
+      *       IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
+      *       AND  (RECE02-FLG (1)  =  1)
+      *         MOVE  6      TO  MF100-JYUNJO
+      *       ELSE
+      *         IF  RECE02-AGE  <  3
+      *           MOVE  6    TO  MF100-JYUNJO
+      *         END-IF
+      *       END-IF
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *     WHEN OTHER
+      *       MOVE      3    TO   MF100-WARIAI
+      **---(01.00.09) LINE ADD START ------------------------------------
+      ***---(01.00.02) LINE ADD START ------------------------------------
+      **       MOVE      7    TO   MF100-JYUNJO
+      ***---(01.00.02) LINE ADD END   ------------------------------------
+      *       MOVE      8    TO   MF100-JYUNJO
+      **---(01.00.09) LINE ADD END    ------------------------------------
+      *     END-EVALUATE
+      **    旧老人判定
+      *     IF     RECE02-RJNHKNNUM  NOT  =  SPACE    AND
+      *            RECE02-SRYYM          <=  "200209"
+      *       MOVE      4    TO   MF100-WARIAI
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *       MOVE     10    TO   MF100-JYUNJO
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *     END-IF
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **    印字順
+      *     IF  RECE02-RJNHKNNUM  NOT =  SPACE
+      *       ADD  2         TO   MF100-JYUNJO
+      *     ELSE
+      *       IF  RECE02-AGE  >=  70
+      *         ADD  1       TO   MF100-JYUNJO
+      *       END-IF
+      *     END-IF
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *    割合区分
       *    旧老人判定
-           IF     RECE02-RJNHKNNUM  NOT  =  SPACE    AND
-                  RECE02-SRYYM          <=  "200209"
-             MOVE      4    TO   MF100-WARIAI
-      *---(01.00.02) LINE ADD START ------------------------------------
-             MOVE     10    TO   MF100-JYUNJO
-      *---(01.00.02) LINE ADD END   ------------------------------------
-           END-IF
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *    印字順
-           IF  RECE02-RJNHKNNUM  NOT =  SPACE
-             ADD  2         TO   MF100-JYUNJO
+           IF   RECE02-RJNHKNNUM  NOT =  SPACE
+           AND  RECE02-SRYYM      <=  "200209"
+             EVALUATE  RECE02-KYURATE
+               WHEN  "010"
+               WHEN  "020"
+                 MOVE  2      TO  MF100-WARIAI
+               WHEN  "030"
+                 MOVE  3      TO  MF100-WARIAI
+             END-EVALUATE
            ELSE
              IF  RECE02-AGE  >=  70
-               ADD  1       TO   MF100-JYUNJO
+               IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
+               AND  RECE02-FLG (2)  =  1
+                 MOVE  2      TO  MF100-WARIAI
+               ELSE
+                 IF  RECE02-KYURATE  =  "030"
+                   MOVE  3    TO  MF100-WARIAI
+                 ELSE
+                   MOVE  2    TO  MF100-WARIAI
+                 END-IF
+               END-IF
+             ELSE
+               IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
+               AND  RECE02-FLG (1)  =  1
+                 MOVE  4      TO  MF100-WARIAI
+               ELSE
+                 IF  RECE02-AGE  <  3
+                   MOVE  4    TO  MF100-WARIAI
+                 ELSE
+                   MOVE  1    TO  MF100-WARIAI
+                 END-IF
+               END-IF
              END-IF
            END-IF
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
            .
        960-SORTKEY-EXT.
@@ -932,14 +997,17 @@
       *
            INITIALIZE      WRK-HKNJANUM
       *
-           PERFORM  VARYING  IDX    FROM    1    BY    1
-                    UNTIL    IDX    >    100
-             IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
-                 MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
-                 MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
-                 MOVE    100                            TO  IDX
-             END-IF
-           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     PERFORM  VARYING  IDX    FROM    1    BY    1
+      *              UNTIL    IDX    >    100
+      *       IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+      *           MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
+      *           MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
+      *           MOVE    100                            TO  IDX
+      *       END-IF
+      *     END-PERFORM
+           MOVE    MF100-CITYNUM2                 TO  WRK-HKNJANUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
            IF  WRK-PARA-SYORIFLG       =   "1"
                AND FLG-SYORI           =    1
@@ -1032,7 +1100,10 @@
            MOVE  SYS-1001-KAISETUNAME   TO  SC05-KANRINAME
       *
       *    点数表区分
-               MOVE  "○"               TO  SC05-TENHYOKBN (1)
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         MOVE  "○"               TO  SC05-TENHYOKBN (1)
+           MOVE  "1"                    TO  SC05-TENHYOKBN
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
            .
        310-HEAD-HEN-EXT.
@@ -1044,26 +1115,37 @@
        320-BODY-HEN-SEC      SECTION.
       *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >    25
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *              UNTIL    IDX1  >    25
+                    UNTIL    IDX1  >    20
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                     OR      FLG-PRINT =    1
       *
       *    市町村名
-            MOVE     MF100-CITYNUM2        TO  WRK-HKNJANUM
+             MOVE     MF100-CITYNUM2        TO  WRK-HKNJANUM
       *
-           PERFORM  920-HKNJAINF-SET-SEC
-           IF       FLG-HKNJAINF        =   ZERO
-                    MOVE    HKNJA-HKNJANAME
-                              TO  SC05-TOWNNAME (IDX1)
-                    DISPLAY "保険者名取得成功"
-           ELSE
-                MOVE "該当無し" TO SC05-TOWNNAME (IDX1)
-           END-IF
-      *
-      *    記号（市町村番号）
-             MOVE  MF100-CITYNUM  TO  SC05-KIGO (IDX1)
-      *
-      *    区分
-             MOVE  MF100-KBN     TO  SC05-KBN(IDX1)
+             PERFORM  920-HKNJAINF-SET-SEC
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     IF       FLG-HKNJAINF        =   ZERO
+      *              MOVE    HKNJA-HKNJANAME
+      *                        TO  SC05-TOWNNAME (IDX1)
+      *              DISPLAY "保険者名取得成功"
+      *     ELSE
+      *          MOVE "該当無し" TO SC05-TOWNNAME (IDX1)
+      *     END-IF
+      **
+      **    記号（市町村番号）
+      *       MOVE  MF100-CITYNUM  TO  SC05-KIGO (IDX1)
+      **
+      **    区分
+      *       MOVE  MF100-KBN     TO  SC05-KBN(IDX1)
+      *    保険者番号
+             DISPLAY "WRK-HKNJANUM = " WRK-HKNJANUM
+             DISPLAY "HKNJA-HKNJANUM = " HKNJA-HKNJANUM
+             MOVE    WRK-HKNJANUM         TO  WRK-MAE-INPUT
+             PERFORM 2009-HENKAN-SEC
+             MOVE    WRK-OUT-INPUT        TO  SC05-HKNJANUM(IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
       *    給付割合
              MOVE  "○"     TO    
@@ -1504,7 +1586,10 @@
                    MOVE  HIGH-VALUE       TO  KEY-NEW
                NOT  AT  END
                    ADD  1                 TO  CNT-MF100
-                   MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *             MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
+                   MOVE  MF100-CITYNUM2(3:3)  TO  KEY-N-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                    MOVE  MF100-KBN        TO  KEY-N-KBN
                    MOVE  MF100-WARIAI     TO  KEY-N-WARIAI
                    MOVE  MF100-COMBIKBN   TO  KEY-N-COMBIKBN
@@ -1518,9 +1603,9 @@
       *    公費請求書マスタ読込
       *****************************************************************
        900-KOHSKY-START-SEC            SECTION.
-      *
            INITIALIZE                  RECE02-REC
       *---(01.00.03) LINE ADD START ------------------------------------
+      *
       *     MOVE    WRK-PARA-HOSPID     TO  RECE02-HOSPID
            MOVE    SPA-HOSPNUM         TO  RECE02-HOSPNUM
       *---(01.00.03) LINE ADD END   ------------------------------------
@@ -1730,7 +1815,10 @@
       *                                MCPAREA
       *                                MCPDATA-REC
            MOVE  "tbl_hknjainf"               TO  MCP-TABLE
-           MOVE  "key"                        TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     MOVE  "key"                        TO  MCP-PATHNAME
+           MOVE  "key2"                       TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            CALL  "ORCDBMAIN"                  USING
                                               MCPAREA
                                               MCPDATA-REC
@@ -1740,10 +1828,23 @@
       *---(01.00.03) LINE ADD START ------------------------------------
       *       MOVE  PATH-TBL-HKNJAINF-KEY     TO  MCP-PATH
              MOVE  "tbl_hknjainf"               TO  MCP-TABLE
-             MOVE  "key"                        TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *       MOVE  "key"                        TO  MCP-PATHNAME
+             MOVE  "key2"                       TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *---(01.00.03) LINE ADD END   ------------------------------------
              PERFORM  925-HKNJAINF-READ-SEC
-             MOVE  HKNJA-HKNJANAME  TO  WRK-HKNJANAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *       MOVE  HKNJA-HKNJANAME  TO  WRK-HKNJANAME
+             PERFORM  UNTIL  FLG-HKNJAINF  =  1
+               IF  HKNJA-HKNNUM  =  "060"
+                   MOVE  HKNJA-HKNJANUM     TO  WRK-HKNJANUM
+                   MOVE  HKNJA-HKNJANAME    TO  WRK-HKNJANAME
+                   MOVE  1                  TO  FLG-HKNJAINF
+               END-IF
+               PERFORM  925-HKNJAINF-READ-SEC
+             END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            ELSE
              DISPLAY  "HKNJAINF SELECT ERR"
            END-IF
@@ -1756,7 +1857,10 @@
       *                            MCPAREA
       *                            MCPDATA-REC
            MOVE  "tbl_hknjainf"           TO  MCP-TABLE
-           MOVE  "key"                    TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     MOVE  "key"                    TO  MCP-PATHNAME
+           MOVE  "key2"                   TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            CALL  "ORCDBMAIN"              USING
                                           MCPAREA
                                           MCPDATA-REC

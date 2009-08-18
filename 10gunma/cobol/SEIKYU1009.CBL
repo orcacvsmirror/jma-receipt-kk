@@ -45,6 +45,7 @@
       *  01.00.06    内田    08/05/07    年齢判定修正
       *  01.00.07    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
       *  01.00.08    内田    09/01/14    SPA-AREA初期化
+      *  01.00.09    吉川    09/07/24    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -228,10 +229,16 @@
       *    キー用エリア
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
-               05  KEY-N-CITYNUM    PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         05  KEY-N-CITYNUM    PIC  X(02).
+               05  KEY-N-CITYNUM    PIC  X(03).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                05  KEY-N-COMBIKBN   PIC  X(02).
            03  KEY-OLD.
-               05  KEY-O-CITYNUM    PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         05  KEY-O-CITYNUM    PIC  X(02).
+               05  KEY-O-CITYNUM    PIC  X(03).
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                05  KEY-O-COMBIKBN   PIC  X(02).
       *
       *    集計用エリア
@@ -725,7 +732,9 @@
            MOVE  RECE02-RJNHKN        TO  MF100-RJNHKN
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
-                                               MF100-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *                                         MF100-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
       *
@@ -805,6 +814,24 @@
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *    市町村番号セット処理
+           IF  MF100-FTNJANUM(3:1)  NOT =  SPACE
+      *      負担者番号が8桁の場合（新）
+             MOVE  MF100-FTNJANUM(3:5)    TO  MF100-CITYNUM2
+           ELSE
+      *      負担者番号が2桁の場合（旧）
+             MOVE  MF100-FTNJANUM         TO  MF100-CITYNUM
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX   >    100
+               IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+                 MOVE  TOWN-CITYNUM(IDX)(1:5)  TO  MF100-CITYNUM2
+                 MOVE  100                TO  IDX
+               END-IF
+             END-PERFORM
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
+      *
       *    ソートするためキーをセット
            PERFORM  960-SORTKEY-SEC
       *
@@ -837,62 +864,95 @@
       *         MOVE  7  TO  MF100-SORTKEY
       *       END-IF
              EVALUATE  RECE02-KYURATE
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         WHEN  "010"
+      *           MOVE  3   TO  MF100-SORTKEY
+      *         WHEN  "020"
+      *           MOVE  7   TO  MF100-SORTKEY
+      *         WHEN  "030"
+      *           MOVE  10  TO  MF100-SORTKEY
                WHEN  "010"
-                 MOVE  3   TO  MF100-SORTKEY
                WHEN  "020"
-                 MOVE  7   TO  MF100-SORTKEY
+                 MOVE  2   TO  MF100-SORTKEY
                WHEN  "030"
-                 MOVE  10  TO  MF100-SORTKEY
+                 MOVE  3   TO  MF100-SORTKEY
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
              END-EVALUATE
       *---(01.00.01) LINE ADD END   ------------------------------------
            ELSE
-      *    割合・年齢チェック
-             EVALUATE  RECE02-KYURATE
-               WHEN  "010"
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *    前期９割（特例措置）は８割
-                 IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
-                 AND  (RECE02-FLG (2)  =  1)
-                     MOVE  5  TO  MF100-SORTKEY
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      **    割合・年齢チェック
+      *       EVALUATE  RECE02-KYURATE
+      *         WHEN  "010"
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **    前期９割（特例措置）は８割
+      *           IF   (RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804)
+      *           AND  (RECE02-FLG (2)  =  1)
+      *               MOVE  5  TO  MF100-SORTKEY
+      *           ELSE
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *             IF  RECE02-AGE  >= 70
+      *               MOVE  2  TO  MF100-SORTKEY
+      *             ELSE
+      *               MOVE  1  TO  MF100-SORTKEY
+      *             END-IF
+      **---(01.00.07) LINE ADD START ------------------------------------
+      *           END-IF
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *         WHEN  "020"
+      *           IF  RECE02-AGE  >= 70
+      *             MOVE  5  TO  MF100-SORTKEY
+      *           ELSE
+      **---(01.00.06) LINE ADD START ------------------------------------
+      *             IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *             AND  (RECE02-FLG (1)   =  1)
+      *                 MOVE  6  TO  MF100-SORTKEY
+      *             ELSE
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      *               IF  RECE02-AGE < 3
+      *                 MOVE  6  TO  MF100-SORTKEY
+      *               ELSE
+      *                 MOVE  4  TO  MF100-SORTKEY
+      *               END-IF
+      **---(01.00.06) LINE ADD START ------------------------------------
+      *             END-IF
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      *           END-IF
+      *         WHEN  "030"
+      **---(01.00.01) LINE ADD START ------------------------------------
+      **           MOVE  8  TO  MF100-SORTKEY
+      *           IF  RECE02-AGE  >= 70
+      *             MOVE  9  TO  MF100-SORTKEY
+      *           ELSE
+      *             MOVE  8  TO  MF100-SORTKEY
+      *           END-IF
+      **---(01.00.01) LINE ADD END   ------------------------------------
+      *       END-EVALUATE
+      *      割合区分チェック
+             IF  RECE02-AGE  >=  70
+               IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
+               AND  RECE02-FLG (2)  =  1
+                 MOVE  2      TO  MF100-SORTKEY
+               ELSE
+                 IF  RECE02-KYURATE  =  "030"
+                   MOVE  3    TO  MF100-SORTKEY
                  ELSE
-      *---(01.00.07) LINE ADD END   ------------------------------------
-                   IF  RECE02-AGE  >= 70
-                     MOVE  2  TO  MF100-SORTKEY
-                   ELSE
-                     MOVE  1  TO  MF100-SORTKEY
-                   END-IF
-      *---(01.00.07) LINE ADD START ------------------------------------
+                   MOVE  2    TO  MF100-SORTKEY
                  END-IF
-      *---(01.00.07) LINE ADD END   ------------------------------------
-               WHEN  "020"
-                 IF  RECE02-AGE  >= 70
-                   MOVE  5  TO  MF100-SORTKEY
+               END-IF
+             ELSE
+               IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
+               AND  RECE02-FLG (1)  =  1
+                 MOVE  4      TO  MF100-SORTKEY
+               ELSE
+                 IF  RECE02-AGE  <  3
+                   MOVE  4    TO  MF100-SORTKEY
                  ELSE
-      *---(01.00.06) LINE ADD START ------------------------------------
-                   IF  (RECE02-SRYYM  >=  WRK-CONS-SRYYM-200804)
-                   AND  (RECE02-FLG (1)   =  1)
-                       MOVE  6  TO  MF100-SORTKEY
-                   ELSE
-      *---(01.00.06) LINE ADD END   ------------------------------------
-                     IF  RECE02-AGE < 3
-                       MOVE  6  TO  MF100-SORTKEY
-                     ELSE
-                       MOVE  4  TO  MF100-SORTKEY
-                     END-IF
-      *---(01.00.06) LINE ADD START ------------------------------------
-                   END-IF
-      *---(01.00.06) LINE ADD END   ------------------------------------
+                   MOVE  1    TO  MF100-SORTKEY
                  END-IF
-               WHEN  "030"
-      *---(01.00.01) LINE ADD START ------------------------------------
-      *           MOVE  8  TO  MF100-SORTKEY
-                 IF  RECE02-AGE  >= 70
-                   MOVE  9  TO  MF100-SORTKEY
-                 ELSE
-                   MOVE  8  TO  MF100-SORTKEY
-                 END-IF
-      *---(01.00.01) LINE ADD END   ------------------------------------
-             END-EVALUATE
+               END-IF
+             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            END-IF
       *
            .
@@ -906,14 +966,17 @@
       *
            INITIALIZE      WRK-HKNJANUM
       *
-           PERFORM  VARYING  IDX    FROM    1    BY    1
-                    UNTIL    IDX    >    100
-             IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
-                 MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
-                 MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
-                 MOVE    100                            TO  IDX
-             END-IF
-           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     PERFORM  VARYING  IDX    FROM    1    BY    1
+      *              UNTIL    IDX    >    100
+      *       IF  MF100-CITYNUM   =  TOWN-NUM(IDX)
+      *           MOVE    TOWN-CITYNUM(IDX)(1:5)   TO  WRK-HKNJANUM
+      *           MOVE    TOWN-CITYNUM(IDX)        TO  MF100-CITYNUM2
+      *           MOVE    100                            TO  IDX
+      *       END-IF
+      *     END-PERFORM
+           MOVE    MF100-CITYNUM2                 TO  WRK-HKNJANUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
            IF  WRK-PARA-SYORIFLG       =   "1"
                AND FLG-SYORI           =    1
@@ -981,13 +1044,20 @@
            MOVE  MF100-CITYNUM2         TO  WRK-HKNJANUM
       *
            PERFORM  920-HKNJAINF-SET-SEC
-           IF       FLG-HKNJAINF        =   ZERO
-                    MOVE    HKNJA-HKNJANAME
-                                        TO  SC09-CITYNAME
-                    DISPLAY "保険者名取得成功"
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     IF       FLG-HKNJAINF        =   ZERO
+      *              MOVE    HKNJA-HKNJANAME
+      *                                  TO  SC09-CITYNAME
+      *              DISPLAY "保険者名取得成功"
+      *     ELSE
+      *              MOVE    "該当無し"  TO  SC09-CITYNAME
+      *     END-IF
+           IF  WRK-HKNJANAME  NOT =  SPACE
+               MOVE  WRK-HKNJANAME       TO  SC09-CITYNAME
            ELSE
-                    MOVE    "該当無し"  TO  SC09-CITYNAME
+               MOVE  "該当無し"          TO  SC09-CITYNAME
            END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
       *    請求日付
            MOVE  WRK-SEIYMDWH           TO  SC09-SEIYMD
@@ -1015,9 +1085,14 @@
            MOVE  SYS-1001-KAISETUNAME   TO  SC09-KAISETUNAME
       *
       *    保険番号
-           MOVE  MF100-CITYNUM2         TO  WRK-MAE-INPUT
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     MOVE  MF100-CITYNUM2         TO  WRK-MAE-INPUT
+      *     PERFORM 2009-HENKAN-SEC
+      *     MOVE    WRK-OUT-INPUT        TO  SC09-HKNJANUM
+           MOVE  WRK-HKNJANUM           TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
-           MOVE    WRK-OUT-INPUT        TO  SC09-HKNJANUM
+           MOVE  WRK-OUT-INPUT          TO  SC09-HKNJANUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD      TO  WRK-MAE-INPUT
@@ -1025,7 +1100,10 @@
            MOVE    WRK-OUT-INPUT        TO  SC09-HOSPCD
       *
       *    点数表区分
-           MOVE    "○"                 TO  SC09-TENHYOKBN (1)
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     MOVE    "○"                 TO  SC09-TENHYOKBN (1)
+           MOVE    "1"                  TO  SC09-TENHYOKBN
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
       *    その他公費番号
            IF  MF100-COMBIKBN NOT =  SPACE
@@ -1050,15 +1128,17 @@
                WHEN  2    MOVE  3   TO  IDX
                WHEN  3    MOVE  5   TO  IDX
                WHEN  4    MOVE  7   TO  IDX
-               WHEN  5    MOVE  9   TO  IDX
-               WHEN  6    MOVE  11  TO  IDX
-               WHEN  7    MOVE  13  TO  IDX
-               WHEN  8    MOVE  15  TO  IDX
-               WHEN  9    MOVE  17  TO  IDX
-      *---(01.00.01) LINE ADD START ------------------------------------
-               WHEN  10   MOVE  19  TO  IDX
-               WHEN  11   MOVE  21  TO  IDX
-      *---(01.00.01) LINE ADD START ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         WHEN  5    MOVE  9   TO  IDX
+      *         WHEN  6    MOVE  11  TO  IDX
+      *         WHEN  7    MOVE  13  TO  IDX
+      *         WHEN  8    MOVE  15  TO  IDX
+      *         WHEN  9    MOVE  17  TO  IDX
+      **---(01.00.01) LINE ADD START ------------------------------------
+      *         WHEN  10   MOVE  19  TO  IDX
+      *         WHEN  11   MOVE  21  TO  IDX
+      **---(01.00.01) LINE ADD START ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
              END-EVALUATE
       *
       *    入外区分
@@ -1106,7 +1186,10 @@
            PERFORM  VARYING  IDX  FROM  1  BY  1
       *---(01.00.01) LINE ADD START ------------------------------------
       *              UNTIL    IDX  >     18
-                    UNTIL    IDX  >     22
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *              UNTIL    IDX  >     22
+                    UNTIL    IDX  >     8
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    件数
@@ -1533,7 +1616,10 @@
                MOVE  HIGH-VALUE       TO  KEY-NEW
              NOT AT  END
                ADD  1                 TO  CNT-MF100
-               MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *         MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
+               MOVE  MF100-CITYNUM2(3:3)  TO  KEY-N-CITYNUM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                MOVE  MF100-COMBIKBN   TO  KEY-N-COMBIKBN
            END-READ
            .
@@ -1756,7 +1842,10 @@
       *                                MCPAREA
       *                                MCPDATA-REC
            MOVE  "tbl_hknjainf"               TO  MCP-TABLE
-           MOVE  "key"                        TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     MOVE  "key"                        TO  MCP-PATHNAME
+           MOVE  "key2"                       TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            CALL  "ORCDBMAIN"                  USING
                                               MCPAREA
                                               MCPDATA-REC
@@ -1766,10 +1855,23 @@
       *---(01.00.03) LINE ADD START ------------------------------------
       *       MOVE  PATH-TBL-HKNJAINF-KEY     TO  MCP-PATH
              MOVE  "tbl_hknjainf"               TO  MCP-TABLE
-             MOVE  "key"                        TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *       MOVE  "key"                        TO  MCP-PATHNAME
+             MOVE  "key2"                       TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *---(01.00.03) LINE ADD END   ------------------------------------
              PERFORM  925-HKNJAINF-READ-SEC
-             MOVE  HKNJA-HKNJANAME  TO  WRK-HKNJANAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *       MOVE  HKNJA-HKNJANAME  TO  WRK-HKNJANAME
+             PERFORM  UNTIL  FLG-HKNJAINF  =  1
+               IF  HKNJA-HKNNUM  =  "060"
+                   MOVE  HKNJA-HKNJANUM     TO  WRK-HKNJANUM
+                   MOVE  HKNJA-HKNJANAME    TO  WRK-HKNJANAME
+                   MOVE  1                  TO  FLG-HKNJAINF
+               END-IF
+               PERFORM  925-HKNJAINF-READ-SEC
+             END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            ELSE
              DISPLAY  "HKNJAINF SELECT ERR"
            END-IF
@@ -1782,7 +1884,10 @@
       *                            MCPAREA
       *                            MCPDATA-REC
            MOVE  "tbl_hknjainf"           TO  MCP-TABLE
-           MOVE  "key"                    TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *     MOVE  "key"                    TO  MCP-PATHNAME
+           MOVE  "key2"                   TO  MCP-PATHNAME
+      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
            CALL  "ORCDBMAIN"              USING
                                           MCPAREA
                                           MCPDATA-REC
