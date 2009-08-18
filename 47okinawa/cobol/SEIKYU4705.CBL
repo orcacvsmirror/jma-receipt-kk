@@ -27,7 +27,9 @@
       *  09/06/15    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/08/10  日レセver4.2でインストールすると
+      *                                  エラーが起きるのを修正
      *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -97,7 +99,10 @@
                                    BY         //RECEERR//.
       *
       *    レセプト印刷データ用領域
-           COPY    "HCM11V01.INC"  REPLACING  //HCM11V01//
+      *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) start
+      *     COPY    "HCM11V01.INC"  REPLACING  //HCM11V01//
+           COPY    "HCM10V02.INC"  REPLACING  //HCM10V02//
+      *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) end
                                    BY         //HC063//.
       *
       *    帳票領域
@@ -403,7 +408,9 @@
            03  WRK-CONS-BYOMEICD-KYUSEI
                                    PIC X(07)   VALUE   "ZZZ4012".   
       *    レセプトフォームID
-           03  WRK-CONS-FORMID     PIC X(12)   VALUE   "HCM11V01.red".
+      *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) start
+      *     03  WRK-CONS-FORMID     PIC X(12)   VALUE   "HCM11V01.red".
+      *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) start
       *
        01  TABLE-AREA.
            03  TBL-PARA-OCC    OCCURS  100.
@@ -2048,8 +2055,11 @@
       *
              IF    (MF100-HKNJANUM      =  RECE08-HKNJANUM
                AND  MF100-TEISYUTUSAKI  =  RECE08-TEISYUTUSAKI
-               AND  MF100-RECESYUBETU   =  RECE08-RECESYUBETU
-               AND  RECE08-FORMID       =  WRK-CONS-FORMID)
+      *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) start
+      *         AND  MF100-RECESYUBETU   =  RECE08-RECESYUBETU
+      *         AND  RECE08-FORMID       =  WRK-CONS-FORMID)
+               AND  MF100-RECESYUBETU   =  RECE08-RECESYUBETU)
+      *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) end
                OR   FLG-RECE08          =  1
       *
       *        連番が2以降は改ページしてから印刷
