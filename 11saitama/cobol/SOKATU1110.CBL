@@ -42,6 +42,7 @@
       *                                 シス管「2007」の公費まとめ対応
       *                                 SPA-AREA初期化
       *  01.00.11    内田    09/06/17   印字対象番号の追加（381）
+      *  01.00.12    吉川    09/08/21   印字対象番号の追加（352,353,354）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -967,6 +968,8 @@
                END-IF
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
       *
+               DISPLAY "RECE10-PTNUM =" RECE10-PTNUM
+               DISPLAY "RECE10-KOHNUM =" RECE10-KOHNUM(IDX3)
       *        全国共通公費と１４１のみを対象にする
       *        川口市（181等）春日部市（281）も印字対象
                IF      RECE10-KOHNUM(IDX3)(1:1)    =   "0"
@@ -991,6 +994,11 @@
       *=== 印字対象番号追加 by Uchida(2009/06/17) start
                    OR  RECE10-KOHNUM(IDX3)  =  "381"
       *=== 印字対象番号追加 by Uchida(2009/06/17) end
+      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
+                   OR  RECE10-KOHNUM(IDX3)  =  "352"
+                   OR  RECE10-KOHNUM(IDX3)  =  "353"
+                   OR  RECE10-KOHNUM(IDX3)  =  "354"
+      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
       *
                    PERFORM VARYING IDX4    FROM    1   BY  1
                            UNTIL   IDX4    >       20
