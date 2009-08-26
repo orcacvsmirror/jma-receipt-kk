@@ -38,6 +38,7 @@
       * 01.00.07     内田    2008/04/30    帳票様式の変更に伴う修正
       * 01.00.08     内田    2008/05/07    給付割合印字修正
       * 01.00.09     内田    2009/01/14    SPA-AREA初期化
+      * 01.00.10     吉川    2009/08/25    長期は別帳票とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -213,9 +214,15 @@
            03  KEY-NEW.
                05  KEY-N-SRYYM      PIC  X(06).
                05  KEY-N-PREFKBN    PIC  9(01).
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
+               05  KEY-N-TYOKI      PIC  X(01).
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
            03  KEY-OLD.
                05  KEY-O-SRYYM      PIC  X(06).
                05  KEY-O-PREFKBN    PIC  9(01).
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
+               05  KEY-O-TYOKI      PIC  X(01).
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".
@@ -591,6 +598,16 @@
       *
       *    在医総
            MOVE  RECE10-ZAITAKU  TO  SKT1000TMP-ZAITAKU
+      *
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
+      *    長期
+           IF  RECE10-ETC-KOHNUM(1)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(2)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(3)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(4)  =  "972" OR "974"
+             MOVE  "1"           TO  SKT1000TMP-TYOKI
+           END-IF
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
       *
       *    県内／県外
            MOVE  RECE10-PREFKBN  TO  SKT1000TMP-PREFKBN
@@ -1697,6 +1714,9 @@
              NOT  AT  END
                MOVE  SKT1000TMP-PREFKBN  TO  KEY-N-PREFKBN
                MOVE  SKT1000TMP-SRYYM    TO  KEY-N-SRYYM
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
+               MOVE  SKT1000TMP-TYOKI    TO  KEY-N-TYOKI
+      *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
            END-READ
            .
        900-TMP-READ-EXT.
