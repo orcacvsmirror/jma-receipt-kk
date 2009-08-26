@@ -22,7 +22,7 @@
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 福岡・特定疾病療養受領証保持者の
       *                      自己負担分相当額申請書
-      *                      (580)
+      *                      (580,680)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  09/02/12    吉川          新規作成
@@ -30,6 +30,10 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/03/05  口座名義人追加
+      *  01.00.02    吉川    2009/08/20  2度目の入院期間を印字する
+      *                                  同一患者で入院と外来がある場合
+      *                                  1行にまとめて印字する
+      *                                  印字対象番号の追加（680）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -155,6 +159,22 @@
                05  WRK-TYY           PIC 9(04).
                05  WRK-TMM           PIC 9(02).
                05  WRK-TDD           PIC 9(02).
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+           03  TBL-MINNYMD.
+               05  WRK-MINNYMD  OCCURS 2.
+                   07  WRK-MINNYY    PIC 9(04).
+                   07  WRK-MINNMM    PIC 9(02).
+                   07  WRK-MINNDD    PIC 9(02).
+           03  TBL-MINTYMD.
+               05  WRK-MINTYMD  OCCURS 2.
+                   07  WRK-MINTYY    PIC 9(04).
+                   07  WRK-MINTMM    PIC 9(02).
+                   07  WRK-MINTDD    PIC 9(02).
+           03  WRK-NYUINKIKAN.
+               05  WRK-NYUMM         PIC X(04).
+               05  WRK-NYUDD         PIC X(02).
+               05  WRK-TAIDD         PIC X(02).
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            03  WRK-KASAN-TBL.
                05  WRK-FTNJANUM      PIC X(08).
                05  WRK-KOHNUM        PIC X(03).
@@ -164,6 +184,9 @@
                05  WRK-SEIKYUGK-G2   PIC 9(09).
            03  WRK-HKNJANUM          PIC X(05).
            03  WRK-FTNJANUM2         PIC X(05).
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+           03  WRK-HKNCOMBINUM       PIC X(04).
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -608,6 +631,9 @@
            PERFORM VARYING IDZ     FROM    1   BY  1
                    UNTIL   IDZ     >       4
                IF      RECE02-KOHNUM (IDZ) =  "580"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) start
+               OR      RECE02-KOHNUM (IDZ) =  "680"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) end
                        PERFORM 20011-SYUKEI-SEC
                END-IF
            END-PERFORM
@@ -657,10 +683,19 @@
                MOVE  "500"                 TO  MF100-CITYNUM
            END-IF
       *
+      *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) start
+      *    一時ファイル読み込み
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           MOVE    RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBN
+      *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) end
+      *
       *    入院患者の場合、最新の入退院日をセット
-           IF  RECE02-NYUGAIKBN = "1"
-               PERFORM 2003-YMDSET-SEC
-           END-IF
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *     IF  RECE02-NYUGAIKBN = "1"
+      *         PERFORM 2003-YMDSET-SEC
+      *     END-IF
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
       *
       *    請求金額集計
            MOVE    MF100-KOHNUM        TO    WRK-KOHNUM
@@ -678,6 +713,13 @@
       *
       *    収納テーブル取得
            PERFORM 920-SYUNOU-SET-SEC
+      *
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *    入院患者の場合、入退院日をセット
+           IF  RECE02-NYUGAIKBN = "1"
+               PERFORM 2003-YMDSET-SEC
+           END-IF
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
       *
            IF      RECE02-FTNMONEY(1)  >   ZERO
            AND     RECE02-FTNMONEY(1)  <   WRK-SEIKYUGK-G
@@ -712,8 +754,16 @@
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF      FLG-ERR         =   ZERO
-               WRITE   MF100-REC 
-               ADD     1           TO  CNT-MF100
+      *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) start
+      *         WRITE   MF100-REC 
+      *         ADD     1           TO  CNT-MF100
+               IF      FLG-MF100  =  1
+                   WRITE   MF100-REC
+                   ADD     1       TO  CNT-MF100
+               ELSE
+                   REWRITE  MF100-REC
+               END-IF
+      *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) start
            ELSE
                DISPLAY "市町村番号対象外 " RECE02-PTNUM
                        "負担者番号="       RECE02-KOHFTNJANUM
@@ -768,6 +818,10 @@
       *
       *    患者入院履歴情報
            INITIALIZE                  PTNYUINRRK-REC
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+                                       TBL-MINNYMD
+                                       TBL-MINTYMD
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
       *
            MOVE    SPA-HOSPNUM          TO  PTNYUINRRK-HOSPNUM
            MOVE    RECE02-PTID          TO  PTNYUINRRK-PTID
@@ -776,23 +830,42 @@
            MOVE    1                    TO  WRK-TDD
            MOVE    WRK-NYMD             TO  PTNYUINRRK-NYUINYMD
            MOVE    WRK-TYMD             TO  PTNYUINRRK-TAIINYMD
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+           MOVE    WRK-HKNCOMBINUM      TO  PTNYUINRRK-HKNCOMBINUM
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
       *
       *    入院履歴テーブル取得
            PERFORM  930-PTNYUINRRK-SELECT-SEC
            PERFORM  930-PTNYUINRRK-CLOSE-SEC
       *
       *    入院日セット
-           IF    WRK-TYMD             >   PTNYUINRRK-NYUINYMD
-             MOVE  WRK-TYMD             TO  MF100-NYUINYMD
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *     IF    WRK-TYMD             >   PTNYUINRRK-NYUINYMD
+      *       MOVE  WRK-TYMD             TO  MF100-NYUINYMD
+           IF    WRK-TYMD             >   WRK-MINNYMD(1)
+             MOVE  WRK-TYMD             TO  MF100-NYUINYMD(1)
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            ELSE
-             MOVE  PTNYUINRRK-NYUINYMD  TO  MF100-NYUINYMD
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *       MOVE  PTNYUINRRK-NYUINYMD  TO  MF100-NYUINYMD
+             MOVE  WRK-MINNYMD(1)       TO  MF100-NYUINYMD(1)
+             MOVE  WRK-MINNYMD(2)       TO  MF100-NYUINYMD(2)
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            END-IF
       *
       *    退院日セット
-           IF  WRK-NYMD               <   PTNYUINRRK-TAIINYMD
-             MOVE  WRK-NYMD             TO  MF100-TAIINYMD
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *     IF  WRK-NYMD               <   PTNYUINRRK-TAIINYMD
+      *       MOVE  WRK-NYMD             TO  MF100-TAIINYMD
+           IF  WRK-NYMD               <   WRK-MINTYMD(1)
+             MOVE  WRK-NYMD             TO  MF100-TAIINYMD(1)
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            ELSE
-             MOVE  PTNYUINRRK-TAIINYMD  TO  MF100-TAIINYMD
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *       MOVE  PTNYUINRRK-TAIINYMD  TO  MF100-TAIINYMD
+             MOVE  WRK-MINTYMD(1)       TO  MF100-TAIINYMD(1)
+             MOVE  WRK-MINTYMD(2)       TO  MF100-TAIINYMD(2)
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            END-IF
       *
            .
@@ -939,14 +1012,40 @@
                MOVE    MF100-NAME          TO  SC23-NAME(IDX1)
       *
       *    入院期間
-               IF  MF100-NYUGAIKBN  =  "1"
-                 MOVE    MF100-NYUINMM     TO  WRK-Z2
-                 MOVE    WRK-Z2            TO  SC23-NYUINMM(IDX1)
-                 MOVE    MF100-NYUINDD     TO  WRK-Z2
-                 MOVE    WRK-Z2            TO  SC23-NYUINDD(IDX1)
-                 MOVE    MF100-TAIINDD     TO  WRK-Z2
-                 MOVE    WRK-Z2            TO  SC23-TAIINDD(IDX1)
-               END-IF
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *         IF  MF100-NYUGAIKBN  =  "1"
+      *           MOVE    MF100-NYUINMM     TO  WRK-Z2
+      *           MOVE    WRK-Z2            TO  SC23-NYUINMM(IDX1)
+      *           MOVE    MF100-NYUINDD     TO  WRK-Z2
+      *           MOVE    WRK-Z2            TO  SC23-NYUINDD(IDX1)
+      *           MOVE    MF100-TAIINDD     TO  WRK-Z2
+      *           MOVE    WRK-Z2            TO  SC23-TAIINDD(IDX1)
+      *         END-IF
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >  2
+      *          2度目の入院はデータがある時のみ印字
+                 IF   IDX2  =  2
+                 AND  MF100-NYUINYMD(IDX2)  =  ZERO
+                   CONTINUE
+                 ELSE
+      *            日付の編集
+                   MOVE  MF100-NYUINMM(IDX2)  TO  WRK-Z2
+                   MOVE  WRK-Z2               TO  WRK-NYUMM
+                   MOVE  MF100-NYUINDD(IDX2)  TO  WRK-Z2
+                   MOVE  WRK-Z2               TO  WRK-NYUDD
+                   MOVE  MF100-TAIINDD(IDX2)  TO  WRK-Z2
+                   MOVE  WRK-Z2               TO  WRK-TAIDD
+      *
+      *            結合(STRING命令はスペースが全角で入るので使用しない)
+                   MOVE  WRK-NYUMM  TO  SC23-NYUINKIKAN(IDX1 IDX2)(1:2)
+                   MOVE  "月"       TO  SC23-NYUINKIKAN(IDX1 IDX2)(3:2)
+                   MOVE  WRK-NYUDD  TO  SC23-NYUINKIKAN(IDX1 IDX2)(5:2)
+                   MOVE  "日〜"     TO  SC23-NYUINKIKAN(IDX1 IDX2)(7:4)
+                   MOVE  WRK-TAIDD  TO  SC23-NYUINKIKAN(IDX1 IDX2)(11:2)
+                   MOVE  "日"       TO  SC23-NYUINKIKAN(IDX1 IDX2)(13:2)
+                 END-IF
+               END-PERFORM
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
       *
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >  2
@@ -1217,6 +1316,9 @@
                          COMB-KOHID(3)    =  WRK-KOHID   OR
                          COMB-KOHID(4)    =  WRK-KOHID
                        PERFORM  800-SEIKYU-SEC
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+                       MOVE  SYU-HKNCOMBINUM      TO  WRK-HKNCOMBINUM
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
                      END-IF
                    END-IF
                  END-IF
@@ -1299,6 +1401,23 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       900-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    MF100-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-MF100
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-MF100
+           END-READ
+           .
+       900-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) end
       *****************************************************************
       *    一時ファイル読込
       *****************************************************************
@@ -1362,10 +1481,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF      RECE02-KOHNUM (1)  =  "580"
-               OR      RECE02-KOHNUM (2)  =  "580"
-               OR      RECE02-KOHNUM (3)  =  "580"
-               OR      RECE02-KOHNUM (4)  =  "580"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) start
+      *         IF      RECE02-KOHNUM (1)  =  "580"
+      *         OR      RECE02-KOHNUM (2)  =  "580"
+      *         OR      RECE02-KOHNUM (3)  =  "580"
+      *         OR      RECE02-KOHNUM (4)  =  "580"
+               IF      RECE02-KOHNUM (1)  =  "580" OR "680"
+               OR      RECE02-KOHNUM (2)  =  "580" OR "680"
+               OR      RECE02-KOHNUM (3)  =  "580" OR "680"
+               OR      RECE02-KOHNUM (4)  =  "580" OR "680"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -1380,6 +1505,9 @@
              PERFORM  VARYING  IDX1  FROM  1  BY  1
                       UNTIL    IDX1  >  4
                  IF  RECE02-KOHNUM (IDX1)  =  "580"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) start
+                 OR  RECE02-KOHNUM (IDX1)  =  "680"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) end
                      MOVE  RECE02-KOHFTNJANUM (IDX1)(1:5)
                                      TO  WRK-FTNJANUM2
                      MOVE  4         TO  IDX1
@@ -1548,7 +1676,10 @@
            MOVE    PTNYUINRRK-REC             TO  MCPDATA-REC
            MOVE    "DBSELECT"                 TO  MCP-FUNC
            MOVE    "tbl_ptnyuinrrk"       TO  MCP-TABLE
-           MOVE    "key11"                TO  MCP-PATHNAME
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *     MOVE    "key11"                TO  MCP-PATHNAME
+           MOVE    "key21"                TO  MCP-PATHNAME
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            CALL    "ORCDBMAIN"            USING
                                           MCPAREA
                                           MCPDATA-REC
@@ -1556,6 +1687,23 @@
       *
            IF      MCP-RC           =   ZERO
                    PERFORM 930-PTNYUINRRK-FETCH-SEC
+      *
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *その月の最小入退院日を取得（2件まで）
+                   MOVE  PTNYUINRRK-NYUINYMD      TO  WRK-MINNYMD(1)
+                   MOVE  PTNYUINRRK-TAIINYMD      TO  WRK-MINTYMD(1)
+      *
+                   PERFORM  UNTIL  FLG-PTNYUINRRK  =  1
+      *              最小入院日が見つかったら並べ替え
+                     IF  PTNYUINRRK-NYUINYMD  <  WRK-MINNYMD(1)
+                       MOVE  WRK-MINNYMD(1)       TO  WRK-MINNYMD(2)
+                       MOVE  WRK-MINTYMD(1)       TO  WRK-MINTYMD(2)
+                       MOVE  PTNYUINRRK-NYUINYMD  TO  WRK-MINNYMD(1)
+                       MOVE  PTNYUINRRK-TAIINYMD  TO  WRK-MINTYMD(1)
+                     END-IF
+                     PERFORM 930-PTNYUINRRK-FETCH-SEC
+                   END-PERFORM
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            ELSE
                    MOVE   1               TO  FLG-PTNYUINRRK
            END-IF
@@ -1569,7 +1717,10 @@
       *
            MOVE    "DBFETCH"                  TO  MCP-FUNC
            MOVE    "tbl_ptnyuinrrk"       TO  MCP-TABLE
-           MOVE    "key11"                TO  MCP-PATHNAME
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *     MOVE    "key11"                TO  MCP-PATHNAME
+           MOVE    "key21"                TO  MCP-PATHNAME
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            CALL    "ORCDBMAIN"            USING
                                           MCPAREA
                                           MCPDATA-REC
@@ -1591,7 +1742,10 @@
       *
            MOVE    "DBCLOSECURSOR"              TO  MCP-FUNC
            MOVE    "tbl_ptnyuinrrk"       TO  MCP-TABLE
-           MOVE    "key11"                TO  MCP-PATHNAME
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *     MOVE    "key11"                TO  MCP-PATHNAME
+           MOVE    "key21"                TO  MCP-PATHNAME
+      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
            CALL    "ORCDBMAIN"            USING
                                           MCPAREA
                                           MCPDATA-REC

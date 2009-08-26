@@ -18,7 +18,9 @@
       *          医療費請求書 COPY (SEI4023.INC) *
       ************************************************************
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/08/20  2回目の入退院日追加
+      *                                  MF100-KEY変更
       ************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
@@ -31,18 +33,18 @@
                05  MF100-JKYSNUM         PIC  X(07).
       *患者番号
                05  MF100-PTNUM           PIC  X(20).
-      *入外区分
-               05  MF100-NYUGAIKBN       PIC  X(01).
       *保険者番号        
                05  MF100-HKNJANUM-KEY    PIC  X(08).
       *適用開始年月日
                05  MF100-TEKSTYMD        PIC  X(08). 
-      *診療科
-               05  MF100-SRYKA           PIC  X(02).
       *診療年月
                05  MF100-SRYYM           PIC  X(06).
       *患者ＩＤ
            03  MF100-PTID                PIC  9(10).
+      *入外区分
+           03  MF100-NYUGAIKBN           PIC  X(01).
+      *診療科
+           03  MF100-SRYKA               PIC  X(02).
       *カナ氏名
            03  MF100-KANANAME            PIC  X(100).
       *漢字氏名
@@ -108,12 +110,12 @@
            03  MF100-FTNMONEYINF  OCCURS 2.
                05  MF100-FTNMONEY        PIC  9(09).
       *入院日
-           03  MF100-NYUINYMD.
+           03  MF100-NYUINYMD  OCCURS 2.
                05  MF100-NYUINYY         PIC  9(04).
                05  MF100-NYUINMM         PIC  9(02).
                05  MF100-NYUINDD         PIC  9(02).
       *退院日
-           03  MF100-TAIINYMD.
+           03  MF100-TAIINYMD  OCCURS 2.
                05  MF100-TAIINYY         PIC  9(04).
                05  MF100-TAIINMM         PIC  9(02).
                05  MF100-TAIINDD         PIC  9(02).
