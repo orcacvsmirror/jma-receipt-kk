@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/08/25  媒体種類欄はINIファイルで制御
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -38,12 +39,28 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *    媒体種類ファイル
+           SELECT  BAITAI-FILE   ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-BAITAI.
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
+      *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *    媒体種類ファイル
+       FD  BAITAI-FILE.
+       01  BAITAI-REC.
+           03  BAITAI-BAITAISYURUI       PIC X(01).
+           03  FILLER                    PIC X(01).
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -73,6 +90,9 @@
            03  STS-RECE10          PIC X(02).
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+           03  STS-BAITAI          PIC X(02).
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -108,6 +128,12 @@
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
            03  WRK-SRYYMD          PIC X(08).
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+           03  WRK-BAITAISYURUI    PIC X(01).
+      *
+      *    ファイル名称用エリア
+           03  FILE-NAME           PIC X(512).
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -195,6 +221,11 @@
       *
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
+      *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -350,10 +381,53 @@
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
       *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *    INIファイル取得
+           PERFORM  110-INI-FILE-SEC
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
+      *
            .
        100-INIT-EXT.
            EXIT.
       *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *****************************************************************
+      *    INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *    媒体種類取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/BAITAI.INI"    TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   BAITAI-REC
+      *
+           OPEN  INPUT  BAITAI-FILE
+      *
+           READ BAITAI-FILE
+             AT END
+               INITIALIZE        BAITAI-REC
+           END-READ
+      *
+           CLOSE BAITAI-FILE
+      *
+           DISPLAY "媒体種類取得=" BAITAI-BAITAISYURUI
+           IF    BAITAI-BAITAISYURUI  =  1 OR 2 OR 3
+             MOVE   BAITAI-BAITAISYURUI  TO  WRK-BAITAISYURUI
+           ELSE
+             MOVE   SPACE                TO  WRK-BAITAISYURUI
+           END-IF
+      *
+           DISPLAY "媒体種類 ="  WRK-BAITAISYURUI
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -439,6 +513,15 @@
       *
       *    請求年月日
            MOVE     WRK-SEIYMDWH         TO  SKT1040-SEIYMD
+      *
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *    媒体種類
+           EVALUATE  WRK-BAITAISYURUI
+             WHEN  "1"  MOVE  "○"       TO  SKT1040-BAITAI (1)
+             WHEN  "2"  MOVE  "○"       TO  SKT1040-BAITAI (2)
+             WHEN  "3"  MOVE  "○"       TO  SKT1040-BAITAI (3)
+           END-EVALUATE
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
            .
        310-HEAD-HEN-EXT.

@@ -30,3 +30,7 @@
            03  SKT1040-SRYYM             PIC  X(16).
       *    請求年月日
            03  SKT1040-SEIYMD            PIC  X(22).
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) start
+      *    媒体種類
+           03  SKT1040-BAITAI            PIC  X(02)  OCCURS  3.
+      *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
