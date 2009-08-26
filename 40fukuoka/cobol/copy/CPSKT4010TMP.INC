@@ -21,12 +21,16 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       * 01.00.01     門間         08/10/29  シス管「2007」公費まとめ対応
+      * 01.00.02     吉川         09/08/26  中国九州北部豪雨対応
       ************************************************************
        01  SKT4010TMP-REC.
            03  SKT4010TMP-KEY.
                05  SKT4010TMP-SYUTURYOKU            PIC  9(01).
                05  SKT4010TMP-HKNJANUM              PIC  X(06).
                05  SKT4010TMP-ZAITAKU               PIC  X(01).
+      *=== 中国九州北部豪雨対応 by Yoshikawa(2009/08/26) start
+               05  SKT4010TMP-GENMEN                PIC  X(01).
+      *=== 中国九州北部豪雨対応 by Yoshikawa(2009/08/26) end
       **
            03  SKT4010TMP-PAGE1-FLG                 PIC  9(01).
            03  SKT4010TMP-PAGE2-FLG                 PIC  9(01).
