@@ -51,6 +51,12 @@
       *  01.00.11    ÆâÅÄ    09/01/14    È÷¹ÍÍó¤Ø¡Ö¹âÈ¾¡×¤Î°õ»úÂÐ±þ
       *                                  SPA-AREA½é´ü²½
       *  01.00.12    µÈÀî    09/07/24    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
+      *  01.00.13    µÈÀî    09/08/25    ÀÁµáÇ¯·îÆü¤Ï°õ»ú¤·¤Ê¤¤
+      *                                  ÊÝ¸±¼ÔÈÖ¹æ¡¢ÉéÃ´¼ÔÈÖ¹æ¤Ï±¦µÍ¤á¤Ç°õ»ú
+      *                                  µìÉéÃ´¼ÔÈÖ¹æ¤È¿·ÉéÃ´¼ÔÈÖ¹æ¤Ç
+      *                                  Ä¢É¼¤¬Ê¬¤«¤ì¤ëÉÔ¶ñ¹ç¤ò½¤Àµ
+      *                                  Ê¿À®20Ç¯3·î°ÊÁ°¤ÎÏ·¿ÍÊÝ·òµÚ¤Ó
+      *                                  70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼°¤Ë°õ»ú
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -112,6 +118,10 @@
       *
            COPY  "SC1003.INC".
            COPY  "SC1004.INC".
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+           COPY  "SC1003o.INC".
+           COPY  "SC1004o.INC".
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
       *
       *    ¥¹¥ÑÎÎ°è
        01  STS-AREA.
@@ -210,6 +220,13 @@
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
       *
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) start
+      *    ±¦µÍ¤áÊÑ´¹ÍÑ
+           03  WRK-HENKAN            PIC  X(20).
+           03  WRK-LENGTH            PIC  9(02).
+           03  WRK-HENSYU            PIC  X(20).
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) end
+      *
       *    ¥Ñ¥é¥á¡¼¥¿¥Õ¥¡¥¤¥ëÌ¾
            03  FILE-NAME        PIC X(512).
       *
@@ -241,6 +258,9 @@
       *    ¥­¡¼ÍÑ¥¨¥ê¥¢
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+               05  KEY-N-YOUSIKI    PIC  9(01).
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
                05  KEY-N-NYUGAIKBN  PIC  X(01).
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *         05  KEY-N-CITYNUM    PIC  X(02).
@@ -251,6 +271,9 @@
                    07  KEY-N-KBN    PIC  9(01).
                05  KEY-N-COMBIKBN   PIC  X(02).
            03  KEY-OLD.
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+               05  KEY-O-YOUSIKI    PIC  9(01).
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
                05  KEY-O-NYUGAIKBN  PIC  X(01).
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *         05  KEY-O-CITYNUM    PIC  X(02).
@@ -779,6 +802,17 @@
            MOVE  RECE02-YKZFTN      (IDY)  TO  MF100-YKZFTN
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
       *
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+      *    £±¡áµìÍÍ¼°¡¢£²¡á¿·ÍÍ¼°
+           IF  RECE02-RJNHKNNUM  NOT =  SPACE
+           OR  (RECE02-AGE  >=  70  AND
+                RECE02-KYURATE  =  "010")
+              MOVE  1                     TO  MF100-YOUSIKI
+           ELSE
+              MOVE  2                     TO  MF100-YOUSIKI
+           END-IF
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
+      *
            IF  RECE02-ZAITAKU  =  1
              MOVE  "99"                   TO  MF100-COMBIKBN
            END-IF
@@ -860,6 +894,9 @@
       *    »ÔÄ®Â¼ÈÖ¹æ¥»¥Ã¥È½èÍý
            IF  MF100-FTNJANUM(3:1)  NOT =  SPACE
       *      ÉéÃ´¼ÔÈÖ¹æ¤¬8·å¤Î¾ì¹ç¡Ê¿·¡Ë
+      *=== Ä¢É¼¤¬Ê¬¤«¤ì¤ëÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2009/08/25) start
+             MOVE  MF100-FTNJANUM(6:2)    TO  MF100-CITYNUM
+      *=== Ä¢É¼¤¬Ê¬¤«¤ì¤ëÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2009/08/25) end
              MOVE  MF100-FTNJANUM(3:5)    TO  MF100-CITYNUM2
            ELSE
       *      ÉéÃ´¼ÔÈÖ¹æ¤¬2·å¤Î¾ì¹ç¡Êµì¡Ë
@@ -1160,31 +1197,63 @@
            PERFORM  UNTIL     FLG-PRINT   =  1
       *
              MOVE  KEY-NEW    TO  KEY-OLD
-             IF    MF100-NYUGAIKBN    =    "2"
-      *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
-               PERFORM  310-HEAD-HEN-SEC
-      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
-               PERFORM  320-BODY-HEN-SEC
-      *    ÊÔ½¸<¹ç·×>½èÍý
-               IF  KEY-NEW  NOT=  KEY-OLD
-                 PERFORM  3201-GOKEI-HEN-SEC
-                 INITIALIZE  SUM-GOKEI-TBL
-               END-IF
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+             IF  MF100-YOUSIKI  =  1
+               IF  MF100-NYUGAIKBN  =  "2"
+      *    Ä¢É¼ÊÔ½¸<µìÍÍ¼°¸«½Ð¤·>½èÍý
+                 PERFORM  310-OLD-HEAD-HEN-SEC
+      *    Ä¢É¼ÊÔ½¸<µìÍÍ¼°ÌÀºÙ>½èÍý
+                 PERFORM  320-OLD-BODY-HEN-SEC
+      *    ÊÔ½¸<µìÍÍ¼°¹ç·×>½èÍý
+                 IF  KEY-NEW  NOT=  KEY-OLD
+                   PERFORM  3201-OLD-GOKEI-HEN-SEC
+                   INITIALIZE  SUM-GOKEI-TBL
+                 END-IF
       *    Ä¢É¼°õºþ½èÍý
-               PERFORM  330-PRINT-OUT-SEC
+                 PERFORM  330-OLD-PRINT-OUT-SEC
+               ELSE
+      *    Ä¢É¼ÊÔ½¸<µìÍÍ¼°¸«½Ð¤·>½èÍý
+                 PERFORM  311-OLD-HEAD-HEN-SEC
+      *    Ä¢É¼ÊÔ½¸<µìÍÍ¼°ÌÀºÙ>½èÍý
+                 PERFORM  321-OLD-BODY-HEN-SEC
+      *    ÊÔ½¸<µìÍÍ¼°¹ç·×>½èÍý
+                 IF  KEY-NEW  NOT=  KEY-OLD
+                   PERFORM  3211-OLD-GOKEI-HEN-SEC
+                   INITIALIZE  SUM-GOKEI-TBL
+                 END-IF
+      *    Ä¢É¼°õºþ½èÍý
+                 PERFORM  331-OLD-PRINT-OUT-SEC
+               END-IF
              ELSE
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
+               IF    MF100-NYUGAIKBN    =    "2"
       *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
-               PERFORM  311-HEAD-HEN-SEC
+                 PERFORM  310-HEAD-HEN-SEC
       *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
-               PERFORM  321-BODY-HEN-SEC
+                 PERFORM  320-BODY-HEN-SEC
       *    ÊÔ½¸<¹ç·×>½èÍý
-               IF  KEY-NEW  NOT=  KEY-OLD
-                 PERFORM  3211-GOKEI-HEN-SEC
-                 INITIALIZE  SUM-GOKEI-TBL
-               END-IF
+                 IF  KEY-NEW  NOT=  KEY-OLD
+                   PERFORM  3201-GOKEI-HEN-SEC
+                   INITIALIZE  SUM-GOKEI-TBL
+                 END-IF
       *    Ä¢É¼°õºþ½èÍý
-               PERFORM  331-PRINT-OUT-SEC
-             END-IF  
+                 PERFORM  330-PRINT-OUT-SEC
+               ELSE
+      *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+                 PERFORM  311-HEAD-HEN-SEC
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
+                 PERFORM  321-BODY-HEN-SEC
+      *    ÊÔ½¸<¹ç·×>½èÍý
+                 IF  KEY-NEW  NOT=  KEY-OLD
+                   PERFORM  3211-GOKEI-HEN-SEC
+                   INITIALIZE  SUM-GOKEI-TBL
+                 END-IF
+      *    Ä¢É¼°õºþ½èÍý
+                 PERFORM  331-PRINT-OUT-SEC
+               END-IF  
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+             END-IF
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
            END-PERFORM
       *
            CLOSE    MF100-FILE
@@ -1228,7 +1297,9 @@
            END-IF
       *
       *    ÀÁµáÆüÉÕ
-           MOVE  WRK-SEIYMDWH          TO  SC03-SEIYMD
+      *=== ÀÁµáÇ¯·îÆü¤Ï°õ»ú¤·¤Ê¤¤ by Yoshikawa(2009/08/25) start
+      *     MOVE  WRK-SEIYMDWH          TO  SC03-SEIYMD
+      *=== ÀÁµáÇ¯·îÆü¤Ï°õ»ú¤·¤Ê¤¤ by Yoshikawa(2009/08/25) end
       *---(01.00.04) LINE ADD START ------------------------------------
       *¡¡¡¡½êºßÃÏ
       *     MOVE  SYS-1002-ADRS         TO  SC03-ADRS
@@ -1321,10 +1392,16 @@
       *
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *    ÉéÃ´¼ÔÈÖ¹æ
-           MOVE    MF100-KOHFTNJANUM    TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) start
+      *     MOVE    MF100-KOHFTNJANUM    TO  WRK-MAE-INPUT
+           MOVE    MF100-KOHFTNJANUM    TO  WRK-HENKAN
+           MOVE    8                    TO  WRK-LENGTH
+           PERFORM  2010-DATA-RIGHT-HENSYU-SEC
+           MOVE    WRK-HENKAN           TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) end
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT        TO  SC03-FTNJANUM (IDX)
-      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
+      **=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
       *
       *    ¼õµë¼ÔÈÖ¹æ
            MOVE    MF100-KOHJKYSNUM     TO  WRK-MAE-INPUT
@@ -1422,7 +1499,13 @@
       *
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *    ÊÝ¸±¼ÔÈÖ¹æ
-           MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) start
+      *     MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+           MOVE    MF100-HKNJANUM       TO  WRK-HENKAN
+           MOVE    8                    TO  WRK-LENGTH
+           PERFORM  2010-DATA-RIGHT-HENSYU-SEC
+           MOVE    WRK-HENKAN           TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) end
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT       TO  SC03-HKNJANUM(IDX)
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
@@ -1611,7 +1694,9 @@
            END-IF
       *
       *    ÀÁµáÆüÉÕ
-           MOVE  WRK-SEIYMDWH          TO  SC04-SEIYMD
+      *=== ÀÁµáÇ¯·îÆü¤Ï°õ»ú¤·¤Ê¤¤ by Yoshikawa(2009/08/25) start
+      *     MOVE  WRK-SEIYMDWH          TO  SC04-SEIYMD
+      *=== ÀÁµáÇ¯·îÆü¤Ï°õ»ú¤·¤Ê¤¤ by Yoshikawa(2009/08/25) end
       *---(01.00.04) LINE ADD START ------------------------------------
       *¡¡¡¡½êºßÃÏ
       *     MOVE  SYS-1002-ADRS         TO  SC04-ADRS
@@ -1704,7 +1789,13 @@
       *
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *    ÉéÃ´¼ÔÈÖ¹æ
-           MOVE    MF100-KOHFTNJANUM    TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) start
+      *     MOVE    MF100-KOHFTNJANUM    TO  WRK-MAE-INPUT
+           MOVE    MF100-KOHFTNJANUM    TO  WRK-HENKAN
+           MOVE    8                    TO  WRK-LENGTH
+           PERFORM  2010-DATA-RIGHT-HENSYU-SEC
+           MOVE    WRK-HENKAN           TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) end
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT        TO  SC04-FTNJANUM (IDX)
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
@@ -1807,7 +1898,13 @@
       *
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *    ÊÝ¸±¼ÔÈÖ¹æ
-           MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) start
+      *     MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+           MOVE    MF100-HKNJANUM       TO  WRK-HENKAN
+           MOVE    8                    TO  WRK-LENGTH
+           PERFORM  2010-DATA-RIGHT-HENSYU-SEC
+           MOVE    WRK-HENKAN           TO  WRK-MAE-INPUT
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) end
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT       TO  SC04-HKNJANUM(IDX)
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) end
@@ -1962,6 +2059,640 @@
            .
        331-PRINT-OUT-EXT.
            EXIT.
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<¥Ø¥Ã¥À¡¼Éô>½èÍý
+      *****************************************************************
+       310-OLD-HEAD-HEN-SEC          SECTION.
+      *
+           INITIALIZE                   SC03o
+      *    ÅÀ¿ôÉ½¶èÊ¬
+           MOVE  "¡û"  TO  SC03o-TENSUHYO (1)
+      *
+      *    °åÎÅµ¡´Ø¥³¡¼¥É
+           MOVE  SYS-1001-HOSPCD   TO  SC03o-HOSPCDN
+      *
+      *    °õºþÆüÉÕ
+           MOVE  WRK-SRYYMWH(1:16)  TO  SC03o-PRTYM
+      *
+      *    »ÔÄ®Â¼Ì¾
+           MOVE  MF100-CITYNUM2        TO  WRK-HKNJANUM
+      *
+           PERFORM  920-HKNJAINF-SET-SEC
+           IF       WRK-HKNJANAME   NOT = SPACE
+             STRING  WRK-HKNJANAME      DELIMITED BY SPACE
+                     "  »ÔÄ®Â¼Ä¹ÍÍ"     DELIMITED BY SIZE
+                     INTO               SC03o-CITYNAME
+             END-STRING
+           ELSE
+             MOVE    "  »ÔÄ®Â¼Ä¹ÍÍ"    TO  SC03o-CITYNAME(19:12)
+           END-IF
+      *
+      *    ÀÁµáÆüÉÕ
+           MOVE  WRK-SEIYMDWH          TO  SC03o-SEIYMD
+      *    ½êºßÃÏ
+           MOVE  WRK-HOSPADRS          TO  SC03o-ADRS
+      *
+      *    °åÎÅµ¡´ØÌ¾
+           MOVE  WRK-HOSPNAME          TO  SC03o-HOSPNAME
+      *
+      *    ÅÅÏÃÈÖ¹æ
+           MOVE  WRK-HOSPTEL           TO  SC03o-TEL
+      *
+      *    ¼õµë»ñ³Ê¼Ô¾Úµ­¹æ¡Ê»ÔÄ®Â¼ÈÖ¹æ¡Ë
+           MOVE  MF100-CITYNUM         TO  SC03o-JKYSKIGO
+      *
+      *    ³ä¹ç¡¦¶èÊ¬
+           EVALUATE  MF100-KYURATE
+             WHEN  10
+               MOVE  "¡û"              TO  SC03o-KYURATE (1)
+             WHEN  20
+               MOVE  "¡û"              TO  SC03o-KYURATE (2)
+             WHEN  30
+               MOVE  "¡û"              TO  SC03o-KYURATE (3)
+           END-EVALUATE
+           IF  MF100-RJNHKNNUM  NOT =  SPACE
+               MOVE  "¡û"              TO  SC03o-KYURATE (7)
+           ELSE
+             EVALUATE  MF100-KBN
+               WHEN  1
+                 MOVE  "¡û"            TO  SC03o-KYURATE (4)
+               WHEN  2
+               WHEN  3
+                 MOVE  "¡û"            TO  SC03o-KYURATE (5)
+               WHEN  4
+                 MOVE  "¡û"            TO  SC03o-KYURATE (6)
+             END-EVALUATE
+           END-IF
+      *
+      *    ¤½¤ÎÂ¾¸øÈñÈÖ¹æ
+           EVALUATE  MF100-COMBIKBN
+             WHEN  "72"
+               MOVE  "02"              TO  SC03o-ETCKOHNUM
+             WHEN  "98"
+               MOVE  "¹â"              TO  SC03o-ETCKOHNUM
+             WHEN  "99"
+               MOVE  "ºß"              TO  SC03o-ETCKOHNUM
+             WHEN  OTHER
+               MOVE  MF100-COMBIKBN    TO  SC03o-ETCKOHNUM
+           END-EVALUATE
+      *
+           .
+       310-OLD-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ¹Ô>½èÍý
+      *****************************************************************
+       320-OLD-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >     12
+                    OR       KEY-NEW    NOT   =    KEY-OLD
+                    OR       FLG-PRINT        =    1
+      *
+      *    ¼õµë¼ÔÈÖ¹æ
+           MOVE    MF100-KOHJKYSNUM     TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT        TO  SC03o-JKYSNUM (IDX)
+      *
+      *    ÊÝ¸±ÈÖ¹æ¶èÊ¬
+             IF  MF100-KOHNUM = "245"  OR  "246"  OR  "243"
+      *
+               IF    MF100-HKNJANUM(7:2)  =  SPACE
+                 MOVE  MF100-HKNJANUM(1:6)  
+                              TO      WRK-HKNJANUM(1:6)
+               ELSE
+                 MOVE  MF100-HKNJANUM(3:6)  
+                              TO      WRK-HKNJANUM(1:6)
+               END-IF
+      *
+               IF    WRK-HKNJANUM(3:1)  =  "3"
+                 MOVE  "¡û"      TO  SC03o-HKNKBN(IDX 5)
+               ELSE
+                 MOVE  "¡û"      TO  SC03o-HKNKBN(IDX 4)
+               END-IF
+      *
+             ELSE
+               EVALUATE  MF100-HKNNUM
+                 WHEN  "006"
+                   MOVE  "¡û"  TO  SC03o-HKNKBN(IDX 2)
+                 WHEN  "031"
+                   MOVE  "¡û"  TO  SC03o-HKNKBN(IDX 3)
+                 WHEN  "032"
+                   MOVE  "¡û"  TO  SC03o-HKNKBN(IDX 3)
+                 WHEN  "033"
+                   MOVE  "¡û"  TO  SC03o-HKNKBN(IDX 3)
+                 WHEN  "034"
+                   MOVE  "¡û"  TO  SC03o-HKNKBN(IDX 3)
+                 WHEN OTHER
+                   MOVE  "¡û"  TO  SC03o-HKNKBN(IDX 1)
+               END-EVALUATE
+             END-IF
+      *
+      *    »áÌ¾
+             MOVE  MF100-NAME  TO  SC03o-NAME (IDX)
+      *
+      *    À­ÊÌ
+             MOVE  "¡û"        TO  SC03o-SEX(IDX MF100-SEX)
+      *
+      *    À¸Ç¯·îÆü
+             MOVE    MF100-BIRTHDAY    TO  WRK-SYMD
+             PERFORM 31012-SEIWA-HEN-SEC
+      *
+             EVALUATE  WRK-HENYMDG1(1:1)
+               WHEN  "M"
+                 MOVE  "¡û"  TO  SC03o-NENGO (IDX 1)
+               WHEN  "T"
+                 MOVE  "¡û"  TO  SC03o-NENGO (IDX 2)
+               WHEN  "S"
+                 MOVE  "¡û"  TO  SC03o-NENGO (IDX 3)
+               WHEN  "H"
+                 MOVE  "¡û"  TO  SC03o-NENGO (IDX 4)
+             END-EVALUATE
+      *
+             MOVE  WRK-HENYMDG(5:4)  
+                        TO  SC03o-BIRTHDAY (IDX)(1:4)
+             MOVE  "."      TO  SC03o-BIRTHDAY (IDX)(5:1)
+             MOVE  WRK-HENYMDG(11:4)
+                        TO  SC03o-BIRTHDAY (IDX)(6:4)
+             MOVE  "."      TO  SC03o-BIRTHDAY (IDX)(10:1)
+             MOVE  WRK-HENYMDG(17:4)
+                        TO  SC03o-BIRTHDAY (IDX)(11:4)
+      *
+      *    ¸øÈñÊ¬ÅÀ¿ô
+             IF    MF100-COMBIKBN NOT  =   SPACE
+               MOVE  MF100-TOTALTEN2   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC03o-TENSU (IDX 1)
+             END-IF
+      *
+      *    Ê¡»ãÅÀ¿ô
+             MOVE  MF100-TOTALTEN      TO  WRK-Z7
+             MOVE  WRK-Z7              TO  SC03o-TENSU (IDX 2)
+      *
+      *    Ê¡»ã°åÎÅÈñÀÁµá³Û
+             IF    MF100-COMBIKBN NOT  =   SPACE  OR
+                   MF100-SEIKYU-FLG    =   1
+               MOVE    MF100-SEIKYUGK  TO  WRK-Z7
+               MOVE    WRK-Z7          TO  SC03o-SEIKYUGK(IDX)
+             END-IF
+      *
+      *    È÷¹Í
+             IF    MF100-SRYYM  NOT  =  LNK-PRTKANRI-SRYYM
+               MOVE  MF100-SRYYM  TO  WRK-SYMD (1:6)
+               MOVE  "01"            TO  WRK-SYMD (7:2)
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE  WRK-HENYMDG1(1:6)    TO  SC03o-BIKO(IDX) 
+             END-IF
+             INITIALIZE   WRK-BIKO2
+             IF  MF100-KEIKA  =  1
+               IF  MF100-SEIKYUGK  >=  12000
+                 MOVE  "·Ð²á"          TO  WRK-BIKO2
+               END-IF
+             END-IF
+             IF  MF100-TYOKI  =  2
+               IF  WRK-BIKO2  =  SPACE
+                 MOVE  "Ä¹£²"          TO  WRK-BIKO2
+               ELSE
+                 STRING  WRK-BIKO2     DELIMITED BY SPACE
+                         "¡¦"          DELIMITED BY SIZE
+                         "Ä¹£²"        DELIMITED BY SIZE
+                     INTO              WRK-BIKO2
+                 END-STRING
+               END-IF
+             END-IF
+             MOVE  WRK-BIKO2           TO  SC03o-BIKO2(IDX)
+      *      ÀÇ¡¢Â¿
+             IF  MF100-TEISHO  =  1
+               MOVE  "ÀÇ"              TO  SC03o-TEI (IDX 1)
+               MOVE  "¡û"              TO  SC03o-MARU (IDX 1)
+             END-IF
+             IF  MF100-KOGAKU4  =  1
+               MOVE  "Â¿"              TO  SC03o-TEI (IDX 2)
+               MOVE  "¡û"              TO  SC03o-MARU (IDX 2)
+             END-IF
+      *
+      *    ¹âÈ¾
+             IF  MF100-KOUHAN  =  1
+               MOVE  "¹âÈ¾"          TO  SC03o-BIKO3(IDX)
+             END-IF
+      *    ¾®·×
+      *    ¸øÈñÊ¬ÅÀ¿ô
+             IF  MF100-COMBIKBN  NOT =   SPACE
+               ADD  MF100-TOTALTEN2 TO   SUM-GTENSU(1)
+             END-IF
+      *
+      *    Ê¡»ãÅÀ¿ô
+             ADD  MF100-TOTALTEN    TO  SUM-GTENSU(2)
+      *
+      *    Ê¡»ã°åÎÅÈñÀÁµá³Û
+             IF    MF100-COMBIKBN NOT  =   SPACE  OR
+                   MF100-SEIKYU-FLG    =   1
+               ADD    MF100-SEIKYUGK  TO  SUM-GSEIKYUGK
+             END-IF
+      *
+      *    ¥ì¥»¥×¥ÈÌÀºÙÆÉ¹þ
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           .
+       320-OLD-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼°õºþ<¾®·×>½èÍý
+      *****************************************************************
+       3201-OLD-GOKEI-HEN-SEC  SECTION.
+      *
+      *    °åÎÅÅÀ¿ô
+           MOVE  SUM-GTENSU(1)    TO  WRK-Z9
+           MOVE  WRK-Z9           TO  SC03o-GTENSU(1)
+      *
+      *    ¹ç·×ÅÀ¿ô
+           MOVE  SUM-GTENSU(2)    TO  WRK-Z9
+           MOVE  WRK-Z9           TO  SC03o-GTENSU(2)
+      *
+      *    Ê¡»ã°åÎÅÈñÀÁµá³Û
+           MOVE  SUM-GSEIKYUGK  TO  WRK-Z9
+           MOVE  WRK-Z9         TO  SC03o-GSEIKYUGK
+      *
+           .
+       3201-OLD-GOKEI-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼°õºþ½èÍý
+      *****************************************************************
+       330-OLD-PRINT-OUT-SEC                SECTION.
+      *
+           ADD      1         TO        CNT-PAGE
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SC1003o.red"        TO  SPRT-PRTID
+           MOVE    "Ê¡»ã°åÎÅÈñÌÀºÙ½ñ"
+                                    TO  SPRT-TITLE
+           MOVE    SC03o            TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       330-OLD-PRINT-OUT-EXT.
+           EXIT.
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<¥Ø¥Ã¥À¡¼Éô>½èÍý
+      *****************************************************************
+       311-OLD-HEAD-HEN-SEC          SECTION.
+      *
+           INITIALIZE                   SC04o
+      *    ÅÀ¿ôÉ½¶èÊ¬
+           EVALUATE  SYS-1001-TENHYOKBN
+             WHEN  1    MOVE  "¡û"      TO  SC04o-TENSUHYO (1)
+             WHEN  3    MOVE  "¡û"      TO  SC04o-TENSUHYO (2)
+           END-EVALUATE
+      *
+      *    °åÎÅµ¡´Ø¥³¡¼¥É
+           MOVE  SYS-1001-HOSPCD        TO  SC04o-HOSPCDN
+      *
+      *    °õºþÆüÉÕ
+           MOVE  WRK-SRYYMWH(1:16)      TO  SC04o-PRTYM
+      *
+      *    »ÔÄ®Â¼Ì¾
+           MOVE  MF100-CITYNUM2         TO  WRK-HKNJANUM
+      *
+           PERFORM  920-HKNJAINF-SET-SEC
+           IF       WRK-HKNJANAME   NOT = SPACE
+             STRING  WRK-HKNJANAME      DELIMITED BY SPACE
+                     "  »ÔÄ®Â¼Ä¹ÍÍ"     DELIMITED BY SIZE
+                     INTO               SC04o-CITYNAME
+             END-STRING
+           ELSE
+             MOVE    "  »ÔÄ®Â¼Ä¹ÍÍ"    TO  SC04o-CITYNAME(19:12)
+           END-IF
+      *
+      *    ÀÁµáÆüÉÕ
+           MOVE  WRK-SEIYMDWH          TO  SC04o-SEIYMD
+      *
+      *    ½êºßÃÏ
+           MOVE  WRK-HOSPADRS          TO  SC04o-ADRS
+      *
+      *    °åÎÅµ¡´ØÌ¾
+           MOVE  WRK-HOSPNAME          TO  SC04o-HOSPNAME
+      *
+      *    ÅÅÏÃÈÖ¹æ
+           MOVE  WRK-HOSPTEL           TO  SC04o-TEL
+      *
+      *    ¼õµë»ñ³Ê¼Ô¾Úµ­¹æ¡Ê»ÔÄ®Â¼ÈÖ¹æ¡Ë
+           MOVE  MF100-CITYNUM         TO  SC04o-JKYSKIGO
+      *
+      *    ³ä¹ç¡¦¶èÊ¬
+           EVALUATE  MF100-KYURATE
+             WHEN  10
+               MOVE  "¡û"              TO  SC04o-KYURATE (1)
+             WHEN  20
+               MOVE  "¡û"              TO  SC04o-KYURATE (2)
+             WHEN  30
+               MOVE  "¡û"              TO  SC04o-KYURATE (3)
+           END-EVALUATE
+           IF  MF100-RJNHKNNUM  NOT =  SPACE
+               MOVE  "¡û"              TO  SC04o-KYURATE (7)
+           ELSE
+             EVALUATE  MF100-KBN
+               WHEN  1
+                 MOVE  "¡û"            TO  SC04o-KYURATE (4)
+               WHEN  2
+               WHEN  3
+                 MOVE  "¡û"            TO  SC04o-KYURATE (5)
+               WHEN  4
+                 MOVE  "¡û"            TO  SC04o-KYURATE (6)
+             END-EVALUATE
+           END-IF
+      *
+      *    ¤½¤ÎÂ¾¸øÈñÈÖ¹æ
+           EVALUATE  MF100-COMBIKBN
+             WHEN  "72"
+               MOVE  "02"              TO  SC04o-ETCKOHNUM
+             WHEN  "98"
+               MOVE  "¹â"              TO  SC04o-ETCKOHNUM
+             WHEN  "99"
+               MOVE  "ºß"              TO  SC04o-ETCKOHNUM
+             WHEN  OTHER
+               MOVE  MF100-COMBIKBN    TO  SC04o-ETCKOHNUM
+           END-EVALUATE
+      *
+           .
+       311-OLD-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ¹Ô>½èÍý
+      *****************************************************************
+       321-OLD-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >     12
+                    OR       KEY-NEW    NOT   =    KEY-OLD
+                    OR       FLG-PRINT        =    1
+      *
+      *    ¼õµë¼ÔÈÖ¹æ
+           MOVE    MF100-KOHJKYSNUM     TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT        TO  SC04o-JKYSNUM (IDX)
+      *
+      *    ÊÝ¸±ÈÖ¹æ¶èÊ¬
+             IF  MF100-KOHNUM = "245"  OR  "246"  OR  "243"
+      *
+               IF    MF100-HKNJANUM(7:2)  =  SPACE
+                 MOVE  MF100-HKNJANUM(1:6)  
+                              TO      WRK-HKNJANUM(1:6)
+               ELSE
+                 MOVE  MF100-HKNJANUM(3:6)  
+                              TO      WRK-HKNJANUM(1:6)
+               END-IF
+      *
+               IF    WRK-HKNJANUM(3:1)  =  "3"
+                 MOVE  "¡û"      TO  SC04o-HKNKBN(IDX 5)
+               ELSE
+                 MOVE  "¡û"      TO  SC04o-HKNKBN(IDX 4)
+               END-IF
+      *
+             ELSE
+               EVALUATE  MF100-HKNNUM
+                 WHEN  "006"
+                   MOVE  "¡û"  TO  SC04o-HKNKBN(IDX 2)
+                 WHEN  "031"
+                   MOVE  "¡û"  TO  SC04o-HKNKBN(IDX 3)
+                 WHEN  "032"
+                   MOVE  "¡û"  TO  SC04o-HKNKBN(IDX 3)
+                 WHEN  "033"
+                   MOVE  "¡û"  TO  SC04o-HKNKBN(IDX 3)
+                 WHEN  "034"
+                   MOVE  "¡û"  TO  SC04o-HKNKBN(IDX 3)
+                 WHEN OTHER
+                   MOVE  "¡û"  TO  SC04o-HKNKBN(IDX 1)
+               END-EVALUATE
+             END-IF
+      *
+      *    »áÌ¾
+             MOVE  MF100-NAME  TO  SC04o-NAME (IDX)
+      *
+      *    À­ÊÌ
+             MOVE  "¡û"        TO  SC04o-SEX(IDX MF100-SEX)
+      *
+      *    À¸Ç¯·îÆü
+             MOVE    MF100-BIRTHDAY    TO  WRK-SYMD
+             PERFORM 31012-SEIWA-HEN-SEC
+      *
+             EVALUATE  WRK-HENYMDG1(1:1)
+               WHEN  "M"
+                 MOVE  "¡û"  TO  SC04o-NENGO (IDX 1)
+               WHEN  "T"
+                 MOVE  "¡û"  TO  SC04o-NENGO (IDX 2)
+               WHEN  "S"
+                 MOVE  "¡û"  TO  SC04o-NENGO (IDX 3)
+               WHEN  "H"
+                 MOVE  "¡û"  TO  SC04o-NENGO (IDX 4)
+             END-EVALUATE
+      *
+             MOVE  WRK-HENYMDG(5:4)  
+                        TO  SC04o-BIRTHDAY (IDX)(1:4)
+             MOVE  "."      TO  SC04o-BIRTHDAY (IDX)(5:1)
+             MOVE  WRK-HENYMDG(11:4)
+                        TO  SC04o-BIRTHDAY (IDX)(6:4)
+             MOVE  "."      TO  SC04o-BIRTHDAY (IDX)(10:1)
+             MOVE  WRK-HENYMDG(17:4)
+                        TO  SC04o-BIRTHDAY (IDX)(11:4)
+      *
+      *    ¸øÈñÊ¬ÅÀ¿ô
+             IF    MF100-COMBIKBN NOT  =   SPACE
+               MOVE  MF100-TOTALTEN2   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC04o-TENSU (IDX 1)
+             END-IF
+      *
+      *    Ê¡»ãÅÀ¿ô
+             MOVE  MF100-TOTALTEN      TO  WRK-Z7
+             MOVE  WRK-Z7              TO  SC04o-TENSU (IDX 2)
+      *
+      *    ¿©»öÆü¿ô
+             MOVE  MF100-SHOKUJINISSU  TO  WRK-Z2
+             MOVE  WRK-Z2              TO  SC04o-SNISSU(IDX)
+      *
+      *    ¿©»öÉ¸½àÉéÃ´³Û
+             MOVE  MF100-SHOKUJIFTN    TO  WRK-Z6
+             MOVE  WRK-Z6              TO  SC04o-SFTNGK (IDX)
+      *
+      *    Ê¡»ã°åÎÅÈñÀÁµá³Û
+             IF    MF100-COMBIKBN NOT  =   SPACE  OR
+                   MF100-SEIKYU-FLG    =   1
+               MOVE    MF100-SEIKYUGK  TO  WRK-Z7
+               MOVE    WRK-Z7          TO  SC04o-SEIKYUGK(IDX)
+             END-IF
+      *
+      *
+      *    È÷¹Í
+             IF    MF100-SRYYM  NOT  =  LNK-PRTKANRI-SRYYM
+               MOVE  MF100-SRYYM  TO  WRK-SYMD (1:6)
+               MOVE  "01"            TO  WRK-SYMD (7:2)
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE  WRK-HENYMDG1(1:6)    TO  SC04o-BIKO(IDX) 
+             END-IF
+             INITIALIZE   WRK-BIKO2
+             IF  MF100-KEIKA  =  1
+               IF  MF100-SEIKYUGK  >=  44400
+                 MOVE  "·Ð²á"          TO  WRK-BIKO2
+               END-IF
+             END-IF
+             IF  MF100-TYOKI  =  2
+               IF  WRK-BIKO2  =  SPACE
+                 MOVE  "Ä¹£²"          TO  WRK-BIKO2
+               ELSE
+                 STRING  WRK-BIKO2     DELIMITED BY SPACE
+                         "¡¦"          DELIMITED BY SIZE
+                         "Ä¹£²"        DELIMITED BY SIZE
+                     INTO              WRK-BIKO2
+                 END-STRING
+               END-IF
+             END-IF
+             MOVE  WRK-BIKO2           TO  SC04o-BIKO2(IDX)
+      *      ÀÇ¡¢Â¿
+             IF  MF100-TEISHO  =  1
+               MOVE  "ÀÇ"              TO  SC04o-TEI (IDX 1)
+               MOVE  "¡û"              TO  SC04o-MARU (IDX 1)
+             END-IF
+             IF  MF100-KOGAKU4  =  1
+               MOVE  "Â¿"              TO  SC04o-TEI (IDX 2)
+               MOVE  "¡û"              TO  SC04o-MARU (IDX 2)
+             END-IF
+      *
+      *    ¹âÈ¾
+             IF  MF100-KOUHAN  =  1
+               MOVE  "¹âÈ¾"          TO  SC04o-BIKO3(IDX)
+             END-IF
+      *
+      *    ¾®·×
+      *    ¸øÈñÊ¬ÅÀ¿ô
+             IF  MF100-COMBIKBN  NOT   =   SPACE
+               ADD  MF100-TOTALTEN2    TO   SUM-GTENSU(1)
+             END-IF
+      *
+      *    Ê¡»ãÅÀ¿ô
+             ADD  MF100-TOTALTEN       TO  SUM-GTENSU(2)
+      *
+      *    ¿©»öÆü¿ô
+             ADD  MF100-SHOKUJINISSU   TO  SUM-GSNISSU
+      *
+      *    ¿©»öÉ¸½àÉéÃ´³Û
+             ADD  MF100-SHOKUJIFTN     TO  SUM-GSFTNGK
+      *
+      *    Ê¡»ã°åÎÅÈñÀÁµá³Û
+             IF    MF100-COMBIKBN NOT  =   SPACE  OR
+                   MF100-SEIKYU-FLG    =   1
+               ADD    MF100-SEIKYUGK  TO  SUM-GSEIKYUGK
+             END-IF
+      *
+      *    ¥ì¥»¥×¥ÈÌÀºÙÆÉ¹þ
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           .
+       321-OLD-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼°õºþ<¾®·×>½èÍý
+      *****************************************************************
+       3211-OLD-GOKEI-HEN-SEC  SECTION.
+      *
+      *    °åÎÅÅÀ¿ô
+           MOVE  SUM-GTENSU(1)    TO  WRK-Z9
+           MOVE  WRK-Z9           TO  SC04o-GTENSU(1)
+      *
+      *    ¹ç·×ÅÀ¿ô
+           MOVE  SUM-GTENSU(2)    TO  WRK-Z9
+           MOVE  WRK-Z9           TO  SC04o-GTENSU(2)
+      *
+      *    ¿©»öÆü¿ô
+           MOVE  SUM-GSNISSU      TO  WRK-Z3
+           MOVE  WRK-Z3           TO  SC04o-GSNISSU
+      *
+      *    ¿©»öÉ¸½àÉéÃ´³Û
+           MOVE  SUM-GSFTNGK      TO  WRK-Z7
+           MOVE  WRK-Z7           TO  SC04o-GSFTNGK
+      *
+      *    Ê¡»ã°åÎÅÈñÀÁµá³Û
+           MOVE  SUM-GSEIKYUGK    TO  WRK-Z9
+           MOVE  WRK-Z9           TO  SC04o-GSEIKYUGK
+      *
+           .
+       3211-OLD-GOKEI-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    Ä¢É¼°õºþ½èÍý
+      *****************************************************************
+       331-OLD-PRINT-OUT-SEC                SECTION.
+      *
+           ADD      1         TO        CNT-PAGE
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SC1004o.red"        TO  SPRT-PRTID
+           MOVE    "Ê¡»ã°åÎÅÈñÌÀºÙ½ñ"
+                                    TO  SPRT-TITLE
+           MOVE    SC04o            TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       331-OLD-PRINT-OUT-EXT.
+           EXIT.
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
       *****************************************************************
       *    ¥¨¥é¡¼½ÐÎÏ½èÍý
       *****************************************************************
@@ -2312,6 +3043,9 @@
                MOVE  HIGH-VALUE       TO  KEY-NEW
              NOT AT  END
                ADD  1                 TO  CNT-MF100
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) start
+               MOVE  MF100-YOUSIKI    TO  KEY-N-YOUSIKI
+      *=== µìÏ·¿ÍµÚ¤Ó70ºÐ°Ê¾å1³ä¤ÏµìÍÍ¼° by Yoshikawa(2009/08/25) end
                MOVE  MF100-NYUGAIKBN  TO  KEY-N-NYUGAIKBN
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2009/07/24) start
       *         MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
@@ -3009,6 +3743,32 @@
            .
        2009-HENKAN-EXT.
            EXIT.
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) start
+      *****************************************************************
+      *    ±¦¤Å¤áÊÔ½¸½èÍý
+      *****************************************************************
+       2010-DATA-RIGHT-HENSYU-SEC          SECTION.
+      *
+           MOVE    SPACE                  TO  WRK-HENSYU
+      *
+           IF  WRK-HENKAN  =  SPACE
+             CONTINUE
+           ELSE
+             PERFORM  VARYING  IDY  FROM  WRK-LENGTH  BY  -1
+                      UNTIL    IDY  <     1
+               IF  WRK-HENKAN(IDY:1)  NOT =  SPACE
+                 COMPUTE  IDZ  =  WRK-LENGTH  -  IDY  +  1
+                 MOVE  WRK-HENKAN(1:IDY)   TO  WRK-HENSYU(IDZ:)
+                 MOVE  WRK-HENSYU          TO  WRK-HENKAN
+                 MOVE  1                   TO  IDY
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       2010-DATA-RIGHT-HENSYU-EXT.
+           EXIT.
+      *=== ±¦µÍ¤á¤Çµ­Ï¿ by Yoshikawa(2009/08/25) end
       *---(01.00.04) LINE ADD START ------------------------------------
       *****************************************************************
       *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß

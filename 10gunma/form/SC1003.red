@@ -6235,12 +6235,12 @@
         <point val="7.39871,7.9711"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.39871,7.73221;9.64091,8.03221"/>
+        <rectangle val="7.39871,7.73221;9.51971,8.03221"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#189;&#234; &#186;&#223; &#195;&#207; &#181;&#218; &#164;&#211;#</string>
+            <string>#&#189;&#234;&#186;&#223;&#195;&#207;&#181;&#218;&#164;&#211;&#204;&#190;&#190;&#206;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6271,12 +6271,12 @@
         <point val="7.39871,8.4336"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.39871,8.19471;9.58031,8.49471"/>
+        <rectangle val="7.39871,8.19471;9.76211,8.49471"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#204;&#190;&#190;&#206;(&#197;&#197;&#207;&#195;&#200;&#214;&#185;&#230;)#</string>
+            <string>#&#161;&#202;&#197;&#197; &#207;&#195; &#200;&#214; &#185;&#230;&#161;&#203;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6772,15 +6772,15 @@
     </object>
     <object type="Standard - Text" version="0" id="O308">
       <attribute name="obj_pos">
-        <point val="15.455,24.2673"/>
+        <point val="15.2607,24.2673"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.455,24.0842;18.2426,24.3142"/>
+        <rectangle val="15.2607,24.0842;18.2806,24.3142"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#206;&#172;&#190;&#206;&#205;&#243;&#164;&#203;&#181;&#173;&#186;&#220;&#164;&#172;&#201;&#172;&#205;&#215;&#164;&#202;&#192;&#193;&#181;&#225;#</string>
+            <string>#&#206;&#172;&#190;&#206;&#197;&#249;&#205;&#243;&#164;&#203;&#181;&#173;&#186;&#220;&#164;&#172;&#201;&#172;&#205;&#215;&#164;&#202;&#192;&#193;&#181;&#225;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6789,7 +6789,7 @@
             <real val="0.23"/>
           </attribute>
           <attribute name="pos">
-            <point val="15.455,24.2673"/>
+            <point val="15.2607,24.2673"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7456,10 +7456,10 @@
     </object>
     <object type="ORCA - TextCircle" version="0" id="O327">
       <attribute name="obj_pos">
-        <point val="15.0235,24.2996"/>
+        <point val="14.8292,24.2996"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.0235,24.1005;15.276,24.3505"/>
+        <rectangle val="14.8292,24.1005;15.0817,24.3505"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -7473,7 +7473,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="15.0235,24.2996"/>
+            <point val="14.8292,24.2996"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
