@@ -53,6 +53,8 @@
       *                                  （280,380,381,390,490）
       *  01.00.16    吉川    08/11/05    公費の助成がない場合は印字しない
       *  01.00.17    吉川    08/12/11    印字対象番号の追加（480,481,590）
+      *  01.00.18    吉川    09/08/20    保険者を個別指定して印刷すると
+      *                                  後期高齢分が印字されない不具合を修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1816,13 +1818,17 @@
            MOVE   WRK-HKNNUM              TO  RECE10-HKNNUM-S
                                               RECE10-HKNNUM
       *
-           IF    WRK-PARA-HKNJANUM  NOT = ZERO
-               MOVE    WRK-PARA-HKNJANUM  TO  RECE10-XXSTHKNJANUM
-                                              RECE10-XXEDHKNJANUM
-           ELSE
+      *=== 個別指定時の後期高齢分印字 by Yoshikawa(2009/08/20) start
+      *     IF    WRK-PARA-HKNJANUM  NOT = ZERO
+      *         MOVE    WRK-PARA-HKNJANUM  TO  RECE10-XXSTHKNJANUM
+      *                                        RECE10-XXEDHKNJANUM
+      *     ELSE
+      *=== 個別指定時の後期高齢分印字 by Yoshikawa(2009/08/20) end
                MOVE    SPACE              TO  RECE10-XXSTHKNJANUM
                MOVE    "99999999"         TO  RECE10-XXEDHKNJANUM
-           END-IF
+      *=== 個別指定時の後期高齢分印字 by Yoshikawa(2009/08/20) start
+      *     END-IF
+      *=== 個別指定時の後期高齢分印字 by Yoshikawa(2009/08/20) end
       *
            MOVE    RECE10-REC              TO  MCPDATA-REC
            MOVE    "DBSELECT"              TO  MCP-FUNC
