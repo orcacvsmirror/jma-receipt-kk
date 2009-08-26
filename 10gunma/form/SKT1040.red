@@ -36,6 +36,11 @@
         <embed object="string" length="22"/>
       </appinfo>
     </element>
+    <element name="BAITAI" occurs="3">
+      <appinfo>
+        <embed object="string" length="2"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -327,7 +332,7 @@
         <point val="7.8921,10.8391"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.8921,10.4409;12.4371,10.9409"/>
+        <rectangle val="7.8921,10.441;12.4371,10.941"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -656,7 +661,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#162;&#168;&#163;&#178; &#197;&#192;&#191;&#244;&#201;&#189;&#182;&#232;&#202;&#172;&#181;&#218;&#164;&#211;&#199;&#222;&#194;&#206;&#188;&#239;&#202;&#204;&#164;&#203;&#164;&#196;&#164;&#164;&#164;&#198;&#164;&#207;&#161;&#162;&#179;&#186;&#197;&#246;&#164;&#203;&#162;&#254;&#164;&#242;&#201;&#213;&#164;&#177;&#164;&#198;&#164;&#175;&#164;&#192;&#164;&#181;&#164;&#164;&#161;&#163;#</string>
+            <string>#&#162;&#168;&#163;&#178; &#197;&#192;&#191;&#244;&#201;&#189;&#182;&#232;&#202;&#172;&#181;&#218;&#164;&#211;&#199;&#222;&#194;&#206;&#188;&#239;&#206;&#224;&#164;&#203;&#164;&#196;&#164;&#164;&#164;&#198;&#164;&#207;&#161;&#162;&#179;&#186;&#197;&#246;&#164;&#203;&#162;&#254;&#164;&#242;&#201;&#213;&#164;&#177;&#164;&#198;&#164;&#175;&#164;&#192;&#164;&#181;&#164;&#164;&#161;&#163;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -759,7 +764,7 @@
         <point val="3.07067,25.2129"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.07067,24.8943;5.81787,25.2943"/>
+        <rectangle val="3.07067,24.8944;5.81787,25.2944"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1451,7 +1456,7 @@
         <point val="8.71988,17.8764"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.71988,17.5578;17.9311,17.9578"/>
+        <rectangle val="8.71988,17.5579;17.9311,17.9579"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1929,7 +1934,7 @@
         <point val="9.025,17.9215"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.025,17.4438;9.631,18.0438"/>
+        <rectangle val="9.025,17.4437;9.631,18.0437"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TENHYOKBN[0]#</string>
@@ -1971,7 +1976,7 @@
         <point val="11.7767,17.9215"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.7767,17.4438;12.3827,18.0438"/>
+        <rectangle val="11.7767,17.4437;12.3827,18.0437"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TENHYOKBN[1]#</string>
@@ -2013,7 +2018,7 @@
         <point val="14.3607,17.9215"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.3607,17.4438;14.9667,18.0438"/>
+        <rectangle val="14.3607,17.4437;14.9667,18.0437"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TENHYOKBN[2]#</string>
@@ -2055,7 +2060,7 @@
         <point val="17.0404,17.9215"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0404,17.4438;17.6464,18.0438"/>
+        <rectangle val="17.0404,17.4437;17.6464,18.0437"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TENHYOKBN[3]#</string>
@@ -2076,6 +2081,132 @@
           </attribute>
           <attribute name="pos">
             <point val="17.0404,17.9215"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.3636"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.303"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O60">
+      <attribute name="obj_pos">
+        <point val="8.65724,22.2778"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.65724,21.8;9.26324,22.4"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#BAITAI[0]#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#162;&#254;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.6"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.65724,22.2778"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.3636"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.303"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O61">
+      <attribute name="obj_pos">
+        <point val="12.8003,22.2874"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8003,21.8096;13.4063,22.4096"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#BAITAI[1]#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#162;&#254;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.6"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="12.8003,22.2874"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.3636"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.303"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O62">
+      <attribute name="obj_pos">
+        <point val="16.9169,22.3227"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="16.9169,21.845;17.5229,22.445"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#BAITAI[2]#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#162;&#254;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.6"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="16.9169,22.3227"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
