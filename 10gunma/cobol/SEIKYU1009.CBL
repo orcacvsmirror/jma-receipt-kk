@@ -46,6 +46,8 @@
       *  01.00.07    内田    08/06/25    前期高齢者９割（特例措置）は８割で集計
       *  01.00.08    内田    09/01/14    SPA-AREA初期化
       *  01.00.09    吉川    09/07/24    帳票様式の変更に伴う修正
+      *  01.00.10    吉川    09/08/28    平成20年3月以前の老人保健及び
+      *                                  70歳以上1割は旧様式に印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -106,6 +108,9 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
            COPY  "SC1009.INC".
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+           COPY  "SC1009o.INC".
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -229,12 +234,18 @@
       *    キー用エリア
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+               05  KEY-N-YOUSIKI    PIC  9(01).
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *         05  KEY-N-CITYNUM    PIC  X(02).
                05  KEY-N-CITYNUM    PIC  X(03).
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
                05  KEY-N-COMBIKBN   PIC  X(02).
            03  KEY-OLD.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+               05  KEY-O-YOUSIKI    PIC  9(01).
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *         05  KEY-O-CITYNUM    PIC  X(02).
                05  KEY-O-CITYNUM    PIC  X(03).
@@ -744,6 +755,18 @@
            MOVE  RECE02-YKZFTNINF   (IDY)  TO  MF100-YKZFTNINF
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
       *
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *    １＝旧様式、２＝新様式
+           IF  RECE02-RJNHKNNUM  NOT =  SPACE
+           OR  (RECE02-SRYYM  <  WRK-CONS-SRYYM-200804  AND
+                RECE02-AGE  >=  70  AND
+                RECE02-KYURATE  =  "010")
+              MOVE  1                     TO  MF100-YOUSIKI
+           ELSE
+              MOVE  2                     TO  MF100-YOUSIKI
+           END-IF
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
+      *
            IF  RECE02-ZAITAKU  =  1
              MOVE  "99"                   TO  MF100-COMBIKBN
            END-IF
@@ -855,7 +878,10 @@
       *****************************************************************
        960-SORTKEY-SEC  SECTION.
       *
-           IF  RECE02-RJNHKNNUM  =  "027"
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *     IF  RECE02-RJNHKNNUM  =  "027"
+           IF  MF100-YOUSIKI  =  1
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *    老人チェック
       *---(01.00.01) LINE ADD START ------------------------------------
       *       IF  RECE02-KYURATE = "010"
@@ -863,21 +889,58 @@
       *       ELSE
       *         MOVE  7  TO  MF100-SORTKEY
       *       END-IF
-             EVALUATE  RECE02-KYURATE
-      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *       EVALUATE  RECE02-KYURATE
+      **=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
+      **         WHEN  "010"
+      **           MOVE  3   TO  MF100-SORTKEY
+      **         WHEN  "020"
+      **           MOVE  7   TO  MF100-SORTKEY
+      **         WHEN  "030"
+      **           MOVE  10  TO  MF100-SORTKEY
       *         WHEN  "010"
-      *           MOVE  3   TO  MF100-SORTKEY
       *         WHEN  "020"
-      *           MOVE  7   TO  MF100-SORTKEY
+      *           MOVE  2   TO  MF100-SORTKEY
       *         WHEN  "030"
-      *           MOVE  10  TO  MF100-SORTKEY
-               WHEN  "010"
-               WHEN  "020"
-                 MOVE  2   TO  MF100-SORTKEY
-               WHEN  "030"
-                 MOVE  3   TO  MF100-SORTKEY
-      *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
-             END-EVALUATE
+      *           MOVE  3   TO  MF100-SORTKEY
+      **=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
+      *       END-EVALUATE
+             IF  RECE02-RJNHKNNUM  NOT =  SPACE
+               EVALUATE  RECE02-KYURATE
+                 WHEN  "010"
+                   MOVE  3   TO  MF100-SORTKEY
+                 WHEN  "020"
+                   MOVE  7   TO  MF100-SORTKEY
+                 WHEN  "030"
+                   MOVE  10  TO  MF100-SORTKEY
+               END-EVALUATE
+             ELSE
+               EVALUATE  RECE02-KYURATE
+                 WHEN  "010"
+                     IF  RECE02-AGE  >= 70
+                       MOVE  2  TO  MF100-SORTKEY
+                     ELSE
+                       MOVE  1  TO  MF100-SORTKEY
+                     END-IF
+                 WHEN  "020"
+                   IF  RECE02-AGE  >= 70
+                     MOVE  5  TO  MF100-SORTKEY
+                   ELSE
+                     IF  RECE02-AGE < 3
+                       MOVE  6  TO  MF100-SORTKEY
+                     ELSE
+                       MOVE  4  TO  MF100-SORTKEY
+                     END-IF
+                   END-IF
+                 WHEN  "030"
+                   IF  RECE02-AGE  >= 70
+                     MOVE  9  TO  MF100-SORTKEY
+                   ELSE
+                     MOVE  8  TO  MF100-SORTKEY
+                   END-IF
+               END-EVALUATE
+             END-IF
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *---(01.00.01) LINE ADD END   ------------------------------------
            ELSE
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
@@ -1015,12 +1078,25 @@
       *
            PERFORM  UNTIL     FLG-PRINT   =  1
       *
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+             IF  MF100-YOUSIKI  =  1
+      *    帳票編集<旧様式・見出し>処理
+               PERFORM  310-OLD-HEAD-HEN-SEC
+      *    帳票編集<旧様式・明細>処理
+               PERFORM  320-OLD-BODY-HEN-SEC
+      *    帳票印刷処理
+               PERFORM  330-OLD-PRINT-OUT-SEC
+             ELSE
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *    帳票編集<見出し>処理
                PERFORM  310-HEAD-HEN-SEC
       *    帳票編集<明細>処理
                PERFORM  320-BODY-HEN-SEC
       *    帳票印刷処理
                PERFORM  330-PRINT-OUT-SEC
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+             END-IF
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
            END-PERFORM
       *
            CLOSE    MF100-FILE
@@ -1268,6 +1344,193 @@
            .
        330-PRINT-OUT-EXT.
            EXIT.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *****************************************************************
+      *    帳票編集<旧様式・ヘッダー部>処理
+      *****************************************************************
+       310-OLD-HEAD-HEN-SEC          SECTION.
+      *
+           ADD      1         TO        CNT-PAGE
+           INITIALIZE         SC09o
+           INITIALIZE         SUM-AREA
+      *
+      *    印刷日付
+           MOVE  WRK-SRYYMWH(1:16)      TO  SC09o-PRTYM
+      *
+           MOVE  MF100-CITYNUM2         TO  WRK-HKNJANUM
+      *
+           PERFORM  920-HKNJAINF-SET-SEC
+           IF  WRK-HKNJANAME  NOT =  SPACE
+               MOVE  WRK-HKNJANAME       TO  SC09o-CITYNAME
+           ELSE
+               MOVE  "該当無し"          TO  SC09o-CITYNAME
+           END-IF
+      *
+      *    請求日付
+           MOVE  WRK-SEIYMDWH           TO  SC09o-SEIYMD
+      *
+      *    医療機関住所
+           MOVE  WRK-HOSPADRS           TO  SC09o-ADRS
+      *
+      *    医療機関名
+           MOVE  WRK-HOSPNAME           TO  SC09o-HOSPNAME
+      *
+      *    電話番号
+           MOVE  WRK-HOSPTEL            TO  SC09o-TEL
+      *
+      *    開設者氏名
+           MOVE  SYS-1001-KAISETUNAME   TO  SC09o-KAISETUNAME
+      *
+      *    保険番号
+           MOVE  WRK-HKNJANUM           TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE  WRK-OUT-INPUT          TO  SC09o-HKNJANUM
+      *
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCD      TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT        TO  SC09o-HOSPCD
+      *
+      *    点数表区分
+           MOVE    "○"                 TO  SC09o-TENHYOKBN (1)
+      *
+      *    その他公費番号
+           IF  MF100-COMBIKBN NOT =  SPACE
+             MOVE  "○"                 TO  SC09o-ETCKOHNUM
+           END-IF
+      *
+           .
+       310-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<旧様式・明細行>処理
+      *****************************************************************
+       320-OLD-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM UNTIL FLG-PRINT    =  1
+                   OR  KEY-NEW  NOT =  KEY-OLD
+      *
+      *    割合・年齢により振り分け
+             EVALUATE  MF100-SORTKEY
+               WHEN  1    MOVE  1   TO  IDX
+               WHEN  2    MOVE  3   TO  IDX
+               WHEN  3    MOVE  5   TO  IDX
+               WHEN  4    MOVE  7   TO  IDX
+               WHEN  5    MOVE  9   TO  IDX
+               WHEN  6    MOVE  11  TO  IDX
+               WHEN  7    MOVE  13  TO  IDX
+               WHEN  8    MOVE  15  TO  IDX
+               WHEN  9    MOVE  17  TO  IDX
+               WHEN  10   MOVE  19  TO  IDX
+               WHEN  11   MOVE  21  TO  IDX
+             END-EVALUATE
+      *
+      *    入外区分
+             IF  MF100-NYUGAIKBN  =  2
+               ADD   1    TO  IDX
+             END-IF
+      *
+      *    件数
+             ADD    1              TO  SUM-KENSU (IDX)
+      *
+      *    点数
+             ADD   MF100-TOTALTEN  TO  SUM-TENSU (IDX)
+      *
+      *    福祉医療費請求額
+             IF    MF100-COMBIKBN NOT  =   SPACE
+                  OR  MF100-SEIKYU-FLG   =  1
+               ADD    MF100-SEIKYUGK   TO  SUM-FKSGAKU (IDX)
+             ELSE
+               IF  MF100-RJNHKNNUM NOT = SPACE  AND
+                   MF100-NYUGAIKBN     = "1"
+                 ADD  MF100-SEIKYUGK   TO  SUM-FKSGAKU (IDX)
+               END-IF
+             END-IF
+      *
+      *    食事療養：件数
+             IF  MF100-SHOKUJINISSU  >  0
+               ADD  1                 TO  SUM-S-KENSU (IDX)
+      *
+      *    食事療養：標準負担額
+               ADD  MF100-SHOKUJIFTN  TO  SUM-S-SKJFTN (IDX)
+             END-IF
+      *
+      *    レセプト明細読込
+             PERFORM  900-TMP-READ-SEC
+      *
+           END-PERFORM
+      *
+           MOVE  KEY-NEW  TO  KEY-OLD
+      *
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >     22
+      *
+      *    件数
+             MOVE  SUM-KENSU (IDX)     TO  WRK-Z5
+             MOVE  WRK-Z5              TO  SC09o-KENSU (IDX)
+      *
+      *    点数
+             MOVE  SUM-TENSU (IDX)     TO  WRK-Z9
+             MOVE  WRK-Z9              TO  SC09o-TENSU (IDX)
+      *
+      *    福祉医療費請求額
+             MOVE  SUM-FKSGAKU (IDX)   TO  WRK-Z10
+             MOVE  WRK-Z10             TO  SC09o-FKSGAKU (IDX)
+      *
+      *    食事療養：件数
+             MOVE  SUM-S-KENSU (IDX)   TO  WRK-Z5
+             MOVE  WRK-Z5              TO  SC09o-S-KENSU (IDX)
+      *
+      *    食事療養：標準負担額
+             MOVE  SUM-S-SKJFTN (IDX)  TO  WRK-Z9
+             MOVE  WRK-Z9              TO  SC09o-S-SKJFTN (IDX)
+           END-PERFORM
+      *
+           .
+       320-OLD-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理
+      *****************************************************************
+       330-OLD-PRINT-OUT-SEC                SECTION.
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SC1009o.red"        TO  SPRT-PRTID
+           MOVE    "福祉医療費請求書"  TO  SPRT-TITLE
+           MOVE    SC09o               TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "帳票ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC                           
+           END-IF                                                   
+           .
+       330-OLD-PRINT-OUT-EXT.
+           EXIT.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *****************************************************************
       *    エラー出力処理
       *****************************************************************
@@ -1616,6 +1879,9 @@
                MOVE  HIGH-VALUE       TO  KEY-NEW
              NOT AT  END
                ADD  1                 TO  CNT-MF100
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+               MOVE  MF100-YOUSIKI    TO  KEY-N-YOUSIKI
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *         MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
                MOVE  MF100-CITYNUM2(3:3)  TO  KEY-N-CITYNUM
