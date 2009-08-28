@@ -57,6 +57,8 @@
       *                                  帳票が分かれる不具合を修正
       *                                  平成20年3月以前の老人保健及び
       *                                  70歳以上1割は旧様式に印字
+      *  01.00.14    吉川    09/08/28    平成20年3月以前の70歳以上1割は
+      *                                  旧様式に印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -805,7 +807,11 @@
       *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/25) start
       *    １＝旧様式、２＝新様式
            IF  RECE02-RJNHKNNUM  NOT =  SPACE
-           OR  (RECE02-AGE  >=  70  AND
+      *=== H20年3月以前の70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *     OR  (RECE02-AGE  >=  70  AND
+           OR  (RECE02-SRYYM  <  WRK-CONS-SRYYM-200804  AND
+                RECE02-AGE  >=  70  AND
+      *=== H20年3月以前の70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
                 RECE02-KYURATE  =  "010")
               MOVE  1                     TO  MF100-YOUSIKI
            ELSE
