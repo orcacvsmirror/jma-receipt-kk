@@ -22,6 +22,7 @@
       *  コピ〖剁饯赖旺悟
       * Maj/Min/Rev  饯赖荚  泣烧        柒推
       *  01.00.01    等李    2009/08/24  KEYを恃构
+      *  01.00.02    等李    2009/08/28  MF100-YOUSIKI纳裁
       ************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
@@ -29,7 +30,9 @@
       *         05  MF100-HOSPID          PIC  X(24).
                05  MF100-HOSPNUM         PIC  9(02).
       *壳闻彩
-               05  MF100-SRYKA           PIC  X(02).
+      *         05  MF100-SRYKA           PIC  X(02).
+      *蘑杉屯及(１♂奠屯及、２♂糠屯及)
+               05  MF100-YOUSIKI         PIC  9(01).
       *辉漠录戎规
       *         05  MF100-CITYNUM        PIC  X(02).
                05  MF100-CITYNUM2        PIC  X(06).
@@ -57,6 +60,8 @@
                05  MF100-TEKSTYMD        PIC  X(08). 
       *壳闻钳奉
                05  MF100-SRYYM           PIC  X(06).
+      *壳闻彩
+           03  MF100-SRYKA               PIC  X(02).
       *吹荚ＩＤ
            03  MF100-PTID                PIC  9(10).
       *戳机会叹

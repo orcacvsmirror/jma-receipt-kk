@@ -48,6 +48,9 @@
       *  01.00.11    吉川    09/07/24    帳票様式の変更に伴う修正
       *  01.00.12    吉川    09/08/25    旧負担者番号と新負担者番号が混在すると
       *                                  市町村番号順にならない不具合を修正
+      *  01.00.13    吉川    09/08/28    平成20年3月以前の老人保健及び
+      *                                  70歳以上1割は旧様式に印字
+      *                                  長期上位は長期と同様の処理をする
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -108,6 +111,9 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
            COPY  "SC1005.INC".
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+           COPY  "SC1005o.INC".
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -226,6 +232,9 @@
       *    キー用エリア
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+               05  KEY-N-YOUSIKI    PIC  9(01).
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *         05  KEY-N-CITYNUM    PIC  X(02).
                05  KEY-N-CITYNUM    PIC  X(03).
@@ -235,6 +244,9 @@
                05  KEY-N-COMBIKBN   PIC  X(02).
                05  KEY-N-NYUGAIKBN  PIC  9(01).
            03  KEY-OLD.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+               05  KEY-O-YOUSIKI    PIC  9(01).
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *         05  KEY-O-CITYNUM    PIC  X(02).
                05  KEY-O-CITYNUM    PIC  X(03).
@@ -735,6 +747,18 @@
            MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
            MOVE  RECE02-YKZFTNINF   (IDY)  TO  MF100-YKZFTNINF
       *
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *    １＝旧様式、２＝新様式
+           IF  RECE02-RJNHKNNUM  NOT =  SPACE
+           OR  (RECE02-SRYYM  <  WRK-CONS-SRYYM-200804  AND
+                RECE02-AGE  >=  70  AND
+                RECE02-KYURATE  =  "010")
+              MOVE  1                     TO  MF100-YOUSIKI
+           ELSE
+              MOVE  2                     TO  MF100-YOUSIKI
+           END-IF
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
+      *
            IF  RECE02-ZAITAKU  =  1
              MOVE  "99"                   TO  MF100-COMBIKBN
            END-IF
@@ -769,6 +793,14 @@
                MOVE    10000          TO    WRK-SEIKYUGK-G
                MOVE    1              TO    MF100-TYOKI
            END-IF
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) start
+      *    長期上位
+           IF    FLG-TYOKI    =    2  AND
+                 WRK-SEIKYUGK-G    >  20000
+               MOVE    20000          TO    WRK-SEIKYUGK-G
+               MOVE    2              TO    MF100-TYOKI
+           END-IF
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) end
       *
       *    四捨五入
              DISPLAY "四捨五入前="  WRK-SEIKYUGK-G
@@ -953,17 +985,43 @@
       *       END-IF
       *     END-IF
       **---(01.00.02) LINE ADD END   ------------------------------------
-      *    割合区分
-      *    旧老人判定
-           IF   RECE02-RJNHKNNUM  NOT =  SPACE
-           AND  RECE02-SRYYM      <=  "200209"
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      **    旧老人判定
+      *     IF   RECE02-RJNHKNNUM  NOT =  SPACE
+      *     AND  RECE02-SRYYM      <=  "200209"
+      *       EVALUATE  RECE02-KYURATE
+      *         WHEN  "010"
+      *         WHEN  "020"
+      *           MOVE  2      TO  MF100-WARIAI
+      *         WHEN  "030"
+      *           MOVE  3      TO  MF100-WARIAI
+      *       END-EVALUATE
+      *    区分（旧様式）
+           IF  RECE02-SRYYM  <  WRK-CONS-SRYYM-200804
+             IF  RECE02-RJNHKNNUM  NOT =  SPACE
+               MOVE  6        TO  MF100-KBN
+             ELSE
+               IF  RECE02-AGE  >=  70
+                 MOVE  7      TO  MF100-KBN
+               ELSE
+                 IF  RECE02-AGE  <  3
+                   MOVE  3    TO  MF100-KBN
+                 ELSE
+                   MOVE  0    TO  MF100-KBN
+                 END-IF
+               END-IF
+             END-IF
+      *      割合（旧様式）
              EVALUATE  RECE02-KYURATE
                WHEN  "010"
+                 MOVE  1      TO  MF100-WARIAI
                WHEN  "020"
                  MOVE  2      TO  MF100-WARIAI
                WHEN  "030"
                  MOVE  3      TO  MF100-WARIAI
              END-EVALUATE
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
+      *    割合
            ELSE
              IF  RECE02-AGE  >=  70
                IF   RECE02-SRYYM   >=  WRK-CONS-SRYYM-200804
@@ -1052,12 +1110,25 @@
       *
            PERFORM  UNTIL     FLG-PRINT   =  1
       *
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+             IF  MF100-YOUSIKI  =  1
+      *    帳票編集<旧様式・見出し>処理
+               PERFORM  310-OLD-HEAD-HEN-SEC
+      *    帳票編集<旧様式・明細>処理
+               PERFORM  320-OLD-BODY-HEN-SEC
+      *    帳票印刷処理
+               PERFORM  330-OLD-PRINT-OUT-SEC
+             ELSE
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *    帳票編集<見出し>処理
                PERFORM  310-HEAD-HEN-SEC
       *    帳票編集<明細>処理
                PERFORM  320-BODY-HEN-SEC
       *    帳票印刷処理
                PERFORM  330-PRINT-OUT-SEC
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+             END-IF
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *
            END-PERFORM
       *
@@ -1124,6 +1195,9 @@
       *              UNTIL    IDX1  >    25
                     UNTIL    IDX1  >    20
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+                    OR      KEY-N-YOUSIKI  NOT =  KEY-O-YOUSIKI
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
                     OR      FLG-PRINT =    1
       *
       *    市町村名
@@ -1145,8 +1219,6 @@
       **    区分
       *       MOVE  MF100-KBN     TO  SC05-KBN(IDX1)
       *    保険者番号
-             DISPLAY "WRK-HKNJANUM = " WRK-HKNJANUM
-             DISPLAY "HKNJA-HKNJANUM = " HKNJA-HKNJANUM
              MOVE    WRK-HKNJANUM         TO  WRK-MAE-INPUT
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT        TO  SC05-HKNJANUM(IDX1)
@@ -1252,6 +1324,166 @@
            .
        330-PRINT-OUT-EXT.
            EXIT.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+      *****************************************************************
+      *    帳票編集<旧様式・ヘッダー部>処理
+      *****************************************************************
+       310-OLD-HEAD-HEN-SEC          SECTION.
+      *
+           ADD   1     TO  CNT-PAGE
+      *
+           INITIALIZE  SC05o
+      *
+      *    医療機関コード
+           MOVE  SYS-1001-HOSPCD        TO  SC05o-HOSPCD
+      *
+      *    印刷日付
+           MOVE  WRK-SRYYMWH(1:16)      TO  SC05o-SRYYM
+      *
+      *    医療機関住所
+           MOVE  WRK-HOSPADRS           TO  SC05o-ADRS
+      *
+      *    医療機関名
+           MOVE  WRK-HOSPNAME           TO  SC05o-HOSPNAME
+      *
+      *    電話番号
+           MOVE  WRK-HOSPTEL            TO  SC05o-TEL
+      *
+      *    開設者氏名
+           MOVE  SYS-1001-KAISETUNAME   TO  SC05-KANRINAME
+      *
+      *    点数表区分
+           MOVE  "○"                   TO  SC05o-TENHYOKBN (1)
+      *
+           .
+       310-OLD-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票編集<旧様式・明細行>処理
+      *****************************************************************
+       320-OLD-BODY-HEN-SEC      SECTION.
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >    25
+                    OR      KEY-N-YOUSIKI  NOT =  1
+                    OR      FLG-PRINT =    1
+      *
+      *    市町村名
+             MOVE     MF100-CITYNUM2        TO  WRK-HKNJANUM
+      *
+             PERFORM  920-HKNJAINF-SET-SEC
+             IF  WRK-HKNJANAME  NOT =  SPACE
+                 MOVE  WRK-HKNJANAME       TO  SC05o-TOWNNAME (IDX1)
+             ELSE
+                 MOVE  "該当無し"          TO  SC05o-TOWNNAME (IDX1)
+             END-IF
+      *
+      *    記号（市町村番号）
+             MOVE  MF100-CITYNUM  TO  SC05o-KIGO (IDX1)
+      *
+      *    区分
+             MOVE  MF100-KBN     TO  SC05o-KBN(IDX1)
+      *
+      *    給付割合
+             MOVE  "○"          TO  SC05o-KYURATE(IDX1 MF100-WARIAI)
+      *
+      *    精神・結核等併用（１特）
+             IF  MF100-COMBIKBN NOT = SPACE
+               MOVE  "○"  TO  SC05o-KYURATE (IDX1 5)
+               MOVE  1     TO  FLG-COMBI
+             END-IF
+      *
+      *    入外区分
+             IF  MF100-NYUGAIKBN   =  "1"
+               MOVE  "○"  TO  SC05o-NYUGAIKBN (IDX1 1)
+             ELSE
+               MOVE  "○"  TO  SC05o-NYUGAIKBN (IDX1 2)
+             END-IF
+      *
+      *    集計
+             PERFORM UNTIL FLG-PRINT  =  1
+                     OR    KEY-NEW NOT = KEY-OLD
+                     OR    KEY-N-YOUSIKI  NOT =  1
+               ADD  1                      TO  SUM-GKENSU
+               ADD  MF100-TOTALTEN         TO  SUM-GTENSU
+               ADD  MF100-KOHYKZFTN        TO  SUM-GFKSGAKU
+      *
+               IF    MF100-COMBIKBN  NOT  =  SPACE
+                 OR  MF100-SEIKYU-FLG   =  1
+                 MOVE   1                 TO  FLG-COMBI
+                 ADD    MF100-SEIKYUGK    TO  SUM-GFKSGAKU
+               END-IF
+      *
+      *    レセプト明細読込
+               PERFORM  900-TMP-READ-SEC
+      *
+             END-PERFORM
+      *
+      *    件数
+             MOVE  SUM-GKENSU      TO  WRK-Z3
+             MOVE  WRK-Z3          TO  SC05o-KENSU (IDX1)
+      *
+      *    点数
+             MOVE  SUM-GTENSU      TO  WRK-Z9
+             MOVE  WRK-Z9          TO  SC05o-TENSU (IDX1)
+      *
+      *    福祉医療費請求額
+             IF  FLG-COMBI  = 1
+               MOVE  SUM-GFKSGAKU    TO  WRK-Z10
+               MOVE  WRK-Z10         TO  SC05o-FKSGAKU (IDX1)
+             END-IF
+      *
+             INITIALIZE  FLG-COMBI
+             INITIALIZE  SUM-GOKEI-TBL
+             MOVE  KEY-NEW  TO  KEY-OLD
+           END-PERFORM
+      *
+           .
+       320-OLD-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    帳票印刷処理
+      *****************************************************************
+       330-OLD-PRINT-OUT-SEC                SECTION.
+      *
+      *
+           INITIALIZE                  ORCSPRTAREA
+           MOVE    "INS"               TO  SPRT-MODE
+           MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
+           MOVE    LNK-PRTKANRI-TBL-KEY
+                                       TO  SPRT-TBL-KEY
+           MOVE    LNK-PRTKANRI-TBL-GROUP
+                                       TO  SPRT-TBL-GROUP
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SPRT-SRYYM
+           MOVE    LNK-PRTKANRI-SKYYMD TO  SPRT-SKYYMD
+           MOVE    LNK-PRTKANRI-SHELLID 
+                                       TO  SPRT-SHELLID
+           MOVE    LNK-PRTKANRI-SHORI-RENNUM
+                                       TO  SPRT-SHORI-RENNUM
+           MOVE    LNK-PRTKANRI-PRIORITY
+                                       TO  SPRT-PRIORITY
+           MOVE   "SC1005o.red"        TO  SPRT-PRTID
+           MOVE    "福祉医療総括表"    TO  SPRT-TITLE
+           MOVE    SC05o               TO  SPRT-PRTDATA
+           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+           CALL    "ORCSPRT"           USING
+                                       ORCSPRTAREA
+                                       SPA-AREA
+           IF      SPRT-RETURN         =   ZERO
+               CONTINUE
+           ELSE
+               MOVE    "印刷ＤＢに更新できませんでした"
+                                          TO  WRK-RECEERR
+               PERFORM 500-ERR-HENSYU-SEC
+           END-IF
+           .
+       330-OLD-PRINT-OUT-EXT.
+           EXIT.
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *****************************************************************
       *    エラー出力処理
       *****************************************************************
@@ -1318,13 +1550,26 @@
                                          "015"  OR  "051"  OR
                                          "091"  OR  "972"  OR
                                          "016"  OR  "052"
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) start
+                                      OR "974"
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) end
                ADD   SYU-TOTAL-HKNTEN     TO  MF100-FUKUSHIGAITEN
                MOVE  SYU-KOH-HKNNUM(IDX)(2:2)  TO  MF100-COMBIKBN
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) start
+               IF  SYU-KOH-HKNNUM(IDX)  =  "972" OR "974"
+                 MOVE  "72"               TO  MF100-COMBIKBN
+               END-IF
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) end
              END-IF
       *
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
                MOVE    1     TO    FLG-TYOKI
              END-IF
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) start
+             IF    SYU-KOH-HKNNUM(IDX)   =   "974"
+               MOVE    2     TO    FLG-TYOKI
+             END-IF
+      *=== 長期上位対応 by Yoshikawa(2009/08/28) end
            END-PERFORM
       *
            IF    FLG-HEIYOU    =    ZERO
@@ -1591,6 +1836,9 @@
                    MOVE  HIGH-VALUE       TO  KEY-NEW
                NOT  AT  END
                    ADD  1                 TO  CNT-MF100
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
+                   MOVE  MF100-YOUSIKI    TO  KEY-N-YOUSIKI
+      *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) end
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) start
       *             MOVE  MF100-CITYNUM    TO  KEY-N-CITYNUM
                    MOVE  MF100-CITYNUM2(3:3)  TO  KEY-N-CITYNUM
