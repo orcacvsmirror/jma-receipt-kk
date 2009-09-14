@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 京都・福祉医療費請求書
-      *                      (143,144)
+      *                      (143,144,145,245)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/05/18    山口          ORCAのバージョンアップ(2.5.0)による再作成
@@ -51,6 +51,7 @@
       *                                  （該当者は公費分患者負担額欄印字）
       *  01.00.12    吉川    09/08/17    公費分患者負担額欄にて償還払いでも
       *                                  記載する負担額は上限額までとする
+      *  01.00.13    吉川    09/09/03    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -221,6 +222,9 @@
            03  SUM-KENSU             PIC 9(03).
            03  SUM-TENSU             PIC 9(09).
            03  SUM-ETCKOHFTN         PIC 9(09).
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+           03  SUM-ITBFTN            PIC 9(09).
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *
       *    総合計エリア
@@ -228,6 +232,9 @@
            03  SUM-GKENSU            PIC 9(03).
            03  SUM-GTENSU            PIC 9(09).
            03  SUM-GETCKOHFTN        PIC 9(09).
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+           03  SUM-GITBFTN           PIC 9(09).
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    カウント領域
@@ -639,6 +646,9 @@
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
              IF  RECE02-KOHNUM (IDZ) = "143" OR "144"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+                                    OR "145" OR "245"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -770,6 +780,9 @@
                ELSE
       *
                    MOVE    ZERO            TO  MF100-IPANCD
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+                   MOVE    ZERO            TO  MF100-FTNMONEY
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
                    IF  FLG-ERR    =    ZERO
                        WRITE   MF100-REC
                        ADD     1   TO  CNT-MF100
@@ -1141,7 +1154,10 @@
       *
            PERFORM VARYING IDX1    FROM    1   BY  1
                    UNTIL   FLG-PRINT       =   1   OR
-                   IDX1                    >   20 
+      *=== 協会けんぽ対応 by Yoshikawa(2008/12/10) start
+      *             IDX1                    >   20 
+                   IDX1                    >   25
+      *=== 協会けんぽ対応 by Yoshikawa(2008/12/10) end
       *
       *    氏名・カナ氏名
                MOVE    MF100-NAME          TO  SC03-NAME(IDX1)
@@ -1200,6 +1216,11 @@
                MOVE    MF100-ETCKOHFTN     TO  WRK-Z6
                MOVE    WRK-Z6              TO  SC03-KSFTN(IDX1)
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *    自己負担
+               MOVE    MF100-FTNMONEY      TO  WRK-Z69
+               MOVE    WRK-Z69             TO  SC03-ITBFTN(IDX1)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *    公長表示の確認
       *---(01.00.04) LINE ADD START ------------------------------------
       *         IF      MF100-KEKKAKUFLG    =   1
@@ -1263,6 +1284,11 @@
       *---(01.00.02) LINE ADD START ------------------------------------
                                                SUM-GETCKOHFTN
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *    自己負担額加算
+               ADD     MF100-FTNMONEY      TO  SUM-ITBFTN
+                                               SUM-GITBFTN
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *    TMPファイル読み込み
                PERFORM  900-TMP-READ-SEC
            END-PERFORM
@@ -1288,6 +1314,13 @@
       *    合計公費分患者負担額
              MOVE    SUM-GETCKOHFTN          TO  WRK-Z7
              MOVE    WRK-Z7                  TO  SC03-GKSFTN
+      *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *    合計自己負担
+             MOVE    SUM-GITBFTN             TO  WRK-Z79
+             MOVE    WRK-Z79                 TO  SC03-GITBFTN
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
+      *
            ELSE
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    合計件数
@@ -1305,6 +1338,13 @@
       *    合計公費分患者負担額
              MOVE    SUM-ETCKOHFTN           TO  WRK-Z7
              MOVE    WRK-Z7                  TO  SC03-GKSFTN
+      *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *    合計自己負担
+             MOVE    SUM-ITBFTN              TO  WRK-Z79
+             MOVE    WRK-Z79                 TO  SC03-GITBFTN
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
+      *
       *---(01.00.02) LINE ADD START ------------------------------------
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
@@ -1688,10 +1728,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "143" OR "144"
-                OR RECE02-KOHNUM(2) = "143" OR "144"
-                OR RECE02-KOHNUM(3) = "143" OR "144"
-                OR RECE02-KOHNUM(4) = "143" OR "144"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *         IF  RECE02-KOHNUM(1) = "143" OR "144"
+      *          OR RECE02-KOHNUM(2) = "143" OR "144"
+      *          OR RECE02-KOHNUM(3) = "143" OR "144"
+      *          OR RECE02-KOHNUM(4) = "143" OR "144"
+               IF  RECE02-KOHNUM(1) = "143" OR "144" OR "145" OR "245"
+                OR RECE02-KOHNUM(2) = "143" OR "144" OR "145" OR "245"
+                OR RECE02-KOHNUM(3) = "143" OR "144" OR "145" OR "245"
+                OR RECE02-KOHNUM(4) = "143" OR "144" OR "145" OR "245"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *    テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC

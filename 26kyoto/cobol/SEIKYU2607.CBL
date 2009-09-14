@@ -21,7 +21,8 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 各種健康診査・予防接種(京都市)及び
-      *　　　　　　　　　　　医保福祉併用分総括表
+      *                      医保福祉併用分総括表
+      *                      （143,144,145,245）
       *  作成日付    作業者        記述
       *  06/09/15    中川          新規作成
       *****************************************************************
@@ -33,6 +34,7 @@
       *  01.00.02    内田    08/05/28    印字対象番号追加（245）
       *  01.00.03    門間    08/09/25    SPA-AREAの初期化
       *                                  診療年月の追加
+      *  01.00.04    吉川    09/09/03    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -799,14 +801,17 @@
       *****************************************************************
        2003-GOKEI-SEC  SECTION.
       *
-           IF  MF100-KOHNUM = "143" OR "144"
-               MOVE    1                TO   IDX1
-           ELSE
-               MOVE    2                TO   IDX1
-           END-IF
-      *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *     IF  MF100-KOHNUM = "143" OR "144"
+      *         MOVE    1                TO   IDX1
+      *     ELSE
+      *         MOVE    2                TO   IDX1
+      *     END-IF
+      **
       *    件数
-           ADD    1                             TO  SUM-KENSU(IDX1)
+      *     ADD    1                             TO  SUM-KENSU(IDX1)
+           ADD    1                             TO  SUM-KENSU(1)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *    レセプト明細読込
            PERFORM 900-TMP-READ-SEC
       *
@@ -848,7 +853,17 @@
       *    電話番号
            MOVE    WRK-HOSPTEL              TO  SC07-TEL
       *---(01.00.01) LINE ADD END   ------------------------------------
-      *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *    点数表区分
+           EVALUATE  SYS-1001-TENHYOKBN
+             WHEN  1
+               MOVE  "○"                   TO  SC07-TENSUHYO(1)
+             WHEN  3
+               MOVE  "○"                   TO  SC07-TENSUHYO(2)
+             WHEN  4
+               MOVE  "○"                   TO  SC07-TENSUHYO(3)
+           END-EVALUATE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
       *
            .
        310-HEAD-HEN-EXT.
@@ -859,14 +874,19 @@
       *****************************************************************
        320-BODY-HEN-SEC      SECTION.
       *
-           PERFORM VARYING IDX1    FROM    1   BY  1
-                   UNTIL   IDX1      >   2
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
+      *     PERFORM VARYING IDX1    FROM    1   BY  1
+      *             UNTIL   IDX1      >   2
+      **
+      *         MOVE    SUM-KENSU(IDX1)     TO  WRK-Z39
+      *         MOVE    WRK-Z39             TO  SC07-KENSU(IDX1)
+      **
+      *     END-PERFORM.
+           MOVE    SUM-KENSU(1)            TO  WRK-Z39
+           MOVE    WRK-Z39                 TO  SC07-KENSU
       *
-               MOVE    SUM-KENSU(IDX1)     TO  WRK-Z39
-               MOVE    WRK-Z39             TO  SC07-KENSU(IDX1)
-      *
-           END-PERFORM.
-      *
+           .
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
        320-BODY-HEN-EXT.
            EXIT.
       *

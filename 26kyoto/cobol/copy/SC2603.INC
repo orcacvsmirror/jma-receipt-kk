@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev       修正者    日付          内容
+      * 01.00.01          吉川      09/09/02      帳票様式の変更に伴う修正
+      ********************************************************************
        01  SC03.
       *印刷年月
          03  SC03-PRTYM            PIC  X(16).
@@ -32,65 +36,130 @@
          03  SC3-TENSUKBN-TBL OCCURS 3.
              05  SC03-TENSUKBN     PIC X(02).
       *カナ氏名
-         03  SC03-KANANAME-TBL  OCCURS 20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-KANANAME-TBL  OCCURS 20.
+         03  SC03-KANANAME-TBL  OCCURS 25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-KANANAME     PIC  X(20).
       *氏名
-         03  SC03-NAME-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-NAME-TBL   OCCURS  20.
+         03  SC03-NAME-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-NAME         PIC  X(20).
       *保険種別１
-         03  SC03-HKNKBN-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-HKNKBN-TBL   OCCURS  20.
+         03  SC03-HKNKBN-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-HKNKBN-G OCCURS 6.
                  07  SC03-HKNKBN   PIC  X(02).
       *本人家族区分１
-         03  SC03-HONKZKKBN1-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-HONKZKKBN1-TBL   OCCURS  20.
+         03  SC03-HONKZKKBN1-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-HONKZKKBN    PIC  X(02).
       *公費負担者番号
-         03  SC03-FTNJANUM1-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-FTNJANUM1-TBL   OCCURS  20.
+         03  SC03-FTNJANUM1-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-FTNJANUM1    PIC  X(04).
       *公費負担者番号
-         03  SC03-FTNJANUM2-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-FTNJANUM2-TBL   OCCURS  20.
+         03  SC03-FTNJANUM2-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-FTNJANUM2    PIC  X(08).
       *受給者番号
-         03  SC03-JKYSNUM-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-JKYSNUM-TBL   OCCURS  20.
+         03  SC03-JKYSNUM-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-JKYSNUM      PIC  X(14).
       *診療年月
-         03  SC03-SRYY-TBL   OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-SRYY-TBL   OCCURS  20.
+         03  SC03-SRYY-TBL   OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-SRYYM        PIC  X(08).
       *入外区分１
-         03  SC03-NYUGAIKBN1-TBL OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-NYUGAIKBN1-TBL OCCURS  20.
+         03  SC03-NYUGAIKBN1-TBL OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-NYUGAIKBN1   PIC  X(02).
       *入外区分２
-         03  SC03-NYUGAIKBN2-TBL OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-NYUGAIKBN2-TBL OCCURS  20.
+         03  SC03-NYUGAIKBN2-TBL OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-NYUGAIKBN2   PIC  X(02).
       *保険総点数
-         03  SC03-TENSU-TBL     OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-TENSU-TBL     OCCURS  20.
+         03  SC03-TENSU-TBL     OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-TENSU        PIC  X(09).
       *薬剤負担文字
-         03  SC03-YKZMOJI-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-YKZMOJI-TBL    OCCURS  20.
+         03  SC03-YKZMOJI-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-YKZMOJI      PIC  X(02).
       *薬剤負担○
-         03  SC03-YKZMARU-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-YKZMARU-TBL    OCCURS  20.
+         03  SC03-YKZMARU-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-YKZMARU      PIC  X(02).
       *薬剤負担
-         03  SC03-YKZFTN-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-YKZFTN-TBL    OCCURS  20.
+         03  SC03-YKZFTN-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-YKZFTN       PIC  X(06).
       *結核・精神
-         03  SC03-KSFTN-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-KSFTN-TBL    OCCURS  20.
+         03  SC03-KSFTN-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-KSFTN        PIC  X(06).
       *その他
-         03  SC03-ETCFTN-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-ETCFTN-TBL    OCCURS  20.
+         03  SC03-ETCFTN-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-ETCFTN       PIC  X(06).
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *自己負担
+         03  SC03-ITBFTN-TBL    OCCURS  25.
+             05  SC03-ITBFTN       PIC  X(06).
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
       *精神文字
-         03  SC03-SMOJI-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-SMOJI-TBL    OCCURS  20.
+         03  SC03-SMOJI-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-SMOJI        PIC  X(02).
       *精神○
-         03  SC03-SMARU-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-SMARU-TBL    OCCURS  20.
+         03  SC03-SMARU-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-SMARU        PIC  X(02).
       *結核文字
-         03  SC03-KMOJI-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-KMOJI-TBL    OCCURS  20.
+         03  SC03-KMOJI-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-KMOJI        PIC  X(04).
       *結核○
-         03  SC03-KMARU-TBL    OCCURS  20.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *   03  SC03-KMARU-TBL    OCCURS  20.
+         03  SC03-KMARU-TBL    OCCURS  25.
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-KMARU        PIC  X(02).
       *合計
          03  SC03-GOKEI-TBL.
@@ -108,3 +177,7 @@
              05  SC03-GKSFTN       PIC  X(07).
       *合計その他
              05  SC03-GETCFTN      PIC  X(07).
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
+      *合計自己負担
+             05  SC03-GITBFTN      PIC  X(07).
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
