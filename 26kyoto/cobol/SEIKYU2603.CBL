@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム叹        : ＯＲＣＡ
       *  サブシステム叹    : 孟数给锐
-      *  コンポ〖ネント叹  : 叠旁ˇ省汇板闻锐懒滇今
+      *  コンポ〖ネント叹  : 叠旁ˇ省汇第び灰伴て毁辩板闻锐懒滇今
       *                      (143,144,145,245)
       *  瓷妄荚            : 
       *  侯喇泣烧    侯度荚        淡揭
@@ -52,6 +52,7 @@
       *  01.00.12    等李    09/08/17    给锐尸吹荚砷么驰腕にて浸丛失いでも
       *                                  淡很する砷么驰は惧嘎驰までとする
       *  01.00.13    等李    09/09/03    蘑杉屯及の恃构に燃う饯赖
+      *                      09/09/15    屯及琵办に燃い、蘑杉叹疚恃构
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -418,7 +419,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU2603"    TO  JOB-PGID
-           MOVE    "省汇板闻锐懒滇今" 
+      *=== 蘑杉屯及の恃构に燃う饯赖 by Yoshikawa(2009/09/15) start
+      *     MOVE    "省汇板闻锐懒滇今" 
+           MOVE    "省汇第び灰伴て毁辩板闻锐懒滇今"
+      *=== 蘑杉屯及の恃构に燃う饯赖 by Yoshikawa(2009/09/15) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -1374,7 +1378,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC2603.red"         TO  SPRT-PRTID
-           MOVE    "省汇板闻锐懒滇今"
+      *=== 屯及琵办に燃い、蘑杉叹疚恃构 by Yoshikawa(2009/09/15) start
+      *     MOVE    "省汇板闻锐懒滇今"
+           MOVE    "省汇第び灰伴て毁辩板闻锐懒滇今"
+      *=== 屯及琵办に燃い、蘑杉叹疚恃构 by Yoshikawa(2009/09/15) end
                                     TO  SPRT-TITLE
            MOVE    SC03             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
