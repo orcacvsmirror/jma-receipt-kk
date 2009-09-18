@@ -41,6 +41,7 @@
       *                                  ではなく、該当の箇所へ印字
       *  01.00.07    吉川    08/10/09    シス管「2007」公費まとめ対応
       *                                  SPA-AREA初期化
+      *  01.00.08    内田    09/09/15    在総診は別帳票ではなく、まとめて印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -779,8 +780,10 @@
            ELSE
              MOVE        2          TO   SKT0710TMP-SYUTURYOKU
            END-IF
+      *=== 在総診はまとめて印字 by Uchida(2009/09/15) start
       *    在宅
-           MOVE   RECE10-ZAITAKU    TO   SKT0710TMP-ZAITAKU
+      *     MOVE   RECE10-ZAITAKU    TO   SKT0710TMP-ZAITAKU
+      *=== 在総診はまとめて印字 by Uchida(2009/09/15) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
