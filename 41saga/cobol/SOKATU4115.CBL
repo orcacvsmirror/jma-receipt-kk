@@ -30,6 +30,8 @@
       *  01.00.01    吉川    2008/05/13  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
       *  01.00.02    吉川    2008/05/21  在宅は別様式の帳票に印字
+      *  01.00.03    吉川    2009/09/16  在総診用の帳票の公費再掲欄に
+      *                                  公費が印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1463,8 +1465,11 @@
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
            MOVE    1                     TO  IDX2
-      * 
-           PERFORM 200231-KOH-HENSYU-SEC
+      *
+      *=== 公費が印字されない不具合修正 by Yoshikawa(2009/09/16) start
+      *     PERFORM 200231-KOH-HENSYU-SEC
+           PERFORM 200331-KOH-HENSYU-SEC
+      *=== 公費が印字されない不具合修正 by Yoshikawa(2009/09/16) end
                                    UNTIL   FLG-KOH-END   =   1
       *
            .
@@ -1482,7 +1487,10 @@
              IF      SUM-KOHNUM (IDX2)   =   SPACE
                MOVE    1                     TO  FLG-KOH-END
              ELSE    
-               PERFORM 2002311-HKNNUM-HENSYU-SEC     
+      *=== 公費が印字されない不具合修正 by Yoshikawa(2009/09/16) start
+      *         PERFORM 2002311-HKNNUM-HENSYU-SEC     
+               PERFORM 2003311-HKNNUM-HENSYU-SEC
+      *=== 公費が印字されない不具合修正 by Yoshikawa(2009/09/16) end
       *    公費再掲欄：療養の給付：件数
                MOVE  SUM-KKENSU(IDX2 2)    TO WRK-Z5
                MOVE  WRK-Z5                TO SKT4125-KKENSU(IDY)
