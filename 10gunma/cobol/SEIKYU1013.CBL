@@ -28,6 +28,10 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/09/16  請求年月に診療年月が
+      *                                  印字されている不具合を修正
+      *                                  受給者番号は頭ゼロ付きで表示
+      *                                  末尾のカンマは不要
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1521,6 +1525,9 @@
       *    見出し３９
            MOVE    "処方箋発行"            TO  WRK-DATA
            MOVE    10                      TO  WRK-NAGASA
+      *=== 末尾のカンマは不用 by Yoshikawa(2009/09/16) start
+           MOVE    1                       TO  WRK-END
+      *=== 末尾のカンマは不用 by Yoshikawa(2009/09/16) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    改行コード編集
@@ -1552,9 +1559,15 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ２．請求年月
-           MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-NUM
+      *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) start
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-NUM
+           MOVE    LNK-PRTKANRI-SKYYMD(1:6) TO  WRK-DATA
+      *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) end
            MOVE    6                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) start
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) end
       *
       *    ３．医療機関コード
            MOVE    SYS-1001-HOSPCD         TO  WRK-NUM
@@ -1607,9 +1620,14 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    １０．福祉負担者番号
-           MOVE    MF100-FTNJANUM          TO  WRK-NUM
+      *=== 番号は頭ゼロ付き by Yoshikawa(2009/09/16) start
+      *     MOVE    MF100-FTNJANUM          TO  WRK-NUM
+      *     MOVE    8                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           MOVE    MF100-FTNJANUM          TO  WRK-DATA
            MOVE    8                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 番号は頭ゼロ付き by Yoshikawa(2009/09/16) start
       *    
       *    １１．第一公費負担者番号
            MOVE    MF100-EKOHFTNJANUM(1)   TO  WRK-NUM
@@ -1622,9 +1640,14 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    １３．受給資格者証記号
-           MOVE    MF100-JKYSNUM           TO  WRK-NUM
+      *=== 番号は頭ゼロ付き by Yoshikawa(2009/09/16) start
+      *     MOVE    MF100-JKYSNUM           TO  WRK-NUM
+      *     MOVE    7                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           MOVE    MF100-JKYSNUM           TO  WRK-DATA
            MOVE    7                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 番号は頭ゼロ付き by Yoshikawa(2009/09/16) start
       *    
       *    １４．受給者氏名
            MOVE    MF100-NAME              TO  WRK-DATA
@@ -1811,6 +1834,9 @@
       *    ４０．処方箋発行期間有無
            MOVE    "0"                     TO  WRK-DATA
            MOVE    1                       TO  WRK-NAGASA
+      *=== 末尾のカンマは不用 by Yoshikawa(2009/09/16) start
+           MOVE    1                       TO  WRK-END
+      *=== 末尾のカンマは不用 by Yoshikawa(2009/09/16) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    改行コード編集
@@ -1877,6 +1903,9 @@
       *    ６．突合用食事標準負担額
            MOVE    SUM-GSFTNGK             TO  WRK-NUM
            MOVE    9                       TO  WRK-NAGASA
+      *=== 末尾のカンマは不用 by Yoshikawa(2009/09/16) start
+           MOVE    1                       TO  WRK-END
+      *=== 末尾のカンマは不用 by Yoshikawa(2009/09/16) end
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    改行コード編集
@@ -2057,7 +2086,10 @@
                                    TO  SFILESV-SKYYMD   (1)
       *    ファイル名
            STRING  "FWMA001_"              DELIMITED  BY  SIZE
-                   LNK-PRTKANRI-SRYYM      DELIMITED  BY  SIZE
+      *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) start
+      *             LNK-PRTKANRI-SRYYM      DELIMITED  BY  SIZE
+                   LNK-PRTKANRI-SKYYMD(1:6) DELIMITED BY  SIZE
+      *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) end
                    "_"                     DELIMITED  BY  SIZE
                    SYS-1001-TENHYOKBN      DELIMITED  BY  SIZE
                    SYS-1001-HOSPCD         DELIMITED  BY  SIZE
