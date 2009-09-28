@@ -37,6 +37,8 @@
       *  01.00.03    吉川    09/01/14    SPA-AREA初期化
       *  01.00.04    吉川    09/06/04    帳票様式の変更に伴う修正
       *                      09/06/24    金額は１０円未満を四捨五入する
+      *  01.00.05    吉川    09/09/09    前期高齢者の家族が本人に
+      *                                  集計されてしまう不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -835,15 +837,21 @@
                            MOVE    4       TO  IDX3
                        WHEN    "067"
                            MOVE    3       TO  IDX2
-                           IF      MF100-AGE       >=  70
-                           OR      MF100-HONKZKKBN =   "1"
+      *=== 前期高齢家族の集計先ミス対応 by Yoshikawa(2009/09/09) start
+      *                     IF      MF100-AGE       >=  70
+      *                     OR      MF100-HONKZKKBN =   "1"
+                           IF      MF100-HONKZKKBN =   "1"
+      *=== 前期高齢家族の集計先ミス対応 by Yoshikawa(2009/09/09) end
                                MOVE    5       TO  IDX3
                            ELSE
                                MOVE    6       TO  IDX3
                            END-IF
                        WHEN    OTHER
-                           IF      MF100-AGE       >=  70
-                           OR      MF100-HONKZKKBN =   "1"
+      *=== 前期高齢家族の集計先ミス対応 by Yoshikawa(2009/09/09) start
+      *                     IF      MF100-AGE       >=  70
+      *                     OR      MF100-HONKZKKBN =   "1"
+                           IF      MF100-HONKZKKBN =   "1"
+      *=== 前期高齢家族の集計先ミス対応 by Yoshikawa(2009/09/09) end
                                MOVE    1       TO  IDX2
                            ELSE
                                MOVE    2       TO  IDX2
