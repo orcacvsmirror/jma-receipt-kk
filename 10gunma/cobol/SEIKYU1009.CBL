@@ -48,6 +48,7 @@
       *  01.00.09    吉川    09/07/24    帳票様式の変更に伴う修正
       *  01.00.10    吉川    09/08/28    平成20年3月以前の老人保健及び
       *                                  70歳以上1割は旧様式に印字
+      *  01.00.11    吉川    09/09/08    長期と長期上位はまとめて印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1603,6 +1604,11 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
                ADD   SYU-TOTAL-HKNTEN     TO  MF100-FUKUSHIGAITEN
                MOVE  SYU-KOH-HKNNUM(IDX)(2:2)  TO  MF100-COMBIKBN
+      *=== 長期と長期上位はまとめる by Yoshikawa(2009/09/08) start
+               IF  SYU-KOH-HKNNUM(IDX)  =  "972" OR "974"
+                 MOVE  "72"               TO  MF100-COMBIKBN
+               END-IF
+      *=== 長期と長期上位はまとめる by Yoshikawa(2009/09/08) end
              END-IF
       *
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
