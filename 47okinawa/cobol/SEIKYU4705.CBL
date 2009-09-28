@@ -30,7 +30,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/08/10  日レセver4.2でインストールすると
       *                                  エラーが起きるのを修正
-     *****************************************************************
+      *  01.00.02    吉川    2009/09/28  帳票様式の変更に伴う修正
+      *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1935,19 +1936,21 @@
                      MOVE  "外・休・深"    TO  SC05-SHOSHINTIME
            END-EVALUATE
       *
-      *＜点数記載＞
-      *    初診
-           MOVE  MF100-TENSU(1 1)          TO  WRK-TENSUZ
-           MOVE  WRK-TENSUZ                TO  SC05-TENSU(1)
-      *
-      *    指導
-           MOVE  MF100-TENSU(7 1)          TO  WRK-TENSUZ
-           MOVE  WRK-TENSUZ                TO  SC05-TENSU(7)
-      *
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/28) start
+      **＜点数記載＞
+      **    初診
+      *     MOVE  MF100-TENSU(1 1)          TO  WRK-TENSUZ
+      *     MOVE  WRK-TENSUZ                TO  SC05-TENSU(1)
+      **
+      **    指導
+      *     MOVE  MF100-TENSU(7 1)          TO  WRK-TENSUZ
+      *     MOVE  WRK-TENSUZ                TO  SC05-TENSU(7)
+      **
       *    その他
            MOVE  "その他"                  TO  SC05-SONOTA
-           MOVE  MF100-TENSU(34 1)         TO  WRK-TENSUZ
-           MOVE  WRK-TENSUZ                TO  SC05-TENSU(34)
+      *     MOVE  MF100-TENSU(34 1)         TO  WRK-TENSUZ
+      *     MOVE  WRK-TENSUZ                TO  SC05-TENSU(34)
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/28) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >     35
@@ -1995,6 +1998,18 @@
                    MOVE  MF100-KHNTEN(IDX)  TO  WRK-KHNTENZ
                    MOVE  WRK-KHNTENZ        TO  SC05-KHNTEN3
                END-EVALUATE
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/28) start
+      *＜点数記載＞
+      *        点数
+               MOVE  MF100-TENSU(IDX 1)     TO  WRK-TENSUZ
+               MOVE  WRK-TENSUZ             TO  SC05-TENSU(IDX)
+      *
+      *＜公費点数記載＞
+      *        公費点数
+               MOVE  MF100-TENSU(IDX 2)     TO  WRK-TENSUZ
+               MOVE  WRK-TENSUZ             TO  SC05-KOUTEN(IDX)
+      *=== 帳票様式の変更 by Yoshikawa(2009/09/28) end
            END-PERFORM
       *
            .
