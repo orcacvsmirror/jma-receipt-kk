@@ -35,6 +35,7 @@
       *  01.00.03    内田    07/05/23    印字対象番号の追加
       *  01.00.04    内田    07/09/26    日レセver4.0対応
       *  01.00.05    吉川    08/09/11    SPA-AREA初期化
+      *  01.00.06    吉川    09/09/07    診療科名を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -53,6 +54,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+      *    診療科名ファイル
+           SELECT  SRYKA-FILE   ASSIGN FILE-NAME
+                                ORGANIZATION    IS  LINE SEQUENTIAL
+                                ACCESS  MODE    IS  SEQUENTIAL
+                                FILE    STATUS  IS  STS-SRYKA.
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -64,6 +73,14 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+      *    診療科ファイル
+       FD  SRYKA-FILE.
+       01  SRYKA-REC.
+           03  SRYKA-SRYKANAME  PIC X(20).
+           03  FILLER           PIC X(01).
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -89,6 +106,9 @@
            03  STS-MF100      PIC X(02).
            03  STS-RECE02     PIC X(02).
            03  STS-RECEERR    PIC X(02).
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+           03  STS-SRYKA      PIC X(02).
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -152,6 +172,12 @@
                05  WRK-TDD           PIC 9(02).
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-KOHID             PIC 9(10).
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+           03  WRK-SRYKANAME         PIC X(20).
+      *
+      *    ファイル名称用エリア
+           03  FILE-NAME             PIC X(512).
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *---(01.00.04) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
       *         05  FILLER          PIC S9(09)  BINARY.
@@ -272,6 +298,11 @@
       *   日付変換サブ
            COPY    "CPORCSDAY.INC".
            COPY    "CPORCSLNK.INC".      
+      *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *
            COPY  "MCPDATA.INC".
       *
@@ -460,6 +491,11 @@
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+      *    INIファイル読込処理
+           PERFORM  110-INI-FILE-SEC
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
+      *
            PERFORM 900-KOHSKY-START-SEC
            .
        100-INIT-EXT.
@@ -558,6 +594,44 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+      *****************************************************************
+      *    INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *    診療科名取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   SRYKA-REC
+      *
+           OPEN  INPUT  SRYKA-FILE
+      *
+           READ SRYKA-FILE
+             AT END
+               INITIALIZE        SRYKA-REC
+           END-READ
+      *
+           CLOSE SRYKA-FILE
+      *
+           DISPLAY "診療科名取得=" SRYKA-SRYKANAME
+           IF    SRYKA-SRYKANAME(1:2)  =  "※"
+             MOVE   SPACE             TO  WRK-SRYKANAME
+           ELSE
+             MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME
+           END-IF
+      *
+           DISPLAY "診療科 ="  WRK-SRYKANAME
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -726,6 +800,11 @@
       *
       *    医療機関コード
            MOVE  SYS-1001-HOSPCD             TO   SC03-HOSPCD
+      *
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
+      *    診療科名
+           MOVE  WRK-SRYKANAME               TO   SC03-SRYKANAME
+      *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *
       *    公費負担者番号
            MOVE  MF100-FTNJANUM              TO   SC03-CITYNUM
