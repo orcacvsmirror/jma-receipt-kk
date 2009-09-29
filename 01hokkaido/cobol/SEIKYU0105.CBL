@@ -52,6 +52,8 @@
       *  01.00.12     内田     09/05/22    上限達した時の旭川市の備考欄印字修正
       *  01.00.13     吉川     09/07/08    公費の助成がなくても印字するのは
       *                                    函館市等８市のみにする
+      *  01.00.14     吉川     09/09/29    全市町村で長期及び全国公費併用時は
+      *                                    公費の助成がなくても印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1967,6 +1969,15 @@
              IF  SYU-KOH-HKNNUM(IDX)  =  "544"
                PERFORM  8001-SEIKYU-SEC
              END-IF
+      *
+      *=== 公費の助成判定変更 by Yoshikawa(2009/09/29) start
+      *    長期及び全国公費を併用している場合は公費の助成がなくても記載
+             IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0"
+             OR  SYU-KOH-HKNNUM(IDX)       =  "972"
+             OR  SYU-KOH-HKNNUM(IDX)       =  "974"
+               MOVE  ZERO                 TO  FLG-ERR
+             END-IF
+      *=== 公費の助成判定変更 by Yoshikawa(2009/09/29) end
       *
            END-PERFORM
       *

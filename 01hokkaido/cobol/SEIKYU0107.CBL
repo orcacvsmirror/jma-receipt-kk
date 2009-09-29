@@ -61,6 +61,8 @@
       *                                    函館市等８市のみにする
       *                                    「２・３割」以外に○がある場合、
       *                                    「２・３割」に○は不要
+      *  01.00.17     吉川     09/09/29    全市町村で長期及び全国公費併用時は
+      *                                    公費の助成がなくても印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1003,7 +1005,6 @@
            MOVE  MF100-FTNMONEY        TO  WRK-T-ITBFTN
            MOVE  MF100-KASAN-FLG       TO  WRK-T-KASAN-FLG
       *    
-      *
            IF       FLG-ERR                    =   ZERO
              WRITE    MF100-REC 
              ADD      1                 TO    CNT-MF100
@@ -2049,6 +2050,15 @@
              IF  SYU-KOH-HKNNUM(IDX)  =  "543"
                PERFORM  8001-SEIKYU-SEC
              END-IF
+      *
+      *=== 公費の助成判定変更 by Yoshikawa(2009/09/29) start
+      *    長期及び全国公費を併用している場合は公費の助成がなくても記載
+             IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0"
+             OR  SYU-KOH-HKNNUM(IDX)       =  "972"
+             OR  SYU-KOH-HKNNUM(IDX)       =  "974"
+                MOVE  ZERO                 TO  FLG-ERR
+             END-IF
+      *=== 公費の助成判定変更 by Yoshikawa(2009/09/29) end
       *
            END-PERFORM
       *
