@@ -37,6 +37,7 @@
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/04/22    帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.06    内田    09/09/29    平成21年台風第9号対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -661,6 +662,13 @@
                MOVE     "2"            TO   SKT2810TMP-SYUTURYOKU
              END-IF
            END-IF
+      *
+      *---(01.00.06) LINE ADD START ------------------------------------
+      *    平成21年台風第9号の対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)    TO  SKT2810TMP-GENMEN
+           END-IF
+      *---(01.00.06) LINE ADD END   ------------------------------------
       *
            PERFORM  800-SKTTMP-READ-SEC
       *
