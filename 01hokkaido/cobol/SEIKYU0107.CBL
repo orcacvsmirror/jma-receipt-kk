@@ -63,6 +63,12 @@
       *                                    「２・３割」に○は不要
       *  01.00.17     吉川     09/09/29    全市町村で長期及び全国公費併用時は
       *                                    公費の助成がなくても印字する
+      *  01.00.18     吉川     09/10/05    全国公費と長期を持っている場合、
+      *                                    「長」に○が付かない不具合を修正
+      *                                    543と長期を併用時、一部負担金が
+      *                                    長期の限度額を超える不具合を修正
+      *                                    長期で実日数が1日のみの場合、
+      *                                    長期とならない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -896,25 +902,51 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    長期編集
-           IF     FLG-TYOKI             =      1   AND
-                  WRK-SEIKYUGK-G        >  10000
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
+      *     IF     FLG-TYOKI             =      1   AND
+      *            WRK-SEIKYUGK-G        >  10000
+           IF     FLG-TYOKI             =      1
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    1                 TO  MF100-TYOKI
-             MOVE    10000             TO  WRK-SEIKYUGK-G
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
+      *       MOVE    10000             TO  WRK-SEIKYUGK-G
+             IF   WRK-SEIKYUGK-G        >  10000
+               MOVE    10000           TO  WRK-SEIKYUGK-G
+             END-IF
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  MF100-TOTALTEN
              IF      MF100-FTNMONEY     >  10000
                MOVE  10000             TO  MF100-FTNMONEY
              END-IF
+      *=== 一部負担金が長期の上限額を超えるのを修正 by Yoshikawa(2009/10/05) start
+             IF      MF100-ETCFTNMONEY  >  10000
+               MOVE  10000             TO  MF100-ETCFTNMONEY
+             END-IF
+      *=== 一部負担金が長期の上限額を超えるのを修正 by Yoshikawa(2009/10/05) end
            END-IF
       *---(01.00.05) LINE ADD START ------------------------------------
       *    長期上位
-           IF     FLG-TYOKI             =      2   AND
-                  WRK-SEIKYUGK-G        >  20000
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
+      *     IF     FLG-TYOKI             =      2   AND
+      *            WRK-SEIKYUGK-G        >  20000
+           IF     FLG-TYOKI             =      2
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    1                 TO  MF100-TYOKI
-             MOVE    20000             TO  WRK-SEIKYUGK-G
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
+      *       MOVE    20000             TO  WRK-SEIKYUGK-G
+             IF   WRK-SEIKYUGK-G        >  20000
+               MOVE    20000           TO  WRK-SEIKYUGK-G
+             END-IF
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  MF100-TOTALTEN
              IF      MF100-FTNMONEY     >  20000
                MOVE  20000             TO  MF100-FTNMONEY
              END-IF
+      *=== 一部負担金が長期の上限額を超えるのを修正 by Yoshikawa(2009/10/05) start
+             IF      MF100-ETCFTNMONEY  >  20000
+               MOVE  20000             TO  MF100-ETCFTNMONEY
+             END-IF
+      *=== 一部負担金が長期の上限額を超えるのを修正 by Yoshikawa(2009/10/05) end
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
