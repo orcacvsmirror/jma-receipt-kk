@@ -64,6 +64,8 @@
       *  01.00.22    内田   09/05/13    障害は公費の助成がなくても印字
       *  01.00.23    吉川   09/07/08    公費の助成がなくても印字するのは
       *                                 函館市等８市のみにする
+      *  01.00.24    吉川   09/10/05    障害＋長期で実日数が1日のみの場合、
+      *                                 長期とならない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1313,20 +1315,34 @@
        20012-FUKUSI-HEN-SEC         SECTION.
       *
       *    長期編集
-           IF     FLG-TYOKI             =      1   AND
-                  WRK-SEIKYUGK-G        >  10000
-             MOVE    10000             TO  WRK-TYOKI
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
+      *     IF     FLG-TYOKI             =      1   AND
+      *            WRK-SEIKYUGK-G        >  10000
+      *       MOVE    10000             TO  WRK-TYOKI
+      *                                     WRK-SEIKYUGK-G
+           IF     FLG-TYOKI             =      1
+             IF   WRK-SEIKYUGK-G        >  10000
+               MOVE    10000           TO  WRK-TYOKI
                                            WRK-SEIKYUGK-G
+             END-IF
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  WRK-T-TOTALTEN
                                            WRK-T-KESE
            END-IF
       *
       *---(01.00.10) LINE ADD START ------------------------------------
       *    長期上位
-           IF     FLG-TYOKI             =      2   AND
-                  WRK-SEIKYUGK-G        >  20000
-             MOVE    20000             TO  WRK-TYOKI
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
+      *     IF     FLG-TYOKI             =      2   AND
+      *            WRK-SEIKYUGK-G        >  20000
+      *       MOVE    20000             TO  WRK-TYOKI
+      *                                     WRK-SEIKYUGK-G
+           IF     FLG-TYOKI             =      2
+             IF   WRK-SEIKYUGK-G        >  20000
+               MOVE    20000           TO  WRK-TYOKI
                                            WRK-SEIKYUGK-G
+             END-IF
+      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  WRK-T-TOTALTEN
                                            WRK-T-KESE
            END-IF
