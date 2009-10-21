@@ -55,6 +55,7 @@
       *                                 SPA-AREA初期化
       *  01.00.14    内田    09/06/17   印字対象番号の追加（381）
       *  01.00.15    吉川    09/08/21   印字対象番号の追加（352,353,354）
+      *  01.00.16    吉川    09/10/16   印字対象番号の追加（382）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1043,6 +1044,9 @@
                OR  RECE10-KOHNUM(IDX3)      = "353"
                OR  RECE10-KOHNUM(IDX3)      = "354"
       *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
+      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
+               OR  RECE10-KOHNUM(IDX3)      = "382"
+      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
                     PERFORM  2202-SYORI-SEC
                END-IF
            END-PERFORM
@@ -1148,6 +1152,9 @@
            AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
            AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
       *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
+      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
+      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
              ADD     WRK-SEIKYUGK-G        TO  SKT1105TMP-SEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1200,6 +1207,9 @@
            AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
            AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
       *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
+      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
+      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
              ADD     WRK-SEIKYUGK-G            TO  WRK-KOHSEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
