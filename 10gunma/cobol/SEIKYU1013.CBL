@@ -34,6 +34,7 @@
       *                                  印字されている不具合を修正
       *                                  受給者番号は頭ゼロ付きで表示
       *                                  末尾のカンマは不要
+      *  01.00.02    吉川    2009/10/19  科別と医療機関番号は頭ゼロ付きで表示
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1572,14 +1573,24 @@
       *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) end
       *
       *    ３．医療機関コード
-           MOVE    SYS-1001-HOSPCD         TO  WRK-NUM
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) start
+      *     MOVE    SYS-1001-HOSPCD         TO  WRK-NUM
+      *     MOVE    7                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           MOVE    SYS-1001-HOSPCD         TO  WRK-DATA
            MOVE    7                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) end
       *
       *    ４．科別
-           MOVE    "01"                    TO  WRK-NUM
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) start
+      *     MOVE    "01"                    TO  WRK-NUM
+      *     MOVE    2                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           MOVE    "01"                    TO  WRK-DATA
            MOVE    2                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) end
       *
       *    ５．入院区分
            IF  MF100-NYUGAIKBN  =  "1"
