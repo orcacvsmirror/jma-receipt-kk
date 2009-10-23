@@ -69,6 +69,9 @@
       *                                    長期の限度額を超える不具合を修正
       *                                    長期で実日数が1日のみの場合、
       *                                    長期とならない不具合を修正
+      *                        09/10/22    全国公費を持っていても
+      *                                    窓口徴収金が発生しない場合は
+      *                                    印字対象外とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -147,6 +150,9 @@
       ***** 05/09/14 yamaguchi INS
            03  FLG-SRYACT     PIC 9(01).
       *****
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+           03  FLG-ERR2       PIC 9(01).
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -231,6 +237,9 @@
       *---(01.00.05) LINE ADD START ------------------------------------
            03  WRK-SHOSAI            PIC 9(07).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+           03  WRK-SRYCNT            PIC 9(02).
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
       *---(01.00.08) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
       *         05  FILLER          PIC S9(09)  BINARY.
@@ -818,6 +827,9 @@
       *
       *    一部負担金がある公費を使用している場合は助成対象判定を行う
            MOVE     ZERO                       TO  FLG-ERR
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+           MOVE     ZERO                       TO  FLG-ERR2
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
       *=== 公費の助成がなくても印字 by Uchida(2009/05/22) start
       **---(01.00.07) LINE ADD START ------------------------------------
       **     IF   MF100-KOHNUM  =  "143"                         OR
@@ -1036,8 +1048,11 @@
            MOVE  MF100-SEIKYUGK        TO  WRK-T-SEIKYUGK
            MOVE  MF100-FTNMONEY        TO  WRK-T-ITBFTN
            MOVE  MF100-KASAN-FLG       TO  WRK-T-KASAN-FLG
-      *    
+      *
            IF       FLG-ERR                    =   ZERO
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+           AND      FLG-ERR2                   =   ZERO
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
              WRITE    MF100-REC 
              ADD      1                 TO    CNT-MF100
       *
@@ -2092,6 +2107,18 @@
              END-IF
       *=== 公費の助成判定変更 by Yoshikawa(2009/09/29) end
       *
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+      *    同保険、同入外区分で診療が複数日ある場合は処理判定を行わない
+      *    （その前の診療で全国公費の負担があるから）
+             IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0" 
+             AND WRK-SRYCNT  <  2
+      *        窓口負担が発生しない全国公費は印字対象外
+               IF  SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO
+                 MOVE  1                   TO  FLG-ERR2
+               END-IF
+             END-IF
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
+      *
            END-PERFORM
       *
            ADD     WRK-SEIKYUGK            TO  WRK-SEIKYUGK-G2
@@ -2163,6 +2190,9 @@
        920-SYUNOU-SET-SEC  SECTION.
       *
              INITIALIZE  SYUNOU-REC
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+             MOVE   1                 TO  WRK-SRYCNT
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
       *---(01.00.08) LINE ADD START ------------------------------------
       *       MOVE  RECE02-HOSPID      TO  SYU-HOSPID
              MOVE  SPA-HOSPNUM        TO  SYU-HOSPNUM
@@ -2221,6 +2251,9 @@
                         IF     MF100-KOHNUM  =  "243"
                           PERFORM  2002-SYOSIN-CHK-SEC
                         END-IF
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) start
+                        ADD  1          TO  WRK-SRYCNT
+      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/22) end
       *
                       END-IF
       *
