@@ -34,7 +34,8 @@
       *                                  印字されている不具合を修正
       *                                  受給者番号は頭ゼロ付きで表示
       *                                  末尾のカンマは不要
-      *  01.00.02    吉川    2009/10/19  科別と医療機関番号は頭ゼロ付きで表示
+      *  01.00.02    吉川    2009/10/23  科別と医療機関番号は頭ゼロ付きで表示
+      *                                  70歳以上入院の福祉医療費請求額を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1726,6 +1727,9 @@
       *    
       *    ２４．福祉医療費請求額
            IF  MF100-TOKURAN  NOT =  SPACE
+      *=== 70歳以上入院の福祉請求額印字 by Yoshikawa(2009/10/23) start
+           OR  MF100-SEIKYU-FLG   =  1
+      *=== 70歳以上入院の福祉請求額印字 by Yoshikawa(2009/10/23) end
              MOVE  MF100-SEIKYUGK          TO  WRK-NUM
            ELSE
              MOVE  ZERO                    TO  WRK-NUM
@@ -1867,6 +1871,9 @@
            ADD     MF100-H-TOTALTEN        TO  SUM-GTENSU
       *    突合用福祉請求額
            IF  MF100-TOKURAN  NOT =  SPACE
+      *=== 70歳以上入院の福祉請求額印字 by Yoshikawa(2009/10/23) start
+           OR  MF100-SEIKYU-FLG   =  1
+      *=== 70歳以上入院の福祉請求額印字 by Yoshikawa(2009/10/23) end
              ADD   MF100-SEIKYUGK          TO  SUM-GSEIKYUGK
            END-IF
       *    突合用食事回数
