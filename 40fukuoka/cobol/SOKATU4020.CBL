@@ -51,6 +51,7 @@
       *  01.00.13    吉川    08/11/26    印字対象番号の追加
       *                                  （280,380,381,390,490）
       *  01.00.14    吉川    08/12/11    印字対象番号の追加（480,481,590）
+      *  01.00.15    内田    09/10/14    中国九州北部豪雨対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -763,6 +764,13 @@
                MOVE        9   TO    SKT4020TMP-SYUTURYOKU
              END-IF
            END-IF
+      *
+      *=== 中国九州北部豪雨対応 Uchida(2009/10/14) start
+      *    中国九州北部豪雨の対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)    TO  SKT4020TMP-GENMEN
+           END-IF
+      *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

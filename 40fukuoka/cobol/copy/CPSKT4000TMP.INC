@@ -20,9 +20,13 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      * 01.00.01     内田       09/10/14  中国九州北部豪雨対応
       ************************************************************
        01  SKT4000TMP-REC.
            03  SKT4000TMP-KEY.
+      *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) start
+               05  SKT4000TMP-GENMEN                PIC  X(01).
+      *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) end
                05  SKT4000TMP-SYUTURYOKU            PIC  9(01).
                05  SKT4000TMP-HKNJANUM              PIC  X(06).
            03  SKT4000TMP-NYUGAIKBN   OCCURS  2.

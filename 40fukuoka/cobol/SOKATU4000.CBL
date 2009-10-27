@@ -55,6 +55,7 @@
       *  01.00.17    µÈÀî    08/12/11    °õ»úÂÐ¾ÝÈÖ¹æ¤ÎÄÉ²Ã¡Ê480,481,590¡Ë
       *  01.00.18    µÈÀî    09/08/20    ÊÝ¸±¼Ô¤ò¸ÄÊÌ»ØÄê¤·¤Æ°õºþ¤¹¤ë¤È
       *                                  ¸å´ü¹âÎðÊ¬¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç¤ò½¤Àµ
+      *  01.00.19    ÆâÅÄ    09/10/14    Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ¡ÊÂÐ¾Ý¼ÔÊÌ½¸·×¡Ë
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -242,34 +243,61 @@
            03  WRK-KEI             PIC 9(10).
            03  WRK-AMARI           PIC 9(01).
            03  WRK-NYUGAI          PIC 9(01).
-           03  WRK-SUM  OCCURS 2.
-               05  WRK-KKH-SKENSU  PIC 9(06).
-               05  WRK-KKH-STENSU  PIC 9(10).
-               05  WRK-TAH-SKENSU  PIC 9(06).
-               05  WRK-TAH-STENSU  PIC 9(10).
-               05  WRK-TAK-SKENSU  PIC 9(06).
-               05  WRK-TAK-STENSU  PIC 9(10).
-               05  WRK-RJN-SKENSU  PIC 9(06).
-               05  WRK-RJN-STENSU  PIC 9(10).
-               05  WRK-SKJ-SKENSU  PIC 9(06).
-               05  WRK-SKJ-STENSU  PIC 9(10).
-      *---(01.00.10) LINE ADD START ------------------------------------
-               05  WRK-KOU-SKENSU  PIC 9(06).
-               05  WRK-KOU-STENSU  PIC 9(10).
-      *---(01.00.10) LINE ADD END   ------------------------------------
-           03  WRK-G-GKENSU          PIC 9(10).
-           03  WRK-G-GTENSU          PIC 9(10).
-           03  WRK-N-GKENSU          PIC 9(10).
-           03  WRK-N-GTENSU          PIC 9(10).
-      *---(01.00.10) LINE ADD START ------------------------------------
-           03  WRK-G-SGKENSU         PIC 9(10).
-           03  WRK-G-SGTENSU         PIC 9(10).
-           03  WRK-N-SGKENSU         PIC 9(10).
-           03  WRK-N-SGTENSU         PIC 9(10).
-      *---(01.00.10) LINE ADD END   ------------------------------------
-           03  WRK-KOH-SUM OCCURS 3.
-               05  WRK-KOH-GKENSU  PIC 9(05).
-               05  WRK-KOH-GTENSU  PIC 9(10).
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *     03  WRK-SUM  OCCURS 2.
+      *         05  WRK-KKH-SKENSU  PIC 9(06).
+      *         05  WRK-KKH-STENSU  PIC 9(10).
+      *         05  WRK-TAH-SKENSU  PIC 9(06).
+      *         05  WRK-TAH-STENSU  PIC 9(10).
+      *         05  WRK-TAK-SKENSU  PIC 9(06).
+      *         05  WRK-TAK-STENSU  PIC 9(10).
+      *         05  WRK-RJN-SKENSU  PIC 9(06).
+      *         05  WRK-RJN-STENSU  PIC 9(10).
+      *         05  WRK-SKJ-SKENSU  PIC 9(06).
+      *         05  WRK-SKJ-STENSU  PIC 9(10).
+      **---(01.00.10) LINE ADD START ------------------------------------
+      *         05  WRK-KOU-SKENSU  PIC 9(06).
+      *         05  WRK-KOU-STENSU  PIC 9(10).
+      **---(01.00.10) LINE ADD END   ------------------------------------
+      *     03  WRK-G-GKENSU          PIC 9(10).
+      *     03  WRK-G-GTENSU          PIC 9(10).
+      *     03  WRK-N-GKENSU          PIC 9(10).
+      *     03  WRK-N-GTENSU          PIC 9(10).
+      **---(01.00.10) LINE ADD START ------------------------------------
+      *     03  WRK-G-SGKENSU         PIC 9(10).
+      *     03  WRK-G-SGTENSU         PIC 9(10).
+      *     03  WRK-N-SGKENSU         PIC 9(10).
+      *     03  WRK-N-SGTENSU         PIC 9(10).
+      **---(01.00.10) LINE ADD END   ------------------------------------
+      *     03  WRK-KOH-SUM OCCURS 3.
+      *         05  WRK-KOH-GKENSU  PIC 9(05).
+      *         05  WRK-KOH-GTENSU  PIC 9(10).
+           03  WRK-SUM-GENMEN-TBL  OCCURS  2.
+               05  WRK-SUM  OCCURS 2.
+                   07  WRK-KKH-SKENSU  PIC 9(06).
+                   07  WRK-KKH-STENSU  PIC 9(10).
+                   07  WRK-TAH-SKENSU  PIC 9(06).
+                   07  WRK-TAH-STENSU  PIC 9(10).
+                   07  WRK-TAK-SKENSU  PIC 9(06).
+                   07  WRK-TAK-STENSU  PIC 9(10).
+                   07  WRK-RJN-SKENSU  PIC 9(06).
+                   07  WRK-RJN-STENSU  PIC 9(10).
+                   07  WRK-SKJ-SKENSU  PIC 9(06).
+                   07  WRK-SKJ-STENSU  PIC 9(10).
+                   07  WRK-KOU-SKENSU  PIC 9(06).
+                   07  WRK-KOU-STENSU  PIC 9(10).
+               05  WRK-G-GKENSU          PIC 9(10).
+               05  WRK-G-GTENSU          PIC 9(10).
+               05  WRK-N-GKENSU          PIC 9(10).
+               05  WRK-N-GTENSU          PIC 9(10).
+               05  WRK-G-SGKENSU         PIC 9(10).
+               05  WRK-G-SGTENSU         PIC 9(10).
+               05  WRK-N-SGKENSU         PIC 9(10).
+               05  WRK-N-SGTENSU         PIC 9(10).
+               05  WRK-KOH-SUM OCCURS 3.
+                   07  WRK-KOH-GKENSU  PIC 9(05).
+                   07  WRK-KOH-GTENSU  PIC 9(10).
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *---(01.00.07) LINE ADD START ------------------------------------
            03  WRK-TMP-TENSU         PIC 9(10).
       *---(01.00.07) LINE ADD END   ------------------------------------
@@ -321,6 +349,9 @@
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
            03  CNT-PAGE            PIC 9(03).
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+           03  CNT-GPAGE           PIC 9(03).
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
            03  CNT-RECE10          PIC 9(06).
            03  CNT-UPDFILE         PIC 9(06).
            03  CNT-IN              PIC 9(02).
@@ -825,7 +856,14 @@
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
            IF       FLG-UPD   =       1
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *              PERFORM   2002-PRINT-SEC
+               PERFORM  VARYING  IDX5  FROM  1  BY  1
+                        UNTIL    IDX5  >     2
                     PERFORM   2002-PRINT-SEC
+               END-PERFORM
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
+      *
       *---(01.00.13) LINE ADD START ------------------------------------
            ELSE
       *      ¥ì¥»ÅÅ¤ÇÊÖÌá¡¢¤â¤·¤¯¤Ï»æ¥ì¥»¤ÇÅö·î¤«
@@ -837,17 +875,34 @@
              OR  (WRK-PARA-SYOKBN  =  1  AND
                   SYS-2005-KKHRECEKBN  =  ZERO  OR  SPACE)
       *      Æý¾ãÊì¤Î¤ß¤Î¾ì¹ç
-               IF  WRK-KOH-GKENSU(3)  >  ZERO
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *         IF  WRK-KOH-GKENSU(3)  >  ZERO
+      **    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+      *           PERFORM 310-HEAD-HEN-SEC
+      **    ÌÀºÙ
+      *           MOVE    WRK-KOH-GKENSU(3)   TO  WRK-Z5
+      *           MOVE    WRK-Z5              TO  SKT4000-KOH-GKENSU
+      *           MOVE    WRK-KOH-GTENSU(3)   TO  WRK-Z9
+      *           MOVE    WRK-Z9              TO  SKT4000-KOH-GTENSU
+      **    Ä¢É¼°õºþ½èÍý
+      *           PERFORM 340-PRINT-OUT-SEC
+      *         END-IF
+      *
+               PERFORM  VARYING  IDX5  FROM  1  BY  1
+                        UNTIL    IDX5  >     2
+                 IF  WRK-KOH-GKENSU(IDX5 3)  >  ZERO
       *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
-                 PERFORM 310-HEAD-HEN-SEC
+                   PERFORM 310-HEAD-HEN-SEC
       *    ÌÀºÙ
-                 MOVE    WRK-KOH-GKENSU(3)   TO  WRK-Z5
-                 MOVE    WRK-Z5              TO  SKT4000-KOH-GKENSU
-                 MOVE    WRK-KOH-GTENSU(3)   TO  WRK-Z9
-                 MOVE    WRK-Z9              TO  SKT4000-KOH-GTENSU
+                   MOVE    WRK-KOH-GKENSU(IDX5 3)   TO  WRK-Z5
+                   MOVE    WRK-Z5               TO  SKT4000-KOH-GKENSU
+                   MOVE    WRK-KOH-GTENSU(IDX5 3)   TO  WRK-Z9
+                   MOVE    WRK-Z9               TO  SKT4000-KOH-GTENSU
       *    Ä¢É¼°õºþ½èÍý
-                 PERFORM 340-PRINT-OUT-SEC
-               END-IF
+                   PERFORM 340-PRINT-OUT-SEC
+                 END-IF
+               END-PERFORM
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
              END-IF
       *---(01.00.13) LINE ADD END   ------------------------------------
            END-IF
@@ -861,10 +916,17 @@
       *****************************************************************
        2001-KOHI-SYUKEI-SEC                SECTION.
       *
-           MOVE    ZERO        TO    WRK-KOH-GKENSU(2)
-                                     WRK-KOH-GKENSU(3)
-                                     WRK-KOH-GTENSU(2)
-                                     WRK-KOH-GTENSU(3)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *     MOVE    ZERO        TO    WRK-KOH-GKENSU(2)
+      *                               WRK-KOH-GKENSU(3)
+      *                               WRK-KOH-GTENSU(2)
+      *                               WRK-KOH-GTENSU(3)
+           MOVE    2           TO    IDX5
+           MOVE    ZERO        TO    WRK-KOH-GKENSU(IDX5 2)
+                                     WRK-KOH-GKENSU(IDX5 3)
+                                     WRK-KOH-GTENSU(IDX5 2)
+                                     WRK-KOH-GTENSU(IDX5 3)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
                                      FLG-END
       *
            PERFORM 900-KOHSKY-START-SEC
@@ -906,21 +968,35 @@
                         RECE02-RJNHKNNUM NOT = SPACE
                    DISPLAY "Ï·¿Í¡Ü¾ã³²:ÂÐ¾Ý³°=" RECE02-PTID
                  ELSE
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *             IF    RECE02-HKNNUM    =    "060" OR "067"
+      *               ADD        1    TO    WRK-KOH-GKENSU(2)
+      *               ADD RECE02-TOTALTEN(IDX3 + 1)
+      *                               TO    WRK-KOH-GTENSU(2)
+      *             ELSE
+      **=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) start
+      *              IF  FLG-ERR           =    ZERO
+      **=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) end
+      *               ADD        1    TO    WRK-KOH-GKENSU(3)
+      *               ADD RECE02-TOTALTEN(IDX3 + 1)
+      *                               TO    WRK-KOH-GTENSU(3)
+      **=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) start
+      *              END-IF
+      **=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) end
+      *             END-IF
+      *
                    IF    RECE02-HKNNUM    =    "060" OR "067"
-                     ADD        1    TO    WRK-KOH-GKENSU(2)
+                     ADD        1    TO    WRK-KOH-GKENSU(IDX5 2)
                      ADD RECE02-TOTALTEN(IDX3 + 1)
-                                     TO    WRK-KOH-GTENSU(2)
+                                     TO    WRK-KOH-GTENSU(IDX5 2)
                    ELSE
-      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) start
-                    IF  FLG-ERR           =    ZERO
-      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) end
-                     ADD        1    TO    WRK-KOH-GKENSU(3)
-                     ADD RECE02-TOTALTEN(IDX3 + 1)
-                                     TO    WRK-KOH-GTENSU(3)
-      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) start
-                    END-IF
-      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2008/11/05) end
+                     IF  FLG-ERR          =    ZERO
+                       ADD        1    TO    WRK-KOH-GKENSU(IDX5 3)
+                       ADD RECE02-TOTALTEN(IDX3 + 1)
+                                       TO    WRK-KOH-GTENSU(IDX5 3)
+                     END-IF
                    END-IF
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
                  END-IF
       *
                END-IF
@@ -946,7 +1022,11 @@
                            PERFORM     310-SEIKYU-UPD-SEC
                    END-IF
            END-IF
-           MOVE  CNT-PAGE  TO  WRK-PARA-PAGE
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *     MOVE  CNT-PAGE  TO  WRK-PARA-PAGE
+           ADD   CNT-PAGE   TO  CNT-GPAGE
+           MOVE  CNT-GPAGE  TO  WRK-PARA-PAGE
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *
            DISPLAY "*** SOKATU4000 IN  "  CNT-RECE10 
            DISPLAY "*** SOKATU4000 END ***"
@@ -1021,6 +1101,16 @@
                MOVE        9   TO    SKT4000TMP-SYUTURYOKU
              END-IF
            END-IF
+      *
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *    Ãæ¹ñ¶å½£ËÌÉô¹ë±«¤ÎÂÐ¾Ý¼Ô¤ÏÊÌÄ¢É¼
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)    TO  SKT4000TMP-GENMEN
+             MOVE  1                        TO  IDX5
+           ELSE
+             MOVE  2                        TO  IDX5
+           END-IF
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -1132,18 +1222,27 @@
       *=== °õ»úÂÐ¾ÝÈÖ¹æÄÉ²Ã by Yoshikawa(2008/12/11) end
       *---(01.00.15) LINE ADD END   ------------------------------------
       *---(01.00.08) LINE ADD END   ------------------------------------
-                 ADD  1                      TO  WRK-KOH-GKENSU(1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *           ADD  1                      TO  WRK-KOH-GKENSU(1)
+                 ADD  1                      TO  WRK-KOH-GKENSU(IDX5 1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
                  ADD  RECE10-TOTALTEN(IDX3 + 1)  TO  WRK-TMP-TENSU
                END-IF
            END-PERFORM
            IF  RECE10-ETC-KOHNUM(1)  =  "019"
-               ADD  1                     TO  WRK-KOH-GKENSU(1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *         ADD  1                     TO  WRK-KOH-GKENSU(1)
+               ADD  1                     TO  WRK-KOH-GKENSU(IDX5 1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
                ADD  RECE10-TOTALTEN(1)    TO  WRK-TMP-TENSU
            END-IF
            IF  RECE10-TOTALTEN(1)  <  WRK-TMP-TENSU
                MOVE  RECE10-TOTALTEN(1)  TO  WRK-TMP-TENSU
            END-IF
-           ADD  WRK-TMP-TENSU            TO  WRK-KOH-GTENSU(1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *     ADD  WRK-TMP-TENSU            TO  WRK-KOH-GTENSU(1)
+           ADD  WRK-TMP-TENSU            TO  WRK-KOH-GTENSU(IDX5 1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    ¿©»öÎÅÍÜ¡§¶â³Û
@@ -1157,32 +1256,60 @@
       *
            MOVE    1               TO  FLG-UPD
       *    ¹ç·×²Ã»»
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *     IF    RECE10-NYUGAIKBN  =  "1"
+      *       ADD    1    TO    WRK-N-GKENSU
+      *       ADD    RECE10-TOTALTEN(1)  TO  WRK-N-GTENSU
+      *     ELSE
+      *       ADD    1    TO    WRK-G-GKENSU
+      *       ADD    RECE10-TOTALTEN(1)  TO  WRK-G-GTENSU
+      *     END-IF
+      *
+      *     EVALUATE  IDX2
+      *     WHEN 1
+      *         ADD  1                   TO  WRK-KKH-SKENSU(IDX1)
+      *         ADD  RECE10-TOTALTEN(1)  TO  WRK-KKH-STENSU(IDX1)
+      *     WHEN 3
+      *         ADD  1                   TO  WRK-TAK-SKENSU(IDX1)
+      *         ADD  RECE10-TOTALTEN(1)  TO  WRK-TAK-STENSU(IDX1)
+      *     WHEN 4
+      *         ADD  1                   TO  WRK-RJN-SKENSU(IDX1)
+      *         ADD  RECE10-TOTALTEN(1)  TO  WRK-RJN-STENSU(IDX1)
+      *     END-EVALUATE
+      *     ADD  RECE10-SHOKUJIRYOYOHI(1)  
+      *                                  TO  WRK-SKJ-STENSU(IDX1)
+      ***** 05/05/27 INS
+      *     IF      RECE10-SHOKUJINISSU(1)   > ZERO
+      *         ADD     1       TO  WRK-SKJ-SKENSU(IDX1)
+      *     END-IF
+      *****
            IF    RECE10-NYUGAIKBN  =  "1"
-             ADD    1    TO    WRK-N-GKENSU
-             ADD    RECE10-TOTALTEN(1)  TO  WRK-N-GTENSU
+             ADD    1    TO    WRK-N-GKENSU (IDX5)
+             ADD    RECE10-TOTALTEN(1)  TO  WRK-N-GTENSU (IDX5)
            ELSE
-             ADD    1    TO    WRK-G-GKENSU
-             ADD    RECE10-TOTALTEN(1)  TO  WRK-G-GTENSU
+             ADD    1    TO    WRK-G-GKENSU (IDX5)
+             ADD    RECE10-TOTALTEN(1)  TO  WRK-G-GTENSU (IDX5)
            END-IF
       *
            EVALUATE  IDX2
            WHEN 1
-               ADD  1                   TO  WRK-KKH-SKENSU(IDX1)
-               ADD  RECE10-TOTALTEN(1)  TO  WRK-KKH-STENSU(IDX1)
+               ADD  1                   TO  WRK-KKH-SKENSU(IDX5 IDX1)
+               ADD  RECE10-TOTALTEN(1)  TO  WRK-KKH-STENSU(IDX5 IDX1)
            WHEN 3
-               ADD  1                   TO  WRK-TAK-SKENSU(IDX1)
-               ADD  RECE10-TOTALTEN(1)  TO  WRK-TAK-STENSU(IDX1)
+               ADD  1                   TO  WRK-TAK-SKENSU(IDX5 IDX1)
+               ADD  RECE10-TOTALTEN(1)  TO  WRK-TAK-STENSU(IDX5 IDX1)
            WHEN 4
-               ADD  1                   TO  WRK-RJN-SKENSU(IDX1)
-               ADD  RECE10-TOTALTEN(1)  TO  WRK-RJN-STENSU(IDX1)
+               ADD  1                   TO  WRK-RJN-SKENSU(IDX5 IDX1)
+               ADD  RECE10-TOTALTEN(1)  TO  WRK-RJN-STENSU(IDX5 IDX1)
            END-EVALUATE
            ADD  RECE10-SHOKUJIRYOYOHI(1)  
-                                        TO  WRK-SKJ-STENSU(IDX1)
-      ***** 05/05/27 INS
+                                        TO  WRK-SKJ-STENSU(IDX5 IDX1)
+      *
            IF      RECE10-SHOKUJINISSU(1)   > ZERO
-               ADD     1       TO  WRK-SKJ-SKENSU(IDX1)
+               ADD     1       TO  WRK-SKJ-SKENSU(IDX5 IDX1)
            END-IF
-      *****
+      *
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *
            .
        2101-SYUKEI-EXT.
@@ -1203,6 +1330,16 @@
              MOVE  2                   TO  SKT4005TMP-SYUTURYOKU
            END-IF
            MOVE  RECE10-HKNJANUM(3:2)  TO  SKT4005TMP-PERFNUM
+      *
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *    Ãæ¹ñ¶å½£ËÌÉô¹ë±«¤ÎÂÐ¾Ý¼Ô¤ÏÊÌÄ¢É¼
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)    TO  SKT4005TMP-GENMEN
+             MOVE  1                        TO  IDX5
+           ELSE
+             MOVE  2                        TO  IDX5
+           END-IF
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *
            PERFORM  901-SKTTMP-READ-SEC
       *
@@ -1246,8 +1383,12 @@
       *    ÅÀ¿ô
            ADD  RECE10-TOTALTEN (1)  TO  SKT4005TMP-TENSU (IDX1)
       *    ¾®·×¥«¥¦¥ó¥È
-           ADD  1                   TO  WRK-KOU-SKENSU(IDX1)
-           ADD  RECE10-TOTALTEN(1)  TO  WRK-KOU-STENSU(IDX1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *     ADD  1                   TO  WRK-KOU-SKENSU(IDX1)
+      *     ADD  RECE10-TOTALTEN(1)  TO  WRK-KOU-STENSU(IDX1)
+           ADD  1                   TO  WRK-KOU-SKENSU(IDX5 IDX1)
+           ADD  RECE10-TOTALTEN(1)  TO  WRK-KOU-STENSU(IDX5 IDX1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *
            IF  FLG-SKT4005TMP  =  1
                WRITE    SKT4005TMP-REC
@@ -1285,6 +1426,11 @@
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
            MOVE     ZERO        TO       FLG-PRINT
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+           MOVE     ZERO        TO       FLG-PRINT2
+           ADD      CNT-PAGE    TO       CNT-GPAGE
+           MOVE     ZERO        TO       CNT-PAGE
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
       *
       *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¹þ
            PERFORM  900-TMP-READ-SEC
@@ -1455,102 +1601,166 @@
            IF    CNT-PAGE    =    1
              PERFORM  VARYING  IDX1  FROM  1  BY  1
                       UNTIL    IDX1  >     2
-               MOVE  WRK-KKH-SKENSU (IDX1)   TO  WRK-Z5
-               MOVE  WRK-Z5          TO  SKT4000-KKH-SKENSU (IDX1)
-               MOVE  WRK-KKH-STENSU (IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-KKH-STENSU (IDX1)
-               MOVE  WRK-TAK-SKENSU (IDX1)   TO  WRK-Z5
-               MOVE  WRK-Z5          TO  SKT4000-TAK-SKENSU (IDX1)
-               MOVE  WRK-TAK-STENSU (IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-TAK-STENSU (IDX1)
-               MOVE  WRK-RJN-SKENSU (IDX1)   TO  WRK-Z5
-               MOVE  WRK-Z5          TO  SKT4000-RJN-SKENSU (IDX1)
-               MOVE  WRK-RJN-STENSU (IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-RJN-STENSU (IDX1)
-      *---(01.00.10) LINE ADD START ------------------------------------
-      *         MOVE  WRK-SKJ-SKENSU (IDX1)   TO  WRK-Z5
-      *         MOVE  WRK-Z5          TO  SKT4000-SKJ-SKENSU (IDX1)
-      **---(01.00.09) LINE ADD START ------------------------------------
-      **         MOVE  WRK-SKJ-STENSU (IDX1)   TO  WRK-Z9
-      **         MOVE  WRK-Z9          TO  SKT4000-SKJ-STENSU (IDX1)
-      *         MOVE  WRK-SKJ-STENSU (IDX1)   TO  WRK-Z10
-      *         MOVE  WRK-Z10         TO  SKT4000-SKJ-STENSU (IDX1)
-      *---(01.00.09) LINE ADD END   ------------------------------------
-               MOVE  WRK-KOU-SKENSU (IDX1)   TO  WRK-Z5
-               MOVE  WRK-Z5          TO  SKT4000-KO-SKENSU (IDX1)
-               MOVE  WRK-KOU-STENSU (IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-KO-STENSU (IDX1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *         MOVE  WRK-KKH-SKENSU (IDX1)   TO  WRK-Z5
+      *         MOVE  WRK-Z5          TO  SKT4000-KKH-SKENSU (IDX1)
+      *         MOVE  WRK-KKH-STENSU (IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-KKH-STENSU (IDX1)
+      *         MOVE  WRK-TAK-SKENSU (IDX1)   TO  WRK-Z5
+      *         MOVE  WRK-Z5          TO  SKT4000-TAK-SKENSU (IDX1)
+      *         MOVE  WRK-TAK-STENSU (IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-TAK-STENSU (IDX1)
+      *         MOVE  WRK-RJN-SKENSU (IDX1)   TO  WRK-Z5
+      *         MOVE  WRK-Z5          TO  SKT4000-RJN-SKENSU (IDX1)
+      *         MOVE  WRK-RJN-STENSU (IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-RJN-STENSU (IDX1)
+      **---(01.00.10) LINE ADD START ------------------------------------
+      **         MOVE  WRK-SKJ-SKENSU (IDX1)   TO  WRK-Z5
+      **         MOVE  WRK-Z5          TO  SKT4000-SKJ-SKENSU (IDX1)
+      ***---(01.00.09) LINE ADD START ------------------------------------
+      ***         MOVE  WRK-SKJ-STENSU (IDX1)   TO  WRK-Z9
+      ***         MOVE  WRK-Z9          TO  SKT4000-SKJ-STENSU (IDX1)
+      **         MOVE  WRK-SKJ-STENSU (IDX1)   TO  WRK-Z10
+      **         MOVE  WRK-Z10         TO  SKT4000-SKJ-STENSU (IDX1)
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *         MOVE  WRK-KOU-SKENSU (IDX1)   TO  WRK-Z5
+      *         MOVE  WRK-Z5          TO  SKT4000-KO-SKENSU (IDX1)
+      *         MOVE  WRK-KOU-STENSU (IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-KO-STENSU (IDX1)
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *
+               MOVE  WRK-KKH-SKENSU (IDX5 IDX1)   TO  WRK-Z5
+               MOVE  WRK-Z5          TO  SKT4000-KKH-SKENSU (IDX1)
+               MOVE  WRK-KKH-STENSU (IDX5 IDX1)   TO  WRK-Z9
+               MOVE  WRK-Z9          TO  SKT4000-KKH-STENSU (IDX1)
+               MOVE  WRK-TAK-SKENSU (IDX5 IDX1)   TO  WRK-Z5
+               MOVE  WRK-Z5          TO  SKT4000-TAK-SKENSU (IDX1)
+               MOVE  WRK-TAK-STENSU (IDX5 IDX1)   TO  WRK-Z9
+               MOVE  WRK-Z9          TO  SKT4000-TAK-STENSU (IDX1)
+               MOVE  WRK-RJN-SKENSU (IDX5 IDX1)   TO  WRK-Z5
+               MOVE  WRK-Z5          TO  SKT4000-RJN-SKENSU (IDX1)
+               MOVE  WRK-RJN-STENSU (IDX5 IDX1)   TO  WRK-Z9
+               MOVE  WRK-Z9          TO  SKT4000-RJN-STENSU (IDX1)
+               MOVE  WRK-KOU-SKENSU (IDX5 IDX1)   TO  WRK-Z5
+               MOVE  WRK-Z5          TO  SKT4000-KO-SKENSU (IDX1)
+               MOVE  WRK-KOU-STENSU (IDX5 IDX1)   TO  WRK-Z9
+               MOVE  WRK-Z9          TO  SKT4000-KO-STENSU (IDX1)
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
              END-PERFORM
            END-IF
       *    £±¥Ú¡¼¥¸ÌÜ¤Ë¤À¤±°õ»ú
            IF    CNT-PAGE    =    1
       *    Æþ±¡¹ç·×
-             MOVE    WRK-N-GKENSU        TO  WRK-Z5
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *       MOVE    WRK-N-GKENSU        TO  WRK-Z5
+      *       MOVE    WRK-Z5              TO  SKT4000-N-GKENSU
+      *       MOVE    WRK-N-GTENSU        TO  WRK-Z9
+      *       MOVE    WRK-Z9              TO  SKT4000-N-GTENSU
+      **---(01.00.10) LINE ADD START ------------------------------------
+      **       COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-GTENSU
+      **                                     /  WRK-N-GKENSU
+      *       COMPUTE   WRK-N-SGKENSU  =  WRK-N-GKENSU
+      *                                +  WRK-KOU-SKENSU (1)
+      *       MOVE    WRK-N-SGKENSU       TO  WRK-Z5
+      *       MOVE    WRK-Z5              TO  SKT4000-N-SGKENSU
+      *       COMPUTE   WRK-N-SGTENSU  =  WRK-N-GTENSU
+      *                                +  WRK-KOU-STENSU (1)
+      *       MOVE    WRK-N-SGTENSU       TO  WRK-Z9
+      *       MOVE    WRK-Z9              TO  SKT4000-N-SGTENSU
+      *       COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-SGTENSU
+      *                                     /  WRK-N-SGKENSU
+      **---(01.00.10) LINE ADD END ------------------------------------
+      *       MOVE    WRK-KEISAN-S        TO   WRK-Z9-S
+      *       MOVE    WRK-Z9-S            TO  SKT4000-N-AVG
+      *       DISPLAY "£±·ï¤¢¤¿¤ê¹ç·×£±=" WRK-KEISAN-S
+      **    ³°Íè¹ç·×
+      *       MOVE    WRK-G-GKENSU        TO  WRK-Z5
+      *       MOVE    WRK-Z5              TO  SKT4000-G-GKENSU
+      *       MOVE    WRK-G-GTENSU        TO  WRK-Z9
+      *       MOVE    WRK-Z9              TO  SKT4000-G-GTENSU
+      **---(01.00.10) LINE ADD START ------------------------------------
+      **       COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-GTENSU
+      **                                     /  WRK-G-GKENSU
+      *       COMPUTE   WRK-G-SGKENSU  =  WRK-G-GKENSU
+      *                                +  WRK-KOU-SKENSU (2)
+      *       MOVE    WRK-G-SGKENSU       TO  WRK-Z5
+      *       MOVE    WRK-Z5              TO  SKT4000-G-SGKENSU
+      *       COMPUTE   WRK-G-SGTENSU  =  WRK-G-GTENSU
+      *                                +  WRK-KOU-STENSU (2)
+      *       MOVE    WRK-G-SGTENSU       TO  WRK-Z9
+      *       MOVE    WRK-Z9              TO  SKT4000-G-SGTENSU
+      *       COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-SGTENSU
+      *                                     /  WRK-G-SGKENSU
+      **---(01.00.10) LINE ADD END ------------------------------------
+      *       MOVE    WRK-KEISAN-S        TO  WRK-Z9-S
+      *       MOVE    WRK-Z9-S            TO  SKT4000-G-AVG
+      *       DISPLAY "£±·ï¤¢¤¿¤ê¹ç·×£²=" WRK-KEISAN-S
+      **
+      **---(01.00.10) LINE ADD START ------------------------------------
+      **    ½ô¸øÈñ¹ç·×
+      **       MOVE    WRK-KOH-GKENSU(1)    TO  WRK-Z5
+      **       MOVE    WRK-Z5              TO  SKT4000-KOH1-GKENSU
+      **       MOVE    WRK-KOH-GTENSU(1)    TO  WRK-Z9
+      **       MOVE    WRK-Z9              TO  SKT4000-KOH1-GTENSU
+      **    ÃÏÊý¸øÈñ¹ç·×
+      **       MOVE    WRK-KOH-GKENSU(2)    TO  WRK-Z5
+      **       MOVE    WRK-Z5              TO  SKT4000-KOH2-GKENSU
+      **       MOVE    WRK-KOH-GTENSU(2)    TO  WRK-Z9
+      **       MOVE    WRK-Z9              TO  SKT4000-KOH2-GTENSU
+      **
+      **       MOVE    WRK-KOH-GKENSU(3)    TO  WRK-Z5
+      **       MOVE    WRK-Z5              TO  SKT4000-KOH3-GKENSU
+      **       MOVE    WRK-KOH-GTENSU(3)    TO  WRK-Z9
+      **       MOVE    WRK-Z9              TO  SKT4000-KOH3-GTENSU
+      *       MOVE    WRK-KOH-GKENSU(3)    TO  WRK-Z5
+      *       MOVE    WRK-Z5              TO  SKT4000-KOH-GKENSU
+      *       MOVE    WRK-KOH-GTENSU(3)    TO  WRK-Z9
+      *       MOVE    WRK-Z9              TO  SKT4000-KOH-GTENSU
+      **---(01.00.10) LINE ADD END   ------------------------------------
+      *
+             MOVE    WRK-N-GKENSU(IDX5)  TO  WRK-Z5
              MOVE    WRK-Z5              TO  SKT4000-N-GKENSU
-             MOVE    WRK-N-GTENSU        TO  WRK-Z9
+             MOVE    WRK-N-GTENSU(IDX5)  TO  WRK-Z9
              MOVE    WRK-Z9              TO  SKT4000-N-GTENSU
-      *---(01.00.10) LINE ADD START ------------------------------------
-      *       COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-GTENSU
-      *                                     /  WRK-N-GKENSU
-             COMPUTE   WRK-N-SGKENSU  =  WRK-N-GKENSU
-                                      +  WRK-KOU-SKENSU (1)
-             MOVE    WRK-N-SGKENSU       TO  WRK-Z5
-             MOVE    WRK-Z5              TO  SKT4000-N-SGKENSU
-             COMPUTE   WRK-N-SGTENSU  =  WRK-N-GTENSU
-                                      +  WRK-KOU-STENSU (1)
-             MOVE    WRK-N-SGTENSU       TO  WRK-Z9
-             MOVE    WRK-Z9              TO  SKT4000-N-SGTENSU
-             COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-SGTENSU
-                                           /  WRK-N-SGKENSU
-      *---(01.00.10) LINE ADD END ------------------------------------
+             COMPUTE   WRK-N-SGKENSU (IDX5)  =  WRK-N-GKENSU (IDX5)
+                                             +  WRK-KOU-SKENSU(IDX5 1)
+             MOVE    WRK-N-SGKENSU (IDX5)    TO  WRK-Z5
+             MOVE    WRK-Z5                  TO  SKT4000-N-SGKENSU
+             COMPUTE   WRK-N-SGTENSU (IDX5)  =  WRK-N-GTENSU (IDX5)
+                                             +  WRK-KOU-STENSU(IDX5 1)
+             MOVE    WRK-N-SGTENSU (IDX5)    TO  WRK-Z9
+             MOVE    WRK-Z9                  TO  SKT4000-N-SGTENSU
+             COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-SGTENSU (IDX5)
+                                           /  WRK-N-SGKENSU (IDX5)
              MOVE    WRK-KEISAN-S        TO   WRK-Z9-S
              MOVE    WRK-Z9-S            TO  SKT4000-N-AVG
              DISPLAY "£±·ï¤¢¤¿¤ê¹ç·×£±=" WRK-KEISAN-S
       *    ³°Íè¹ç·×
-             MOVE    WRK-G-GKENSU        TO  WRK-Z5
-             MOVE    WRK-Z5              TO  SKT4000-G-GKENSU
-             MOVE    WRK-G-GTENSU        TO  WRK-Z9
-             MOVE    WRK-Z9              TO  SKT4000-G-GTENSU
-      *---(01.00.10) LINE ADD START ------------------------------------
-      *       COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-GTENSU
-      *                                     /  WRK-G-GKENSU
-             COMPUTE   WRK-G-SGKENSU  =  WRK-G-GKENSU
-                                      +  WRK-KOU-SKENSU (2)
-             MOVE    WRK-G-SGKENSU       TO  WRK-Z5
-             MOVE    WRK-Z5              TO  SKT4000-G-SGKENSU
-             COMPUTE   WRK-G-SGTENSU  =  WRK-G-GTENSU
-                                      +  WRK-KOU-STENSU (2)
-             MOVE    WRK-G-SGTENSU       TO  WRK-Z9
-             MOVE    WRK-Z9              TO  SKT4000-G-SGTENSU
-             COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-SGTENSU
-                                           /  WRK-G-SGKENSU
-      *---(01.00.10) LINE ADD END ------------------------------------
+             MOVE    WRK-G-GKENSU (IDX5)     TO  WRK-Z5
+             MOVE    WRK-Z5                  TO  SKT4000-G-GKENSU
+             MOVE    WRK-G-GTENSU (IDX5)     TO  WRK-Z9
+             MOVE    WRK-Z9                  TO  SKT4000-G-GTENSU
+             COMPUTE   WRK-G-SGKENSU (IDX5)  =  WRK-G-GKENSU (IDX5)
+                                             +  WRK-KOU-SKENSU(IDX5 2)
+             MOVE    WRK-G-SGKENSU (IDX5)    TO  WRK-Z5
+             MOVE    WRK-Z5                  TO  SKT4000-G-SGKENSU
+             COMPUTE   WRK-G-SGTENSU (IDX5)  =  WRK-G-GTENSU (IDX5)
+                                             +  WRK-KOU-STENSU(IDX5 2)
+             MOVE    WRK-G-SGTENSU (IDX5)    TO  WRK-Z9
+             MOVE    WRK-Z9                  TO  SKT4000-G-SGTENSU
+             COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-SGTENSU (IDX5)
+                                           /  WRK-G-SGKENSU (IDX5)
              MOVE    WRK-KEISAN-S        TO  WRK-Z9-S
              MOVE    WRK-Z9-S            TO  SKT4000-G-AVG
              DISPLAY "£±·ï¤¢¤¿¤ê¹ç·×£²=" WRK-KEISAN-S
       *
-      *---(01.00.10) LINE ADD START ------------------------------------
       *    ½ô¸øÈñ¹ç·×
-      *       MOVE    WRK-KOH-GKENSU(1)    TO  WRK-Z5
-      *       MOVE    WRK-Z5              TO  SKT4000-KOH1-GKENSU
-      *       MOVE    WRK-KOH-GTENSU(1)    TO  WRK-Z9
-      *       MOVE    WRK-Z9              TO  SKT4000-KOH1-GTENSU
-      *    ÃÏÊý¸øÈñ¹ç·×
-      *       MOVE    WRK-KOH-GKENSU(2)    TO  WRK-Z5
-      *       MOVE    WRK-Z5              TO  SKT4000-KOH2-GKENSU
-      *       MOVE    WRK-KOH-GTENSU(2)    TO  WRK-Z9
-      *       MOVE    WRK-Z9              TO  SKT4000-KOH2-GTENSU
+             MOVE    WRK-KOH-GKENSU(IDX5 3)  TO  WRK-Z5
+             MOVE    WRK-Z5                  TO  SKT4000-KOH-GKENSU
+             MOVE    WRK-KOH-GTENSU(IDX5 3)  TO  WRK-Z9
+             MOVE    WRK-Z9                  TO  SKT4000-KOH-GTENSU
       *
-      *       MOVE    WRK-KOH-GKENSU(3)    TO  WRK-Z5
-      *       MOVE    WRK-Z5              TO  SKT4000-KOH3-GKENSU
-      *       MOVE    WRK-KOH-GTENSU(3)    TO  WRK-Z9
-      *       MOVE    WRK-Z9              TO  SKT4000-KOH3-GTENSU
-             MOVE    WRK-KOH-GKENSU(3)    TO  WRK-Z5
-             MOVE    WRK-Z5              TO  SKT4000-KOH-GKENSU
-             MOVE    WRK-KOH-GTENSU(3)    TO  WRK-Z9
-             MOVE    WRK-Z9              TO  SKT4000-KOH-GTENSU
-      *---(01.00.10) LINE ADD END   ------------------------------------
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
            END-IF
       *
       *
@@ -2497,6 +2707,19 @@
            READ  SKT4000TMP-FILE   NEXT
                AT  END
                    MOVE  1  TO  FLG-PRINT
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *    £²²ó½èÍý¤¹¤ë¤Î¤Ç³ºÅö¼Ô°Ê³°¤Ï°õ»úÂÐ¾Ý³°
+               NOT AT END
+                   IF  IDX5  =  1
+                       IF  SKT4000TMP-GENMEN  NOT =  ZERO
+                           GO  TO  900-TMP-READ-SEC
+                       END-IF
+                   ELSE
+                       IF  SKT4000TMP-GENMEN  =  ZERO
+                           GO  TO  900-TMP-READ-SEC
+                       END-IF
+                   END-IF
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
            END-READ
            .
        900-TMP-READ-EXT.
@@ -2510,6 +2733,19 @@
            READ  SKT4005TMP-FILE   NEXT
                AT  END
                    MOVE  1  TO  FLG-PRINT2
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) start
+      *    £²²ó½èÍý¤¹¤ë¤Î¤Ç³ºÅö¼Ô°Ê³°¤Ï°õ»úÂÐ¾Ý³°
+               NOT AT END
+                   IF  IDX5  =  1
+                       IF  SKT4005TMP-GENMEN  NOT =  ZERO
+                           GO  TO  901-TMP-READ-SEC
+                       END-IF
+                   ELSE
+                       IF  SKT4005TMP-GENMEN  =  ZERO
+                           GO  TO  901-TMP-READ-SEC
+                       END-IF
+                   END-IF
+      *=== Ãæ¹ñ¶å½£ËÌÉô¹ë±«ÂÐ±þ by Uchida(2009/10/14) end
            END-READ
            .
        901-TMP-READ-EXT.
