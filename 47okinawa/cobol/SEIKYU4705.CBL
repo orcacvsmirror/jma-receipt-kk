@@ -31,6 +31,8 @@
       *  01.00.01    吉川    2009/08/10  日レセver4.2でインストールすると
       *                                  エラーが起きるのを修正
       *  01.00.02    吉川    2009/09/28  帳票様式の変更に伴う修正
+      *  01.00.03    吉川    2009/10/27  差引請求額欄は、社保・国保の場合
+      *                                  1の位を四捨五入、後期高齢は切捨て
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1024,8 +1026,12 @@
       *
            COMPUTE WRK-SEIKYUGK-G2 =   WRK-SEIKYUGK-G  +   0.5 
       *
-      *    老人は１円の位を四捨五入し、その他は小数点まで記載する
-           IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== 差引請求額の端数処理変更 by Yoshikawa(2009/10/27) start
+      **    老人は１円の位を四捨五入し、その他は小数点まで記載する
+      *     IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *    政管・国保は１円の位を四捨五入とし、後期高齢は切り捨てとする
+           IF      RECE02-HKNNUM   NOT =  "039" AND "040"
+      *=== 差引請求額の端数処理変更 by Yoshikawa(2009/10/27) end
                MOVE    WRK-SEIKYUGK-G  TO  WRK-SEIKYUGK-G2
                DIVIDE  WRK-SEIKYUGK-G2 BY  10
                        GIVING              WRK-KEISAN
@@ -1037,7 +1043,11 @@
                END-IF
                MOVE    WRK-SEIKYUGK-G2 TO  MF100-SEIKYUGK
            ELSE
-               MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
+      *=== 差引請求額の端数処理変更 by Yoshikawa(2009/10/27) start
+      *         MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
+               COMPUTE WRK-KEISAN      =   WRK-SEIKYUGK-G2  /  10
+               COMPUTE MF100-SEIKYUGK  =   WRK-KEISAN  *  10
+      *=== 差引請求額の端数処理変更 by Yoshikawa(2009/10/27) end
            END-IF
       *
            DISPLAY "集計結果=" MF100-SEIKYUGK
@@ -2091,7 +2101,6 @@
                  INITIALIZE                  HC063
                END-IF
       *
-               DISPLAY "RECE08-PRTDATA =" RECE08-PRTDATA
                MOVE   RECE08-PRTDATA      TO  HC063
       *        摘要欄編集
                PERFORM  VARYING  IDX  FROM  1  BY  1
