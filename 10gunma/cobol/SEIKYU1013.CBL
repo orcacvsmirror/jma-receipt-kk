@@ -36,6 +36,7 @@
       *                                  末尾のカンマは不要
       *  01.00.02    吉川    2009/10/23  科別と医療機関番号は頭ゼロ付きで表示
       *                                  70歳以上入院の福祉医療費請求額を印字
+      *                                  負担者番号の空白をゼロで埋める
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -181,6 +182,16 @@
            03  WRK-SYUBETU                PIC 9(01).
            03  WRK-TOKURAN                PIC X(02).
            03  WRK-BIKO                   PIC X(02).
+      *
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) start
+      *    負担者番号ゼロ埋め変換
+           03  WRK-FTNJAHENKAN.
+               05  WRK-FTNJANUM-MAE       PIC X(08).
+               05  WRK-FTNJANUM-ATO       PIC X(08).
+               05  WRK-HANI               PIC 9(03).
+               05  WRK-ICHI               PIC 9(03).
+               05  WRK-HENKANFLG          PIC 9(01).
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) end
       *
       *    文字変換
            03  WRK-MAE-INPUT              PIC X(200).
@@ -1574,24 +1585,24 @@
       *=== 診療年月を請求年月に by Yoshikawa(2009/09/16) end
       *
       *    ３．医療機関コード
-      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) start
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/23) start
       *     MOVE    SYS-1001-HOSPCD         TO  WRK-NUM
       *     MOVE    7                       TO  WRK-NAGASA
       *     PERFORM 5005-NUM-HENSYU-SEC
            MOVE    SYS-1001-HOSPCD         TO  WRK-DATA
            MOVE    7                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
-      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) end
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/23) end
       *
       *    ４．科別
-      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) start
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/23) start
       *     MOVE    "01"                    TO  WRK-NUM
       *     MOVE    2                       TO  WRK-NAGASA
       *     PERFORM 5005-NUM-HENSYU-SEC
            MOVE    "01"                    TO  WRK-DATA
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
-      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/19) end
+      *=== 頭ゼロ付きで表示 by Yoshikawa(2009/10/23) end
       *
       *    ５．入院区分
            IF  MF100-NYUGAIKBN  =  "1"
@@ -1638,20 +1649,42 @@
       *     MOVE    MF100-FTNJANUM          TO  WRK-NUM
       *     MOVE    8                       TO  WRK-NAGASA
       *     PERFORM 5005-NUM-HENSYU-SEC
-           MOVE    MF100-FTNJANUM          TO  WRK-DATA
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) start
+      *     MOVE    MF100-FTNJANUM          TO  WRK-DATA
+           INITIALIZE                          WRK-FTNJAHENKAN
+           MOVE    MF100-FTNJANUM          TO  WRK-FTNJANUM-MAE
+           PERFORM 331-FTNJA-HENKAN-SEC
+           MOVE    WRK-FTNJANUM-ATO        TO  WRK-DATA
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) end
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *=== 番号は頭ゼロ付き by Yoshikawa(2009/09/16) start
       *    
       *    １１．第一公費負担者番号
-           MOVE    MF100-EKOHFTNJANUM(1)   TO  WRK-NUM
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) start
+      *     MOVE    MF100-EKOHFTNJANUM(1)   TO  WRK-NUM
+      *     MOVE    8                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           INITIALIZE                          WRK-FTNJAHENKAN
+           MOVE    MF100-EKOHFTNJANUM(1)   TO  WRK-FTNJANUM-MAE
+           PERFORM 331-FTNJA-HENKAN-SEC
+           MOVE    WRK-FTNJANUM-ATO        TO  WRK-DATA
            MOVE    8                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) end
       *    
       *    １２．第二公費負担者番号
-           MOVE    MF100-EKOHFTNJANUM(2)   TO  WRK-NUM
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) start
+      *     MOVE    MF100-EKOHFTNJANUM(2)   TO  WRK-NUM
+      *     MOVE    8                       TO  WRK-NAGASA
+      *     PERFORM 5005-NUM-HENSYU-SEC
+           INITIALIZE                          WRK-FTNJAHENKAN
+           MOVE    MF100-EKOHFTNJANUM(2)   TO  WRK-FTNJANUM-MAE
+           PERFORM 331-FTNJA-HENKAN-SEC
+           MOVE    WRK-FTNJANUM-ATO        TO  WRK-DATA
            MOVE    8                       TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) end
       *    
       *    １３．受給資格者証記号
       *=== 番号は頭ゼロ付き by Yoshikawa(2009/09/16) start
@@ -1887,6 +1920,43 @@
        330-CSV-HEN-EXT.
            EXIT.
       *
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) start
+      *****************************************************************
+      *    負担者番号変換処理（前ゼロ埋め）
+      *****************************************************************
+       331-FTNJA-HENKAN-SEC     SECTION.
+      *
+      *    旧負担者番号の場合、右詰めしてから空白をゼロで埋める
+           IF  WRK-FTNJANUM-MAE(3:1)  =  SPACE
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1     >  8
+               IF  WRK-FTNJANUM-MAE(IDX1:1)  =  SPACE
+                   COMPUTE  WRK-HANI  =  IDX1 - 1
+                   COMPUTE  WRK-ICHI  =  (8 - WRK-HANI) + 1
+                   MOVE     8            TO  IDX1
+                   MOVE     1            TO  WRK-HENKANFLG
+               END-IF
+             END-PERFORM
+      *
+             IF  WRK-HENKANFLG  =  ZERO
+               MOVE  WRK-FTNJANUM-MAE    TO  WRK-FTNJANUM-ATO
+             ELSE
+               IF  WRK-FTNJANUM-MAE  NOT =  SPACE
+                 MOVE  WRK-FTNJANUM-MAE(1:WRK-HANI)
+                                 TO  WRK-FTNJANUM-ATO(WRK-ICHI:WRK-HANI)
+                 INSPECT  WRK-FTNJANUM-ATO  REPLACING  ALL " "  BY  "0"
+               END-IF
+             END-IF
+      *
+           ELSE
+             MOVE  WRK-FTNJANUM-MAE      TO  WRK-FTNJANUM-ATO
+           END-IF
+      *
+           .
+       331-FTNJA-HENKAN-EXT.
+           EXIT.
+      *
+      *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) end
       *****************************************************************
       *    ＣＳＶ<エンドレコード>処理
       *****************************************************************
