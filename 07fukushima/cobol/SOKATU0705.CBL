@@ -28,6 +28,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/07/18  在宅分もまとめて印字する
+      *  01.00.02    吉川    2009/11/04  指定金融機関を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -50,6 +51,14 @@
                                    ACCESS MODE    IS  SEQUENTIAL
                                    FILE   STATUS  IS  STS-SRYKA.
       *
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+      *    金融機関ファイル
+           SELECT  KINYU-FILE      ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-KINYU.
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
@@ -67,6 +76,14 @@
        01  SRYKA-REC.
            03  SRYKA-SRYKANAME           PIC X(30).
            03  FILLER                    PIC X(01).
+      *
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+      *    金融機関ファイル
+       FD  KINYU-FILE.
+       01  KINYU-REC.
+           03  KINYU-KINYUDATA           PIC X(20).
+           03  FILLER                    PIC X(01).
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -90,6 +107,9 @@
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
            03  STS-SRYKA           PIC X(02).
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+           03  STS-KINYU           PIC X(02).
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -189,7 +209,10 @@
       *    ファイル名称用エリア
            03  FILE-NAME           PIC X(512).
            03  WRK-SRYKANAME       PIC X(30) OCCURS 2.
-      
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+           03  WRK-KINYUDATA       PIC X(20) OCCURS 2.
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *
       *    公費名称編集
            03  WRK-KOHKBN.
                05  WRK-KOHNUM      PIC X(03).
@@ -527,6 +550,10 @@
       *
            PERFORM  111-INI-FILE-SEC
       *
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+           PERFORM  112-INI-FILE-SEC
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *
            .
        100-INIT-EXT.
            EXIT.
@@ -579,6 +606,48 @@
        111-INI-FILE-EXT.
            EXIT.
       *
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+      *****************************************************************
+      *    指定金融機関名INIファイル読み込み処理
+      *****************************************************************
+       112-INI-FILE-SEC                SECTION.
+      *
+      *    金融機関情報取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   KINYU-REC
+      *
+           OPEN  INPUT  KINYU-FILE
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     2
+             READ KINYU-FILE
+               AT END
+                 INITIALIZE        KINYU-REC
+             END-READ
+      *
+             DISPLAY "金融機関情報取得=" KINYU-KINYUDATA
+             IF    KINYU-KINYUDATA(1:2)  =  "※"
+               MOVE   SPACE             TO  WRK-KINYUDATA(IDX1)
+             ELSE
+               MOVE   KINYU-KINYUDATA   TO  WRK-KINYUDATA(IDX1)
+             END-IF
+           END-PERFORM
+      *
+           DISPLAY "銀行名 =" WRK-KINYUDATA(1)
+           DISPLAY "店名 ="   WRK-KINYUDATA(2)
+      *
+           CLOSE KINYU-FILE
+      *
+           .
+       112-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -1183,6 +1252,14 @@
       *    保険者数(県外)
              MOVE     WRK-KENGAI-MAX TO   WRK-Z11
              MOVE     WRK-Z11      TO   SKT0705-KENGAI-HKNJSU(IDX)
+      *
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
+      *      銀行名
+             MOVE    WRK-KINYUDATA(1)   TO  SKT0705-GINKO(IDX)
+      *
+      *      店名
+             MOVE    WRK-KINYUDATA(2)   TO  SKT0705-TENMEI(IDX)
+      *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
       *
            END-PERFORM
       *
