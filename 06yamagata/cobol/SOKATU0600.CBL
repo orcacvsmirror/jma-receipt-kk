@@ -37,6 +37,7 @@
       *  01.00.05    吉川   08/10/14   札幌市代表保険者番号変更
       *  01.00.06    内田   09/02/25   返戻対応
       *  01.00.07    吉川   09/08/11   仙台市代表保険者番号変更
+      *  01.00.08    吉川   09/11/05   特別療養費国保対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -156,6 +157,9 @@
       **** 05/02/01 yamaguhi INS
            03  WRK-PARA-SYOKBN     PIC X(01).
       ****
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -190,6 +194,9 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       ****
            03  WRK-PATH            PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+           03  WRK-PATH2           PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -352,6 +359,9 @@
                                                WRK-PARA-SYOKBN
       ****
       *---(01.00.03) LINE ADD START ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+                                               WRK-PARA-TOKUBETU
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
                                                RECEERR
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -499,28 +509,44 @@
       *
            OPEN     OUTPUT  UPD-FILE
       *
-      *---(01.00.02) LINE ADD START ------------------------------------
-      **** 05/02/01 yamaguhi INS
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+      **---(01.00.02) LINE ADD START ------------------------------------
+      ***** 05/02/01 yamaguhi INS
+      **     EVALUATE    WRK-PARA-SYOKBN
+      **        WHEN    "2" 
+      **          MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      **        WHEN    "1" 
+      **          MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+      **    END-EVALUATE
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **     MOVE    PATH-TBL-SEIKYU-KEY4          TO  WRK-PATH
+      *      MOVE    "key4"                       TO  WRK-PATH
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *****
+      **---(01.00.06) LINE ADD START ------------------------------------
       *     EVALUATE    WRK-PARA-SYOKBN
       *        WHEN    "2" 
-      *          MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *          MOVE    "key37"                  TO  WRK-PATH
       *        WHEN    "1" 
-      *          MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-      *    END-EVALUATE
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *     MOVE    PATH-TBL-SEIKYU-KEY4          TO  WRK-PATH
-            MOVE    "key4"                       TO  WRK-PATH
-      *---(01.00.03) LINE ADD END   ------------------------------------
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      ****
-      *---(01.00.06) LINE ADD START ------------------------------------
-           EVALUATE    WRK-PARA-SYOKBN
-              WHEN    "2" 
-                MOVE    "key37"                  TO  WRK-PATH
-              WHEN    "1" 
-                MOVE    "key38"                  TO  WRK-PATH
+      *          MOVE    "key38"                  TO  WRK-PATH
+      *     END-EVALUATE
+      **---(01.00.06) LINE ADD END   ------------------------------------
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE    "key37"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "1"
+                   MOVE    "key38"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
            END-EVALUATE
-      *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       *
            PERFORM  900-SEIKYU-SELECT-SEC
       *
@@ -883,6 +909,13 @@
       *
            MOVE     SYS-1001-HOSPCD          TO   SKT0600-HOSPCD
       *
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"              TO   SKT0600-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
+      *
            MOVE    1                         TO   FLG-PRINT
       *
            .
@@ -1204,6 +1237,12 @@
            MOVE   LNK-PRTKANRI-SRYYM    TO    RECE10-SKYYM.
            MOVE   SPACE                 TO    RECE10-XXSTHKNJANUM
            MOVE   "99999999"            TO    RECE10-XXEDHKNJANUM
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "000000"             TO    RECE10-SRYYM
+             MOVE  "999999"             TO    RECE10-XXSRYYM
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       *
            MOVE   RECE10-REC                   TO    MCPDATA-REC.
            MOVE   "DBSELECT"                   TO    MCP-FUNC.

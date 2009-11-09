@@ -15,12 +15,19 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2009/11/05  特別療養費国保対応
+      ********************************************************************
        01  SKT0600.
            03         SKT0600-SEIYM            PIC  X(16).
            03         SKT0600-HOSPCD           PIC  X(07).
            03         SKT0600-ADRS             PIC  X(100).
            03         SKT0600-HOSPNAME         PIC  X(100).
            03         SKT0600-KAISETUNAME      PIC  X(40).
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
+           03         SKT0600-TOKUBETU         PIC  X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       ***** 05/02/21 yamaguchi INS
            03         SKT0600-DATA.
       *****
