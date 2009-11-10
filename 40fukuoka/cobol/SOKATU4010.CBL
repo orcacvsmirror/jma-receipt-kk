@@ -51,6 +51,7 @@
       *  01.00.14    吉川     08/12/11    印字対象番号の追加（480,481,590）
       *  01.00.15    吉川     09/08/26    中国九州北部豪雨対応（対象者別集計）
       *  01.00.16    吉川     09/10/30    印字対象番号の追加（690,780）
+      *  01.00.17    吉川     09/11/06    公費番号まとめの編集方法修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1003,7 +1004,10 @@
               PERFORM VARYING IDZ1    FROM    1   BY  1
                       UNTIL   IDZ1    >       WRK-2007-MAX
                 PERFORM VARYING IDZ2  FROM    1   BY  1
-                        UNTIL   IDZ2  >       5
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/06) start
+      *                  UNTIL   IDZ2  >       5
+                        UNTIL   IDZ2  >       10
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/06) end
                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
                   IF  RECE10-KOHNUM(IDX3)  
                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
@@ -1011,7 +1015,10 @@
                                 TO  RECE10-KOHNUM (IDX3)
                     MOVE  WRK-2007-MEISYO (IDZ1)
                                 TO  WRK-KOHNAME
-                    MOVE  5             TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/06) start
+      *              MOVE  5             TO  IDZ2
+                    MOVE  10            TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/06) end
                     MOVE  WRK-2007-MAX  TO  IDZ1
                   END-IF
                 END-PERFORM
