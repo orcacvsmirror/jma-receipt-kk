@@ -45,6 +45,8 @@
       *                                  SPA-AREA½é´ü²½
       *  01.00.07    ÆâÅÄ    09/01/20    ¡Ö¸ø¡×Íó¤Ï£²£·¤Î¤ß¤Î°õ»ú¤Ç
       *                                  Á´¹ñ¸øÈñ¤Ï°õ»ú¤·¤Ê¤¤
+      *  01.00.08    µÈÀî    09/11/10    ÆÃµ­»ö¹à£°£³¤ò»ý¤Ã¤Æ¤¤¤ë¾ì¹ç¤Ï
+      *                                  °õ»úÂÐ¾Ý³°¤È¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -115,6 +117,9 @@
            03  FLG-SYORI       PIC 9(01).
            03  FLG-PTKOHINF    PIC 9(01).
            03  FLG-HKNNUM      PIC 9(01).
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) start
+           03  FLG-RECE10      PIC 9(01).
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -287,6 +292,11 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) star
+      *    ÀÁµá´ÉÍý
+           COPY    "CPRCF010.INC".
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) end
       *
       *    ¥Ñ¥é¥á¥¿
        01  BTPARA-REC.
@@ -1369,6 +1379,19 @@
                      GO  TO  900-KOHSKY-READ-SEC
                    END-IF
       *
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) start
+      *            ÆÃµ­»ö¹à£°£³¤ò»ý¤Ã¤Æ¤¤¤ë¾ì¹ç¤ÏÆÉ¤ßÈô¤Ð¤¹
+                   PERFORM  900-SEIKYU-SELECT-SEC
+      *
+                   IF  RECE10-TOKKI(1)  =  "03"
+                   OR  RECE10-TOKKI(2)  =  "03"
+                   OR  RECE10-TOKKI(3)  =  "03"
+                   OR  RECE10-TOKKI(4)  =  "03"
+                   OR  RECE10-TOKKI(5)  =  "03"
+                     GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) end
+      *
                    ADD  1  TO  CNT-RECE02
                ELSE
                    GO  TO  900-KOHSKY-READ-SEC
@@ -1402,6 +1425,73 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) start
+      *****************************************************************
+      *   ÀÁµá´ÉÍý¾ðÊóÆÉ¹þ
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC  SECTION.
+      *
+           INITIALIZE  RECE10-REC
+           MOVE  RECE02-HOSPNUM       TO  RECE10-HOSPNUM
+           MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
+           MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+           MOVE  RECE02-PTID          TO  RECE10-PTID
+           MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
+           MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+           MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+           MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+           MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+           MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+           MOVE  RECE10-REC           TO  MCPDATA-REC
+           MOVE  "DBSELECT"           TO  MCP-FUNC
+           MOVE  "tbl_seikyu"         TO  MCP-TABLE
+           MOVE  "key"                TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"          USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+           IF  MCP-RC  =  ZERO
+             PERFORM  900-SEIKYU-READ-SEC
+           ELSE
+             DISPLAY  "SEIKYU SELECT ERR"
+           END-IF
+      *
+           MOVE  "DBCLOSECURSOR"    TO  MCP-FUNC
+           MOVE  "tbl_seikyu"       TO  MCP-TABLE
+           MOVE  "key"              TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+      *
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ÀÁµá´ÉÍý£Æ£Å£Ô£Ã£È
+      *****************************************************************
+       900-SEIKYU-READ-SEC  SECTION.
+      *
+           MOVE  "tbl_seikyu"   TO  MCP-TABLE
+           MOVE  "key"          TO  MCP-PATHNAME
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  RECE10-REC
+             MOVE  ZERO         TO  FLG-RECE10
+           ELSE
+             INITIALIZE             RECE10-REC
+             MOVE  1            TO  FLG-RECE10
+           END-IF
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *=== ÆÃµ­»ö¹à£°£³¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/11/10) end
       *****************************************************************
       *    ´µ¼Ô¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************

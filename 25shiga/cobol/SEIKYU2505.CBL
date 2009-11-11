@@ -33,6 +33,8 @@
       *  01.00.01    内田    08/05/21    請求年月の印字修正
       *  01.00.02    吉川    08/10/20    結核・精神を併用していても
       *                                  公費分患者負担額を計算する
+      *  01.00.03    吉川    09/11/10    特記事項０３を持っている場合は
+      *                                  印字対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1746,6 +1748,19 @@
                    IF      FLG-ERR           =   1
                      GO  TO  900-KOHSKY-READ-SEC
                    END-IF
+      *
+      *=== 特記事項０３は印字対象外 by Yoshikawa(2009/11/10) start
+      *            特記事項０３を持っている場合は読み飛ばす
+                   PERFORM  900-SEIKYU-SET-SEC
+      *
+                   IF  RECE10-TOKKI(1)  =  "03"
+                   OR  RECE10-TOKKI(2)  =  "03"
+                   OR  RECE10-TOKKI(3)  =  "03"
+                   OR  RECE10-TOKKI(4)  =  "03"
+                   OR  RECE10-TOKKI(5)  =  "03"
+                     GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *=== 特記事項０３は印字対象外 by Yoshikawa(2009/11/10) end
       *
                    ADD  1  TO  CNT-RECE02
                ELSE
