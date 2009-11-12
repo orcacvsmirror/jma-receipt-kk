@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 熊本・障害者医療費請求書
-      *                      (142,242,342)
+      *                      (142,242,342,442)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/12/13    山口          再作成(2.5.0対応)
@@ -33,6 +33,7 @@
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/08/07    診療科は旧総合病院の場合に印字
       *  01.00.03    門間    09/01/20    SPA-AREAの初期化
+      *  01.00.04    吉川    09/11/11    印字対象番号の追加（442）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -574,6 +575,9 @@
            PERFORM VARYING IDZ FROM 1 BY 1
                    UNTIL IDZ  >  4
              IF  RECE02-KOHNUM (IDZ)  = "142" OR "242" OR "342"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/11/11) start
+                                  OR  = "442"
+      *=== 印字対象番号の追加 by Yoshikawa(2009/11/11) end
                PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1259,10 +1263,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "142" OR "242" OR "342"
+      *=== 印字対象番号追加 by Yoshikawa(2009/11/11) start
+      *         IF  RECE02-KOHNUM (1)  =  "142" OR "242" OR "342"
+      *          OR RECE02-KOHNUM (2)  =  "142" OR "242" OR "342"
+      *          OR RECE02-KOHNUM (3)  =  "142" OR "242" OR "342"
+      *          OR RECE02-KOHNUM (4)  =  "142" OR "242" OR "342"
+               IF  RECE02-KOHNUM (1)  =  "142" OR "242" OR "342" 
+                                     OR  "442"
                 OR RECE02-KOHNUM (2)  =  "142" OR "242" OR "342"
+                                     OR  "442"
                 OR RECE02-KOHNUM (3)  =  "142" OR "242" OR "342"
+                                     OR  "442"
                 OR RECE02-KOHNUM (4)  =  "142" OR "242" OR "342"
+                                     OR  "442"
+      *=== 印字対象番号追加 by Yoshikawa(2009/11/11) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
