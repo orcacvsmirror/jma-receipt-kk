@@ -38,6 +38,7 @@
       *  01.00.07    ÆâÅÄ     08/08/13    Ê¡»ãÍó¤Ë£±£¸£¸³ºÅö¼ÔÄÉ²Ã
       *  01.00.08    µÈÀî     09/10/07    Ê¡»ãÍó¤Ë£±£¹£±³ºÅö¼ÔÄÉ²Ã
       *  01.00.09    µÈÀî     09/11/06    £±£¹£±¤ÏÊ¡»ãÍó¤Ç¤Ï¤Ê¤¯¸øÈñÍó¤Ë½¸·×
+      *  01.00.10    µÈÀî     09/11/19    ¸øÈñÍó¤ÏÁ´¹ñ¸øÈñ¤Ç¤¢¤ì¤Ð½¸·×
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -702,21 +703,24 @@
              PERFORM  VARYING IDX2 FROM 1 BY 1
                        UNTIL  IDX2 > 4
                        OR     RECE10-KOHNUM (IDX2) = SPACE
-               IF    RECE10-KOHNUM (IDX2)  =  "010"
-                 OR  RECE10-KOHNUM (IDX2)  =  "011"
-                 OR  RECE10-KOHNUM (IDX2)  =  "015"
-                 OR  RECE10-KOHNUM (IDX2)  =  "016"
-                 OR  RECE10-KOHNUM (IDX2)  =  "017"
-                 OR  RECE10-KOHNUM (IDX2)  =  "019"
-                 OR  RECE10-KOHNUM (IDX2)  =  "020"
-                 OR  RECE10-KOHNUM (IDX2)  =  "021"
-                 OR  RECE10-KOHNUM (IDX2)  =  "023"
-                 OR  RECE10-KOHNUM (IDX2)  =  "051"
-                 OR  RECE10-KOHNUM (IDX2)  =  "052"
-                 OR  RECE10-KOHNUM (IDX2)  =  "053"
-      *---(01.00.02) LINE ADD START ------------------------------------
-                 OR  RECE10-KOHNUM (IDX2)  =  "091"
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== ¸øÈñÍó¤ÏÁ´¹ñ¸øÈñ¤Ç¤¢¤ì¤Ð½¸·× by Yoshikawa(2009/11/19) start
+      *         IF    RECE10-KOHNUM (IDX2)  =  "010"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "011"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "015"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "016"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "017"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "019"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "020"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "021"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "023"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "051"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "052"
+      *           OR  RECE10-KOHNUM (IDX2)  =  "053"
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *           OR  RECE10-KOHNUM (IDX2)  =  "091"
+      **---(01.00.02) LINE ADD END   ------------------------------------
+               IF    RECE10-KOHNUM (IDX2)(1:1)  =  "0"
+      *=== ¸øÈñÍó¤ÏÁ´¹ñ¸øÈñ¤Ç¤¢¤ì¤Ð½¸·× by Yoshikawa(2009/11/19) end
       *=== 191¤Ï¸øÈñÍó¤Ë½¸·× by Yoshikawa(2009/11/06) start
                  OR  RECE10-KOHNUM (IDX2)  =  "191"
       *=== 191¤Ï¸øÈñÍó¤Ë½¸·× by Yoshikawa(2009/11/06) end
