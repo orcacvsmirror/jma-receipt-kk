@@ -34,6 +34,8 @@
       *  01.00.03    内田    2009/10/16  中国九州北部豪雨対応（対象者別集計）
       *  01.00.04    吉川    2009/11/06  シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.05    吉川    2009/11/19  食事が無く生活療養のみの場合でも
+      *                                  食事件数が集計される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1143,9 +1145,15 @@
                ADD  RECE10-FTNMONEY(IDZ + 1)
                                  TO  SKT4025TMP-KPTFTN(CNT-KOH IDX3)
       *
-               IF      IDX3              =   1 
-      *          食事療養:件数
-                 ADD  1          TO  SKT4025TMP-S-KKENSU(CNT-KOH)
+               IF      IDX3              =   1
+      *=== 食事がない場合は件数集計しない by Yoshikawa(2009/11/19) start
+                 IF    RECE10-SHOKUJINISSU(IDZ + 1)   >   ZERO
+      *=== 食事がない場合は件数集計しない by Yoshikawa(2009/11/19) end
+      *            食事療養:件数
+                   ADD  1        TO  SKT4025TMP-S-KKENSU(CNT-KOH)
+      *=== 食事がない場合は件数集計しない by Yoshikawa(2009/11/19) start
+                 END-IF
+      *=== 食事がない場合は件数集計しない by Yoshikawa(2009/11/19) end
       *          食事療養:日数
                  ADD  RECE10-SHOKUJINISSU(IDZ + 1)
                                  TO  SKT4025TMP-S-KNISSU(CNT-KOH)
@@ -1747,26 +1755,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
