@@ -37,6 +37,8 @@
       *                                   処理をする
       *  01.00.03     内田    2008/05/16  ４月改正対応
       *  01.00.04     門間    2008/10/09  SPA-AREAの初期化
+      *  01.00.05     内田    2009/11/13  帳票上部の公費種別は市町村公費の場合
+      *                                   受給者番号の事業コードで判別する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1125,6 +1127,28 @@
                    MOVE    "○"            TO  SC07-KOHKBN(4)
                WHEN "150"
                    MOVE    "○"            TO  SC07-KOHKBN(5)
+      *=== 事業コードで判別 by Uchida(2009/11/13) start
+               WHEN OTHER
+                   EVALUATE  MF101-JKYSNUM(3:2)
+                     WHEN  "60"
+                       MOVE    "○"        TO  SC07-KOHKBN(1)
+                     WHEN  "70"
+                       MOVE    "○"        TO  SC07-KOHKBN(2)
+                     WHEN  "81"
+                     WHEN  "82"
+                     WHEN  "83"
+                       MOVE    "○"        TO  SC07-KOHKBN(3)
+                     WHEN  "91"
+                     WHEN  "92"
+                     WHEN  "93"
+                     WHEN  "94"
+                     WHEN  "95"
+                     WHEN  "96"
+                       MOVE    "○"        TO  SC07-KOHKBN(4)
+                     WHEN  "65"
+                       MOVE    "○"        TO  SC07-KOHKBN(5)
+                   END-EVALUATE
+      *=== 事業コードで判別 by Uchida(2009/11/13) end
            END-EVALUATE
       *
       *    保険区分
@@ -1429,6 +1453,28 @@
                    MOVE    "○"            TO  SC08-KOHKBN(4)
                WHEN "150"
                    MOVE    "○"            TO  SC08-KOHKBN(5)
+      *=== 事業コードで判別 by Uchida(2009/11/13) start
+               WHEN OTHER
+                   EVALUATE  MF101-JKYSNUM(3:2)
+                     WHEN  "60"
+                       MOVE    "○"        TO  SC08-KOHKBN(1)
+                     WHEN  "70"
+                       MOVE    "○"        TO  SC08-KOHKBN(2)
+                     WHEN  "81"
+                     WHEN  "82"
+                     WHEN  "83"
+                       MOVE    "○"        TO  SC08-KOHKBN(3)
+                     WHEN  "91"
+                     WHEN  "92"
+                     WHEN  "93"
+                     WHEN  "94"
+                     WHEN  "95"
+                     WHEN  "96"
+                       MOVE    "○"        TO  SC08-KOHKBN(4)
+                     WHEN  "65"
+                       MOVE    "○"        TO  SC08-KOHKBN(5)
+                   END-EVALUATE
+      *=== 事業コードで判別 by Uchida(2009/11/13) end
            END-EVALUATE
       *
       *    保険区分
