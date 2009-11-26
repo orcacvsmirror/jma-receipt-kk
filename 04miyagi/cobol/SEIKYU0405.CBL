@@ -36,6 +36,8 @@
       *  01.00.02    内田    08/07/08    未就学児の場合、入外区分欄に
       *                                  「３」、「４」を印字
       *  01.00.03    吉川    09/04/08    SPA-AREA初期化
+      *  01.00.04    吉川    09/11/25    公費欄に特定疾患及び
+      *                                  その特記事項を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -109,7 +111,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
-      *
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+           03  FLG-RECE10     PIC 9(01).
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -169,6 +173,9 @@
                05   WRK-T-SHOKUJIFTN      PIC 9(07).
                05   WRK-FTNMONEY          PIC 9(07).
                05   WRK-SHOKUJIRYOYOHI    PIC 9(07).
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+               05   WRK-TOKKI             PIC X(02).
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
            03  WRK-CITYNUM                PIC 9(03).
@@ -289,6 +296,11 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+      *    請求管理情報
+           COPY    "CPRCF010.INC".
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -742,6 +754,22 @@
            MOVE    WRK-SEIKYUGK-G2    TO    MF100-SEIKYUGK
            MOVE    WRK-TAHOU          TO    MF100-TAHOU
       *
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+           IF  MF100-TAHOU  =  "051" OR "052"
+             PERFORM  900-SEIKYU-READ-SEC
+      *      特定疾患の特記事項
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL    IDX2  >     5
+                 IF   RECE10-TOKKI(IDX2)  =  "17" OR "18" OR "19"
+                                         OR  "22" OR "23" OR "24"
+                   MOVE  RECE10-TOKKI(IDX2)  TO  WRK-TOKKI
+                   MOVE  WRK-TOKKI           TO  MF100-TOKKI
+                   MOVE  5                   TO  IDX2
+                 END-IF
+             END-PERFORM
+           END-IF
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
+      *
       *  月途中で仙台市内の区を移動した時は合算し、移動後の区へ請求する
            MOVE    ZERO                    TO  FLG-SENDAI
            INITIALIZE                      WRK-TAIHI-TBL
@@ -850,6 +878,11 @@
            IF  WRK-TAHOU  NOT =  SPACE
              MOVE    WRK-TAHOU        TO    MF100-TAHOU
            END-IF
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+           IF  WRK-TOKKI  NOT =  SPACE
+             MOVE    WRK-TOKKI        TO    MF100-TOKKI
+           END-IF
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
       *
            IF      FLG-MF100  =  1
                    WRITE    MF100-REC
@@ -1098,6 +1131,13 @@
             IF  MF100-TYOKI      =     "1"
               MOVE    "02"                    TO   SC05-TYOKI(IDX1)
             END-IF
+      *
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+      *    特記事項
+             IF  MF100-TOKKI  NOT =  SPACE
+               MOVE   MF100-TOKKI             TO   SC05-TYOKI(IDX1)
+             END-IF 
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
       *
       *    合計小計
       *    件数
@@ -1843,6 +1883,56 @@
        900-KOHSKY-CLOSE-EXT.
            EXIT.
       *
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
+      *****************************************************************
+      *    請求管理情報読み込み
+      *****************************************************************
+       900-SEIKYU-READ-SEC         SECTION.
+      *
+           INITIALIZE                          RECE10-REC
+      *
+           MOVE    RECE02-KEY              TO  RECE10-KEY
+           MOVE    RECE10-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_seikyu"        TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"             USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+               IF      MCP-RC          =   ZERO
+                   MOVE    ZERO            TO  FLG-RECE10
+                   MOVE    MCPDATA-REC     TO  RECE10-REC
+               ELSE
+                   MOVE    1               TO  FLG-RECE10
+                   INITIALIZE                  RECE10-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-RECE10
+               INITIALIZE                      RECE10-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *
+      *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
