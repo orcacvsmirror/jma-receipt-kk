@@ -28,6 +28,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    09/11/26    市町村番号と異なる市町村名が
+      *                                  印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1110,6 +1112,12 @@
              MOVE  MCPDATA-REC  TO  HKNJAINF-REC
              MOVE  ZERO         TO  FLG-HKNJAINF
       *
+      *=== 市町村名の不正取得修正 by Yoshikawa(2009/11/26) start
+      *    国保でない時は、読み直す
+             IF    HKNJA-HKNNUM  NOT  =  "060" AND "067"
+               GO               TO  925-HKNJAINF-READ-SEC
+             END-IF
+      *=== 市町村名の不正取得修正 by Yoshikawa(2009/11/26) end
            ELSE
              INITIALIZE  HKNJAINF-REC
              MOVE  1            TO  FLG-HKNJAINF
