@@ -35,6 +35,8 @@
       *  01.00.04      内田     08/06/20    斜線部分の一部負担金は印字しない
       *  01.00.05      内田     08/07/11    一部負担金が倍になるのを修正
       *  01.00.06      吉川     08/10/17    シス管「2007」公費まとめ対応
+      *  01.00.07      吉川     09/11/30    シス管「2007」のまとめ公費で
+      *                                     6つ目以降がまとまらない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -933,7 +935,10 @@
                  PERFORM VARYING IDZ1    FROM    1   BY  1
                          UNTIL   IDZ1    >       WRK-2007-MAX
                    PERFORM VARYING IDZ2  FROM    1   BY  1
-                           UNTIL   IDZ2  >       5
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) start
+      *                     UNTIL   IDZ2  >       5
+                           UNTIL   IDZ2  >       10
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) end
                            OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
                      IF  RECE10-KOHNUM(IDX3)  
                                    =   WRK-2007-KOHNUM(IDZ1 IDZ2)
@@ -941,7 +946,10 @@
                                    TO  RECE10-KOHNUM (IDX3)
                        MOVE  WRK-2007-MEISYO (IDZ1)
                                    TO  WRK-KOHNAME
-                       MOVE  5             TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) start
+      *                 MOVE  5             TO  IDZ2
+                       MOVE  10            TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) end
                        MOVE  WRK-2007-MAX  TO  IDZ1
                      END-IF
                    END-PERFORM
