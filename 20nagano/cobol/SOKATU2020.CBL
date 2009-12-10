@@ -37,6 +37,8 @@
       *  01.00.05    吉川    08/09/10    シス管「2007」の公費まとめ対応
       *  01.00.06    吉川    09/12/01    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.07    吉川    09/12/07    レセ電時の紙レセの返戻は、
+      *                                  前月分としてまとめて印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -142,6 +144,10 @@
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) start
+           03  FLG-RECEDEN         PIC 9(01).
+           03  FLG-KOURECEDEN      PIC 9(01).
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -315,6 +321,14 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) start
+      *    レセプト・総括印刷情報
+           COPY    "CPSK2005.INC".
+      *
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           COPY    "CPSK200501.INC".
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
       *
       *=== シス管「2007」対応 by Yoshikawa(2008/09/10) start
       *    公費番号まとめ情報
@@ -578,6 +592,46 @@
       *
            MOVE    IDX1                    TO  WRK-2007-MAX
       *=== シス管「2007」対応 by Yoshikawa(2008/09/10) end
+      *
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) start
+      *    レセプト・総括印刷情報 レセ電か
+           INITIALIZE                  SYS-2005-REC
+           MOVE    "2005"              TO  SYS-2005-KANRICD
+           MOVE    "*"                 TO  SYS-2005-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2005-STYUKYMD(1:6)
+                                           SYS-2005-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2005-STYUKYMD(7:2)
+                                           SYS-2005-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2005-HOSPNUM
+           MOVE    SYS-2005-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2005-REC
+               MOVE    SYS-2005-KKHRECEKBN TO  FLG-RECEDEN
+           ELSE
+               MOVE    ZERO                TO  FLG-RECEDEN
+           END-IF 
+      *
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           INITIALIZE                     SYS-200501-REC
+           MOVE     "2005"        TO      SYS-200501-KANRICD
+           MOVE     "01"          TO      SYS-200501-KBNCD
+           MOVE     LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-200501-STYUKYMD(1:6)
+                                          SYS-200501-EDYUKYMD(1:6)
+           MOVE     "01"          TO      SYS-200501-STYUKYMD(7:2)
+                                          SYS-200501-EDYUKYMD(7:2)
+           MOVE     SPA-HOSPNUM   TO      SYS-200501-HOSPNUM
+           MOVE     SYS-200501-REC  TO      MCPDATA-REC
+           PERFORM  910-SYSKANRI-INV-SEC
+           IF       FLG-SYSKANRI       =  ZERO
+               MOVE    MCPDATA-REC   TO    SYS-200501-REC
+               MOVE    SYS-200501-KOUIKIRECEKBN TO  FLG-KOURECEDEN
+           ELSE
+               MOVE    ZERO                     TO  FLG-KOURECEDEN
+           END-IF 
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
       *
       *---(01.00.02) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -1146,17 +1200,36 @@
            INITIALIZE  SKT2020
       *
       *    診療年月
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) start
+           IF   WRK-PARA-SYOKBN  =  "2"
+           AND  FLG-RECEDEN  NOT =  ZERO
+             MOVE  LNK-PRTKANRI-SRYYM        TO  WRK-SRYYMD (1:6)
+             MOVE  "01"                      TO  WRK-SRYYMD (7:2)
+             IF  WRK-SMM  =  1
+               COMPUTE  WRK-SYY  =  WRK-SYY  -  1
+               MOVE  "12"                    TO  WRK-SMM
+             ELSE
+               COMPUTE  WRK-SMM  =  WRK-SMM  -  1
+             END-IF
+             PERFORM 31012-SEIWA-HEN-SEC
+             MOVE    WRK-HENYMDG(1:16)       TO  WRK-SRYYMWH2
+             MOVE    WRK-SRYYMWH2            TO  SKT2020-SRYYM
+           ELSE
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
       *---(01.00.04) LINE ADD START ------------------------------------
       *     MOVE    WRK-SRYYMWH             TO  SKT2020-SRYYM
-           IF  SKT2020TMP-SRYYM  =  ZERO
-             MOVE    WRK-SRYYMWH           TO  SKT2020-SRYYM
-           ELSE
-             MOVE    SKT2020TMP-SRYYM      TO  WRK-SYMD (1:6)
-             MOVE    "01"                  TO  WRK-SYMD (7:2)
-             PERFORM 31012-SEIWA-HEN-SEC
-             MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
-             MOVE    WRK-SRYYMWH2          TO  SKT2020-SRYYM
+             IF  SKT2020TMP-SRYYM  =  ZERO
+               MOVE    WRK-SRYYMWH           TO  SKT2020-SRYYM
+             ELSE
+               MOVE    SKT2020TMP-SRYYM      TO  WRK-SYMD (1:6)
+               MOVE    "01"                  TO  WRK-SYMD (7:2)
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE    WRK-HENYMDG(1:16)     TO  WRK-SRYYMWH2
+               MOVE    WRK-SRYYMWH2          TO  SKT2020-SRYYM
+             END-IF
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) start
            END-IF
+      *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    請求年月日
