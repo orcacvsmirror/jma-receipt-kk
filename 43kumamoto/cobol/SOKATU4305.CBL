@@ -31,6 +31,7 @@
       *  01.00.02    吉川    2008/08/12  在宅は合算して印字する
       *  01.00.03    吉川    2009/01/20  公費番号欄に法別番号ではなく
       *                                  保険番号が印字される不具合を修正
+      *  01.00.04    吉川    2009/12/10  食事がない場合でも生活療養を集計
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -924,6 +925,9 @@
       *    食事療養：件数
                ADD  1                 TO  SUM-S-KENSU(WRK-CNT)
                                           SUM-S-GKENSU
+      *=== 食事無しでも生活療養を修正 by Yoshikawa(2009/12/10) start
+             END-IF
+      *=== 食事無しでも生活療養を修正 by Yoshikawa(2009/12/10) end
       *    食事療養：金額
                ADD  RECE10-SHOKUJIRYOYOHI(1) 
                                       TO  SUM-S-KINGK(WRK-CNT)
@@ -932,7 +936,9 @@
                ADD  RECE10-SHOKUJIFTN(1)
                                       TO  SUM-S-FTNGK(WRK-CNT)
                                           SUM-S-GFTNGK
-             END-IF
+      *=== 食事無しでも生活療養を修正 by Yoshikawa(2009/12/10) start
+      *       END-IF
+      *=== 食事無しでも生活療養を修正 by Yoshikawa(2009/12/10) end
            END-IF    
       *
            MOVE    1               TO  FLG-UPD
