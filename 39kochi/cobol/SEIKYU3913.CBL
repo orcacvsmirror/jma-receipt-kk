@@ -42,6 +42,8 @@
       *                                    処理をする
       *  01.00.13    門間    09/02/25      SPA-AREAの初期化
       *  01.00.14    吉川    09/07/09      印字対象番号の追加（246,760）
+      *  01.00.15    吉川    09/12/10      「公費分点数１と同２の欄の点数」欄と
+      *                                    「老人分一部負担金」欄は印字不要
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -975,14 +977,18 @@
                MOVE   MF100-TENSU(IDX2)      TO  WRK-Z9
                MOVE   WRK-Z9                 TO  SC13-TENSU(IDX IDX2)
       *    公費分点数
-               MOVE   MF100-KOHTENSU(IDX2)   TO  WRK-Z9
-               MOVE   WRK-Z9                 TO  SC13-KOHTENSU(IDX IDX2)
+      *=== 印字不要 by Yoshikawa(2009/12/10) start
+      *         MOVE   MF100-KOHTENSU(IDX2)   TO  WRK-Z9
+      *         MOVE   WRK-Z9                 TO  SC13-KOHTENSU(IDX IDX2)
+      *=== 印字不要 by Yoshikawa(2009/12/10) end
       *    薬剤一部負担金
                MOVE   MF100-YKZFTN(IDX2)     TO  WRK-Z7
                MOVE   WRK-Z7                 TO  SC13-YKZFTN(IDX IDX2)
+      *=== 印字不要 by Yoshikawa(2009/12/10) start
       *    一部負担金
-               MOVE   MF100-ITBFTN(IDX2)     TO  WRK-Z9
-               MOVE   WRK-Z9                 TO  SC13-ITBFTN(IDX IDX2)
+      *         MOVE   MF100-ITBFTN(IDX2)     TO  WRK-Z9
+      *         MOVE   WRK-Z9                 TO  SC13-ITBFTN(IDX IDX2)
+      *=== 印字不要 by Yoshikawa(2009/12/10) end
              END-PERFORM
       *    食事件数
              MOVE     MF100-SKENSU           TO  WRK-Z5
