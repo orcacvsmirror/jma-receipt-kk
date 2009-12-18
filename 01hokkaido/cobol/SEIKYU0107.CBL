@@ -72,6 +72,8 @@
       *                        09/10/22    全国公費を持っていても
       *                                    窓口徴収金が発生しない場合は
       *                                    印字対象外とするように修正
+      *  01.00.19     吉川     09/12/17    全国公費と長期が適用となった場合
+      *                                    上限額の低い方に○を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -918,13 +920,19 @@
       *     IF     FLG-TYOKI             =      1   AND
       *            WRK-SEIKYUGK-G        >  10000
            IF     FLG-TYOKI             =      1
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+           AND    WRK-SEIKYUGK-G       >=  10000
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    1                 TO  MF100-TYOKI
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
       *       MOVE    10000             TO  WRK-SEIKYUGK-G
-             IF   WRK-SEIKYUGK-G        >  10000
-               MOVE    10000           TO  WRK-SEIKYUGK-G
-             END-IF
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+      *       IF   WRK-SEIKYUGK-G        >  10000
+      *         MOVE    10000           TO  WRK-SEIKYUGK-G
+      *       END-IF
+             MOVE    10000             TO  WRK-SEIKYUGK-G
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  MF100-TOTALTEN
              IF      MF100-FTNMONEY     >  10000
@@ -942,13 +950,19 @@
       *     IF     FLG-TYOKI             =      2   AND
       *            WRK-SEIKYUGK-G        >  20000
            IF     FLG-TYOKI             =      2
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+           AND    WRK-SEIKYUGK-G       >=  20000
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    1                 TO  MF100-TYOKI
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
       *       MOVE    20000             TO  WRK-SEIKYUGK-G
-             IF   WRK-SEIKYUGK-G        >  20000
-               MOVE    20000           TO  WRK-SEIKYUGK-G
-             END-IF
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+      *       IF   WRK-SEIKYUGK-G        >  20000
+      *         MOVE    20000           TO  WRK-SEIKYUGK-G
+      *       END-IF
+             MOVE    20000             TO  WRK-SEIKYUGK-G
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  MF100-TOTALTEN
              IF      MF100-FTNMONEY     >  20000
@@ -1544,7 +1558,10 @@
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
                MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
-             END-IF
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+      *       END-IF
+             ELSE
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *
              EVALUATE  MF100-KESE-FLG
              WHEN  "010"
@@ -1566,6 +1583,9 @@
                MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
              END-EVALUATE
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+             END-IF
+      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *
              IF    (MF100-KOHNUM  =  "243"  AND
                     MF100-ETCFTNMONEY   >  0) OR
