@@ -34,6 +34,8 @@
       *  01.00.02    内田    08/08/07    帳票様式の変更に伴う修正
       *                                  診療科は旧総合病院の場合に印字
       *  01.00.03    門間    09/01/20    SPA-AREAの初期化
+      *  01.00.04    吉川    09/12/18    保険番号143は上限額を超えたら
+      *                                  印字対象外とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -148,6 +150,9 @@
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-KOHID             PIC 9(10).
            03  WRK-AMARI             PIC 9(02).
+      *=== 143は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+           03  WRK-CHK-FTNMONEY      PIC 9(09).
+      *=== 143は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
       *
            03  WRK-MAE-INPUT       PIC X(200).
            03  WRK-OUT-INPUT       PIC X(200).
@@ -625,6 +630,9 @@
            COMPUTE IDY  =  IDZ  +  1
            MOVE  RECE02-JNISSU      (IDY)  TO  MF100-JNISSU
            MOVE  RECE02-TOTALTEN    (IDY)  TO  MF100-TOTALTEN
+      *=== 143は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+           MOVE  RECE02-FTNMONEY    (IDY)  TO  WRK-CHK-FTNMONEY
+      *=== 143は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
       *
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -641,12 +649,25 @@
            END-IF
            PERFORM  920-SYUNOU-SET-SEC
       *
+      *=== 143は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+      *    143使用者で一部負担金が21000円以上の場合は対象外とする
+           IF  (MF100-KOHNUM  =  "143")  AND
+               (WRK-CHK-FTNMONEY  >=  21000)
+             DISPLAY "対象外患者番号=" RECE02-PTNUM
+                     "公費番号="       MF100-KOHNUM
+                     "点数="           MF100-TOTALTEN
+                     "一部負担金="     WRK-CHK-FTNMONEY
+           ELSE
+      *=== 143は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
       *    総合計加算
-           ADD    1                   TO    SUM-GKENSU
-           ADD    MF100-TOTALTEN      TO    SUM-GTENSU
-           ADD    MF100-KESETEN       TO    SUM-GKESETEN
+             ADD    1                   TO    SUM-GKENSU
+             ADD    MF100-TOTALTEN      TO    SUM-GTENSU
+             ADD    MF100-KESETEN       TO    SUM-GKESETEN
       *
-           WRITE  MF100-REC
+             WRITE  MF100-REC
+      *=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+           END-IF
+      *=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
       *
            .
        20011-SYUKEI-EXT.
