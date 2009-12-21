@@ -34,6 +34,8 @@
       *  01.00.02    内田    08/08/07    診療科は旧総合病院の場合に印字
       *  01.00.03    門間    09/01/20    SPA-AREAの初期化
       *  01.00.04    吉川    09/11/11    印字対象番号の追加（442）
+      *  01.00.05    吉川    09/12/18    保険番号342,442は上限額を超えたら
+      *                                  印字対象外とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -644,12 +646,25 @@
                      "点数="           MF100-TOTALTEN
                      "一部負担金="     WRK-CHK-FTNMONEY
            ELSE
+      *=== 342,442は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+      *    342,442使用者で一部負担金が21000円以上の場合は対象外とする
+             IF  (MF100-KOHNUM  =  "342" OR "442")  AND
+                 (WRK-CHK-FTNMONEY  >=  21000)
+               DISPLAY "対象外患者番号=" RECE02-PTNUM
+                       "公費番号="       MF100-KOHNUM
+                       "点数="           MF100-TOTALTEN
+                       "一部負担金="     WRK-CHK-FTNMONEY
+             ELSE
+      *=== 342,442は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
       *    総合計加算
-             ADD    1                   TO    SUM-GKENSU
-             ADD    MF100-TOTALTEN      TO    SUM-GTENSU
-             ADD    MF100-KESETEN       TO    SUM-GKESETEN
+               ADD    1                   TO    SUM-GKENSU
+               ADD    MF100-TOTALTEN      TO    SUM-GTENSU
+               ADD    MF100-KESETEN       TO    SUM-GKESETEN
       *
-             WRITE  MF100-REC
+               WRITE  MF100-REC
+      *=== 342,442は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+             END-IF
+      *=== 342,442は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
            END-IF
       *
            .
