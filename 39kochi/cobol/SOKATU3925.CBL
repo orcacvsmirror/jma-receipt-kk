@@ -30,6 +30,8 @@
       *  01.00.01    吉川    2008/05/14  保険者番号毎に集計する
       *                                  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2010/01/07  シス管「2007」のまとめ公費で
+      *                                  6つ目以降がまとまらない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -367,7 +369,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU3925"    TO  JOB-PGID
-           MOVE    "県外用・広域連合・国保請求書"
+           MOVE    "後期高齢者請求書"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -914,7 +916,10 @@
                PERFORM VARYING IDZ1    FROM    1   BY  1
                        UNTIL   IDZ1    >       WRK-2007-MAX
                  PERFORM VARYING IDZ2  FROM    1   BY  1
-                         UNTIL   IDZ2  >       5
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) start
+      *                   UNTIL   IDZ2  >       5
+                         UNTIL   IDZ2  >       10
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) end
                          OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
                    IF  RECE10-KOHNUM(IDZ)  
                                        =   WRK-2007-KOHNUM(IDZ1 IDZ2)
@@ -922,7 +927,10 @@
                                          TO  RECE10-KOHNUM (IDZ)
                      MOVE  WRK-2007-MEISYO (IDZ1)
                                          TO  WRK-MEISYO
-                     MOVE  5             TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) start
+      *               MOVE  5             TO  IDZ2
+                     MOVE  10            TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) end
                      MOVE  WRK-2007-MAX  TO  IDZ1
                    END-IF
                  END-PERFORM
@@ -1287,26 +1295,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "後期高齢者請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "後期高齢者請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "後期高齢者請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "後期高齢者請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "後期高齢者請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "後期高齢者請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
