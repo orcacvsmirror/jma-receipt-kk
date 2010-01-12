@@ -29,6 +29,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/06/24  まとめ公費を使用した時の
       *                                  まとめ公費以外の公費名称修正
+      *  01.00.02    吉川    2010/01/07  シス管「2007」のまとめ公費で
+      *                                  6つ目以降がまとまらない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -951,7 +953,10 @@
                PERFORM VARYING IDZ1    FROM    1   BY  1
                        UNTIL   IDZ1    >       WRK-2007-MAX
                  PERFORM VARYING IDZ2  FROM    1   BY  1
-                         UNTIL   IDZ2  >       5
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) start
+      *                   UNTIL   IDZ2  >       5
+                         UNTIL   IDZ2  >       10
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) end
                          OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
                    IF  RECE10-KOHNUM(IDZ)  
                                        =   WRK-2007-KOHNUM(IDZ1 IDZ2)
@@ -959,7 +964,10 @@
                                          TO  RECE10-KOHNUM (IDZ)
                      MOVE  WRK-2007-MEISYO (IDZ1)
                                          TO  WRK-MEISYO
-                     MOVE  5             TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) start
+      *               MOVE  5             TO  IDZ2
+                     MOVE  10            TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2010/01/07) end
                      MOVE  WRK-2007-MAX  TO  IDZ1
                    END-IF
                  END-PERFORM
