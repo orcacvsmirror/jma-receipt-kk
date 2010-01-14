@@ -37,6 +37,8 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.04    門間    08/11/20    SPA-AREA初期化
+      *  01.00.05    吉川    10/01/13    区切り線がある場合、傷病名欄と
+      *                                  転帰欄の番号がずれる不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1706,29 +1708,44 @@
                    WHEN    "1"
       *                 MOVE    WRK-Z2  TO  WRK-TAIHI-TENKI1(WRK-LINEBYO)
                        ADD     1       TO  CNT-TENKI1
-                       MOVE    WRK-LINEBYO TO  WRK-Z2
+      *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) start
+      *                 MOVE    WRK-LINEBYO TO  WRK-Z2
+      *                 STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
+      *                             INTO    WRK-TAIHI-TENKI1(CNT-TENKI1)
+                       MOVE    CNT-TENKI1 TO  WRK-Z2
                        STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
-                                   INTO    WRK-TAIHI-TENKI1(CNT-TENKI1)
+                                   INTO    WRK-TAIHI-TENKI1(WRK-LINEBYO)
+      *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) end
                        END-STRING
                    WHEN    "2"
       *                 MOVE    WRK-Z2  TO  WRK-TAIHI-TENKI2(WRK-LINEBYO)
                        ADD     1       TO  CNT-TENKI2
-                       MOVE    WRK-LINEBYO TO  WRK-Z2
+      *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) start
+      *                 MOVE    WRK-LINEBYO TO  WRK-Z2
+      *                 STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **                             INTO    WRK-TAIHI-TENKI1(CNT-TENKI2)
+      *                             INTO    WRK-TAIHI-TENKI2(CNT-TENKI2)
+      **---(01.00.02) LINE ADD END   ------------------------------------
+                       MOVE    CNT-TENKI2 TO  WRK-Z2
                        STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *                             INTO    WRK-TAIHI-TENKI1(CNT-TENKI2)
-                                   INTO    WRK-TAIHI-TENKI2(CNT-TENKI2)
-      *---(01.00.02) LINE ADD END   ------------------------------------
+                                   INTO    WRK-TAIHI-TENKI2(WRK-LINEBYO)
+      *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) end
                        END-STRING
                    WHEN    "3"
       *                 MOVE    WRK-Z2  TO  WRK-TAIHI-TENKI3(WRK-LINEBYO)
                        ADD     1       TO  CNT-TENKI3
-                       MOVE    WRK-LINEBYO TO  WRK-Z2
+      *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) start
+      *                 MOVE    WRK-LINEBYO TO  WRK-Z2
+      *                 STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **                             INTO    WRK-TAIHI-TENKI1(CNT-TENKI3)
+      *                             INTO    WRK-TAIHI-TENKI3(CNT-TENKI3)
+      **---(01.00.02) LINE ADD END   ------------------------------------
+                       MOVE    CNT-TENKI3 TO  WRK-Z2
                        STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *                             INTO    WRK-TAIHI-TENKI1(CNT-TENKI3)
-                                   INTO    WRK-TAIHI-TENKI3(CNT-TENKI3)
-      *---(01.00.02) LINE ADD END   ------------------------------------
+                                   INTO    WRK-TAIHI-TENKI3(WRK-LINEBYO)
+      *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) end
                        END-STRING
                    END-EVALUATE
                END-IF
