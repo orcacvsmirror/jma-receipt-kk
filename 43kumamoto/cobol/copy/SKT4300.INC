@@ -41,3 +41,7 @@
               03  SKT4300-K-SKENSU    PIC X(4).
               03  SKT4300-K-SKINGK    PIC X(7).
               03  SKT4300-K-SFTNGK    PIC X(7).
+      *=== ‘•ÛE‘ŞE‚Ì‘Œ”‚ğˆóš by Yoshikawa(2010/01/14) start
+            02  SKT4300-SOUKENSU-TBL    OCCURS  3 TIMES.
+              03  SKT4300-SOUKENSU    PIC X(7).
+      *=== ‘•ÛE‘ŞE‚Ì‘Œ”‚ğˆóš by Yoshikawa(2010/01/14) end

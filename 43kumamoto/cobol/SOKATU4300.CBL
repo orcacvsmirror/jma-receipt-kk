@@ -40,6 +40,7 @@
       *  01.00.07    門間    09/01/19    シス管「2007」公費まとめ対応
       *  01.00.08    吉川    10/01/07    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.09    吉川    10/01/14    国保・退職者の総件数を印字する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -247,6 +248,10 @@
            03  SUM-SSKINGK    PIC 9(07).
            03  SUM-SSFTNGK    PIC 9(07).
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 国保・退職の総件数を印字 by Yoshikawa(2010/01/14) start
+           03  SUM-SOUKENSU-TBL  OCCURS 3.
+               05  SUM-SOUKENSU    PIC 9(06).
+      *=== 国保・退職の総件数を印字 by Yoshikawa(2010/01/14) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -1683,6 +1688,22 @@
            ADD       SKT4300TMP-TENSU(IDX2 1)   TO  SUM-TENSU(IDX2 1)
            ADD       SKT4300TMP-TENSU(IDX2 2)   TO  SUM-TENSU(IDX2 2)
       *
+      *=== 国保・退職の総件数を印字 by Yoshikawa(2010/01/14) start
+      *    総件数
+           IF  IDX2  <  5
+      *      国保
+             ADD     SKT4300TMP-KENSU(IDX2 1)   TO  SUM-SOUKENSU(1)
+             ADD     SKT4300TMP-KENSU(IDX2 2)   TO  SUM-SOUKENSU(1)
+           ELSE
+      *      退職                                         
+             ADD     SKT4300TMP-KENSU(IDX2 1)   TO  SUM-SOUKENSU(2)
+             ADD     SKT4300TMP-KENSU(IDX2 2)   TO  SUM-SOUKENSU(2)
+           END-IF
+      *    国保＋退職
+           ADD       SKT4300TMP-KENSU(IDX2 1)   TO  SUM-SOUKENSU(3)
+           ADD       SKT4300TMP-KENSU(IDX2 2)   TO  SUM-SOUKENSU(3)
+      *=== 国保・退職の総件数を印字 by Yoshikawa(2010/01/14) end
+      *
            .
        3203-BODY-HEN-EXT.
            EXIT.
@@ -1900,6 +1921,14 @@
            MOVE      SUM-SSFTNGK     TO  WRK-Z7
            MOVE      WRK-Z7     TO    SKT4300-G-SSFTNGK
       *
+      *=== 国保・退職の総件数を印字 by Yoshikawa(2010/01/14) start
+      *    総件数
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >     3
+              MOVE   SUM-SOUKENSU(IDX4)  TO  WRK-Z7
+              MOVE   WRK-Z7              TO  SKT4300-SOUKENSU(IDX4)
+           END-PERFORM
+      *=== 国保・退職の総件数を印字 by Yoshikawa(2010/01/14) end
       *
            .
        3213-SHOKEI-HEN-EXT.
