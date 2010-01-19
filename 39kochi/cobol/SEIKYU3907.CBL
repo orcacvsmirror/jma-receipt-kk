@@ -45,6 +45,8 @@
       *  01.00.07    門間    09/02/25    SPA-AREAの初期化
       *  01.00.08    吉川    09/07/09    実日数がゼロの場合は0を印字
       *                                  印字対象番号の追加（246）
+      *  01.00.09    吉川    10/01/15    診療年月欄には当月ではなく
+      *                                  診療年月を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -807,7 +809,13 @@
       *
            INITIALIZE                             SC07
       *    診療年月 
-           MOVE     WRK-SRYYMWH              TO   SC07-PRTYM
+      *=== 診療年月欄は診療年月を印字 by Yoshikawa(2010/01/15) start
+      *     MOVE     WRK-SRYYMWH              TO   SC07-PRTYM
+           MOVE    MF100-SRYYM               TO  WRK-SYMD (1:6)
+           MOVE    "01"                      TO  WRK-SYMD (7:2)
+           PERFORM 31012-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMDG(1:16)         TO  SC07-PRTYM
+      *=== 診療年月欄は診療年月を印字 by Yoshikawa(2010/01/15) end
       *    印刷日付
            MOVE     WRK-SEIYMDWH             TO   SC07-SEIYMD
       *
