@@ -40,6 +40,8 @@
       *  01.00.08    内田    09/05/29  平成２１年５月特定疾患改正の対応
       *                                （対応条件に特疾・小児特定の使用有無
       *                                の判定追加）←後にパッチが出る
+      *  01.00.09    吉川    10/01/19  長期が助成する分まで請求金額欄に
+      *                                加算されてしまう不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -110,6 +112,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
+           03  FLG-TYOKIFTN   PIC 9(01).
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -1590,6 +1595,9 @@
       *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/29) start
                                    WRK-TOKUTEI
       *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/29) end
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
+                                   FLG-TYOKIFTN
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -1641,9 +1649,22 @@
                END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
+      *    現状、地方公費＋長期の場合、保険助成後の金額を地方公費が助成
+      *    してしまう為、長期の計算負担金がゼロの場合は長期が助成したと判断する
+               IF  (SYU-KOH-HKNNUM(IDX)  =  "972" OR "974")
+               AND (SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO)
+                 MOVE      1       TO      FLG-TYOKIFTN
+               END-IF
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
+      *
            END-PERFORM
       *
            IF  FLG-HEIYOU      =   ZERO
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
+      *      長期助成有りの場合、請求金額に加算しない
+             IF  FLG-TYOKIFTN  =   ZERO
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
                IF  RECE02-FTNMONEY(1)  =   ZERO
                    IF  RECE02-RJNHKNNUM    NOT =   SPACE
                        MOVE    SYU-KOH-COMPFTN-ENTANI(1)
@@ -1659,6 +1680,11 @@
                        MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
                    END-IF
                END-IF
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
+             ELSE
+                MOVE    ZERO                       TO  WRK-SEIKYUGK
+             END-IF
+      *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
            END-IF
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
