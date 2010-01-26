@@ -38,6 +38,7 @@
       *                                  SPA-AREA初期化
       *  01.00.06    吉川    09/02/16    公費の助成がない場合は印字しない
       *  01.00.07    吉川    09/10/28    対象公費番号追加(681)
+      *  01.00.08    吉川    10/01/26    190は助成の有無に関わらず記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -627,6 +628,12 @@
                    END-IF
                    PERFORM  920-SYUNOU-SET-SEC
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/16) end
+      *
+      *=== 190は助成の有無に関わらず記載 by Yoshikawa(2010/01/26) start
+                   IF  RECE02-KOHNUM (IDX)  = "190"
+                     MOVE  ZERO                    TO  FLG-ERR
+                   END-IF
+      *=== 190は助成の有無に関わらず記載 by Yoshikawa(2010/01/26) end
       *
                    PERFORM 200111-HKNJANUM-CHK-SEC
                    IF      FLG-ERR     =   ZERO
