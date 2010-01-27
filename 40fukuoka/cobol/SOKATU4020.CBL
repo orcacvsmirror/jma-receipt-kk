@@ -55,6 +55,7 @@
       *  01.00.16    吉川    09/10/30    印字対象番号の追加（690,780）
       *  01.00.17    吉川    09/11/06    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.18    吉川    10/01/22    オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -228,6 +229,7 @@
            03  WRK-Z13             PIC Z,ZZZ,ZZZ,ZZZ.
       *
            03  WRK-RECEERR         PIC X(200).
+      *
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
@@ -2322,6 +2324,13 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/01/22) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/01/22) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
