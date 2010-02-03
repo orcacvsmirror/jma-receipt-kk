@@ -36,6 +36,8 @@
       *                                  SPA-AREA初期化
       *                                  長期の判定修正
       *  01.00.03    内田    08/04/23    帳票様式の変更に伴う修正
+      *  01.00.04    吉川    10/02/02    公費の種類毎に改頁しないように修正
+      *                                  公費の助成がない場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -195,10 +197,14 @@
        01  KEY-AREA  VALUE   LOW-VALUE.
            03  KEY-NEW.
                05  KEY-N-NYUGAIKBN  PIC X(01).
-               05  KEY-N-KOHNUM     PIC X(03).
+      *=== 公費の種類毎に改頁しない by Yoshikawa(2010/02/02) start
+      *         05  KEY-N-KOHNUM     PIC X(03).
+      *=== 公費の種類毎に改頁しない by Yoshikawa(2010/02/02) end
            03  KEY-OLD.
                05  KEY-O-NYUGAIKBN  PIC X(01).
-               05  KEY-O-KOHNUM     PIC X(03).
+      *=== 公費の種類毎に改頁しない by Yoshikawa(2010/02/02) start
+      *         05  KEY-O-KOHNUM     PIC X(03).
+      *=== 公費の種類毎に改頁しない by Yoshikawa(2010/02/02) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -655,6 +661,9 @@
            MOVE    MF100-KOHID             TO  WRK-KOHID
            MOVE    ZERO                    TO  WRK-SEIKYUGK-G
                                                FLG-TYOKI
+      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
+                                               FLG-ERR
+      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
            DISPLAY "集計開始 入外区分=" RECE02-NYUGAIKBN
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -698,6 +707,7 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
                MOVE    WRK-SEIKYUGK-G  TO  MF100-ITBFTN
+      *
       *    特定疾患併用判定
       *---(01.00.02) LINE ADD START ------------------------------------
       *         IF  MF100-TYOKI         =   3
@@ -712,8 +722,12 @@
            END-IF
       *
       *
-      *    点数が０のデータは対象外
-           IF      MF100-TOTALTEN >   ZERO
+      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
+      **    点数が０のデータは対象外
+      *     IF      MF100-TOTALTEN >   ZERO
+      *    地方公費の助成がないデータは対象外
+           IF      FLG-ERR  =  ZERO
+      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
                WRITE  MF100-REC
                ADD  1  TO  CNT-MF100
            ELSE
@@ -1132,6 +1146,13 @@
                                                TO  WRK-SEIKYUGK
                    END-IF
                END-IF
+      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
+           ELSE
+      *        ３併で地方公費の助成があるかどうか
+               IF  WRK-SEIKYUGK  =  ZERO
+                   MOVE    1                   TO  FLG-ERR
+               END-IF
+      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
            END-IF
       *
            ADD WRK-SEIKYUGK                    TO  WRK-SEIKYUGK-G
@@ -1306,7 +1327,9 @@
                AT  END
                    MOVE  1  TO  FLG-PRINT
              NOT AT  END
-               MOVE  MF100-KOHNUM-KEY  TO  KEY-N-KOHNUM
+      *=== 公費の種類毎に改頁しない by Yoshikawa(2010/02/02) start
+      *         MOVE  MF100-KOHNUM-KEY  TO  KEY-N-KOHNUM
+      *=== 公費の種類毎に改頁しない by Yoshikawa(2010/02/02) end
                MOVE  MF100-NYUGAIKBN   TO  KEY-N-NYUGAIKBN
                DISPLAY "患者番号=" MF100-PTNUM
                        "公費番号=" MF100-KOHNUM
