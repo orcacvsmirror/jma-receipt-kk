@@ -36,6 +36,7 @@
       *  01.00.04    内田    08/08/13    後期高齢者のみの場合でも印字する
       *  01.00.05    吉川    09/12/07    レセ電時の紙レセの返戻は、
       *                                  前月分としてまとめて印字する
+      *  01.00.06    吉川    10/02/02    兵庫県の広域連合名が印字されないのを修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1246,6 +1247,9 @@
            WHEN  "25"  MOVE  "滋賀県"    TO  WRK-KENNAME
            WHEN  "26"  MOVE  "京都府"    TO  WRK-KENNAME
            WHEN  "27"  MOVE  "大阪府"    TO  WRK-KENNAME
+      *=== 兵庫県の広域連合名を印字 by Yoshikawa(2010/02/02) start
+           WHEN  "28"  MOVE  "兵庫県"    TO  WRK-KENNAME
+      *=== 兵庫県の広域連合名を印字 by Yoshikawa(2010/02/02) end
            WHEN  "29"  MOVE  "奈良県"    TO  WRK-KENNAME
            WHEN  "30"  MOVE  "和歌山県"  TO  WRK-KENNAME
            WHEN  "31"  MOVE  "鳥取県"    TO  WRK-KENNAME
