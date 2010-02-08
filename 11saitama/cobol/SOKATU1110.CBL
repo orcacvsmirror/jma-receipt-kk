@@ -46,6 +46,8 @@
       *  01.00.13    吉川    09/10/16   印字対象番号の追加（382）
       *  01.00.14    吉川    09/11/18   シス管「2007」のまとめ公費で
       *                                 6つ目以降がまとまらない不具合を修正
+      *  01.00.15    吉川    10/02/04   シス管「2010」の公費再掲欄への
+      *                                 地方公費記載設定対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -149,9 +151,15 @@
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
            03  FLG-RECE02          PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+           03  FLG-2010            PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
       *
       *    添字領域
        01  IDX-AREA.
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+           03  IDX                 PIC 9(04).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
@@ -242,6 +250,13 @@
            03  WRK-2007-MAX          PIC 9(03).
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
       *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+       01  WRK-2010-AREA.
+           03  WRK-2010-TBL          OCCURS  100.
+               05  WRK-2010-KOHNUM   PIC X(03).
+           03  WRK-2010-MAX          PIC 9(03).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -322,6 +337,11 @@
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+      *    地方公費保険番号付加情報
+           COPY    "CPSK2010.INC".
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -583,6 +603,53 @@
       *
            MOVE    IDX1                    TO  WRK-2007-MAX
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+      *    請求書公費再掲欄記載情報
+           INITIALIZE                      WRK-2010-AREA
+      *
+           INITIALIZE                      SYS-2010-REC
+           MOVE    "2010"              TO  SYS-2010-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2010-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2010-STYUKYMD (7:2)
+           MOVE    SYS-2010-STYUKYMD   TO  SYS-2010-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2010-HOSPNUM
+           MOVE    SYS-2010-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX            >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2010-REC
+               IF    ( SYS-2010-SAIKEIKBN  =   "1"         )
+               AND   ( SYS-2010-SAIKEI-TAIKBN
+                                           =   "0" OR  "1" )
+                   ADD     1                   TO  IDX
+                   MOVE    SYS-2010-KBNCD(1:3) TO WRK-2010-KOHNUM (IDX)
+               END-IF
+      *
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX                 TO  WRK-2010-MAX
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -948,69 +1015,87 @@
                    MOVE    "051"   TO  RECE10-KOHNUM(IDX3)
                END-IF
       *
-      *=== シス管「2007」対応 by Yoshikawa(2008/10/08) start
-      *        公費番号まとめ情報があるとき
-               IF  WRK-2007-MAX  >  ZERO
-                 MOVE  SPACE     TO  WRK-KOHNAME
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+               MOVE    ZERO                  TO  FLG-2010
+      *
+      *        請求書公費再掲欄記載情報があるとき
+               IF  WRK-2010-MAX  >  ZERO
                  PERFORM VARYING IDZ1    FROM    1   BY  1
-                         UNTIL   IDZ1    >       WRK-2007-MAX
-                   PERFORM VARYING IDZ2  FROM    1   BY  1
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *                     UNTIL   IDZ2  >       5
-                           UNTIL   IDZ2  >       10
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                           OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
-                     IF  RECE10-KOHNUM(IDX3)  
-                                   =   WRK-2007-KOHNUM(IDZ1 IDZ2)
-                       MOVE  WRK-2007-KOHNUM(IDZ1 1)
-                                   TO  RECE10-KOHNUM (IDX3)
-                       MOVE  WRK-2007-MEISYO (IDZ1)
-                                   TO  WRK-KOHNAME
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *                 MOVE  5             TO  IDZ2
-                       MOVE  10            TO  IDZ2
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                       MOVE  WRK-2007-MAX  TO  IDZ1
-                     END-IF
-                   END-PERFORM
+                         UNTIL   IDZ1    >       WRK-2010-MAX
+                   IF  RECE10-KOHNUM(IDX3)  =  WRK-2010-KOHNUM(IDZ1)
+                     MOVE    1               TO  FLG-2010
+                     MOVE    WRK-2010-MAX    TO  IDZ1
+                   END-IF
                  END-PERFORM
                END-IF
+      *
+               IF  FLG-2010  =  ZERO
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/08) start
+      *          公費番号まとめ情報があるとき
+                 IF  WRK-2007-MAX  >  ZERO
+                   MOVE  SPACE     TO  WRK-KOHNAME
+                   PERFORM VARYING IDZ1    FROM    1   BY  1
+                           UNTIL   IDZ1    >       WRK-2007-MAX
+                     PERFORM VARYING IDZ2  FROM    1   BY  1
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
+      *                       UNTIL   IDZ2  >       5
+                             UNTIL   IDZ2  >       10
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
+                             OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                       IF  RECE10-KOHNUM(IDX3)  
+                                     =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                         MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                     TO  RECE10-KOHNUM (IDX3)
+                         MOVE  WRK-2007-MEISYO (IDZ1)
+                                     TO  WRK-KOHNAME
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
+      *                   MOVE  5             TO  IDZ2
+                         MOVE  10            TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
+                         MOVE  WRK-2007-MAX  TO  IDZ1
+                       END-IF
+                     END-PERFORM
+                   END-PERFORM
+                 END-IF
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
       *
-               DISPLAY "RECE10-PTNUM =" RECE10-PTNUM
-               DISPLAY "RECE10-KOHNUM =" RECE10-KOHNUM(IDX3)
-      *        全国共通公費と１４１のみを対象にする
-      *        川口市（181等）春日部市（281）も印字対象
-               IF      RECE10-KOHNUM(IDX3)(1:1)    =   "0"
-      *---(01.00.04) LINE ADD START ------------------------------------
-                   OR  RECE10-KOHNUM(IDX3)  =  "141"
-      *---(01.00.04) LINE ADD END   ------------------------------------
-      *---(01.00.05) LINE ADD START ------------------------------------
-                   OR  RECE10-KOHNUM(IDX3)  =  "181"
-                   OR  RECE10-KOHNUM(IDX3)  =  "182"
-                   OR  RECE10-KOHNUM(IDX3)  =  "183"
-                   OR  RECE10-KOHNUM(IDX3)  =  "281"
-      *---(01.00.05) LINE ADD END   ------------------------------------
-      *---(01.00.09) LINE ADD START ------------------------------------
-                   OR  RECE10-KOHNUM(IDX3)  =  "481"
-                   OR  RECE10-KOHNUM(IDX3)  =  "482"
-                   OR  RECE10-KOHNUM(IDX3)  =  "483"
-                   OR  RECE10-KOHNUM(IDX3)  =  "583"
-      *---(01.00.09) LINE ADD END   ------------------------------------
-      *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
-                   OR  RECE10-KOHNUM(IDX3)  =  "581"
-      *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
-      *=== 印字対象番号追加 by Uchida(2009/06/17) start
-                   OR  RECE10-KOHNUM(IDX3)  =  "381"
-      *=== 印字対象番号追加 by Uchida(2009/06/17) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
-                   OR  RECE10-KOHNUM(IDX3)  =  "352"
-                   OR  RECE10-KOHNUM(IDX3)  =  "353"
-                   OR  RECE10-KOHNUM(IDX3)  =  "354"
-      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
-                   OR  RECE10-KOHNUM(IDX3)  =  "382"
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+      *         DISPLAY "RECE10-PTNUM =" RECE10-PTNUM
+      *         DISPLAY "RECE10-KOHNUM =" RECE10-KOHNUM(IDX3)
+      **        全国共通公費と１４１のみを対象にする
+      **        川口市（181等）春日部市（281）も印字対象
+      *         IF      RECE10-KOHNUM(IDX3)(1:1)    =   "0"
+      **---(01.00.04) LINE ADD START ------------------------------------
+      *             OR  RECE10-KOHNUM(IDX3)  =  "141"
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *             OR  RECE10-KOHNUM(IDX3)  =  "181"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "182"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "183"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "281"
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **---(01.00.09) LINE ADD START ------------------------------------
+      *             OR  RECE10-KOHNUM(IDX3)  =  "481"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "482"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "483"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "583"
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      **=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
+      *             OR  RECE10-KOHNUM(IDX3)  =  "581"
+      **=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      **=== 印字対象番号追加 by Uchida(2009/06/17) start
+      *             OR  RECE10-KOHNUM(IDX3)  =  "381"
+      **=== 印字対象番号追加 by Uchida(2009/06/17) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
+      *             OR  RECE10-KOHNUM(IDX3)  =  "352"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "353"
+      *             OR  RECE10-KOHNUM(IDX3)  =  "354"
+      **=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
+      *             OR  RECE10-KOHNUM(IDX3)  =  "382"
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
       *
                    PERFORM VARYING IDX4    FROM    1   BY  1
                            UNTIL   IDX4    >       20
@@ -1083,7 +1168,12 @@
       *                 PERFORM 2101-SYUKEI-SEC
       *             END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
-               END-IF
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+      *         END-IF
+               ELSE
+                   MOVE    1                   TO  FLG-UPD
+               END-IF     
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
            END-PERFORM
       *
            .
