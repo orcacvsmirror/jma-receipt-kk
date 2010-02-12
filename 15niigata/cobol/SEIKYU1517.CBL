@@ -54,6 +54,8 @@
       *                                  負担金が印字されないのを修正
       *  01.00.09    内田    09/01/28    助成の有無の判定修正
       *                                  SPA-AREA初期化
+      *  01.00.10    吉川    10/02/08    複数科診療の場合、患者負担額が
+      *                                  四捨五入されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2054,8 +2056,18 @@
                    IF  SYU-GRP-DENPNUM      =  KASAN-DENPNUM(IDX1)
                    OR  KASAN-DENPNUM (IDX1)  =  ZERO
                      MOVE  SYU-GRP-DENPNUM    TO KASAN-DENPNUM(IDX1)
-                     ADD   SYU-KOH-COMPFTN(IDX)
-                                              TO KASAN-COMPFTN(IDX1)
+      *=== 複数科診療時の四捨五入修正 by Yoshikawa(2010/02/08) start
+      *               ADD   SYU-KOH-COMPFTN(IDX)
+      *                                        TO KASAN-COMPFTN(IDX1)
+                     IF  SYU-KOH-HKNFTNMONEY(IDX)  =  ZERO
+                       COMPUTE  WRK-KEISAN2  =
+                               (SYU-KOH-COMPFTN(IDX) + 5)  /  10
+                       COMPUTE  WRK-KEISAN2  =  WRK-KEISAN2  *  10
+                     ELSE
+                       ADD  SYU-KOH-HKNFTNMONEY(IDX)  TO  WRK-KEISAN2
+                     END-IF
+                     ADD  WRK-KEISAN2         TO  KASAN-COMPFTN(IDX1)
+      *=== 複数科診療時の四捨五入修正 by Yoshikawa(2010/02/08) end
                      MOVE  4                     TO  IDX1
                    END-IF
                  END-PERFORM
