@@ -61,6 +61,8 @@
       *                                   旧様式で帳票を分けるように修正
       *  01.02.12    吉川       09/11/18  シス管「2007」のまとめ公費で
       *                                   6つ目以降がまとまらない不具合を修正
+      *  01.02.13    吉川       10/02/10  公費名称はシス管「2007」の
+      *                                   「表示名称２」を使用する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -478,7 +480,14 @@
                MOVE    MCPDATA-REC         TO  SYS-2007-REC
       *
                ADD     1                   TO  IDX
-               MOVE    SYS-2007-MEISYO (1) TO  WRK-2007-MEISYO   (IDX)
+      *=== 表示名称２を使用 by Yoshikawa(2010/02/10) start
+      *         MOVE    SYS-2007-MEISYO (1) TO  WRK-2007-MEISYO   (IDX)
+               IF      SYS-2007-MEISYO (2) =   SPACE
+                   MOVE    SYS-2007-MEISYO (1) TO  WRK-2007-MEISYO (IDX)
+               ELSE
+                   MOVE    SYS-2007-MEISYO (2) TO  WRK-2007-MEISYO (IDX)
+               END-IF
+      *=== 表示名称２を使用 by Yoshikawa(2010/02/10) end
                PERFORM VARYING IDY FROM    1   BY  1
                        UNTIL   IDY >       10
                        OR      SYS-2007-KOHNUM (IDY)   =   SPACE
