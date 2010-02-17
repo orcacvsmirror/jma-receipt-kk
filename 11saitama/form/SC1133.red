@@ -965,7 +965,7 @@
         <point val="16.1931,17.299"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.6317,17.289;16.2032,17.309"/>
+        <rectangle val="12.6317,17.289;16.2031,17.309"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="16.1931,17.299"/>
@@ -1402,7 +1402,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#178;&#243;&#202;&#172;#</string>
+            <string>#&#198;&#252;&#202;&#172;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -17307,7 +17307,7 @@
           <point val="3.40674,8.02347"/>
         </attribute>
         <attribute name="obj_bb">
-          <rectangle val="3.40674,7.68902;6.37614,8.10902"/>
+          <rectangle val="3.40674,7.68903;6.37614,8.10903"/>
         </attribute>
         <attribute name="dnode_path">
           <string>#JKYSNUM[0]#</string>
