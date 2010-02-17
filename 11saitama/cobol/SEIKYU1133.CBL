@@ -36,6 +36,8 @@
       *                                 長期上位（974）は長期と同様の
       *                                 処理をする
       * 01.00.04     吉川    08/10/08   SPA-AREA初期化
+      * 01.00.05     吉川    10/02/16   協会けんぽ対応
+      *                                 食事欄の食事回数を食事日数に変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -107,6 +109,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+           03  FLG-NYUINACCT  PIC 9(01).
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -174,6 +179,9 @@
                05  WRK-SEIKYUGK        PIC 9(08).
                05  WRK-SEIKYUGK-G      PIC 9(08).
            03  WRK-HKNJANAME           PIC X(20).
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+           03  WRK-SNISSU              PIC 9(03).
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
       *
            03  WRK-HENSYU.
                05  WRK-JKYSNUM       PIC X(06).
@@ -220,6 +228,12 @@
        01  SUM-AREA1.
            03  SUM-GHKNFTN            PIC 9(07).
            03  SUM-GSKJFTN            PIC 9(07).
+      *
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+      *    食事日エリア
+       01  SYOKUJIDAY-AREA.
+           03  WRK-DAY                PIC 9(03)  OCCURS 31.
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -293,6 +307,12 @@
       *    保険者情報
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
+      *
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+      *    入院会計
+       01  NYUIN-SRYACCT-REC.
+           COPY    "CPNYUINACCT.INC".
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -673,7 +693,9 @@
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
-           MOVE  RECE02-SHOKUJINISSU(IDZ)  TO  MF100-SHOKUJINISSU
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+      *     MOVE  RECE02-SHOKUJINISSU(IDZ)  TO  MF100-SHOKUJINISSU
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
            MOVE  RECE02-SHOKUJIRYOYOHI (IDZ)
                                      TO  MF100-SHOKUJIRYOYOHI
            COMPUTE IDY     =         IDZ   +   1
@@ -732,6 +754,15 @@
            MOVE     MF100-KOHNUM      TO    WRK-T-KOHNUM
            MOVE     MF100-SEIKYUGK    TO    WRK-T-HKNFTN
            MOVE     MF100-SHOKUJIRYOYOHI    TO    WRK-T-SKJFTN
+      *
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+      *    入院の場合、入院会計から入院日数を取得
+           IF  RECE02-NYUGAIKBN  =  "1"
+             PERFORM  930-NYUINACCT-SET-SEC
+      *
+             MOVE   WRK-SNISSU        TO    MF100-SHOKUJINISSU
+           END-IF
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
       *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -964,6 +995,9 @@
                  WHEN  "003"
                  WHEN  "004"
                  WHEN  "007"
+      *=== 協会けんぽ対応 by Yoshikawa(2010/02/16) start
+                 WHEN  "009"
+      *=== 協会けんぽ対応 by Yoshikawa(2010/02/16) end
                    MOVE  "〇"               TO  SC33-HKKBN(IDX1 4)
                END-EVALUATE
                EVALUATE  MF100-HKNNUM(1:2)
@@ -1765,6 +1799,93 @@
        925-HKNJAINF-READ-EXT.
            EXIT.
       *
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) start
+      *****************************************************************
+      *    入院会計セット
+      *****************************************************************
+       930-NYUINACCT-SET-SEC  SECTION.
+      *
+           INITIALIZE                          NYUIN-SRYACCT-REC
+                                               SYOKUJIDAY-AREA
+      *
+           MOVE  SPA-HOSPNUM               TO  NACCT-HOSPNUM
+           MOVE  MF100-PTID                TO  NACCT-PTID
+           MOVE  MF100-SRYYM               TO  NACCT-SRYYM
+           MOVE  NYUIN-SRYACCT-REC         TO  MCPDATA-REC
+           MOVE  "DBSELECT"                TO  MCP-FUNC
+           MOVE  "tbl_nyuinacct "          TO  MCP-TABLE
+           MOVE  "key33"                   TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"                   USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_nyuinacct"       TO  MCP-TABLE
+             MOVE    "key33"               TO  MCP-PATHNAME
+             PERFORM  930-NYUINACCT-READ-SEC
+      *
+             PERFORM  UNTIL  FLG-NYUINACCT  =  1
+      *
+               PERFORM  VARYING  IDX  FROM  1  BY  1
+                        UNTIL    IDX  >    31
+      *
+      *          朝昼夕いずれの食事があった日にフラグを立てる
+                 IF  NACCT-DAY(IDX)  NOT  =  ZERO
+                   MOVE  1                 TO  WRK-DAY(IDX)
+                 END-IF
+               END-PERFORM
+      *
+               PERFORM  930-NYUINACCT-READ-SEC
+             END-PERFORM
+      *
+      *      食事日数のカウント
+             MOVE  ZERO                    TO  WRK-SNISSU
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >    31
+               IF  WRK-DAY(IDX)  =  1
+                 ADD  1                    TO  WRK-SNISSU
+               END-IF
+             END-PERFORM
+      *
+           ELSE
+             DISPLAY  "NYUINACCT SELECT ERR"
+           END-IF
+      *
+           INITIALIZE                          MCPAREA
+           MOVE  "DBCLOSECURSOR"           TO  MCP-FUNC
+           MOVE  "tbl_nyuinacct"           TO  MCP-TABLE
+           MOVE  "key33"                   TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"                   USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       930-NYUINACCT-SET-EXT.
+           EXIT.
+      *****************************************************************
+      *    入院会計読込
+      *****************************************************************
+       930-NYUINACCT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"             TO  MCP-FUNC
+           CALL  "ORCDBMAIN"               USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC         TO  NYUIN-SRYACCT-REC
+             MOVE  ZERO                TO  FLG-NYUINACCT
+           ELSE
+             INITIALIZE                    NYUIN-SRYACCT-REC
+             MOVE  1                   TO  FLG-NYUINACCT
+           END-IF
+      *
+           .
+       930-NYUINACCT-READ-EXT.
+           EXIT.
+      *
+      *=== 食事回数を食事日数に変更 by Yoshikawa(2010/02/16) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
