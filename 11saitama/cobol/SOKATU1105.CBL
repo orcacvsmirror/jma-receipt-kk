@@ -60,6 +60,7 @@
       *                                 6つ目以降がまとまらない不具合を修正
       *  01.00.18    吉川    10/02/04   シス管「2010」の公費再掲欄への
       *                                 地方公費記載設定対応
+      *  01.00.19    吉川    10/02/18   保険番号782は請求額を記載しない
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1248,6 +1249,9 @@
       *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
            AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
       *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
+      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "782"
+      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) end
              ADD     WRK-SEIKYUGK-G        TO  SKT1105TMP-SEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1303,6 +1307,9 @@
       *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
            AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
       *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
+      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "782"
+      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) end
              ADD     WRK-SEIKYUGK-G            TO  WRK-KOHSEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
