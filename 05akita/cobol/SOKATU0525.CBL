@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * ŽÆŽ°êËŽ¸Ž½à§Ž¥Ž»Ž¥Ž×Ž¥ŽÈŽ¥Ž½Ž¥ŽÕŽ¥ŽÈŽ¡ŽÊJMA standard receipt softwareŽ¡ŽË
+      * Æü°åÉ¸½à¥ì¥»¥×¥È¥½¥Õ¥È¡ÊJMA standard receipt software¡Ë
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -18,17 +18,18 @@
        IDENTIFICATION          DIVISION.
        PROGRAM-ID.             SOKATU0525.
       *****************************************************************
-      *  Ž¥Ž·Ž¥Ž¹Ž¥ŽÆŽ¥àÎŽ¾        : Ž£ŽÏŽ£ŽÒŽ£ŽÃŽ£ŽÁ
-      *  Ž¥ŽµŽ¥ŽÖŽ¥Ž·Ž¥Ž¹Ž¥ŽÆŽ¥àÎŽ¾    : Ž·ý·Ž¡ŽÄŽ¢ŽÉŽ¼
-      *  Ž¥Ž³Ž¥Ž¥ŽÝŽ¡Ž¼Ž¥ŽÍŽ¥Ž¥ŽÈŽÌŽ¾  : Ž¼Ž¯Ž»ŽÅî£Ž¦Ž¹Ž­Ž°ðÑŽ¢Ž¹î£Ž¦Ž¿ŽÇŽÎŽÅŽÊŽ½Ž·ŽÀŽÁŽµâ¿
-      *  Ž´ŽÉŽÍŽ¼ŽÔ            : 
-      *  Žºý´Ž®ŽÆŽÉŽÕ    ŽºúøŽÈŽ¼ŽÔ        ŽµŽ­Ž½ŽÒ
-      *  08/04/30    ŽÅŽÄŽÃ          Ž¿Ž·ŽµŽ¬Žºý´Ž®
+      *  ¥·¥¹¥Æ¥àÌ¾        : £Ï£Ò£Ã£Á
+      *  ¥µ¥Ö¥·¥¹¥Æ¥àÌ¾    : ·î¼¡Ä¢É¼
+      *  ¥³¥ó¥Ý¡¼¥Í¥ó¥ÈÌ¾  : ¼¯»ùÅç¡¦¹­°èÏ¢¹ç¡¦¿ÇÎÅÊó½·ÀÁµá½ñ
+      *  ´ÉÍý¼Ô            : 
+      *  ºîÀ®ÆüÉÕ    ºî¶È¼Ô        µ­½Ò
+      *  08/04/30    ÅÄÃæ          ¿·µ¬ºîÀ®
       *****************************************************************
-      *  Ž¥Ž×Ž¥Ž¥Ž°Ž¥ò§à¿Ž¤ŽÀŽµŽÍõ¬
-      * Maj/Min/Rev  Ž½Ž¤ŽÀŽµŽ¼ŽÔ  ŽÆŽÉŽÕ        ŽÆäÏŽÆ
-      *  01.00.01    ŽµŽÈŽÀ    2008/05/14  Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž×Ž¤Ž¹Ž¤
-      *  01.00.02    ŽÆäÇŽÄ    2009/04/02  ŽÅŽÀŽ¿ŽÉŽ½Ž¶ðÌŽ¬ŽÄŽÉŽ²ŽÃ
+      *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
+      * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
+      *  01.00.01    µÈÀî    2008/05/14  ¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·×¤¹¤ë
+      *  01.00.02    ÆâÅÄ    2009/04/02  ÅÀ¿ôÉ½¶èÊ¬ÄÉ²Ã
+      *  01.00.03    µÈÀî    2010/02/18  ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -36,51 +37,51 @@
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
       *
-      *    ŽÀŽÁŽµâ¥ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·ŽÍŽÑŽ¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥
+      *    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë
            SELECT  UPD-FILE        ASSIGN  RECEUPD
                                    ORGANIZATION    IS  LINE
                                                        SEQUENTIAL 
                                    FILE    STATUS  IS  STS-RECEUPD.
       *
-      *    Ž¥Ž¨Ž¥ò£Ž¼Ž¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥
+      *    ¥¨¥é¡¼¥Õ¥¡¥¤¥ë
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
-      *    ŽÀŽÁŽµâ¥ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·ŽÍŽÑŽ¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥
+      *    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
                                    BY         //RECE10X//.
       *
-      *    Ž¥Ž¨Ž¥ò£Ž¼Ž¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥
+      *    ¥¨¥é¡¼¥Õ¥¡¥¤¥ë
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
       *
-      *    ŽÀŽÁŽµâ¥ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·ŽÍŽÑŽ¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥ ŽÌŽ¾Ž¾ŽÎŽÎŽÎŽ° 
+      *    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë Ì¾¾ÎÎÎ°è 
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
            03  FILLER              PIC X(04)   VALUE   ".dat".
       *
-      *    Ž¥Ž¨Ž¥ò£Ž¼Ž¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥ ŽÌŽ¾Ž¾ŽÎŽÎŽÎŽ° 
+      *    ¥¨¥é¡¼¥Õ¥¡¥¤¥ë Ì¾¾ÎÎÎ°è 
            COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
                                     BY         //RECEERR//.
       *     
-      *    Ž¥Ž·Ž¥Ž§Ž¥ŽÍŽÑŽÎŽÎŽ°
+      *    ¥·¥§¥ëÍÑÎÎ°è
            COPY    "CPCOMMONSHELL.INC".
       *
            COPY    "SKT0525.INC".
       *
-      *    Ž¥Ž¹Ž¥ŽÑŽÎŽÎŽ°
+      *    ¥¹¥ÑÎÎ°è
        01  STS-AREA.
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
       *
-      *    Ž¥ŽÕŽ¥ò§Ž°ŽÎŽÎŽ°
+      *    ¥Õ¥é¥°ÎÎ°è
        01  FLG-AREA.
            03  FLG-END             PIC 9(01).
            03  FLG-ERR             PIC 9(01).
@@ -97,7 +98,7 @@
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
-      *    ŽÅŽºŽ»õ¬ŽÎŽ°
+      *    Åº»úÎÎ°è
        01  IDX-AREA.
            03  IDX                 PIC 9(04).
            03  IDX1                PIC 9(04).
@@ -125,7 +126,7 @@
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-SYOKBN1    PIC X(01).
       *
-      *    Ž°Ž»ŽÎŽÎŽ°
+      *    °ì»þÎÎ°è
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
            03  WRK-SEIYMDWH        PIC X(22).
@@ -163,13 +164,13 @@
            03  WRK-INDEX           PIC 9(02).
            03  WRK-HKNJANAME       PIC X(20).
       *
-      *    Ž¸ŽÈŽÌŽ¾Ž¾ŽÎŽÊŽÔŽ½Ž¸
+      *    ¸øÈñÌ¾¾ÎÊÔ½¸
            03  WRK-KOHKBN.
                05  WRK-KOHNUM        PIC X(03).
                05  WRK-HKNNAME       PIC X(20). 
            03  WRK-MEISYO          PIC X(44).
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¾ŽÊ
+      *    °åÎÅµ¡´Ø¾ðÊó
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
                05  WRK-HOSPNAME1   PIC X(50).
@@ -187,18 +188,18 @@
                    07  WRK-2007-KOHNUM
                                    PIC X(03)   OCCURS  10.
            03  WRK-2007-MAX        PIC 9(03).
-      *    Ž¥Ž«Ž¥Ž¦Ž¥Ž¥ŽÈŽÎŽÎŽ°
+      *    ¥«¥¦¥ó¥ÈÎÎ°è
        01  CNT-AREA.
            03  CNT-PAGE            PIC 9(03).
            03  CNT-RECE10          PIC 9(06).
            03  CNT-UPDFILE         PIC 9(06).
            03  CNT-KOH             PIC 9(02).
       *
-      *    Ž½Ž¸Ž·Ž×ŽÎŽÎŽ°
+      *    ½¸·×ÎÎ°è
        01  SUM-AREA.
            03  SUM-TBL-SRYKA       PIC X(02).
            03  SUM-TABLE.
-      *        Ž¸ê¶Ž¹äÐŽ¼ŽÔ
+      *        ¸å´ü¹âÎð¼Ô
                05  SUM-TBL             OCCURS  2.
                    07  SUM-NYUGAI-TBL       OCCURS  2.
                        09  SUM-KENSU           PIC  9(06).
@@ -210,7 +211,7 @@
                    07  SUM-S-KINGK             PIC  9(10).
                    07  SUM-S-FTNGK             PIC  9(10).
       *
-      *        Ž¸ŽÈŽÉòÅŽ´ 
+      *        ¸øÈñÉéÃ´ 
                05  SUM-KOH-TBL         OCCURS  100.
                    07  SUM-KOHNUM              PIC  X(03).
                    07  SUM-KOH-NYUGAI-TBL   OCCURS  2.
@@ -224,82 +225,87 @@
                    07  SUM-S-KFTNGK            PIC  9(10).
                    07  SUM-KOH-MEISYO          PIC  X(44).
       *
-      *    Ž¥Ž­Ž¡Ž¼ŽÎŽÎŽ°
+      *    ¥­¡¼ÎÎ°è
        01  KEY-AREA                    VALUE   LOW-VALUE.
            03  KEY-NEW.
                05  KEY-N-HKNJANUM      PIC X(08).
            03  KEY-OLD.
                05  KEY-O-HKNJANUM      PIC X(08). 
       *
-      *    Ž¸ŽÇŽÄŽ¹àÎŽÜ
+      *    ¸ÇÄê¹àÌÜ
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *
            COPY    "COMMON-SPA".
       *
       *****************************************************************
-      *    Ž¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥Ž¥Ž¥Ž¤Ž¥Ž¢Ž¥Ž¦Ž¥ŽÈ
+      *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
       *
-      *    Ž´ŽµŽ¼ŽÔ
+      *    ´µ¼Ô
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
       *
-      *    ŽÊŽÝŽ¸Ž±ŽÈŽÖŽ¹
+      *    ÊÝ¸±ÈÖ¹æ
        01  HKNNUM-REC.
            COPY    "CPHKNNUM.INC".
       *
-      *    ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽ¾ŽÊ
+      *    ÊÝ¸±¼Ô¾ðÊó
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¾ŽÊŽ¾ŽÊ
+      *    °åÎÅµ¡´Ø¾ðÊó¾ðÊó
            COPY    "CPSK1001.INC".
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¾ŽÊŽ¡ŽÝŽ½ŽºŽßŽÃŽÏŽ¡Ž¢ŽÏŽ¢ŽÍõÅ 
+      *    °åÎÅµ¡´Ø¾ðÊó¡Ý½êºßÃÏ¡¢Ï¢ÍíÀè 
            COPY    "CPSK1002.INC".
       *
-      *    Ž¿ŽÇŽÎŽÅŽ²ŽÊŽÌŽÜŽ¾ŽÊ
+      *    ¿ÇÎÅ²ÊÌÜ¾ðÊó
            COPY    "CPSK1005.INC".
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÊŽÔŽ½Ž¸Ž¾ŽÊ
+      *    °åÎÅµ¡´ØÊÔ½¸¾ðÊó
            COPY    "CPSK1900.INC".
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÌŽ¾Ž¾ŽÎŽÊŽÔŽ½Ž¸Ž¾ŽÊ
+      *    °åÎÅµ¡´ØÌ¾¾ÎÊÔ½¸¾ðÊó
            COPY    "CPSK1901.INC".
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ½Ž»Ž½ŽÊŽÔŽ½Ž¸Ž¾ŽÊ
+      *    °åÎÅµ¡´Ø½»½êÊÔ½¸¾ðÊó
            COPY    "CPSK1902.INC".
       *
-      *    Ž¸ŽÈŽÈŽÖŽ¹ì¦ŽÞŽ¤ŽÈŽ¤âÀŽÊ
+      *=== ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ by Yoshikawa(2010/02/18) start
+      *    ¥ì¥»¥×¥È¡¦Áí³ç°õºþ¾ðÊó¡Ê¹­°èÏ¢¹ç¡Ë
+           COPY    "CPSK200501.INC".
+      *=== ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ by Yoshikawa(2010/02/18) end
+      *
+      *    ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó
            COPY    "CPSK2007.INC".
       *
            COPY    "CPRCF010.INC".
       *
-      *    Ž¥Ž¸Ž¥î§ŽÖŽ´ŽÉŽÍŽ¥ŽÞŽ¥Ž¹Ž¥Ž¿
+      *    ¥¸¥ç¥Ö´ÉÍý¥Þ¥¹¥¿
        01  JOBKANRI-REC.
            COPY    "CPJOBKANRI.INC".
       * 
       ******************************************************************
-      *    Ž¥ŽµŽ¥ŽÖŽ¥Ž×Ž¥õøŽÑŽ¡Ž¡ŽÎŽÎŽ°
+      *    ¥µ¥Ö¥×¥íÍÑ¡¡ÎÎ°è
       *****************************************************************
       *
-      *   Ž¥Ž¸Ž¥î§ŽÖŽ´ŽÉŽÍŽ£ŽÄŽ£ŽÂŽÀŽ©Ž¸ì§ŽµŽ¥ŽÖ
+      *   ¥¸¥ç¥Ö´ÉÍý£Ä£ÂÀ©¸æ¥µ¥Ö
            COPY    "CPORCSJOBKANRI.INC".
       *
-      *    Ž°ŽºŽ£ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·Ž¥ŽµŽ¥ŽÖ
+      *    °õºþ£Ä£Â¹¹¿·¥µ¥Ö
            COPY    "CPORCSPRT.INC".
       *
-      *   ŽÆŽÉŽÕŽÊŽÑŽ´Ž¹Ž¥ŽµŽ¥ŽÖ
+      *   ÆüÉÕÊÑ´¹¥µ¥Ö
            COPY    "CPORCSDAY.INC".
            COPY    "CPORCSLNK.INC".
       *
-      *    Ž¶Ž¦ŽÄŽÌŽ¥ŽÑŽ¥ò§â§Ž¿
+      *    ¶¦ÄÌ¥Ñ¥é¥á¥¿
            COPY    "MCPAREA".
       *
            COPY    "MCPDATA.INC".
       *
-      *   ŽÈŽ¾Ž³ŽÑŽ¥ŽÁŽ¥Ž§Ž¥ŽÃŽ¥Ž¯Ž¥ŽµŽ¥ŽÖ
+      *   È¾³Ñ¥Á¥§¥Ã¥¯¥µ¥Ö
            COPY  "CPORCSKANACHK.INC".
       *
       ****************************************************************
@@ -311,7 +317,7 @@
                USING
            COMMAND-PARAM.
       *****************************************************************
-      *    Ž¼î£Ž¡Ž¡Ž¡Ž½ðÏ
+      *    ¼ç¡¡¡¡½èÍý
       *****************************************************************
        000-PROC-SEC                SECTION.
       *
@@ -325,7 +331,7 @@
            STOP    RUN
            .
       *****************************************************************
-      *    Ž½ò¶Ž¡Ž¡Ž½ðÏ
+      *    ½é´ü¡¡½èÍý
       *****************************************************************
        100-INIT-SEC                SECTION.
       *
@@ -361,7 +367,7 @@
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
       *
-      *    Ž¥Ž¹Ž¥ŽÆŽ¥ŽÃŽ¥Ž×Ž´ŽÉŽÍŽ³Ž«Ž»ŽÏŽ½ðÏ
+      *    ¥¹¥Æ¥Ã¥×´ÉÍý³«»Ï½èÍý
            MOVE    "STS"           TO  SJOBKANRI-MODE
            INITIALIZE                  JOBKANRI-REC
            MOVE    SPA-HOSPNUM     TO  JOB-HOSPNUM
@@ -369,7 +375,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU0525"    TO  JOB-PGID
-           MOVE    "Ž¹Ž­Ž°ðÑŽ¢Ž¹î£Ž¦Ž¿ŽÇŽÎŽÅŽÊŽ½Ž·ŽÀŽÁŽµâ¿"
+           MOVE    "¹­°èÏ¢¹ç¡¦¿ÇÎÅÊó½·ÀÁµá½ñ"
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -397,7 +403,7 @@
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ£ŽÉŽ£ŽÄŽÊŽÔŽ½Ž¸
+      *    °åÎÅµ¡´Ø£É£ÄÊÔ½¸
            INITIALIZE                  SYS-1001-REC
            MOVE    "1001"              TO  SYS-1001-KANRICD
            MOVE    "*"                 TO  SYS-1001-KBNCD
@@ -418,13 +424,13 @@
                    MOVE    SPACE               TO  SYS-1001-KAISETUNAME
                END-IF    
            ELSE
-               MOVE    "Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¾ŽÊŽ¤Ž¬Ž¼ðÈŽÀŽ¤ŽÇŽ¤Ž­Ž¤ŽÞŽ¤Ž»Ž¤Ž¤ŽÇŽ¤Ž·Ž¤Ž¿"
+               MOVE    "°åÎÅµ¡´Ø¾ðÊó¤¬¼èÆÀ¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
                                            TO  WRK-RECEERR
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¾ŽÊŽ¡ŽÝŽ½ŽºŽßŽÃŽÏŽ¡Ž¢ŽÏŽ¢ŽÍõÅ
+      *    °åÎÅµ¡´Ø¾ðÊó¡Ý½êºßÃÏ¡¢Ï¢ÍíÀè
            INITIALIZE                  SYS-1002-REC
            MOVE    "1002"              TO  SYS-1002-KANRICD
            MOVE    "*"                 TO  SYS-1002-KBNCD
@@ -442,7 +448,7 @@
                    MOVE    SPACE               TO  SYS-1002-ADRS
                END-IF    
            ELSE
-               MOVE    "Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¾ŽÊŽ¡ŽÊŽ½ŽºŽßŽÃŽÏŽ¡ŽËŽ¤Ž¬Ž¼ðÈŽÀŽ¤ŽÇŽ¤Ž­Ž¤ŽÞŽ¤Ž»Ž¤Ž¤ŽÇŽ¤Ž·Ž¤Ž¿"
+               MOVE    "°åÎÅµ¡´Ø¾ðÊó¡Ê½êºßÃÏ¡Ë¤¬¼èÆÀ¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
                                            TO  WRK-RECEERR
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
@@ -451,10 +457,10 @@
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÊŽÔŽ½Ž¸Ž¾ŽÊ
+      *    °åÎÅµ¡´ØÊÔ½¸¾ðÊó
            PERFORM 900-1900-READ-SEC
       *
-      *    Ž¸ŽÈŽÈŽÖŽ¹ì¦ŽÞŽ¤ŽÈŽ¤âÀŽÊ
+      *    ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó
            INITIALIZE                      WRK-2007-AREA
       *
            INITIALIZE                      SYS-2007-REC
@@ -501,18 +507,52 @@
       *
            MOVE    IDX                     TO  WRK-2007-MAX
       *
+      *=== ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ by Yoshikawa(2010/02/18) start
+      *    ¥ì¥»¥×¥È¡¦Áí³çÊÔ½¸¾ðÊó
+      *    ¶èÊ¬¥³¡¼¥É£°£±¤Î¥Ç¡¼¥¿ÆÉ¤ß¹þ¤ß
+           MOVE    SPACE               TO  SYS-200501-REC
+           INITIALIZE                      SYS-200501-REC
+           MOVE    "2005"              TO  SYS-200501-KANRICD
+           MOVE    "01"                TO  SYS-200501-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-200501-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-200501-STYUKYMD (7:2)
+           MOVE    SYS-200501-STYUKYMD TO  SYS-200501-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-200501-HOSPNUM
+           MOVE    SYS-200501-REC      TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-KEY10-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-200501-REC
+           ELSE
+               INITIALIZE                      SYS-200501-REC
+           END-IF
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   SPACE
+               MOVE    "0"                 TO  SYS-200501-KOUIKIPRTKBN
+           END-IF
+      *
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   "1"
+               CONTINUE
+           ELSE
+               MOVE    "00000000"          TO  WRK-PARA-HKNJANUM
+           END-IF
+      *
+           DISPLAY "SYS-200501-KOUIKIPRTKBN=" SYS-200501-KOUIKIPRTKBN
+           DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
+      *=== ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ by Yoshikawa(2010/02/18) end
+      *
            .
        100-INIT-EXT.
            EXIT.
       *
       *****************************************************************
-      *    Ž¼î£Ž¡Ž¡Ž¡Ž½ðÏ
+      *    ¼ç¡¡¡¡½èÍý
       *****************************************************************
        200-MAIN-SEC                SECTION.
       *
            OPEN    OUTPUT  UPD-FILE
       *
-      *    Ž½ðÏŽ¶ðÌŽ¬(0=ŽÁŽ´ŽÂŽÎ 1=ŽÅŽ·ý¢Ž¦Ž·ý¿ŽÙŽ¤ 2=ŽÊŽÖŽÌâÌŽ¬)Ž¤ŽÇŽÊŽ¬Ž¤Ž±Ž¤
+      *    ½èÍý¶èÊ¬(0=Á´ÂÎ 1=Åö·î¡¦·îÃÙ¤ì 2=ÊÖÌáÊ¬)¤ÇÊ¬¤±¤ë
            EVALUATE    WRK-PARA-SYOKBN
                WHEN    ZERO
                WHEN    "2"
@@ -528,7 +568,7 @@
       *
            CLOSE   UPD-FILE
       *
-      *    ŽÀŽÁŽµâ¥ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·
+      *    ÀÁµá£Ä£Â¹¹¿·
            IF      FLG-UPD        =   1
            AND     FLG-ERR        =   ZERO 
                IF      CNT-UPDFILE    >   ZERO
@@ -541,16 +581,16 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž½ðÏŽ¶ðÌŽ¬Ž½Ž¸Ž·Ž×Ž½ðÏ
+      *    ½èÍý¶èÊ¬½¸·×½èÍý
       *****************************************************************
        2001-SYOKBN-SYUKEI-SEC         SECTION.
       *
-      *    ŽÆŽ±Ž¡Ž³Ž°Ž¡ŽÊŽ¤Ž½Ž¤ŽÎŽÂŽ¾Ž¤ŽÎŽ¥Ž¥Ž»Ž¡ŽËŽ¡Ž¦ŽÆŽ±Ž¡Ž½Ž¸Ž·Ž×
+      *    Æþ±¡³°¡Ê¤½¤ÎÂ¾¤Î¥ì¥»¡Ë¡¦Æþ±¡½¸·×
       *    
            MOVE    LOW-VALUE           TO  KEY-AREA
            MOVE    1                   TO  WRK-INDEX
       *
-      *    Ž½ðÏŽ¶ðÌŽ¬Ž¤ŽËŽ¤ð¦ŽÃŽ¤ŽÆŽ¥Ž­Ž¡Ž¼Ž¤ŽÊŽ¬Ž¤Ž±Ž¤(SYOKBN1=2Ž¢ŽªŽÆŽÃŽÊŽÌŽÎŽÅŽÍŽÜŽÈ)
+      *    ½èÍý¶èÊ¬¤Ë¤è¤Ã¤Æ¥­¡¼¤òÊ¬¤±¤ë(SYOKBN1=2¢ªÆÃÊÌÎÅÍÜÈñ)
            EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
                WHEN    "1"             ALSO    "1"
                    MOVE    "key62"         TO  WRK-MCP-PATHNAME
@@ -571,8 +611,8 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *    ŽÆŽ±Ž¡Ž³Ž°Ž½Ž¸Ž·Ž×Ž¡ŽÊŽºŽßŽÁõÄŽÇŽ¤ŽÞŽ¤Ž¿Ž¤ŽÏŽºŽßŽ°êÃôÕŽ»Ž»ŽÄô¦Ž·Ž¤Ž¿Ž¥Ž¥Ž»Ž¡ŽË
-      *    ŽÆŽÃŽÊŽÌŽÎŽÅŽÍŽÜŽÈŽ¤ŽÎŽ¾Ž¹î¦ŽÏŽºŽßŽÁõÄŽÇŽ¤ŽÏŽ¤ŽÊŽ¤Ž·
+      *    Æþ±¡³°½¸·×¡ÊºßÁí¿Ç¤Þ¤¿¤Ïºß°åÁí¤ò»»Äê¤·¤¿¥ì¥»¡Ë
+      *    ÆÃÊÌÎÅÍÜÈñ¤Î¾ì¹ç¤ÏºßÁí¿Ç¤Ï¤Ê¤·
            IF    ( FLG-ERR             =   ZERO )
            AND   ( WRK-PARA-SYOKBN1    =   "1"  )
                MOVE    LOW-VALUE           TO  KEY-AREA
@@ -602,21 +642,21 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž½Ž¸Ž·Ž×Ž½ðÏ
+      *    ½¸·×½èÍý
       *****************************************************************
        200-HENSYU-SEC                SECTION.
       *
            INITIALIZE                  SUM-AREA
       *
-      *    Ž¥Ž­Ž¡Ž¼ŽËð¦ŽËŽ½Ž¸Ž·Ž×
+      *    ¥­¡¼Ëè¤Ë½¸·×
            MOVE    KEY-NEW             TO  KEY-OLD
            PERFORM             UNTIL   FLG-END     =   1
                                OR      KEY-NEW NOT =   KEY-OLD
-      *        ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽÊŽÌŽ½Ž¸Ž·Ž×Ž½ðÏ
+      *        ÊÝ¸±¼ÔÊÌ½¸·×½èÍý
                PERFORM 2001-KOUKI-SYUKEI-SEC
            END-PERFORM
       *
-      *   Ž°ŽºŽ½ðÏ
+      *   °õºþ½èÍý
           IF      FLG-UPD        =   1
           AND     FLG-ERR        =   ZERO
                PERFORM 2002-PRINT-SEC
@@ -626,23 +666,23 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽÊŽÌŽ½Ž¸Ž·Ž×Ž½ðÏ
+      *    ÊÝ¸±¼ÔÊÌ½¸·×½èÍý
       *****************************************************************
        2001-KOUKI-SYUKEI-SEC                SECTION.
       *
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
-      *    ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽÈŽÖŽ¹
+      *    ÊÝ¸±¼ÔÈÖ¹æ
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM(1:6)
            ELSE
              MOVE  RECE10-HKNJANUM(3:6)  TO  WRK-HKNJANUM(1:6)
            END-IF
-      *    ŽÂêËŽ½ŽÈŽÖŽ¹ì§Ž»Ž¥ŽÃŽ¥ŽÈ
+      *    ÂåÉ½ÈÖ¹æ¥»¥Ã¥È
            PERFORM  200101-HKNJANUM-SET-SEC
       *
-      *    ŽÆŽ³Ž°Ž¶ðÌŽ¬
+      *    Æþ³°¶èÊ¬
            EVALUATE    RECE10-NYUGAIKBN
                WHEN    "1"
                    MOVE    1                   TO  IDX3
@@ -650,7 +690,7 @@
                    MOVE    2                   TO  IDX3
            END-EVALUATE
       *
-      *    ŽµŽÉŽÕŽ³è»
+      *    µëÉÕ³ä¹ç
            EVALUATE    RECE10-KYURATE
                WHEN    9
                    MOVE    1                   TO  IDX1
@@ -660,7 +700,7 @@
       *
            PERFORM 20011-HKN-SYUKEI-SEC
       *
-      *    Ž¸ŽÈŽÉòÅŽ´ŽÊŽ¬
+      *    ¸øÈñÉéÃ´Ê¬
            IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
                    RECE10-KOHNUM (2)   NOT =   SPACE  OR
                    RECE10-KOHNUM (3)   NOT =   SPACE  OR
@@ -668,7 +708,7 @@
                PERFORM 20012-KOH-SYUKEI-SEC
            END-IF
       *
-      *    Ž½Ž¸Ž·Ž×Ž¤ŽÎŽÂŽÐŽ¾ŽÝŽ¤ŽËŽ¤ŽÊŽ¤ò¦ŽÊŽ¤Ž«Ž¤ŽÃŽ¤Ž¿Ž¤ŽÈŽ¤Ž­
+      *    ½¸·×¤ÎÂÐ¾Ý¤Ë¤Ê¤é¤Ê¤«¤Ã¤¿¤È¤­
            IF      FLG-UPD             =   1
                PERFORM 20013-UPD-FILE-HENSYU-SEC
       *
@@ -677,11 +717,11 @@
                PERFORM 900-SEIKYU-READ-SEC
            ELSE
                MOVE    SPACE               TO  WRK-RECEERR
-               STRING "Ž½Ž¸Ž·Ž×ŽÂŽÐŽ¾ŽÝŽ³Ž°Ž¡Ž¡Ž´ŽµŽ¼ŽÔŽÈŽÖŽ¹ì£"     DELIMITED  BY  SIZE
+               STRING "½¸·×ÂÐ¾Ý³°¡¡´µ¼ÔÈÖ¹æ¡á"     DELIMITED  BY  SIZE
                        RECE10-PTNUM                DELIMITED  BY  SPACE
-                       " Ž¿ŽÇŽÎŽÅŽÇŽ¯Ž·ý¢"               DELIMITED  BY  SIZE
+                       " ¿ÇÎÅÇ¯·î¡á"               DELIMITED  BY  SIZE
                        RECE10-SRYYM                DELIMITED  BY  SIZE
-                       " Ž¥Ž¥Ž»Ž¼ŽÊŽÌŽ¡"               DELIMITED  BY  SIZE
+                       " ¥ì¥»¼ïÊÌ¡á"               DELIMITED  BY  SIZE
                        RECE10-RECESYUBETU          DELIMITED  BY  SIZE
                                            INTO    WRK-RECEERR
                END-STRING
@@ -693,199 +733,199 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¹Ž­Ž°ðÑŽ¢Ž¹î£Ž¦ŽÂêËŽ½ŽÈŽÖŽ¹ì§Ž»Ž¥ŽÃŽ¥ŽÈ
+      *    ¹­°èÏ¢¹ç¡¦ÂåÉ½ÈÖ¹æ¥»¥Ã¥È
       *****************************************************************
        200101-HKNJANUM-SET-SEC                SECTION.
       *
            EVALUATE  WRK-HKNJANUM(1:2)
-      *      ŽËŽÌŽ³Ž¤ŽÆŽ»
+      *      ËÌ³¤Æ»
              WHEN  "01"
                  MOVE  "010004"  TO  WRK-HKNJANUM
-                 MOVE  "ŽËŽÌŽ³Ž¤ŽÆŽ»"  TO  WRK-HKNJANAME
-      *      ŽÀŽÄŽ¿Ž¹Ž¸Ž©
+                 MOVE  "ËÌ³¤Æ»"  TO  WRK-HKNJANAME
+      *      ÀÄ¿¹¸©
              WHEN  "02"
                  MOVE  "020003"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÀŽÄŽ¿Ž¹Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž´è¾Ž¸Ž©
+                 MOVE  "ÀÄ¿¹¸©"  TO  WRK-HKNJANAME
+      *      ´ä¼ê¸©
              WHEN  "03"
                  MOVE  "030002"  TO  WRK-HKNJANUM
-                 MOVE  "Ž´è¾Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽµŽÜŽ¾Ž¸Ž©
+                 MOVE  "´ä¼ê¸©"  TO  WRK-HKNJANAME
+      *      µÜ¾ë¸©
              WHEN  "04"
                  MOVE  "040001"  TO  WRK-HKNJANUM
-                 MOVE  "ŽµŽÜŽ¾Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž½Ž©ŽÅŽÄŽ¸Ž©
+                 MOVE  "µÜ¾ë¸©"  TO  WRK-HKNJANAME
+      *      ½©ÅÄ¸©
              WHEN  "05"
                  MOVE  "050000"  TO  WRK-HKNJANUM
-                 MOVE  "Ž½Ž©ŽÅŽÄŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž»Ž³Ž·ŽÁŽ¸Ž©
+                 MOVE  "½©ÅÄ¸©"  TO  WRK-HKNJANAME
+      *      »³·Á¸©
              WHEN  "06"
                  MOVE  "060009"  TO  WRK-HKNJANUM
-                 MOVE  "Ž»Ž³Ž·ŽÁŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÊŽ¡ŽÅîºŽ©
+                 MOVE  "»³·Á¸©"  TO  WRK-HKNJANAME
+      *      Ê¡Åç¸©
              WHEN  "07"
                  MOVE  "070008"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÊŽ¡ŽÅîºŽ©"  TO  WRK-HKNJANAME
-      *      Ž°Ž¾Ž¸Ž©
+                 MOVE  "Ê¡Åç¸©"  TO  WRK-HKNJANAME
+      *      °ñ¾ë¸©
              WHEN  "08"
                  MOVE  "080007"  TO  WRK-HKNJANUM
-                 MOVE  "Ž°Ž¾Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÆŽÊŽÌŽÚŽ¸Ž©
+                 MOVE  "°ñ¾ë¸©"  TO  WRK-HKNJANAME
+      *      ÆÊÌÚ¸©
              WHEN  "09"
                  MOVE  "090006"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÆŽÊŽÌŽÚŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž·Ž²ŽÇŽÏŽ¸Ž©
+                 MOVE  "ÆÊÌÚ¸©"  TO  WRK-HKNJANAME
+      *      ·²ÇÏ¸©
              WHEN  "10"
                  MOVE  "100003"  TO  WRK-HKNJANUM
-                 MOVE  "Ž·Ž²ŽÇŽÏŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽºŽ¶ŽÌŽ¸Ž©
+                 MOVE  "·²ÇÏ¸©"  TO  WRK-HKNJANAME
+      *      ºë¶Ì¸©
              WHEN  "11"
                  MOVE  "110002"  TO  WRK-HKNJANUM
-                 MOVE  "ŽºŽ¶ŽÌŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÀòÏŽÕŽ¸Ž©
+                 MOVE  "ºë¶Ì¸©"  TO  WRK-HKNJANAME
+      *      ÀéÍÕ¸©
              WHEN  "12"
                  MOVE  "120001"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÀòÏŽÕŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÅŽµŽÅŽÔ
+                 MOVE  "ÀéÍÕ¸©"  TO  WRK-HKNJANAME
+      *      ÅìµþÅÔ
              WHEN  "13"
                  MOVE  "130000"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÅŽµŽÅŽÔ"  TO  WRK-HKNJANAME
-      *      Ž¿ŽÀŽÆàÂŽ¸Ž©
+                 MOVE  "ÅìµþÅÔ"  TO  WRK-HKNJANAME
+      *      ¿ÀÆàÀî¸©
              WHEN  "14"
                  MOVE  "140009"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¿ŽÀŽÆàÂŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž¿Ž·Ž³æºŽ©
+                 MOVE  "¿ÀÆàÀî¸©"  TO  WRK-HKNJANAME
+      *      ¿·³ã¸©
              WHEN  "15"
                  MOVE  "150008"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¿Ž·Ž³æºŽ©"  TO  WRK-HKNJANAME
-      *      ŽÉŽÙŽ»Ž³Ž¸Ž©
+                 MOVE  "¿·³ã¸©"  TO  WRK-HKNJANAME
+      *      ÉÙ»³¸©
              WHEN  "16"
                  MOVE  "160007"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÉŽÙŽ»Ž³Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÀŽÐŽÀŽ¸Ž©
+                 MOVE  "ÉÙ»³¸©"  TO  WRK-HKNJANAME
+      *      ÀÐÀî¸©
              WHEN  "17"
                  MOVE  "170006"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÀŽÐŽÀŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÊŽ¡Ž°ìºŽ©
+                 MOVE  "ÀÐÀî¸©"  TO  WRK-HKNJANAME
+      *      Ê¡°æ¸©
              WHEN  "18"
                  MOVE  "180005"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÊŽ¡Ž°ìºŽ©"  TO  WRK-HKNJANAME
-      *      Ž»Ž³ŽÍŽ¸Ž©
+                 MOVE  "Ê¡°æ¸©"  TO  WRK-HKNJANAME
+      *      »³Íü¸©
              WHEN  "19"
                  MOVE  "190004"  TO  WRK-HKNJANUM
-                 MOVE  "Ž»Ž³ŽÍŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÄŽ¹ŽÌŽ¸Ž©
+                 MOVE  "»³Íü¸©"  TO  WRK-HKNJANAME
+      *      Ä¹Ìî¸©
              WHEN  "20"
                  MOVE  "200001"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÄŽ¹ŽÌŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž´ŽÉŽ¸Ž©
+                 MOVE  "Ä¹Ìî¸©"  TO  WRK-HKNJANAME
+      *      ´ôÉì¸©
              WHEN  "21"
                  MOVE  "210000"  TO  WRK-HKNJANUM
-                 MOVE  "Ž´ŽÉŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÀŽÅŽ²Ž¬Ž¸Ž©
+                 MOVE  "´ôÉì¸©"  TO  WRK-HKNJANAME
+      *      ÀÅ²¬¸©
              WHEN  "22"
                  MOVE  "220009"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÀŽÅŽ²Ž¬Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž°Ž¦ŽÃŽÎŽ¸Ž©
+                 MOVE  "ÀÅ²¬¸©"  TO  WRK-HKNJANAME
+      *      °¦ÃÎ¸©
              WHEN  "23"
                  MOVE  "230008"  TO  WRK-HKNJANUM
-                 MOVE  "Ž°Ž¦ŽÃŽÎŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž»Ž°Ž½ŽÅŽ¸Ž©
+                 MOVE  "°¦ÃÎ¸©"  TO  WRK-HKNJANAME
+      *      »°½Å¸©
              WHEN  "24"
                  MOVE  "240007"  TO  WRK-HKNJANUM
-                 MOVE  "Ž»Ž°Ž½ŽÅŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž¼Ž¢Ž²Ž¸Ž©
+                 MOVE  "»°½Å¸©"  TO  WRK-HKNJANAME
+      *      ¼¢²ì¸©
              WHEN  "25"
                  MOVE  "250006"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¼Ž¢Ž²Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽµŽÅŽÔŽÉŽÜ
+                 MOVE  "¼¢²ì¸©"  TO  WRK-HKNJANAME
+      *      µþÅÔÉÜ
              WHEN  "26"
                  MOVE  "260005"  TO  WRK-HKNJANUM
-                 MOVE  "ŽµŽÅŽÔŽÉŽÜ"  TO  WRK-HKNJANAME
-      *      ŽÂî¼êËŽÜ
+                 MOVE  "µþÅÔÉÜ"  TO  WRK-HKNJANAME
+      *      ÂçºåÉÜ
              WHEN  "27"
                  MOVE  "270004"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÂî¼êËŽÜ"  TO  WRK-HKNJANAME
-      *      ŽÊŽ¼Ž¸ŽËŽ¸Ž©
+                 MOVE  "ÂçºåÉÜ"  TO  WRK-HKNJANAME
+      *      Ê¼¸Ë¸©
              WHEN  "28"
                  MOVE  "280003"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÊŽ¼Ž¸ŽËŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÆàÐŽÉŽ¸Ž©
+                 MOVE  "Ê¼¸Ë¸©"  TO  WRK-HKNJANAME
+      *      ÆàÎÉ¸©
              WHEN  "29"
                  MOVE  "290002"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÆàÐŽÉŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÏŽÂŽ²ŽÎŽ»Ž³Ž¸Ž©
+                 MOVE  "ÆàÎÉ¸©"  TO  WRK-HKNJANAME
+      *      ÏÂ²Î»³¸©
              WHEN  "30"
                  MOVE  "300009"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÏŽÂŽ²ŽÎŽ»Ž³Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÄŽ»Ž¼ðºŽ©
+                 MOVE  "ÏÂ²Î»³¸©"  TO  WRK-HKNJANAME
+      *      Ä»¼è¸©
              WHEN  "31"
                  MOVE  "310008"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÄŽ»Ž¼ðºŽ©"  TO  WRK-HKNJANAME
-      *      ŽÅî¼Ž¬Ž¸Ž©
+                 MOVE  "Ä»¼è¸©"  TO  WRK-HKNJANAME
+      *      Åçº¬¸©
              WHEN  "32"
                  MOVE  "320007"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÅî¼Ž¬Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž²Ž¬Ž»Ž³Ž¸Ž©
+                 MOVE  "Åçº¬¸©"  TO  WRK-HKNJANAME
+      *      ²¬»³¸©
              WHEN  "33"
                  MOVE  "330006"  TO  WRK-HKNJANUM
-                 MOVE  "Ž²Ž¬Ž»Ž³Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž¹Ž­ŽÅîºŽ©
+                 MOVE  "²¬»³¸©"  TO  WRK-HKNJANAME
+      *      ¹­Åç¸©
              WHEN  "34"
                  MOVE  "340005"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¹Ž­ŽÅîºŽ©"  TO  WRK-HKNJANAME
-      *      Ž»Ž³Ž¸Ž¸Ž©
+                 MOVE  "¹­Åç¸©"  TO  WRK-HKNJANAME
+      *      »³¸ý¸©
              WHEN  "35"
                  MOVE  "350004"  TO  WRK-HKNJANUM
-                 MOVE  "Ž»Ž³Ž¸Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÆŽÁŽÅîºŽ©
+                 MOVE  "»³¸ý¸©"  TO  WRK-HKNJANAME
+      *      ÆÁÅç¸©
              WHEN  "36"
                  MOVE  "360003"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÆŽÁŽÅîºŽ©"  TO  WRK-HKNJANAME
-      *      Ž¹âÂŽ¸Ž©
+                 MOVE  "ÆÁÅç¸©"  TO  WRK-HKNJANAME
+      *      ¹áÀî¸©
              WHEN  "37"
                  MOVE  "370002"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¹âÂŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž°Ž¦ŽÉŽ²Ž¸Ž©
+                 MOVE  "¹áÀî¸©"  TO  WRK-HKNJANAME
+      *      °¦É²¸©
              WHEN  "38"
                  MOVE  "380001"  TO  WRK-HKNJANUM
-                 MOVE  "Ž°Ž¦ŽÉŽ²Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž¹äÅŽÎŽ¸Ž©
+                 MOVE  "°¦É²¸©"  TO  WRK-HKNJANAME
+      *      ¹âÃÎ¸©
              WHEN  "39"
                  MOVE  "390000"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¹äÅŽÎŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÊŽ¡Ž²Ž¬Ž¸Ž©
+                 MOVE  "¹âÃÎ¸©"  TO  WRK-HKNJANAME
+      *      Ê¡²¬¸©
              WHEN  "40"
                  MOVE  "400007"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÊŽ¡Ž²Ž¬Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽºŽ´Ž²Ž¸Ž©
+                 MOVE  "Ê¡²¬¸©"  TO  WRK-HKNJANAME
+      *      º´²ì¸©
              WHEN  "41"
                  MOVE  "410006"  TO  WRK-HKNJANUM
-                 MOVE  "ŽºŽ´Ž²Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÄŽ¹ŽºŽ¸Ž©
+                 MOVE  "º´²ì¸©"  TO  WRK-HKNJANAME
+      *      Ä¹ºê¸©
              WHEN  "42"
                  MOVE  "420005"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÄŽ¹ŽºŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž·Ž§ŽËŽÜŽ¸Ž©
+                 MOVE  "Ä¹ºê¸©"  TO  WRK-HKNJANAME
+      *      ·§ËÜ¸©
              WHEN  "43"
                  MOVE  "430004"  TO  WRK-HKNJANUM
-                 MOVE  "Ž·Ž§ŽËŽÜŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽÂîÌŽ¬Ž¸Ž©
+                 MOVE  "·§ËÜ¸©"  TO  WRK-HKNJANAME
+      *      ÂçÊ¬¸©
              WHEN  "44"
                  MOVE  "440003"  TO  WRK-HKNJANUM
-                 MOVE  "ŽÂîÌŽ¬Ž¸Ž©"  TO  WRK-HKNJANAME
-      *      ŽµŽÜŽºŽ¸Ž©
+                 MOVE  "ÂçÊ¬¸©"  TO  WRK-HKNJANAME
+      *      µÜºê¸©
              WHEN  "45"
                  MOVE  "450002"  TO  WRK-HKNJANUM
-                 MOVE  "ŽµŽÜŽºŽ¸Ž©"  TO  WRK-HKNJANAME
-      *      Ž¼Ž¯Ž»ŽÅîºŽ©
+                 MOVE  "µÜºê¸©"  TO  WRK-HKNJANAME
+      *      ¼¯»ùÅç¸©
              WHEN  "46"
                  MOVE  "460001"  TO  WRK-HKNJANUM
-                 MOVE  "Ž¼Ž¯Ž»ŽÅîºŽ©"  TO  WRK-HKNJANAME
-      *      Ž²Ž­ŽÆŽ¸Ž©
+                 MOVE  "¼¯»ùÅç¸©"  TO  WRK-HKNJANAME
+      *      ²­Æì¸©
              WHEN  "47"
                  MOVE  "470000"  TO  WRK-HKNJANUM
-                 MOVE  "Ž²Ž­ŽÆŽ¸Ž©"  TO  WRK-HKNJANAME
+                 MOVE  "²­Æì¸©"  TO  WRK-HKNJANAME
            END-EVALUATE
       *
            .
@@ -893,7 +933,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž½Ž¸Ž·Ž×Ž½ðÏ
+      *    ½¸·×½èÍý
       *****************************************************************
        20011-HKN-SYUKEI-SEC          SECTION.
       *
@@ -902,25 +942,25 @@
                PERFORM  20011-HKN-SYUKEI-EXT
            END-IF
       *
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž·Ž¿
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
            ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž¿ŽÇŽÎŽÅŽ¼ŽÂŽÆŽ¿
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§¿ÇÎÅ¼ÂÆü¿ô
            ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§ŽÅŽÀŽ¿
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
            ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž°ŽÉŽÉòÅŽ´Ž¶
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
            ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
       *
            IF      IDX3                   =   1 
              IF      RECE10-SHOKUJINISSU(1)   >   ZERO
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž·Ž¿
+      *    ¿©»öÎÅÍÜ¡§·ï¿ô
                ADD     1                   TO  SUM-S-KENSU(IDX1)
              END-IF
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÆŽ¿
+      *    ¿©»öÎÅÍÜ¡§Æü¿ô
              ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž¶äµŽÛ
+      *    ¿©»öÎÅÍÜ¡§¶â³Û
              ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÉŽ¸Ž½àËòÅŽ´Ž³ŽÛ
+      *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
              ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
            END-IF    
       *
@@ -930,7 +970,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¸ŽÈŽÉòÅŽ´ŽÊŽ¬Ž½Ž¸Ž·Ž×Ž½ðÏ
+      *    ¸øÈñÉéÃ´Ê¬½¸·×½èÍý
       *****************************************************************
        20012-KOH-SYUKEI-SEC        SECTION.
       *
@@ -938,13 +978,13 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
-      **      Ž£Ž°Ž£ŽµŽ£Ž±Ž¤ŽÈŽ£Ž°Ž£Ž¹Ž£Ž±Ž¤ŽÏŽÆŽ±Ž¤Ž¸Ž¾Ž½ô¦ŽËŽ½Ž¸Ž·Ž×Ž¤Ž¹Ž¤
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
+      **      £°£µ£±¤È£°£¹£±¤ÏÆ±¤¸¾ì½ê¤Ë½¸·×¤¹¤ë
       *       IF      RECE10-KOHNUM (IDZ) =   "091"
       *         MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
       *       END-IF
       **
-      **      Ž¸ŽÈŽÈŽÖŽ¹ì¦ŽÞŽ¤ŽÈŽ¤âÀŽÊŽ¤Ž¬Ž¤Ž¢Ž¤Ž¤ŽÈŽ¤Ž­
+      **      ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó¤¬¤¢¤ë¤È¤­
       *       IF        WRK-2007-MAX    >       ZERO
       *         PERFORM VARYING IDZ1    FROM    1   BY  1
       *                 UNTIL   IDZ1    >       WRK-2007-MAX
@@ -964,7 +1004,7 @@
       *         END-PERFORM
       *       END-IF
       **
-      **      Ž¸ŽÈŽÈŽÖŽ¹ìµŽÊŽÇŽ¼
+      **      ¸øÈñÈÖ¹æ³ÊÇ¼
       *       PERFORM VARYING   IDX2    FROM    1   BY  1
       *               UNTIL     IDX2 >          100
       *         IF  SUM-KOHNUM (IDX2)   =   SPACE
@@ -973,55 +1013,55 @@
       *         END-IF
       *         IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
              MOVE   1                    TO  IDX2
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
                   PERFORM 200121-KOH-SYUKEI-01-SEC
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
       *           MOVE    100             TO  IDX2
       *         END-IF
       *       END-PERFORM
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
            END-PERFORM
            .
        20012-KOH-SYUKEI-EXT.
            EXIT.
       *
       *****************************************************************
-      *    Ž¸ŽÈŽ½Ž¸Ž·Ž×Ž½ðÏ
+      *    ¸øÈñ½¸·×½èÍý
       *****************************************************************
        200121-KOH-SYUKEI-01-SEC        SECTION.
       *
            COMPUTE IDY     =   IDZ     +   1
       *    
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž·Ž¿
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
            ADD  1                    TO  SUM-KKENSU(IDX2 IDX3)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§ŽÆŽ¿
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
            ADD  RECE10-JNISSU(IDY)   TO  SUM-KNISSU(IDX2 IDX3)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§ŽÅŽÀŽ¿
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
            ADD  RECE10-TOTALTEN(IDY) TO  SUM-KTENSU(IDX2 IDX3)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž°ŽÉŽÉòÅŽ´Ž¶
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
            ADD  RECE10-FTNMONEY(IDY) TO  SUM-KITBFTN(IDX2 IDX3)
       *
            IF      IDX3              =   1 
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
-      *      Ž·Ž³ŽËŽ£Ž±Ž£Ž°ŽÀŽºŽ¿ŽÀŽ£Ž²Ž£Ž±ŽÊŽ¡Ž»æ¦ŽÏŽ¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¤Ž½Ž¸Ž·Ž×Ž¤Ž·Ž¤ŽÊŽ¤Ž¤
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
+      *      ·ë³Ë£±£°Àº¿À£²£±Ê¡»ã¤Ï¿©»öÎÅÍÜ¤ò½¸·×¤·¤Ê¤¤
              IF  RECE10-KOHNUM(IDZ)  NOT  = "010" AND "021" AND "174"
                                        AND  "173" AND "175" AND "172"
                                        AND  "176" AND "177" AND "178"
                                        AND  "374"
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
                IF    RECE10-SHOKUJINISSU(IDY)   >   ZERO
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž·Ž¿
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§·ï¿ô
                  ADD     1                     TO SUM-S-KKENSU(IDX2)
                END-IF
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÆŽ¿
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§Æü¿ô
                ADD  RECE10-SHOKUJINISSU(IDY)   TO SUM-S-KNISSU(IDX2)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž¶äµŽÛ
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§¶â³Û
                ADD  RECE10-SHOKUJIRYOYOHI(IDY) TO SUM-S-KKINGK(IDX2)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÉŽ¸Ž½àËòÅŽ´Ž³ŽÛ
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
                ADD  RECE10-SHOKUJIFTN(IDY)     TO SUM-S-KFTNGK(IDX2)
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
              END-IF
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
            END-IF    
       *
            MOVE    1               TO  FLG-UPD 
@@ -1030,7 +1070,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÀŽÁŽµâ¥ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·ŽÍŽÑŽ¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥Ž½ŽÐŽÎŽÏŽ½ðÏ
+      *    ÀÁµá£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
        20013-UPD-FILE-HENSYU-SEC         SECTION.
       *
@@ -1047,7 +1087,7 @@
                CONTINUE
            ELSE
                MOVE    SPACE               TO  WRK-RECEERR
-               STRING "Ž¹Ž¹Ž¿Ž·ŽÍŽÑŽ¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥ Ž½Ž¤Ž­Ž¹Ž¤ŽßŽ¥Ž¨Ž¥ò£Ž¼ STS="
+               STRING "¹¹¿·ÍÑ¥Õ¥¡¥¤¥ë ½ñ¤­¹þ¤ß¥¨¥é¡¼ STS="
                                                    DELIMITED  BY  SIZE
                        STS-RECEUPD                 DELIMITED  BY  SIZE
                                            INTO    WRK-RECEERR
@@ -1061,15 +1101,15 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÄŽ¢ŽÉŽ¼Ž¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥Ž½ŽÐŽÎŽÏŽ½ðÏ
+      *    Ä¢É¼¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
-      *    ŽÄŽ¢ŽÉŽ¼ŽÊŽÔŽ½Ž¸<Ž¸Ž«Ž½ŽÐŽ¤Ž·>Ž½ðÏ
+      *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
            PERFORM 20021-HEAD-HEN-SEC
-      *    ŽÄŽ¢ŽÉŽ¼ŽÊŽÔŽ½Ž¸<ŽÌŽÀŽºŽÙ>Ž½ðÏ
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ>½èÍý
            PERFORM 20023-BODY-HEN-SEC
-      *    ŽÄŽ¢ŽÉŽ¼Ž°ŽºŽ½ðÏ
+      *    Ä¢É¼°õºþ½èÍý
            PERFORM 20024-PRINT-OUT-SEC
       *
            .
@@ -1077,47 +1117,47 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÄŽ¢ŽÉŽ¼ŽÊŽÔŽ½Ž¸<Ž¸Ž«Ž½ŽÐŽ¤Ž·>Ž½ðÏ
+      *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
       *****************************************************************
        20021-HEAD-HEN-SEC          SECTION.
       *
            INITIALIZE                      SKT0525
-      *    ŽÀŽÁŽµâÉŽ¯Ž·ýÃ
+      *    ÀÁµáÇ¯·îÆü
            MOVE    WRK-SEIYMDWH        TO  SKT0525-SEIYMD
-      *    Ž¿ŽÇŽÎŽÅŽÇŽ¯Ž·
+      *    ¿ÇÎÅÇ¯·î
            MOVE    WRK-SRYYMWH         TO  SKT0525-SRYYM
-      *=== ŽÅŽÀŽ¿ŽÉŽ½Ž¶ðÌŽ¬ŽÄŽÉŽ²ŽÃ by Uchida(2009/04/02) start
-      *    ŽÅŽÀŽ¿ŽÉŽ½Ž¶ðÌŽ¬
+      *=== ÅÀ¿ôÉ½¶èÊ¬ÄÉ²Ã by Uchida(2009/04/02) start
+      *    ÅÀ¿ôÉ½¶èÊ¬
            EVALUATE SYS-1001-TENHYOKBN
              WHEN    1
-               MOVE    "Ž¡"            TO  SKT0525-TENHYOKBN(1)
+               MOVE    "¡û"            TO  SKT0525-TENHYOKBN(1)
              WHEN    3
-               MOVE    "Ž¡"            TO  SKT0525-TENHYOKBN(2)
+               MOVE    "¡û"            TO  SKT0525-TENHYOKBN(2)
            END-EVALUATE
-      *=== ŽÅŽÀŽ¿ŽÉŽ½Ž¶ðÌŽ¬ŽÄŽÉŽ²ŽÃ by Uchida(2009/04/02) end
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ½Ž»Ž½
+      *=== ÅÀ¿ôÉ½¶èÊ¬ÄÉ²Ã by Uchida(2009/04/02) end
+      *    °åÎÅµ¡´Ø½»½ê
            MOVE    WRK-HOSPADRS        TO  SKT0525-ADRS
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÌŽ¾
+      *    °åÎÅµ¡´ØÌ¾
            MOVE    WRK-HOSPNAME        TO  SKT0525-HOSPNAME
-      *    Ž³Ž«ŽÀŽßŽ¼ŽÔŽÌŽ¾
+      *    ³«Àß¼ÔÌ¾
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT0525-KAISETUNAME
-      *    ŽÅŽÅŽÏŽÃŽÈŽÖŽ¹
+      *    ÅÅÏÃÈÖ¹æ
       *     MOVE    WRK-HOSPTEL         TO  SKT0525-TEL
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ¥Ž³Ž¡Ž¼Ž¥ŽÉ
+      *    °åÎÅµ¡´Ø¥³¡¼¥É
            MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT0525-HOSPCD
-      *    ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽÈŽÖŽ¹
+      *    ÊÝ¸±¼ÔÈÖ¹æ
            MOVE     WRK-HKNJANUM(1:2)       TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT0525-HKNJANUM
-      *    ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽÌŽ¾(ŽÅŽÔŽÆŽ»ŽÉŽÜŽ¸Ž©ŽÌŽ¾)
+      *    ÊÝ¸±¼ÔÌ¾(ÅÔÆ»ÉÜ¸©Ì¾)
            MOVE     WRK-HKNJANAME      TO  SKT0525-HKNJANAME
-      *    ŽºŽßŽÁõÄŽÇŽ¡Ž¦ŽºŽßŽ°êÃ
+      *    ºßÁí¿Ç¡¦ºß°åÁí
            IF    WRK-INDEX  =  2
-             MOVE    "ŽºŽß"              TO  SKT0525-ZAI1
-             MOVE    "Ž¢"              TO  SKT0525-ZAI2
+             MOVE    "ºß"              TO  SKT0525-ZAI1
+             MOVE    "¢þ"              TO  SKT0525-ZAI2
            END-IF
       *
            .
@@ -1125,120 +1165,120 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÄŽ¢ŽÉŽ¼ŽÊŽÔŽ½Ž¸<ŽÌŽÀŽºŽÙŽ¹ŽÔ>Ž½ðÏ
+      *    Ä¢É¼ÊÔ½¸<ÌÀºÙ¹Ô>½èÍý
       *****************************************************************
        20023-BODY-HEN-SEC      SECTION.
       *
            MOVE    ZERO                TO  IDZ
       *
-      *    ŽÊŽÔŽ½Ž¸Ž½ðÏ
+      *    ÊÔ½¸½èÍý
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       2
              ADD     1                   TO  IDZ    
              PERFORM VARYING IDY FROM    1   BY  1
                      UNTIL   IDY >       2
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž·Ž¿
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
                MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
                MOVE  WRK-Z5              TO  SKT0525-KENSU(IDZ IDY)
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž¿ŽÇŽÎŽÅŽ¼ŽÂŽÆŽ¿
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§¿ÇÎÅ¼ÂÆü¿ô
                MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT0525-NISSU(IDZ IDY)
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§ŽÅŽÀŽ¿
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
                MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT0525-TENSU(IDZ IDY)
-      *    ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž°ŽÉŽÉòÅŽ´Ž¶
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
                MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT0525-ITBFTN(IDZ IDY)
              END-PERFORM
       *
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž·Ž¿
+      *    ¿©»öÎÅÍÜ¡§·ï¿ô
              MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT0525-S-KENSU(IDZ)
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÆŽ¿
+      *    ¿©»öÎÅÍÜ¡§Æü¿ô
              MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT0525-S-NISSU(IDZ)
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž¶äµŽÛ
+      *    ¿©»öÎÅÍÜ¡§¶â³Û
              MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT0525-S-KINGK(IDZ)
-      *    Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÉŽ¸Ž½àËòÅŽ´Ž³ŽÛ
+      *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
              MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT0525-S-FTNGK(IDZ)
            END-PERFORM
       *     
-      *    Ž¸ŽÈŽÉòÅŽ´ŽÊŽ¬ŽÊŽÔŽ½Ž¸Ž½ðÏ
+      *    ¸øÈñÉéÃ´Ê¬ÊÔ½¸½èÍý
            MOVE    ZERO                  TO  FLG-KOH-END
            MOVE    1                     TO  IDX2
       * 
            PERFORM 200231-KOH-HENSYU-SEC
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
       *                             UNTIL   FLG-KOH-END   =   1
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
       *
            .
        20023-BODY-HEN-EXT.
            EXIT.
       *
       *****************************************************************
-      *    ŽÄŽ¢ŽÉŽ¼ŽÊŽÔŽ½Ž¸<Ž¸ŽÈŽÉòÅŽ´ŽÊŽ¬>Ž½ðÏ
+      *    Ä¢É¼ÊÔ½¸<¸øÈñÉéÃ´Ê¬>½èÍý
       *****************************************************************
        200231-KOH-HENSYU-SEC         SECTION.
       *
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
       *     IF      SUM-KOHNUM (IDX2)   =   SPACE
       *       MOVE    1                     TO  FLG-KOH-END
       *     ELSE    
       *       PERFORM 2002311-HKNNUM-HENSYU-SEC     
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
              PERFORM VARYING IDZ FROM    1   BY  1
                      UNTIL   IDZ >       2
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž·Ž¿
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
                MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
                MOVE  WRK-Z5                TO SKT0525-KKENSU(IDZ)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§ŽÆŽ¿
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
                MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
                MOVE  WRK-Z5                TO SKT0525-KNISSU(IDZ)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§ŽÅŽÀŽ¿
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
                MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
                MOVE  WRK-Z9                TO SKT0525-KTENSU(IDZ)
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§ŽÎŽÅŽÍŽÜŽ¤ŽÎŽµŽÉŽÕŽ¡Ž§Ž°ŽÉŽÉòÅŽ´Ž¶
+      *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§°ìÉôÉéÃ´¶â
                MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
                MOVE  WRK-Z9                TO SKT0525-KITBFTN(IDZ)
              END-PERFORM
       *
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž·Ž¿
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§·ï¿ô
              MOVE  SUM-S-KKENSU(IDX2)      TO  WRK-Z5
              MOVE  WRK-Z5                  TO  SKT0525-S-KKENSU
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÆŽ¿
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§Æü¿ô
              MOVE  SUM-S-KNISSU(IDX2)      TO  WRK-Z5
              MOVE  WRK-Z5                  TO  SKT0525-S-KNISSU
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§Ž¶äµŽÛ
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§¶â³Û
              MOVE  SUM-S-KKINGK(IDX2)      TO  WRK-Z9
              MOVE  WRK-Z9                  TO  SKT0525-S-KKINGK
-      *    Ž¸ŽÈŽºŽÆŽ·ŽÇŽÍŽ¡Ž§Ž¿Ž©Ž»ŽÎŽÅŽÍŽÜŽ¡Ž§ŽÉŽ¸Ž½àËòÅŽ´Ž³ŽÛ
+      *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
              MOVE  SUM-S-KFTNGK(IDX2)      TO  WRK-Z9
              MOVE  WRK-Z9                  TO  SKT0525-S-KFTNGK
       *
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) start
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) start
       *       ADD     1                     TO  IDX2   
       *     END-IF        
       *
-      *    Ž£Ž±ŽÊŽÇŽ½ŽÐŽÎŽÏŽ¤Ž·Ž¤ŽÆŽ¤äºŽÈŽ¤ŽÏŽ¤ŽÞŽ¤ŽÀŽ»ŽÄŽ¤ŽÃŽ¤ŽÆŽ¤Ž¤Ž¤Ž¤Ž«
+      *    £±ÊÇ½ÐÎÏ¤·¤Æ¤â¸øÈñ¤Ï¤Þ¤À»Ä¤Ã¤Æ¤¤¤ë¤«
       *     IF      SUM-KOHNUM (IDX2)  =   SPACE
       *         MOVE    1                   TO  FLG-KOH-END
       *     ELSE    
-      **        ŽÄŽ¢ŽÉŽ¼Ž°ŽºŽ½ðÏŽ¡ŽÊŽ£Ž²ŽÊŽÇŽ°ŽÊŽ¹ŽßŽ¡ŽË
+      **        Ä¢É¼°õºþ½èÍý¡Ê£²ÊÇ°Ê¹ß¡Ë
       *         PERFORM 20024-PRINT-OUT-SEC
-      **        ŽÄŽ¢ŽÉŽ¼ŽÊŽÔŽ½Ž¸<Ž¸Ž«Ž½ŽÐŽ¤Ž·>Ž½ðÏ
+      **        Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
       *         PERFORM 20021-HEAD-HEN-SEC
       *     END-IF     
-      *===Ž¸ŽÈŽ¤ŽÏŽ°Ž²ŽÕŽ½ô¦ŽËŽ½Ž¸Ž·Ž× by Yoshikawa(2008/05/14) end
+      *===¸øÈñ¤Ï°ì²Õ½ê¤Ë½¸·× by Yoshikawa(2008/05/14) end
       *
            .
        200231-KOH-HENSYU-EXT.
            EXIT.
       *
       *****************************************************************
-      *    Ž¸ŽÈŽÊŽÝŽ¸Ž±Ž¶ðÌŽ¬ŽÊŽÔŽ½Ž¸Ž½ðÏ
+      *    ¸øÈñÊÝ¸±¶èÊ¬ÊÔ½¸½èÍý
       *****************************************************************
        2002311-HKNNUM-HENSYU-SEC         SECTION.
       *
@@ -1247,14 +1287,14 @@
            MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
            MOVE    WRK-KOHNUM9         TO  SKT0525-HBTNUM
       *
-      *    ŽÆŽÃŽÄŽ¼ŽÀŽ´ŽµŽ¤ŽÎŽ¤ŽÈŽ¤Ž­ 
+      *    ÆÃÄê¼À´µ¤Î¤È¤­ 
            IF      SUM-KOHNUM (IDX2)  =   "051"
                MOVE    "51"            TO   SKT0525-HBTNUM
-               MOVE    "ŽÆŽÃŽÄŽ¼ŽÀŽ´Žµ"      TO   WRK-HKNNAME
+               MOVE    "ÆÃÄê¼À´µ"      TO   WRK-HKNNAME
            ELSE
-      *      Ž¸ŽÈŽÈŽÖŽ¹ì¦ŽÞŽ¤ŽÈŽ¤âÀŽÊŽ¤Ž«Ž¤ò¦ŽÎŽ½Ž¸Ž·Ž×Ž¤Ž«
+      *      ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó¤«¤é¤Î½¸·×¤«
              IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
-      *        ŽÊŽÝŽ¸Ž±ŽÈŽÖŽ¹ìÈŽÉŽ¹Ž¤Žß  
+      *        ÊÝ¸±ÈÖ¹æÆÉ¹þ¤ß  
                INITIALIZE                     HKNNUM-REC
                MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
                MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
@@ -1287,15 +1327,15 @@
                  MOVE  "key2"             TO  MCP-PATHNAME
                  PERFORM  900-CLOSE-SEC
       *
-      *          ŽËŽ¡ŽÊŽÌŽÈŽÖŽ¹
+      *          Ë¡ÊÌÈÖ¹æ
                  MOVE  HKN-HBTNUM         TO  SKT0525-HBTNUM
              ELSE
-      *          Ž¸ŽÈŽÈŽÖŽ¹ì¦ŽÞŽ¤ŽÈŽ¤âÀŽÊŽ¤Ž«Ž¤òºŽÈŽÌŽ¾Ž¤ŽØ
+      *          ¸øÈñÈÖ¹æ¤Þ¤È¤á¾ðÊó¤«¤é¸øÈñÌ¾¤Ø
                  MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
              END-IF
            END-IF
       *
-      *    Ž¸ŽÈŽÌŽ¾
+      *    ¸øÈñÌ¾
            MOVE  WRK-HKNNAME        TO  SKT0525-KOHNAME
       *
            . 
@@ -1303,7 +1343,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÄŽ¢ŽÉŽ¼Ž°ŽºŽ½ðÏ
+      *    Ä¢É¼°õºþ½èÍý
       *****************************************************************
        20024-PRINT-OUT-SEC                SECTION.
       *
@@ -1333,26 +1373,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "Ž¸ê¶Ž¹äÐŽ¼ŽÔŽÀŽÁŽµâ¿"        TO  SPRT-TITLE
+                   MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "Ž¸ê¶Ž¹äÐŽ¼ŽÔŽÀŽÁŽµâ¿Ž¡ŽÊŽºŽßŽ°êÃõÐŽ¡ŽË"
+                   MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ¡Êºß°åÁíÅù¡Ë"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "Ž¸ê¶Ž¹äÐŽ¼ŽÔŽÀŽÁŽµâ¿Ž¡ŽÎŽÊŽÖŽÌâÌŽ¬Ž¡ŽÏ" 
+                   MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ¡ÎÊÖÌáÊ¬¡Ï" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "Ž¸ê¶Ž¹äÐŽ¼ŽÔŽÀŽÁŽµâ¿Ž¡ŽÊŽºŽßŽ°êÃõÐŽ¡ŽËŽ¡ŽÎŽÊŽÖŽÌâÌŽ¬Ž¡ŽÏ"
+                   MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ¡Êºß°åÁíÅù¡Ë¡ÎÊÖÌáÊ¬¡Ï"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "Ž¸ê¶Ž¹äÐŽ¼ŽÔŽÀŽÁŽµâ¿Ž¡ŽÎŽÆŽÃŽÊŽÌŽÎŽÅŽÍŽÜŽÈŽ¡ŽÏ"
+                   MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ¡ÎÆÃÊÌÎÅÍÜÈñ¡Ï"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "Ž¸ê¶Ž¹äÐŽ¼ŽÔŽÀŽÁŽµâ¿Ž¡ŽÎŽÊŽÖŽÌâÌŽ¬Ž¡ŽÏŽ¡ŽÎŽÆŽÃŽÊŽÌŽÎŽÅŽÍŽÜŽÈŽ¡ŽÏ" 
+                   MOVE    "¸å´ü¹âÎð¼ÔÀÁµá½ñ¡ÎÊÖÌáÊ¬¡Ï¡ÎÆÃÊÌÎÅÍÜÈñ¡Ï" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1366,7 +1406,7 @@
            IF      SPRT-RETURN         =   ZERO
                CONTINUE
            ELSE
-               MOVE    "Ž°ŽºŽ£ŽÄŽ£ŽÂŽ¤ŽËŽ¹Ž¹Ž¿Ž·Ž¤ŽÇŽ¤Ž­Ž¤ŽÞŽ¤Ž»Ž¤Ž¤ŽÇŽ¤Ž·Ž¤Ž¿"
+               MOVE    "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
                                           TO  WRK-RECEERR
                PERFORM 500-ERR-HENSYU-SEC
                PERFORM 500-COBABORT-SEC
@@ -1376,7 +1416,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÁŽ´Ž³ŽÑŽÊŽÑŽ´Ž¹Ž½ðÏ
+      *    Á´³ÑÊÑ´¹½èÍý
       *****************************************************************
        2009-HENKAN-SEC                 SECTION.
       *
@@ -1399,7 +1439,7 @@
            EXIT.
       * 
       *****************************************************************
-      *    Ž¥Ž¨Ž¥ò£Ž¼Ž½ŽÐŽÎŽÏŽ½ðÏ
+      *    ¥¨¥é¡¼½ÐÎÏ½èÍý
       *****************************************************************
        500-ERR-HENSYU-SEC                SECTION.
       *
@@ -1413,7 +1453,7 @@
                WRITE   RECEERR-REC
                CLOSE   RECEERR-FILE
       *         
-      *        Ž¥Ž¸Ž¥î§ŽÖŽ´ŽÉŽÍŽ³Ž«Ž»ŽÏŽ½ðÏ
+      *        ¥¸¥ç¥Ö´ÉÍý³«»Ï½èÍý
                MOVE    "JBE"           TO  SJOBKANRI-MODE
                INITIALIZE                  JOBKANRI-REC
                MOVE    WRK-RECEERR     TO  JOB-YOBI
@@ -1429,7 +1469,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¥Ž¨Ž¥ò£Ž¼Ž»Ž½ŽªŽÎŽ»Ž½ðÏ
+      *    ¥¨¥é¡¼»þ½ªÎ»½èÍý
       *****************************************************************
        500-COBABORT-SEC                SECTION.
       *
@@ -1446,12 +1486,12 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž½ŽªŽÎŽ»Ž½ðÏ
+      *    ½ªÎ»½èÍý
       *****************************************************************
        300-END-SEC                 SECTION.
       *
       *     
-      *    Ž¥Ž¹Ž¥ŽÆŽ¥ŽÃŽ¥Ž×Ž´ŽÉŽÍŽ½ŽªŽÎŽ»Ž½ðÏ
+      *    ¥¹¥Æ¥Ã¥×´ÉÍý½ªÎ»½èÍý
            MOVE    "STE"           TO  SJOBKANRI-MODE
            INITIALIZE                  JOBKANRI-REC
            MOVE    CNT-PAGE        TO  JOB-UPDCNT
@@ -1463,7 +1503,7 @@
            EXIT.
       *
       *****************************************************************
-      *   ŽÀŽÁŽµâ¶ŽÉŽÍŽ£ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·Ž½ðÏ
+      *   ÀÁµá´ÉÍý£Ä£Â¹¹¿·½èÍý
       *****************************************************************
        310-SEIKYU-UPD-SEC              SECTION.
       *
@@ -1486,7 +1526,7 @@
                    IF      MCP-RC          =   ZERO
                        PERFORM 900-UPD-FILE-READ-SEC
                    ELSE
-                       STRING "ŽÀŽÁŽµâ¶ŽÉŽÍŽ£ŽÄŽ£ŽÂŽ¡Ž¡Ž¹Ž¹Ž¿Ž·Ž¥Ž¨Ž¥ò£Ž¼Ž¡Ž¡"
+                       STRING "ÀÁµá´ÉÍý£Ä£Â¡¡¹¹¿·¥¨¥é¡¼¡¡"
                                                DELIMITED  BY  SIZE
                                RECE10-KEY      DELIMITED  BY  SIZE
                                                INTO    WRK-RECEERR
@@ -1495,7 +1535,7 @@
                        PERFORM 500-COBABORT-SEC
                    END-IF
                ELSE
-                   STRING "ŽÀŽÁŽµâ¶ŽÉŽÍŽ£ŽÄŽ£ŽÂŽ¡Ž¡ŽÆŽÉŽ¹Ž¤ŽßŽ¹Ž¹Ž¿Ž·Ž¥Ž¨Ž¥ò£Ž¼Ž¡Ž¡"
+                   STRING "ÀÁµá´ÉÍý£Ä£Â¡¡ÆÉ¹þ¤ß¹¹¿·¥¨¥é¡¼¡¡"
                                                DELIMITED  BY  SIZE
                            RECE10X-KEY         DELIMITED  BY  SIZE
                                                INTO    WRK-RECEERR
@@ -1511,7 +1551,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÀŽ¾ŽÎŽÆŽËŽÜŽ¸ŽÊŽÑŽ´Ž¹Ž½ðÏ
+      *    À¾ÎñÆüËÜ¸ìÊÑ´¹½èÍý
       *****************************************************************
        31012-SEIWA-HEN-SEC        SECTION.
       *
@@ -1522,19 +1562,19 @@
            CALL    "ORCSDAY"           USING   STS-AREA-DAY
                                                LNK-DAY2-AREA
            MOVE    LNK-DAY2-EDTYMD3    TO  WRK-HENYMDG
-           INSPECT WRK-HENYMDG    REPLACING  ALL "  "  BY  "Ž¡Ž¡"
+           INSPECT WRK-HENYMDG    REPLACING  ALL "  "  BY  "¡¡"
            .
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
       *****************************************************************
-      *    ŽÀŽÁŽµâ¶ŽÉŽÍŽÆŽÉŽ¹
+      *    ÀÁµá´ÉÍýÆÉ¹þ
       *****************************************************************
        900-SEIKYU-SELECT-SEC             SECTION.
       *
            MOVE    ZERO                TO  FLG-RECE10
       *     
-      *    ŽÀŽÁŽµâ¶ŽÉŽÍŽ£ŽÄŽ£ŽÂŽ¸Ž¡Žº
+      *    ÀÁµá´ÉÍý£Ä£Â¸¡º÷
            MOVE    SPACE               TO  RECE10-REC
            INITIALIZE                      RECE10-REC
            MOVE    WRK-PARA-HOSPNUM    TO  RECE10-HOSPNUM
@@ -1557,7 +1597,14 @@
                                                RECE10-HKNNUM
            END-IF
       *
-
+      *###
+           DISPLAY "SYOKBN=" WRK-SYOKBN " SYOKBN1=" WRK-PARA-SYOKBN1
+                   " SRYYM=" RECE10-SRYYM "-" RECE10-XXSRYYM 
+                   " HKNNUM= " RECE10-HKNNUM
+                   " PATHNAME=" WRK-MCP-PATHNAME
+                   " HKNJANUM=" RECE10-XXSTHKNJANUM "-" 
+                                RECE10-XXEDHKNJANUM
+      *###
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
@@ -1576,7 +1623,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÀŽÁŽµâ§ŽÞŽ¥Ž¹Ž¥Ž¿Ž¡Ž¼ŽÆŽÉŽ¹
+      *    ÀÁµá¥Þ¥¹¥¿¡¼ÆÉ¹þ
       *****************************************************************
        900-SEIKYU-READ-SEC           SECTION.
       *
@@ -1587,7 +1634,7 @@
                MOVE    ZERO            TO  FLG-RECE10
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
-      *        Ž¥ŽÆŽ¥Ž¹Ž¥ŽÈŽ´ŽµŽ¼ŽÔŽ¤ŽÎŽ¤ŽÈŽ¤Ž­Ž¤ŽÏŽÆŽÉŽ¤ŽßŽÈŽ¤ŽÐŽ¤Ž¹
+      *        ¥Æ¥¹¥È´µ¼Ô¤Î¤È¤­¤ÏÆÉ¤ßÈô¤Ð¤¹
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
                MOVE    RECE10-HOSPNUM      TO  PTINF-HOSPNUM
@@ -1598,7 +1645,7 @@
                AND     PTINF-TSTPTNUMKBN   =   "1"
                    PERFORM  900-SEIKYU-READ-SEC
                END-IF   
-      *        Ž¥Ž­Ž¡Ž¼Ž¤ŽËŽ¸Ž©ŽÈŽÖŽ¹ì¦Ž³ŽÊŽÇŽ¼
+      *        ¥­¡¼¤Ë¸©ÈÖ¹æ¤ò³ÊÇ¼
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
                ADD     1                     TO  CNT-RECE10   
       *         
@@ -1612,7 +1659,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž´ŽµŽ¼ŽÔŽ¥ŽÞŽ¥Ž¹Ž¥Ž¿ŽÆŽÉŽ¹
+      *    ´µ¼Ô¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
        800-PTINF-READ-SEC         SECTION.
       *
@@ -1644,7 +1691,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÀŽÁŽµâ¶ŽÉŽÍŽ£ŽÄŽ£ŽÂŽ¹Ž¹Ž¿Ž·ŽÍŽÑŽ¥ŽÕŽ¥Ž¡Ž¥Ž¤Ž¥ŽÆŽÉŽ¹
+      *    ÀÁµá´ÉÍý£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ëÆÉ¹þ
       *****************************************************************
        900-UPD-FILE-READ-SEC             SECTION.
       *
@@ -1659,11 +1706,11 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÊŽÔŽ½Ž¸Ž¾ŽÊŽÆŽÉŽ¤ŽßŽ¹Ž¤Žß
+      *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
       *****************************************************************
        900-1900-READ-SEC           SECTION.
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÊŽÔŽ½Ž¸Ž¾ŽÊŽÆŽÉŽ¤ŽßŽ¹Ž¤Žß
+      *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
            MOVE    SPACE           TO  SYS-1900-REC
            INITIALIZE                  SYS-1900-REC
            MOVE    "1900"          TO  SYS-1900-KANRICD
@@ -1679,9 +1726,9 @@
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
                IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
-      *            Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÌŽ¾Ž¾ŽÎŽÊŽÔŽ½Ž¸Ž¾ŽÊ
+      *            °åÎÅµ¡´ØÌ¾¾ÎÊÔ½¸¾ðÊó
                    PERFORM 900-1901-READ-SEC
-      *            Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ½Ž»Ž½ŽÊŽÔŽ½Ž¸Ž¾ŽÊ
+      *            °åÎÅµ¡´Ø½»½êÊÔ½¸¾ðÊó
                    PERFORM 900-1902-READ-SEC
                 END-IF
            ELSE
@@ -1693,11 +1740,11 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÌŽ¾Ž¾ŽÎŽÊŽÔŽ½Ž¸Ž¾ŽÊŽÆŽÉŽ¤ŽßŽ¹Ž¤Žß
+      *    °åÎÅµ¡´ØÌ¾¾ÎÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
       *****************************************************************
        900-1901-READ-SEC           SECTION.
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽÌŽ¾Ž¾ŽÎŽÊŽÔŽ½Ž¸Ž¾ŽÊŽÆŽÉŽ¤ŽßŽ¹Ž¤Žß
+      *    °åÎÅµ¡´ØÌ¾¾ÎÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
            MOVE    SPACE           TO  SYS-1901-REC
            INITIALIZE                  SYS-1901-REC
            MOVE    "1901"          TO  SYS-1901-KANRICD
@@ -1724,11 +1771,11 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ½Ž»Ž½ŽÊŽÔŽ½Ž¸Ž¾ŽÊŽÆŽÉŽ¤ŽßŽ¹Ž¤Žß
+      *    °åÎÅµ¡´Ø½»½êÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
       *****************************************************************
        900-1902-READ-SEC           SECTION.
       *
-      *    Ž°êÐŽÅŽµŽ¡Ž´ŽØŽ½Ž»Ž½ŽÊŽÔŽ½Ž¸Ž¾ŽÊŽÆŽÉŽ¤ŽßŽ¹Ž¤Žß
+      *    °åÎÅµ¡´Ø½»½êÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
            MOVE    SPACE           TO  SYS-1902-REC
            INITIALIZE                  SYS-1902-REC
            MOVE    "1902"          TO  SYS-1902-KANRICD
@@ -1755,7 +1802,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¥Ž·Ž¥Ž¹Ž¥ŽÆŽ¥à¶ŽÉŽÍŽ¥ŽÞŽ¥Ž¹Ž¥Ž¿ŽÆŽÉŽ¹
+      *    ¥·¥¹¥Æ¥à´ÉÍý¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
        910-SYSKANRI-KEY10-SEC         SECTION.
       *
@@ -1784,7 +1831,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¥Ž·Ž¥Ž¹Ž¥ŽÆŽ¥à¶ŽÉŽÍŽ¥ŽÞŽ¥Ž¹Ž¥Ž¿ŽÆŽÉŽ¹Ž¡ŽÊŽ£ŽÎŽ£ŽÅŽ£ŽØŽ£ŽÔŽ¡ŽË
+      *    ¥·¥¹¥Æ¥à´ÉÍý¥Þ¥¹¥¿ÆÉ¹þ¡Ê£Î£Å£Ø£Ô¡Ë
       *****************************************************************
        900-SYSKANRI-READ-N-SEC         SECTION.
       *
@@ -1801,7 +1848,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÀŽÁŽµâ¶ŽÉŽÍŽ¥ŽÞŽ¥Ž¹Ž¥Ž¿ŽÆŽÉŽ¹
+      *    ÀÁµá´ÉÍý¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
        910-SEIKYU-INV-SEC         SECTION.
       *
@@ -1831,7 +1878,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÊŽÝŽ¸Ž±ŽÈŽÖŽ¹ì§ŽÞŽ¥Ž¹Ž¥Ž¿Ž¡Ž¼ŽÆŽÉŽ¹
+      *    ÊÝ¸±ÈÖ¹æ¥Þ¥¹¥¿¡¼ÆÉ¹þ
       *****************************************************************
        900-HKNNUM-READ-SEC         SECTION.
       *
@@ -1849,7 +1896,7 @@
            EXIT.
       *
       *****************************************************************
-      *    ŽÊŽÝŽ¸Ž±Ž¼ŽÔŽ¥ŽÞŽ¥Ž¹Ž¥Ž¿Ž¡Ž¼ŽÆŽÉŽ¹Ž¡ŽÊŽ¥Ž­Ž¡Ž¼Ž¡ŽË
+      *    ÊÝ¸±¼Ô¥Þ¥¹¥¿¡¼ÆÉ¹þ¡Ê¥­¡¼¡Ë
       *****************************************************************
        900-HKNJAINF-INV-SEC         SECTION.
       *
@@ -1879,7 +1926,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¥Ž¸Ž¥î§ŽÖŽ´ŽÉŽÍŽ£ŽÄŽ£ŽÂŽÀŽ©Ž¸ì¿ðÏ
+      *    ¥¸¥ç¥Ö´ÉÍý£Ä£ÂÀ©¸æ½èÍý
       *****************************************************************
        900-CALL-ORCSJOB-SEC            SECTION.
       *
@@ -1896,7 +1943,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž£ŽÄŽ£ŽÂŽ£ŽÓŽ£ŽÅŽ£ŽÌŽ£ŽÅŽ£ŽÃŽ£ŽÔŽ½ðÏ
+      *    £Ä£Â£Ó£Å£Ì£Å£Ã£Ô½èÍý
       *****************************************************************
        900-DBSELECT-SEC                SECTION.
       *
@@ -1913,7 +1960,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž£ŽÄŽ£ŽÂŽ£ŽÆŽ£ŽÅŽ£ŽÔŽ£ŽÃŽ£ŽÈŽ½ðÏ
+      *    £Ä£Â£Æ£Å£Ô£Ã£È½èÍý
       *****************************************************************
        900-DBFETCH-SEC                SECTION.
       *
@@ -1925,7 +1972,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¥ŽÆŽ¡Ž¼Ž¥ŽÖŽ¥Ž¥Ž¯Ž¥Ž¡Ž¼Ž¥ŽºŽ½ðÏ
+      *    ¥Æ¡¼¥Ö¥ë¥¯¥í¡¼¥º½èÍý
       *****************************************************************
        900-CLOSE-SEC               SECTION.
       *
@@ -1937,7 +1984,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž¥ŽÆŽ¡Ž¼Ž¥ŽÖŽ¥Ž¥Ž¢Ž¥Ž¯Ž¥Ž»Ž¥Ž¹Ž½ðÏ
+      *    ¥Æ¡¼¥Ö¥ë¥¢¥¯¥»¥¹½èÍý
       *****************************************************************
        900-ORCDBMAIN-SEC               SECTION.
       *
@@ -1950,7 +1997,7 @@
            EXIT.
       *      
       *****************************************************************
-      *    Ž£ŽÄŽ£ŽÂŽ¥ŽªŽ¡Ž¼Ž¥Ž×Ž¥Ž½ðÏ
+      *    £Ä£Â¥ª¡¼¥×¥ó½èÍý
       *****************************************************************
        100-DBOPEN-SEC                SECTION.
       *
@@ -1968,7 +2015,7 @@
            EXIT.
       *
       *****************************************************************
-      *    Ž£ŽÄŽ£ŽÂŽ¥Ž¯Ž¥Ž¡Ž¼Ž¥ŽºŽ½ðÏ
+      *    £Ä£Â¥¯¥í¡¼¥º½èÍý
       *****************************************************************
        900-DBDISCONNECT-SEC            SECTION.
       *
