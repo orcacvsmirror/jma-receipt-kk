@@ -44,6 +44,9 @@
       *  01.00.14    吉川    09/07/09      印字対象番号の追加（246,760）
       *  01.00.15    吉川    09/12/10      「公費分点数１と同２の欄の点数」欄と
       *                                    「老人分一部負担金」欄は印字不要
+      *  01.00.16    吉川    10/02/22      全国公費を併用している場合のみ
+      *                                    「老人分一部負担金〜」欄は記載し
+      *                                    「点数」欄は集計不要
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -789,7 +792,14 @@
            ADD     1               TO    MF100-KENSU(IDX)
       *
       *    点数
-           ADD     WRK-TENSU       TO  MF100-TENSU(IDX)
+      *=== 全国公費時、点数は計上しない by Yoshikawa(2010/02/22) start
+      *     ADD     WRK-TENSU       TO  MF100-TENSU(IDX)
+           IF      FLG-HEIYOU2            =  1
+             CONTINUE
+           ELSE
+             ADD     WRK-TENSU       TO  MF100-TENSU(IDX)
+           END-IF
+      *=== 全国公費時、点数は計上しない by Yoshikawa(2010/02/22) end
       *
       *    公費分点数
            ADD     WRK-KOHTENSU    TO    MF100-KOHTENSU(IDX)
@@ -984,11 +994,16 @@
       *    薬剤一部負担金
                MOVE   MF100-YKZFTN(IDX2)     TO  WRK-Z7
                MOVE   WRK-Z7                 TO  SC13-YKZFTN(IDX IDX2)
-      *=== 印字不要 by Yoshikawa(2009/12/10) start
+      *=== 全国公費併用時は印字 by Yoshikawa(2010/02/22) start
+      **=== 印字不要 by Yoshikawa(2009/12/10) start
+      **    一部負担金
+      **         MOVE   MF100-ITBFTN(IDX2)     TO  WRK-Z9
+      **         MOVE   WRK-Z9                 TO  SC13-ITBFTN(IDX IDX2)
+      **=== 印字不要 by Yoshikawa(2009/12/10) end
       *    一部負担金
-      *         MOVE   MF100-ITBFTN(IDX2)     TO  WRK-Z9
-      *         MOVE   WRK-Z9                 TO  SC13-ITBFTN(IDX IDX2)
-      *=== 印字不要 by Yoshikawa(2009/12/10) end
+               MOVE   MF100-ITBFTN(IDX2)     TO  WRK-Z9
+               MOVE   WRK-Z9                 TO  SC13-ITBFTN(IDX IDX2)
+      *=== 全国公費併用時は印字 by Yoshikawa(2010/02/22) end
              END-PERFORM
       *    食事件数
              MOVE     MF100-SKENSU           TO  WRK-Z5
