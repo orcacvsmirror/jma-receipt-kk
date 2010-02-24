@@ -66,3 +66,8 @@
       *È÷¹Í
             03  SC07-BIKO                         PIC X(16).
             03  SC07-BIKO2                        PIC X(16).
+            03  SC07-BIKO3                        PIC X(16).
+      *Â¾Ë¡Ë¡ÊÌ
+            03  SC07-TAHOUHBT                     PIC X(02).
+      *Â¾Ë¡ÉéÃ´³Û
+            03  SC07-TAHOUFTN                     PIC X(14).

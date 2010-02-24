@@ -66,3 +66,7 @@
       *È÷¹Í
             03  SC11-BIKO                         PIC X(16).
             03  SC11-BIKO2                        PIC X(16).
+      *Â¾Ë¡Ë¡ÊÌ
+            03  SC11-TAHOUHBT                     PIC X(02).
+      *Â¾Ë¡ÉéÃ´³Û
+            03  SC11-TAHOUFTN                     PIC X(14).

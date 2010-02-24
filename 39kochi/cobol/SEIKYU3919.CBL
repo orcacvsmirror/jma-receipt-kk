@@ -41,6 +41,8 @@
       *  01.00.06     吉川    09/07/06    実日数がゼロの場合は0を印字
       *  01.00.07     吉川    10/01/15    診療年月欄には当月ではなく
       *                                   診療年月を印字する
+      *  01.00.08     吉川    10/02/22    全国公費を併用している場合
+      *                                   備考欄に法別と負担額を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -110,6 +112,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+           03  FLG-HKNNUM     PIC 9(01).
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -159,6 +164,14 @@
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
            03  WRK-KOBETUCITYNUM          PIC X(03).
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+           03  WRK-KOHNUM2                PIC X(03).
+           03  WRK-KEISAN1                PIC S9(08)V9(01).
+           03  WRK-KEISAN1-G              PIC S9(08).
+           03  WRK-KEISAN2                PIC S9(08)V9(01).
+           03  WRK-KEISAN2-G              PIC S9(08).
+           03  WRK-TAHOUFTN-G             PIC S9(08)V9(01).
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *
            03  WRK-MAE-INPUT              PIC X(200).
            03  WRK-OUT-INPUT              PIC X(200).
@@ -251,6 +264,12 @@
       *    保険組合せ
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
+      *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+      *    保険番号
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -633,6 +652,10 @@
       *
       *    請求金額集計
            INITIALIZE                    WRK-KASAN-TBL
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+           MOVE    ZERO            TO    WRK-KEISAN1
+                                         WRK-KEISAN2
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
            MOVE    MF100-KOHNUM    TO    WRK-KOHNUM
            MOVE    MF100-KOHID     TO    WRK-KOHID
            IF      RECE02-NYUGAIKBN    =   "1"
@@ -690,6 +713,20 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
            MOVE    WRK-SEIKYUGK-G2  TO   MF100-SEIKYUGK
+      *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+           COMPUTE WRK-KEISAN1-G   ROUNDED =   WRK-KEISAN1
+           COMPUTE WRK-KEISAN2-G   ROUNDED =   WRK-KEISAN2
+      *    全国公費の負担額を計算
+           IF      WRK-KEISAN1-G   <=  WRK-KEISAN2-G
+               MOVE    ZERO                 TO  WRK-TAHOUFTN-G
+           ELSE
+               COMPUTE WRK-TAHOUFTN-G  =   WRK-KEISAN1-G
+                                       -   WRK-KEISAN2-G
+           END-IF
+      *
+           MOVE    WRK-TAHOUFTN-G           TO  MF100-TAHOUFTN
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
@@ -924,6 +961,22 @@
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+           IF  MF100-TAHOUFTN  NOT =  ZERO
+      *    他法法別
+             MOVE     MF100-TAHOUHBT         TO   SC19-TAHOUHBT
+      *
+      *    他法負担額
+             MOVE     MF100-TAHOUFTN         TO   WRK-Z6
+             MOVE     WRK-Z6                 TO   WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             STRING   WRK-OUT-INPUT          DELIMITED  BY  SPACE
+                      "円"                   DELIMITED  BY  SIZE
+                      INTO                        SC19-TAHOUFTN
+             END-STRING
+           END-IF
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *
            .
        320-BODY-HEN-EXT.
            EXIT.
@@ -1032,6 +1085,36 @@
                  MOVE   SYU-KOH-COMPFTN(IDX)
                                        TO    WRK-SEIKYUGK
                END-IF
+      *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+      *        現在の負担金と、上位の負担金をそれぞれ加算
+               IF     IDX  =    1
+                 IF  RECE02-FTNMONEY(1)  >  ZERO
+                   ADD  SYU-SYUCOMPFTN            TO  WRK-KEISAN1
+                   ADD  SYU-KOH-COMPFTN(IDX)      TO  WRK-KEISAN2
+                 ELSE
+                   ADD  SYU-SYUCOMPFTN-ENTANI     TO  WRK-KEISAN1
+                   ADD  SYU-KOH-COMPFTN-ENTANI(IDX) 
+                                                  TO  WRK-KEISAN2
+                 END-IF
+               ELSE
+                 IF  RECE02-FTNMONEY(1)  >  ZERO
+                   ADD  SYU-KOH-COMPFTN(IDX - 1)  TO  WRK-KEISAN1
+                   ADD  SYU-KOH-COMPFTN(IDX)      TO  WRK-KEISAN2
+                 ELSE
+                   ADD  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                                  TO  WRK-KEISAN1
+                   ADD  SYU-KOH-COMPFTN-ENTANI(IDX)
+                                                  TO  WRK-KEISAN2
+                 END-IF
+               END-IF
+      *
+      *        保険番号マスタから法別番号取得
+               MOVE     SYU-KOH-HKNNUM(IDX)       TO  WRK-KOHNUM2
+               PERFORM  930-HKNNUM-SET-SEC
+      *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *
              END-IF
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
                MOVE    1     TO    MF100-TYOKI
@@ -1595,6 +1678,75 @@
        925-HKNJAINF-READ-EXT.
            EXIT.
       *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
+      *****************************************************************
+      *   保険情報セット
+      *****************************************************************
+       930-HKNNUM-SET-SEC  SECTION.
+      *
+           INITIALIZE                           HKNNUM-REC
+           MOVE    SPA-HOSPNUM              TO  HKN-HOSPNUM
+           MOVE    WRK-KOHNUM2              TO  HKN-HKNNUM
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)  TO  HKN-TEKSTYMD(1:6)
+                                                HKN-TEKEDYMD(1:6)
+           MOVE    "01"                     TO  HKN-TEKSTYMD(7:2)
+                                                HKN-TEKEDYMD(7:2)
+           MOVE    HKNNUM-REC               TO  MCPDATA-REC
+           MOVE    "DBSELECT"               TO  MCP-FUNC
+           MOVE    "tbl_hknnum"             TO  MCP-TABLE
+           MOVE    "key5"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                  USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    "tbl_hknnum"         TO  MCP-TABLE
+               MOVE    "key5"               TO  MCP-PATHNAME
+               PERFORM  930-HKNNUM-READ-SEC
+      *
+           ELSE
+               DISPLAY  "HKNNUM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE                           MCPAREA
+           MOVE    "DBCLOSECURSOR"          TO  MCP-FUNC
+           MOVE    "tbl_hknnum"             TO  MCP-TABLE
+           MOVE    "key5"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                  USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+      *
+           .
+       930-HKNNUM-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険番号情報読込
+      *****************************************************************
+       930-HKNNUM-READ-SEC  SECTION.
+      *
+           MOVE    "DBFETCH"                TO  MCP-FUNC
+           CALL    "ORCDBMAIN"                  USING
+                                                MCPAREA
+                                                MCPDATA-REC
+                                                SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC              TO  HKNNUM-REC
+             MOVE  ZERO                     TO  FLG-HKNNUM
+      *
+      *      法別番号取得
+             MOVE  HKN-HBTNUM               TO  MF100-TAHOUHBT
+           ELSE
+             INITIALIZE  HKNNUM-REC
+             MOVE  1                        TO  FLG-HKNNUM
+           END-IF
+      *
+           .
+       930-HKNNUM-READ-EXT.
+           EXIT.
+      *
+      *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************

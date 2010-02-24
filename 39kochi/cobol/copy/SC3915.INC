@@ -66,3 +66,7 @@
       *備考
             03  SC15-BIKO                        PIC X(16).
             03  SC15-BIKO2                       PIC X(16).
+      *他法法別
+            03  SC15-TAHOUHBT                    PIC X(02).
+      *他法負担額
+            03  SC15-TAHOUFTN                    PIC X(14).

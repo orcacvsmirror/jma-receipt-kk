@@ -67,3 +67,7 @@
             03  SC03-BIKO                         PIC X(16).
             03  SC03-BIKO2                        PIC X(16).
             03  SC03-BIKO3                        PIC X(16).
+      *他法法別
+            03  SC03-TAHOUHBT                     PIC X(02).
+      *他法負担額
+            03  SC03-TAHOUFTN                     PIC X(14).

@@ -66,3 +66,7 @@
       *備考
             03  SC19-BIKO                        PIC X(16).
             03  SC19-BIKO2                       PIC X(16).
+      *他法法別
+            03  SC19-TAHOUHBT                    PIC X(02).
+      *他法負担額
+            03  SC19-TAHOUFTN                    PIC X(14).

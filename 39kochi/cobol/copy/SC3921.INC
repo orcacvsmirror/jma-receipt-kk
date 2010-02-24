@@ -66,3 +66,7 @@
       *備考
             03  SC21-BIKO                        PIC X(16).
             03  SC21-BIKO2                       PIC X(16).
+      *他法法別
+            03  SC21-TAHOUHBT                    PIC X(02).
+      *他法負担額
+            03  SC21-TAHOUFTN                    PIC X(14).

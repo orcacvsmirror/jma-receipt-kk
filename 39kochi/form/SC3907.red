@@ -129,6 +129,16 @@
         <embed object="string" length="16"/>
       </appinfo>
     </element>
+    <element name="TAHOUHBT" occurs="1">
+      <appinfo>
+        <embed object="string" length="2"/>
+      </appinfo>
+    </element>
+    <element name="TAHOUFTN" occurs="1">
+      <appinfo>
+        <embed object="string" length="14"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -2325,10 +2335,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O86">
       <attribute name="obj_pos">
-        <point val="13.7,19.1"/>
+        <point val="13.7,18.9233"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.7,18.7815;18.952,19.9815"/>
+        <rectangle val="13.7,18.6048;18.952,19.8048"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2344,7 +2354,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="13.7,19.1"/>
+            <point val="13.7,18.9233"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4461,10 +4471,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O138">
       <attribute name="obj_pos">
-        <point val="13.9125,20.6888"/>
+        <point val="13.9125,20.3531"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.9125,20.211;18.7605,20.811"/>
+        <rectangle val="13.9125,19.8753;18.7605,20.4753"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#BIKO2#</string>
@@ -4484,7 +4494,7 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="13.9125,20.6888"/>
+            <point val="13.9125,20.3531"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4503,10 +4513,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O139">
       <attribute name="obj_pos">
-        <point val="13.9,21.475"/>
+        <point val="13.9,21.0156"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.9,20.9972;18.748,21.5972"/>
+        <rectangle val="13.9,20.5379;18.748,21.1379"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#BIKO3#</string>
@@ -4526,7 +4536,7 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="13.9,21.475"/>
+            <point val="13.9,21.0156"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4539,6 +4549,90 @@
           </attribute>
           <attribute name="multi">
             <real val="0.303"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O140">
+      <attribute name="obj_pos">
+        <point val="13.9507,21.6491"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="13.9507,21.1713;14.6779,21.7713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TAHOUHBT#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.6"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="13.9507,21.6491"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.3636"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.303"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O141">
+      <attribute name="obj_pos">
+        <point val="18.509,21.6668"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.974,21.2686;18.509,21.7686"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TAHOUFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#163;&#177;&#163;&#178;&#163;&#179;&#163;&#180;&#163;&#181;&#163;&#182;&#177;&#223;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.5"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.509,21.6668"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.303"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.2525"/>
           </attribute>
         </composite>
       </attribute>
