@@ -47,6 +47,7 @@
       *  01.00.10    µÈÀî    09/02/16    ¸øÈñ¤Î½õÀ®¤¬¤Ê¤¤¾ì¹ç¤Ï°õ»ú¤·¤Ê¤¤
       *  01.00.11    µÈÀî    09/06/09    190¤Ï½õÀ®¤ÎÍ­Ìµ¤Ë´Ø¤ï¤é¤ºµ­ºÜ
       *  01.00.12    µÈÀî    09/10/28    ÂÐ¾Ý¸øÈñÈÖ¹æÄÉ²Ã(681)
+      *  01.00.13    µÈÀî    10/02/23    ÆÃµ­»ö¹à¤ò°õ»ú¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -243,6 +244,59 @@
                05  WRK-2003-SYUBETU-G.
                    07  WRK-2003-SYUBETU        PIC X(04) OCCURS 10.
       *
+      *=== ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2010/02/23) start
+      *   ÆÃµ­»ö¹à
+       01  TBL-TOKKI-AREA.
+           03  FILLER              PIC X(02)   VALUE   "01".
+           03  FILLER              PIC X(10)   VALUE   "£°£±¸ø".
+           03  FILLER              PIC X(02)   VALUE   "02".
+           03  FILLER              PIC X(10)   VALUE   "£°£²Ä¹".
+           03  FILLER              PIC X(02)   VALUE   "03".
+           03  FILLER              PIC X(10)   VALUE   "£°£³Ä¹½è".
+           03  FILLER              PIC X(02)   VALUE   "04".
+           03  FILLER              PIC X(10)   VALUE   "£°£´¸åÊÝ".
+           03  FILLER              PIC X(02)   VALUE   "07".
+           03  FILLER              PIC X(10)   VALUE   "£°£·Ï·Ê»".
+           03  FILLER              PIC X(02)   VALUE   "08".
+           03  FILLER              PIC X(10)   VALUE   "£°£¸Ï··ò".
+           03  FILLER              PIC X(02)   VALUE   "09".
+           03  FILLER              PIC X(10)   VALUE   "£°£¹»Ü".
+           03  FILLER              PIC X(02)   VALUE   "10".
+           03  FILLER              PIC X(10)   VALUE   "£±£°Âè»°".
+           03  FILLER              PIC X(02)   VALUE   "11".
+           03  FILLER              PIC X(10)   VALUE   "£±£±Ìô¼£".
+           03  FILLER              PIC X(02)   VALUE   "12".
+           03  FILLER              PIC X(10)   VALUE   "£±£²´ï¼£".
+           03  FILLER              PIC X(02)   VALUE   "13".
+           03  FILLER              PIC X(10)   VALUE   "£±£³Àè¿Ê".
+           03  FILLER              PIC X(02)   VALUE   "14".
+           03  FILLER              PIC X(10)   VALUE   "£±£´À©Ä¶".
+           03  FILLER              PIC X(02)   VALUE   "15".
+           03  FILLER              PIC X(10)   VALUE   "£±£µ·Ð²á".
+           03  FILLER              PIC X(02)   VALUE   "16".
+           03  FILLER              PIC X(10)   VALUE   "£±£¶Ä¹£²".
+           03  FILLER              PIC X(02)   VALUE   "17".
+           03  FILLER              PIC X(10)   VALUE   "£±£·¾å°Ì".
+           03  FILLER              PIC X(02)   VALUE   "18".
+           03  FILLER              PIC X(10)   VALUE   "£±£¸°ìÈÌ".
+           03  FILLER              PIC X(02)   VALUE   "19".
+           03  FILLER              PIC X(10)   VALUE   "£±£¹Äã½ê".
+           03  FILLER              PIC X(02)   VALUE   "20".
+           03  FILLER              PIC X(10)   VALUE   "£²£°Æó³ä".
+           03  FILLER              PIC X(02)   VALUE   "21".
+           03  FILLER              PIC X(10)   VALUE   "£²£±¹âÈ¾".
+           03  FILLER              PIC X(02)   VALUE   "22".
+           03  FILLER              PIC X(10)   VALUE   "£²£²Â¿¾å".
+           03  FILLER              PIC X(02)   VALUE   "23".
+           03  FILLER              PIC X(10)   VALUE   "£²£³Â¿°ì".
+           03  FILLER              PIC X(02)   VALUE   "24".
+           03  FILLER              PIC X(10)   VALUE   "£²£´Â¿Äã".
+       01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
+           03  TBL-TOKKI       OCCURS   22.
+               05  TBL-TOKKICD     PIC X(02).
+               05  TBL-TOKKINAME   PIC X(10).
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
+      *=== ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2010/02/23) end
       *
       *    ¥«¥¦¥ó¥ÈÎÎ°è
        01  CNT-AREA.
@@ -868,6 +922,16 @@
       *
       *    ÀÁµá´ÉÍý¾ðÊó¤è¤ê¡¢Á´¹ñ¸øÈñ¾ðÊó¼èÆÀ
            PERFORM  900-SEIKYU-READ-SEC
+      *
+      *=== ÆÃµ­»ö¹àÄÉ²Ã by Yoshikawa(2010/02/23) start
+           PERFORM  VARYING  IDX2  FROM  1  BY  1
+                    UNTIL    IDX2  >     4
+             IF  RECE10-TOKKI(IDX2)  NOT =  SPACE
+               MOVE  RECE10-TOKKI(IDX2)     TO  MF100-TOKKI(IDX2)
+             END-IF
+           END-PERFORM
+      *=== ÆÃµ­»ö¹àÄÉ²Ã by Yoshikawa(2010/02/23) end
+      *
       *---(01.00.04) LINE ADD START ------------------------------------
       *    ¿©»ö¼èÆÀ
            MOVE  RECE10-SHOKUJIINF(1)     TO  MF100-SHOKUJIINF-G
@@ -1158,6 +1222,21 @@
       *    °åÎÅµ¡´Ø£Ô£Å£Ì
            MOVE    WRK-HOSPTEL         TO  SC03-HOSPTEL
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== ÆÃµ­»ö¹àÄÉ²Ã by Yoshikawa(2010/02/23) start
+      *    ÆÃµ­»ö¹à
+           PERFORM  VARYING  IDX2  FROM  1  BY  1
+                    UNTIL    IDX2  >     4
+             PERFORM  VARYING  IDY  FROM  1  BY  1
+                      UNTIL    IDY  >   TBL-TOKKI-MAX
+               IF  MF100-TOKKI(IDX2)  =  TBL-TOKKICD(IDY)
+                 MOVE  TBL-TOKKINAME(IDY)   TO  SC03-TOKKI(IDX2)
+                 MOVE  TBL-TOKKI-MAX        TO  IDY
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== ÆÃµ­»ö¹àÄÉ²Ã by Yoshikawa(2010/02/23) end
+      *
            .
        310-HEAD-HEN-EXT.
            EXIT.
@@ -1469,6 +1548,20 @@
       *    ÅÅÏÃÈÖ¹æ
            MOVE    WRK-HOSPTEL         TO  SC04-HOSPTEL
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== ÆÃµ­»ö¹àÄÉ²Ã by Yoshikawa(2010/02/23) start
+      *    ÆÃµ­»ö¹à
+           PERFORM  VARYING  IDX2  FROM  1  BY  1
+                    UNTIL    IDX2  >     4
+             PERFORM  VARYING  IDY  FROM  1  BY  1
+                      UNTIL    IDY  >   TBL-TOKKI-MAX
+               IF  MF100-TOKKI(IDX2)  =  TBL-TOKKICD(IDY)
+                 MOVE  TBL-TOKKINAME(IDY)   TO  SC04-TOKKI(IDX2)
+                 MOVE  TBL-TOKKI-MAX        TO  IDY
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== ÆÃµ­»ö¹àÄÉ²Ã by Yoshikawa(2010/02/23) end
       *
            .
        311-HEAD-HEN-EXT.
