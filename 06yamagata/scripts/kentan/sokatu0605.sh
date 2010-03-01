@@ -13,6 +13,7 @@ RENNUM=0
 #        ${13} シェルＩＤ
 #        ${15} 医療機関ＩＤ 
 #        ${16} エラーファイル名 
+#        ${18} 対象保険者番号
 #        ${19} 処理対象区分
 #              0:全体  1:当月・月遅れ分  2:返戻分
 #-------------------------------------------#
@@ -27,7 +28,7 @@ RENNUM=0
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},2,${16} > ${LOG_FILE}-2.log 2>&1
+            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,${16} > ${LOG_FILE}-2.log 2>&1
             if  [ -e ${16} ]; then
                 exit
             fi
@@ -35,7 +36,7 @@ RENNUM=0
 ##      当月・月遅れ分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},1,${16} > ${LOG_FILE}-1.log 2>&1
+            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,${16} > ${LOG_FILE}-1.log 2>&1
             if  [ -e ${16} ]; then
                 exit
             fi
