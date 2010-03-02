@@ -31,6 +31,7 @@
       *                                  群馬県を印字の先頭とする
       *  01.00.02    内田    08/05/21    同一保険者の場合、９割を先に印字
       *                                  処理名等を「後期高齢者総括表」へ変更
+      *  01.00.03    吉川    10/03/01    広域連合の保険者番号指定対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -215,6 +216,11 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/01) start
+      *    レセプト・総括印刷情報（広域連合）
+           COPY    "CPSK200501.INC".
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/01) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -404,6 +410,40 @@
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
+      *
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/01) start
+      *    レセプト・総括編集情報
+      *    区分コード０１のデータ読み込み
+           MOVE    SPACE               TO  SYS-200501-REC
+           INITIALIZE                      SYS-200501-REC
+           MOVE    "2005"              TO  SYS-200501-KANRICD
+           MOVE    "01"                TO  SYS-200501-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-200501-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-200501-STYUKYMD (7:2)
+           MOVE    SYS-200501-STYUKYMD TO  SYS-200501-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-200501-HOSPNUM
+           MOVE    SYS-200501-REC      TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-200501-REC
+           ELSE
+               INITIALIZE                      SYS-200501-REC
+           END-IF
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   SPACE
+               MOVE    "0"                 TO  SYS-200501-KOUIKIPRTKBN
+           END-IF
+      *
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   "1"
+               CONTINUE
+           ELSE
+               MOVE    "00000000"          TO  WRK-PARA-HKNJANUM
+           END-IF
+      *
+           DISPLAY "SYS-200501-KOUIKIPRTKBN=" SYS-200501-KOUIKIPRTKBN
+           DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/01) end
       *
            EVALUATE    WRK-PARA-SYOKBN
                WHEN   "2"
