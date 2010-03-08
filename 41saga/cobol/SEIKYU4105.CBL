@@ -39,6 +39,8 @@
       *  01.00.04    門間    08/11/20    SPA-AREA初期化
       *  01.00.05    吉川    10/01/13    区切り線がある場合、傷病名欄と
       *                                  転帰欄の番号がずれる不具合を修正
+      *  01.00.06    吉川    10/03/03    乳幼児の食事欄は
+      *                                  空白ではなくゼロを印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -175,6 +177,10 @@
            03  WRK-Z6                PIC ZZ,ZZZ.
            03  WRK-Z7                PIC ZZZ,ZZZ.
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
+      *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) start
+           03  WRK-Z29               PIC Z9.
+           03  WRK-Z79               PIC ZZZ,ZZ9.
+      *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) end
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
            03  WRK-HENYMDG           PIC X(22).
@@ -1270,21 +1276,43 @@
                MOVE    MF101-FTNMONEY(IDX) TO  WRK-Z7
                MOVE    WRK-Z7              TO  SC05-KOHFTN(IDX)
       *
+      *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) start
+               IF  (MF101-EKOHNUM(1)  =  SPACE
+                    AND  IDX  =  2)
+               OR  (MF101-EKOHNUM(1)  NOT =  SPACE
+                    AND  IDX  =  3)
       *    食事日数
-               MOVE    MF101-SHOKUJINISSU(IDX)
+                 MOVE    MF101-SHOKUJINISSU(IDX)
+                                           TO  WRK-Z29
+                 MOVE    WRK-Z29           TO  SC05-SNISSU(IDX)
+      *    食事療養費
+                 MOVE    MF101-SHOKUJIRYOYOHI(IDX)
+                                           TO  WRK-Z79
+                 MOVE    WRK-Z79           TO  SC05-SKINGK(IDX)
+      *    食事標準負担額
+                 MOVE    MF101-SHOKUJIFTN(IDX)
+                                           TO  WRK-Z79
+                 MOVE    WRK-Z79           TO  SC05-SFTNGK(IDX)
+               ELSE
+      *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) end
+      *    食事日数
+                 MOVE    MF101-SHOKUJINISSU(IDX)
                                            TO  WRK-Z2
-               MOVE    WRK-Z2              TO  SC05-SNISSU(IDX)
+                 MOVE    WRK-Z2            TO  SC05-SNISSU(IDX)
       *
       *    食事療養費
-               MOVE    MF101-SHOKUJIRYOYOHI(IDX)
+                 MOVE    MF101-SHOKUJIRYOYOHI(IDX)
                                            TO  WRK-Z7
-               MOVE    WRK-Z7              TO  SC05-SKINGK(IDX)
+                 MOVE    WRK-Z7            TO  SC05-SKINGK(IDX)
       *
       *    食事標準負担額
-               MOVE    MF101-SHOKUJIFTN(IDX)
+                 MOVE    MF101-SHOKUJIFTN(IDX)
                                            TO  WRK-Z7
-               MOVE    WRK-Z7              TO  SC05-SFTNGK(IDX)
-           
+                 MOVE    WRK-Z7            TO  SC05-SFTNGK(IDX)
+      *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) start
+               END-IF
+      *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) end
+      *
            END-PERFORM 
       *
       *    傷病名編集処理
