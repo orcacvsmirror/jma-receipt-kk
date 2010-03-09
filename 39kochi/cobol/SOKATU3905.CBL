@@ -37,6 +37,8 @@
       *                                  食事療養費を印字する
       *  01.00.04    吉川    2008/07/09  請求区分が請求済みにならない不具合を修正
       *  01.00.05    吉川    2009/04/24  在宅は合算して印字する
+      *  01.00.06    吉川    2010/03/05  後期高齢７割の場合、生活療養費が
+      *                                  印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -846,13 +848,17 @@
       *    療養の給付：一部負担金
            ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(WRK-CNT + 1 IDX1)
       *
-           IF      IDX1                   =   1 
-             IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+           IF      IDX1                   =   1
+      *=== 生活療養の印字不具合対応 by Yoshikawa(2010/03/05) start
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      *=== 生活療養の印字不具合対応 by Yoshikawa(2010/03/05) end
       *    食事療養：金額
              ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(WRK-CNT + 1)
       *    食事療養：標準負担額
              ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(WRK-CNT + 1)
-             END-IF
+      *=== 生活療養の印字不具合対応 by Yoshikawa(2010/03/05) start
+      *       END-IF
+      *=== 生活療養の印字不具合対応 by Yoshikawa(2010/03/05) end
            END-IF    
       *
       *    原爆件数集計
