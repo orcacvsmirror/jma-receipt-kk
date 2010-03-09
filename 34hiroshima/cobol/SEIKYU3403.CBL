@@ -45,6 +45,8 @@
       *  01.00.09    ÆâÅÄ    08/05/03    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *  01.00.10    ÆâÅÄ    08/09/09    SPA-AREA½é´ü²½
       *  01.00.11    ÆâÅÄ    09/01/21    È÷¹ÍÍó¤Ø¡Ö¹âÈ¾¡×¤Î°õ»úÂÐ±þ
+      *  01.00.12    µÈÀî    10/03/04    Á°´ü¹âÎð¼Ô£¹³ä¡Ê·Ú¸ºÁ¼ÃÖ¡Ë¤Ï
+      *                                  £²³äÉéÃ´¤Çµ­ºÜ¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -120,6 +122,9 @@
       *---(01.00.11) LINE ADD START ------------------------------------
            03  FLG-RECE10     PIC 9(01).
       *---(01.00.11) LINE ADD END   ------------------------------------
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+           03  FLG-PTKOHFTN    PIC 9(01).
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -172,6 +177,10 @@
            03  WRK-SEIKYUGK-G      PIC 9(09)V9(01).
            03  WRK-SEIKYUGK-G2     PIC 9(09).
            03  WRK-SEIKYUGK        PIC 9(09)V9(01).
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+           03  WRK-KEISAN          PIC 9(09)V9(01).
+           03  WRK-JGNGK           PIC 9(09).
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
       *---(01.00.08) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
       *         05  FILLER          PIC S9(09)  BINARY.
@@ -268,6 +277,12 @@
       *    ´µ¼Ô¸øÈñ¾ðÊó¥Þ¥¹¥¿
        01  PTKOHINF-REC.
            COPY  "CPPTKOHINF.INC".
+      *
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+      *    ´µ¼Ô¸øÈñÉéÃ´
+       01  PTKOHFTN-REC.
+           COPY    "CPPTKOHFTN.INC".
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
       *
       *    ´µ¼Ô¾ðÊó
        01  PTINF-REC.
@@ -733,6 +748,18 @@
            END-IF
       *
            PERFORM  920-SYUNOU-SET-SEC
+      *
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+           IF   RECE02-FLG(2)      =  1
+           AND  MF100-T-KOHNUM     =  "051"
+      *      ¸øÈñ¤Î¾å¸Â³Û¤ò¼èÆÀ
+             PERFORM  950-PTKOHFTN-READ-SEC
+      *      ¾å¸Â³Û¤òÄ¶¤¨¤Æ¤¤¤ë¤«¤É¤¦¤«
+             IF  MF100-T-FTNMONEY  >  WRK-JGNGK
+               MOVE  WRK-JGNGK         TO  MF100-T-FTNMONEY
+             END-IF
+           END-IF
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
       *
            IF      MF100-T-KOHNUM      NOT = SPACE
                PERFORM 930-PTKOHINF-SET-SEC
@@ -1754,8 +1781,20 @@
                IF (RECE02-FTNMONEY(1)      >  ZERO)  OR
                   (SYU-KOH-HKNNUM(IDX) NOT  =  "010" AND "011" AND
                                                "020" AND "021")
-                 ADD     SYU-KOH-COMPFTN(IDX)
-                                          TO  MF100-T-FTNMONEY
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+      *    ÆÃÄê¼À´µ¤ÏÉéÃ´³ä¹ç¤¬Äê¤á¤é¤ì¤Æ¤¤¤Ê¤¤¤Î¤Ç¡¢ÉéÃ´³Û¤ò¼êÆ°·×»»
+                 IF  RECE02-FLG(2)         =  1
+                 AND SYU-KOH-HKNNUM(IDX)   =  "051"
+      *            ÊÝ¸±ÅÀ¿ô¤Î£¸³ä¤Ç·×»»¤¹¤ë
+                   COMPUTE WRK-KEISAN  =  SYU-TOTAL-HKNTEN * 10 * 0.2
+                   ADD     WRK-KEISAN     TO  MF100-T-FTNMONEY
+                 ELSE
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
+                   ADD     SYU-KOH-COMPFTN(IDX)
+                                            TO  MF100-T-FTNMONEY
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+                 END-IF
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
                END-IF
              END-IF
       *
@@ -2226,6 +2265,63 @@
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *---(01.00.11) LINE ADD START ------------------------------------
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) start
+      *****************************************************************
+      *    ´µ¼Ô¸øÈñÉéÃ´¾ðÊóÆÉ¹þ½èÍý
+      *****************************************************************
+       950-PTKOHFTN-READ-SEC         SECTION.
+      *
+           INITIALIZE                          PTKOHFTN-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  PTKOHFTN-HOSPNUM
+           MOVE    MF100-PTID              TO  PTKOHFTN-PTID
+           MOVE    PTKOHFTN-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+                   MOVE    ZERO                TO  FLG-PTKOHFTN
+      *            ¾å¸Â³Û
+                   IF  MF100-NYUGAIKBN  =  "1"
+                     MOVE  PTKOHFTN-NYUJGNGAK    TO  WRK-JGNGK
+                   ELSE
+                     MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGK
+                   END-IF
+               ELSE
+                   MOVE    1                   TO  FLG-PTKOHFTN
+                   INITIALIZE                  PTKOHFTN-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHFTN
+               INITIALIZE                  PTKOHFTN-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       950-PTKOHFTN-READ-EXT.
+           EXIT.
+      *
+      *=== Á°´ü¹âÎð£¹³ä¤Ï£²³äÉéÃ´·×»» by Yoshikawa(2010/03/04) end
       *****************************************************************
       *    ÀÁµá´ÉÍýÆÉ¹þ
       *****************************************************************
