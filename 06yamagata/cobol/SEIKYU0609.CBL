@@ -40,6 +40,7 @@
       *  01.00.06    ÆâÅÄ    08/03/07    Æþ±¡¤ÎÊÝ¸±¼ïÊÌ¤Î°õ»ú¤Î½¤Àµ
       *  01.00.07    ÆâÅÄ    08/06/04    Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *  01.00.08    µÈÀî    08/09/09    SPA-AREA½é´ü²½
+      *  01.00.09    µÈÀî    10/03/08    ÊÝ¸±ÅÀ¿ôÍó¤Ï¸øÈñ¹ç·×ÅÀ¿ô¤ò°õ»ú¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -806,6 +807,12 @@
            IF       IDZ           =     1
            AND      RECE02-KOHNUM(IDZ + 1)  =  SPACE
              PERFORM  900-SEIKYU-READ-SEC
+      *=== ÊÝ¸±ÅÀ¿ôÍó¤Ï¸øÈñ¹ç·×ÅÀ¿ô¤ò°õ»ú by Yoshikawa(2010/03/08) start
+              IF  RECE10-KOHNUM(1)  NOT =  SPACE
+              OR  RECE10-KOHNUM(2)  NOT =  SPACE
+                MOVE   RECE10-TOTALTEN(1)         TO  MF101-TOTALTEN
+              END-IF
+      *=== ÊÝ¸±ÅÀ¿ôÍó¤Ï¸øÈñ¹ç·×ÅÀ¿ô¤ò°õ»ú by Yoshikawa(2010/03/08) end
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     2  OR
                       RECE10-KOHNUM(IDX)  =  SPACE
