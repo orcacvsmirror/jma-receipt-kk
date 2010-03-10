@@ -37,6 +37,7 @@
       *                                  正しく集計されない不具合を修正
       *  01.00.04    吉川    2009/12/03  シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.05    吉川    2010/03/09  返戻分は1枚にまとめる
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -185,6 +186,9 @@
       *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) start
            03  WRK-FTNJANUM        PIC X(08).
       *=== 公費負担者番号の頭2桁毎に集計 by Yoshikawa(2008/06/24) end
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) start
+           03  WRK-SRYYM-MIN       PIC X(06).
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
@@ -602,6 +606,9 @@
            OPEN    I-O     SKT2815TMP-FILE
            
            MOVE    ZERO                TO  FLG-UPD
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) start
+           MOVE    "999999"            TO  WRK-SRYYM-MIN
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
       *
            PERFORM 2001-KOUKI-SYUKEI-SEC
                    UNTIL   FLG-END  =  1
@@ -736,7 +743,13 @@
       *
       *    返戻分は実際の診療年月を設定
            IF  WRK-PARA-SYOKBN  =  "2"
-             MOVE  RECE10-SRYYM          TO   SKT2815TMP-SRYYM
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) start
+      *       MOVE  RECE10-SRYYM          TO   SKT2815TMP-SRYYM
+      *      最小の診療年月を退避
+             IF  RECE10-SRYYM  <  WRK-SRYYM-MIN
+               MOVE  RECE10-SRYYM        TO   WRK-SRYYM-MIN
+             END-IF
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
       *    当月分・月遅れ分は画面入力された診療年月を設定
            ELSE
              MOVE  LNK-PRTKANRI-SRYYM    TO   SKT2815TMP-SRYYM
@@ -1254,7 +1267,14 @@
       *    診療年月
       *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) start
       *     MOVE    WRK-SRYYMWH         TO  SKT2815-SRYYM
-           MOVE    SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) start
+      *     MOVE    SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
+           IF  WRK-PARA-SYOKBN  =  "2"
+             MOVE  WRK-SRYYM-MIN       TO  WRK-SYMD (1:6)
+           ELSE
+             MOVE  SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
+           END-IF
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
            MOVE    "01"                TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
            MOVE    WRK-HENYMDG(1:16)   TO  SKT2815-SRYYM
