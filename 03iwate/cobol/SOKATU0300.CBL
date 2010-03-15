@@ -41,6 +41,7 @@
       *  01.00.09     µ»¿Ó   2008/10/22  ∫ﬂ¡Ìø«∞ ≥∞§Œ∫ﬂ¬§œ∫ﬂ∞Â¡Ì§»§π§Î
       *  01.00.10     µ»¿Ó   2009/07/03  ∫ﬂ¡Ìø«§»∫ﬂ∞Â¡Ì§Œ2§ƒ§¨§¢§ÎæÏπÁ°¢
       *                                  ∫ﬂ¡Ìø«§»§π§Î§Ë§¶§ÀΩ§¿µ
+      *  01.00.11     µ»¿Ó   2010/03/11  ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞§ÀΩ∏∑◊
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -855,7 +856,10 @@
       *            MOVE  63  TO  IDX4
       *---(01.00.03) LINE ADD START ------------------------------------
       *             MOVE  64  TO  IDX4
-                   MOVE  40  TO  IDX4
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
+      *             MOVE  40  TO  IDX4
+                   MOVE  39  TO  IDX4
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== ¿¡µ·¿ËÃæ(∏©∆‚)ƒ…≤√63¢™64 ADD By NAKAGAWA (2006/08/29) end
                  END-IF
@@ -867,9 +871,15 @@
                  WHEN  "05"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (3)
                  WHEN  "06"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (4)
                  WHEN  "07"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (5)
-                 WHEN  "12"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (6)
-                 WHEN  "13"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (7)
-                 WHEN  "23"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (8)
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
+      *           WHEN  "12"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (6)
+      *           WHEN  "13"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (7)
+      *           WHEN  "23"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (8)
+                 WHEN  "09"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (6)
+                 WHEN  "12"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (7)
+                 WHEN  "13"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (8)
+                 WHEN  "23"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (9)
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) end
                  WHEN  OTHER
                    PERFORM  VARYING  IDX4  FROM  1  BY  1
                             UNTIL    IDX4  >     50
@@ -1162,7 +1172,10 @@
       *               UNTIL    IDX1  >     63
       *---(01.00.03) LINE ADD START ------------------------------------
       *                UNTIL    IDX1  >     64
-                      UNTIL    IDX1  >     40
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
+      *                UNTIL    IDX1  >     40
+                      UNTIL    IDX1  >     39
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== ¿¡µ·¿ËÃæ(∏©∆‚)ƒ…≤√63¢™64 ADD By NAKAGAWA (2006/08/29) end
                IF  SKT0300TMP-KENNAI-FLG (IDX1)  =  1
@@ -1177,7 +1190,10 @@
              END-PERFORM
       *
              PERFORM  VARYING  IDX1  FROM  1  BY  1
-                      UNTIL    IDX1  >     8
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
+      *                UNTIL    IDX1  >     8
+                      UNTIL    IDX1  >     9
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) end
                MOVE  SKT0300TMP-KENGAI-KENSU (IDX1)  TO  WRK-Z2
                MOVE  WRK-Z2               TO  SKT0300-GHKNJA (IDX1)
              END-PERFORM
@@ -1187,13 +1203,18 @@
            PERFORM  VARYING  IDX1  FROM  1  BY  1
       *---(01.00.03) LINE ADD START ------------------------------------
       *              UNTIL    IDX1  >     8
-                    UNTIL    IDX1  >     14
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
+      *              UNTIL    IDX1  >     14
+                    UNTIL    IDX1  >     13
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) end
       *---(01.00.03) LINE ADD START ------------------------------------
                     OR       SKT0300TMP-KENMEI (WRK-CNT) = ZERO
              EVALUATE  SKT0300TMP-KENMEI (WRK-CNT)
                WHEN  "01"  MOVE  "ÀÃ≥§∆ª"  TO  SKT0300-KENMEI (IDX1)
                WHEN  "08"  MOVE  "∞ÒæÎ"    TO  SKT0300-KENMEI (IDX1)
-               WHEN  "09"  MOVE  "∆ Ã⁄"    TO  SKT0300-KENMEI (IDX1)
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) start
+      *         WHEN  "09"  MOVE  "∆ Ã⁄"    TO  SKT0300-KENMEI (IDX1)
+      *=== ¡¥πÒªı≤ ∞Âª’πÒ ›¡»πÁ§œ∏©≥∞ by Yoshikawa(2010/03/11) end
                WHEN  "10"  MOVE  "∑≤«œ"    TO  SKT0300-KENMEI (IDX1)
                WHEN  "11"  MOVE  "∫Î∂Ã"    TO  SKT0300-KENMEI (IDX1)
                WHEN  "14"  MOVE  "ø¿∆‡¿Ó"  TO  SKT0300-KENMEI (IDX1)

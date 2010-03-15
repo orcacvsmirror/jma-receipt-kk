@@ -19,6 +19,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01     中川     2006/08/29   請求先名(県内)追加63→64
+      *  01.00.02     吉川     2010/03/11   請求先名(県外)追加8→9
       ************************************************************
        01  SKT0300.
       *    診療年月
@@ -85,12 +86,21 @@
       *=== 請求先名(県内)追加63→64 ADD By NAKAGAWA (2006/08/29) end
                05  SKT0300-NHKNJA           PIC  X(02).
       *    県名
-           03  SKT0300-KENMEI-TBL  OCCURS  14.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) start
+      *     03  SKT0300-KENMEI-TBL  OCCURS  14.
+           03  SKT0300-KENMEI-TBL  OCCURS  13.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) end
                05  SKT0300-KENMEI           PIC  X(06).
       *    県外保険者数
-           03  SKT0300-GHKNJA-TBL  OCCURS  8.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) start
+      *     03  SKT0300-GHKNJA-TBL  OCCURS  8.
+           03  SKT0300-GHKNJA-TBL  OCCURS  9.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) end
                05  SKT0300-GHKNJA           PIC  X(02).
-           03  SKT0300-GHKNJA-TBL2  OCCURS  14.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) start
+      *     03  SKT0300-GHKNJA-TBL2  OCCURS  14.
+           03  SKT0300-GHKNJA-TBL2  OCCURS  13.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) end
                05  SKT0300-GHKNJA2           PIC  X(02).
       *    保険者合計数
            03  SKT0300-GOKEIHKNJA-TBL  OCCURS  2.

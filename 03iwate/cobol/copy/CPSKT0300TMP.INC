@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01     中川     2006/08/29   請求先名(県内)追加63→64
+      *  01.00.02     吉川     2010/03/11   請求先名(県外)追加8→9
       ************************************************************
        01  SKT0300TMP-REC.
       *請求テーブル
@@ -61,7 +62,10 @@
            03  SKT0300TMP-KENMEI-TBL  OCCURS  50.
                05  SKT0300TMP-KENMEI               PIC  9(02).
       *県外保険者
-           03  SKT0300TMP-GHKNJA-TBL   OCCURS  8.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) start
+      *     03  SKT0300TMP-GHKNJA-TBL   OCCURS  8.
+           03  SKT0300TMP-GHKNJA-TBL   OCCURS  9.
+      *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) end
                05  SKT0300TMP-KENGAI-KENSU         PIC  9(02).
       *県外保険者２
            03  SKT0300TMP-GHKNJA-TBL2  OCCURS  50.
