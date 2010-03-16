@@ -41,6 +41,7 @@
       *                                  転帰欄の番号がずれる不具合を修正
       *  01.00.06    吉川    10/03/03    乳幼児の食事欄は
       *                                  空白ではなくゼロを印字する
+      *  01.00.07    吉川    10/03/15    転帰欄の番号がずれる不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1728,14 +1729,26 @@
                                                     (WRK-LINEBYO)(7:)
       *        転帰日
                IF      WRK-BO-TENKIYMD     =   SPACE
-                   CONTINUE 
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) start
+      *             CONTINUE 
+                   ADD     1               TO  CNT-TENKI1
+                                               CNT-TENKI2
+                                               CNT-TENKI3
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) end
                ELSE
                    MOVE    WRK-BO-TENKIYMD TO  WRK-SYMD
                    MOVE    WRK-SDD         TO  WRK-Z2
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) start
+                   ADD     1               TO  CNT-TENKI1
+                                               CNT-TENKI2
+                                               CNT-TENKI3
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) end
                    EVALUATE    WRK-BO-TENKIKBN
                    WHEN    "1"
       *                 MOVE    WRK-Z2  TO  WRK-TAIHI-TENKI1(WRK-LINEBYO)
-                       ADD     1       TO  CNT-TENKI1
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) start
+      *                 ADD     1       TO  CNT-TENKI1
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) end
       *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) start
       *                 MOVE    WRK-LINEBYO TO  WRK-Z2
       *                 STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
@@ -1747,7 +1760,9 @@
                        END-STRING
                    WHEN    "2"
       *                 MOVE    WRK-Z2  TO  WRK-TAIHI-TENKI2(WRK-LINEBYO)
-                       ADD     1       TO  CNT-TENKI2
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) start
+      *                 ADD     1       TO  CNT-TENKI2
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) end
       *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) start
       *                 MOVE    WRK-LINEBYO TO  WRK-Z2
       *                 STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
@@ -1762,7 +1777,9 @@
                        END-STRING
                    WHEN    "3"
       *                 MOVE    WRK-Z2  TO  WRK-TAIHI-TENKI3(WRK-LINEBYO)
-                       ADD     1       TO  CNT-TENKI3
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) start
+      *                 ADD     1       TO  CNT-TENKI3
+      *=== 転帰欄の番号がずれる不具合対応 by Yoshikawa(2010/03/15) end
       *=== 転帰欄の番号を正しく印字する by Yoshikawa(2010/01/13) start
       *                 MOVE    WRK-LINEBYO TO  WRK-Z2
       *                 STRING  "(" WRK-Z2 ")" DELIMITED BY SIZE
