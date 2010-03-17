@@ -36,6 +36,7 @@
       *                                  公費が正しく集計されないのを修正
       *  01.00.05    吉川    2009/12/02  シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.06    吉川    2010/03/16  特定疾患が記載されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -976,9 +977,11 @@
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
       *      ０５１と０９１は同じ場所に集計する
-             IF      RECE10-KOHNUM (IDZ) =   "091"
-               MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
-             END-IF
+      *=== 特定疾患の集計不具合対応 by Yoshikawa(2010/03/16) start
+      *       IF      RECE10-KOHNUM (IDZ) =   "091"
+      *         MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
+      *       END-IF
+      *=== 特定疾患の集計不具合対応 by Yoshikawa(2010/03/16) end
       *
       *      公費番号まとめ情報があるとき
       *=== WRK-MEISYO初期化 by Yoshikawa(2009/04/10) start
