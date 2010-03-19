@@ -42,6 +42,7 @@
       *  01.00.09    吉川    08/11/27    公費欄の集計方法変更
       *  01.00.10    吉川    09/11/18    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.11    吉川    10/03/18    公費欄の値は保険の分を含めない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1116,12 +1117,20 @@
       *=== シス管「2007」対応 by Yoshikawa(2008/10/10) end
       *    療養の給付：件数
              ADD   1  TO  SKT1210TMP-K-KENSU (CNT-KOH)
+      *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) start
+      **    療養の給付:診療実日数
+      *       ADD  RECE10-JNISSU(1)     TO
+      *                         SKT1210TMP-K-NISSU(CNT-KOH)
+      **    療養の給付：点数
+      *       ADD  RECE10-TOTALTEN(1)   TO
+      *                         SKT1210TMP-K-TENSU(CNT-KOH)
       *    療養の給付:診療実日数
-             ADD  RECE10-JNISSU(1)     TO
+             ADD  RECE10-JNISSU(IDX3 + 1)     TO
                                SKT1210TMP-K-NISSU(CNT-KOH)
       *    療養の給付：点数
-             ADD  RECE10-TOTALTEN(1)   TO
+             ADD  RECE10-TOTALTEN(IDX3 + 1)   TO
                                SKT1210TMP-K-TENSU(CNT-KOH)
+      *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) end
       *
       *    ３併か判定(３併の場合、公費分点数、一部負担金は印字しない)
              IF    RECE10-KOHNUM(2)       =  SPACE  AND
@@ -1133,19 +1142,34 @@
                ADD  RECE10-TOTALTEN(IDX3 + 1)   TO
                                SKT1210TMP-K-KOHTENSU(CNT-KOH)
              END-IF
-             IF  RECE10-SHOKUJINISSU(1)  >  ZERO
+      *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) start
+      *       IF  RECE10-SHOKUJINISSU(1)  >  ZERO
+      **    食事療養:件数
+      *         ADD   1  TO  SKT1210TMP-K-SKENSU(CNT-KOH)
+      *       END-IF
+      **    食事療養:日数
+      *       ADD  RECE10-SHOKUJINISSU(1)  TO
+      *                         SKT1210TMP-K-SNISSU(CNT-KOH)
+      **    食事療養：金額
+      *       ADD  RECE10-SHOKUJIRYOYOHI(1)  TO
+      *                         SKT1210TMP-K-SKINGK(CNT-KOH)
+      **    食事療養：標準負担額
+      *       ADD  RECE10-SHOKUJIFTN(1)  TO
+      *                         SKT1210TMP-K-SFTNGK(CNT-KOH)
+             IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  ZERO
       *    食事療養:件数
                ADD   1  TO  SKT1210TMP-K-SKENSU(CNT-KOH)
              END-IF
       *    食事療養:日数
-             ADD  RECE10-SHOKUJINISSU(1)  TO
+             ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
                                SKT1210TMP-K-SNISSU(CNT-KOH)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(1)  TO
+             ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
                                SKT1210TMP-K-SKINGK(CNT-KOH)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(1)  TO
+             ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
                                SKT1210TMP-K-SFTNGK(CNT-KOH)
+      *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) end
            END-PERFORM
       *
            .
