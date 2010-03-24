@@ -41,7 +41,7 @@
       *  01.00.09     吉川   2008/10/22  在総診以外の在宅は在医総とする
       *  01.00.10     吉川   2009/07/03  在総診と在医総の2つがある場合、
       *                                  在総診とするように修正
-      *  01.00.11     吉川   2010/03/11  全国歯科医師国保組合は県外に集計
+      *  01.00.11     吉川   2010/03/11  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -856,10 +856,10 @@
       *            MOVE  63  TO  IDX4
       *---(01.00.03) LINE ADD START ------------------------------------
       *             MOVE  64  TO  IDX4
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *             MOVE  40  TO  IDX4
                    MOVE  39  TO  IDX4
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== 請求先名(県内)追加63→64 ADD By NAKAGAWA (2006/08/29) end
                  END-IF
@@ -871,7 +871,7 @@
                  WHEN  "05"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (3)
                  WHEN  "06"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (4)
                  WHEN  "07"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (5)
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *           WHEN  "12"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (6)
       *           WHEN  "13"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (7)
       *           WHEN  "23"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (8)
@@ -879,7 +879,7 @@
                  WHEN  "12"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (7)
                  WHEN  "13"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (8)
                  WHEN  "23"   ADD  1  TO  SKT0300TMP-KENGAI-KENSU (9)
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) end
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) end
                  WHEN  OTHER
                    PERFORM  VARYING  IDX4  FROM  1  BY  1
                             UNTIL    IDX4  >     50
@@ -1172,10 +1172,10 @@
       *               UNTIL    IDX1  >     63
       *---(01.00.03) LINE ADD START ------------------------------------
       *                UNTIL    IDX1  >     64
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *                UNTIL    IDX1  >     40
                       UNTIL    IDX1  >     39
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) end
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== 請求先名(県内)追加63→64 ADD By NAKAGAWA (2006/08/29) end
                IF  SKT0300TMP-KENNAI-FLG (IDX1)  =  1
@@ -1190,10 +1190,10 @@
              END-PERFORM
       *
              PERFORM  VARYING  IDX1  FROM  1  BY  1
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *                UNTIL    IDX1  >     8
                       UNTIL    IDX1  >     9
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) end
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) end
                MOVE  SKT0300TMP-KENGAI-KENSU (IDX1)  TO  WRK-Z2
                MOVE  WRK-Z2               TO  SKT0300-GHKNJA (IDX1)
              END-PERFORM
@@ -1203,18 +1203,18 @@
            PERFORM  VARYING  IDX1  FROM  1  BY  1
       *---(01.00.03) LINE ADD START ------------------------------------
       *              UNTIL    IDX1  >     8
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *              UNTIL    IDX1  >     14
                     UNTIL    IDX1  >     13
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) end
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) end
       *---(01.00.03) LINE ADD START ------------------------------------
                     OR       SKT0300TMP-KENMEI (WRK-CNT) = ZERO
              EVALUATE  SKT0300TMP-KENMEI (WRK-CNT)
                WHEN  "01"  MOVE  "北海道"  TO  SKT0300-KENMEI (IDX1)
                WHEN  "08"  MOVE  "茨城"    TO  SKT0300-KENMEI (IDX1)
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) start
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *         WHEN  "09"  MOVE  "栃木"    TO  SKT0300-KENMEI (IDX1)
-      *=== 全国歯科医師国保組合は県外 by Yoshikawa(2010/03/11) end
+      *=== 帳票様式の変更 by Yoshikawa(2010/03/11) end
                WHEN  "10"  MOVE  "群馬"    TO  SKT0300-KENMEI (IDX1)
                WHEN  "11"  MOVE  "埼玉"    TO  SKT0300-KENMEI (IDX1)
                WHEN  "14"  MOVE  "神奈川"  TO  SKT0300-KENMEI (IDX1)
