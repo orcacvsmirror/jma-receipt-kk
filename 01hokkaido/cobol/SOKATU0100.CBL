@@ -73,6 +73,8 @@
       *                                 印字対象外とするように修正
       *  01.00.25    吉川   10/02/12    函館市は公費の助成がない場合
       *                                 印字対象外とする
+      *  01.00.26    吉川   10/03/25    診療入力順によってはデータが
+      *                                 印字されない場合があるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -180,6 +182,9 @@
       *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) start
            03  FLG-ERR2            PIC 9(01).
       *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) end
+      *=== 公費助成判定の修正 by Yoshikawa(2010/03/25) start
+           03  FLG-SYORI2     PIC 9(01).
+      *=== 公費助成判定の修正 by Yoshikawa(2010/03/25) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -2728,17 +2733,30 @@
              END-IF
       *=== 公費の助成判定変更 by Yoshikawa(2009/10/27) end
       *
-      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) start
-      *    同保険、同入外区分で診療が複数日ある場合は処理判定を行わない
-      *    （その前の診療で全国公費の負担があるから）
-             IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0" 
-             AND WRK-SRYCNT  <  2
-      *        窓口負担が発生しない全国公費は印字対象外
-               IF  SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO
+      *=== 公費助成判定の修正 by Yoshikawa(2010/03/25) start
+      **=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) start
+      **    同保険、同入外区分で診療が複数日ある場合は処理判定を行わない
+      **    （その前の診療で全国公費の負担があるから）
+      *       IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0" 
+      *       AND WRK-SRYCNT  <  2
+      **        窓口負担が発生しない全国公費は印字対象外
+      *         IF  SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO
+      *           MOVE  1                   TO  FLG-ERR2
+      *         END-IF
+      *       END-IF
+      **=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) end
+             IF  FLG-SYORI2  =  ZERO
+               IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0" 
                  MOVE  1                   TO  FLG-ERR2
+      *
+      *          窓口負担が発生しない全国公費は印字対象外
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX)  NOT =  ZERO
+                   MOVE  ZERO              TO  FLG-ERR2
+                   MOVE  1                 TO  FLG-SYORI2
+                 END-IF
                END-IF
              END-IF
-      *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) end
+      *=== 公費助成判定の修正 by Yoshikawa(2010/03/25) end
       *
            END-PERFORM
       *
@@ -2754,6 +2772,9 @@
        920-SYUNOU-SET-SEC  SECTION.
       *
              INITIALIZE  SYUNOU-REC
+      *=== 公費助成判定の修正 by Yoshikawa(2010/03/25) start
+                         FLG-SYORI2
+      *=== 公費助成判定の修正 by Yoshikawa(2010/03/25) end
       *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) start
              MOVE   1                 TO  WRK-SRYCNT
       *=== 患者負担無の全国公費は印字対象外 by Yoshikawa(2009/10/27) end
