@@ -35,6 +35,8 @@
       *                                  医療機関情報を参照
       *  01.00.05    内田    08/07/29    公費助成の有無の判定修正
       *  01.00.06    門間    08/11/20    SPA-AREA初期化
+      *  01.00.07    吉川    10/04/01    月途中で負担者番号を変更しても
+      *                                  変更前の市町村が取得されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -187,6 +189,9 @@
       *---(01.00.03) LINE ADD START -----------------------------------
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-KOHID             PIC 9(10).
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) start
+           03  WRK-FTNJANUM          PIC X(08).
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -713,7 +718,10 @@
                MOVE    "01"                TO  PTKOH-TEKEDYMD(7:2)
                MOVE    PTKOHINF-REC        TO  MCPDATA-REC
                PERFORM 800-PTKOHINF-READ-SEC
-               MOVE    PTKOH-FTNJANUM(3:5) TO  MF100-HKNJANUM
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) start
+      *         MOVE    PTKOH-FTNJANUM(3:5) TO  MF100-HKNJANUM
+               MOVE    WRK-FTNJANUM(3:5)   TO  MF100-HKNJANUM
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) end
            END-IF
       *
       *---(01.00.03) LINE ADD START -----------------------------------
@@ -1645,26 +1653,33 @@
                                     SPA-AREA
       *---(01.00.04) LINE ADD END   ------------------------------------
            IF      MCP-RC              =   ZERO
-               MOVE    "DBFETCH"               TO  MCP-FUNC
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *         MOVE    PATH-TBL-PTKOHINF-KEY6  TO  MCP-PATH
-      *         CALL    "MCPSUB"                USING
-      *                                             MCPAREA
-      *                                             MCPDATA-REC
-               MOVE  "tbl_ptkohinf"     TO  MCP-TABLE
-               MOVE  "key6"             TO  MCP-PATHNAME
-               CALL  "ORCDBMAIN"        USING
-                                        MCPAREA
-                                        MCPDATA-REC
-                                        SPA-AREA
-      *---(01.00.04) LINE ADD END   ------------------------------------
-               IF      MCP-RC              =   ZERO
-                   MOVE    ZERO                TO  FLG-PTKOHINF
-                   MOVE    MCPDATA-REC         TO  PTKOHINF-REC
-               ELSE
-                   MOVE    1                   TO  FLG-PTKOHINF
-                   INITIALIZE                  PTKOHINF-REC
-               END-IF
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) start
+      *         MOVE    "DBFETCH"               TO  MCP-FUNC
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **         MOVE    PATH-TBL-PTKOHINF-KEY6  TO  MCP-PATH
+      **         CALL    "MCPSUB"                USING
+      **                                             MCPAREA
+      **                                             MCPDATA-REC
+      *         MOVE  "tbl_ptkohinf"     TO  MCP-TABLE
+      *         MOVE  "key6"             TO  MCP-PATHNAME
+      *         CALL  "ORCDBMAIN"        USING
+      *                                  MCPAREA
+      *                                  MCPDATA-REC
+      *                                  SPA-AREA
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *         IF      MCP-RC              =   ZERO
+      *             MOVE    ZERO                TO  FLG-PTKOHINF
+      *             MOVE    MCPDATA-REC         TO  PTKOHINF-REC
+      *         ELSE
+      *             MOVE    1                   TO  FLG-PTKOHINF
+      *             INITIALIZE                  PTKOHINF-REC
+      *         END-IF
+               PERFORM  810-PTKOHINF-FETCH-SEC
+               PERFORM  UNTIL  FLG-PTKOHINF = 1
+                   MOVE  PTKOH-FTNJANUM    TO  WRK-FTNJANUM
+                   PERFORM  810-PTKOHINF-FETCH-SEC
+               END-PERFORM
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) end
            ELSE
                MOVE    1                   TO  FLG-PTKOHINF
                INITIALIZE                  PTKOHINF-REC
@@ -1687,6 +1702,32 @@
            .
        800-PTKOHINF-READ-EXT.
            EXIT.
+      *
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) start
+      *****************************************************************
+      *    患者公費情報FETCH
+      *****************************************************************
+       810-PTKOHINF-FETCH-SEC         SECTION.
+      *
+           MOVE  "DBFETCH"          TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"     TO  MCP-TABLE
+           MOVE  "key6"             TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"            USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC          =   ZERO
+               MOVE    ZERO         TO  FLG-PTKOHINF
+               MOVE    MCPDATA-REC  TO  PTKOHINF-REC
+           ELSE
+               MOVE    1            TO  FLG-PTKOHINF
+               INITIALIZE               PTKOHINF-REC
+           END-IF
+      *
+           .
+       810-PTKOHINF-FETCH-EXT.
+           EXIT.
+      *=== 月途中変更後の負担者番号取得 by Yoshikawa(2010/04/01) end
       *
       *****************************************************************
       *   保険者情報セット
