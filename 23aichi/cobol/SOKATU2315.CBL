@@ -32,6 +32,7 @@
       *  01.00.03    吉川    2008/08/14  再掲欄に１８８該当者追加
       *  01.00.04    吉川    2009/10/07  再掲欄に１９１該当者追加
       *  01.00.05    吉川    2010/03/29  広域連合の保険者番号指定対応
+      *  01.00.06    吉川    2010/04/05  オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1409,6 +1410,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-RECE10
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

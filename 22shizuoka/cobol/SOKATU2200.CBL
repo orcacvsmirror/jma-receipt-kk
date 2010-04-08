@@ -51,6 +51,7 @@
       *  01.00.10    吉川    2008/09/05   月遅れの患者を出力すると旧様式に
       *                                   合計が印字される不具合を修正
       *  01.00.11    吉川    2008/10/02   最終ページに合計を印字
+      *  01.00.12    吉川    2010/04/05   オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2143,6 +2144,15 @@
            IF       MCP-RC  =     ZERO
                     MOVE    MCPDATA-REC   TO      RECE10-REC
                     ADD     1             TO      CNT-RECE10
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
+      *
            ELSE
                     MOVE    1             TO      FLG-END
            END-IF
@@ -2327,6 +2337,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

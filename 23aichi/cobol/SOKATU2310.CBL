@@ -47,6 +47,7 @@
       *  01.00.08    等李     09/10/07    省汇腕に１９１澈碰荚纳裁
       *  01.00.09    等李     09/10/21    办婶砷么垛腕に１９１の尸を礁纷する
       *  01.00.10    等李     09/11/06    １９１は省汇腕ではなく给锐腕に礁纷
+      *  01.00.11    等李     10/04/05    オンライン手提滦炳
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1558,6 +1559,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン手提滦炳 by Yoshikawa(2010/04/05) start
+      *        手提尸でオンライン懒滇は粕み若ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン手提滦炳 by Yoshikawa(2010/04/05) end
       *
       *        テスト吹荚のときは粕み若ばす
                MOVE    SPACE               TO  PTINF-REC
