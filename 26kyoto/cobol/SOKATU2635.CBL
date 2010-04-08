@@ -34,6 +34,7 @@
       *  01.00.02    吉川    2008/05/12  他公費欄、長期欄、原爆欄の値が
       *                                  印字されない不具合を修正
       *  01.00.03    吉川    2010/03/30  広域連合の保険者番号指定対応
+      *  01.00.04    吉川    2010/04/05  オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1240,6 +1241,15 @@
                IF  RECE10-PREFKBN  NOT =  "1"
                    PERFORM  900-SEIKYU-READ-SEC
                END-IF
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC

@@ -53,6 +53,7 @@
       *  01.00.15    吉川    09/07/09    福祉件数欄への対象公費番号の追加
       *                                 （480,580,680,780,382,482,385,
       *                                   485,585,343,443）
+      *  01.00.16    吉川    10/04/06    オンライン返戻対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1946,6 +1947,15 @@
       *
            IF       MCP-RC  =     ZERO
                     MOVE    MCPDATA-REC   TO      RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/06) start
+      *             返戻分でオンライン請求は読み飛ばす
+                    IF      (WRK-PARA-SYOKBN         =  "2")
+                    AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                        GO  TO  900-SEIKYU-READ-SEC
+                    END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/06) end
+      *
       *        テスト患者のときは読み飛ばす
                     MOVE    SPACE               TO  PTINF-REC
                     INITIALIZE                      PTINF-REC
@@ -2020,6 +2030,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/06) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/06) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

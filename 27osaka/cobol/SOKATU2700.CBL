@@ -42,6 +42,7 @@
       *                                   まとめて印字する
       *  01.00.06    内田     09/03/12    公費の負担金欄は保険がある場合は
       *                                   保険、無い場合は公費の値を印字
+      *  01.00.07    吉川     10/04/06    オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1496,6 +1497,14 @@
                IF  RECE10-PREFKBN  NOT =  "1"
                  GO  TO  900-SEIKYU-READ-SEC
                END-IF
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/06) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/06) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

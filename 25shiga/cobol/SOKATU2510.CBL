@@ -41,6 +41,7 @@
       *  01.00.10    内田    2008/07/31    福祉のみの場合でも印刷する
       *  01.00.11    吉川    2009/06/01    帳票様式の変更に伴う修正
       *                                    レセ電時は件数を印字しない
+      *  01.00.12    吉川    2010/04/05    オンライン返戻対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1846,6 +1847,15 @@
                ELSE
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
@@ -2191,6 +2201,15 @@
                    GO  TO  950-SEIKYU-READ-SEC
                END-IF
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC

@@ -37,6 +37,7 @@
       *                                    SPA-AREA初期化
       *  01.00.06       内田    08/05/07   国保データがない場合の
       *                                    後期高齢印刷不具合修正
+      *  01.00.07       吉川    10/04/05   オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1372,6 +1373,14 @@
                  GO  TO  900-SEIKYU-READ-SEC
                END-IF
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
@@ -1451,6 +1460,14 @@
                IF  RECE10-PREFKBN  =  "1"
                  GO  TO  950-SEIKYU-READ-SEC
                END-IF
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

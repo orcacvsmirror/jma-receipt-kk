@@ -37,6 +37,7 @@
       *  01.00.06    吉川    2008/10/20    SPA-AREA初期化
       *  01.00.07    吉川    2009/06/01    レセ電時は件数を印字しない
       *                      2009/06/10    「愛荘町」の保険者番号修正
+      *  01.00.08    吉川    2010/04/05     オンライン返戻対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1285,6 +1286,14 @@
                    END-IF
                END-IF
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
@@ -1652,6 +1661,14 @@
                    GO  TO  950-SEIKYU-READ-SEC
                END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/05) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
