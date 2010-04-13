@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 埼玉県川越市用・乳幼児医療費請求書
-      *                      (143)
+      *                      (143,743)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/06    有村          再作成(2.5.0対応)
@@ -36,6 +36,7 @@
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
       * 01.00.04     吉川    2008/10/08   SPA-AREA初期化
+      * 01.00.05     吉川    2010/04/12   対象保険番号の追加（743）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -586,7 +587,10 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-               IF      RECE02-KOHNUM(IDZ)  =   "143"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) start
+      *         IF      RECE02-KOHNUM(IDZ)  =   "143"
+               IF      RECE02-KOHNUM(IDZ)  =   "143" OR "743"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) end
                    PERFORM  20011-SYUKEI-SEC
                END-IF
            END-PERFORM
@@ -1298,10 +1302,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "143"  OR
-                   RECE02-KOHNUM (2)  =  "143"  OR
-                   RECE02-KOHNUM (3)  =  "143"  OR
-                   RECE02-KOHNUM (4)  =  "143"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) start
+      *         IF  RECE02-KOHNUM (1)  =  "143"  OR
+      *             RECE02-KOHNUM (2)  =  "143"  OR
+      *             RECE02-KOHNUM (3)  =  "143"  OR
+      *             RECE02-KOHNUM (4)  =  "143"
+               IF  RECE02-KOHNUM (1)  =  "143" OR "743" OR
+                   RECE02-KOHNUM (2)  =  "143" OR "743" OR
+                   RECE02-KOHNUM (3)  =  "143" OR "743" OR
+                   RECE02-KOHNUM (4)  =  "143" OR "743"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
