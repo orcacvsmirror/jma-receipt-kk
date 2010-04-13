@@ -22,7 +22,7 @@
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 埼玉県川越市用・重度心身障害者医療費請求書
       *                      社保・国保組合用
-      *                      (242)
+      *                      (242,442,542)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/06     有村          再作成(2.5.0対応)
@@ -37,6 +37,7 @@
       *                                 長期上位（974）は長期と同様の
       *                                 処理をする
       * 01.00.04     吉川    08/10/08   SPA-AREA初期化
+      * 01.00.05     吉川    10/04/12   対象保険番号の追加（442,542）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -595,7 +596,10 @@
                    UNTIL   IDZ >       4
       *---(01.00.02) LINE ADD START ------------------------------------
       *         IF      RECE02-KOHNUM(IDZ)  =   "142"
-               IF      RECE02-KOHNUM(IDZ)  =   "242"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) start
+      *         IF      RECE02-KOHNUM(IDZ)  =   "242"
+               IF      RECE02-KOHNUM(IDZ)  =   "242" OR "442" OR "542"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) end
       *---(01.00.02) LINE ADD END   ------------------------------------
                    PERFORM  20011-SYUKEI-SEC
                END-IF
@@ -1330,10 +1334,16 @@
       *             RECE02-KOHNUM (2)  =  "142"  OR
       *             RECE02-KOHNUM (3)  =  "142"  OR
       *             RECE02-KOHNUM (4)  =  "142"
-               IF  RECE02-KOHNUM (1)  =  "242"  OR
-                   RECE02-KOHNUM (2)  =  "242"  OR
-                   RECE02-KOHNUM (3)  =  "242"  OR
-                   RECE02-KOHNUM (4)  =  "242"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) start
+      *         IF  RECE02-KOHNUM (1)  =  "242"  OR
+      *             RECE02-KOHNUM (2)  =  "242"  OR
+      *             RECE02-KOHNUM (3)  =  "242"  OR
+      *             RECE02-KOHNUM (4)  =  "242"
+               IF  RECE02-KOHNUM (1)  =  "242" OR "442" OR "542" OR
+                   RECE02-KOHNUM (2)  =  "242" OR "442" OR "542" OR
+                   RECE02-KOHNUM (3)  =  "242" OR "442" OR "542" OR
+                   RECE02-KOHNUM (4)  =  "242" OR "442" OR "542"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC

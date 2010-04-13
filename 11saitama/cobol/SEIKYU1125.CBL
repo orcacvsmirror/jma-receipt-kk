@@ -22,7 +22,7 @@
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 埼玉県川越市用・重度心身障害者医療費請求書
       *                      市町村国保用
-      *                      (142)
+      *                      (142,442,542)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/06     有村          再作成(2.5.0対応)
@@ -36,6 +36,7 @@
       *                                 長期上位（974）は長期と同様の
       *                                 処理をする
       * 01.00.03     吉川    08/10/08   SPA-AREA初期化
+      * 01.00.04     吉川    10/04/12   対象保険番号の追加（442,542）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -593,7 +594,10 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-               IF      RECE02-KOHNUM(IDZ)  =   "142"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) start
+      *         IF      RECE02-KOHNUM(IDZ)  =   "142"
+               IF      RECE02-KOHNUM(IDZ)  =   "142" OR "442" OR "542"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) end
                    PERFORM  20011-SYUKEI-SEC
                END-IF
            END-PERFORM
@@ -1322,10 +1326,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "142"  OR
-                   RECE02-KOHNUM (2)  =  "142"  OR
-                   RECE02-KOHNUM (3)  =  "142"  OR
-                   RECE02-KOHNUM (4)  =  "142"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) start
+      *         IF  RECE02-KOHNUM (1)  =  "142"  OR
+      *             RECE02-KOHNUM (2)  =  "142"  OR
+      *             RECE02-KOHNUM (3)  =  "142"  OR
+      *             RECE02-KOHNUM (4)  =  "142"
+               IF  RECE02-KOHNUM (1)  =  "142" OR "442" OR "542" OR
+                   RECE02-KOHNUM (2)  =  "142" OR "442" OR "542" OR
+                   RECE02-KOHNUM (3)  =  "142" OR "442" OR "542" OR
+                   RECE02-KOHNUM (4)  =  "142" OR "442" OR "542"
+      *=== 印字対象番号追加 by Yoshikawa(2010/04/12) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
