@@ -42,6 +42,8 @@
       *  01.00.06    吉川    10/03/03    乳幼児の食事欄は
       *                                  空白ではなくゼロを印字する
       *  01.00.07    吉川    10/03/15    転帰欄の番号がずれる不具合を修正
+      *  01.00.08    吉川    10/04/13    外来様式で摘要欄の下部にゼロが
+      *                                  印字されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1277,6 +1279,9 @@
                MOVE    MF101-FTNMONEY(IDX) TO  WRK-Z7
                MOVE    WRK-Z7              TO  SC05-KOHFTN(IDX)
       *
+      *=== 外来はゼロを記載しない by Yoshikawa(2010/04/13) start
+               IF  MF101-NYUGAIKBN  =  "1"
+      *=== 外来はゼロを記載しない by Yoshikawa(2010/04/13) end
       *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) start
                IF  (MF101-EKOHNUM(1)  =  SPACE
                     AND  IDX  =  2)
@@ -1313,6 +1318,9 @@
       *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) start
                END-IF
       *=== 乳幼児の食事はゼロ記載 by Yoshikawa(2010/03/03) end
+      *=== 外来はゼロを記載しない by Yoshikawa(2010/04/13) start
+               END-IF
+      *=== 外来はゼロを記載しない by Yoshikawa(2010/04/13) end
       *
            END-PERFORM 
       *
