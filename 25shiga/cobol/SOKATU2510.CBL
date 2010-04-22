@@ -42,6 +42,10 @@
       *  01.00.11    吉川    2009/06/01    帳票様式の変更に伴う修正
       *                                    レセ電時は件数を印字しない
       *  01.00.12    吉川    2010/04/05    オンライン返戻対応
+      *  01.00.13    吉川    2010/04/14    県内・県外判定の変更
+      *                                    帳票様式の変更に伴う修正
+      *                                    END-IF漏れ修正
+      *  01.00.14    吉川    2010/04/16    印字対象番号の追加（340）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -638,7 +642,10 @@
                                               "145" OR "245" OR "345" OR
                                               "146" OR "246" OR "170"
       *---(01.00.07) LINE ADD START ------------------------------------
-                                           OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                                     OR "441" OR "541"
+                                           OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *****
                        PERFORM 10011-KOH-CHK-SEC
@@ -1098,6 +1105,21 @@
       *=== 帳票様式の変更 by Yoshikawa(2009/06/01) end
            END-IF
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/04/14) start
+      *    相模原市の場合、代表番号セット
+           IF      SKT2510TMP-HKNJANUM(1:3)    =   "146"
+               MOVE    "146001"    TO  SKT2510TMP-HKNJANUM
+               MOVE    1           TO  SKT2510TMP-KBN
+               MOVE    24          TO  SKT2510TMP-IDX
+           END-IF
+      *
+      *    全国歯科医師国保
+           IF      SKT2510TMP-HKNJANUM =   "093013"
+               MOVE    1           TO  SKT2510TMP-KBN
+               MOVE    25          TO  SKT2510TMP-IDX
+           END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/04/14) end
+      *
       *    帳票固定保険者では無い場合、市町村は給付割合を印字しない
       *    国保組合の法定内分は７割 法定外分は該当する給付割合を印字する
            IF      SKT2510TMP-KBN  =   2
@@ -1157,7 +1179,10 @@
            INITIALIZE       SKT2515TMP-REC
       *
       *    県外時集計
-           IF      RECE10-HKNJANUM(3:2) = "25"
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
+      *     IF      RECE10-HKNJANUM(3:2) = "25"
+           IF      RECE10-PREFKBN = "1"
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) end
                MOVE  1  TO  FLG-UPD
            ELSE
                MOVE  RECE10-HKNJANUM  TO  SKT2515TMP-HKNJANUM
@@ -1165,6 +1190,9 @@
                PERFORM  850-SKTTMP-READ-SEC
       *
                PERFORM  220-KOUKI-SYUKEI-SEC
+      *=== END-IF漏れ修正 by Yoshikawa(2010/04/14) start
+           END-IF
+      *=== END-IF漏れ修正 by Yoshikawa(2010/04/14) end
       * 
       *    集計の対象にならなかったとき
            IF     FLG-UPD        =       1
@@ -1834,19 +1862,25 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
-      *        無条件で県内となる国保組合かどうか
-               MOVE  RECE10-HKNJANUM-S        TO  WRK-HKNJANUM
-               IF      WRK-HKNJANUM  NOT =  "133033"  AND
-                       WRK-HKNJANUM  NOT =  "133298"  AND
-                       WRK-HKNJANUM  NOT =  "133264"  AND
-                       WRK-HKNJANUM  NOT =  "093013"
-      *            県外かどうか
-                   IF  WRK-HKNJANUM (1:2) = "25"
-                     GO  TO  900-SEIKYU-READ-SEC
-                   END-IF
-               ELSE
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
+      **        無条件で県内となる国保組合かどうか
+      *         MOVE  RECE10-HKNJANUM-S        TO  WRK-HKNJANUM
+      *         IF      WRK-HKNJANUM  NOT =  "133033"  AND
+      *                 WRK-HKNJANUM  NOT =  "133298"  AND
+      *                 WRK-HKNJANUM  NOT =  "133264"  AND
+      *                 WRK-HKNJANUM  NOT =  "093013"
+      **            県外かどうか
+      *             IF  WRK-HKNJANUM (1:2) = "25"
+      *               GO  TO  900-SEIKYU-READ-SEC
+      *             END-IF
+      *         ELSE
+      *             GO  TO  900-SEIKYU-READ-SEC
+      *         END-IF
+      *        県外かどうか
+               IF  RECE10-PREFKBN  =  "1"
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) end
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
       *        返戻分でオンライン請求は読み飛ばす
@@ -2554,7 +2588,10 @@
                                       "145" OR "245" OR "345" OR
                                       "146" OR "246" OR "170"
       *---(01.00.07) LINE ADD START ------------------------------------
-                                   OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                             OR "441" OR "541"
+                                   OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
       *---(01.00.07) LINE ADD END   ------------------------------------
                OR  RECE02-KOHNUM(2) = "142" OR "242" OR "140" OR
                                       "141" OR "241" OR "341" OR
@@ -2563,7 +2600,10 @@
                                       "145" OR "245" OR "345" OR
                                       "146" OR "246" OR "170"
       *---(01.00.07) LINE ADD START ------------------------------------
-                                   OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                             OR "441" OR "541"
+                                   OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
       *---(01.00.07) LINE ADD END   ------------------------------------
                OR  RECE02-KOHNUM(3) = "142" OR "242" OR "140" OR
                                       "141" OR "241" OR "341" OR
@@ -2572,7 +2612,10 @@
                                       "145" OR "245" OR "345" OR
                                       "146" OR "246" OR "170"
       *---(01.00.07) LINE ADD START ------------------------------------
-                                   OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                             OR "441" OR "541"
+                                   OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
       *---(01.00.07) LINE ADD END   ------------------------------------
                OR  RECE02-KOHNUM(4) = "142" OR "242" OR "140" OR
                                       "141" OR "241" OR "341" OR
@@ -2581,7 +2624,10 @@
                                       "145" OR "245" OR "345" OR
                                       "146" OR "246" OR "170"
       *---(01.00.07) LINE ADD START ------------------------------------
-                                   OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                             OR "441" OR "541"
+                                   OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *****
       *            テスト患者のときは読み飛ばす
