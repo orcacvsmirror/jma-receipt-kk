@@ -23,7 +23,7 @@
       *  コンポーネント名  : 滋賀福祉ＣＳＶファイル作成（ＦＤ請求）
       *                      (142,242,140,141,241,341,143,243,343)
       *                      (144,244,344,145,245,345,146,246,170)
-      *                      (441,541)
+      *                      (441,541,340)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  08/02/22    内田          新規作成
@@ -35,6 +35,7 @@
       *                                  公費分患者負担額を計算する
       *  01.00.03    吉川    09/11/10    特記事項０３を持っている場合は
       *                                  印字対象外とする
+      *  01.00.04    吉川    10/04/16    印字対象番号の追加（340）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -634,7 +635,10 @@
                                       OR "144" OR "244" OR "344"
                                       OR "145" OR "245" OR "345"
                                       OR "146" OR "246" OR "170"
-                                      OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                                OR "441" OR "541"
+                                      OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1167,7 +1171,7 @@
                MOVE  MF100-JNISSU          TO  WRK-TMP-JNISSU(1)
                MOVE  MF100-TOTALTEN        TO  WRK-TMP-TENSU(1)
                MOVE  MF100-YKZFTN          TO  WRK-TMP-YKZFTN(1)
-               MOVE  MF100-FTNMONEY        TO  WRK-TMP-ITBFTN(1)               
+               MOVE  MF100-FTNMONEY        TO  WRK-TMP-ITBFTN(1)
       *
                INITIALIZE                  WRK-TMP-TBL(2)
            END-IF
@@ -1695,28 +1699,40 @@
                                     OR "144" OR "244" OR "344"
                                     OR "145" OR "245" OR "345"
                                     OR "146" OR "246" OR "170"
-                                    OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                              OR "441" OR "541"
+                                    OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
                OR  RECE02-KOHNUM(2)  = "142" OR "242" OR "140"
                                     OR "141" OR "241" OR "341"
                                     OR "143" OR "243" OR "343"
                                     OR "144" OR "244" OR "344"
                                     OR "145" OR "245" OR "345"
                                     OR "146" OR "246" OR "170"
-                                    OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                              OR "441" OR "541"
+                                    OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
                OR  RECE02-KOHNUM(3)  = "142" OR "242" OR "140"
                                     OR "141" OR "241" OR "341"
                                     OR "143" OR "243" OR "343"
                                     OR "144" OR "244" OR "344"
                                     OR "145" OR "245" OR "345"
                                     OR "146" OR "246" OR "170"
-                                    OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                              OR "441" OR "541"
+                                    OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
                OR  RECE02-KOHNUM(4)  = "142" OR "242" OR "140"
                                     OR "141" OR "241" OR "341"
                                     OR "143" OR "243" OR "343"
                                     OR "144" OR "244" OR "344"
                                     OR "145" OR "245" OR "345"
                                     OR "146" OR "246" OR "170"
-                                    OR "441" OR "541"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) start
+      *                              OR "441" OR "541"
+                                    OR "441" OR "541" OR "340"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/16) end
       *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
