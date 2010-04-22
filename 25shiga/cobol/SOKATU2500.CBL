@@ -37,7 +37,9 @@
       *  01.00.06    吉川    2008/10/20    SPA-AREA初期化
       *  01.00.07    吉川    2009/06/01    レセ電時は件数を印字しない
       *                      2009/06/10    「愛荘町」の保険者番号修正
-      *  01.00.08    吉川    2010/04/05     オンライン返戻対応
+      *  01.00.08    吉川    2010/04/05    オンライン返戻対応
+      *  01.00.09    吉川    2010/04/14    県内・県外判定の変更
+      *                                    帳票様式の変更に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -759,7 +761,9 @@
       *     END-EVALUATE
            EVALUATE    WRK-HKNJANUM
                WHEN    "253013"    MOVE    1   TO  IDX1
-               WHEN    "093013"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/04/14) start
+      *         WHEN    "093013"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/04/14) end
       *            本人家族で判別
       *---(01.00.04) LINE ADD START ------------------------------------
       *             IF  RECE10-HONKZKKBN  =  "1"
@@ -853,7 +857,10 @@
            IF  FLG-KOURECEDEN      =  ZERO
            OR  WRK-PARA-SYOKBN  =  "2"
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
-             IF      RECE10-HKNJANUM(3:2) = "25"
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
+      *       IF      RECE10-HKNJANUM(3:2) = "25"
+             IF      RECE10-PREFKBN = "1"
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) end
                  IF  RECE10-HKNNUM  =  "039"
                      ADD  1  TO  SUM-GKENSUK
                  END-IF
@@ -1274,17 +1281,23 @@
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
       *
-      *        無条件で県内となる国保組合かどうか
-               MOVE    RECE10-HKNJANUM-S(1:6)  TO  WRK-HKNJANUM
-               IF      WRK-HKNJANUM    NOT =   "133033"
-               AND     WRK-HKNJANUM    NOT =   "133298"
-               AND     WRK-HKNJANUM    NOT =   "133264"
-               AND     WRK-HKNJANUM    NOT =   "093013"
-      *            県内かどうか
-                   IF      WRK-HKNJANUM(1:2)   NOT =   "25"
-                       GO  TO  900-SEIKYU-READ-SEC
-                   END-IF
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
+      **        無条件で県内となる国保組合かどうか
+      *         MOVE    RECE10-HKNJANUM-S(1:6)  TO  WRK-HKNJANUM
+      *         IF      WRK-HKNJANUM    NOT =   "133033"
+      *         AND     WRK-HKNJANUM    NOT =   "133298"
+      *         AND     WRK-HKNJANUM    NOT =   "133264"
+      *         AND     WRK-HKNJANUM    NOT =   "093013"
+      **            県内かどうか
+      *             IF      WRK-HKNJANUM(1:2)   NOT =   "25"
+      *                 GO  TO  900-SEIKYU-READ-SEC
+      *             END-IF
+      *         END-IF
+      *        県内かどうか
+               IF  RECE10-PREFKBN  =  "2"
+                   GO  TO  900-SEIKYU-READ-SEC
                END-IF
+      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
       *        返戻分でオンライン請求は読み飛ばす
