@@ -48,6 +48,7 @@
       *                                  印字対象番号の追加(681)
       *  01.00.11    吉川    09/07/28    福祉医療費請求額欄は
       *                                  公費の助成分を印字する
+      *  01.00.12    吉川    10/04/30    印字対象番号の追加(781)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -629,6 +630,9 @@
       *=== 印字対象番号の追加 by Uchida(2009/07/09) start
                                     OR "681"
       *=== 印字対象番号の追加 by Uchida(2009/07/09) end
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/30) start
+                                    OR "781"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/30) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1517,14 +1521,28 @@
       *                               OR "481" OR "581" OR
       *             RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
       *                                OR "481" OR "581"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/30) start
+      *         IF  RECE02-KOHNUM (1)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR "681"
+      *         OR  RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR "681"
+      *         OR  RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR "681"
+      *         OR  RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
+      *                                OR "481" OR "581" OR "681"
                IF  RECE02-KOHNUM (1)  =  "181" OR "281" OR "381"
                                       OR "481" OR "581" OR "681"
+                                      OR "781"
                OR  RECE02-KOHNUM (2)  =  "181" OR "281" OR "381"
                                       OR "481" OR "581" OR "681"
+                                      OR "781"
                OR  RECE02-KOHNUM (3)  =  "181" OR "281" OR "381"
                                       OR "481" OR "581" OR "681"
+                                      OR "781"
                OR  RECE02-KOHNUM (4)  =  "181" OR "281" OR "381"
                                       OR "481" OR "581" OR "681"
+                                      OR "781"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/04/30) end
       *=== 印字対象番号の追加 by Uchida(2009/07/09) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
