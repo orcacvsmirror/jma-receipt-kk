@@ -35,6 +35,7 @@
       *  01.00.03    長屋    08/04/27    帳票様式に伴う修正
       *  01.00.04    吉川    09/02/25    SPA-AREA初期化
       *  01.00.05    内田    09/08/25    中国九州北部豪雨対応（対象者別集計）
+      *  01.00.06    吉川    10/04/30    オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1873,6 +1874,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/30) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/04/30) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
