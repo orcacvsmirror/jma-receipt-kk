@@ -40,6 +40,8 @@
       *  01.00.08    吉川    2010/04/05    オンライン返戻対応
       *  01.00.09    吉川    2010/04/14    県内・県外判定の変更
       *                                    帳票様式の変更に伴う修正
+      *  01.00.10    吉川    2010/05/11    滋賀県医師国保（253013）が
+      *                                    印字されない不具合を修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -771,16 +773,18 @@
       *             ELSE
       *                 MOVE    3       TO  IDX1
       *             END-IF
-                   IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804
-                       IF  RECE10-HONKZKKBN  =  "1"
-                           MOVE    2       TO  IDX1
-                       ELSE
-                           MOVE    3       TO  IDX1
-                       END-IF
-                   ELSE
-                       MOVE    2       TO  IDX1
-                   END-IF
-      *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 滋賀国組の印字不具合修正 by Yoshikawa(2010/05/11) start
+      *             IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-200804
+      *                 IF  RECE10-HONKZKKBN  =  "1"
+      *                     MOVE    2       TO  IDX1
+      *                 ELSE
+      *                     MOVE    3       TO  IDX1
+      *                 END-IF
+      *             ELSE
+      *                 MOVE    2       TO  IDX1
+      *             END-IF
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 滋賀国組の印字不具合修正 by Yoshikawa(2010/05/11) end
                WHEN    "133033"    MOVE    4   TO  IDX1
                WHEN    "133264"    MOVE    5   TO  IDX1
                WHEN    "133298"    MOVE    6   TO  IDX1
