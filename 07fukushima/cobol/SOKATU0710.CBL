@@ -44,6 +44,7 @@
       *  01.00.08    内田    09/09/15    在総診は別帳票ではなく、まとめて印字
       *  01.00.09    吉川    09/11/17    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.10    吉川    10/05/17    札幌市の代表保険者番号変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1876,7 +1877,10 @@
       *
            IF    WRK-PARA-HKNJANUM  NOT = ZERO
              EVALUATE  WRK-PARA-HKNJANUM(1:6)
-             WHEN    "014001"
+      *=== 札幌市代表保険者番号変更 by Yoshikawa(2010/05/17) start
+      *       WHEN    "014001"
+             WHEN    "010017"
+      *=== 札幌市代表保険者番号変更 by Yoshikawa(2010/05/17) end
                MOVE  "014000"          TO  RECE10-XXSTHKNJANUM
                MOVE  "014999"          TO  RECE10-XXEDHKNJANUM
              WHEN    "044008"
