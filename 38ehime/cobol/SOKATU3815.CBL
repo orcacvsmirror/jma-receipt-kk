@@ -27,6 +27,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2010/05/13  オンライン返戻対応
+      *                                  広域連合の保険者番号指定対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -268,6 +270,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/05/13) start
+      *    レセプト・総括印刷情報（広域連合）
+           COPY    "CPSK200501.INC".
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/05/13) end
+      *
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
       *
@@ -450,6 +457,40 @@
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
+      *
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/05/13) start
+      *    レセプト・総括編集情報
+      *    区分コード０１のデータ読み込み
+           MOVE    SPACE               TO  SYS-200501-REC
+           INITIALIZE                      SYS-200501-REC
+           MOVE    "2005"              TO  SYS-200501-KANRICD
+           MOVE    "01"                TO  SYS-200501-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-200501-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-200501-STYUKYMD (7:2)
+           MOVE    SYS-200501-STYUKYMD TO  SYS-200501-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-200501-HOSPNUM
+           MOVE    SYS-200501-REC      TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-KEY10-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-200501-REC
+           ELSE
+               INITIALIZE                      SYS-200501-REC
+           END-IF
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   SPACE
+               MOVE    "0"                 TO  SYS-200501-KOUIKIPRTKBN
+           END-IF
+      *
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   "1"
+               CONTINUE
+           ELSE
+               MOVE    "00000000"          TO  WRK-PARA-HKNJANUM
+           END-IF
+      *
+           DISPLAY "SYS-200501-KOUIKIPRTKBN=" SYS-200501-KOUIKIPRTKBN
+           DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/05/13) end
       *
            .
        100-INIT-EXT.
@@ -761,7 +802,6 @@
            PERFORM 20021-HEAD-HEN-SEC
       *    帳票編集<明細>処理
            PERFORM 20023-BODY-HEN-SEC
-           DISPLAY "20024-"
       *    帳票印刷処理
            PERFORM 20024-PRINT-OUT-SEC
       *
@@ -940,26 +980,26 @@
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
                                             ALSO   "1"
-                   MOVE    "広域連合総括表"        TO  SPRT-TITLE
+                   MOVE    "広域連合請求書"        TO  SPRT-TITLE
                WHEN    2            ALSO    "1"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）"
+                   MOVE    "広域連合請求書（在医総等）"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表［返戻分］" 
+                   MOVE    "広域連合請求書［返戻分］" 
                                                TO  SPRT-TITLE
                WHEN    2            ALSO    "2"
                                             ALSO   "1"
-                   MOVE    "広域連合総括表（在医総等）［返戻分］"
+                   MOVE    "広域連合請求書（在医総等）［返戻分］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "1"     
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［特別療養費］"
+                   MOVE    "広域連合請求書［特別療養費］"
                                                TO  SPRT-TITLE
                WHEN    1            ALSO    "2"
                                             ALSO   "2"
-                   MOVE    "広域連合総括表［返戻分］［特別療養費］" 
+                   MOVE    "広域連合請求書［返戻分］［特別療養費］" 
                                                TO  SPRT-TITLE
            END-EVALUATE
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1173,6 +1213,8 @@
                    " SRYYM=" RECE10-SRYYM "-" RECE10-XXSRYYM 
                    " HKNNUM= " RECE10-HKNNUM
                    " PATHNAME=" WRK-MCP-PATHNAME
+                   " HKNJANUM=" RECE10-XXSTHKNJANUM "-" 
+                                RECE10-XXEDHKNJANUM
       *###
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
@@ -1202,6 +1244,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-RECE10
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/05/13) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/05/13) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
