@@ -36,6 +36,7 @@
       *  01.00.04    内田    07/11/30    ７０歳未満は一部負担金欄へ集計しない
       *  01.00.05    門間    09/02/25    SPA-AREAの初期化
       *  01.00.06    内田    09/04/24    ７０歳未満も一部負担金欄へ集計する
+      *  01.00.07    吉川    10/05/14    オンライン返戻対応
       ****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1180,6 +1181,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/05/14) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/05/14) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
