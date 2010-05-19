@@ -33,6 +33,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    内田    09/01/28    SPA-AREA初期化
+      *  01.00.03    吉川    10/05/18    市町村名の取得方法の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -51,6 +52,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *    新潟後期高齢保険番号データ
+           SELECT  TOWN-FILE     ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-TOWN.
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -62,6 +71,12 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *    市町村名用データ
+       FD  TOWN-FILE.
+           COPY  "TOWN1501.INC".
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -87,6 +102,9 @@
            03  STS-MF100   PIC X(02).
            03  STS-RECE02  PIC X(02).
            03  STS-RECEERR  PIC X(02).
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+           03  STS-TOWN    PIC X(02).
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -99,6 +117,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+           03  FLG-TOWN       PIC 9(01).
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -168,6 +189,26 @@
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
+      *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *    市町村名退避エリア
+       01  TOWN-DAT.
+           03  TOWN-TBL  OCCURS  100.
+               05  TOWN-NUM           PIC X(06).
+               05  TOWN-SPACE1        PIC X(01).
+               05  TOWN-KOKINUM       PIC X(08).
+               05  TOWN-SPACE2        PIC X(01).
+               05  TOWN-NAME          PIC X(20).
+               05  TOWN-KAIGYO        PIC X(01).
+      *
+      *    パラメータファイル名
+           03  FILE-NAME             PIC X(512).
+      *
+      *    ファイル名
+       01  DATA-FILE.
+           03  FILLER      PIC X(05)  VALUE  "data/".
+           03  FILLER      PIC X(12)  VALUE  "TOWN1501.TXT".
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -248,6 +289,11 @@
            COPY    "CPORCSLNK.INC".      
       *
            COPY    "MCPDATA.INC".
+      *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
       *
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
@@ -421,6 +467,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *    市町村情報
+           PERFORM 1001-TOWN-SEC 
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
+      *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -429,6 +480,38 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *****************************************************************
+      *    市町村名用テキスト読み込み処理 
+      *****************************************************************
+       1001-TOWN-SEC                SECTION.
+      *
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  DATA-FILE     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           OPEN  INPUT  TOWN-FILE
+      *
+           MOVE  ZERO   TO  FLG-TOWN
+           PERFORM VARYING IDX FROM 1 BY 1 
+                   UNTIL FLG-TOWN = 1
+             READ TOWN-FILE NEXT
+               AT END
+                 MOVE  1         TO  FLG-TOWN
+               NOT AT END
+                 MOVE  TOWN-REC  TO  TOWN-TBL(IDX)
+             END-READ
+           END-PERFORM
+      *
+           CLOSE TOWN-FILE
+      *
+           .
+       1001-TOWN-EXT.
+           EXIT.
+      *
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
       *****************************************************************
       *    パラメタ編集処理
       *****************************************************************
@@ -609,11 +692,26 @@
            IF      RECE02-RJNHKNNUM   NOT       =    SPACE
              MOVE  RECE02-RJNFTNJANUM(3:6)      TO   MF100-CITYNUM   
            ELSE
-             IF    RECE02-HKNJANUM(7:2)         =    SPACE
-               MOVE  RECE02-HKNJANUM(1:6)       TO   MF100-CITYNUM
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
+      *      後期高齢者は外部ファイルから保険者番号を取得する
+             IF    RECE02-HKNNUM                =  "039" OR "040"
+               PERFORM  VARYING  IDX1  FROM  1  BY  1
+                        UNTIL    IDX1    >   100
+                 IF  RECE02-HKNJANUM  =  TOWN-KOKINUM(IDX1)
+                     MOVE  TOWN-NUM(IDX1)       TO  MF100-CITYNUM
+                     MOVE  100                  TO  IDX1
+                 END-IF
+               END-PERFORM
              ELSE
-               MOVE  RECE02-HKNJANUM(3:6)       TO   MF100-CITYNUM
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
+               IF    RECE02-HKNJANUM(7:2)       =    SPACE
+                 MOVE  RECE02-HKNJANUM(1:6)     TO   MF100-CITYNUM
+               ELSE
+                 MOVE  RECE02-HKNJANUM(3:6)     TO   MF100-CITYNUM
+               END-IF
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) start
              END-IF
+      *=== 市町村名の取得方法の変更 by Yoshikawa(2010/05/18) end
            END-IF
       *
       *    患者住所・電話番号
