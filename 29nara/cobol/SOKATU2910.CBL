@@ -35,6 +35,7 @@
       *  01.00.04    門間     08/10/07    SPA-AREAの初期化
       *  01.00.05    吉川     08/12/09    国組3〜6歳を分けないように修正
       *  01.00.06    吉川     10/04/06    オンライン返戻対応
+      *  01.00.07    吉川     10/05/21    長期は分けて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -660,6 +661,15 @@
                END-IF
            END-IF
       *=== 国組3〜6歳は分けない by Yoshikawa(2008/12/09) end
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           IF  RECE10-ETC-KOHNUM(1) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(2) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(3) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(4) = "972" OR "974"
+             MOVE   "1"                   TO    SKT2910TMP-TYOKI
+           END-IF
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
            PERFORM 900-SKTTMP-READ-SEC
       *

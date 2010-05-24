@@ -22,12 +22,16 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01     山口      05/04/13  全国公費と地方公費を合算して集計する
       *                                   ため公費テーブルのOCCURSを３に変更
+      *  01.00.02     吉川      10/05/21  長期を別帳票にするためKEY追加
       ************************************************************
        01  SKT2910TMP-REC.
            03      SKT2910TMP-KEY.
              05    SKT2910TMP-SYUTURYOKU          PIC  X(01).
              05    SKT2910TMP-HKNJANUM            PIC  X(06).
              05    SKT2910TMP-ZAITAKU             PIC  X(01).
+      *=== 長期は別帳票とする by Yoshikawa(2010/05/21) start
+             05    SKT2910TMP-TYOKI               PIC  X(01).
+      *=== 長期は別帳票とする by Yoshikawa(2010/05/21) end
              05    SKT2910TMP-KYURATE             PIC  9(02).
            03      SKT2910TMP-PAGE-FLG1           PIC  9(01).
            03      SKT2910TMP-PAGE-FLG2           PIC  9(01).

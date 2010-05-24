@@ -34,12 +34,22 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/03/31  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/04/06  オンライン返戻対応
+      *  01.00.05    吉川    2010/05/21  長期は分けて印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *    請求書一時ファイル
+           SELECT  SKT2915TMP-FILE ASSIGN    SKT2915TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT2915TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT2915.
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
       *    請求ＤＢ更新用ファイル
            SELECT  UPD-FILE        ASSIGN  RECEUPD
@@ -54,6 +64,11 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+       FD  SKT2915TMP-FILE.
+           COPY    "CPSKT2915TMP.INC".
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
+      *
       *    請求ＤＢ更新用ファイル
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
@@ -64,6 +79,13 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *    請求書一時ファイル 名称領域
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT2915TP//.
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
       *    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -82,6 +104,9 @@
       *
       *    スパ領域
        01  STS-AREA.
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           03  STS-SKT2915         PIC X(02).
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
       *
@@ -101,6 +126,10 @@
            03  FLG-PTINF           PIC 9(01).
       *     
            03  FLG-PRTKBN          PIC 9(01).
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           03  FLG-SKT2915TMP      PIC 9(01).
+           03  FLG-PRINT           PIC 9(01).
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -108,6 +137,9 @@
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           03  IDX4                PIC 9(04).
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            03  IDXX                PIC 9(04).
            03  IDXY                PIC 9(04).
       *
@@ -387,6 +419,11 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           MOVE    "SKT2915"           TO  SKT2915TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT2915TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT2915TP-HOSPNUM
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
@@ -546,6 +583,21 @@
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/31) end
       *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *    処理区分によってキーを分ける
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "1"
+                   MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"
+                   MOVE    "key65"         TO  WRK-MCP-PATHNAME
+           END-EVALUATE
+      *
+           MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+           PERFORM 900-SEIKYU-SELECT-SEC
+           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
+      *
            .
        100-INIT-EXT.
            EXIT.
@@ -557,21 +609,38 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *
-      *    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "2"
-                   MOVE    "2"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "1"
-                   MOVE    "1"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      **    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "2"
+      *             MOVE    "2"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "1"
+      *             MOVE    "1"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      **
+      *     CLOSE   UPD-FILE
+           OPEN    OUTPUT  SKT2915TMP-FILE
+           CLOSE           SKT2915TMP-FILE
+           OPEN    I-O     SKT2915TMP-FILE
+           
+           MOVE    ZERO                TO  FLG-UPD
+      *
+           PERFORM 2001-KOUKI-SYUKEI-SEC
+                   UNTIL   FLG-END  =  1
       *
            CLOSE   UPD-FILE
+           CLOSE   SKT2915TMP-FILE
+      *
+           IF       FLG-UPD   =       1
+                    PERFORM   2002-PRINT-SEC
+           END-IF
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
       *    請求ＤＢ更新
            IF      FLG-UPD        =   1
@@ -679,6 +748,9 @@
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+                                            SKT2915TMP-REC
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *    保険者番号
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM(1:6)
@@ -687,6 +759,35 @@
            END-IF
       *    代表番号セット
            PERFORM  200101-HKNJANUM-SET-SEC
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *    保険者番号、県名
+           MOVE  WRK-HKNJANUM            TO  SKT2915TMP-HKNJANUM
+           MOVE  WRK-HKNJANAME           TO  SKT2915TMP-HKNJANAME
+      *
+      *    在宅
+           IF     RECE10-ZAITAKU    =    "1"
+             MOVE     "1"                TO   SKT2915TMP-ZAITAKU
+           ELSE
+             MOVE     "2"                TO   SKT2915TMP-ZAITAKU
+           END-IF
+      *
+      *    出力順
+           IF     RECE10-PREFKBN   =    "1"
+             MOVE     "1"                TO   SKT2915TMP-SYUTURYOKU
+           ELSE
+             MOVE     "2"                TO   SKT2915TMP-SYUTURYOKU
+           END-IF
+      *
+      *    長期
+           IF  RECE10-ETC-KOHNUM(1) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(2) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(3) = "972" OR "974" OR
+               RECE10-ETC-KOHNUM(4) = "972" OR "974"
+             MOVE     "1"                TO   SKT2915TMP-TYOKI
+             ADD       1                 TO   SKT2915TMP-TKENSU
+           END-IF
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
       *    入外区分
            EVALUATE    RECE10-NYUGAIKBN
@@ -703,6 +804,10 @@
                WHEN    7
                    MOVE    2                   TO  IDX1
            END-EVALUATE
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
            PERFORM 20011-HKN-SYUKEI-SEC
       *
@@ -721,6 +826,14 @@
                    RECE10-ETC-KOHNUM (4)   =  "972"  OR "974"
                ADD  1   TO   WRK-TYOKI
            END-IF
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           IF      FLG-SKT2915TMP  =  1
+               WRITE   SKT2915TMP-REC
+           ELSE
+               REWRITE SKT2915TMP-REC
+           END-IF
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -741,6 +854,9 @@
                END-STRING
                PERFORM 500-ERR-HENSYU-SEC
                PERFORM 500-COBABORT-SEC
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+               MOVE    1                   TO  FLG-END
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            END-IF 
            .
        2001-KOUKI-SYUKEI-EXT.
@@ -956,27 +1072,50 @@
                PERFORM  20011-HKN-SYUKEI-EXT
            END-IF
       *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      **    療養の給付：件数
+      *     ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+      **    療養の給付：診療実日数
+      *     ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+      **    療養の給付：点数
+      *     ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+      **    療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+      **
+      *     IF      IDX3                   =   1 
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      **    食事療養：件数
+      *         ADD     1                   TO  SUM-S-KENSU(IDX1)
+      *       END-IF
+      **    食事療養：日数
+      *       ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+      **    食事療養：金額
+      *       ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+      **    食事療養：標準負担額
+      *       ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+      *     END-IF    
       *    療養の給付：件数
-           ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+           ADD  1                  TO  SKT2915TMP-KENSU(IDX1 IDX3)
       *    療養の給付：診療実日数
-           ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+           ADD  RECE10-JNISSU(1)   TO  SKT2915TMP-NISSU(IDX1 IDX3)
       *    療養の給付：点数
-           ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+           ADD  RECE10-TOTALTEN(1) TO  SKT2915TMP-TENSU(IDX1 IDX3)
       *    療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+           ADD  RECE10-FTNMONEY(1) TO  SKT2915TMP-ITBFTN(IDX1 IDX3)
       *
            IF      IDX3                   =   1 
              IF      RECE10-SHOKUJINISSU(1)   >   ZERO
       *    食事療養：件数
-               ADD     1                   TO  SUM-S-KENSU(IDX1)
+               ADD     1                   TO  SKT2915TMP-S-KENSU(IDX1)
              END-IF
       *    食事療養：日数
-             ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+             ADD  RECE10-SHOKUJINISSU(1)   TO  SKT2915TMP-S-NISSU(IDX1)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SKT2915TMP-S-KINGK(IDX1)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
-           END-IF    
+             ADD  RECE10-SHOKUJIFTN(1)     TO  SKT2915TMP-S-FTNGK(IDX1)
+           END-IF
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -1026,19 +1165,70 @@
                END-PERFORM
              END-IF
       *
-      *      公費番号格納
-             PERFORM VARYING   IDX2    FROM    1   BY  1
-                     UNTIL     IDX2 >          100
-               IF  SUM-KOHNUM (IDX2)   =   SPACE
-                 MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
-                 MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
-               END-IF
-               IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
-                 PERFORM 200121-KOH-SYUKEI-01-SEC
-                 MOVE    100             TO  IDX2
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      **      公費番号格納
+      *       PERFORM VARYING   IDX2    FROM    1   BY  1
+      *               UNTIL     IDX2 >          100
+      *         IF  SUM-KOHNUM (IDX2)   =   SPACE
+      *           MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+      *           MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+      *         END-IF
+      *         IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+      *           PERFORM 200121-KOH-SYUKEI-01-SEC
+      *           MOVE    100             TO  IDX2
+      *         END-IF
+      *       END-PERFORM
+             PERFORM VARYING  IDX4    FROM    1   BY  1
+                   UNTIL    IDX4    >       20
+                   OR       SKT2915TMP-KOHNUM(IDX4) = SPACE
+               IF  RECE10-KOHNUM (IDZ)  =  SKT2915TMP-KOHNUM (IDX4)
+                 MOVE    IDX4    TO  CNT-KOH
+                 MOVE    20      TO  IDX4
                END-IF
              END-PERFORM
+      *
+      *      該当公費がなかった場合
+             IF  IDX4   <   20
+               MOVE  IDX4        TO  CNT-KOH
+      *        公費名称
+               MOVE  WRK-MEISYO  TO  SKT2915TMP-KOHNAME(CNT-KOH)
+             END-IF
+      *
+      *      公費番号
+             MOVE  RECE10-KOHNUM (IDZ)
+                               TO  SKT2915TMP-KOHNUM(CNT-KOH)
+      *      療養の給付：件数
+             ADD  1            TO  SKT2915TMP-KKENSU(CNT-KOH IDX3)
+      *      療養の給付:診療実日数
+             ADD  RECE10-JNISSU(IDZ + 1)
+                               TO  SKT2915TMP-KNISSU(CNT-KOH IDX3)
+      *      療養の給付：点数
+             ADD  RECE10-TOTALTEN(IDZ + 1)
+                               TO  SKT2915TMP-KTENSU(CNT-KOH IDX3)
+      *      療養の給付：一部負担金
+             ADD  RECE10-FTNMONEY(IDZ + 1)
+                               TO  SKT2915TMP-KITBFTN(CNT-KOH IDX3)
+      *
+             IF      IDX3              =   1
+               IF    RECE10-SHOKUJINISSU(IDZ + 1)   >   ZERO
+      *          食事療養:件数
+                 ADD  1        TO  SKT2915TMP-S-KKENSU(CNT-KOH)
+               END-IF
+      *        食事療養:日数
+               ADD  RECE10-SHOKUJINISSU(IDZ + 1)
+                               TO  SKT2915TMP-S-KNISSU(CNT-KOH)
+      *        食事療養：金額
+               ADD  RECE10-SHOKUJIRYOYOHI(IDZ + 1)
+                               TO  SKT2915TMP-S-KKINGK(CNT-KOH)
+      *        食事療養：標準負担額
+               ADD  RECE10-SHOKUJIFTN(IDZ + 1)  
+                               TO  SKT2915TMP-S-KFTNGK(CNT-KOH)
+             END-IF
+      *
+             MOVE    1           TO  FLG-UPD
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            END-PERFORM
+      *
            .
        20012-KOH-SYUKEI-EXT.
            EXIT.
@@ -1113,12 +1303,29 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
-      *    帳票編集<見出し>処理
-           PERFORM 20021-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-           PERFORM 20023-BODY-HEN-SEC
-      *    帳票印刷処理
-           PERFORM 20024-PRINT-OUT-SEC
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           OPEN     INPUT       SKT2915TMP-FILE
+      *
+           MOVE     ZERO        TO       FLG-PRINT
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
+      *
+      *      帳票編集<見出し>処理
+             PERFORM 20021-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+             PERFORM 20023-BODY-HEN-SEC
+      *      帳票印刷処理
+             PERFORM 20024-PRINT-OUT-SEC
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *      一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+      *
+           END-PERFORM
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *
            .
        2002-PRINT-EXT.
@@ -1148,13 +1355,22 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT2915-HOSPCDN
       *    保険者番号
-           MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *     MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+           MOVE    SKT2915TMP-HKNJANUM TO  WRK-MAE-INPUT
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT2915-HKNJANUM
       *    保険者名(都道府県名)
-           MOVE     WRK-HKNJANAME      TO  SKT2915-HKNJANAME
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *     MOVE     WRK-HKNJANAME      TO  SKT2915-HKNJANAME
+           MOVE    SKT2915TMP-HKNJANAME TO  SKT2915-HKNJANAME
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *    在総診・在医総
-           IF    WRK-INDEX  =  2
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *     IF    WRK-INDEX  =  2
+           IF    SKT2915TMP-ZAITAKU  =  "1"
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
              MOVE    "在"              TO  SKT2915-ZAI1
              MOVE    "◯"              TO  SKT2915-ZAI2
            END-IF
@@ -1176,38 +1392,73 @@
              ADD     1                   TO  IDZ    
              PERFORM VARYING IDY FROM    1   BY  1
                      UNTIL   IDY >       2
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      **    療養の給付：件数
+      *         MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT2915-KENSU(IDZ IDY)
+      **    療養の給付：診療実日数
+      *         MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
+      *         MOVE  WRK-Z5              TO  SKT2915-NISSU(IDZ IDY)
+      **    療養の給付：点数
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT2915-TENSU(IDZ IDY)
+      **    療養の給付：一部負担金
+      *         MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT2915-ITBFTN(IDZ IDY)
+      *       END-PERFORM
+      **
+      **    食事療養：件数
+      *       MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT2915-S-KENSU(IDZ)
+      **    食事療養：日数
+      *       MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT2915-S-NISSU(IDZ)
+      **    食事療養：金額
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2915-S-KINGK(IDZ)
+      **    食事療養：標準負担額
+      *       MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT2915-S-FTNGK(IDZ)
+      *     END-PERFORM
+      *     
+      **    長期高額療養件数
+      *     MOVE  WRK-TYOKI             TO  WRK-Z5
+      *     MOVE  WRK-Z5                TO  SKT2915-TYOKI
+      *     
       *    療養の給付：件数
-               MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+               MOVE  SKT2915TMP-KENSU(IDX IDY)  TO  WRK-Z5
                MOVE  WRK-Z5              TO  SKT2915-KENSU(IDZ IDY)
       *    療養の給付：診療実日数
-               MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
+               MOVE  SKT2915TMP-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT2915-NISSU(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+               MOVE  SKT2915TMP-TENSU(IDX IDY)  TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT2915-TENSU(IDZ IDY)
       *    療養の給付：一部負担金
-               MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+               MOVE  SKT2915TMP-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT2915-ITBFTN(IDZ IDY)
              END-PERFORM
       *
       *    食事療養：件数
-             MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+             MOVE  SKT2915TMP-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT2915-S-KENSU(IDZ)
       *    食事療養：日数
-             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+             MOVE  SKT2915TMP-S-NISSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT2915-S-NISSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+             MOVE  SKT2915TMP-S-KINGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT2915-S-KINGK(IDZ)
       *    食事療養：標準負担額
-             MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+             MOVE  SKT2915TMP-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT2915-S-FTNGK(IDZ)
            END-PERFORM
-           
+      *
       *    長期高額療養件数
-           MOVE  WRK-TYOKI             TO  WRK-Z5
-           MOVE  WRK-Z5                TO  SKT2915-TYOKI
-      *     
+           MOVE  SKT2915TMP-TKENSU              TO  WRK-Z5
+           MOVE  WRK-Z5                  TO  SKT2915-TYOKI
+      *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
+      *
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
            MOVE    1                     TO  IDX2
@@ -1227,25 +1478,26 @@
            PERFORM VARYING IDY     FROM    1   BY  1
                    UNTIL   IDY     >       5         
                    OR      FLG-KOH-END     =   1
-             IF      SUM-KOHNUM (IDX2)   =   SPACE
-               MOVE    1                     TO  FLG-KOH-END
-             ELSE    
-               PERFORM 2002311-HKNNUM-HENSYU-SEC     
-               PERFORM VARYING IDZ FROM    1   BY  1
-                       UNTIL   IDZ >       2
-      *    公費再掲欄：療養の給付：件数
-                 MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
-                 MOVE  WRK-Z5                TO SKT2915-KKENSU(IDY IDZ)
-      *    公費再掲欄：療養の給付：日数
-                 MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
-                 MOVE  WRK-Z5                TO SKT2915-KNISSU(IDY IDZ)
-      *    公費再掲欄：療養の給付：点数
-                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT2915-KTENSU(IDY IDZ)
-      *    公費再掲欄：療養の給付：一部負担金
-                 MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT2915-KITBFTN(IDY IDZ)
-               END-PERFORM
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *       IF      SUM-KOHNUM (IDX2)   =   SPACE
+      *         MOVE    1                     TO  FLG-KOH-END
+      *       ELSE    
+      *         PERFORM 2002311-HKNNUM-HENSYU-SEC     
+      *         PERFORM VARYING IDZ FROM    1   BY  1
+      *                 UNTIL   IDZ >       2
+      **    公費再掲欄：療養の給付：件数
+      *           MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
+      *           MOVE  WRK-Z5                TO SKT2915-KKENSU(IDY IDZ)
+      **    公費再掲欄：療養の給付：日数
+      *           MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
+      *           MOVE  WRK-Z5                TO SKT2915-KNISSU(IDY IDZ)
+      **    公費再掲欄：療養の給付：点数
+      *           MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+      *           MOVE  WRK-Z9                TO SKT2915-KTENSU(IDY IDZ)
+      **    公費再掲欄：療養の給付：一部負担金
+      *           MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
+      *           MOVE  WRK-Z9                TO SKT2915-KITBFTN(IDY IDZ)
+      *         END-PERFORM
       *
       **    公費再掲欄：食事療養：件数
       *-         MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
@@ -1260,12 +1512,38 @@
       *-         MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
       *-         MOVE  WRK-Z9                TO  SKT2915-S-KFTNGK(IDY)
       *
+      *         ADD     1                   TO  IDX2   
+      *       END-IF        
+             IF      SKT2915TMP-KOHNUM (IDX2)   =   SPACE
+               MOVE    1                     TO  FLG-KOH-END
+             ELSE    
+               PERFORM 2002311-HKNNUM-HENSYU-SEC     
+               PERFORM VARYING IDZ FROM    1   BY  1
+                       UNTIL   IDZ >       2
+      *    公費再掲欄：療養の給付：件数
+                 MOVE  SKT2915TMP-KKENSU(IDX2 IDZ)  TO WRK-Z5
+                 MOVE  WRK-Z5                TO SKT2915-KKENSU(IDY IDZ)
+      *    公費再掲欄：療養の給付：日数
+                 MOVE  SKT2915TMP-KNISSU(IDX2 IDZ)  TO WRK-Z5
+                 MOVE  WRK-Z5                TO SKT2915-KNISSU(IDY IDZ)
+      *    公費再掲欄：療養の給付：点数
+                 MOVE  SKT2915TMP-KTENSU(IDX2 IDZ)  TO WRK-Z9
+                 MOVE  WRK-Z9                TO SKT2915-KTENSU(IDY IDZ)
+      *    公費再掲欄：療養の給付：一部負担金
+                 MOVE  SKT2915TMP-KITBFTN(IDX2 IDZ) TO WRK-Z9
+                 MOVE  WRK-Z9                TO SKT2915-KITBFTN(IDY IDZ)
+               END-PERFORM
+      *
                ADD     1                   TO  IDX2   
-             END-IF        
+             END-IF
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            END-PERFORM
       *
       *    １頁出力しても公費はまだ残っているか
-           IF      SUM-KOHNUM (IDX2)  =   SPACE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *     IF      SUM-KOHNUM (IDX2)  =   SPACE
+           IF      SKT2915TMP-KOHNUM (IDX2)  =   SPACE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
                MOVE    1                   TO  FLG-KOH-END
            ELSE    
       *        帳票印刷処理（２頁以降）
@@ -1286,23 +1564,35 @@
            MOVE    SPACE               TO  WRK-KOHKBN
       *
       *=== 公費番号を印字 by Yoshikawa(2008/07/11) start
-           MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *     MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+           MOVE    SKT2915TMP-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            MOVE    WRK-KOHNUM9         TO  SKT2915-HBTNUM (IDY)
       *=== 公費番号を印字 by Yoshikawa(2008/07/11) end
       *
       *    特定疾患のとき 
-           IF      SUM-KOHNUM (IDX2)  =   "051"
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *     IF      SUM-KOHNUM (IDX2)  =   "051"
+           IF      SKT2915TMP-KOHNUM (IDX2)  =   "051"
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *=== 公費番号を印字 by Yoshikawa(2008/07/11) start
                MOVE    "51"            TO   SKT2915-HBTNUM (IDY)
       *=== 公費番号を印字 by Yoshikawa(2008/07/11) end
                MOVE    "特定疾患"      TO   WRK-HKNNAME
            ELSE
       *      公費番号まとめ情報からの集計か
-             IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *       IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+             IF      SKT2915TMP-KOHNAME(IDX2)  =   SPACE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
       *        保険番号読込み  
                INITIALIZE                     HKNNUM-REC
                MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
-               MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *         MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+               MOVE  SKT2915TMP-KOHNUM (IDX2)  TO  HKN-HKNNUM
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
                MOVE  HKNNUM-REC           TO  MCPDATA-REC
                MOVE  "tbl_hknnum"         TO  MCP-TABLE
                MOVE  "key2"               TO  MCP-PATHNAME
@@ -1376,6 +1666,14 @@
            MOVE    WRK-PAGE            TO  SKT2915-NO
            MOVE    "SKT2915.red"         TO  SPRT-PRTID
            MOVE    SKT2915               TO  SPRT-PRTDATA
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+           IF  SKT2915TMP-ZAITAKU  =  "1"
+               MOVE  2  TO  WRK-INDEX
+           ELSE
+               MOVE  1  TO  WRK-INDEX
+           END-IF
+           MOVE  WRK-PARA-SYOKBN       TO  WRK-SYOKBN
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
@@ -1557,6 +1855,36 @@
        310-SEIKYU-UPD-EXT.
            EXIT.
       *
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT2915TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT2915TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT2915TMP
+           END-READ
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT2915TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
+      *
       *****************************************************************
       *    西暦日本語変換処理
       *****************************************************************
@@ -1623,6 +1951,9 @@
                MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
                PERFORM 900-SEIKYU-READ-SEC
            ELSE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+               MOVE    1                   TO  FLG-END
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
                MOVE    1                   TO  FLG-RECE10
                MOVE    HIGH-VALUE      TO  KEY-NEW
            END-IF
@@ -1666,6 +1997,9 @@
                ADD     1                     TO  CNT-RECE10   
       *         
            ELSE
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) start
+               MOVE    1               TO  FLG-END
+      *=== 長期は分けて印字する by Yoshikawa(2010/05/21) end
                MOVE    HIGH-VALUE      TO  KEY-NEW
                MOVE    1               TO  FLG-RECE10
            END-IF
