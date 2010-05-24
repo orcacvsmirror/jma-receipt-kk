@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 静岡・福祉医療費電子レセプト
-      *                      (183,283,383,184,185)
+      *                      (183,283,383,184,285)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  10/04/22    吉川          新規作成
@@ -557,7 +557,7 @@
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
              IF  RECE02-KOHNUM (IDZ)  =  "183" OR "283" OR "383"
-                                     OR  "184" OR "185"
+                                     OR  "184" OR "285"
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -615,7 +615,7 @@
            MOVE  MF100-KOHFTNJANUM(5:3)     TO  WRK-KOBETUCITYNUM
       *
       *    食事療養費は保険及び上位公費の差で計算する
-           IF  RECE02-KOHNUM(IDZ)  =  "184" OR "185"
+           IF  RECE02-KOHNUM(IDZ)  =  "184" OR "285"
              COMPUTE  MF100-SHOKUJIRYOYOHI  =
                RECE02-SHOKUJIRYOYOHI(IDZ)  -  RECE02-SHOKUJIRYOYOHI(IDY)
              COMPUTE  MF100-SHOKUJIFTN  =
@@ -632,7 +632,7 @@
              WHEN "184"
                  MOVE  "84"                 TO  MF100-SEIDO
                  ADD   1                    TO  WRK-KENSU(2)
-             WHEN "185"
+             WHEN "285"
                  MOVE  "85"                 TO  MF100-SEIDO
                  ADD   1                    TO  WRK-KENSU(3)
            END-EVALUATE
@@ -1226,13 +1226,13 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
                IF  RECE02-KOHNUM(1) =  "183" OR "283" OR "383" OR
-                                       "184" OR "185" OR
+                                       "184" OR "285" OR
                    RECE02-KOHNUM(2) =  "183" OR "283" OR "383" OR
-                                       "184" OR "185" OR
+                                       "184" OR "285" OR
                    RECE02-KOHNUM(3) =  "183" OR "283" OR "383" OR
-                                       "184" OR "185" OR
+                                       "184" OR "285" OR
                    RECE02-KOHNUM(4) =  "183" OR "283" OR "383" OR
-                                       "184" OR "185"
+                                       "184" OR "285"
       *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
