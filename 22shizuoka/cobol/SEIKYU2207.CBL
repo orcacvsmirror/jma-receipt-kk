@@ -28,6 +28,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2010/05/31  同じ法別番号の公費を持っており
+      *                                  同月にどちらも使用している場合
+      *                                  件数がダブルカウントされるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -591,6 +594,23 @@
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
       *
+      *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) start
+      *    制度番号
+           EVALUATE  RECE02-KOHNUM(IDZ)
+             WHEN "183"
+             WHEN "283"
+             WHEN "383"
+                 MOVE  "83"                TO  MF100-SEIDO
+                 MOVE  1                   TO  IDX1
+             WHEN "184"
+                 MOVE  "84"                TO  MF100-SEIDO
+                 MOVE  2                   TO  IDX1
+             WHEN "285"
+                 MOVE  "85"                TO  MF100-SEIDO
+                 MOVE  3                   TO  IDX1
+           END-EVALUATE
+      *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) end
+      *
            PERFORM  800-SKTTMP-READ-SEC
       *
            MOVE  RECE02-PTID         TO  MF100-PTID
@@ -623,20 +643,22 @@
            END-IF
       *
       *    制度番号
-           EVALUATE  RECE02-KOHNUM(IDZ)
-             WHEN "183"
-             WHEN "283"
-             WHEN "383"
-                 MOVE  "83"                 TO  MF100-SEIDO
-                 ADD   1                    TO  WRK-KENSU(1)
-             WHEN "184"
-                 MOVE  "84"                 TO  MF100-SEIDO
-                 ADD   1                    TO  WRK-KENSU(2)
-             WHEN "285"
-                 MOVE  "85"                 TO  MF100-SEIDO
-                 ADD   1                    TO  WRK-KENSU(3)
-           END-EVALUATE
-           
+      *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) start
+      *     EVALUATE  RECE02-KOHNUM(IDZ)
+      *       WHEN "183"
+      *       WHEN "283"
+      *       WHEN "383"
+      *           MOVE  "83"                 TO  MF100-SEIDO
+      *           ADD   1                    TO  WRK-KENSU(1)
+      *       WHEN "184"
+      *           MOVE  "84"                 TO  MF100-SEIDO
+      *           ADD   1                    TO  WRK-KENSU(2)
+      *       WHEN "285"
+      *           MOVE  "85"                 TO  MF100-SEIDO
+      *           ADD   1                    TO  WRK-KENSU(3)
+      *     END-EVALUATE
+      *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) end
+      *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -645,6 +667,9 @@
              IF  FLG-MF100  =  1
                  WRITE    MF100-REC
                  ADD      1                 TO    CNT-MF100
+      *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) start
+                 ADD      1                 TO    WRK-KENSU(IDX1)
+      *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) end
              ELSE
                  REWRITE  MF100-REC
              END-IF
