@@ -38,6 +38,7 @@
       * 01.00.04     µ»¿Ó    08/10/08   SPA-AREAΩÈ¥¸≤Ω
       * 01.00.05     µ»¿Ó    10/02/16   ∂®≤Ò§±§Û§›¬–±˛
       *                                 ø©ªˆÕÛ§Œø©ªˆ≤ÛøÙ§Úø©ªˆ∆¸øÙ§À —ππ
+      * 01.00.06     µ»¿Ó    10/06/02   ∞ÂŒ≈µ°¥ÿ•≥°º•…§Œ8∑ÂÃ‹§œ≈¿øÙ…Ω∂Ë ¨§Ú∞ıª˙
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -689,7 +690,10 @@
            MOVE  RECE02-RJNHKN       TO  MF100-RJNHKN
            MOVE  RECE02-HKNNUM       TO  MF100-HKNNUM
       *
-           MOVE  RECE02-SRYKA       (IDZ)  TO  MF100-SRYKA
+      *=== ø«Œ≈∂Ë ¨§œ≈¿øÙ…Ω∂Ë ¨ by Yoshikawa(2010/06/02) start
+      *     MOVE  RECE02-SRYKA       (IDZ)  TO  MF100-SRYKA
+           MOVE  SYS-1001-TENHYOKBN        TO  MF100-SRYKA
+      *=== ø«Œ≈∂Ë ¨§œ≈¿øÙ…Ω∂Ë ¨ by Yoshikawa(2010/06/02) end
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
@@ -917,25 +921,44 @@
            MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  SC33-HOSPCD-TBL
-           MOVE    MF100-SRYKA             TO  WRK-MAE-INPUT
+      *=== ∞ÂŒ≈µ°¥ÿ•≥°º•…8∑ÂÃ‹§œ≈¿øÙ…Ω by Yoshikawa(2010/06/02) start
+      *     MOVE    MF100-SRYKA             TO  WRK-MAE-INPUT
+      *     PERFORM 2009-HENKAN-SEC
+      *     MOVE    WRK-OUT-INPUT(3:2)      TO  SC33-HOSPCD8
+      **    ø«Œ≈∂Ë ¨
+      *     EVALUATE  MF100-SRYKA
+      *       WHEN  "01"
+      *         MOVE  "°ª"                  TO  SC33-SRKBN(1)
+      *       WHEN  "03"
+      *         MOVE  "°ª"                  TO  SC33-SRKBN(2)
+      *       WHEN  "04"
+      *         MOVE  "°ª"                  TO  SC33-SRKBN(3)
+      *       WHEN  "05"
+      *         MOVE  "°ª"                  TO  SC33-SRKBN(4)
+      *       WHEN  "06"
+      *         MOVE  "°ª"                  TO  SC33-SRKBN(5)
+      *       WHEN  "09"
+      *         MOVE  "°ª"                  TO  SC33-SRKBN(6)
+      *     END-EVALUATE
+           MOVE    SYS-1001-TENHYOKBN      TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
-           MOVE    WRK-OUT-INPUT(3:2)      TO  SC33-HOSPCD8
+           MOVE    WRK-OUT-INPUT           TO  SC33-HOSPCD8
       *    ø«Œ≈∂Ë ¨
-           EVALUATE  MF100-SRYKA
-             WHEN  "01"
+           EVALUATE  SYS-1001-TENHYOKBN
+             WHEN  1
                MOVE  "°ª"                  TO  SC33-SRKBN(1)
-             WHEN  "03"
+             WHEN  3
                MOVE  "°ª"                  TO  SC33-SRKBN(2)
-             WHEN  "04"
+             WHEN  4
                MOVE  "°ª"                  TO  SC33-SRKBN(3)
-             WHEN  "05"
+             WHEN  5
                MOVE  "°ª"                  TO  SC33-SRKBN(4)
-             WHEN  "06"
+             WHEN  6
                MOVE  "°ª"                  TO  SC33-SRKBN(5)
-             WHEN  "09"
+             WHEN  OTHER
                MOVE  "°ª"                  TO  SC33-SRKBN(6)
            END-EVALUATE
-      *
+      *=== ∞ÂŒ≈µ°¥ÿ•≥°º•…8∑ÂÃ‹§œ≈¿øÙ…Ω by Yoshikawa(2010/06/02) end
       *
       *    •⁄°º•∏øÙ
            MOVE    CNT-PAGE2               TO  WRK-Z3
@@ -1023,7 +1046,10 @@
                MOVE    WRK-MAE-INPUT(2:2)   TO  SC33-SRYY(IDX1)
                MOVE    WRK-MAE-INPUT(5:2)   TO  SC33-SRMM(IDX1)
       *    ø«Œ≈∂Ë ¨
-               MOVE    MF100-SRYKA(2:1)     TO  SC33-SRKBN1(IDX1)
+      *=== ø«Œ≈∂Ë ¨§œ≈¿øÙ…Ω∂Ë ¨ by Yoshikawa(2010/06/02) start
+      *         MOVE    MF100-SRYKA(2:1)     TO  SC33-SRKBN1(IDX1)
+               MOVE    MF100-SRYKA          TO  SC33-SRKBN1(IDX1)
+      *=== ø«Œ≈∂Ë ¨§œ≈¿øÙ…Ω∂Ë ¨ by Yoshikawa(2010/06/02) end
       *    ∆˛≥∞∂Ë ¨
                EVALUATE  MF100-NYUGAIKBN
                  WHEN  "2"
