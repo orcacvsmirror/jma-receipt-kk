@@ -37,6 +37,8 @@
       *                                  シス管「2007」の公費まとめ対応
       *  01.00.05    吉川    10/01/07    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
+      *  01.00.06    吉川    10/06/01    オンライン返戻対応
+      *                                  代表保険者番号追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -789,6 +791,14 @@
       *    川崎市の場合、代表番号セット
                WHEN    "145"
                    MOVE  "145003"  TO  SKT4410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *    相模原市の場合、代表番号セット
+               WHEN    "146"
+                   MOVE  "146001"  TO  SKT4410TMP-HKNJANUM
+      *    新潟市の場合、代表番号セット
+               WHEN    "154"
+                   MOVE  "154005"  TO  SKT4410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
       *    静岡市
                WHEN    "220"
                WHEN    "224"
@@ -797,6 +807,11 @@
                        MOVE    "224006"
                                    TO  SKT4410TMP-HKNJANUM
                    END-IF
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *    浜松市の場合、代表番号セット
+               WHEN    "225"
+                   MOVE  "225003"  TO  SKT4410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) emd
       *    名古屋市の場合、代表番号セット
                WHEN    "234"
                    MOVE  "230011"  TO  SKT4410TMP-HKNJANUM
@@ -806,6 +821,11 @@
       *    大阪市の場合、代表番号セット
                WHEN    "274"
                    MOVE  "274001"  TO  SKT4410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) start
+      *    堺市の場合、代表番号セット
+               WHEN    "275"
+                   MOVE  "275008"  TO  SKT4410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2009/03/19) end
       *    神戸市の場合、代表番号セット
                WHEN    "284"
                    MOVE  "284000"  TO  SKT4410TMP-HKNJANUM
@@ -2117,6 +2137,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/06/01) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/06/01) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
