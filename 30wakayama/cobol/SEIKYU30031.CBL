@@ -35,6 +35,8 @@
       *  01.00.02       ÆïËÜ    05/06/14         £Ï£Ò£Ã£Á£²¡¥£µÂÐ±þ
       *  01.00.03       ÆïËÜ    06/07/07         MONFUNC DBCLOSESURSOR ÂÐ±þ
       *  02.00.00       ÆïËÜ¡¡¡¡07/10/11         ORCA4.0ÂÐ±þ
+      *  02.00.01       µÈÀî    10/06/02         SPA-AREA½é´ü²½
+      *                                          ¤«¤Ä¤é¤®Ä®¤ÏÌ¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -177,6 +179,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *=== SPA-AREA½é´ü²½ by Yoshikawa(2010/06/02) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA½é´ü²½ by Yoshikawa(2010/06/02) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -207,7 +212,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU3003"    TO  JOB-PGID
-           MOVE    "¤Ò¤È¤ê¿Æ£³ºÐÌ¤Ëþ" 
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
+      *    MOVE    "¤Ò¤È¤ê¿Æ£³ºÐÌ¤Ëþ" 
+          MOVE    "¤Ò¤È¤ê¿Æ" 
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA  
@@ -329,6 +337,13 @@
       *
            IF  MF100-KEY(7:3)         = "012" OR "018"
                MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBNP
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
+               IF    RECE02-FLG(1)    =  1
+                 MOVE  "1"               TO  MF100-MISYUKBNP
+               ELSE
+                 MOVE  "0"               TO  MF100-MISYUKBNP
+               END-IF
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
            ELSE
                MOVE  "0"                 TO  MF100-NYUGAIKBNP
            END-IF
@@ -433,7 +448,9 @@
                    RECE02-KOHNUM (2)  =  "143"  OR
                    RECE02-KOHNUM (3)  =  "143"  OR
                    RECE02-KOHNUM (4)  =  "143"
-                   IF  RECE02-AGE     <   3
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
+      *             IF  RECE02-AGE     <   3
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
                     MOVE  ZERO                TO  FLG-SYORI  
                     IF      WRK-PARA-SYORIFLG   =   "1"
                       PERFORM VARYING IDXX    FROM    1   BY  1
@@ -475,9 +492,11 @@
                     END-IF
       *
                        ADD  1  TO  CNT-RECE02
-                   ELSE
-                       GO  TO  900-KOHSKY-READ-SEC
-                   END-IF
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
+      *             ELSE
+      *                 GO  TO  900-KOHSKY-READ-SEC
+      *             END-IF
+      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
                ELSE
                  GO  TO  900-KOHSKY-READ-SEC
                END-IF
