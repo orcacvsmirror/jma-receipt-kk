@@ -47,6 +47,10 @@
       *                                         印南町　日高町
       *  01.00.08       楠本    06/07/07        MONFUNC DBCLOSESURSOR 対応
       *  02.00.00       楠本　　07/10/11        ORCA4.0対応
+      *  02.00.01       吉川    10/06/02        SPA-AREA初期化
+      *                                         システム管理マスタ「1901」の
+      *                                         医療機関情報を参照
+      *                                         かつらぎ町は未就学で帳票を分ける
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -262,9 +266,22 @@
            03  WRK-SKIN        PIC 9(10).
            03  WRK-SKINN       PIC 9(10).
            03  WRK-GKIN        PIC 9(10).
-	   03  WRK-GKIN2       PIC 9(10).
+	       03  WRK-GKIN2       PIC 9(10).
            03  WRK-SYKZFTN     PIC 9(10).
            03  WRK-GTESU       PIC 9(10).
+      *
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) start
+      *    医療機関情報
+           03  WRK-HOSPNAME        PIC X(100).
+           03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
+               05  WRK-HOSPNAME1   PIC X(50).
+               05  WRK-HOSPNAME2   PIC X(50).
+           03  WRK-HOSPADRS        PIC X(100).
+           03  WRK-HOSPADRS-R      REDEFINES   WRK-HOSPADRS.
+               05  WRK-HOSPADRS1   PIC X(50).
+               05  WRK-HOSPADRS2   PIC X(50).
+           03  WRK-HOSPTEL         PIC X(15).
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *
        01  SUM-AREA.
            03  SUM-GOKEI  OCCURS  60
@@ -288,6 +305,9 @@
                    07  WRK-MF100-KOHFTNJA-C  PIC X(03).
                    07  FILLER                PIC X(01).
                05  WRK-NYUGAIKBNP            PIC X(01).
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
+               05  WRK-MISYUKBNP             PIC X(01).
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) end
                05  WRK-SRYM                  PIC X(06).
                05  FILLER                    PIC X(59).
       *
@@ -335,6 +355,17 @@
       *
       *    診療科目情報情報
            COPY  "CPSK1005.INC".
+      *
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) start
+      *    医療機関編集情報
+           COPY  "CPSK1900.INC".
+      *
+      *    医療機関名称編集情報
+           COPY  "CPSK1901.INC".
+      *
+      *    医療機関住所編集情報
+           COPY  "CPSK1902.INC".
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -433,6 +464,9 @@
            INITIALIZE  WRK-KAIP
            INITIALIZE  SUM-AREA
            INITIALIZE  WRK-KEY-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) end
       *
            ACCEPT  SYS-TIME  FROM  TIME
       *
@@ -457,6 +491,14 @@
       *
       *    システム管理マスタ（医療機関情報）
            PERFORM 120-HOSPINF-GET-SEC
+      *
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) start
+           MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+           MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
+           MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
+      *    医療機関編集情報
+           PERFORM 900-1900-READ-SEC
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *
       *    口座名取得
            CALL    "KOUZASUB"          USING
@@ -565,7 +607,10 @@
       *    帳票印刷処理
       *    合計帳票印刷
              IF  WRK-MF100-KEY(5:5)   =   "30006"
-                IF  (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
+      *          IF  (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
+                IF  (MF100-KEY (1:12) NOT  =   WRK-MF100-KEY (1:12) ) 
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) end
                      PERFORM 3951-GOKEI-PRINT-SEC
                 ELSE
                     MOVE    SPACE     TO  SC03-GKEN
@@ -581,7 +626,10 @@
       *
       *    合計帳票印刷
              IF (WRK-KAIP-GOUKEI       =   "1" )  AND
-                (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
+      *          (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
+                (MF100-KEY (1:12) NOT  =   WRK-MF100-KEY (1:12) ) 
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) end
                  PERFORM 395-GOKEI-PRINT-SEC
              END-IF 
       *
@@ -790,17 +838,27 @@
            MOVE  "-"                    TO  SC03-POST(4:1)
            MOVE  SYS-1002-POST(4:7)     TO  SC03-POST(5:8)
       *
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) start
+      **    住所
+      *     MOVE  SYS-1002-ADRS          TO  SC03-ADRS
+      **
+      **    医療機関名
+      *     MOVE  SYS-1001-HOSPNAME      TO  SC03-HOSPNAME
+      **
+      **    電話番号
+      *     MOVE  SYS-1002-TEL           TO  SC03-TEL
       *    住所
-           MOVE  SYS-1002-ADRS          TO  SC03-ADRS
+           MOVE  WRK-HOSPADRS           TO  SC03-ADRS
       *
       *    医療機関名
-           MOVE  SYS-1001-HOSPNAME      TO  SC03-HOSPNAME
+           MOVE  WRK-HOSPNAME           TO  SC03-HOSPNAME
+      *
+      *    電話番号
+           MOVE  WRK-HOSPTEL            TO  SC03-TEL
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *
       *    管理者名
            MOVE  SYS-1001-KAISETUNAME   TO  SC03-KANRINAME
-      *
-      *    電話番号
-           MOVE  SYS-1002-TEL           TO  SC03-TEL
       *
            IF  FLG-KEY = 0
                MOVE    KEY-N-STSCD     TO  WRK-STSCD
@@ -854,7 +912,10 @@
       *
            PERFORM  UNTIL  FLG-END  =   1
                     OR   CNT-LINE   =   WRK-KAIP-GYO
-                    OR   MF100-KEY (1:17) NOT =  WRK-MF100-KEY (1:17) 
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
+      *              OR   MF100-KEY (1:17) NOT =  WRK-MF100-KEY (1:17) 
+                    OR   MF100-KEY (1:18) NOT =  WRK-MF100-KEY (1:18) 
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) end
       *
              ADD  1  TO  CNT-LINE
       *
@@ -1695,6 +1756,99 @@
       *
        900-HKNJAINF-INV-EXT.
            EXIT.
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) start
+      *****************************************************************
+      *    医療機関編集情報読み込み
+      *****************************************************************
+       900-1900-READ-SEC           SECTION.
+      *
+      *    医療機関編集情報読み込み
+           MOVE    SPACE                   TO  SYS-1900-REC
+           INITIALIZE                          SYS-1900-REC
+           MOVE    "1900"                  TO  SYS-1900-KANRICD
+           MOVE    "*"                     TO  SYS-1900-KBNCD
+           MOVE    SPA-HOSPNUM             TO  SYS-1900-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-STYUKYMD(1:6)
+           MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-EDYUKYMD(1:6)
+           MOVE    "01"                    TO  SYS-1900-EDYUKYMD(7:2)
+           MOVE    SYS-1900-REC    TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-1900-REC
+               IF      SYS-1900-PRTKBN(8) NOT =   SPACE
+      *            医療機関名称編集情報
+                   PERFORM 900-1901-READ-SEC
+      *            医療機関住所編集情報
+                   PERFORM 900-1902-READ-SEC
+               END-IF
+           ELSE
+               INITIALIZE                  SYS-1900-REC
+           END-IF
+           .
+      *
+       900-1900-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関名称編集情報読み込み
+      *****************************************************************
+       900-1901-READ-SEC           SECTION.
+      *
+      *    医療機関名称編集情報読み込み
+           MOVE    SPACE               TO  SYS-1901-REC
+           INITIALIZE                      SYS-1901-REC
+           MOVE    "1901"              TO  SYS-1901-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1901-KBNCD
+           MOVE    SPA-HOSPNUM         TO  SYS-1901-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1901-EDYUKYMD(7:2)
+           MOVE    SYS-1901-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-1901-REC
+               MOVE    SYS-1901-HOSPNAME1  TO  WRK-HOSPNAME1
+               MOVE    SYS-1901-HOSPNAME2  TO  WRK-HOSPNAME2
+           ELSE
+               INITIALIZE                  SYS-1901-REC
+           END-IF
+           .
+      *
+       900-1901-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1902-READ-SEC           SECTION.
+      *
+      *    医療機関住所編集情報読み込み
+           MOVE    SPACE               TO  SYS-1902-REC
+           INITIALIZE                      SYS-1902-REC
+           MOVE    "1902"              TO  SYS-1902-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1902-KBNCD
+           MOVE    SPA-HOSPNUM         TO  SYS-1902-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-1902-EDYUKYMD(7:2)
+           MOVE    SYS-1902-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1902-REC
+               MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
+               MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+           ELSE
+               INITIALIZE                  SYS-1902-REC
+           END-IF
+           .
+      *
+       900-1902-READ-EXT.
+           EXIT.
+      *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************

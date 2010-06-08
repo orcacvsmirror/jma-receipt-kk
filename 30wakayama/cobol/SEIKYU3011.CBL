@@ -36,6 +36,7 @@
       *  01.00.02       楠本    05/06/14         ＯＲＣＡ２．５対応
       *  01.00.03       楠本    06/07/07         MONFUNC DBCLOSESURSOR 対応
       *  02.00.00       楠本　　07/10/11    ORCA4.0対応
+      *  02.00.01       吉川    10/06/02         SPA-AREA初期化
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -174,6 +175,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) end
       *
            PERFORM 100-DBOPEN-SEC
       *

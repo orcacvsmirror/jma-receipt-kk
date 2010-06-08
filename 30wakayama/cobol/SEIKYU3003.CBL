@@ -35,6 +35,8 @@
       *  01.00.02       楠本    05/06/14         ＯＲＣＡ２．５対応
       *  01.00.03       楠本    06/07/07         MONFUNC DBCLOSESURSOR 対応
       *  02.00.00       楠本　　07/10/11         ORCA4.0対応
+      *  02.00.01       吉川    10/06/02         SPA-AREA初期化
+      *                                          かつらぎ町は未就学で帳票を分ける
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -174,6 +176,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) start
+           INITIALIZE  SPA-AREA
+      *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -326,6 +331,9 @@
       *
            IF  MF100-KEY(7:3)         = "012" OR "018"
                MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBNP
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
+               MOVE  "0"                 TO  MF100-MISYUKBNP
+      *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) end
            ELSE
              IF  MF100-KEY(7:3)         = "031"
                  MOVE  MF100-KOHJKYSNUM(1:1)   TO  MF100-NYUGAIKBNP
