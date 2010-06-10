@@ -33,6 +33,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    内田    09/01/28    SPA-AREA初期化
+      *  01.00.03    吉川    10/06/08    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -570,21 +571,48 @@
            END-PERFORM
       *
       *    集計場所判定
-           IF     RECE02-HKNNUM     =  "060" OR "067"
-             IF   RECE02-RJNHKNNUM  =  SPACE
-               MOVE     1          TO  IDX
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *     IF     RECE02-HKNNUM     =  "060" OR "067"
+      *       IF   RECE02-RJNHKNNUM  =  SPACE
+      *         MOVE     1          TO  IDX
+      *       ELSE
+      *         MOVE     2          TO  IDX
+      *       END-IF
+      *     ELSE
+      *       MOVE       3          TO  IDX
+      *     END-IF
+           IF   RECE02-RJNHKNNUM  NOT =  SPACE
+             IF     RECE02-HKNNUM     =  "060" OR "067"
+               MOVE     4          TO  IDX
              ELSE
-               MOVE     2          TO  IDX
+               MOVE     5          TO  IDX
              END-IF
            ELSE
-             MOVE       3          TO  IDX
+             IF     RECE02-HKNNUM     =  "060" OR "067"
+               IF     RECE02-AGE      <  70
+                  MOVE  1          TO  IDX
+               ELSE
+                  MOVE  2          TO  IDX
+               END-IF
+             ELSE
+               IF     RECE02-HKNNUM   =  "039" OR "040"
+                  MOVE  3          TO  IDX
+               END-IF
+             END-IF
            END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
       *
       *    件数・受領委任額加算
            ADD      1              TO  MF100-KENSU(IDX)
-                                       MF100-KENSU(4)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *                                 MF100-KENSU(4)
+                                       MF100-KENSU(6)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
            ADD      WRK-KEISAN     TO  MF100-SEIKYUGK(IDX)
-                                       MF100-SEIKYUGK(4)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *                                 MF100-SEIKYUGK(4)
+                                       MF100-SEIKYUGK(6)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
       *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -728,7 +756,10 @@
        320-BODY-HEN-SEC      SECTION.
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
-                    UNTIL    IDX  >     4
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *              UNTIL    IDX  >     4
+                    UNTIL    IDX  >     6
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
              MOVE   MF100-KENSU(IDX)    TO     WRK-Z5
              MOVE   WRK-Z5              TO     SC19-MAISU(IDX)
       * 

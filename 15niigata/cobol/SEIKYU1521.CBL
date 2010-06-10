@@ -34,6 +34,7 @@
       *                                  医療機関情報を参照
       *  01.00.02    内田    09/01/28    SPA-AREA初期化
       *  01.00.03    吉川    10/05/18    市町村名の取得方法の変更
+      *  01.00.04    吉川    10/06/08    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -238,6 +239,11 @@
       *
       *    医療機関情報−所在地、連絡先
            COPY  "CPSK1002.INC".
+      *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *    診療科目情報
+           COPY  "CPSK1005.INC".
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *    医療機関編集情報
@@ -644,7 +650,10 @@
            MOVE  SPA-HOSPNUM         TO  MF100-HOSPNUM
       *---(01.00.01) LINE ADD END   ------------------------------------
            MOVE  RECE02-PTNUM        TO  MF100-PTNUM
-           MOVE  RECE02-RECEKA       TO  MF100-SRYKA
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *     MOVE  RECE02-RECEKA       TO  MF100-SRYKA
+           MOVE  RECE02-SRYKA(1)     TO  MF100-SRYKA
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
            MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
            MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
            MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBN
@@ -678,15 +687,36 @@
            END-PERFORM
       *
       *    保険区分設定
-           IF      RECE02-HKNNUM                =  "060" OR "067"
-             IF    RECE02-RJNHKNNUM        NOT  =  SPACE
-               MOVE    2                       TO  MF100-HKNKBN-KEY
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *     IF      RECE02-HKNNUM                =  "060" OR "067"
+      *       IF    RECE02-RJNHKNNUM        NOT  =  SPACE
+      *         MOVE    2                       TO  MF100-HKNKBN-KEY
+      *       ELSE
+      *         MOVE    1                       TO  MF100-HKNKBN-KEY
+      *       END-IF
+      *     ELSE
+      *       MOVE      3                       TO  MF100-HKNKBN-KEY
+      *     END-IF
+           IF   RECE02-RJNHKNNUM  NOT =  SPACE
+             IF     RECE02-HKNNUM     =  "060" OR "067"
+               MOVE     4                      TO  MF100-HKNKBN-KEY
              ELSE
-               MOVE    1                       TO  MF100-HKNKBN-KEY
+               MOVE     5                      TO  MF100-HKNKBN-KEY
              END-IF
            ELSE
-             MOVE      3                       TO  MF100-HKNKBN-KEY
+             IF     RECE02-HKNNUM     =  "060" OR "067"
+               IF     RECE02-AGE      <  70
+                  MOVE  1                      TO  MF100-HKNKBN-KEY
+               ELSE
+                  MOVE  2                      TO  MF100-HKNKBN-KEY
+               END-IF
+             ELSE
+               IF     RECE02-HKNNUM   =  "039" OR "040"
+                  MOVE  3                      TO  MF100-HKNKBN-KEY
+               END-IF
+             END-IF
            END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
       *
       *    市町村番号設定(老人は負担者番号、その他は保険者番号)
            IF      RECE02-RJNHKNNUM   NOT       =    SPACE
@@ -853,6 +883,28 @@
            MOVE     WRK-HOSPTEL              TO  SC21-TEL
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *    科別
+           IF  SYS-1001-HOSPSBT   =  1
+      *      診療科目情報取得
+             INITIALIZE                SYS-1005-REC
+             MOVE    "1005"            TO  SYS-1005-KANRICD
+             MOVE    MF100-SRYKA       TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-1005-STYUKYMD(1:6)
+                                           SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"              TO  SYS-1005-STYUKYMD(7:2)
+                                           SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM       TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC      TO  MCPDATA-REC
+             PERFORM 800-SYSKANRI-READ-SEC
+             IF      FLG-SYSKANRI      =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME  TO  SC21-SRYKANAME
+             END-IF
+           END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
+      *
            .
        310-HEAD-HEN-EXT.
            EXIT.
@@ -864,11 +916,19 @@
       *
       *    レセプト種別
       *    国保・社保
-           IF     MF100-HKNNUM             =  "060" OR "067"
-             MOVE     "○"                TO  SC21-SYUBETU(1)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+           IF     MF100-HKNNUM             =  "039" OR "040"
+             MOVE     "○"                TO  SC21-SYUBETU(8)
            ELSE
-             MOVE     "○"                TO  SC21-SYUBETU(2)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
+             IF   MF100-HKNNUM             =  "060" OR "067"
+               MOVE   "○"                TO  SC21-SYUBETU(1)
+             ELSE
+               MOVE   "○"                TO  SC21-SYUBETU(2)
+             END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
            END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
       *
       *    一般・退職・老人
            IF     MF100-RJNHKNNUM          =  SPACE
@@ -882,13 +942,26 @@
            END-IF
       *
       *    高８・高９  給付割合
-           IF     MF100-KYURATE            =  10
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) start
+      *     IF     MF100-KYURATE            =  10
+      *         MOVE   "○"                TO  SC21-SYUBETU(6)
+      *                                        SC21-KYURATE(1)
+      *     ELSE
+      *         MOVE   "○"                TO  SC21-SYUBETU(7)
+      *                                        SC21-KYURATE(2)
+      *     END-IF
+           EVALUATE  MF100-KYURATE
+             WHEN  10
                MOVE   "○"                TO  SC21-SYUBETU(6)
                                               SC21-KYURATE(1)
-           ELSE
-               MOVE   "○"                TO  SC21-SYUBETU(7)
+             WHEN  20
+               MOVE   "○"                TO  SC21-SYUBETU(6)
                                               SC21-KYURATE(2)
-           END-IF
+             WHEN  30
+               MOVE   "○"                TO  SC21-SYUBETU(7)
+                                              SC21-KYURATE(3)
+           END-EVALUATE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/06/08) end
       *
       *    市町村番号(老人保健負担者番号)
            MOVE    MF100-RJNFTNJANUM      TO  WRK-MAE-INPUT

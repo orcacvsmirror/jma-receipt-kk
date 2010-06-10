@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
+      * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    µÈÀî         10/06/07  Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
+      ********************************************************************
        01  SC19.
       *¿ÇÎÅÇ¯·î
            03  SC19-SRYYY                 PIC  X(04).
@@ -27,7 +31,13 @@
            03  SC19-HOSPNAME              PIC  X(100).
       *³«Àß¼Ô»áÌ¾
            03  SC19-KAISETU               PIC  X(30).
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2010/06/07) start
+      **Ëç¿ô
+      *     03  SC19-MAISU                 PIC  X(05) OCCURS 4.
+      **¼õÎÎ°ÑÇ¤³Û
+      *     03  SC19-KINGK                 PIC  X(09) OCCURS 4.
       *Ëç¿ô
-           03  SC19-MAISU                 PIC  X(05) OCCURS 4.
+           03  SC19-MAISU                 PIC  X(05) OCCURS 6.
       *¼õÎÎ°ÑÇ¤³Û
-           03  SC19-KINGK                 PIC  X(09) OCCURS 4.
+           03  SC19-KINGK                 PIC  X(09) OCCURS 6.
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2010/06/07) end

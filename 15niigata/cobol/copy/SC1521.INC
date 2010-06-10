@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/06/07  帳票様式の変更に伴う修正
+      ********************************************************************
        01  SC21.
       *診療年月
            03  SC21-SRYYY                 PIC  X(04).
@@ -30,7 +34,10 @@
       *医療機関電話番号
            03  SC21-TEL                   PIC  X(15).
       *レセプト種別
-           03  SC21-SYUBETU               PIC  X(02) OCCURS 7.
+      *=== 帳票様式の変更 by Yoshikawa(2010/06/07) start
+      *     03  SC21-SYUBETU               PIC  X(02) OCCURS 7.
+           03  SC21-SYUBETU               PIC  X(02) OCCURS 8.
+      *=== 帳票様式の変更 by Yoshikawa(2010/06/07) end
       *老人保健負担者番号(市町村番号)
            03  SC21-CITYNUM               PIC  X(16).
       *老人保健受給者番号
@@ -38,7 +45,10 @@
       *保険者番号
            03  SC21-HKNJANUM              PIC  X(16).
       *給付割合
-           03  SC21-KYURATE               PIC  X(02) OCCURS 2.
+      *=== 帳票様式の変更 by Yoshikawa(2010/06/07) start
+      *     03  SC21-KYURATE               PIC  X(02) OCCURS 2.
+           03  SC21-KYURATE               PIC  X(02) OCCURS 3.
+      *=== 帳票様式の変更 by Yoshikawa(2010/06/07) end
       *市町村名
            03  SC21-CITYNAME              PIC  X(16).
       *記号
@@ -71,3 +81,7 @@
            03  SC21-TENSU                 PIC  X(07).
       *請求額
            03  SC21-SEIKYUGK              PIC  X(09).
+      *=== 帳票様式の変更 by Yoshikawa(2010/06/07) start
+      *科別
+           03  SC21-SRYKANAME             PIC  X(20).
+      *=== 帳票様式の変更 by Yoshikawa(2010/06/07) end
