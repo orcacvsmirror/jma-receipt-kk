@@ -37,6 +37,7 @@
       *  02.00.00       楠本　　07/10/11         ORCA4.0対応
       *  02.00.01       吉川    10/06/02         SPA-AREA初期化
       *                                          かつらぎ町は未就学で帳票を分ける
+      *  02.00.02       吉川    10/06/09         個別発行の処理方法変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -74,6 +75,9 @@
            03  FLG-END  PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+           03  FLG-ERR        PIC 9(01).
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -97,6 +101,9 @@
            03 WRK-KOHNUM        PIC X(03).
            03 WRK-KOHFTN        PIC 9(10).
            03 WRK-SYUCOMPTOTAL  PIC 9(10).
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+           03 WRK-HKNJANUM      PIC X(05).
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -107,8 +114,12 @@
       *
        01  TABLE-AREA.
            03  TBL-PARA-OCC        OCCURS  100.
-               05  TBL-KBN         PIC X(01).
-               05  TBL-PARA        PIC 9(10).
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+      *         05  TBL-KBN         PIC X(01).
+      *         05  TBL-PARA        PIC 9(10).
+               05  TBL-PARA-HKNJANUM    PIC X(08).
+               05  TBL-PARA-PTID        PIC 9(10).
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *
        01  WRK-CONS-PARA-MAX       PIC 9(03)   VALUE   100.
       *
@@ -240,10 +251,16 @@
        1001-PARA-HENSYU-SEC        SECTION.
       *
            MOVE    ZERO                TO  IDXX
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+                                           FLG-SYORI
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
            INITIALIZE                      TABLE-AREA
       *
            IF      WRK-PARA-SYORIFLG   =   "1" 
                INITIALIZE                      BTPARA-REC
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+               MOVE    SPA-HOSPNUM         TO  BTPARA-HOSPNUM
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
                MOVE    WRK-PARA-SHELLID    TO  BTPARA-SHELLID
                MOVE    WRK-PARA-JOBID      TO  BTPARA-JOBID
                MOVE    BTPARA-REC          TO  MCPDATA-REC
@@ -265,8 +282,23 @@
       *
                PERFORM     UNTIL   FLG-BTPARA  =   1
                    ADD     1                   TO  IDXX
-                   MOVE    BTPARA-INFO-KBN     TO  TBL-KBN  (IDXX)
-                   MOVE    BTPARA-INFO-PTID    TO  TBL-PARA (IDXX)
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+      *             MOVE    BTPARA-INFO-KBN     TO  TBL-KBN  (IDXX)
+      *             MOVE    BTPARA-INFO-PTID    TO  TBL-PARA (IDXX)
+                   IF      BTPARA-INFO-KBN     =   "1"
+                     MOVE    1                 TO  FLG-SYORI
+                     MOVE    BTPARA-INFO-PARA
+                                       TO TBL-PARA-HKNJANUM(IDXX)
+                   ELSE
+                     MOVE    2                 TO  FLG-SYORI
+                     MOVE    BTPARA-INFO-PTID
+                                       TO TBL-PARA-PTID(IDXX)
+                   END-IF
+                   DISPLAY "パラメタ区分=" BTPARA-INFO-KBN
+                           "パラメタ="     BTPARA-INFO-PARA
+                           "保険者番号="   TBL-PARA-HKNJANUM(IDXX)
+                           "患者番号="     TBL-PARA-PTID(IDXX)
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *
                    MOVE   "tbl_btpara"     TO  MCP-TABLE
                    MOVE   "key5"           TO  MCP-PATHNAME
@@ -347,9 +379,22 @@
            ELSE
                MOVE  "0"                 TO  MF100-NYUGAIKBNP
            END-IF
+      *
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+      *    保険者番号チェック処理
+           MOVE    ZERO                TO  FLG-ERR
+           PERFORM 200111-HKNJANUM-CHK-SEC
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
+      *
            IF  MF100-KEY(7:3)         = "018"
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+             IF  FLG-ERR              =  ZERO
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
                WRITE  MF100-REC
                ADD  1  TO  CNT-MF100
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+             END-IF
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
            END-IF
       *
            MOVE   "tbl_kohsky"         TO  MCP-TABLE
@@ -359,6 +404,38 @@
        200-MAIN-EXT.
            EXIT.
       *
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+      *****************************************************************
+      *    個別発行時の保険者番号(市町村番号)チェック処理
+      *****************************************************************
+       200111-HKNJANUM-CHK-SEC                SECTION.
+      *
+           INITIALIZE      WRK-HKNJANUM
+           MOVE    "30"                     TO  WRK-HKNJANUM(1:2)
+           MOVE    MF100-FTNJANUM(5:3)      TO  WRK-HKNJANUM(3:3)
+      *
+           IF  WRK-PARA-SYORIFLG       =   "1"
+               AND FLG-SYORI           =    1
+               AND FLG-ERR             =   ZERO
+      *
+               DISPLAY "チェック用保険者番号="  WRK-HKNJANUM
+               MOVE    1       TO      FLG-ERR
+               PERFORM VARYING IDXX    FROM    1   BY  1
+                       UNTIL   IDXX    >   WRK-CONS-PARA-MAX
+                       OR      TBL-PARA-HKNJANUM(IDXX)  =   SPACE
+                   IF      WRK-HKNJANUM(1:5)
+                                   =   TBL-PARA-HKNJANUM(IDXX)(1:5)
+                       MOVE    ZERO                TO  FLG-ERR
+                       MOVE    WRK-CONS-PARA-MAX   TO  IDXX
+                   END-IF
+               END-PERFORM 
+           END-IF
+      *
+           .
+       200111-HKNJANUM-CHK-EXT.
+           EXIT.
+      *
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *****************************************************************
       *    終了　　処理
       *****************************************************************
@@ -451,45 +528,68 @@
       *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
       *             IF  RECE02-AGE     <   3
       *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) end
-                    MOVE  ZERO                TO  FLG-SYORI  
-                    IF      WRK-PARA-SYORIFLG   =   "1"
-                      PERFORM VARYING IDXX    FROM    1   BY  1
-                           UNTIL   IDXX    >   WRK-CONS-PARA-MAX
-                           OR      TBL-PARA (IDXX)     =   ZERO
-                       IF  TBL-KBN (IDXX)            =   "1"
-                           IF RECE02-KOHNUM (1)      =   "143" AND 
-                              RECE02-KOHFTNJANUM (1) (3:5)
-                                           =   TBL-PARA(IDXX) (1:5)
-                               MOVE    1   TO  FLG-SYORI
-                           END-IF
-                           IF RECE02-KOHNUM (2)      =   "143" AND 
-                              RECE02-KOHFTNJANUM (2) (3:5)
-                                           =   TBL-PARA(IDXX) (1:5)
-                               MOVE    1   TO  FLG-SYORI
-                           END-IF
-                           IF RECE02-KOHNUM (3)      =   "143" AND 
-                              RECE02-KOHFTNJANUM (3) (3:5)
-                                           =   TBL-PARA(IDXX) (1:5)
-                               MOVE    1   TO  FLG-SYORI
-                           END-IF
-                           IF RECE02-KOHNUM (4)      =   "143" AND 
-                              RECE02-KOHFTNJANUM (4) (3:5)
-                                           =   TBL-PARA(IDXX) (1:5)
-                               MOVE    1   TO  FLG-SYORI
-                           END-IF
-
-                       ELSE
-                           IF  RECE02-PTID =   TBL-PARA (IDXX)
-                               MOVE    1   TO  FLG-SYORI
-                           END-IF
-                       END-IF
-                      END-PERFORM 
-                    ELSE
-                      MOVE    1                 TO  FLG-SYORI
-                    END-IF
-                    IF      FLG-SYORI           =   ZERO
-                      GO  TO  900-KOHSKY-READ-SEC
-                    END-IF
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
+      *              MOVE  ZERO                TO  FLG-SYORI  
+      *              IF      WRK-PARA-SYORIFLG   =   "1"
+      *                PERFORM VARYING IDXX    FROM    1   BY  1
+      *                     UNTIL   IDXX    >   WRK-CONS-PARA-MAX
+      *                     OR      TBL-PARA (IDXX)     =   ZERO
+      *                 IF  TBL-KBN (IDXX)            =   "1"
+      *                     IF RECE02-KOHNUM (1)      =   "143" AND 
+      *                        RECE02-KOHFTNJANUM (1) (3:5)
+      *                                     =   TBL-PARA(IDXX) (1:5)
+      *                         MOVE    1   TO  FLG-SYORI
+      *                     END-IF
+      *                     IF RECE02-KOHNUM (2)      =   "143" AND 
+      *                        RECE02-KOHFTNJANUM (2) (3:5)
+      *                                     =   TBL-PARA(IDXX) (1:5)
+      *                         MOVE    1   TO  FLG-SYORI
+      *                     END-IF
+      *                     IF RECE02-KOHNUM (3)      =   "143" AND 
+      *                        RECE02-KOHFTNJANUM (3) (3:5)
+      *                                     =   TBL-PARA(IDXX) (1:5)
+      *                         MOVE    1   TO  FLG-SYORI
+      *                     END-IF
+      *                     IF RECE02-KOHNUM (4)      =   "143" AND 
+      *                        RECE02-KOHFTNJANUM (4) (3:5)
+      *                                     =   TBL-PARA(IDXX) (1:5)
+      *                         MOVE    1   TO  FLG-SYORI
+      *                     END-IF
+      *
+      *                 ELSE
+      *                     IF  RECE02-PTID =   TBL-PARA (IDXX)
+      *                         MOVE    1   TO  FLG-SYORI
+      *                     END-IF
+      *                 END-IF
+      *                END-PERFORM 
+      *              ELSE
+      *                MOVE    1                 TO  FLG-SYORI
+      *              END-IF
+      *              IF      FLG-SYORI           =   ZERO
+      *                GO  TO  900-KOHSKY-READ-SEC
+      *              END-IF
+      *    個別発行で患者番号指定の場合、対象判定を行う
+                   MOVE  ZERO                TO  FLG-ERR
+                   IF      WRK-PARA-SYORIFLG   =   "1"
+                   AND     FLG-SYORI           =    2
+                     MOVE  1                   TO  FLG-ERR
+                     PERFORM VARYING IDXX    FROM    1   BY  1
+                             UNTIL   IDXX    >   WRK-CONS-PARA-MAX
+                             OR      TBL-PARA-PTID(IDXX) =   ZERO
+                         IF      RECE02-PTID =   TBL-PARA-PTID(IDXX)
+                           MOVE    ZERO                TO  FLG-ERR
+                           MOVE    WRK-CONS-PARA-MAX   TO  IDXX
+                         END-IF
+                     END-PERFORM 
+                   END-IF
+                   DISPLAY "患者番号=" RECE02-PTNUM
+                           "負担者番号=" RECE02-KOHFTNJANUM(1)
+                           "保険者番号=" RECE02-HKNJANUM
+      *
+                   IF      FLG-ERR           =   1
+                     GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *
                        ADD  1  TO  CNT-RECE02
       *=== 未就学で帳票を分ける by Yoshikawa(2010/06/02) start
