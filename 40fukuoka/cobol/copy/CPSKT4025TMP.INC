@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/06/10  原爆用法別番号追加
       ************************************************************
        01  SKT4025TMP-REC.
            03  SKT4025TMP-KEY.
@@ -53,6 +54,9 @@
                05  SKT4025TMP-S-KKINGK              PIC  9(13).
                05  SKT4025TMP-S-KFTNGK              PIC  9(09).
            03  SKT4025TMP-GENBAKU-AREA.
+      *=== 原爆用法別番号追加 by Yoshikawa(2010/06/10) start
+               05  SKT4025TMP-GKOHNUM               PIC  X(02).
+      *=== 原爆用法別番号追加 by Yoshikawa(2010/06/10) end
                05  SKT4025TMP-KOH-NYUGAI-TBL OCCURS 2.
                    07  SKT4025TMP-GKENSU            PIC  9(05).
                    07  SKT4025TMP-GNISSU            PIC  9(05).

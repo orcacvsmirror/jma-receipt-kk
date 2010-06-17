@@ -38,6 +38,8 @@
       *                                  食事件数が集計される不具合を修正
       *  01.00.06    吉川    2010/01/22  オンライン返戻対応
       *  01.00.07    吉川    2010/05/14  広域連合の保険者番号指定対応
+      *  01.00.08    吉川    2010/06/10  公費欄の1行目は常に「19」が
+      *                                  印字されているのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1318,6 +1320,11 @@
            ADD  RECE10-SHOKUJIFTN(IDXX + 1)
                                            TO  SKT4025TMP-S-GFTNGK
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/16) end
+      *=== 原爆の法別番号欄修正 by Yoshikawa(2010/06/10) start
+      *    原爆：法別番号
+           MOVE  "19"                      TO  SKT4025TMP-GKOHNUM
+      *=== 原爆の法別番号欄修正 by Yoshikawa(2010/06/10) start
+      *
            MOVE    1               TO  FLG-UPD 
          .
        20013-GENBK-SYUKEI-EXT.
@@ -1572,6 +1579,10 @@
            MOVE  WRK-Z10                 TO  SKT4025-S-GFTNGK
       *
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/16) start
+      *=== 原爆の法別番号欄修正 by Yoshikawa(2010/06/10) start
+      *    原爆：法別番号
+           MOVE  SKT4025TMP-GKOHNUM      TO  SKT4025-GHBTNUM
+      *=== 原爆の法別番号欄修正 by Yoshikawa(2010/06/10) end
       *
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
