@@ -58,6 +58,8 @@
       *  01.00.19    内田    09/10/14    中国九州北部豪雨対応（対象者別集計）
       *  01.00.20    吉川    09/10/30    印字対象番号の追加（690,780）
       *  01.00.21    吉川    10/01/22    オンライン返戻対応
+      *  01.00.22    吉川    10/06/10    返戻時、乳障母の値が当月分に
+      *                                  記載される不具合を修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2526,6 +2528,19 @@
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 返戻時の乳障母欄の不具合対応 by Yoshikawa(2010/06/10) start
+      *        返戻の乳障母データがあるかどうか
+                   EVALUATE  WRK-PARA-SYOKBN
+                     WHEN  "1"
+                       IF  RECE02-HENREIYM  NOT =  ZERO
+                         GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                     WHEN  "2"
+                       IF  RECE02-HENREIYM      =  ZERO
+                         GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                   END-EVALUATE
+      *=== 返戻時の乳障母欄の不具合対応 by Yoshikawa(2010/06/10) end
                ELSE
                  GO  TO  900-KOHSKY-READ-SEC
                END-IF
