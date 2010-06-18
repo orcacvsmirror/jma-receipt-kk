@@ -75,6 +75,7 @@
       *                                 印字対象外とする
       *  01.00.26    吉川   10/03/25    診療入力順によってはデータが
       *                                 印字されない場合があるのを修正
+      *  01.00.27    吉川   10/06/17    オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2199,6 +2200,14 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE10-REC
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/06/17) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/06/17) end
+      *
       *        テスト患者のときは読み飛ばす
                INITIALIZE                      PTINF-REC
       *---(01.00.10) LINE ADD START ------------------------------------
@@ -2358,6 +2367,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/06/17) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/06/17) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
