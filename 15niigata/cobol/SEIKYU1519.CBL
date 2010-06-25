@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 新潟・高額受領委任払請求書
-      *                      (180,182,184,186,100)
+      *                      (180,280,182,282,184,284,186,286,100)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/09    山口          ORCAのバージョンアップ(2.5.0)による再作成
@@ -34,6 +34,7 @@
       *                                  医療機関情報を参照
       *  01.00.02    内田    09/01/28    SPA-AREA初期化
       *  01.00.03    吉川    10/06/08    帳票様式の変更に伴う修正
+      *  01.00.04    吉川    10/06/22    印字対象番号の追加(280,282,284,286)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -559,8 +560,13 @@
            MOVE    ZERO    TO  WRK-KEISAN
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4
-             IF  RECE02-KOHNUM (IDX) = "180" OR "182" OR "184"
-                                    OR "186" OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
+      *       IF  RECE02-KOHNUM (IDX) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100"
+             IF  RECE02-KOHNUM (IDX) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
       *
                COMPUTE  WRK-KEISAN  =
                    (RECE02-TOTALTEN(IDX + 1) * RECE02-KYURATE / 10)
@@ -978,14 +984,28 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1) = "180" OR "182" OR "184"
-                                    OR "186" OR "100" OR
-                   RECE02-KOHNUM (2) = "180" OR "182" OR "184"
-                                    OR "186" OR "100" OR
-                   RECE02-KOHNUM (3) = "180" OR "182" OR "184"
-                                    OR "186" OR "100" OR
-                   RECE02-KOHNUM (4) = "180" OR "182" OR "184"
-                                    OR "186" OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
+      *         IF  RECE02-KOHNUM (1) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100" OR
+      *             RECE02-KOHNUM (2) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100" OR
+      *             RECE02-KOHNUM (3) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100" OR
+      *             RECE02-KOHNUM (4) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100"
+               IF  RECE02-KOHNUM (1) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100" OR
+                   RECE02-KOHNUM (2) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100" OR
+                   RECE02-KOHNUM (3) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100" OR
+                   RECE02-KOHNUM (4) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC

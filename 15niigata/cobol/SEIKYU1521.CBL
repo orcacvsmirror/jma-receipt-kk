@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 新潟・高額受領委任払承認兼支給申請書
-      *                      (180,182,184,186,100)
+      *                      (180,280,182,282,184,284,186,286,100)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/06/13    山口          ORCAのバージョンアップ(2.5.0)による再作成
@@ -35,6 +35,7 @@
       *  01.00.02    内田    09/01/28    SPA-AREA初期化
       *  01.00.03    吉川    10/05/18    市町村名の取得方法の変更
       *  01.00.04    吉川    10/06/08    帳票様式の変更に伴う修正
+      *  01.00.05    吉川    10/06/22    印字対象番号の追加(280,282,284,286)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -670,8 +671,13 @@
            MOVE  RECE02-ZAITAKU      TO  MF100-ZAITAKU
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4
-             IF  RECE02-KOHNUM (IDX) = "180" OR "182" OR "184"
-                                    OR "186" OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
+      *       IF  RECE02-KOHNUM (IDX) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100"
+             IF  RECE02-KOHNUM (IDX) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
       *
                MOVE  RECE02-KOHINF      (IDX)  TO  MF100-KOHINF
                MOVE  MF100-KOHJKYSNUM          TO  MF100-JKYSNUM
@@ -1026,18 +1032,39 @@
            MOVE    MF100-TEL             TO  SC21-PTTEL
       *
       *    自己負担限度額
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
+      *     EVALUATE  MF100-KOHNUM
+      *     WHEN "180"
+      *     MOVE    "○"                  TO  SC21-KOHKBN(1)
+      *     WHEN "182"
+      *     MOVE    "○"                  TO  SC21-KOHKBN(2)
+      *     WHEN "184"
+      *     MOVE    "○"                  TO  SC21-KOHKBN(3)
+      *     WHEN "186"
+      *     MOVE    "○"                  TO  SC21-KOHKBN(4)
+      *     WHEN "100"
+      *     MOVE    "○"                  TO  SC21-KOHKBN(5)
+      *     END-EVALUATE
            EVALUATE  MF100-KOHNUM
            WHEN "180"
-           MOVE    "○"                  TO  SC21-KOHKBN(1)
+           WHEN "280"
+             MOVE    "○"                TO  SC21-KOHKBN(1)
            WHEN "182"
-           MOVE    "○"                  TO  SC21-KOHKBN(2)
+           WHEN "282"
+             MOVE    "○"                TO  SC21-KOHKBN(2)
            WHEN "184"
-           MOVE    "○"                  TO  SC21-KOHKBN(3)
+           WHEN "284"
+             MOVE    "○"                TO  SC21-KOHKBN(3)
            WHEN "186"
-           MOVE    "○"                  TO  SC21-KOHKBN(4)
+           WHEN "286"
+             MOVE    "○"                TO  SC21-KOHKBN(4)
            WHEN "100"
-           MOVE    "○"                  TO  SC21-KOHKBN(5)
+             MOVE    "○"                TO  SC21-KOHKBN(5)
            END-EVALUATE
+           IF  MF100-KOHNUM = "280" OR "282" OR "284" OR "286"
+             MOVE    "○"                TO  SC21-KOHKBN(6)
+           END-IF
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) end
       *
       *    実日数
            MOVE    MF100-JNISSU          TO  WRK-Z2
@@ -1250,14 +1277,28 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1) = "180" OR "182" OR "184"
-                                    OR "186" OR "100" OR
-                   RECE02-KOHNUM (2) = "180" OR "182" OR "184"
-                                    OR "186" OR "100" OR
-                   RECE02-KOHNUM (3) = "180" OR "182" OR "184"
-                                    OR "186" OR "100" OR
-                   RECE02-KOHNUM (4) = "180" OR "182" OR "184"
-                                    OR "186" OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) start
+      *         IF  RECE02-KOHNUM (1) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100" OR
+      *             RECE02-KOHNUM (2) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100" OR
+      *             RECE02-KOHNUM (3) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100" OR
+      *             RECE02-KOHNUM (4) = "180" OR "182" OR "184"
+      *                              OR "186" OR "100"
+               IF  RECE02-KOHNUM (1) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100" OR
+                   RECE02-KOHNUM (2) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100" OR
+                   RECE02-KOHNUM (3) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100" OR
+                   RECE02-KOHNUM (4) = "180" OR "280" OR "182" OR "282"
+                                    OR "184" OR "284" OR "186" OR "286"
+                                    OR "100"
+      *=== 印字対象番号の追加 by Yoshikawa(2010/06/22) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC

@@ -36,6 +36,7 @@
       *                                  医療機関情報を参照
       *  01.00.05    長屋    08/04/27    帳票様式に伴う修正
       *  01.00.06    内田    09/01/28    SPA-AREA初期化
+      *  01.00.07    吉川    10/06/22    印字対象番号の追加(280,282,284,286)
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -775,14 +776,28 @@
       *
       *    公費請求情報より、高額療養費委任払を所持しているか判定
            PERFORM  900-KOHSKY-READ-SEC
-           IF    RECE02-KOHNUM(1)     =  "180" OR "182" OR "184" OR
-                                         "186" OR "100" OR
-                 RECE02-KOHNUM(2)     =  "180" OR "182" OR "184" OR
-                                         "186" OR "100" OR
-                 RECE02-KOHNUM(3)     =  "180" OR "182" OR "184" OR
-                                         "186" OR "100" OR
-                 RECE02-KOHNUM(4)     =  "180" OR "182" OR "184" OR
-                                         "186" OR "100"
+      *=== 対象公費番号の追加 by Yoshikawa(2010/06/22) start
+      *     IF    RECE02-KOHNUM(1)     =  "180" OR "182" OR "184" OR
+      *                                   "186" OR "100" OR
+      *           RECE02-KOHNUM(2)     =  "180" OR "182" OR "184" OR
+      *                                   "186" OR "100" OR
+      *           RECE02-KOHNUM(3)     =  "180" OR "182" OR "184" OR
+      *                                   "186" OR "100" OR
+      *           RECE02-KOHNUM(4)     =  "180" OR "182" OR "184" OR
+      *                                   "186" OR "100"
+           IF    RECE02-KOHNUM(1)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100" OR
+                 RECE02-KOHNUM(2)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100" OR
+                 RECE02-KOHNUM(3)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100" OR
+                 RECE02-KOHNUM(4)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100"
+      *=== 対象公費番号の追加 by Yoshikawa(2010/06/22) end
              ADD    1    TO    SKT1510TMP-KOUGK-KENSU(IDX2)
              DISPLAY "IDX2=" IDX2
            END-IF
