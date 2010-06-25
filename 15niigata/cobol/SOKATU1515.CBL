@@ -33,6 +33,8 @@
       *  01.00.02    等李    2009/11/30  シス瓷≈2007∽のまとめ给锐で
       *                                  6つ誊笆惯がまとまらない稍恶圭を饯赖
       *  01.00.03    等李    2010/03/02  弓拌息圭の瘦副荚戎规回年滦炳
+      *  01.00.04    等李    2010/06/22  光驰闻蛙锐把扦失の给锐を
+      *                                  给锐浩非腕に淡很するように饯赖
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -98,6 +100,9 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) start
+           03  FLG-RECE02          PIC 9(01).
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
@@ -214,14 +219,12 @@
                    07  SUM-S-NISSU             PIC  9(06).
                    07  SUM-S-KINGK             PIC  9(10).
                    07  SUM-S-FTNGK             PIC  9(10).
-
                05  SUM-NYUGAI-TBL       OCCURS  2.
                    07  SUM-FKENSU           PIC  9(06).
                    07  SUM-FTENSU           PIC  9(10).
                    07  SUM-S-FKENSU             PIC  9(06).
                    07  SUM-S-FKINGK             PIC  9(10).
                    07  SUM-S-FFTNGK             PIC  9(10).
-      *
       *        给锐砷么 
                05  SUM-KOH-TBL         OCCURS  100.
                    07  SUM-KOHNUM              PIC  X(03).
@@ -235,6 +238,11 @@
                    07  SUM-S-KKINGK            PIC  9(10).
                    07  SUM-S-KFTNGK            PIC  9(10).
                    07  SUM-KOH-MEISYO          PIC  X(44).
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) start
+      *        光驰闻蛙锐把扦失凤眶
+               05  SUM-KOUGK-NYUGAI-TBL     OCCURS  2.
+                   07  SUM-KOUGK-KENSU         PIC  9(06).
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) end
       *
       *    キ〖挝拌
        01  KEY-AREA                    VALUE   LOW-VALUE.
@@ -292,6 +300,13 @@
            COPY    "CPSK2007.INC".
       *
            COPY    "CPRCF010.INC".
+      *
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) start
+      *    给锐懒滇今
+           COPY    "CPKOHSKY.INC"
+                   REPLACING  //KOHSKY//
+                   BY         //RECE02//.
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) end
       *
       *    ジョブ瓷妄マスタ
        01  JOBKANRI-REC.
@@ -726,7 +741,26 @@
                    PERFORM 20013-KENKOH-SYUKEI-SEC
              END-IF
            END-PERFORM
-           
+      *     
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) start
+      *    给锐懒滇攫鼠より、光驰闻蛙锐把扦失を疥积しているか冉年
+           PERFORM  900-KOHSKY-READ-SEC
+           IF    RECE02-KOHNUM(1)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100" OR
+                 RECE02-KOHNUM(2)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100" OR
+                 RECE02-KOHNUM(3)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100" OR
+                 RECE02-KOHNUM(4)     =  "180" OR "280" OR "182" OR 
+                                         "282" OR "184" OR "284" OR
+                                         "186" OR "286" OR "100"
+             ADD    1    TO    SUM-KOUGK-KENSU(IDX3)
+           END-IF
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) end
+      *
       *    礁纷の滦据にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 20013-UPD-FILE-HENSYU-SEC
@@ -1284,7 +1318,7 @@
              MOVE  SUM-S-FFTNGK(IDX)     TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT1515-S-FFTNGK(IDX)
            END-PERFORM
-
+      *
       *    给锐砷么尸试礁借妄
            MOVE    ZERO                  TO  FLG-KOH-END
            MOVE    1                     TO  IDX2
@@ -1301,7 +1335,29 @@
       *****************************************************************
        200231-KOH-HENSYU-SEC         SECTION.
       *
-           PERFORM VARYING IDY     FROM    1   BY  1
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) start
+      *    光驰闻蛙锐把扦失
+           IF  IDX2  =  1
+             PERFORM VARYING IDX   FROM    1   BY  1
+                     UNTIL   IDX   >       2
+               IF  SUM-KOUGK-KENSU(IDX)  >  ZERO
+                 MOVE  "把"                TO  SKT1515-KOHNAME(1)
+                 MOVE  SUM-KOUGK-KENSU(IDX)    TO  WRK-Z5
+                 MOVE  WRK-Z5              TO  SKT1515-KKENSU(1 IDX)
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           IF  IDX2  =  1
+           AND ((SUM-KOUGK-KENSU(1)     >     ZERO)
+           OR   (SUM-KOUGK-KENSU(2)     >     ZERO))
+             MOVE     2     TO     IDX3
+           ELSE
+             MOVE     1     TO     IDX3
+           END-IF
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) end
+      *
+           PERFORM VARYING IDY     FROM    IDX3  BY  1
                    UNTIL   IDY     >       5         
                    OR      FLG-KOH-END     =   1
              IF      SUM-KOHNUM (IDX2)   =   SPACE
@@ -1729,6 +1785,55 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) start
+      *****************************************************************
+      *    给锐懒滇攫鼠粕み哈み
+      *****************************************************************
+       900-KOHSKY-READ-SEC         SECTION.
+      *
+           INITIALIZE                  RECE02-REC
+           MOVE    RECE10-KEY                 TO  RECE02-KEY
+           MOVE    RECE02-REC                 TO  MCPDATA-REC
+           MOVE    "DBSELECT"                 TO  MCP-FUNC
+           MOVE    "tbl_kohsky"          TO  MCP-TABLE
+           MOVE    "key"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_kohsky"      TO  MCP-TABLE
+               MOVE    "key"             TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"       USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-RECE02
+                   MOVE    MCPDATA-REC         TO  RECE02-REC
+               ELSE
+                   MOVE    1                   TO  FLG-RECE02
+                   INITIALIZE                  RECE02-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-RECE02
+               INITIALIZE                  RECE02-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"             TO  MCP-FUNC
+           MOVE    "tbl_kohsky"          TO  MCP-TABLE
+           MOVE    "key"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       900-KOHSKY-READ-EXT.
+           EXIT.
+      *
+      *=== 光驰闻蛙锐把扦失の给锐を淡很 by Yoshikawa(2010/06/22) end
       *****************************************************************
       *    吹荚マスタ粕哈
       *****************************************************************
