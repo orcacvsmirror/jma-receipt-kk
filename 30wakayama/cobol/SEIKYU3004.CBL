@@ -51,6 +51,7 @@
       *                                         ¥·¥¹¥Æ¥à´ÉÍý¥Þ¥¹¥¿¡Ö1901¡×¤Î
       *                                         °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *                                         ¤«¤Ä¤é¤®Ä®¤ÏÌ¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë
+      *  02.00.02       µÈÀî    10/06/24        ÏÂ²Î»³»Ô¡¢¶¶ËÜ»Ô°Ê³°¤ÎÄ¢É¼ÇÑ»ß
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -606,32 +607,36 @@
       *
       *    Ä¢É¼°õºþ½èÍý
       *    ¹ç·×Ä¢É¼°õºþ
-             IF  WRK-MF100-KEY(5:5)   =   "30006"
-      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
-      *          IF  (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
-                IF  (MF100-KEY (1:12) NOT  =   WRK-MF100-KEY (1:12) ) 
-      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
-                     PERFORM 3951-GOKEI-PRINT-SEC
-                ELSE
-                    MOVE    SPACE     TO  SC03-GKEN
-                                          SC03-GKEN2
-                                          SC03-GKENK
-  ¡¡                                      SC03-GKENS
-                                          SC03-GGTENSU
-                                          SC03-GKIN
-                                          SC03-GYKZFTN
-                END-IF
-             END-IF 
+      *=== °ìÉô¤ÎÄ¢É¼ÇÑ»ß by Yoshikawa(2010/06/24) start
+      *       IF  WRK-MF100-KEY(5:5)   =   "30006"
+      **=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
+      **          IF  (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
+      *          IF  (MF100-KEY (1:12) NOT  =   WRK-MF100-KEY (1:12) ) 
+      **=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
+      *               PERFORM 3951-GOKEI-PRINT-SEC
+      *          ELSE
+      *              MOVE    SPACE     TO  SC03-GKEN
+      *                                    SC03-GKEN2
+      *                                    SC03-GKENK
+      *                                    SC03-GKENS
+      *                                    SC03-GGTENSU
+      *                                    SC03-GKIN
+      *                                    SC03-GYKZFTN
+      *          END-IF
+      *       END-IF 
+      *=== °ìÉô¤ÎÄ¢É¼ÇÑ»ß by Yoshikawa(2010/06/24) end
              PERFORM 390-PRINT-OUT-SEC
       *
       *    ¹ç·×Ä¢É¼°õºþ
-             IF (WRK-KAIP-GOUKEI       =   "1" )  AND
-      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
-      *          (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
-                (MF100-KEY (1:12) NOT  =   WRK-MF100-KEY (1:12) ) 
-      *=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
-                 PERFORM 395-GOKEI-PRINT-SEC
-             END-IF 
+      *=== °ìÉô¤ÎÄ¢É¼ÇÑ»ß by Yoshikawa(2010/06/24) start
+      *       IF (WRK-KAIP-GOUKEI       =   "1" )  AND
+      **=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) start
+      **          (MF100-KEY (1:11) NOT  =   WRK-MF100-KEY (1:11) ) 
+      *          (MF100-KEY (1:12) NOT  =   WRK-MF100-KEY (1:12) ) 
+      **=== Ì¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë by Yoshikawa(2010/06/02) end
+      *           PERFORM 395-GOKEI-PRINT-SEC
+      *       END-IF 
+      *=== °ìÉô¤ÎÄ¢É¼ÇÑ»ß by Yoshikawa(2010/06/24) end
       *
            END-PERFORM
       *
@@ -1318,7 +1323,10 @@
                                        TO  SPRT-PRIORITY
            MOVE    SPACE               TO  SPRT-PRTID
       *
-           IF  WRK-KAIP-PNO            =  "000"
+      *=== °ìÉô¤ÎÄ¢É¼ÇÑ»ß by Yoshikawa(2010/06/24) start
+      *     IF  WRK-KAIP-PNO            =  "000"
+           IF  WRK-KAIP-PNO        NOT =  "003"
+      *=== °ìÉô¤ÎÄ¢É¼ÇÑ»ß by Yoshikawa(2010/06/24) end
                MOVE   "SC3003.red"     TO  SPRT-PRTID
            ELSE
                IF  FLG-KATSURAGI       =   1
