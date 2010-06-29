@@ -60,6 +60,7 @@
       *  01.00.21    吉川    10/01/22    オンライン返戻対応
       *  01.00.22    吉川    10/06/10    返戻時、乳障母の値が当月分に
       *                                  記載される不具合を修正
+      *  01.00.23    吉川    10/06/29    乳障親欄は当月分と返戻分を合算する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2528,19 +2529,21 @@
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 返戻時の乳障母欄の不具合対応 by Yoshikawa(2010/06/10) start
-      *        返戻の乳障母データがあるかどうか
-                   EVALUATE  WRK-PARA-SYOKBN
-                     WHEN  "1"
-                       IF  RECE02-HENREIYM  NOT =  ZERO
-                         GO  TO  900-KOHSKY-READ-SEC
-                       END-IF
-                     WHEN  "2"
-                       IF  RECE02-HENREIYM      =  ZERO
-                         GO  TO  900-KOHSKY-READ-SEC
-                       END-IF
-                   END-EVALUATE
-      *=== 返戻時の乳障母欄の不具合対応 by Yoshikawa(2010/06/10) end
+      *=== 乳障親は当月と返戻を合算 by Yoshikawa(2010/06/29) start
+      **=== 返戻時の乳障母欄の不具合対応 by Yoshikawa(2010/06/10) start
+      **        返戻の乳障母データがあるかどうか
+      *             EVALUATE  WRK-PARA-SYOKBN
+      *               WHEN  "1"
+      *                 IF  RECE02-HENREIYM  NOT =  ZERO
+      *                   GO  TO  900-KOHSKY-READ-SEC
+      *                 END-IF
+      *               WHEN  "2"
+      *                 IF  RECE02-HENREIYM      =  ZERO
+      *                   GO  TO  900-KOHSKY-READ-SEC
+      *                 END-IF
+      *             END-EVALUATE
+      **=== 返戻時の乳障母欄の不具合対応 by Yoshikawa(2010/06/10) end
+      *=== 乳障親は当月と返戻を合算 by Yoshikawa(2010/06/29) end
                ELSE
                  GO  TO  900-KOHSKY-READ-SEC
                END-IF
