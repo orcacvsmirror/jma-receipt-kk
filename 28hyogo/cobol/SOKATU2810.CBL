@@ -39,6 +39,7 @@
       *                                  SPA-AREA初期化
       *  01.00.06    内田    09/09/29    平成21年台風第9号対応（対象者別集計）
       *  01.00.07    吉川    10/04/06    オンライン返戻対応
+      *  01.00.08    吉川    10/07/06    返戻分は1枚にまとめる
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -637,14 +638,16 @@
       *
       *    診療年月別(KEY設定)
       *    返戻分は実際の診療年月を設定
-            IF  WRK-PARA-SYOKBN  =  "2"
-              MOVE    RECE10-SRYYM          TO   SKT2810TMP-SRYYM
-              DISPLAY  "返戻分・診療年月  "  SKT2810TMP-SRYYM
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/07/06) start
+      *      IF  WRK-PARA-SYOKBN  =  "2"
+      *        MOVE    RECE10-SRYYM          TO   SKT2810TMP-SRYYM
+      *        DISPLAY  "返戻分・診療年月  "  SKT2810TMP-SRYYM
       *    当月分・月遅れ分は画面入力された診療年月を設定
-            ELSE
+      *      ELSE
               MOVE    LNK-PRTKANRI-SRYYM    TO   SKT2810TMP-SRYYM
-              DISPLAY  "当月、月後れ分・診療年月  "  SKT2810TMP-SRYYM
-            END-IF
+      *        DISPLAY  "当月、月後れ分・診療年月  "  SKT2810TMP-SRYYM
+      *      END-IF
+      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/07/06) end
       *
       *    在宅(同じ保険者の場合、在宅の方が最初に印刷される様変更)
             IF     RECE10-ZAITAKU    =    "1"
