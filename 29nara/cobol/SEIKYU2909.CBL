@@ -34,8 +34,12 @@
       *                                長期上位（974）は長期と同様の
       *                                処理をする
       *  01.00.02    内田    08/08/12  実日数、点数は保険のデータとする
-      *  01.00.03    門間    08/10/07  実日数が０の場合、実日数を０と印字する
+      *  01.00.03    門間    08/10/07  在宅のみを算定している患者は
+      *                                実日数を０とする
       *                                SPA-AREAの初期化
+      *  01.00.04    吉川    10/07/12  月途中で負担者番号が変更された場合
+      *                                実日数欄はその負担者番号で
+      *                                診療した日数を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -104,6 +108,9 @@
            03  FLG-ERR         PIC 9(01).
            03  FLG-BTPARA      PIC 9(01).
            03  FLG-SYORI       PIC 9(01).
+      *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) start
+           03  FLG-FTNJANUM    PIC 9(01).
+      *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -667,6 +674,20 @@
              END-IF
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) start
+      *    月途中に負担者番号だけが変更になった公費があるかどうか
+           MOVE    ZERO                 TO   FLG-FTNJANUM
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     4
+             IF  IDX1  NOT =  IDZ
+               IF  MF100-KOHNUM           =  RECE02-KOHNUM(IDX1)
+               AND MF100-KOHFTNJANUM  NOT =  RECE02-KOHFTNJANUM(IDX1)
+                   MOVE    1            TO   FLG-FTNJANUM
+               END-IF
+             END-IF
+           END-PERFORM
+      *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) end
       *
       *---(01.00.02) LINE ADD START ------------------------------------
       *    実日数、点数は保険のそれが必要なため請求管理から取得
@@ -1422,7 +1443,13 @@
                IF      MCP-RC              =   ZERO
                    MOVE  MCPDATA-REC   TO  RECE10-REC
       *    実日数、点数
-                   MOVE  RECE10-JNISSU (1)    TO  MF100-JNISSU
+      *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) start
+      *            月途中に負担者番号の変更がない公費のみ、保険の実日数
+      *             MOVE  RECE10-JNISSU (1)    TO  MF100-JNISSU
+                   IF  FLG-FTNJANUM  =  ZERO
+                     MOVE  RECE10-JNISSU (1)  TO  MF100-JNISSU
+                   END-IF
+      *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) end
                    MOVE  RECE10-TOTALTEN (1)  TO  MF100-TOTALTEN
                END-IF
            END-IF
