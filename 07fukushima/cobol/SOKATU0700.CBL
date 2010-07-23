@@ -35,6 +35,7 @@
       *                                  返戻対応
       *  01.00.04    内田    08/04/06    SPA-AREA初期化
       *  01.00.05    吉川    09/11/04    指定金融機関を印字する
+      *  01.00.06    吉川    10/07/02    オンライン返戻対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1375,6 +1376,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/02) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/02) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

@@ -45,6 +45,7 @@
       *  01.00.11    内田   09/06/08    保険番号283,285,289はまとめて記載
       *  01.00.12    吉川   09/11/18    シス管「2007」のまとめ公費で
       *                                 6つ目以降がまとまらない不具合を修正
+      *  01.00.13    吉川   10/07/15    オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2261,6 +2262,13 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/15) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/15) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
