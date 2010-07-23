@@ -38,6 +38,8 @@
       *  01.00.06    内田   09/02/25   返戻対応
       *  01.00.07    吉川   09/08/11   仙台市代表保険者番号変更
       *  01.00.08    吉川   09/11/05   特別療養費国保対応
+      *  01.00.09    吉川   10/07/02   代表保険者番号追加
+      *                                オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -706,6 +708,12 @@
              MOVE  "040014"  TO  WRK-HKNJANUM
       *=== 仙台市代表保険者番号変更 by Yoshikawa(2009/08/11) end
            END-IF
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) start
+      *    さいたま市の場合、代表番号セット
+           IF  WRK-HKNJANUM (1:3) = "114"
+             MOVE  "114009"  TO  WRK-HKNJANUM
+           END-IF
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) end
       *    千葉市の場合、代表番号セット
            IF  WRK-HKNJANUM (1:3) = "124"
              MOVE  "124008"  TO  WRK-HKNJANUM
@@ -718,6 +726,24 @@
            IF  WRK-HKNJANUM (1:3) = "145"
              MOVE  "145003"  TO  WRK-HKNJANUM
            END-IF
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) start
+      *    相模原市の場合、代表番号セット
+           IF  WRK-HKNJANUM (1:3) = "146"
+             MOVE  "146001"  TO  WRK-HKNJANUM
+           END-IF
+      *    新潟市の場合、代表番号セット
+           IF  WRK-HKNJANUM (1:3) = "154"
+             MOVE  "154005"  TO  WRK-HKNJANUM
+           END-IF
+      *    静岡市の場合、代表番号セット
+           IF  WRK-HKNJANUM (1:3) = "224"
+             MOVE  "224006"  TO  WRK-HKNJANUM
+           END-IF
+      *    浜松市の場合、代表番号セット
+           IF  WRK-HKNJANUM (1:3) = "225"
+             MOVE  "225003"  TO  WRK-HKNJANUM
+           END-IF
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) end
       *    名古屋市の場合、代表番号セット
            IF  WRK-HKNJANUM (1:3) = "234"
              MOVE  "234005"  TO  WRK-HKNJANUM
@@ -730,6 +756,12 @@
            IF  WRK-HKNJANUM(1:3)  = "274"
              MOVE  "274001"  TO  WRK-HKNJANUM
            END-IF
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) start
+      *    堺市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  = "275"
+             MOVE  "275008"  TO  WRK-HKNJANUM
+           END-IF
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) end
       *    神戸市の場合、代表番号セット
            IF  WRK-HKNJANUM (1:3) = "284"
              MOVE  "284000"  TO  WRK-HKNJANUM
@@ -1311,6 +1343,14 @@
       *
            IF       MCP-RC  =     ZERO
                     MOVE    MCPDATA-REC   TO      RECE10-REC
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/02) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/02) end
+      *
                     ADD     1             TO      CNT-RECE10   
            ELSE
                     MOVE    1             TO      FLG-END

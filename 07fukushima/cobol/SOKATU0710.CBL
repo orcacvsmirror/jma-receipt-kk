@@ -45,6 +45,8 @@
       *  01.00.09    吉川    09/11/17    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.10    吉川    10/05/17    札幌市の代表保険者番号変更
+      *  01.00.11    吉川    10/07/02    代表保険者番号追加
+      *                                  オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1898,6 +1900,20 @@
              WHEN    "145003"
                MOVE  "145000"          TO  RECE10-XXSTHKNJANUM
                MOVE  "145999"          TO  RECE10-XXEDHKNJANUM
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) start
+             WHEN    "146001"
+               MOVE  "146000"          TO  RECE10-XXSTHKNJANUM
+               MOVE  "146999"          TO  RECE10-XXEDHKNJANUM
+             WHEN    "154005"
+               MOVE  "154000"          TO  RECE10-XXSTHKNJANUM
+               MOVE  "154999"          TO  RECE10-XXEDHKNJANUM
+             WHEN    "224006"
+               MOVE  "224000"          TO  RECE10-XXSTHKNJANUM
+               MOVE  "224999"          TO  RECE10-XXEDHKNJANUM
+             WHEN    "225003"
+               MOVE  "225000"          TO  RECE10-XXSTHKNJANUM
+               MOVE  "225999"          TO  RECE10-XXEDHKNJANUM
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) end
              WHEN    "234005"
                MOVE  "234000"          TO  RECE10-XXSTHKNJANUM
                MOVE  "234999"          TO  RECE10-XXEDHKNJANUM
@@ -1907,6 +1923,11 @@
              WHEN    "274001"
                MOVE  "274000"          TO  RECE10-XXSTHKNJANUM
                MOVE  "274999"          TO  RECE10-XXEDHKNJANUM
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) start
+             WHEN    "275008"
+               MOVE  "275000"          TO  RECE10-XXSTHKNJANUM
+               MOVE  "275999"          TO  RECE10-XXEDHKNJANUM
+      *=== 代表保険者番号追加 by Yoshikawa(2010/07/02) end
              WHEN    "284000"
                MOVE  "284000"          TO  RECE10-XXSTHKNJANUM
                MOVE  "284999"          TO  RECE10-XXEDHKNJANUM
@@ -1973,6 +1994,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/02) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/07/02) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
