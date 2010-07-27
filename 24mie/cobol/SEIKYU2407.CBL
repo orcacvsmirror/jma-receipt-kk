@@ -27,7 +27,10 @@
       *  10/02/25    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev	修正者	日付		内容
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    10/07/23    他法公費の値は最終診療時の値が
+      *                                  記載されるのを修正
+      *                                  助成種別毎に印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -206,8 +209,14 @@
        01  KEY-AREA  VALUE  ZERO.
            03  KEY-NEW.
                05  KEY-N-CITYNUM     PIC X(03).
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) start
+               05  KEY-N-KBN         PIC X(01).
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) end
            03  KEY-OLD.
                05  KEY-O-CITYNUM     PIC X(03).
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) start
+               05  KEY-O-KBN         PIC X(01).
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) end
       *
        01  TABLE-AREA.
            03  TBL-PARA-OCC    OCCURS  100.
@@ -1275,8 +1284,14 @@
               AT  END
                  MOVE  1                   TO  FLG-PRINT
                  MOVE  HIGH-VALUE          TO  KEY-N-CITYNUM
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) start
+                 MOVE  HIGH-VALUE          TO  KEY-N-KBN
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) end
               NOT AT  END
                  MOVE  MF100-CITYNUM       TO  KEY-N-CITYNUM
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) start
+                 MOVE  MF100-KOHKBN        TO  KEY-N-KBN
+      *=== 種別区分毎に印字 by Yoshikawa(2010/07/23) end
            END-READ
            .
        900-MF100-READ-EXT.
@@ -1449,11 +1464,18 @@
       *
            END-PERFORM
       *
-           MOVE  WRK-TAHOFTN                   TO  MF100-TAHOFTN
-           MOVE  WRK-KOHTENSU                  TO  MF100-TAHOTEN
-           MOVE  WRK-ETCSHOKUJINISSU           TO  MF100-ETCSHOKUJINISSU
-           MOVE  WRK-ETCSHOKUJIRYOYOHI     TO  MF100-ETCSHOKUJIRYOYOHI
-           MOVE  WRK-ETCSHOKUJIFTN             TO  MF100-ETCSHOKUJIFTN
+      *=== 他法公費は月の合計を印字 by Yoshikawa(2010/07/23) start
+      *     MOVE  WRK-TAHOFTN                   TO  MF100-TAHOFTN
+      *     MOVE  WRK-KOHTENSU                  TO  MF100-TAHOTEN
+      *     MOVE  WRK-ETCSHOKUJINISSU           TO  MF100-ETCSHOKUJINISSU
+      *     MOVE  WRK-ETCSHOKUJIRYOYOHI     TO  MF100-ETCSHOKUJIRYOYOHI
+      *     MOVE  WRK-ETCSHOKUJIFTN             TO  MF100-ETCSHOKUJIFTN
+           ADD  WRK-TAHOFTN               TO  MF100-TAHOFTN
+           ADD  WRK-KOHTENSU              TO  MF100-TAHOTEN
+           ADD  WRK-ETCSHOKUJINISSU       TO  MF100-ETCSHOKUJINISSU
+           ADD  WRK-ETCSHOKUJIRYOYOHI     TO  MF100-ETCSHOKUJIRYOYOHI
+           ADD  WRK-ETCSHOKUJIFTN         TO  MF100-ETCSHOKUJIFTN
+      *=== 他法公費は月の合計を印字 by Yoshikawa(2010/07/23) end
       *
            .
        800-SEIKYU-SEC-EXT.
