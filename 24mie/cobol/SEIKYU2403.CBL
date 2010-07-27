@@ -30,6 +30,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    09/11/26    市町村番号と異なる市町村名が
       *                                  印字される不具合を修正
+      *  01.00.02    吉川    10/07/23    他法公費の値は最終診療時の値が
+      *                                  記載されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1512,11 +1514,18 @@
       *
            END-PERFORM
       *
-           MOVE  WRK-TAHOFTN                   TO  MF100-TAHOFTN
-           MOVE  WRK-KOHTENSU                  TO  MF100-TAHOTEN
-           MOVE  WRK-ETCSHOKUJINISSU           TO  MF100-ETCSHOKUJINISSU
-           MOVE  WRK-ETCSHOKUJIRYOYOHI     TO  MF100-ETCSHOKUJIRYOYOHI
-           MOVE  WRK-ETCSHOKUJIFTN             TO  MF100-ETCSHOKUJIFTN
+      *=== 他法公費は月の合計を印字 by Yoshikawa(2010/07/23) start
+      *     MOVE  WRK-TAHOFTN                   TO  MF100-TAHOFTN
+      *     MOVE  WRK-KOHTENSU                  TO  MF100-TAHOTEN
+      *     MOVE  WRK-ETCSHOKUJINISSU           TO  MF100-ETCSHOKUJINISSU
+      *     MOVE  WRK-ETCSHOKUJIRYOYOHI     TO  MF100-ETCSHOKUJIRYOYOHI
+      *     MOVE  WRK-ETCSHOKUJIFTN             TO  MF100-ETCSHOKUJIFTN
+           ADD   WRK-TAHOFTN               TO  MF100-TAHOFTN
+           ADD   WRK-KOHTENSU              TO  MF100-TAHOTEN
+           ADD   WRK-ETCSHOKUJINISSU       TO  MF100-ETCSHOKUJINISSU
+           ADD   WRK-ETCSHOKUJIRYOYOHI     TO  MF100-ETCSHOKUJIRYOYOHI
+           ADD   WRK-ETCSHOKUJIFTN         TO  MF100-ETCSHOKUJIFTN
+      *=== 他法公費は月の合計を印字 by Yoshikawa(2010/07/23) end
       *
            .
        800-SEIKYU-SEC-EXT.
