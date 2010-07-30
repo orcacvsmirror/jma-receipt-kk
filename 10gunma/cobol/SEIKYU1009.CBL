@@ -49,6 +49,10 @@
       *  01.00.10    吉川    09/08/28    平成20年3月以前の老人保健及び
       *                                  70歳以上1割は旧様式に印字
       *  01.00.11    吉川    09/09/08    長期と長期上位はまとめて印字
+      *  01.00.12    吉川    10/07/26    特疾負無（091）は「51」と記載
+      *                                  点数欄は総点数を記載する
+      *                                  「特」欄は限度額に達してない場合は
+      *                                  記載しないようにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -139,6 +143,10 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            03  FLG-RECE10     PIC 9(01).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+           03  FLG-PTKOHFTN   PIC 9(01).
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *
       *
       *    添字領域
        01  IDX-AREA.
@@ -199,6 +207,13 @@
            03  WRK-HKNJANUM               PIC X(06).
            03  WRK-HKNJANAME              PIC X(20).
            03  WRK-KYURATE                PIC 9(02).
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
+           03  WRK-KOHINF  OCCURS 4.
+               05  WRK-H-KOHNUM           PIC X(03).
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+           03  WRK-JGNGAK            PIC 9(08).
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -337,6 +352,12 @@
       *    請求管理
            COPY    "CPRCF010.INC".
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+      *    患者公費負担
+       01  PTKOHFTN-REC.
+           COPY    "CPPTKOHFTN.INC".
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -755,6 +776,12 @@
            MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
            MOVE  RECE02-YKZFTNINF   (IDY)  TO  MF100-YKZFTNINF
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
+      *    請求管理より、保険使用時情報取得
+           PERFORM  900-SEIKYU-SELECT-SEC
+           MOVE  RECE10-TOTALTEN(1)        TO  MF100-H-TOTALTEN
+           MOVE  RECE10-KOHINF             TO  WRK-KOHINF
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *
       *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start
       *    １＝旧様式、２＝新様式
@@ -795,6 +822,49 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
            END-IF
            PERFORM  920-SYUNOU-SET-SEC
+      *
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
+      *    収納で取得できなかった全国公費を請求管理から取得
+           IF    MF100-COMBIKBN       =     SPACE
+              PERFORM  VARYING  IDX1  FROM  1  BY  1
+                       UNTIL    IDX1  >     4
+                IF  WRK-H-KOHNUM(IDX1)  =  "010" OR "011" OR "020" OR
+                                           "021" OR "015" OR "016" OR
+                                           "051" OR "091" OR "052"
+      *
+                  MOVE  WRK-H-KOHNUM(IDX1)(2:2)  TO  MF100-COMBIKBN
+      *
+                  IF  WRK-H-KOHNUM(IDX1)  =  "091"
+                    MOVE  "51"                   TO  MF100-COMBIKBN
+                  END-IF
+      *
+                END-IF
+              END-PERFORM
+           END-IF
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
+      *
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+      *    公費上限額取得
+           IF  MF100-COMBIKBN  =  "11" OR "15" OR "16" OR "21" OR "24"
+                               OR "38" OR "51" OR "52" OR "79"
+             PERFORM  930-PTKOHFTN-READ-SEC
+             IF  MF100-COMBIKBN  =  "11" OR "51" OR "52"
+               IF  MF100-NYUGAIKBN  =  "1"
+                 MOVE  PTKOHFTN-NYUJGNGAK    TO  WRK-JGNGAK
+               ELSE
+                 MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGAK
+               END-IF
+             ELSE
+                 MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGAK
+             END-IF
+      *
+      *      上限額に満たない場合は「特」としない
+             IF  WRK-JGNGAK  >  ZERO
+             AND WRK-JGNGAK  >  WRK-SEIKYUGK-G
+               MOVE  SPACE                   TO  MF100-COMBIKBN
+             END-IF
+           END-IF
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
       *
       *    老人＋在宅等で保険に限度額が有る場合の対応
            IF     RECE02-FTNMONEY(1)  >   ZERO     AND
@@ -856,6 +926,22 @@
            END-IF
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+           EVALUATE  RECE02-ZAITAKU
+             WHEN  "2"
+               IF  RECE02-FTNMONEY(1)  <  83400
+                 MOVE  SPACE       TO  MF100-COMBIKBN
+               END-IF
+             WHEN  "3"
+               IF  RECE02-FTNMONEY(1)  <  44400
+                 MOVE  SPACE       TO  MF100-COMBIKBN
+               END-IF
+             WHEN  "4"
+               IF  RECE02-FTNMONEY(1)  <  24600
+                 MOVE  SPACE       TO  MF100-COMBIKBN
+               END-IF
+           END-EVALUATE
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
       *    ソートするためキーをセット
            PERFORM  960-SORTKEY-SEC
       *
@@ -1227,7 +1313,10 @@
              ADD    1              TO  SUM-KENSU (IDX)
       *
       *    点数
-             ADD   MF100-TOTALTEN  TO  SUM-TENSU (IDX)
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
+      *       ADD   MF100-TOTALTEN  TO  SUM-TENSU (IDX)
+             ADD   MF100-H-TOTALTEN  TO  SUM-TENSU (IDX)
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *---(01.00.01) LINE ADD START ------------------------------------
       *
       *    薬剤一部負担金
@@ -1436,7 +1525,10 @@
              ADD    1              TO  SUM-KENSU (IDX)
       *
       *    点数
-             ADD   MF100-TOTALTEN  TO  SUM-TENSU (IDX)
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
+      *       ADD   MF100-TOTALTEN  TO  SUM-TENSU (IDX)
+             ADD   MF100-H-TOTALTEN  TO  SUM-TENSU (IDX)
+      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *
       *    福祉医療費請求額
              IF    MF100-COMBIKBN NOT  =   SPACE
@@ -1592,6 +1684,16 @@
                  MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
                                              TO  WRK-SEIKYUGK
                END-IF
+      *=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
+               IF  WRK-SEIKYUGK  =  ZERO
+                 IF    RECE02-FTNMONEY(1) >  ZERO
+                   MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
+                 ELSE
+                   MOVE   SYU-SYUCOMPFTN-ENTANI
+                                             TO  WRK-SEIKYUGK
+                 END-IF
+               END-IF
+      *=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) end
              END-IF
       *
              IF  SYU-KOH-HKNNUM(IDX)  =  "010"  OR  "011"  OR
@@ -1620,6 +1722,13 @@
                MOVE    2     TO    FLG-TYOKI
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 特疾負無(091)は「51」と印字 by Yoshikawa(2010/07/26) start
+      *      特疾負無は「51」でまとめる
+             IF  SYU-KOH-HKNNUM(IDX)  =  "091"
+               MOVE  "51"                      TO  MF100-COMBIKBN
+             END-IF
+      *=== 特疾負無(091)は「51」と印字 by Yoshikawa(2010/07/26) end
            END-PERFORM
       *
            IF    FLG-HEIYOU    =    ZERO
@@ -2196,6 +2305,57 @@
            .
        925-HKNJAINF-READ-EXT.
            EXIT.
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+      *****************************************************************
+      *    患者公費負担情報読込処理
+      *****************************************************************
+       930-PTKOHFTN-READ-SEC         SECTION.
+      *
+           INITIALIZE                          PTKOHFTN-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  PTKOHFTN-HOSPNUM
+           MOVE    MF100-PTID              TO  PTKOHFTN-PTID
+           MOVE    PTKOHFTN-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+                   MOVE    ZERO                TO  FLG-PTKOHFTN
+               ELSE
+                   MOVE    1                   TO  FLG-PTKOHFTN
+                   INITIALIZE                  PTKOHFTN-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHFTN
+               INITIALIZE                  PTKOHFTN-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       930-PTKOHFTN-READ-EXT.
+           EXIT.
+      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *
       *---(01.00.04) LINE ADD START ------------------------------------
       *****************************************************************
       *    請求管理読込
@@ -2229,6 +2389,17 @@
            ELSE
                MOVE    1               TO  FLG-RECE10
            END-IF
+      *
+      *=== DBCLOSECURSOR漏れ by Yoshikawa(2010/07/26) start
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *=== DBCLOSECURSOR漏れ by Yoshikawa(2010/07/26) end
+      *
            .
        900-SEIKYU-SELECT-EXT.
            EXIT.
