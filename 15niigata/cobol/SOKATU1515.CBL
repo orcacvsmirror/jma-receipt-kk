@@ -35,6 +35,7 @@
       *  01.00.03    等李    2010/03/02  弓拌息圭の瘦副荚戎规回年滦炳
       *  01.00.04    等李    2010/06/22  光驰闻蛙锐把扦失の给锐を
       *                                  给锐浩非腕に淡很するように饯赖
+      *  01.00.05    等李    2010/08/04  オンライン手提滦炳
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1760,6 +1761,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-RECE10
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン手提滦炳 by Yoshikawa(2010/08/04) start
+      *        手提尸でオンライン懒滇は粕み若ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン手提滦炳 by Yoshikawa(2010/08/04) end
       *
       *        テスト吹荚のときは粕み若ばす
                MOVE    SPACE               TO  PTINF-REC

@@ -44,6 +44,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.11    吉川    10/03/18    公費欄の値は保険の分を含めない
       *  01.00.12    吉川    10/04/02    特別療養費国保対応
+      *  01.00.13    吉川    10/08/03    オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2820,6 +2821,13 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/08/03) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/08/03) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
