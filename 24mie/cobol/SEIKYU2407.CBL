@@ -31,6 +31,7 @@
       *  01.00.01    吉川    10/07/23    他法公費の値は最終診療時の値が
       *                                  記載されるのを修正
       *                                  助成種別毎に印字する
+      *  01.00.02    吉川    10/08/05    処方せん発行区分の判定方法変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -111,6 +112,10 @@
            03  FLG-TOWN              PIC 9(01).
            03  FLG-PASS              PIC 9(01).
            03  FLG-TYOKI             PIC 9(01).
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
+           03  FLG-SRYACT            PIC 9(01).
+           03  FLG-SYOHOKOFU         PIC 9(01).
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -225,6 +230,23 @@
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
+      *    固定値
+       01  CONST-AREA.
+      *    処方せんを交付する診療行為
+           03  CONS-SYOHOKOFU1       PIC X(09) VALUE "113003510".
+           03  CONS-SYOHOKOFU2       PIC X(09) VALUE "113003610".
+           03  CONS-SYOHOKOFU3       PIC X(09) VALUE "113003910".
+           03  CONS-SYOHOKOFU4       PIC X(09) VALUE "113005810".
+           03  CONS-SYOHOKOFU5       PIC X(09) VALUE "113005910".
+           03  CONS-SYOHOKOFU6       PIC X(09) VALUE "114007510".
+           03  CONS-SYOHOKOFU7       PIC X(09) VALUE "114007610".
+           03  CONS-SYOHOKOFU8       PIC X(09) VALUE "114012210".
+           03  CONS-SYOHOKOFU9       PIC X(09) VALUE "114013010".
+           03  CONS-SYOHOKOFU10      PIC X(09) VALUE "114013210".
+           03  CONS-SYOHOKOFU11      PIC X(09) VALUE "160082810".
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
+      *
            COPY  "CPSHELLTBL.INC".
       *
            COPY    "COMMON-SPA".
@@ -289,6 +311,12 @@
       *    保険組合せ
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
+      *
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
+      *    診療行為
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -669,6 +697,19 @@
              MOVE   RECE02-FTNMONEY(1)       TO   MF100-FTNMONEY
            END-IF
       *
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
+      *    レセプトの「処方せん」に点数がある場合、発行区分に1をセット
+           IF  RECE02-TENSU(33 IDY)  >  ZERO
+             MOVE   1                 TO  FLG-SYOHOKOFU
+           ELSE
+      *      処方せんを交付する診療行為があるかチェック
+             PERFORM 930-SRYACT-SET-SEC
+           END-IF
+           IF  FLG-SYOHOKOFU  =  1
+             MOVE   1                        TO   MF100-SYOHO
+           END-IF
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
+      *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -922,7 +963,10 @@
              MOVE  WRK-Z7               TO  SC07-ESHOKUJIFTN (IDX1)
       *
       *    処方箋発行区分
-             IF  SYS-1001-SYOHOKBN  =  1
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
+      *       IF  SYS-1001-SYOHOKBN  =  1
+             IF  MF100-SYOHO  =  1
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
                  MOVE     "1"           TO   SC07-SYOHO (IDX1)
              END-IF
       *
@@ -1411,6 +1455,101 @@
        925-HKNJAINF-READ-EXT.
            EXIT.
       *
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
+      *****************************************************************
+      *  診療情報セット
+      *****************************************************************
+       930-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE  SRYACT-REC
+             INITIALIZE  FLG-SYOHOKOFU
+      *
+             MOVE  SPA-HOSPNUM             TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN        TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID             TO  SRY-PTID
+             MOVE  RECE02-SRYYM            TO  SRY-SRYYM
+             MOVE  SRYACT-REC              TO  MCPDATA-REC
+             MOVE  "DBSELECT"              TO  MCP-FUNC
+             MOVE  "tbl_sryact"            TO  MCP-TABLE
+             MOVE  "key4"                  TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"          TO  MCP-TABLE
+               MOVE  "key4"                TO  MCP-PATHNAME
+               PERFORM  935-SRYACT-READ-SEC
+      *
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  940-SYOHOKOFU-CHK-SEC
+      *
+                 MOVE  "tbl_sryact"        TO  MCP-TABLE
+                 MOVE  "key4"              TO  MCP-PATHNAME
+                 PERFORM  935-SRYACT-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"         TO  MCP-FUNC
+             MOVE  "tbl_sryact"            TO  MCP-TABLE
+             MOVE  "key4"                  TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       960-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       935-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"  TO      MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE             SRYACT-REC
+             MOVE  1            TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       935-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    処方せん交付診療チェック
+      *****************************************************************
+       940-SYOHOKOFU-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL   (IDX3  >     5) OR
+                            (SRY-SRYCD(IDX3)  =  SPACE)
+             IF  SRY-SRYCD(IDX3)  =  CONS-SYOHOKOFU1 OR CONS-SYOHOKOFU2
+                                 OR  CONS-SYOHOKOFU3 OR CONS-SYOHOKOFU4
+                                 OR  CONS-SYOHOKOFU5 OR CONS-SYOHOKOFU6
+                                 OR  CONS-SYOHOKOFU7 OR CONS-SYOHOKOFU8
+                                 OR  CONS-SYOHOKOFU9 OR CONS-SYOHOKOFU10
+                                 OR  CONS-SYOHOKOFU11
+                 MOVE  1  TO  FLG-SYOHOKOFU
+             END-IF
+           END-PERFORM
+      *
+           .
+       940-SYOHOKOFU-CHK-EXT.
+           EXIT.
+      *
+      *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
       *****************************************************************
       *    請求点数集計処理
       *****************************************************************
