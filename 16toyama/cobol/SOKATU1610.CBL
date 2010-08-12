@@ -35,6 +35,8 @@
       *  01.00.03    長屋    08/04/22  帳票様式に伴う修正
       *  01.00.04    内田    08/05/16  国組３〜６歳の帳票を分けないように修正
       *  01.00.05    吉川    09/04/08  SPA-AREA初期化
+      *  01.00.06    吉川    10/08/04  オンライン返戻対応
+      *                                特別療養費国保対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -151,7 +153,9 @@
            03  WRK-PARA-HKNJANUM   PIC X(08).
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYOKBN     PIC X(01).
-      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -188,6 +192,9 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH            PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+           03  WRK-PATH2           PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *    医療機関情報
            03  WRK-HOSPNAME            PIC X(100).
            03  WRK-HOSPNAME-R          REDEFINES   WRK-HOSPNAME.
@@ -341,6 +348,9 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-HKNJANUM
                                                WRK-PARA-SYOKBN
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+                                               WRK-PARA-TOKUBETU
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *---(01.00.02) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.02) LINE ADD END   ------------------------------------
@@ -466,18 +476,34 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *  
-           EVALUATE    WRK-PARA-SYOKBN 
-               WHEN    "2"
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
-                   MOVE    "key37"                  TO  WRK-PATH
-      *---(01.00.02) LINE ADD END   ------------------------------------
-               WHEN    "1"
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-                   MOVE    "key38"                  TO  WRK-PATH
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+      *     EVALUATE    WRK-PARA-SYOKBN 
+      *         WHEN    "2"
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *             MOVE    "key37"                  TO  WRK-PATH
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+      *             MOVE    "key38"                  TO  WRK-PATH
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE    "key37"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "1"
+                   MOVE    "key38"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
            END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *  
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -688,7 +714,10 @@
                END-IF
            ELSE
       *        一般国保
-               IF      RECE10-HKNNUM   =   "060"
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+      *         IF      RECE10-HKNNUM   =   "060"
+               IF      RECE10-HKNNUM   =   "060" OR "068"
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
                    IF      RECE10-AGE  >=  70
       *---(01.00.03) LINE ADD START ------------------------------------
       *                 IF      RECE10-KYURATE  =   9
@@ -918,6 +947,13 @@
            MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC  
            MOVE    WRK-OUT-INPUT           TO  SKT1610-HOSPCD
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"            TO  SKT1610-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *    長期件数
@@ -1250,6 +1286,12 @@
                MOVE    SPACE           TO  RECE10-XXSTHKNJANUM
                MOVE    "99999999"      TO  RECE10-XXEDHKNJANUM
            END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "000000"            TO  RECE10-SRYYM
+             MOVE  "999999"            TO  RECE10-XXSRYYM
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
@@ -1296,6 +1338,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/08/04) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/08/04) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
