@@ -18,6 +18,7 @@
       *  コピー句正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/05/13  開設者名のバイト数増加
+      *  01.00.02    吉川    2010/08/04  特別療養費国保対応
       *****************************************************************
         01  SKT1610.
             03  SKT1610-NO              PIC X(04).
@@ -32,6 +33,9 @@
       *=== バイト数増加 by Yoshikawa(2009/05/13) end
             03  SKT1610-HKNJANUM        PIC X(12).
             03  SKT1610-HKNJANAME       PIC X(26).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
+            03  SKT1610-TOKUBETU        PIC X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
             03  SKT1610-SEIKYU          OCCURS  11 TIMES.
                 05  SKT1610-NYUGAI-TBL      OCCURS  2 TIMES.
                     07  SKT1610-KENSU   PIC X(04).
