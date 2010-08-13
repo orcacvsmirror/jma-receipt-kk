@@ -64,6 +64,7 @@
       *                                   6つ目以降がまとまらない不具合を修正
       *  01.02.14    吉川       10/02/10  公費名称はシス管「2007」の
       *                                   「表示名称２」を使用する
+      *  01.02.15    吉川       10/08/03  オンライン返戻対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1743,6 +1744,14 @@
                                    NOT =   WRK-NYUGAIKBN
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/08/03) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/08/03) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
