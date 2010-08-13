@@ -35,6 +35,8 @@
       *                                  処理をする
       *  01.00.05    吉川    08/10/08    SPA-AREA初期化
       *  01.00.06    吉川    10/04/12    対象保険番号の追加（743）
+      *  01.00.07    吉川    10/08/12    同一負担者番号、同一受給者番号で
+      *                                  適用期間が異なる場合、別行に印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -104,6 +106,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) start
+           03  FLG-PTKOHINF   PIC 9(01).
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -159,6 +164,10 @@
                05  WRK-SEIKYUGK-G      PIC 9(08).
                05  WRK-SEIKYUGK        PIC 9(08)V9(01).
                05  WRK-SEIKYUGK-G2     PIC 9(08)V9(01).
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) start
+           03  WRK-TEKSTYMD            PIC X(08).
+           03  WRK-TEKEDYMD            PIC X(08).
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -245,6 +254,12 @@
       *    患者情報
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
+      *
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) start
+      *    患者公費情報マスタ
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) end
       *
       *    公費請求書
            COPY    "CPKOHSKY.INC"
@@ -686,6 +701,12 @@
            MOVE     WRK-SEIKYUGK-G    TO    MF100-SEIKYUGK
            MOVE     WRK-TAHOU         TO    MF100-TAHOU
       *
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) start
+      *    患者公費情報から適用期間を取得
+           PERFORM 930-PTKOHINF-SET-SEC
+           MOVE     WRK-TEKSTYMD      TO    MF100-TEKSTYMD
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) end
+      *
       *    合計に加算
            ADD      1                 TO    SUM-GKENSU
            ADD      WRK-SEIKYUGK-G    TO    SUM-GSEIKYUGK
@@ -1119,6 +1140,81 @@
            .
        925-SYUNOU-READ-EXT.
            EXIT.
+      *
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) start
+      *****************************************************************
+      *    患者公費情報セット
+      *****************************************************************
+       930-PTKOHINF-SET-SEC  SECTION.
+      *
+           INITIALIZE                      PTKOHINF-REC
+      *
+           MOVE  SPA-HOSPNUM               TO  PTKOH-HOSPNUM
+           MOVE  RECE02-PTID               TO  PTKOH-PTID
+           MOVE  MF100-KOHID               TO  PTKOH-KOHID
+      *
+           MOVE  PTKOHINF-REC              TO  MCPDATA-REC
+           MOVE  "DBSELECT"                TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key8"                    TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"                   USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           IF  MCP-RC  =  ZERO
+             MOVE  "tbl_ptkohinf"          TO  MCP-TABLE
+             MOVE  "key8"                  TO  MCP-PATHNAME
+             PERFORM  935-PTKOHINF-READ-SEC
+      *
+             PERFORM  UNTIL  FLG-PTKOHINF = 1
+               IF  PTKOH-TEKSTYMD(1:6) <= RECE02-SRYYM(1:6)  AND 
+                   PTKOH-TEKEDYMD(1:6) >= RECE02-SRYYM(1:6)
+      *            適用期間取得
+                   MOVE  PTKOH-TEKSTYMD    TO  WRK-TEKSTYMD
+                   MOVE  PTKOH-TEKEDYMD    TO  WRK-TEKEDYMD
+               END-IF
+               MOVE  "tbl_ptkohinf"        TO  MCP-TABLE
+               MOVE  "key8"                TO  MCP-PATHNAME
+                 PERFORM  935-PTKOHINF-READ-SEC
+             END-PERFORM
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"           TO  MCP-FUNC
+           MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
+           MOVE  "key8"                    TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"                   USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       930-PTKOHINF-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    患者公費情報ＦＥＴＣＨ
+      *****************************************************************
+       935-PTKOHINF-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"  TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  PTKOHINF-REC
+             MOVE  ZERO         TO  FLG-PTKOHINF
+           ELSE
+             INITIALIZE  PTKOHINF-REC
+             MOVE  1  TO  FLG-PTKOHINF
+           END-IF
+      *
+           .
+       935-PTKOHINF-READ-EXT.
+           EXIT.
+      *=== 適用期間が異なる場合は別行印字 by Yoshikawa(2010/08/12) end
       *
       *****************************************************************
       *    保険組合せマスター読み込み
