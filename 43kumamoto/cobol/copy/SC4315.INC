@@ -14,7 +14,11 @@
       * this license along with this program. If not, stop using this
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
-      ********************************************************************
+      ************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/08/12  受給者番号の桁数増加
+      ************************************************************
        01  SC15.
       *印刷日付
            03  SC15-PRTY              PIC  X(04).
@@ -48,7 +52,10 @@
            03  SC15-MEISAI-TBL OCCURS 10.
       *受給資格者証記号番号
                05  SC15-KIGO           PIC  X(04).
-               05  SC15-NUM            PIC  X(14).
+      *=== 受給者番号桁数増加 by Yoshikawa(2010/08/12) start
+      *         05  SC15-NUM            PIC  X(14).
+               05  SC15-NUM            PIC  X(18).
+      *=== 受給者番号桁数増加 by Yoshikawa(2010/08/12) end
       *保険者番号
                05  SC15-HKNJANUM       PIC  X(16).
       *受給者氏名

@@ -36,6 +36,7 @@
       *  01.00.03    門間    09/01/20    SPA-AREAの初期化
       *  01.00.04    吉川    09/12/18    保険番号143は上限額を超えたら
       *                                  印字対象外とするように修正
+      *  01.00.05    吉川    10/08/12    受給者番号は9桁まで印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -791,7 +792,9 @@
                     OR       FLG-PRINT        =    1
       * 
       *    受給者証記号・番号
-             MOVE   MF100-FTNJANUM         TO  SC15-KIGO(IDX)
+      *=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) start
+      *       MOVE   MF100-FTNJANUM         TO  SC15-KIGO(IDX)
+      *=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) end
              MOVE     MF100-JKYSNUM        TO  WRK-MAE-INPUT
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT         TO  SC15-NUM(IDX)
