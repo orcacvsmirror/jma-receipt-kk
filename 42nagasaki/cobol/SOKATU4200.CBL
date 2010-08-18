@@ -40,6 +40,7 @@
       *                                  後期高齢のみの場合でも印字する
       *  01.00.05    吉川    08/12/15    請求書枚数に在宅分も含める
       *  01.00.06    吉川    10/05/17    オンライン返戻対応
+      *  01.00.07    吉川    10/08/17    再印刷画面に返戻分は「返戻分」と表示
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -896,7 +897,14 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4200.red"        TO  SPRT-PRTID
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      *     MOVE    "国保総括表"        TO  SPRT-TITLE
+           IF  WRK-PARA-SYOKBN  =  "1"
+             MOVE  "国保総括表"            TO  SPRT-TITLE
+           ELSE
+             MOVE  "国保総括表［返戻分］"  TO  SPRT-TITLE
+           END-IF
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
            MOVE    SKT4200             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

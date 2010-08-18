@@ -48,6 +48,7 @@
       *  01.00.09    吉川    10/01/07    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.10    吉川    10/05/17    オンライン返戻対応
+      *  01.00.11    吉川    10/08/17    再印刷画面に返戻分は「返戻分」と表示
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1565,7 +1566,14 @@
       *     MOVE   "SKT4210.red"        TO  SPRT-PRTID
            MOVE   "SKT4210o.red"       TO  SPRT-PRTID
       *---(01.00.06) LINE ADD END   ------------------------------------
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           IF  WRK-PARA-SYOKBN  =  "1"
+             MOVE  "国保請求書"            TO  SPRT-TITLE
+           ELSE
+             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+           END-IF
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
            MOVE    SKT4210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1775,7 +1783,14 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4220.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           IF  WRK-PARA-SYOKBN  =  "1"
+             MOVE  "国保請求書"            TO  SPRT-TITLE
+           ELSE
+             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+           END-IF
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
            MOVE    SKT4220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1950,7 +1965,14 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4230.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           IF  WRK-PARA-SYOKBN  =  "1"
+             MOVE  "国保請求書"            TO  SPRT-TITLE
+           ELSE
+             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+           END-IF
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
            MOVE    SKT4230             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2171,7 +2193,14 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4210.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           IF  WRK-PARA-SYOKBN  =  "1"
+             MOVE  "国保請求書"            TO  SPRT-TITLE
+           ELSE
+             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+           END-IF
+      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
            MOVE    SKT4210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
