@@ -29,6 +29,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/12/07  レセ電時の紙レセの返戻は、
       *                                  前月分としてまとめて印字する
+      *  01.00.02    吉川    2010/08/16  返戻分が2枚以上になる場合、
+      *                                  診療年月がおかしくなるのを修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -929,8 +931,12 @@
       *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) start
            IF   WRK-PARA-SYOKBN  =  "2"
            AND  FLG-RECEDEN  NOT =  ZERO
-             MOVE  LNK-PRTKANRI-SRYYM        TO  WRK-SRYYMD (1:6)
-             MOVE  "01"                      TO  WRK-SRYYMD (7:2)
+      *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) start
+      *       MOVE  LNK-PRTKANRI-SRYYM        TO  WRK-SRYYMD (1:6)
+      *       MOVE  "01"                      TO  WRK-SRYYMD (7:2)
+             MOVE  LNK-PRTKANRI-SRYYM        TO  WRK-SYMD (1:6)
+             MOVE  "01"                      TO  WRK-SYMD (7:2)
+      *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) end
              IF  WRK-SMM  =  1
                COMPUTE  WRK-SYY  =  WRK-SYY  -  1
                MOVE  "12"                    TO  WRK-SMM

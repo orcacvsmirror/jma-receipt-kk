@@ -33,6 +33,9 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2009/12/07  レセ電時の紙レセの返戻は、
       *                                  前月分としてまとめて印字する
+      *  01.00.04    吉川    2010/03/10  広域連合の保険者番号指定対応
+      *  01.00.05    吉川    2010/08/16  返戻分が2枚以上になる場合、
+      *                                  診療年月がおかしくなるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -559,6 +562,22 @@
            ELSE
                MOVE    ZERO                     TO  FLG-KOURECEDEN
            END-IF 
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/10) start
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   SPACE
+               MOVE    "0"                 TO  SYS-200501-KOUIKIPRTKBN
+           END-IF
+      *
+           IF      SYS-200501-KOUIKIPRTKBN
+                                       =   "1"
+               CONTINUE
+           ELSE
+               MOVE    "00000000"          TO  WRK-PARA-HKNJANUM
+           END-IF
+      *
+           DISPLAY "SYS-200501-KOUIKIPRTKBN=" SYS-200501-KOUIKIPRTKBN
+           DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
+      *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/10) end
       *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
       *
            .
@@ -1140,8 +1159,12 @@
       *     MOVE    WRK-SRYYMWH         TO  SKT2025-SRYYM
            IF   WRK-PARA-SYOKBN     =  "2"
            AND  FLG-KOURECEDEN  NOT =  ZERO
-             MOVE  LNK-PRTKANRI-SRYYM    TO  WRK-SRYYMD (1:6)
-             MOVE  "01"                  TO  WRK-SRYYMD (7:2)
+      *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) start
+      *       MOVE  LNK-PRTKANRI-SRYYM        TO  WRK-SRYYMD (1:6)
+      *       MOVE  "01"                      TO  WRK-SRYYMD (7:2)
+             MOVE  LNK-PRTKANRI-SRYYM        TO  WRK-SYMD (1:6)
+             MOVE  "01"                      TO  WRK-SYMD (7:2)
+      *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) end
              IF  WRK-SMM  =  1
                COMPUTE  WRK-SYY  =  WRK-SYY  -  1
                MOVE  "12"                TO  WRK-SMM
@@ -1623,6 +1646,8 @@
                    " SRYYM=" RECE10-SRYYM "-" RECE10-XXSRYYM 
                    " HKNNUM= " RECE10-HKNNUM
                    " PATHNAME=" WRK-MCP-PATHNAME
+                   " HKNJANUM=" RECE10-XXSTHKNJANUM "-" 
+                                RECE10-XXEDHKNJANUM
       *###
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
