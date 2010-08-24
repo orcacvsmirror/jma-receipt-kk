@@ -44,6 +44,7 @@
       *  01.00.07    吉川    10/03/15    転帰欄の番号がずれる不具合を修正
       *  01.00.08    吉川    10/04/13    外来様式で摘要欄の下部にゼロが
       *                                  印字されるのを修正
+      *  01.00.09    吉川    10/08/18    受給者番号の全角入力対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -207,6 +208,9 @@
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
+      *=== 受給者番号の全角入力対応 by Yoshikawa(2010/08/18) start
+           03  WRK-HENKAN            PIC X(20).
+      *=== 受給者番号の全角入力対応 by Yoshikawa(2010/08/18) end
       *
            03  WRK-KOHID               PIC 9(10).
            03  WRK-FTNMONEY            PIC 9(08).
@@ -893,6 +897,61 @@
            ELSE
                PERFORM 200122-ETC-KOH-HEN-SEC
            END-IF
+      *
+      *=== 受給者番号の全角入力対応 by Yoshikawa(2010/08/18) start
+      *    全角→半角へ
+           DISPLAY "患者番号=" MF101-PTNUM
+                   "変換前1=" MF101-EKOHJKYSNUM(1)
+                   "変換前2=" MF101-EKOHJKYSNUM(2)
+           PERFORM  VARYING  IDX1  FROM  1   BY  1
+                    UNTIL    IDX1  >     2
+             MOVE     SPACE    TO    WRK-HENKAN
+             MOVE     ZERO     TO    IDY
+             PERFORM  VARYING  IDX2  FROM  1   BY  2
+                      UNTIL    IDX2  >     20
+                      OR       MF101-EKOHJKYSNUM(IDX1)(IDX2:2) = SPACE
+               EVALUATE  MF101-EKOHJKYSNUM(IDX1)(IDX2:2)
+               WHEN "１"
+                 ADD      1    TO    IDY
+                 MOVE    "1"   TO    WRK-HENKAN(IDY:1)
+               WHEN "２"
+                 ADD      1    TO    IDY
+                 MOVE    "2"   TO    WRK-HENKAN(IDY:1)
+               WHEN "３"
+                 ADD      1    TO    IDY
+                 MOVE    "3"   TO    WRK-HENKAN(IDY:1)
+               WHEN "４"
+                 ADD      1    TO    IDY
+                 MOVE    "4"   TO    WRK-HENKAN(IDY:1)
+               WHEN "５"
+                 ADD      1    TO    IDY
+                 MOVE    "5"   TO    WRK-HENKAN(IDY:1)
+               WHEN "６"
+                 ADD      1    TO    IDY
+                 MOVE    "6"   TO    WRK-HENKAN(IDY:1)
+               WHEN "７"
+                 ADD      1    TO    IDY
+                 MOVE    "7"   TO    WRK-HENKAN(IDY:1)
+               WHEN "８"
+                 ADD      1    TO    IDY
+                 MOVE    "8"   TO    WRK-HENKAN(IDY:1)
+               WHEN "９"
+                 ADD      1    TO    IDY
+                 MOVE    "9"   TO    WRK-HENKAN(IDY:1)
+               WHEN "０"
+                 ADD      1    TO    IDY
+                 MOVE    "0"   TO    WRK-HENKAN(IDY:1)
+               END-EVALUATE
+             END-PERFORM
+      *
+             IF  WRK-HENKAN  NOT  =  SPACE
+               MOVE    WRK-HENKAN    TO    MF101-EKOHJKYSNUM(IDX1)
+             END-IF
+      *
+           END-PERFORM
+           DISPLAY "変換後1=" MF101-EKOHJKYSNUM(1)
+           DISPLAY "変換後2=" MF101-EKOHJKYSNUM(2)
+      *=== 受給者番号の全角入力対応 by Yoshikawa(2010/08/18) end
       *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC

@@ -21,6 +21,7 @@
       ************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/08/18  受給者番号バイト数増加
       ************************************************************
       *01  MF101-REC.
            03  MF101-KEY.
@@ -134,4 +135,7 @@
            03  MF101-ETCKOHINF OCCURS 2.
                05  MF101-EKOHNUM         PIC  X(03).
                05  MF101-EKOHFTNJANUM    PIC  X(08).
-               05  MF101-EKOHJKYSNUM     PIC  X(07).
+      *=== 受給者番号バイト数増加 by Yoshikawa(2010/08/18) start
+      *         05  MF101-EKOHJKYSNUM     PIC  X(07).
+               05  MF101-EKOHJKYSNUM     PIC  X(20).
+      *=== 受給者番号バイト数増加 by Yoshikawa(2010/08/18) end
