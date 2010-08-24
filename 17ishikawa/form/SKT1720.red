@@ -16,6 +16,11 @@
         <embed object="string" length="4"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -3391,7 +3396,7 @@
         <point val="8.69453,27.8625"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.68953,27.8575;20.201,28.8393"/>
+        <rectangle val="8.68953,27.8575;20.2009,28.8392"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="8.69453,27.8625"/>
@@ -4581,7 +4586,7 @@
         <point val="1.55,11.9943"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.55,11.7555;2.156,12.0555"/>
+        <rectangle val="1.55,11.7554;2.156,12.0554"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -7833,7 +7838,7 @@
         <point val="17.1075,28.7074"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.1075,28.4686;17.7135,28.7686"/>
+        <rectangle val="17.1075,28.4685;17.7135,28.7685"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -7941,7 +7946,7 @@
         <point val="12.8938,28.2127"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8938,27.9739;13.4998,28.2739"/>
+        <rectangle val="12.8938,27.9738;13.4998,28.2738"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -8013,7 +8018,7 @@
         <point val="15.597,28.7074"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.597,28.5084;15.8495,28.7584"/>
+        <rectangle val="15.597,28.5083;15.8495,28.7583"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -8204,6 +8209,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O318">
+      <attribute name="obj_pos">
+        <point val="9.76727,1.19169"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.76727,0.87317;11.7873,1.27317"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="9.76727,1.19169"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>

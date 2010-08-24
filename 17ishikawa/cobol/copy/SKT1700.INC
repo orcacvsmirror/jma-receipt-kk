@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * ì˙à„ïWèÄÉåÉZÉvÉgÉ\ÉtÉgÅiJMA standard receipt softwareÅj
+      * ∆¸∞Â…∏Ω‡•Ï•ª•◊•»•Ω•’•»° JMA standard receipt software°À
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  •≥•‘°º∂ÁΩ§¿µÕ˙ŒÚ
+      * Maj/Min/Rev  Ω§¿µº‘  ∆¸…’        ∆‚Õ∆
+      *  01.00.01    µ»¿Ó    2010/08/19  ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛
+      ********************************************************************
         01  SKT1700.
             03  SKT1700-SRYYM   PIC X(16).
             03  SKT1700-SEIYMD  PIC X(22).
@@ -22,6 +26,9 @@
             03  SKT1700-RECEKA  PIC X(10).
             03  SKT1700-ADRS    PIC X(100).
             03  SKT1700-HOSPNAME    PIC X(100).
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/08/19) start
+            03  SKT1700-TOKUBETU    PIC X(10).
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2009/08/19) end
             03  SKT1700-SEIKYU-TBL      OCCURS  3 TIMES.
               05  SKT1700-NYUGAI-TBL      OCCURS  2 TIMES.
                 07  SKT1700-KENSU   PIC X(5).
