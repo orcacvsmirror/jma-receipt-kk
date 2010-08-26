@@ -41,6 +41,8 @@
       *                                  記載しないようにする
       *                                  福祉請求額の計算方法変更
       *                                  福祉、第一請求点数の計算方法変更
+      *  01.00.04    吉川    2010/08/25  「特」欄の該当公費の上限額に
+      *                                  達していない場合でも「特」とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -941,28 +943,30 @@
            END-IF
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *
-      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
-      *    公費上限額取得
-           IF  WRK-TOKURAN  =  "11" OR "15" OR "16" OR "21" OR "24"
-                               OR "38" OR "51" OR "52" OR "79"
-             PERFORM  930-PTKOHFTN-READ-SEC
-             IF  WRK-TOKURAN  =  "11" OR "51" OR "52"
-               IF  MF100-NYUGAIKBN  =  "1"
-                 MOVE  PTKOHFTN-NYUJGNGAK    TO  WRK-JGNGAK
-               ELSE
-                 MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGAK
-               END-IF
-             ELSE
-                 MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGAK
-             END-IF
-      *
-      *      上限額に満たない場合は「特」としない
-             IF  WRK-JGNGAK  >  ZERO
-             AND WRK-JGNGAK  >  WRK-SEIKYUGK-G
-               MOVE  SPACE                   TO  WRK-TOKURAN
-             END-IF
-           END-IF
-      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *=== 公費は限度額未満でも「特」対象 by Yoshikawa(2010/08/25) start
+      **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+      **    公費上限額取得
+      *     IF  WRK-TOKURAN  =  "11" OR "15" OR "16" OR "21" OR "24"
+      *                         OR "38" OR "51" OR "52" OR "79"
+      *       PERFORM  930-PTKOHFTN-READ-SEC
+      *       IF  WRK-TOKURAN  =  "11" OR "51" OR "52"
+      *         IF  MF100-NYUGAIKBN  =  "1"
+      *           MOVE  PTKOHFTN-NYUJGNGAK    TO  WRK-JGNGAK
+      *         ELSE
+      *           MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGAK
+      *         END-IF
+      *       ELSE
+      *           MOVE  PTKOHFTN-GAIJGNGAK    TO  WRK-JGNGAK
+      *       END-IF
+      **
+      **      上限額に満たない場合は「特」としない
+      *       IF  WRK-JGNGAK  >  ZERO
+      *       AND WRK-JGNGAK  >  WRK-SEIKYUGK-G
+      *         MOVE  SPACE                   TO  WRK-TOKURAN
+      *       END-IF
+      *     END-IF
+      **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *=== 公費は限度額未満でも「特」対象 by Yoshikawa(2010/08/25) end
       *
       *    老人＋在宅等で保険に限度額が有る場合の対応
            IF     RECE02-FTNMONEY(1)  >   ZERO     AND
