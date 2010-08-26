@@ -46,6 +46,7 @@
       *  01.00.10    吉川    09/12/25    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.11    吉川    10/04/07    オンライン返戻対応
+      *  01.00.12    吉川    10/08/24    中国地方豪雨対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -814,6 +815,12 @@
              END-IF
            END-IF
       *
+      *=== 中国地方豪雨対応 by Yoshikawa(2010/08/24) start
+      *    中国地方豪雨の対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)    TO  SKT3410TMP-GENMEN
+           END-IF
+      *=== 中国地方豪雨対応 by Yoshikawa(2010/08/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

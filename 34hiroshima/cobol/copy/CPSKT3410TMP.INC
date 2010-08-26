@@ -21,12 +21,16 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01   内田    06/11/22  帳票様式の変更
+      *  01.00.02   吉川    10/08/24  中国地方豪雨対応（対象者別集計）
       ************************************************************
        01  SKT3410TMP-REC.
            03  SKT3410TMP-KEY.
                05  SKT3410TMP-SYUTURYOKU            PIC  9(01).
                05  SKT3410TMP-KENKBN                PIC  X(01).
                05  SKT3410TMP-HKNJANUM              PIC  X(06).
+      *=== 中国地方豪雨対応 by Yoshikawa(2010/08/24) start
+               05  SKT3410TMP-GENMEN                PIC  X(01).
+      *=== 中国地方豪雨対応 by Yoshikawa(2010/08/24) end
            03  SKT3410TMP-HKN-AREA  OCCURS  11.
                05  SKT3410TMP-NYUGAI-TBL  OCCURS  2.
                    07  SKT3410TMP-KENSU             PIC  9(05).
