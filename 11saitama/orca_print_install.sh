@@ -7,7 +7,8 @@ usrname=`whoami`
 # Etchで使用するコードUTF-8への変換
 # echo message (default character-code EUC)
 function echomsg() {
-  if [ "${LANG}" = "ja_JP.UTF-8" ] || [ "${LANG}" = "ja_JP.UTF8" ]; then
+  if [ "${LANG}" = "ja_JP.UTF-8" ] || [ "${LANG}" = "ja_JP.UTF8" ] ||
+      [ "${LANG}" = "ja_JP.utf8" ]; then
     if [ -z $2 ]; then
       echo `echo $1 | nkf -wE`
     else
@@ -49,10 +50,6 @@ else
 	echomsg "埼玉県（総括表・地方公費）プログラムコピー異常終了!!"
 	exit
 fi
-
-# ???
-cp -af ${SITELDDEFDIR} ${ORCA_DIR}
-
 
 #不要ＰＧ（ORCBM022,ORCBM037,ORCBM038）の削除
 for f in ${SITESRCDIR}/cobol/ORCBM022.CBL ; do
