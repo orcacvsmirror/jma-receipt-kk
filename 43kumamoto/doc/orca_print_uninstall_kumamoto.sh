@@ -10,7 +10,8 @@ usrname=`whoami`
 # Etchで使用するコードUTF-8への変換
 # echo message (default character-code EUC)
 function echomsg() {
-  if [ "${LANG}" = "ja_JP.UTF-8" ] || [ "${LANG}" = "ja_JP.UTF8" ]; then
+  if [ "${LANG}" = "ja_JP.UTF-8" ] || [ "${LANG}" = "ja_JP.UTF8" ] ||
+      [ "${LANG}" = "ja_JP.utf8" ]; then
     if [ -z $2 ]; then
       echo `echo $1 | nkf -wE`
     else
