@@ -7299,11 +7299,8 @@
       <attribute name="dnode_path">
         <string>#JKYSNUM#</string>
       </attribute>
-      <attribute name="embed_text_column">
-        <int val="10"/>
-      </attribute>
       <attribute name="embed_text_string">
-        <enum val="1"/>
+        <enum val="0"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
