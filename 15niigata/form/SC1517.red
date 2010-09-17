@@ -2384,10 +2384,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O87">
       <attribute name="obj_pos">
-        <point val="11.725,5.625"/>
+        <point val="11.5837,5.625"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5735,5.38611;11.8765,5.68611"/>
+        <rectangle val="11.5837,5.38611;11.8867,5.68611"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2401,13 +2401,13 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.725,5.625"/>
+            <point val="11.5837,5.625"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.1818"/>
@@ -2420,10 +2420,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O88">
       <attribute name="obj_pos">
-        <point val="11.725,6.025"/>
+        <point val="11.5837,6.025"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5735,5.78611;11.8765,6.08611"/>
+        <rectangle val="11.5837,5.78611;11.8867,6.08611"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2437,13 +2437,13 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.725,6.025"/>
+            <point val="11.5837,6.025"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.1818"/>
@@ -2456,10 +2456,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O89">
       <attribute name="obj_pos">
-        <point val="11.725,6.425"/>
+        <point val="11.5837,6.425"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5735,6.18611;11.8765,6.48611"/>
+        <rectangle val="11.5837,6.18611;11.8867,6.48611"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2473,13 +2473,13 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.725,6.425"/>
+            <point val="11.5837,6.425"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.1818"/>
@@ -2492,10 +2492,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O90">
       <attribute name="obj_pos">
-        <point val="15.125,5.45"/>
+        <point val="14.648,5.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.5947,5.1713;15.6552,5.5213"/>
+        <rectangle val="14.648,5.1713;15.7085,5.5213"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2509,13 +2509,13 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="15.125,5.45"/>
+            <point val="14.648,5.45"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.2121"/>
@@ -6188,10 +6188,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O191">
       <attribute name="obj_pos">
-        <point val="4.15,3.95"/>
+        <point val="3.79664,3.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.746,3.31296;4.554,4.11296"/>
+        <rectangle val="3.79664,3.31296;4.60464,4.11296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHKBN[0]#</string>
@@ -6211,13 +6211,13 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.15,3.95"/>
+            <point val="3.79664,3.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4848"/>
@@ -6230,10 +6230,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O192">
       <attribute name="obj_pos">
-        <point val="6.4,3.95"/>
+        <point val="6.04664,3.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.996,3.31296;6.804,4.11296"/>
+        <rectangle val="6.04664,3.31296;6.85464,4.11296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHKBN[1]#</string>
@@ -6253,13 +6253,13 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.4,3.95"/>
+            <point val="6.04664,3.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4848"/>
@@ -6272,10 +6272,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O193">
       <attribute name="obj_pos">
-        <point val="8.875,3.95"/>
+        <point val="8.52164,3.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.471,3.31296;9.279,4.11296"/>
+        <rectangle val="8.52164,3.31296;9.32964,4.11296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHKBN[2]#</string>
@@ -6295,13 +6295,13 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.875,3.95"/>
+            <point val="8.52164,3.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4848"/>
@@ -6314,10 +6314,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O194">
       <attribute name="obj_pos">
-        <point val="11.175,3.95"/>
+        <point val="10.8216,3.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.771,3.31296;11.579,4.11296"/>
+        <rectangle val="10.8216,3.31296;11.6296,4.11296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHKBN[3]#</string>
@@ -6337,13 +6337,13 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.175,3.95"/>
+            <point val="10.8216,3.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4848"/>
@@ -6356,10 +6356,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O195">
       <attribute name="obj_pos">
-        <point val="13.525,3.95"/>
+        <point val="13.1716,3.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.121,3.31296;13.929,4.11296"/>
+        <rectangle val="13.1716,3.31296;13.9796,4.11296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHKBN[4]#</string>
@@ -6379,13 +6379,13 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="13.525,3.95"/>
+            <point val="13.1716,3.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4848"/>
@@ -6398,10 +6398,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O196">
       <attribute name="obj_pos">
-        <point val="15.925,3.95"/>
+        <point val="15.5716,3.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.521,3.31296;16.329,4.11296"/>
+        <rectangle val="15.5716,3.31296;16.3796,4.11296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHKBN[5]#</string>
@@ -6421,13 +6421,13 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="15.925,3.95"/>
+            <point val="15.5716,3.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4848"/>
@@ -6566,10 +6566,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O200">
       <attribute name="obj_pos">
-        <point val="11.725,5.8"/>
+        <point val="11.3716,5.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.3715,5.24259;12.0785,5.94259"/>
+        <rectangle val="11.3716,5.24259;12.0786,5.94259"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEX[0]#</string>
@@ -6589,13 +6589,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.725,5.8"/>
+            <point val="11.3716,5.8"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6608,10 +6608,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O201">
       <attribute name="obj_pos">
-        <point val="11.725,6.6"/>
+        <point val="11.3716,6.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.3715,6.04259;12.0785,6.74259"/>
+        <rectangle val="11.3716,6.04259;12.0786,6.74259"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEX[1]#</string>
@@ -6631,13 +6631,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.725,6.6"/>
+            <point val="11.3716,6.6"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6650,10 +6650,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O202">
       <attribute name="obj_pos">
-        <point val="14.775,5.6"/>
+        <point val="14.4746,5.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.4215,5.04259;15.1285,5.74259"/>
+        <rectangle val="14.4746,5.04259;15.1816,5.74259"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENGO[2]#</string>
@@ -6673,13 +6673,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.775,5.6"/>
+            <point val="14.4746,5.6"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6692,10 +6692,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O203">
       <attribute name="obj_pos">
-        <point val="15.425,5.6"/>
+        <point val="15.1246,5.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.0715,5.04259;15.7785,5.74259"/>
+        <rectangle val="15.1246,5.04259;15.8316,5.74259"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENGO[3]#</string>
@@ -6715,13 +6715,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="15.425,5.6"/>
+            <point val="15.1246,5.6"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6776,10 +6776,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O205">
       <attribute name="obj_pos">
-        <point val="3.55,9.85"/>
+        <point val="3.21431,9.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.1965,9.29259;3.9035,9.99259"/>
+        <rectangle val="3.21431,9.29259;3.92131,9.99259"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KYURATE[0]#</string>
@@ -6799,13 +6799,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="3.55,9.85"/>
+            <point val="3.21431,9.85"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6818,10 +6818,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O206">
       <attribute name="obj_pos">
-        <point val="3.55,10.65"/>
+        <point val="3.21431,10.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.1965,10.0926;3.9035,10.7926"/>
+        <rectangle val="3.21431,10.0926;3.92131,10.7926"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KYURATE[1]#</string>
@@ -6841,13 +6841,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="3.55,10.65"/>
+            <point val="3.21431,10.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6860,10 +6860,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O207">
       <attribute name="obj_pos">
-        <point val="3.55,11.425"/>
+        <point val="3.21431,11.425"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.1965,10.8676;3.9035,11.5676"/>
+        <rectangle val="3.21431,10.8676;3.92131,11.5676"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KYURATE[2]#</string>
@@ -6883,13 +6883,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="3.55,11.425"/>
+            <point val="3.21431,11.425"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6902,10 +6902,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O208">
       <attribute name="obj_pos">
-        <point val="13.825,11.45"/>
+        <point val="13.4893,11.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.4715,10.8926;14.1785,11.5926"/>
+        <rectangle val="13.4893,10.8926;14.1963,11.5926"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENDO[0]#</string>
@@ -6925,13 +6925,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="13.825,11.45"/>
+            <point val="13.4893,11.45"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6944,10 +6944,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O209">
       <attribute name="obj_pos">
-        <point val="18.85,11.425"/>
+        <point val="18.5143,11.425"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.4965,10.8676;19.2035,11.5676"/>
+        <rectangle val="18.5143,10.8676;19.2213,11.5676"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENDO[1]#</string>
@@ -6967,13 +6967,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.85,11.425"/>
+            <point val="18.5143,11.425"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -6986,10 +6986,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O210">
       <attribute name="obj_pos">
-        <point val="13.65,12.125"/>
+        <point val="13.3143,12.125"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.2965,11.5676;14.0035,12.2676"/>
+        <rectangle val="13.3143,11.5676;14.0213,12.2676"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENDO[2]#</string>
@@ -7009,13 +7009,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="13.65,12.125"/>
+            <point val="13.3143,12.125"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -7028,10 +7028,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O211">
       <attribute name="obj_pos">
-        <point val="16.325,12.125"/>
+        <point val="15.9893,12.125"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.9715,11.5676;16.6785,12.2676"/>
+        <rectangle val="15.9893,11.5676;16.6963,12.2676"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENDO[3]#</string>
@@ -7051,13 +7051,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.325,12.125"/>
+            <point val="15.9893,12.125"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -7070,10 +7070,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O212">
       <attribute name="obj_pos">
-        <point val="18.975,12.1"/>
+        <point val="18.6393,12.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.6215,11.5426;19.3285,12.2426"/>
+        <rectangle val="18.6393,11.5426;19.3463,12.2426"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GENDO[4]#</string>
@@ -7093,13 +7093,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.975,12.1"/>
+            <point val="18.6393,12.1"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -8498,10 +8498,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O246">
       <attribute name="obj_pos">
-        <point val="3.541,12.1831"/>
+        <point val="3.20531,12.1831"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.1875,11.6257;3.8945,12.3257"/>
+        <rectangle val="3.20531,11.6257;3.91231,12.3257"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KYURATE[3]#</string>
@@ -8521,13 +8521,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="3.541,12.1831"/>
+            <point val="3.20531,12.1831"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
