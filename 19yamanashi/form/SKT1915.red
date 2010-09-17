@@ -5633,10 +5633,10 @@
   <layer name="&#186;&#185;&#164;&#183;&#185;&#254;&#164;&#223;" visible="true">
     <object type="Embed - Text" version="0" id="O210">
       <attribute name="obj_pos">
-        <point val="10.3372,5.69788"/>
+        <point val="9.15345,5.69788"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.6302,5.14047;10.3372,5.84047"/>
+        <rectangle val="9.15345,5.14047;9.86045,5.84047"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI2#</string>
@@ -5656,13 +5656,13 @@
             <real val="0.7"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.3372,5.69788"/>
+            <point val="9.15345,5.69788"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="2"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.4242"/>
@@ -5675,10 +5675,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O211">
       <attribute name="obj_pos">
-        <point val="10.2,5.6"/>
+        <point val="9.22827,5.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.695,5.20185;10.2,5.70185"/>
+        <rectangle val="9.22827,5.20185;9.73327,5.70185"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI1#</string>
@@ -5698,13 +5698,13 @@
             <real val="0.5"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.2,5.6"/>
+            <point val="9.22827,5.6"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="2"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.303"/>
