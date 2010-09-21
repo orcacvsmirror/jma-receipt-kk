@@ -8539,10 +8539,10 @@
   <layer name="&#186;&#185;&#164;&#183;&#185;&#254;&#164;&#223;" visible="true">
     <object type="Embed - Text" version="0" id="O312">
       <attribute name="obj_pos">
-        <point val="17.7493,24.2176"/>
+        <point val="17.4666,24.2176"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.4463,23.7398;18.0523,24.3398"/>
+        <rectangle val="17.4666,23.7398;18.0726,24.3398"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKUBETU2[1]#</string>
@@ -8562,13 +8562,13 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.7493,24.2176"/>
+            <point val="17.4666,24.2176"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.3636"/>
@@ -8581,10 +8581,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O313">
       <attribute name="obj_pos">
-        <point val="17.7475,23.0615"/>
+        <point val="17.4648,23.0615"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.4445,22.5837;18.0505,23.1837"/>
+        <rectangle val="17.4648,22.5837;18.0708,23.1837"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKUBETU1[1]#</string>
@@ -8604,13 +8604,13 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.7475,23.0615"/>
+            <point val="17.4648,23.0615"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="1"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.3636"/>
