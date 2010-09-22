@@ -45,6 +45,7 @@
       *  01.00.10    吉川     09/11/17   シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.11    吉川     10/06/17   オンライン返戻対応
+      *  01.00.12    吉川     10/09/14   返戻の場合旧帳票が印字されるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -667,6 +668,11 @@
       *****************************************************************
        210-HKN-SYUKEI-SEC          SECTION.
       *
+      *=== 返戻は旧帳票で印刷されるのを修正 by Yoshikawa(2010/09/14) start
+           MOVE  RECE10-SRYYM            TO  WRK-SYMD (1:6)
+           MOVE  "01"                    TO  WRK-SYMD (7:2)
+      *=== 返戻は旧帳票で印刷されるのを修正 by Yoshikawa(2010/09/14) end
+      *
       *    入院／外来
            IF  RECE10-NYUGAIKBN  =  1
              MOVE  1  TO  IDX2
@@ -1146,7 +1152,10 @@
                                        TO  SPRT-PRIORITY
       *---(01.00.08) LINE ADD START ------------------------------------
       *     MOVE   "SKT0200.red"            TO  SPRT-PRTID
-           IF  WRK-PARA-SYOKBN  =  "1"
+      *=== 返戻は旧帳票で印刷されるのを修正 by Yoshikawa(2010/09/14) start
+      *     IF  WRK-PARA-SYOKBN  =  "1"
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      *=== 返戻は旧帳票で印刷されるのを修正 by Yoshikawa(2010/09/14) end
                MOVE   "SKT0200.red"    TO  SPRT-PRTID
            ELSE
                MOVE   "SKT0200o.red"   TO  SPRT-PRTID
@@ -1344,7 +1353,10 @@
                                        TO  SPRT-PRIORITY
       *---(01.00.08) LINE ADD START ------------------------------------
       *     MOVE   "SKT0210.red"            TO  SPRT-PRTID
-           IF  WRK-PARA-SYOKBN  =  "1"
+      *=== 返戻は旧帳票で印刷されるのを修正 by Yoshikawa(2010/09/14) start
+      *     IF  WRK-PARA-SYOKBN  =  "1"
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-200804
+      *=== 返戻は旧帳票で印刷されるのを修正 by Yoshikawa(2010/09/14) end
                MOVE   "SKT0210.red"    TO  SPRT-PRTID
            ELSE
                MOVE   "SKT0210o.red"   TO  SPRT-PRTID
