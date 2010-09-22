@@ -7455,7 +7455,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999&#163;#</string>
+            <string>#9,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
