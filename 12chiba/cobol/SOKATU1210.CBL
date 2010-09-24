@@ -45,6 +45,7 @@
       *  01.00.11    吉川    10/03/18    公費欄の値は保険の分を含めない
       *  01.00.12    吉川    10/04/02    特別療養費国保対応
       *  01.00.13    吉川    10/08/03    オンライン返戻対応
+      *  01.00.14    吉川    10/09/10    公費欄に長期の点数と負担金を記載する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1170,6 +1171,18 @@
       *    療養の給付：公費分点数
                ADD  RECE10-TOTALTEN(IDX3 + 1)   TO
                                SKT1210TMP-K-KOHTENSU(CNT-KOH)
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+             ELSE
+      *    療養の給付:診療実日数
+               ADD  RECE10-ETC-JNISSU(IDX3)    TO
+                               SKT1210TMP-K-NISSU(CNT-KOH)
+      *    療養の給付：点数
+               ADD  RECE10-ETC-TOTALTEN(IDX3)  TO
+                               SKT1210TMP-K-TENSU(CNT-KOH)
+      *    療養の給付：一部負担金
+               ADD  RECE10-ETC-FTNMONEY(IDX3)  TO
+                               SKT1210TMP-K-ITBFTN(CNT-KOH)
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
              END-IF
       *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) start
       *       IF  RECE10-SHOKUJINISSU(1)  >  ZERO
@@ -1189,15 +1202,33 @@
       *    食事療養:件数
                ADD   1  TO  SKT1210TMP-K-SKENSU(CNT-KOH)
              END-IF
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+      *      長期かどうか
+             IF    RECE10-KOHNUM(2)       =  SPACE  AND
+                   RECE10-KOHNUM(1)  NOT  =  "972"
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
       *    食事療養:日数
-             ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
-                               SKT1210TMP-K-SNISSU(CNT-KOH)
+               ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
+                                 SKT1210TMP-K-SNISSU(CNT-KOH)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
-                               SKT1210TMP-K-SKINGK(CNT-KOH)
+               ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
+                                 SKT1210TMP-K-SKINGK(CNT-KOH)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
-                               SKT1210TMP-K-SFTNGK(CNT-KOH)
+               ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
+                                 SKT1210TMP-K-SFTNGK(CNT-KOH)
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+             ELSE
+      *    食事療養:日数
+               ADD  RECE10-ETC-SHOKUJINISSU(IDX3)    TO
+                                 SKT1210TMP-K-SNISSU(CNT-KOH)
+      *    食事療養：金額
+               ADD  RECE10-ETC-SHOKUJIRYOYOHI(IDX3)  TO
+                                 SKT1210TMP-K-SKINGK(CNT-KOH)
+      *    食事療養：標準負担額
+               ADD  RECE10-ETC-SHOKUJIFTN(IDX3)      TO
+                                 SKT1210TMP-K-SFTNGK(CNT-KOH)
+             END-IF
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
       *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) end
            END-PERFORM
       *
@@ -1307,21 +1338,51 @@
       *    療養の給付：公費分点数
                ADD  RECE10-TOTALTEN(IDX3 + 1)   TO
                                SKT1210TMP-K-RKOHTENSU(CNT-KOH)
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+             ELSE
+      *    療養の給付:診療実日数
+               ADD  RECE10-ETC-JNISSU(IDX3)    TO
+                               SKT1210TMP-K-RNISSU(CNT-KOH)
+      *    療養の給付：点数
+               ADD  RECE10-ETC-TOTALTEN(IDX3)  TO
+                               SKT1210TMP-K-RTENSU(CNT-KOH)
+      *    療養の給付：一部負担金
+               ADD  RECE10-ETC-FTNMONEY(IDX3)  TO
+                               SKT1210TMP-K-RITBFTN(CNT-KOH)
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
              END-IF
       *
              IF  RECE10-SHOKUJINISSU(1)  >  ZERO
       *    食事療養:件数
                ADD   1  TO  SKT1210TMP-K-RSKENSU(CNT-KOH)
              END-IF
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+      *      長期かどうか
+             IF    RECE10-KOHNUM(2)       =  SPACE  AND
+                   RECE10-KOHNUM(1)  NOT  =  "972"
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
       *    食事療養:日数
-             ADD  RECE10-SHOKUJINISSU(1)  TO
-                               SKT1210TMP-K-RSNISSU(CNT-KOH)
+               ADD  RECE10-SHOKUJINISSU(1)  TO
+                                 SKT1210TMP-K-RSNISSU(CNT-KOH)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(1)  TO
-                               SKT1210TMP-K-RSKINGK(CNT-KOH)
+               ADD  RECE10-SHOKUJIRYOYOHI(1)  TO
+                                 SKT1210TMP-K-RSKINGK(CNT-KOH)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(1)  TO
-                               SKT1210TMP-K-RSFTNGK(CNT-KOH)
+               ADD  RECE10-SHOKUJIFTN(1)  TO
+                                 SKT1210TMP-K-RSFTNGK(CNT-KOH)
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+             ELSE
+      *    食事療養:日数
+               ADD  RECE10-ETC-SHOKUJINISSU(IDX3)    TO
+                                 SKT1210TMP-K-RSNISSU(CNT-KOH)
+      *    食事療養：金額
+               ADD  RECE10-ETC-SHOKUJIRYOYOHI(IDX3)  TO
+                                 SKT1210TMP-K-RSKINGK(CNT-KOH)
+      *    食事療養：標準負担額
+               ADD  RECE10-ETC-SHOKUJIFTN(IDX3)      TO
+                                 SKT1210TMP-K-RSFTNGK(CNT-KOH)
+             END-IF
+      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
            END-PERFORM
       *
            .
