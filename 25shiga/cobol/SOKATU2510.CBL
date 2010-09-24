@@ -46,6 +46,7 @@
       *                                    帳票様式の変更に伴う修正
       *                                    END-IF漏れ修正
       *  01.00.14    吉川    2010/04/16    印字対象番号の追加（340）
+      *  01.00.15    吉川    2010/09/16    後期高齢は県毎にまとめる
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1185,7 +1186,10 @@
       *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) end
                MOVE  1  TO  FLG-UPD
            ELSE
-               MOVE  RECE10-HKNJANUM  TO  SKT2515TMP-HKNJANUM
+      *=== 後期高齢は県毎にまとめる by Yoshikawa(2010/09/16) start
+      *         MOVE  RECE10-HKNJANUM  TO  SKT2515TMP-HKNJANUM
+               MOVE  RECE10-HKNJANUM(3:2)  TO  SKT2515TMP-PREFNUM
+      *=== 後期高齢は県毎にまとめる by Yoshikawa(2010/09/16) end
       *
                PERFORM  850-SKTTMP-READ-SEC
       *
@@ -1650,7 +1654,10 @@
       *****************************************************************
        920-TODOUHUKEN-SET-SEC  SECTION.
       *
-           EVALUATE  SKT2515TMP-HKNJANUM(3:2)
+      *=== 後期高齢は県毎にまとめる by Yoshikawa(2010/09/16) start
+      *     EVALUATE  SKT2515TMP-HKNJANUM(3:2)
+           EVALUATE  SKT2515TMP-PREFNUM
+      *=== 後期高齢は県毎にまとめる by Yoshikawa(2010/09/16) end
              WHEN  "01"  MOVE  "北海道"    TO  WRK-TODOUHUKEN
              WHEN  "02"  MOVE  "青森県"    TO  WRK-TODOUHUKEN
              WHEN  "03"  MOVE  "岩手県"    TO  WRK-TODOUHUKEN

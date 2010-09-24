@@ -20,10 +20,14 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/09/16  都道府県番号追加
       ************************************************************
        01  SKT2515TMP-REC.
            03  SKT2515TMP-KEY.
                05  SKT2515TMP-KBN                   PIC  9(01).
+      *=== 都道府県番号追加 by Yoshikawa(2010/09/16) start
+               05  SKT2515TMP-PREFNUM               PIC  X(02).
+      *=== 都道府県番号追加 by Yoshikawa(2010/09/16) end
                05  SKT2515TMP-HKNJANUM              PIC  X(06).
                05  SKT2515TMP-KYURATE               PIC  9(03).
                05  SKT2515TMP-IDX                   PIC  9(02).
