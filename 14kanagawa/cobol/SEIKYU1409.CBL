@@ -41,6 +41,7 @@
       *  01.00.07    内田     08/09/17    SPA-AREA初期化
       *  01.00.08    吉川     09/05/01    病名数が2頁以降までまたがると
       *                                   1頁目が印字されない不具合を修正
+      *  01.00.09    吉川     10/09/21    実日数がゼロの場合は0を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -171,6 +172,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z1                PIC Z.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2010/09/21) start
+           03  WRK-Z1-9              PIC Z9.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2010/09/21) end
            03  WRK-Z2                PIC ZZ.
            03  WRK-Z3                PIC ZZZ.
            03  WRK-Z5                PIC Z,ZZZ.
@@ -1168,8 +1172,12 @@
            MOVE    WRK-OUT-INPUT       TO  SC09-JKYSNUM(IDX2)
       *
       *    日数
-           MOVE    MF101-JNISSU        TO  WRK-Z2
-           MOVE    WRK-Z2              TO  SC09-NISSU  
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2010/09/21) start
+      *     MOVE    MF101-JNISSU        TO  WRK-Z2
+      *     MOVE    WRK-Z2              TO  SC09-NISSU  
+           MOVE    MF101-JNISSU        TO  WRK-Z1-9
+           MOVE    WRK-Z1-9            TO  SC09-NISSU  
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2010/09/21) end
       *
       *    点数
            MOVE    MF101-TOTALTEN      TO  WRK-Z7
