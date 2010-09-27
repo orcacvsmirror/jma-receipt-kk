@@ -33,6 +33,7 @@
       *  01.00.02    吉川    2008/10/22  在総診以外の在宅は在医総とする
       *  01.00.03    吉川    2010/02/17  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/07/01  オンライン返戻対応
+      *  01.00.05    吉川    2010/09/22  日数の桁数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -189,6 +190,9 @@
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
+           03  WRK-Z6              PIC ZZ,ZZZ.
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
            03  WRK-KOHNUM9         PIC Z9.
@@ -1007,8 +1011,12 @@
                    MOVE  SUM-KENSU(IDX1 IDX2 IDX3)  TO  WRK-Z5
                    MOVE  WRK-Z5   TO  SKT0305-KENSU(IDX1 IDX2 IDX3)
       *    療養の給付：日数
-                   MOVE  SUM-NISSU(IDX1 IDX2 IDX3)  TO  WRK-Z5
-                   MOVE  WRK-Z5   TO  SKT0305-NISSU(IDX1 IDX2 IDX3)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
+      *             MOVE  SUM-NISSU(IDX1 IDX2 IDX3)  TO  WRK-Z5
+      *             MOVE  WRK-Z5   TO  SKT0305-NISSU(IDX1 IDX2 IDX3)
+                   MOVE  SUM-NISSU(IDX1 IDX2 IDX3)  TO  WRK-Z6
+                   MOVE  WRK-Z6   TO  SKT0305-NISSU(IDX1 IDX2 IDX3)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
       *    療養の給付：点数
                    MOVE  SUM-TENSU(IDX1 IDX2 IDX3)  TO  WRK-Z9
                    MOVE  WRK-Z9   TO  SKT0305-TENSU(IDX1 IDX2 IDX3)
@@ -1025,8 +1033,12 @@
                    MOVE  SUM-ZKENSU(IDX1 IDX2)      TO  WRK-Z5
                    MOVE  WRK-Z5   TO  SKT0305-ZKENSU(IDX1 IDX2)
       *    療養の給付：日数
-                   MOVE  SUM-ZNISSU(IDX1 IDX2)      TO  WRK-Z5
-                   MOVE  WRK-Z5   TO  SKT0305-ZNISSU(IDX1 IDX2)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
+      *             MOVE  SUM-ZNISSU(IDX1 IDX2)      TO  WRK-Z5
+      *             MOVE  WRK-Z5   TO  SKT0305-ZNISSU(IDX1 IDX2)
+                   MOVE  SUM-ZNISSU(IDX1 IDX2)      TO  WRK-Z6
+                   MOVE  WRK-Z6   TO  SKT0305-ZNISSU(IDX1 IDX2)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
       *    療養の給付：点数
                    MOVE  SUM-ZTENSU(IDX1 IDX2)      TO  WRK-Z9
                    MOVE  WRK-Z9   TO  SKT0305-ZTENSU(IDX1 IDX2)
@@ -1040,8 +1052,12 @@
                MOVE  SUM-SKENSU(IDX1)           TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT0305-SKENSU(IDX1)
       *    食事療養：日数
-               MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z5
-               MOVE  WRK-Z5   TO  SKT0305-SNISSU(IDX1)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
+      *         MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0305-SNISSU(IDX1)
+               MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z6
+               MOVE  WRK-Z6   TO  SKT0305-SNISSU(IDX1)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
       *    食事療養：金額
                MOVE  SUM-STENSU(IDX1)           TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT0305-STENSU(IDX1)
@@ -1056,8 +1072,12 @@
                  MOVE  SUM-GKENSU(IDX1 IDX2)        TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT0305-GKENSU(IDX1 IDX2)
       *    療養の給付：日数
-                 MOVE  SUM-GNISSU(IDX1 IDX2)        TO  WRK-Z5
-                 MOVE  WRK-Z5   TO  SKT0305-GNISSU(IDX1 IDX2)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
+      *           MOVE  SUM-GNISSU(IDX1 IDX2)        TO  WRK-Z5
+      *           MOVE  WRK-Z5   TO  SKT0305-GNISSU(IDX1 IDX2)
+                 MOVE  SUM-GNISSU(IDX1 IDX2)        TO  WRK-Z7
+                 MOVE  WRK-Z7   TO  SKT0305-GNISSU(IDX1 IDX2)
+      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
       *    療養の給付：点数
                  MOVE  SUM-GTENSU(IDX1 IDX2)        TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT0305-GTENSU(IDX1 IDX2)

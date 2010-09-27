@@ -46,7 +46,7 @@
           </element>
           <element name="NISSU" occurs="1">
             <appinfo>
-              <embed object="string" length="5"/>
+              <embed object="string" length="6"/>
             </appinfo>
           </element>
           <element name="TENSU" occurs="1">
@@ -66,7 +66,7 @@
         </element>
         <element name="ZNISSU" occurs="1">
           <appinfo>
-            <embed object="string" length="5"/>
+            <embed object="string" length="6"/>
           </appinfo>
         </element>
         <element name="ZTENSU" occurs="1">
@@ -85,7 +85,7 @@
         </element>
         <element name="SNISSU" occurs="1">
           <appinfo>
-            <embed object="string" length="5"/>
+            <embed object="string" length="6"/>
           </appinfo>
         </element>
         <element name="STENSU" occurs="1">
@@ -104,7 +104,7 @@
         </element>
         <element name="GNISSU" occurs="1">
           <appinfo>
-            <embed object="string" length="5"/>
+            <embed object="string" length="7"/>
           </appinfo>
         </element>
         <element name="GTENSU" occurs="1">
@@ -5125,10 +5125,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O152">
       <attribute name="obj_pos">
-        <point val="8.7844,8.23182"/>
+        <point val="8.99641,8.23182"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,7.9133;8.7844,8.3133"/>
+        <rectangle val="7.54201,7.9133;8.99641,8.3133"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[0].PREF-TBL[0].NISSU#</string>
@@ -5139,7 +5139,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5148,7 +5148,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,8.23182"/>
+            <point val="8.99641,8.23182"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5671,10 +5671,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O165">
       <attribute name="obj_pos">
-        <point val="8.7844,8.82652"/>
+        <point val="8.99641,8.82652"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,8.508;8.7844,8.908"/>
+        <rectangle val="7.54201,8.508;8.99641,8.908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[1].PREF-TBL[0].NISSU#</string>
@@ -5685,7 +5685,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5694,7 +5694,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,8.82652"/>
+            <point val="8.99641,8.82652"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5755,10 +5755,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O167">
       <attribute name="obj_pos">
-        <point val="8.7844,9.47348"/>
+        <point val="8.99641,9.47348"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,9.15496;8.7844,9.55496"/>
+        <rectangle val="7.54201,9.15496;8.99641,9.55496"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[0].PREF-TBL[0].NISSU#</string>
@@ -5769,7 +5769,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5778,7 +5778,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,9.47348"/>
+            <point val="8.99641,9.47348"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5839,10 +5839,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O169">
       <attribute name="obj_pos">
-        <point val="8.7844,10.0006"/>
+        <point val="8.99641,10.0006"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,9.68208;8.7844,10.0821"/>
+        <rectangle val="7.54201,9.68208;8.99641,10.0821"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[1].PREF-TBL[0].NISSU#</string>
@@ -5853,7 +5853,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5862,7 +5862,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,10.0006"/>
+            <point val="8.99641,10.0006"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5923,10 +5923,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O171">
       <attribute name="obj_pos">
-        <point val="8.7844,10.6177"/>
+        <point val="8.99641,10.6177"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,10.2992;8.7844,10.6992"/>
+        <rectangle val="7.54201,10.2992;8.99641,10.6992"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI-TBL[0].ZPREF-TBL[0].ZNISSU#</string>
@@ -5937,7 +5937,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5946,7 +5946,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,10.6177"/>
+            <point val="8.99641,10.6177"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6007,10 +6007,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O173">
       <attribute name="obj_pos">
-        <point val="8.7844,11.2177"/>
+        <point val="8.99641,11.2177"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,10.8992;8.7844,11.2992"/>
+        <rectangle val="7.54201,10.8992;8.99641,11.2992"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI-TBL[1].ZPREF-TBL[0].ZNISSU#</string>
@@ -6021,7 +6021,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6030,7 +6030,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,11.2177"/>
+            <point val="8.99641,11.2177"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6091,10 +6091,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O175">
       <attribute name="obj_pos">
-        <point val="8.7844,12.4354"/>
+        <point val="8.99641,12.4354"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,12.1169;8.7844,12.5169"/>
+        <rectangle val="7.54201,12.1169;8.99641,12.5169"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SKJ-TBL.SPREF-TBL[0].SNISSU#</string>
@@ -6105,7 +6105,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6114,7 +6114,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,12.4354"/>
+            <point val="8.99641,12.4354"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6175,10 +6175,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O177">
       <attribute name="obj_pos">
-        <point val="8.7844,11.8177"/>
+        <point val="8.99641,11.8177"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,11.4992;8.7844,11.8992"/>
+        <rectangle val="7.29961,11.4992;8.99641,11.8992"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL[0].GPREF-TBL[0].GNISSU#</string>
@@ -6189,7 +6189,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6198,7 +6198,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,11.8177"/>
+            <point val="8.99641,11.8177"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6259,10 +6259,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O179">
       <attribute name="obj_pos">
-        <point val="8.7844,13.0354"/>
+        <point val="8.99641,13.0354"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5724,12.7169;8.7844,13.1169"/>
+        <rectangle val="7.29961,12.7169;8.99641,13.1169"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL[1].GPREF-TBL[0].GNISSU#</string>
@@ -6273,7 +6273,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6282,7 +6282,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.7844,13.0354"/>
+            <point val="8.99641,13.0354"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6721,10 +6721,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O190">
       <attribute name="obj_pos">
-        <point val="16.3982,8.25303"/>
+        <point val="16.5042,8.25303"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,7.93451;16.3982,8.33451"/>
+        <rectangle val="15.0498,7.93451;16.5042,8.33451"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[0].PREF-TBL[1].NISSU#</string>
@@ -6735,7 +6735,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6744,7 +6744,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,8.25303"/>
+            <point val="16.5042,8.25303"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6847,10 +6847,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O193">
       <attribute name="obj_pos">
-        <point val="16.3982,8.82652"/>
+        <point val="16.5042,8.82652"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,8.508;16.3982,8.908"/>
+        <rectangle val="15.0498,8.508;16.5042,8.908"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[1].PREF-TBL[1].NISSU#</string>
@@ -6861,7 +6861,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6870,7 +6870,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,8.82652"/>
+            <point val="16.5042,8.82652"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6973,10 +6973,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O196">
       <attribute name="obj_pos">
-        <point val="16.3982,9.47348"/>
+        <point val="16.5042,9.47348"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,9.15496;16.3982,9.55496"/>
+        <rectangle val="15.0498,9.15496;16.5042,9.55496"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[0].PREF-TBL[1].NISSU#</string>
@@ -6987,7 +6987,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6996,7 +6996,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,9.47348"/>
+            <point val="16.5042,9.47348"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7099,10 +7099,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O199">
       <attribute name="obj_pos">
-        <point val="16.3982,10.0006"/>
+        <point val="16.5042,10.0006"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,9.68208;16.3982,10.0821"/>
+        <rectangle val="15.0498,9.68208;16.5042,10.0821"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[1].PREF-TBL[1].NISSU#</string>
@@ -7113,7 +7113,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7122,7 +7122,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,10.0006"/>
+            <point val="16.5042,10.0006"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7225,10 +7225,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O202">
       <attribute name="obj_pos">
-        <point val="16.3982,10.6177"/>
+        <point val="16.5042,10.6177"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,10.2992;16.3982,10.6992"/>
+        <rectangle val="15.0498,10.2992;16.5042,10.6992"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI-TBL[0].ZPREF-TBL[1].ZNISSU#</string>
@@ -7239,7 +7239,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7248,7 +7248,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,10.6177"/>
+            <point val="16.5042,10.6177"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7351,10 +7351,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O205">
       <attribute name="obj_pos">
-        <point val="16.3982,11.2177"/>
+        <point val="16.5042,11.2177"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,10.8992;16.3982,11.2992"/>
+        <rectangle val="15.0498,10.8992;16.5042,11.2992"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI-TBL[1].ZPREF-TBL[1].ZNISSU#</string>
@@ -7365,7 +7365,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7374,7 +7374,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,11.2177"/>
+            <point val="16.5042,11.2177"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7477,10 +7477,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O208">
       <attribute name="obj_pos">
-        <point val="16.3982,12.4354"/>
+        <point val="16.5042,12.4354"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,12.1169;16.3982,12.5169"/>
+        <rectangle val="15.0498,12.1169;16.5042,12.5169"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SKJ-TBL.SPREF-TBL[1].SNISSU#</string>
@@ -7491,7 +7491,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7500,7 +7500,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,12.4354"/>
+            <point val="16.5042,12.4354"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7603,10 +7603,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O211">
       <attribute name="obj_pos">
-        <point val="16.3982,11.8177"/>
+        <point val="16.5042,11.8177"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1862,11.4992;16.3982,11.8992"/>
+        <rectangle val="14.8074,11.4992;16.5042,11.8992"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL[0].GPREF-TBL[1].GNISSU#</string>
@@ -7617,7 +7617,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7626,7 +7626,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.3982,11.8177"/>
+            <point val="16.5042,11.8177"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7729,10 +7729,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O214">
       <attribute name="obj_pos">
-        <point val="16.4159,13.0354"/>
+        <point val="16.5219,13.0354"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.2039,12.7169;16.4159,13.1169"/>
+        <rectangle val="14.8251,12.7169;16.5219,13.1169"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL[1].GPREF-TBL[1].GNISSU#</string>
@@ -7743,7 +7743,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7752,7 +7752,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.4159,13.0354"/>
+            <point val="16.5219,13.0354"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>

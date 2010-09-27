@@ -23,6 +23,7 @@
       ********************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/09/22  日数のバイト数増加
       ********************************************************************
        01  SKT0305.
       *    印刷年月
@@ -48,7 +49,10 @@
       *    件数
                        09  SKT0305-KENSU   PIC X(05).
       *    日数
-                       09  SKT0305-NISSU   PIC X(05).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) start
+      *                 09  SKT0305-NISSU   PIC X(05).
+                       09  SKT0305-NISSU   PIC X(06).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) end
       *    点数
                        09  SKT0305-TENSU   PIC X(09).
       *    在宅テーブル
@@ -58,7 +62,10 @@
       *    件数
                    07  SKT0305-ZKENSU      PIC X(5).
       *    日数
-                   07  SKT0305-ZNISSU      PIC X(5).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) start
+      *             07  SKT0305-ZNISSU      PIC X(5).
+                   07  SKT0305-ZNISSU      PIC X(6).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) end
       *    点数
                    07  SKT0305-ZTENSU      PIC X(9).
       *    食事療養・生活療養テーブル
@@ -68,7 +75,10 @@
       *    件数
                    07  SKT0305-SKENSU      PIC X(5).
       *    日数
-                   07  SKT0305-SNISSU      PIC X(5).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) start
+      *             07  SKT0305-SNISSU      PIC X(5).
+                   07  SKT0305-SNISSU      PIC X(6).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) end
       *    点数
                    07  SKT0305-STENSU      PIC X(9).
       *    合計テーブル
@@ -78,7 +88,10 @@
       *    件数
                    07  SKT0305-GKENSU      PIC X(5).
       *    日数
-                   07  SKT0305-GNISSU      PIC X(5).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) start
+      *             07  SKT0305-GNISSU      PIC X(5).
+                   07  SKT0305-GNISSU      PIC X(7).
+      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) end
       *    点数
                    07  SKT0305-GTENSU      PIC X(9).
       *    請求先テーブル（県内）
