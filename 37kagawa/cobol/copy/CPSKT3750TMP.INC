@@ -20,11 +20,15 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/09/24  主科対応
       ************************************************************
        01  SKT3750TMP-REC.
            03  SKT3750TMP-KEY.
                05  SKT3750TMP-SYUTURYOKU            PIC  9(01).
                05  SKT3750TMP-HKNJANUM              PIC  X(06).
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+               05  SKT3750TMP-RECEKA                PIC  X(02).
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
                05  SKT3750TMP-ZAITAKU               PIC  X(01).
            03  SKT3750TMP-HKN-AREA  OCCURS  11.
                05  SKT3750TMP-NYUGAI-TBL  OCCURS  2.

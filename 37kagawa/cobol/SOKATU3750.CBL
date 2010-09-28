@@ -42,6 +42,7 @@
       *  01.00.08    吉川    09/12/25    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.09    吉川    10/05/13    オンライン返戻対応
+      *  01.00.10    吉川    10/09/24    主科対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -280,6 +281,14 @@
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
       *--- (2008/12/17) line add end   monma --------------------------
+      *
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    診療科目情報
+           COPY    "CPSK1005.INC".
+      *
+      *    主科設定情報
+           COPY    "CPSK2009.INC".
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -545,6 +554,24 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    主科設定情報
+           INITIALIZE                  SYS-2009-REC
+           MOVE    "2009"              TO  SYS-2009-KANRICD
+           MOVE    "*"                 TO  SYS-2009-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2009-STYUKYMD(1:6)
+                                           SYS-2009-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2009-STYUKYMD(7:2)
+                                           SYS-2009-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2009-HOSPNUM
+           MOVE    SYS-2009-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2009-REC
+           END-IF
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
+      *
            PERFORM  110-INI-FILE-SEC
       *
            EVALUATE    WRK-PARA-SYOKBN 
@@ -701,9 +728,21 @@
              END-IF
            END-IF
       *
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    診療科
+           MOVE     RECE10-RECEKA   TO   SKT3750TMP-RECEKA
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
+      *
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
+      *
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    全科合計（シス管の主科設定で科別としているなら）
+           IF  SYS-2009-SYUKA-KOKUHO  =  1
+             PERFORM  20011-GOKEI-SET-SEC
+           END-IF
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -978,6 +1017,49 @@
            .
        220-KOH-SYUKEI-EXT.
            EXIT.
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *****************************************************************
+      *    全科合計処理
+      *****************************************************************
+       20011-GOKEI-SET-SEC          SECTION.
+      *
+      *TMP-FILE キーセット
+      *
+           INITIALIZE       SKT3750TMP-REC
+           INITIALIZE       SKT3750TMP-HKNJANUM
+      *
+           IF  RECE10-HKNJANUM(7:2)  =  SPACE
+             MOVE  RECE10-HKNJANUM(1:6)  TO  SKT3750TMP-HKNJANUM(1:6)
+           ELSE
+             MOVE  RECE10-HKNJANUM(3:6)  TO  SKT3750TMP-HKNJANUM(1:6)
+           END-IF
+      *
+      *    出力順設定
+           IF     YUSEN-HKNJANUM    =    SKT3750TMP-HKNJANUM
+             MOVE        1          TO   SKT3750TMP-SYUTURYOKU
+           ELSE
+             IF     RECE10-PREFKBN  =    "1"
+               IF   SKT3750TMP-HKNJANUM(3:1)  =  "3"
+                 MOVE    3          TO   SKT3750TMP-SYUTURYOKU
+               ELSE
+                 MOVE    2          TO   SKT3750TMP-SYUTURYOKU
+               END-IF
+             ELSE
+               MOVE      9          TO   SKT3750TMP-SYUTURYOKU
+             END-IF
+           END-IF
+      *
+      *    診療科
+           MOVE     "99"            TO   SKT3750TMP-RECEKA
+      *
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           PERFORM  210-HKN-SYUKEI-SEC
+      *
+           .
+       20011-GOKEI-SET-EXT.
+           EXIT.
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -1103,6 +1185,30 @@
       *       MOVE    "◯"                TO  SKT3750-ZAI2
       *     END-IF
       *****
+      *
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    診療科
+           INITIALIZE                  SYS-1005-REC
+           IF  (SKT3750TMP-RECEKA  NOT =  ZERO)
+           AND (SKT3750TMP-RECEKA  NOT =  "99")
+      *    診療科目情報取得
+             INITIALIZE                  SYS-1005-REC
+             MOVE    "1005"              TO  SYS-1005-KANRICD
+             MOVE    SKT3750TMP-RECEKA   TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                         TO  SYS-1005-STYUKYMD(1:6)
+                                             SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"                TO  SYS-1005-STYUKYMD(7:2)
+                                             SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM         TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC        TO  MCPDATA-REC
+             PERFORM 910-SYSKANRI-INV-SEC
+             IF      FLG-SYSKANRI        =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME1 TO  SKT3750-RECEKA
+             END-IF
+           END-IF
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
       *
       *    ページ番号
              MOVE    CNT-PAGE            TO  WRK-Z4
@@ -1239,6 +1345,30 @@
       *       MOVE    "◯"                TO  SKT3760-ZAI2
       *     END-IF
       *****
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    診療科
+           INITIALIZE                  SYS-1005-REC
+           IF  (SKT3750TMP-RECEKA  NOT =  ZERO)
+           AND (SKT3750TMP-RECEKA  NOT =  "99")
+      *    診療科目情報取得
+             INITIALIZE                  SYS-1005-REC
+             MOVE    "1005"              TO  SYS-1005-KANRICD
+             MOVE    SKT3750TMP-RECEKA   TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                         TO  SYS-1005-STYUKYMD(1:6)
+                                             SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"                TO  SYS-1005-STYUKYMD(7:2)
+                                             SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM         TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC        TO  MCPDATA-REC
+             PERFORM 910-SYSKANRI-INV-SEC
+             IF      FLG-SYSKANRI        =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME1 TO  SKT3760-RECEKA
+             END-IF
+           END-IF
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
+      *
            INITIALIZE                    IDX4
       *
       *    ページ番号

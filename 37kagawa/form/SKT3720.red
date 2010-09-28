@@ -36,6 +36,11 @@
         <embed object="string" length="20"/>
       </appinfo>
     </element>
+    <element name="RECEKA" occurs="1">
+      <appinfo>
+        <embed object="string" length="20"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU" occurs="11">
       <element name="SKENSU" occurs="1">
         <appinfo>
@@ -1297,7 +1302,7 @@
         <point val="1.23853,26.0941"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.23853,25.8658;1.84453,26.1658"/>
+        <rectangle val="1.23853,25.8552;1.84453,26.1552"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1333,7 +1338,7 @@
         <point val="1.98853,26.0941"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.98853,25.8658;2.47333,26.1658"/>
+        <rectangle val="1.98853,25.8552;2.47333,26.1552"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1369,7 +1374,7 @@
         <point val="4.33853,26.0941"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.33853,25.8658;8.27753,26.1658"/>
+        <rectangle val="4.33853,25.8552;8.27753,26.1552"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1405,7 +1410,7 @@
         <point val="1.98853,26.4295"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.98853,26.2012;10.6543,26.5012"/>
+        <rectangle val="1.98853,26.1906;10.6543,26.4906"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1441,7 +1446,7 @@
         <point val="6.50859,2.4392"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.50859,1.98256;16.8106,2.58256"/>
+        <rectangle val="6.50859,1.96142;16.8106,2.56142"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1477,7 +1482,7 @@
         <point val="9.23359,3.1392"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.23359,2.75867;12.8696,3.25867"/>
+        <rectangle val="9.23359,2.74105;12.8696,3.24105"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1513,7 +1518,7 @@
         <point val="11.5086,4.9392"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5086,4.63478;12.3166,5.03478"/>
+        <rectangle val="11.5086,4.62068;12.3166,5.02068"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1549,7 +1554,7 @@
         <point val="14.2586,4.9392"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.2586,4.55867;17.7936,5.05867"/>
+        <rectangle val="14.2586,4.54105;17.7936,5.04105"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1585,7 +1590,7 @@
         <point val="11.4556,5.7392"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.4556,5.43478;12.2636,5.83478"/>
+        <rectangle val="11.4556,5.42068;12.2636,5.82068"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1621,7 +1626,7 @@
         <point val="3.20859,2.5642"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.20859,2.18367;3.71359,2.68367"/>
+        <rectangle val="3.20859,2.16605;3.71359,2.66605"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1657,7 +1662,7 @@
         <point val="5.15859,2.5642"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.15859,2.18367;6.16859,2.68367"/>
+        <rectangle val="5.15859,2.16605;6.16859,2.66605"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1693,7 +1698,7 @@
         <point val="19.4354,2.41085"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.4354,2.18253;19.7384,5.48253"/>
+        <rectangle val="19.4354,2.17196;19.7384,5.47196"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1739,7 +1744,7 @@
         <point val="2.8,8.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8,8.1869;3.0828,11.2669"/>
+        <rectangle val="2.8,8.17704;3.0828,11.257"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1785,7 +1790,7 @@
         <point val="1.69045,6.99403"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.69045,6.68961;3.95285,7.08961"/>
+        <rectangle val="1.69045,6.67551;3.95285,7.07551"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1821,7 +1826,7 @@
         <point val="1.7008,7.7161"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.7008,7.41168;4.044,7.81168"/>
+        <rectangle val="1.7008,7.39758;4.044,7.79758"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1857,7 +1862,7 @@
         <point val="5.75,6.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.75,6.67168;7.8104,6.97168"/>
+        <rectangle val="5.75,6.66111;7.8104,6.96111"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1893,7 +1898,7 @@
         <point val="4.59088,7.79415"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.59088,7.56583;5.56048,7.86583"/>
+        <rectangle val="4.59088,7.55526;5.56048,7.85526"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1929,7 +1934,7 @@
         <point val="6.90085,7.75146"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.90085,7.52314;8.41585,7.82314"/>
+        <rectangle val="6.90085,7.51257;8.41585,7.81257"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1965,7 +1970,7 @@
         <point val="10.2132,7.00377"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.2132,6.77545;11.5464,7.07545"/>
+        <rectangle val="10.2132,6.76488;11.5464,7.06488"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2001,7 +2006,7 @@
         <point val="10.2443,7.62709"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.2443,7.39877;11.5169,7.69877"/>
+        <rectangle val="10.2443,7.3882;11.5169,7.6882"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2037,7 +2042,7 @@
         <point val="13.0039,6.92572"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.0039,6.6974;15.2461,6.9974"/>
+        <rectangle val="13.0039,6.68683;15.2461,6.98683"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2073,7 +2078,7 @@
         <point val="12.957,7.78317"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.957,7.55485;13.26,7.85485"/>
+        <rectangle val="12.957,7.54428;13.26,7.84428"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2109,7 +2114,7 @@
         <point val="14.8896,7.76549"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.8896,7.53717;15.1926,7.83717"/>
+        <rectangle val="14.8896,7.5266;15.1926,7.8266"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2145,7 +2150,7 @@
         <point val="16.9576,6.93305"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.9576,6.70473;18.2908,7.00473"/>
+        <rectangle val="16.9576,6.69416;18.2908,6.99416"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2181,7 +2186,7 @@
         <point val="16.2325,7.75817"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.2325,7.52985;16.8385,7.82985"/>
+        <rectangle val="16.2325,7.51928;16.8385,7.81928"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2217,7 +2222,7 @@
         <point val="17.518,7.74781"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.518,7.51949;18.8512,7.81949"/>
+        <rectangle val="17.518,7.50892;18.8512,7.80892"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2253,7 +2258,7 @@
         <point val="19.2329,7.00806"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2329,6.77974;19.8389,7.07974"/>
+        <rectangle val="19.2329,6.76917;19.8389,7.06917"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2289,7 +2294,7 @@
         <point val="19.2579,7.69048"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2579,7.46216;19.8639,7.76216"/>
+        <rectangle val="19.2579,7.45159;19.8639,7.75159"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2325,7 +2330,7 @@
         <point val="1.98283,26.7398"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.98283,26.5115;12.1636,26.8115"/>
+        <rectangle val="1.98283,26.5009;12.1636,26.8009"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2361,7 +2366,7 @@
         <point val="1.2374,9.77086"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2374,9.58059;1.7424,9.83059"/>
+        <rectangle val="1.2374,9.57179;1.7424,9.82179"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2397,7 +2402,7 @@
         <point val="3.91692,8.23592"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.91692,8.08371;4.11892,8.88371"/>
+        <rectangle val="3.91692,8.07666;4.11892,8.87666"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2436,7 +2441,7 @@
         <point val="3.65,10.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.65,9.8369;3.9328,10.3969"/>
+        <rectangle val="3.65,9.82704;3.9328,10.387"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2473,7 +2478,7 @@
         <point val="3.6625,10.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.6625,10.7369;3.9453,11.2969"/>
+        <rectangle val="3.6625,10.727;3.9453,11.287"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2510,7 +2515,7 @@
         <point val="2.05,8.58809"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,8.37499;2.3328,8.65499"/>
+        <rectangle val="2.05,8.36513;2.3328,8.64513"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2546,7 +2551,7 @@
         <point val="2.05,9.41907"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,9.20597;2.3328,9.48597"/>
+        <rectangle val="2.05,9.19611;2.3328,9.47611"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2582,7 +2587,7 @@
         <point val="2.05,10.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,10.0369;2.3328,10.3169"/>
+        <rectangle val="2.05,10.027;2.3328,10.307"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2618,7 +2623,7 @@
         <point val="2.05,11.081"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,10.8679;2.3328,11.1479"/>
+        <rectangle val="2.05,10.858;2.3328,11.138"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2654,7 +2659,7 @@
         <point val="2.8,12.7783"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8,12.5652;3.0828,14.5252"/>
+        <rectangle val="2.8,12.5553;3.0828,14.5153"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2696,7 +2701,7 @@
         <point val="3.65,11.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.65,11.5369;3.9328,12.0969"/>
+        <rectangle val="3.65,11.527;3.9328,12.087"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2733,7 +2738,7 @@
         <point val="3.5,14.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.5,14.1369;3.7828,14.6969"/>
+        <rectangle val="3.5,14.127;3.7828,14.687"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2770,7 +2775,7 @@
         <point val="3.8,14.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.8,14.1369;4.0828,14.6969"/>
+        <rectangle val="3.8,14.127;4.0828,14.687"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2807,7 +2812,7 @@
         <point val="2.05,11.9225"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,11.7094;2.3328,11.9894"/>
+        <rectangle val="2.05,11.6995;2.3328,11.9795"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2843,7 +2848,7 @@
         <point val="2.05,12.6827"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,12.4696;2.3328,12.7496"/>
+        <rectangle val="2.05,12.4597;2.3328,12.7397"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2879,7 +2884,7 @@
         <point val="2.05,13.5314"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,13.3183;2.3328,13.5983"/>
+        <rectangle val="2.05,13.3084;2.3328,13.5884"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2915,7 +2920,7 @@
         <point val="2.05,14.3624"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,14.1493;2.3328,14.4293"/>
+        <rectangle val="2.05,14.1394;2.3328,14.4194"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2951,7 +2956,7 @@
         <point val="2.05,15.2869"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,15.0738;2.3328,15.3538"/>
+        <rectangle val="2.05,15.0639;2.3328,15.3439"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2987,7 +2992,7 @@
         <point val="3.6625,15.175"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.6625,14.9619;3.9453,15.5219"/>
+        <rectangle val="3.6625,14.952;3.9453,15.512"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3024,7 +3029,7 @@
         <point val="1.25198,13.5985"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.25198,13.4082;1.75698,13.6582"/>
+        <rectangle val="1.25198,13.3994;1.75698,13.6494"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3060,7 +3065,7 @@
         <point val="1.25198,16.6431"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.25198,16.4528;1.75698,16.7028"/>
+        <rectangle val="1.25198,16.444;1.75698,16.694"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3096,7 +3101,7 @@
         <point val="2.8,16.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.8,15.9369;3.0828,17.0569"/>
+        <rectangle val="2.8,15.927;3.0828,17.047"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3135,7 +3140,7 @@
         <point val="3.65,16"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.65,15.7869;3.9328,16.3469"/>
+        <rectangle val="3.65,15.777;3.9328,16.337"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3172,7 +3177,7 @@
         <point val="3.65,16.8664"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.65,16.6533;3.9328,17.2133"/>
+        <rectangle val="3.65,16.6434;3.9328,17.2034"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3209,7 +3214,7 @@
         <point val="2.05,16.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,15.9369;2.3328,16.2169"/>
+        <rectangle val="2.05,15.927;2.3328,16.207"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3245,7 +3250,7 @@
         <point val="2.05,16.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,16.7369;2.3328,17.0169"/>
+        <rectangle val="2.05,16.727;2.3328,17.007"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3281,7 +3286,7 @@
         <point val="1.29697,17.8807"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.29697,17.5763;3.72097,17.9763"/>
+        <rectangle val="1.29697,17.5622;3.72097,17.9622"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3317,7 +3322,7 @@
         <point val="1.25496,19.0123"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.25496,18.822;1.75996,19.072"/>
+        <rectangle val="1.25496,18.8132;1.75996,19.0632"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3353,7 +3358,7 @@
         <point val="2.05,19"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,18.8097;2.3025,19.0597"/>
+        <rectangle val="2.05,18.8009;2.3025,19.0509"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3389,7 +3394,7 @@
         <point val="2.93459,18.8219"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.93459,18.6088;3.21739,19.1688"/>
+        <rectangle val="2.93459,18.5989;3.21739,19.1589"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3426,7 +3431,7 @@
         <point val="3.3766,18.8219"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3766,18.6088;3.71596,19.1688"/>
+        <rectangle val="3.3766,18.5989;3.71596,19.1589"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3463,7 +3468,7 @@
         <point val="2.05,19.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,19.7097;2.3025,19.9597"/>
+        <rectangle val="2.05,19.7009;2.3025,19.9509"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3499,7 +3504,7 @@
         <point val="2.05,20.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,20.7097;2.3025,20.9597"/>
+        <rectangle val="2.05,20.7009;2.3025,20.9509"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3535,7 +3540,7 @@
         <point val="2.05,21.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,21.7597;2.3025,22.0097"/>
+        <rectangle val="2.05,21.7509;2.3025,22.0009"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3571,7 +3576,7 @@
         <point val="2.05,22.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,22.7097;2.3025,22.9597"/>
+        <rectangle val="2.05,22.7009;2.3025,22.9509"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3607,7 +3612,7 @@
         <point val="2.05,23.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,23.7097;2.3025,23.9597"/>
+        <rectangle val="2.05,23.7009;2.3025,23.9509"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3643,7 +3648,7 @@
         <point val="2.05,24.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.05,24.7097;2.3025,24.9597"/>
+        <rectangle val="2.05,24.7009;2.3025,24.9509"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3676,10 +3681,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O124">
       <attribute name="obj_pos">
-        <point val="2.02354,3.97908"/>
+        <point val="2.02354,3.82007"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.02354,3.75076;3.84154,4.05076"/>
+        <rectangle val="2.02354,3.58118;3.84154,3.88118"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3693,7 +3698,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="2.02354,3.97908"/>
+            <point val="2.02354,3.82007"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3712,10 +3717,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O125">
       <attribute name="obj_pos">
-        <point val="2.0161,4.44346"/>
+        <point val="2.0161,4.28445"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.0161,4.21514;3.7735,4.51514"/>
+        <rectangle val="2.0161,4.04556;3.7735,4.34556"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3729,7 +3734,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="2.0161,4.44346"/>
+            <point val="2.0161,4.28445"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3748,10 +3753,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O126">
       <attribute name="obj_pos">
-        <point val="1.99842,4.88546"/>
+        <point val="1.99842,4.72645"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.99842,4.65714;3.75582,4.95714"/>
+        <rectangle val="1.99842,4.48756;3.75582,4.78756"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3765,7 +3770,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.99842,4.88546"/>
+            <point val="1.99842,4.72645"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3784,10 +3789,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O127">
       <attribute name="obj_pos">
-        <point val="2.03378,5.57499"/>
+        <point val="2.03378,5.41598"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.03378,5.34667;3.79118,5.64667"/>
+        <rectangle val="2.03378,5.17709;3.79118,5.47709"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3801,7 +3806,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="2.03378,5.57499"/>
+            <point val="2.03378,5.41598"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3823,7 +3828,7 @@
         <point val="9.20764,8.27221"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.20764,8.10478;9.42984,8.32478"/>
+        <rectangle val="9.20764,8.09702;9.42984,8.31702"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3859,7 +3864,7 @@
         <point val="11.8597,8.26271"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.8597,8.09528;12.0819,8.31528"/>
+        <rectangle val="11.8597,8.08752;12.0819,8.30752"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3895,7 +3900,7 @@
         <point val="13.7624,8.25867"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.7624,8.09124;13.9846,8.31124"/>
+        <rectangle val="13.7624,8.08348;13.9846,8.30348"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3931,7 +3936,7 @@
         <point val="15.725,8.24099"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.725,8.07356;15.9472,8.29356"/>
+        <rectangle val="15.725,8.0658;15.9472,8.2858"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3967,7 +3972,7 @@
         <point val="18.8261,8.24503"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.8261,8.0776;19.0483,8.2976"/>
+        <rectangle val="18.8261,8.06984;19.0483,8.28984"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4003,7 +4008,7 @@
         <point val="1.98968,27.069"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.98968,26.8407;10.9585,27.1407"/>
+        <rectangle val="1.98968,26.8301;10.9585,27.1301"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4039,7 +4044,7 @@
         <point val="1.975,27.4095"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.975,27.1812;18.8218,27.4812"/>
+        <rectangle val="1.975,27.1706;18.8218,27.4706"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4075,7 +4080,7 @@
         <point val="2.375,27.7595"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.375,27.5312;5.102,27.8312"/>
+        <rectangle val="2.375,27.5206;5.102,27.8206"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4111,7 +4116,7 @@
         <point val="3.6625,8.23592"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.6625,8.08371;3.8645,8.88371"/>
+        <rectangle val="3.6625,8.07666;3.8645,8.87666"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4150,7 +4155,7 @@
         <point val="3.4375,8.33592"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.4375,8.18371;3.6395,8.78371"/>
+        <rectangle val="3.4375,8.17666;3.6395,8.77666"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4188,7 +4193,7 @@
         <point val="3.90442,9.19729"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.90442,9.04508;4.10642,9.64508"/>
+        <rectangle val="3.90442,9.03803;4.10642,9.63803"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4226,7 +4231,7 @@
         <point val="3.6625,9.19729"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.6625,9.04508;3.8645,9.64508"/>
+        <rectangle val="3.6625,9.03803;3.8645,9.63803"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4264,7 +4269,7 @@
         <point val="3.4375,9.19729"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.4375,9.04508;3.6395,9.24508"/>
+        <rectangle val="3.4375,9.03803;3.6395,9.23803"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4300,7 +4305,7 @@
         <point val="3.91692,12.5397"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.91692,12.3875;4.11892,12.9875"/>
+        <rectangle val="3.91692,12.3804;4.11892,12.9804"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4338,7 +4343,7 @@
         <point val="3.675,12.5397"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.675,12.3875;3.877,12.9875"/>
+        <rectangle val="3.675,12.3804;3.877,12.9804"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4376,7 +4381,7 @@
         <point val="3.45,12.5397"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.45,12.3875;3.652,12.5875"/>
+        <rectangle val="3.45,12.3804;3.652,12.5804"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4412,7 +4417,7 @@
         <point val="3.94192,13.3897"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.94192,13.2375;4.14392,13.8375"/>
+        <rectangle val="3.94192,13.2304;4.14392,13.8304"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4450,7 +4455,7 @@
         <point val="3.7,13.3897"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.7,13.2375;3.902,13.8375"/>
+        <rectangle val="3.7,13.2304;3.902,13.8304"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4488,7 +4493,7 @@
         <point val="3.475,13.3897"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.475,13.2375;3.677,13.4375"/>
+        <rectangle val="3.475,13.2304;3.677,13.4304"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4526,7 +4531,7 @@
         <point val="2.80632,2.48945"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.99832,2.18503;2.80632,2.58503"/>
+        <rectangle val="1.99832,2.17093;2.80632,2.57093"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SRYY#</string>
@@ -4568,7 +4573,7 @@
         <point val="4.85649,2.48871"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.04849,2.18429;4.85649,2.58429"/>
+        <rectangle val="4.04849,2.17019;4.85649,2.57019"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SRYM#</string>
@@ -4610,7 +4615,7 @@
         <point val="13.3738,5.74264"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.3738,5.36211;18.4238,5.86211"/>
+        <rectangle val="13.3738,5.34449;18.4238,5.84449"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPCDN#</string>
@@ -4655,7 +4660,7 @@
         <point val="2.65,19.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.65,19.6694;4.165,19.9694"/>
+        <rectangle val="2.65,19.6584;4.165,19.9584"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[0].K-KOHNAME#</string>
@@ -4697,7 +4702,7 @@
         <point val="2.65,20.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.65,20.6694;4.165,20.9694"/>
+        <rectangle val="2.65,20.6584;4.165,20.9584"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[1].K-KOHNAME#</string>
@@ -4739,7 +4744,7 @@
         <point val="2.65,21.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.65,21.6694;4.165,21.9694"/>
+        <rectangle val="2.65,21.6584;4.165,21.9584"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[2].K-KOHNAME#</string>
@@ -4781,7 +4786,7 @@
         <point val="2.65,22.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.65,22.7194;4.165,23.0194"/>
+        <rectangle val="2.65,22.7084;4.165,23.0084"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[3].K-KOHNAME#</string>
@@ -4823,7 +4828,7 @@
         <point val="2.65,23.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.65,23.6694;4.165,23.9694"/>
+        <rectangle val="2.65,23.6584;4.165,23.9584"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[4].K-KOHNAME#</string>
@@ -4865,7 +4870,7 @@
         <point val="2.65,24.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.65,24.7194;4.165,25.0194"/>
+        <rectangle val="2.65,24.7084;4.165,25.0084"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[5].K-KOHNAME#</string>
@@ -4904,10 +4909,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O156">
       <attribute name="obj_pos">
-        <point val="4.03126,3.87328"/>
+        <point val="4.03126,3.71427"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.03126,3.66779;10.8488,4.20779"/>
+        <rectangle val="4.03126,3.49927;10.8488,4.03927"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ADRS#</string>
@@ -4931,7 +4936,7 @@
             <real val="0.27"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.03126,3.87328"/>
+            <point val="4.03126,3.71427"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4950,10 +4955,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O157">
       <attribute name="obj_pos">
-        <point val="4.03126,4.48082"/>
+        <point val="4.03126,4.32181"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.03126,4.27533;9.48526,4.81533"/>
+        <rectangle val="4.03126,4.10681;9.48526,4.64681"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPNAME#</string>
@@ -4977,7 +4982,7 @@
             <real val="0.27"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.03126,4.48082"/>
+            <point val="4.03126,4.32181"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4996,10 +5001,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O158">
       <attribute name="obj_pos">
-        <point val="4.03126,5.577"/>
+        <point val="4.03126,5.41799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.03126,5.38673;9.08126,5.63673"/>
+        <rectangle val="4.03126,5.21892;9.08126,5.46892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETU#</string>
@@ -5019,7 +5024,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.03126,5.577"/>
+            <point val="4.03126,5.41799"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5038,10 +5043,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O159">
       <attribute name="obj_pos">
-        <point val="4.05,5.2"/>
+        <point val="4.05,5.04099"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.05,4.89558;7.686,5.29558"/>
+        <rectangle val="4.05,4.72247;7.686,5.12247"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TEL#</string>
@@ -5061,7 +5066,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.05,5.2"/>
+            <point val="4.05,5.04099"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5083,7 +5088,7 @@
         <point val="5.6,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,8.3108;5.6,8.6908"/>
+        <rectangle val="4.4486,8.29741;5.6,8.67741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].SKENSU#</string>
@@ -5125,7 +5130,7 @@
         <point val="8.7,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,8.3108;8.7,8.6908"/>
+        <rectangle val="6.62748,8.29741;8.7,8.67741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].SKINGK#</string>
@@ -5167,7 +5172,7 @@
         <point val="11.75,8.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,8.3108;11.75,8.6908"/>
+        <rectangle val="9.67748,8.29741;11.75,8.67741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].SFTNGK#</string>
@@ -5209,7 +5214,7 @@
         <point val="5.6,9.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,9.1608;5.6,9.5408"/>
+        <rectangle val="4.4486,9.14741;5.6,9.52741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].SKENSU#</string>
@@ -5251,7 +5256,7 @@
         <point val="8.7,9.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,9.1608;8.7,9.5408"/>
+        <rectangle val="6.62748,9.14741;8.7,9.52741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].SKINGK#</string>
@@ -5293,7 +5298,7 @@
         <point val="11.75,9.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,9.1608;11.75,9.5408"/>
+        <rectangle val="9.67748,9.14741;11.75,9.52741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].SFTNGK#</string>
@@ -5335,7 +5340,7 @@
         <point val="5.6,10.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,10.0108;5.6,10.3908"/>
+        <rectangle val="4.4486,9.99741;5.6,10.3774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].SKENSU#</string>
@@ -5377,7 +5382,7 @@
         <point val="8.7,10.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,10.0108;8.7,10.3908"/>
+        <rectangle val="6.62748,9.99741;8.7,10.3774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].SKINGK#</string>
@@ -5419,7 +5424,7 @@
         <point val="11.75,10.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,10.0108;11.75,10.3908"/>
+        <rectangle val="9.67748,9.99741;11.75,10.3774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].SFTNGK#</string>
@@ -5461,7 +5466,7 @@
         <point val="5.6,11.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,10.8108;5.6,11.1908"/>
+        <rectangle val="4.4486,10.7974;5.6,11.1774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].SKENSU#</string>
@@ -5503,7 +5508,7 @@
         <point val="8.7,11.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,10.8108;8.7,11.1908"/>
+        <rectangle val="6.62748,10.7974;8.7,11.1774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].SKINGK#</string>
@@ -5545,7 +5550,7 @@
         <point val="11.75,11.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,10.8108;11.75,11.1908"/>
+        <rectangle val="9.67748,10.7974;11.75,11.1774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].SFTNGK#</string>
@@ -5587,7 +5592,7 @@
         <point val="5.6,12"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,11.7108;5.6,12.0908"/>
+        <rectangle val="4.4486,11.6974;5.6,12.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].SKENSU#</string>
@@ -5629,7 +5634,7 @@
         <point val="8.7,12"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,11.7108;8.7,12.0908"/>
+        <rectangle val="6.62748,11.6974;8.7,12.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].SKINGK#</string>
@@ -5671,7 +5676,7 @@
         <point val="11.75,12"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,11.7108;11.75,12.0908"/>
+        <rectangle val="9.67748,11.6974;11.75,12.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].SFTNGK#</string>
@@ -5713,7 +5718,7 @@
         <point val="5.6,12.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,12.5108;5.6,12.8908"/>
+        <rectangle val="4.4486,12.4974;5.6,12.8774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[5].SKENSU#</string>
@@ -5755,7 +5760,7 @@
         <point val="8.7,12.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,12.5108;8.7,12.8908"/>
+        <rectangle val="6.62748,12.4974;8.7,12.8774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[5].SKINGK#</string>
@@ -5797,7 +5802,7 @@
         <point val="11.75,12.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,12.5108;11.75,12.8908"/>
+        <rectangle val="9.67748,12.4974;11.75,12.8774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[5].SFTNGK#</string>
@@ -5839,7 +5844,7 @@
         <point val="5.6,13.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,13.3608;5.6,13.7408"/>
+        <rectangle val="4.4486,13.3474;5.6,13.7274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[6].SKENSU#</string>
@@ -5881,7 +5886,7 @@
         <point val="8.7,13.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,13.3608;8.7,13.7408"/>
+        <rectangle val="6.62748,13.3474;8.7,13.7274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[6].SKINGK#</string>
@@ -5923,7 +5928,7 @@
         <point val="11.75,13.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,13.3608;11.75,13.7408"/>
+        <rectangle val="9.67748,13.3474;11.75,13.7274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[6].SFTNGK#</string>
@@ -5965,7 +5970,7 @@
         <point val="5.6,14.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,14.2108;5.6,14.5908"/>
+        <rectangle val="4.4486,14.1974;5.6,14.5774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[7].SKENSU#</string>
@@ -6007,7 +6012,7 @@
         <point val="8.7,14.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,14.2108;8.7,14.5908"/>
+        <rectangle val="6.62748,14.1974;8.7,14.5774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[7].SKINGK#</string>
@@ -6049,7 +6054,7 @@
         <point val="11.75,14.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,14.2108;11.75,14.5908"/>
+        <rectangle val="9.67748,14.1974;11.75,14.5774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[7].SFTNGK#</string>
@@ -6091,7 +6096,7 @@
         <point val="5.6,15.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,15.0608;5.6,15.4408"/>
+        <rectangle val="4.4486,15.0474;5.6,15.4274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[8].SKENSU#</string>
@@ -6133,7 +6138,7 @@
         <point val="8.7,15.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,15.0608;8.7,15.4408"/>
+        <rectangle val="6.62748,15.0474;8.7,15.4274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[8].SKINGK#</string>
@@ -6175,7 +6180,7 @@
         <point val="11.75,15.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,15.0608;11.75,15.4408"/>
+        <rectangle val="9.67748,15.0474;11.75,15.4274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[8].SFTNGK#</string>
@@ -6217,7 +6222,7 @@
         <point val="5.6,16.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,15.9108;5.6,16.2908"/>
+        <rectangle val="4.4486,15.8974;5.6,16.2774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[9].SKENSU#</string>
@@ -6259,7 +6264,7 @@
         <point val="8.7,16.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,15.9108;8.7,16.2908"/>
+        <rectangle val="6.62748,15.8974;8.7,16.2774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[9].SKINGK#</string>
@@ -6301,7 +6306,7 @@
         <point val="11.75,16.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,15.9108;11.75,16.2908"/>
+        <rectangle val="9.67748,15.8974;11.75,16.2774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[9].SFTNGK#</string>
@@ -6343,7 +6348,7 @@
         <point val="5.6,17"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,16.7108;5.6,17.0908"/>
+        <rectangle val="4.4486,16.6974;5.6,17.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[10].SKENSU#</string>
@@ -6385,7 +6390,7 @@
         <point val="8.7,17"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,16.7108;8.7,17.0908"/>
+        <rectangle val="6.62748,16.6974;8.7,17.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[10].SKINGK#</string>
@@ -6427,7 +6432,7 @@
         <point val="11.75,17"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,16.7108;11.75,17.0908"/>
+        <rectangle val="9.67748,16.6974;11.75,17.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[10].SFTNGK#</string>
@@ -6469,7 +6474,7 @@
         <point val="5.6,19"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,18.7108;5.6,19.0908"/>
+        <rectangle val="4.4486,18.6974;5.6,19.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#K35-SEIKYU.K35-SKENSU#</string>
@@ -6511,7 +6516,7 @@
         <point val="8.7,19"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,18.7108;8.7,19.0908"/>
+        <rectangle val="6.62748,18.6974;8.7,19.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#K35-SEIKYU.K35-SKINGK#</string>
@@ -6553,7 +6558,7 @@
         <point val="11.75,19"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,18.7108;11.75,19.0908"/>
+        <rectangle val="9.67748,18.6974;11.75,19.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#K35-SEIKYU.K35-SFTNGK#</string>
@@ -6595,7 +6600,7 @@
         <point val="1.5,19.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2475,19.7097;1.7525,19.9597"/>
+        <rectangle val="1.2475,19.7009;1.7525,19.9509"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[0].K-HBTNUM#</string>
@@ -6637,7 +6642,7 @@
         <point val="1.5,20.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2475,20.7097;1.7525,20.9597"/>
+        <rectangle val="1.2475,20.7009;1.7525,20.9509"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[1].K-HBTNUM#</string>
@@ -6679,7 +6684,7 @@
         <point val="1.5,21.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2475,21.7597;1.7525,22.0097"/>
+        <rectangle val="1.2475,21.7509;1.7525,22.0009"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[2].K-HBTNUM#</string>
@@ -6721,7 +6726,7 @@
         <point val="1.5,22.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2475,22.7097;1.7525,22.9597"/>
+        <rectangle val="1.2475,22.7009;1.7525,22.9509"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[3].K-HBTNUM#</string>
@@ -6763,7 +6768,7 @@
         <point val="1.5,23.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2475,23.7097;1.7525,23.9597"/>
+        <rectangle val="1.2475,23.7009;1.7525,23.9509"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[4].K-HBTNUM#</string>
@@ -6805,7 +6810,7 @@
         <point val="1.5,24.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.2475,24.7097;1.7525,24.9597"/>
+        <rectangle val="1.2475,24.7009;1.7525,24.9509"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[5].K-HBTNUM#</string>
@@ -6847,7 +6852,7 @@
         <point val="5.6,20"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,19.7108;5.6,20.0908"/>
+        <rectangle val="4.4486,19.6974;5.6,20.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[0].K-SKENSU#</string>
@@ -6889,7 +6894,7 @@
         <point val="8.7,20"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,19.7108;8.7,20.0908"/>
+        <rectangle val="6.62748,19.6974;8.7,20.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[0].K-SKINGK#</string>
@@ -6931,7 +6936,7 @@
         <point val="11.75,20"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,19.7108;11.75,20.0908"/>
+        <rectangle val="9.67748,19.6974;11.75,20.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[0].K-SFTNGK#</string>
@@ -6973,7 +6978,7 @@
         <point val="5.6,21"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,20.7108;5.6,21.0908"/>
+        <rectangle val="4.4486,20.6974;5.6,21.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[1].K-SKENSU#</string>
@@ -7015,7 +7020,7 @@
         <point val="8.7,21"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,20.7108;8.7,21.0908"/>
+        <rectangle val="6.62748,20.6974;8.7,21.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[1].K-SKINGK#</string>
@@ -7057,7 +7062,7 @@
         <point val="11.75,21"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,20.7108;11.75,21.0908"/>
+        <rectangle val="9.67748,20.6974;11.75,21.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[1].K-SFTNGK#</string>
@@ -7099,7 +7104,7 @@
         <point val="5.6,22"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,21.7108;5.6,22.0908"/>
+        <rectangle val="4.4486,21.6974;5.6,22.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[2].K-SKENSU#</string>
@@ -7141,7 +7146,7 @@
         <point val="8.7,22"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,21.7108;8.7,22.0908"/>
+        <rectangle val="6.62748,21.6974;8.7,22.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[2].K-SKINGK#</string>
@@ -7183,7 +7188,7 @@
         <point val="11.75,22"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,21.7108;11.75,22.0908"/>
+        <rectangle val="9.67748,21.6974;11.75,22.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[2].K-SFTNGK#</string>
@@ -7225,7 +7230,7 @@
         <point val="5.6,22.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,22.6608;5.6,23.0408"/>
+        <rectangle val="4.4486,22.6474;5.6,23.0274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[3].K-SKENSU#</string>
@@ -7267,7 +7272,7 @@
         <point val="8.7,22.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,22.6608;8.7,23.0408"/>
+        <rectangle val="6.62748,22.6474;8.7,23.0274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[3].K-SKINGK#</string>
@@ -7309,7 +7314,7 @@
         <point val="11.75,22.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,22.6608;11.75,23.0408"/>
+        <rectangle val="9.67748,22.6474;11.75,23.0274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[3].K-SFTNGK#</string>
@@ -7351,7 +7356,7 @@
         <point val="5.6,23.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,23.6608;5.6,24.0408"/>
+        <rectangle val="4.4486,23.6474;5.6,24.0274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[4].K-SKENSU#</string>
@@ -7393,7 +7398,7 @@
         <point val="8.7,23.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,23.6608;8.7,24.0408"/>
+        <rectangle val="6.62748,23.6474;8.7,24.0274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[4].K-SKINGK#</string>
@@ -7435,7 +7440,7 @@
         <point val="11.75,23.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,23.6608;11.75,24.0408"/>
+        <rectangle val="9.67748,23.6474;11.75,24.0274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[4].K-SFTNGK#</string>
@@ -7477,7 +7482,7 @@
         <point val="5.6,25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.4486,24.7108;5.6,25.0908"/>
+        <rectangle val="4.4486,24.6974;5.6,25.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[5].K-SKENSU#</string>
@@ -7519,7 +7524,7 @@
         <point val="8.7,25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.62748,24.7108;8.7,25.0908"/>
+        <rectangle val="6.62748,24.6974;8.7,25.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[5].K-SKINGK#</string>
@@ -7561,7 +7566,7 @@
         <point val="11.75,25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.67748,24.7108;11.75,25.0908"/>
+        <rectangle val="9.67748,24.6974;11.75,25.0774"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI-SEIKYU[5].K-SFTNGK#</string>
@@ -7594,6 +7599,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1919"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O220">
+      <attribute name="obj_pos">
+        <point val="1.28975,6.07774"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="1.28975,5.83885;4.31975,6.13885"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#RECEKA#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="1.28975,6.07774"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
           </attribute>
         </composite>
       </attribute>

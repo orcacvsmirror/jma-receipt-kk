@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/09/24  主科対応
+      ************************************************************
        01  SKT3760.
       *    診療年月
            03  SKT3760-SRYYM               PIC  X(16).
@@ -27,6 +31,10 @@
            03  SKT3760-ZAI2                PIC  X(02).
       *    ページ番号
            03  SKT3760-NO                  PIC  X(04).
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *    診療科
+           03  SKT3760-RECEKA              PIC  X(20).
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
       *    老人請求テーブル
            03       SKT3760-RSEIKYU-TBL OCCURS 2.
                05   SKT3760-RNYUGAI-TBL OCCURS 2.

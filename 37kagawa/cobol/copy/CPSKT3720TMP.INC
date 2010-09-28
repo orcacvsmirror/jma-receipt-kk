@@ -20,11 +20,16 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/09/24  主科対応
       ************************************************************
        01  SKT3720TMP-REC.
            03  SKT3720TMP-KEY.
       *県内・県外
                05  SKT3720TMP-PREFKBN           PIC  X(01).
+      *=== 主科対応 by Yoshikawa(2010/09/24) start
+      *診療科
+               05  SKT3720TMP-RECEKA            PIC  X(02).
+      *=== 主科対応 by Yoshikawa(2010/09/24) end
       *
       *請求テーブル
            03  SKT3720TMP-HKN-AREA  OCCURS  11.
