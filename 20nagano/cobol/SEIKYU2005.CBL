@@ -38,6 +38,8 @@
       *  01.00.05    吉川    2008/09/10    公費の点数・診療実日数が
       *                                    出力されない不具合を修正
       *  01.00.06    内田    2009/02/24    食事療養費等は０円なら０と記録する
+      *  01.00.07    吉川    2010/09/27    市町村番号が「000」の場合、
+      *                                    件数が正しくならないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -111,6 +113,9 @@
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
            03  IDW            PIC 9(04).
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+           03  IDX-TOWN       PIC 9(03).
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -175,7 +180,10 @@
            03  WRK-HENSHU.
                05  WRK-GOKEI-TBL           OCCURS  10.
                    07  WRK-GOKEI-YM        PIC 9(06).
-                   07  WRK-GOKEI-DATA      OCCURS  150.
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      *             07  WRK-GOKEI-DATA      OCCURS  150.
+                   07  WRK-GOKEI-DATA      OCCURS  151.
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
                        09  WRK-GOKEIKENSU  PIC  9(03).
                05  WRK-SOUGOKEIKENSU       PIC 9(07).
       *
@@ -542,6 +550,9 @@
            MOVE     ZERO    TO      FLG-END
       *
            MOVE   ZERO      TO   WRK-TOWN
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+           MOVE   ZERO      TO   IDX-TOWN
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
       *
            PERFORM  2001-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
@@ -626,19 +637,28 @@
            END-IF
       *    CSV総括用件数カウント
            MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)   TO   WRK-TOWN
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+           COMPUTE  IDX-TOWN  =  WRK-TOWN  +  1
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
       *    診療年月でデータを分ける
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     10
                     OR       WRK-GOKEI-YM (IDX1)  =  ZERO
                IF  MF101-SRYYM  =  WRK-GOKEI-YM (IDX1)
-                   ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      *             ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+                   ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
                    MOVE  10   TO  IDX1
                END-IF
            END-PERFORM
       *    その診療年月で初データの場合
            IF  IDX1  <  10
                MOVE  MF101-SRYYM  TO  WRK-GOKEI-YM (IDX1)
-               ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      *         ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+               ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
            END-IF
            ADD   1   TO   WRK-SOUGOKEIKENSU
       *
@@ -806,6 +826,9 @@
            MOVE     ZERO        TO       WRK-RECENO
            MOVE     ZERO        TO       FLG-PRINT
            MOVE     ZERO        TO       WRK-TOWN
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+           MOVE     ZERO        TO       IDX-TOWN
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
@@ -891,12 +914,18 @@
       *    総括
       *
            MOVE  MF101-KOHFTNJANUM(1:3)   TO   WRK-TOWN
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+           COMPUTE  IDX-TOWN  =  WRK-TOWN  +  1
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
            MOVE  MF101-SRYYM              TO   WRK-CHK-SRYYM
       *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     10
                IF  MF101-SRYYM  =  WRK-GOKEI-YM (IDX1)
-                   MOVE  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      *             MOVE  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+                   MOVE  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
                          TO  WRK-MOJIHEN
                    MOVE  10    TO  IDX1
                END-IF
