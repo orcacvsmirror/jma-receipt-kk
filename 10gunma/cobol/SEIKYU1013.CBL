@@ -43,6 +43,7 @@
       *                                  福祉、第一請求点数の計算方法変更
       *  01.00.04    吉川    2010/08/25  「特」欄の該当公費の上限額に
       *                                  達していない場合でも「特」とする
+      *  01.00.05    吉川    2010/09/29  福祉請求点数に記載する条件を変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -928,12 +929,20 @@
            DISPLAY "公費MF100-TOTALTEN2 = " MF100-TOTALTEN2
            DISPLAY "WRK-TOKURAN =" WRK-TOKURAN
       *    総点数と公費点数が同じ場合は公費点数は印字しない
-           IF    MF100-H-TOTALTEN     =     MF100-TOTALTEN
+      *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) start
+      *     IF    MF100-H-TOTALTEN     =     MF100-TOTALTEN
+           IF  MF100-H-TOTALTEN       =     MF100-TOTALTEN2
+           OR  MF100-TOTALTEN2        =     ZERO
+      *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) endt
              MOVE    ZERO             TO    MF100-TOTALTEN2
            ELSE
       *      感染症及び精神通院以外は福祉点数を上段に記載
              IF  WRK-TOKURAN  NOT =  "10" AND "11" AND "21"
-               MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
+      *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) start
+      *         MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
+               COMPUTE  MF100-TOTALTEN2  =
+                        MF100-H-TOTALTEN  -  MF100-TOTALTEN2
+      *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) end
              END-IF
              COMPUTE  WRK-SEIKYUGK-G  =  
                       MF100-TOTALTEN2  *  MF100-KYURATE  /  10
