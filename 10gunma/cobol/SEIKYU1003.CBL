@@ -68,6 +68,7 @@
       *                                  記載しないようにする
       *  01.00.16    吉川    10/08/25    「特」欄の該当公費の上限額に
       *                                  達していない場合でも「特」とする
+      *  01.00.17    吉川    10/09/29    点数欄の上段に記載する条件を変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -914,13 +915,21 @@
            END-IF
       *
       *    総点数と公費点数が同じ場合は公費点数は印字しない
-           IF    MF100-H-TOTALTEN     =     MF100-TOTALTEN
+      *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) start
+      *     IF    MF100-H-TOTALTEN     =     MF100-TOTALTEN
+           IF  MF100-H-TOTALTEN       =     MF100-TOTALTEN2
+           OR  MF100-TOTALTEN2        =     ZERO
+      *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) end
              MOVE  MF100-H-TOTALTEN   TO    MF100-TOTALTEN
              MOVE    ZERO             TO    MF100-TOTALTEN2
            ELSE
       *      感染症及び精神通院以外は福祉点数を上段に記載
              IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
-               MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
+      *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) start
+      *         MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
+               COMPUTE  MF100-TOTALTEN2  =
+                        MF100-H-TOTALTEN  -  MF100-TOTALTEN2
+      *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) end
              END-IF
              MOVE  MF100-H-TOTALTEN   TO    MF100-TOTALTEN
              COMPUTE  WRK-SEIKYUGK-G  =  
