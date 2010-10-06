@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川      2010/10/01   特別療養費国保対応
+      ********************************************************************
         01  SKT1820.
             03  SKT1820-SRYYM           PIC X(16).
             03  SKT1820-SEIYMD          PIC X(22).
@@ -23,6 +27,9 @@
             03  SKT1820-ZAI1            PIC X(02).
             03  SKT1820-ZAI2            PIC X(02).
             03  SKT1820-NO              PIC X(04).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+            03  SKT1820-TOKUBETU        PIC X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
             03  SKT1820-SEIKYU-TBL      OCCURS  7 TIMES.
               05  SKT1820-NYUGAI-TBL      OCCURS  2 TIMES.
                 07  SKT1820-KENSU       PIC X(05).

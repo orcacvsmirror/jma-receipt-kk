@@ -26,6 +26,11 @@
         <embed object="string" length="4"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="KOH-TBL" occurs="7">
       <element name="KOHNUM" occurs="1">
         <appinfo>
@@ -4003,7 +4008,7 @@
         <point val="6.29975,2.24065"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.29975,1.8425;14.3797,2.3425"/>
+        <rectangle val="6.29975,1.8425;14.3798,2.3425"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4545,7 +4550,7 @@
         <point val="3.645,10.1552"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.645,9.91635;3.948,10.2163"/>
+        <rectangle val="3.645,9.91631;3.948,10.2163"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4581,7 +4586,7 @@
         <point val="3.295,9.50524"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.295,9.26635;3.598,10.1663"/>
+        <rectangle val="3.295,9.26635;3.598,10.1664"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4727,7 +4732,7 @@
         <point val="4.045,10.1552"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.045,9.91635;4.2268,10.2163"/>
+        <rectangle val="4.045,9.91631;4.2268,10.2163"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -8672,7 +8677,7 @@
         <point val="5.445,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.435,22.6393;5.445,22.8893"/>
+        <rectangle val="4.435,22.6392;5.445,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-NYUGAI-TBL[0].K-KENSU#</string>
@@ -8714,7 +8719,7 @@
         <point val="5.445,23.4383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.435,23.2393;5.445,23.4893"/>
+        <rectangle val="4.435,23.2392;5.445,23.4892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-NYUGAI-TBL[1].K-KENSU#</string>
@@ -8756,7 +8761,7 @@
         <point val="6.945,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.935,22.6393;6.945,22.8893"/>
+        <rectangle val="5.935,22.6392;6.945,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-NYUGAI-TBL[0].K-NISSU#</string>
@@ -8798,7 +8803,7 @@
         <point val="6.945,23.4383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.935,23.2393;6.945,23.4893"/>
+        <rectangle val="5.935,23.2392;6.945,23.4892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-NYUGAI-TBL[1].K-NISSU#</string>
@@ -8840,7 +8845,7 @@
         <point val="9.195,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.175,22.6393;9.195,22.8893"/>
+        <rectangle val="7.175,22.6392;9.195,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-NYUGAI-TBL[0].K-TENSU#</string>
@@ -8882,7 +8887,7 @@
         <point val="9.195,23.4383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.175,23.2393;9.195,23.4893"/>
+        <rectangle val="7.175,23.2392;9.195,23.4892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-NYUGAI-TBL[1].K-TENSU#</string>
@@ -9008,7 +9013,7 @@
         <point val="14.595,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.585,22.6393;14.595,22.8893"/>
+        <rectangle val="13.585,22.6392;14.595,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-SKENSU#</string>
@@ -9050,7 +9055,7 @@
         <point val="15.745,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.735,22.6393;15.745,22.8893"/>
+        <rectangle val="14.735,22.6392;15.745,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-SNISSU#</string>
@@ -9092,7 +9097,7 @@
         <point val="17.995,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.975,22.6393;17.995,22.8893"/>
+        <rectangle val="15.975,22.6392;17.995,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-SKINGK#</string>
@@ -9134,7 +9139,7 @@
         <point val="19.995,22.8383"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.975,22.6393;19.995,22.8893"/>
+        <rectangle val="17.975,22.6392;19.995,22.8892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[6].K-SFTNGK#</string>
@@ -9167,6 +9172,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O262">
+      <attribute name="obj_pos">
+        <point val="6.41343,6.30742"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.41343,5.9889;8.43343,6.3889"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="6.41343,6.30742"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>

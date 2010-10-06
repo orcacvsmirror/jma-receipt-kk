@@ -20,6 +20,7 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川      2007/10/05   システム管理マスタ「1901」の
       *                                     医療機関情報を参照
+      *  01.00.02    吉川      2010/10/01   特別療養費国保対応
       ************************************************************
         01  SKT1800.
             03  SKT1800-SRYYM           PIC X(16).
@@ -32,6 +33,9 @@
             03  SKT1800-HOSPNAME        PIC X(100).
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
             03  SKT1800-TEL             PIC X(15).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+            03  SKT1800-TOKUBETU        PIC X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
             03  SKT1800-KEN-TBL         OCCURS  2 TIMES.
                 05  SKT1800-SEIKYU-TBL      OCCURS  10 TIMES.
                     07  SKT1800-KENSU   PIC X(6).
