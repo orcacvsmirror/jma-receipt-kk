@@ -39,6 +39,8 @@
       *  01.00.06    吉川    10/02/02    兵庫県の広域連合名が印字されないのを修正
       *  01.00.07    吉川    10/08/16    返戻分が2枚以上になる場合、
       *                                  診療年月がおかしくなるのを修正
+      *  01.00.08    吉川    10/10/01    オンライン返戻対応
+      *                                  特別療養費国保対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -255,6 +257,11 @@
       *    暫定処置
            03  WRK-KENSU           PIC 9(05).
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *    特別療養費件数
+           03  WRK-TOKUKENSU       PIC 9(05) OCCURS 2.
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -692,12 +699,41 @@
            PERFORM  2002-KOUKI-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
            PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE     ZERO    TO        FLG-END
+      *     MOVE    "040"    TO        WRK-HKNNUM
+      *     PERFORM  950-SEIKYU-SELECT-SEC
+      *     PERFORM  2002-KOUKI-SYUKEI-SEC
+      *              UNTIL   FLG-END   =   1
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+      *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *    特別療養費国保集計
+           MOVE     ZERO    TO        WRK-TOKUKENSU(1)
+           MOVE     ZERO    TO        WRK-TOKUKENSU(2)
+      *
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "068"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM 2003-TOKUBETU-SYUKEI-SEC
+                   UNTIL   FLG-END =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+      *
+           MOVE     ZERO    TO        FLG-END
+           MOVE    "069"    TO        WRK-HKNNUM
+           PERFORM  950-SEIKYU-SELECT-SEC
+           PERFORM 2003-TOKUBETU-SYUKEI-SEC
+                   UNTIL   FLG-END =   1
+           PERFORM  950-SEIKYU-CLOSE-SEC
+      * 
            MOVE     ZERO    TO        FLG-END
            MOVE    "040"    TO        WRK-HKNNUM
            PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2002-KOUKI-SYUKEI-SEC
+           PERFORM  2003-TOKUBETU-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
-      *---(01.00.02) LINE ADD END   ------------------------------------
+           PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
       *
            CLOSE   UPD-FILE
            CLOSE   SKT2000TMP-FILE
@@ -934,6 +970,42 @@
        2102-KOUKI-SYUKEI-EXT.
            EXIT.
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *****************************************************************
+      *    特別療養費国保集計処理
+      *****************************************************************
+       2003-TOKUBETU-SYUKEI-SEC              SECTION.
+      *
+           IF  RECE10-PREFKBN  =  "1"
+              ADD   1      TO  WRK-TOKUKENSU(1)
+           ELSE
+              ADD   1      TO  WRK-TOKUKENSU(2)
+           END-IF
+      *
+           MOVE    1       TO  FLG-UPD 
+      *
+      *    集計の対象にならなかったとき
+           IF      FLG-UPD             =   1
+               PERFORM 230-UPD-FILE-HENSYU-SEC
+      *
+               PERFORM 950-SEIKYU-READ-SEC
+           ELSE
+               MOVE    SPACE               TO  WRK-RECEERR
+               STRING "集計対象外　患者番号＝"     DELIMITED  BY  SIZE
+                       RECE10-PTNUM                DELIMITED  BY  SPACE
+                       " 診療年月＝"               DELIMITED  BY  SIZE
+                       RECE10-SRYYM                DELIMITED  BY  SIZE
+                       " レセ種別＝"               DELIMITED  BY  SIZE
+                       RECE10-RECESYUBETU          DELIMITED  BY  SIZE
+                                           INTO    WRK-RECEERR
+               END-STRING
+               PERFORM 500-ERR-HENSYU-SEC
+               MOVE    1                   TO  FLG-END
+           END-IF 
+           .
+       2003-TOKUBETU-SYUKEI-EXT.
+           EXIT.
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -1089,6 +1161,16 @@
                                       INTO    SKT2000-GTYOKI
                    END-STRING
                END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+               IF  SKT2000TMP-PREFKBN  =  "1"
+                   MOVE   WRK-TOKUKENSU(1) TO  WRK-Z5
+                   MOVE   WRK-Z5           TO  SKT2000-TOKUBETU
+               ELSE
+                   MOVE   WRK-TOKUKENSU(2) TO  WRK-Z5
+                   MOVE   WRK-Z5           TO  SKT2000-TOKUBETU
+               END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+      *
                PERFORM 900-TMP-READ-SEC
            END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -1101,6 +1183,16 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
                MOVE    SKT2001TMP-KENSU    TO  WRK-Z5
                MOVE    WRK-Z5              TO  SKT2000-KGKENSU
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+               IF  SKT2001TMP-PREFKBN  =  "1"
+                   MOVE   WRK-TOKUKENSU(1) TO  WRK-Z5
+                   MOVE   WRK-Z5           TO  SKT2000-TOKUBETU
+               ELSE
+                   MOVE   WRK-TOKUKENSU(2) TO  WRK-Z5
+                   MOVE   WRK-Z5           TO  SKT2000-TOKUBETU
+               END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+      *
                PERFORM 901-TMP-READ-SEC
       *---(01.00.03) LINE ADD START ------------------------------------
              ELSE
@@ -1592,6 +1684,14 @@
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *=== オンライン返戻対応 by Yoshikawa(2010/10/01) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  900-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/10/01) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
@@ -1667,6 +1767,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== オンライン返戻対応 by Yoshikawa(2010/10/01) start
+      *        返戻分でオンライン請求は読み飛ばす
+               IF      (WRK-PARA-SYOKBN         =  "2")
+               AND     (RECE10-HENREI-SIJI-FLG  =  1)
+                   GO  TO  950-SEIKYU-READ-SEC
+               END-IF
+      *=== オンライン返戻対応 by Yoshikawa(2010/10/01) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
