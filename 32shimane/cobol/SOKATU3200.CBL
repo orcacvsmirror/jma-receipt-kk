@@ -35,6 +35,7 @@
       *  01.00.04    内田      08/05/02    帳票様式の変更に伴う修正
       *  01.00.05    門間      08/12/16    SPA-AREA初期化
       *  01.00.06    吉川      10/04/07    オンライン返戻対応
+      *  01.00.07    吉川      10/10/06    後期高齢のみの場合でも印字するよう修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -353,7 +354,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2010/10/06) start
+      *             UNTIL       FLG-END     =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2010/10/06) end
       *
            PERFORM 300-END-SEC
       *
@@ -550,7 +553,9 @@
       *****************************************************************
        200-MAIN-SEC                SECTION.
       *
-           MOVE     ZERO    TO      FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2010/10/06) start
+      *     MOVE     ZERO    TO      FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2010/10/06) end
            MOVE     ZERO    TO      FLG-UPD
       *
       *    国保分件数
@@ -992,6 +997,10 @@
                ADD   1                     TO  SUM-KOUKI-KENSU(IDX1)
                                                SUM-KOUKI-GKENSU
            END-IF
+      *
+      *=== 後期高齢のみでも印字 by Yoshikawa(2010/10/06) start
+           MOVE    1    TO  FLG-UPD 
+      *=== 後期高齢のみでも印字 by Yoshikawa(2010/10/06) end
       *
            IF      FLG-UPD             =   1
                PERFORM 230-UPD-FILE-HENSYU-SEC
