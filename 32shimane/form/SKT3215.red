@@ -2851,15 +2851,15 @@
     </object>
     <object type="Standard - Text" version="0" id="O118">
       <attribute name="obj_pos">
-        <point val="1.89674,5.77285"/>
+        <point val="1.97174,5.77285"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.89674,5.58174;2.62394,5.82174"/>
+        <rectangle val="1.97174,5.58174;2.84438,5.82174"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#198;&#254;&#177;&#161;&#163;&#177;#</string>
+            <string>#&#198;&#254; &#177;&#161;&#163;&#177;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -2868,7 +2868,7 @@
             <real val="0.24"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.89674,5.77285"/>
+            <point val="1.97174,5.77285"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2887,13 +2887,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O119">
       <attribute name="obj_pos">
-        <point val="2.34471,5.5419"/>
+        <point val="2.60852,5.5419"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.33971,5.5369;2.63259,5.84747"/>
+        <rectangle val="2.60352,5.5369;2.8964,5.84747"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.34471,5.5419"/>
+        <point val="2.60852,5.5419"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -2946,13 +2946,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O121">
       <attribute name="obj_pos">
-        <point val="2.5817,6.24972"/>
+        <point val="2.60852,6.24972"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5767,6.24472;2.86958,6.55529"/>
+        <rectangle val="2.60352,6.24472;2.8964,6.55529"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.5817,6.24972"/>
+        <point val="2.60852,6.24972"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -4561,15 +4561,15 @@
     </object>
     <object type="Standard - Text" version="0" id="O167">
       <attribute name="obj_pos">
-        <point val="1.9,7.05"/>
+        <point val="1.975,7.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.9,6.85889;2.6272,7.09889"/>
+        <rectangle val="1.975,6.85889;2.84764,7.09889"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#198;&#254;&#177;&#161;&#163;&#177;#</string>
+            <string>#&#198;&#254; &#177;&#161;&#163;&#177;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -4578,7 +4578,7 @@
             <real val="0.24"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.9,7.05"/>
+            <point val="1.975,7.05"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4597,13 +4597,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O168">
       <attribute name="obj_pos">
-        <point val="2.34797,6.81906"/>
+        <point val="2.60852,6.81906"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.34297,6.81406;2.63585,7.12463"/>
+        <rectangle val="2.60352,6.81406;2.8964,7.12463"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.34797,6.81906"/>
+        <point val="2.60852,6.81906"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -4656,13 +4656,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O170">
       <attribute name="obj_pos">
-        <point val="2.58774,7.39798"/>
+        <point val="2.60852,7.39798"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.58274,7.39298;2.87562,7.70355"/>
+        <rectangle val="2.60352,7.39298;2.8964,7.70355"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.58774,7.39798"/>
+        <point val="2.60852,7.39798"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -4679,15 +4679,15 @@
     </object>
     <object type="Standard - Text" version="0" id="O171">
       <attribute name="obj_pos">
-        <point val="1.907,8.20313"/>
+        <point val="1.982,8.20313"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.907,8.01202;2.6342,8.25202"/>
+        <rectangle val="1.982,8.01202;2.85464,8.25202"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#198;&#254;&#177;&#161;&#163;&#177;#</string>
+            <string>#&#198;&#254; &#177;&#161;&#163;&#177;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -4696,7 +4696,7 @@
             <real val="0.24"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.907,8.20313"/>
+            <point val="1.982,8.20313"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4715,13 +4715,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O172">
       <attribute name="obj_pos">
-        <point val="2.35498,7.97219"/>
+        <point val="2.60852,7.97219"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.34998,7.96719;2.64286,8.27776"/>
+        <rectangle val="2.60352,7.96719;2.8964,8.27776"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.35498,7.97219"/>
+        <point val="2.60852,7.97219"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -4774,13 +4774,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O174">
       <attribute name="obj_pos">
-        <point val="2.5885,8.54799"/>
+        <point val="2.60852,8.54799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5835,8.54299;2.87638,8.85356"/>
+        <rectangle val="2.60352,8.54299;2.8964,8.85356"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.5885,8.54799"/>
+        <point val="2.60852,8.54799"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -4797,15 +4797,15 @@
     </object>
     <object type="Standard - Text" version="0" id="O175">
       <attribute name="obj_pos">
-        <point val="1.9114,9.33407"/>
+        <point val="1.9864,9.33407"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.9114,9.14296;2.6386,9.38296"/>
+        <rectangle val="1.9864,9.14296;2.85904,9.38296"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#198;&#254;&#177;&#161;&#163;&#177;#</string>
+            <string>#&#198;&#254; &#177;&#161;&#163;&#177;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -4814,7 +4814,7 @@
             <real val="0.24"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.9114,9.33407"/>
+            <point val="1.9864,9.33407"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4833,13 +4833,13 @@
     </object>
     <object type="Standard - Ellipse" version="0" id="O176">
       <attribute name="obj_pos">
-        <point val="2.35938,9.10313"/>
+        <point val="2.60852,9.10313"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.35438,9.09813;2.64726,9.4087"/>
+        <rectangle val="2.60352,9.09813;2.8964,9.4087"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="2.35938,9.10313"/>
+        <point val="2.60852,9.10313"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.282885"/>
@@ -5103,7 +5103,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#185;&#173;&#176;&#232;&#207;&#162;&#185;&#231; &#220;&#235;#</string>
+            <string>#&#185;&#173;&#176;&#232;&#207;&#162;&#185;&#231; &#205;&#205;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
