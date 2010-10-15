@@ -38,6 +38,7 @@
       *                                  別れて印字される不具合を修正
       *  01.00.05    吉川    2010/08/03  オンライン返戻対応
       *                                  特別療養費国保対応
+      *  01.00.06    吉川    2010/10/08  再印刷時の帳票タイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -951,7 +952,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT1330.red"       TO  SPRT-PRTID
-           MOVE    "レセ電用国保総括表"    TO  SPRT-TITLE
+      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
+      *     MOVE    "レセ電用国保総括表"    TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "レセ電用国保総括表"       TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "レセ電用国保総括表 [特別療養費]"
+                                                TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
            MOVE    SKT1330             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

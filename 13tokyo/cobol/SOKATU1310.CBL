@@ -40,6 +40,7 @@
       *  01.00.06    吉川    10/08/03    オンライン返戻対応
       *                                  特別療養費国保対応
       *                                  代表保険者番号追加(146001)
+      *  01.00.07    吉川    10/10/08    再印刷時の帳票タイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1321,7 +1322,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1310.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書・外来"  TO  SPRT-TITLE
+      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
+      *     MOVE    "国保請求書・外来"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) end
            MOVE    SKT1310             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1509,7 +1518,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1320.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書・入院"  TO  SPRT-TITLE
+      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
+      *     MOVE    "国保請求書・入院"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) end
            MOVE    SKT1320             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
