@@ -216,6 +216,29 @@
   <layer name="&#199;&#216;&#183;&#202;" visible="true">
     <object type="Standard - Box" version="0" id="O0">
       <attribute name="obj_pos">
+        <point val="0.536433,12.9953"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="0.516433,12.9753;18.2288,18.2179"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="0.536433,12.9953"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="17.6724"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="5.20261"/>
+      </attribute>
+      <attribute name="border_width">
+        <real val="0.04"/>
+      </attribute>
+      <attribute name="show_background">
+        <boolean val="false"/>
+      </attribute>
+    </object>
+    <object type="Standard - Box" version="0" id="O1">
+      <attribute name="obj_pos">
         <point val="0.55,4.8125"/>
       </attribute>
       <attribute name="obj_bb">
@@ -237,7 +260,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O1">
+    <object type="Standard - Line" version="0" id="O2">
       <attribute name="obj_pos">
         <point val="1.80212,5.70671"/>
       </attribute>
@@ -255,21 +278,21 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O3" connection="0"/>
+        <connection handle="0" to="O4" connection="0"/>
       </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O2">
+    <object type="Standard - Box" version="0" id="O3">
       <attribute name="obj_pos">
         <point val="1.80445,9.19668"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.78445,9.17668;18.2296,10.9305"/>
+        <rectangle val="1.78445,9.17668;18.2208,10.9305"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="1.80445,9.19668"/>
       </attribute>
       <attribute name="elem_width">
-        <real val="16.4052"/>
+        <real val="16.3963"/>
       </attribute>
       <attribute name="elem_height">
         <real val="1.71378"/>
@@ -281,7 +304,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O3">
+    <object type="Standard - Box" version="0" id="O4">
       <attribute name="obj_pos">
         <point val="1.80212,5.70671"/>
       </attribute>
@@ -304,7 +327,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O4">
+    <object type="Standard - Box" version="0" id="O5">
       <attribute name="obj_pos">
         <point val="0.5375,13"/>
       </attribute>
@@ -327,7 +350,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O5">
+    <object type="Standard - Line" version="0" id="O6">
       <attribute name="obj_pos">
         <point val="0.55,5.70625"/>
       </attribute>
@@ -345,10 +368,10 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="1" to="O3" connection="2"/>
+        <connection handle="1" to="O4" connection="2"/>
       </connections>
     </object>
-    <object type="Standard - Line" version="0" id="O6">
+    <object type="Standard - Line" version="0" id="O7">
       <attribute name="obj_pos">
         <point val="1.80212,7.42049"/>
       </attribute>
@@ -366,20 +389,20 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O3" connection="5"/>
-        <connection handle="1" to="O3" connection="7"/>
+        <connection handle="0" to="O4" connection="5"/>
+        <connection handle="1" to="O4" connection="7"/>
       </connections>
     </object>
-    <object type="Standard - Line" version="0" id="O7">
+    <object type="Standard - Line" version="0" id="O8">
       <attribute name="obj_pos">
         <point val="1.0875,9.19688"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.0775,9.18688;18.21,9.21"/>
+        <rectangle val="1.0775,9.18668;18.2108,9.20688"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="1.0875,9.19688"/>
-        <point val="18.2,9.2"/>
+        <point val="18.2008,9.19668"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -387,8 +410,11 @@
       <attribute name="line_width">
         <real val="0.02"/>
       </attribute>
+      <connections>
+        <connection handle="1" to="O3" connection="2"/>
+      </connections>
     </object>
-    <object type="Standard - Line" version="0" id="O8">
+    <object type="Standard - Line" version="0" id="O9">
       <attribute name="obj_pos">
         <point val="1.8,10.9"/>
       </attribute>
@@ -406,7 +432,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O9">
+    <object type="Standard - Line" version="0" id="O10">
       <attribute name="obj_pos">
         <point val="1.1,5.7"/>
       </attribute>
@@ -424,7 +450,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O10">
+    <object type="Standard - Line" version="0" id="O11">
       <attribute name="obj_pos">
         <point val="2.9,4.8"/>
       </attribute>
@@ -442,7 +468,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O11">
+    <object type="Standard - Line" version="0" id="O12">
       <attribute name="obj_pos">
         <point val="2.9,5.2"/>
       </attribute>
@@ -460,7 +486,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O12">
+    <object type="Standard - Line" version="0" id="O13">
       <attribute name="obj_pos">
         <point val="11,4.8"/>
       </attribute>
@@ -478,7 +504,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O13">
+    <object type="Standard - Line" version="0" id="O14">
       <attribute name="obj_pos">
         <point val="4.4,5.2"/>
       </attribute>
@@ -496,7 +522,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O14">
+    <object type="Standard - Line" version="0" id="O15">
       <attribute name="obj_pos">
         <point val="6,5.2"/>
       </attribute>
@@ -514,7 +540,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O15">
+    <object type="Standard - Line" version="0" id="O16">
       <attribute name="obj_pos">
         <point val="8.3,5.2"/>
       </attribute>
@@ -532,16 +558,16 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O16">
+    <object type="Standard - Line" version="0" id="O17">
       <attribute name="obj_pos">
         <point val="2.1,8.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.09,8.29;18.2354,8.31125"/>
+        <rectangle val="2.09,8.29;18.2059,8.31371"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="2.1,8.3"/>
-        <point val="18.2254,8.30125"/>
+        <point val="18.1959,8.30371"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -550,7 +576,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O17">
+    <object type="Standard - Line" version="0" id="O18">
       <attribute name="obj_pos">
         <point val="2.1,6.6"/>
       </attribute>
@@ -568,7 +594,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O18">
+    <object type="Standard - Line" version="0" id="O19">
       <attribute name="obj_pos">
         <point val="2.1,11.8125"/>
       </attribute>
@@ -586,7 +612,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O19">
+    <object type="Standard - Line" version="0" id="O20">
       <attribute name="obj_pos">
         <point val="2.1,10"/>
       </attribute>
@@ -604,7 +630,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O20">
+    <object type="Standard - Line" version="0" id="O21">
       <attribute name="obj_pos">
         <point val="15.9,5.2"/>
       </attribute>
@@ -622,7 +648,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O21">
+    <object type="Standard - Box" version="0" id="O22">
       <attribute name="obj_pos">
         <point val="4.6,3.2"/>
       </attribute>
@@ -645,7 +671,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O22">
+    <object type="Standard - Line" version="0" id="O23">
       <attribute name="obj_pos">
         <point val="4.6,3.6"/>
       </attribute>
@@ -663,7 +689,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O23">
+    <object type="Standard - Line" version="0" id="O24">
       <attribute name="obj_pos">
         <point val="6.1,3.6"/>
       </attribute>
@@ -681,7 +707,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O24">
+    <object type="Standard - Line" version="0" id="O25">
       <attribute name="obj_pos">
         <point val="6.6,3.6"/>
       </attribute>
@@ -699,11 +725,11 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O22" connection="0"/>
-        <connection handle="1" to="O21" connection="6"/>
+        <connection handle="0" to="O23" connection="0"/>
+        <connection handle="1" to="O22" connection="6"/>
       </connections>
     </object>
-    <object type="Standard - Line" version="0" id="O25">
+    <object type="Standard - Line" version="0" id="O26">
       <attribute name="obj_pos">
         <point val="7.1,3.6"/>
       </attribute>
@@ -721,7 +747,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O26">
+    <object type="Standard - Line" version="0" id="O27">
       <attribute name="obj_pos">
         <point val="7.6,3.6"/>
       </attribute>
@@ -739,7 +765,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O27">
+    <object type="Standard - Line" version="0" id="O28">
       <attribute name="obj_pos">
         <point val="8.1,3.6"/>
       </attribute>
@@ -757,7 +783,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O28">
+    <object type="Standard - Box" version="0" id="O29">
       <attribute name="obj_pos">
         <point val="9.4,3.2"/>
       </attribute>
@@ -780,7 +806,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O29">
+    <object type="Standard - Line" version="0" id="O30">
       <attribute name="obj_pos">
         <point val="9.4,3.6"/>
       </attribute>
@@ -798,7 +824,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O30">
+    <object type="Standard - Line" version="0" id="O31">
       <attribute name="obj_pos">
         <point val="9.9,3.6"/>
       </attribute>
@@ -816,11 +842,11 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O29" connection="0"/>
-        <connection handle="1" to="O28" connection="6"/>
+        <connection handle="0" to="O30" connection="0"/>
+        <connection handle="1" to="O29" connection="6"/>
       </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O31">
+    <object type="Standard - Box" version="0" id="O32">
       <attribute name="obj_pos">
         <point val="10.4,3.2"/>
       </attribute>
@@ -843,7 +869,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O32">
+    <object type="Standard - Line" version="0" id="O33">
       <attribute name="obj_pos">
         <point val="10.4,3.6"/>
       </attribute>
@@ -861,7 +887,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O33">
+    <object type="Standard - Line" version="0" id="O34">
       <attribute name="obj_pos">
         <point val="10.9,3.6"/>
       </attribute>
@@ -879,7 +905,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O34">
+    <object type="Standard - Line" version="0" id="O35">
       <attribute name="obj_pos">
         <point val="11.4,3.6"/>
       </attribute>
@@ -897,7 +923,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O35">
+    <object type="Standard - Line" version="0" id="O36">
       <attribute name="obj_pos">
         <point val="11.9,3.6"/>
       </attribute>
@@ -915,7 +941,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O36">
+    <object type="Standard - Line" version="0" id="O37">
       <attribute name="obj_pos">
         <point val="12.4,3.6"/>
       </attribute>
@@ -933,7 +959,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O37">
+    <object type="Standard - Line" version="0" id="O38">
       <attribute name="obj_pos">
         <point val="12.9,3.6"/>
       </attribute>
@@ -951,7 +977,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O38">
+    <object type="Standard - Line" version="0" id="O39">
       <attribute name="obj_pos">
         <point val="13.4,3.6"/>
       </attribute>
@@ -969,7 +995,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O39">
+    <object type="Standard - Box" version="0" id="O40">
       <attribute name="obj_pos">
         <point val="14.7,3.2"/>
       </attribute>
@@ -992,7 +1018,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O40">
+    <object type="Standard - Line" version="0" id="O41">
       <attribute name="obj_pos">
         <point val="14.7,3.6"/>
       </attribute>
@@ -1010,7 +1036,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O41">
+    <object type="Standard - Line" version="0" id="O42">
       <attribute name="obj_pos">
         <point val="15.2,3.6"/>
       </attribute>
@@ -1028,11 +1054,11 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O40" connection="0"/>
-        <connection handle="1" to="O39" connection="6"/>
+        <connection handle="0" to="O41" connection="0"/>
+        <connection handle="1" to="O40" connection="6"/>
       </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O42">
+    <object type="Standard - Box" version="0" id="O43">
       <attribute name="obj_pos">
         <point val="19.3,3.2"/>
       </attribute>
@@ -1055,7 +1081,7 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O43">
+    <object type="Standard - Line" version="0" id="O44">
       <attribute name="obj_pos">
         <point val="19.3,3.6"/>
       </attribute>
@@ -1073,7 +1099,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O44">
+    <object type="Standard - Line" version="0" id="O45">
       <attribute name="obj_pos">
         <point val="2.1,5.7"/>
       </attribute>
@@ -1091,7 +1117,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O45">
+    <object type="Standard - Box" version="0" id="O46">
       <attribute name="obj_pos">
         <point val="18.4,4.8"/>
       </attribute>
@@ -1114,34 +1140,16 @@
         <boolean val="false"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O46">
-      <attribute name="obj_pos">
-        <point val="13.7,5.2"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="13.69,5.19;13.7128,12.621"/>
-      </attribute>
-      <attribute name="conn_endpoints">
-        <point val="13.7,5.2"/>
-        <point val="13.7028,12.611"/>
-      </attribute>
-      <attribute name="numcp">
-        <int val="1"/>
-      </attribute>
-      <attribute name="line_width">
-        <real val="0.02"/>
-      </attribute>
-    </object>
     <object type="Standard - Line" version="0" id="O47">
       <attribute name="obj_pos">
-        <point val="12.3058,5.21875"/>
+        <point val="13.7,5.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2958,5.20875;12.3158,12.6256"/>
+        <rectangle val="13.6859,5.19;13.71,12.6075"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="12.3058,5.21875"/>
-        <point val="12.3058,12.6156"/>
+        <point val="13.7,5.2"/>
+        <point val="13.6959,12.5975"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1152,14 +1160,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O48">
       <attribute name="obj_pos">
-        <point val="18.4,5.6"/>
+        <point val="12.3058,5.21875"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="18.39,5.59;20.31,5.61"/>
+        <rectangle val="12.2958,5.20875;12.3184,12.6075"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="18.4,5.6"/>
-        <point val="20.3,5.6"/>
+        <point val="12.3058,5.21875"/>
+        <point val="12.3084,12.5975"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1169,6 +1177,24 @@
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O49">
+      <attribute name="obj_pos">
+        <point val="18.4,5.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.39,5.59;20.3566,5.61071"/>
+      </attribute>
+      <attribute name="conn_endpoints">
+        <point val="18.4,5.6"/>
+        <point val="20.3466,5.60071"/>
+      </attribute>
+      <attribute name="numcp">
+        <int val="1"/>
+      </attribute>
+      <attribute name="line_width">
+        <real val="0.02"/>
+      </attribute>
+    </object>
+    <object type="Standard - Line" version="0" id="O50">
       <attribute name="obj_pos">
         <point val="1.1,14.8"/>
       </attribute>
@@ -1186,7 +1212,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O50">
+    <object type="Standard - Line" version="0" id="O51">
       <attribute name="obj_pos">
         <point val="1.1,16.5"/>
       </attribute>
@@ -1204,7 +1230,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O51">
+    <object type="Standard - Line" version="0" id="O52">
       <attribute name="obj_pos">
         <point val="1.1,13"/>
       </attribute>
@@ -1222,7 +1248,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O52">
+    <object type="Standard - Line" version="0" id="O53">
       <attribute name="obj_pos">
         <point val="1.8,13"/>
       </attribute>
@@ -1240,7 +1266,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O53">
+    <object type="Standard - Line" version="0" id="O54">
       <attribute name="obj_pos">
         <point val="2.9,13"/>
       </attribute>
@@ -1258,7 +1284,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O54">
+    <object type="Standard - Line" version="0" id="O55">
       <attribute name="obj_pos">
         <point val="10.9,13"/>
       </attribute>
@@ -1276,7 +1302,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O55">
+    <object type="Standard - Line" version="0" id="O56">
       <attribute name="obj_pos">
         <point val="4.4,13"/>
       </attribute>
@@ -1294,7 +1320,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O56">
+    <object type="Standard - Line" version="0" id="O57">
       <attribute name="obj_pos">
         <point val="6,13"/>
       </attribute>
@@ -1312,7 +1338,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O57">
+    <object type="Standard - Line" version="0" id="O58">
       <attribute name="obj_pos">
         <point val="8.3,13"/>
       </attribute>
@@ -1330,7 +1356,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O58">
+    <object type="Standard - Line" version="0" id="O59">
       <attribute name="obj_pos">
         <point val="2.10069,15.598"/>
       </attribute>
@@ -1348,11 +1374,11 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O62" connection="0"/>
-        <connection handle="1" to="O4" connection="4"/>
+        <connection handle="0" to="O63" connection="0"/>
+        <connection handle="1" to="O5" connection="4"/>
       </connections>
     </object>
-    <object type="Standard - Line" version="0" id="O59">
+    <object type="Standard - Line" version="0" id="O60">
       <attribute name="obj_pos">
         <point val="2.1,13.9"/>
       </attribute>
@@ -1370,7 +1396,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O60">
+    <object type="Standard - Line" version="0" id="O61">
       <attribute name="obj_pos">
         <point val="2.1,17.3"/>
       </attribute>
@@ -1388,7 +1414,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O61">
+    <object type="Standard - Line" version="0" id="O62">
       <attribute name="obj_pos">
         <point val="15.9,13"/>
       </attribute>
@@ -1406,7 +1432,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O62">
+    <object type="Standard - Line" version="0" id="O63">
       <attribute name="obj_pos">
         <point val="2.1,13"/>
       </attribute>
@@ -1424,7 +1450,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O63">
+    <object type="Standard - Line" version="0" id="O64">
       <attribute name="obj_pos">
         <point val="13.7,13"/>
       </attribute>
@@ -1442,7 +1468,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O64">
+    <object type="Standard - Line" version="0" id="O65">
       <attribute name="obj_pos">
         <point val="12.2815,12.9969"/>
       </attribute>
@@ -1460,7 +1486,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O65">
+    <object type="Standard - Line" version="0" id="O66">
       <attribute name="obj_pos">
         <point val="19.369,16.6547"/>
       </attribute>
@@ -1478,11 +1504,11 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="0" to="O74" connection="0"/>
-        <connection handle="1" to="O73" connection="6"/>
+        <connection handle="0" to="O75" connection="0"/>
+        <connection handle="1" to="O74" connection="6"/>
       </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O66">
+    <object type="Standard - Box" version="0" id="O67">
       <attribute name="obj_pos">
         <point val="0.5375,18.402"/>
       </attribute>
@@ -1505,7 +1531,7 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O67">
+    <object type="Standard - Line" version="0" id="O68">
       <attribute name="obj_pos">
         <point val="2.9,18.4"/>
       </attribute>
@@ -1523,7 +1549,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O68">
+    <object type="Standard - Line" version="0" id="O69">
       <attribute name="obj_pos">
         <point val="5.3,18.4"/>
       </attribute>
@@ -1542,7 +1568,7 @@
       </attribute>
     </object>
     <group>
-      <object type="Standard - Box" version="0" id="O69">
+      <object type="Standard - Box" version="0" id="O70">
         <attribute name="obj_pos">
           <point val="18.4661,14.1947"/>
         </attribute>
@@ -1565,7 +1591,7 @@
           <boolean val="false"/>
         </attribute>
       </object>
-      <object type="Standard - Line" version="0" id="O70">
+      <object type="Standard - Line" version="0" id="O71">
         <attribute name="obj_pos">
           <point val="18.469,14.6358"/>
         </attribute>
@@ -1583,7 +1609,7 @@
           <real val="0.02"/>
         </attribute>
       </object>
-      <object type="Standard - Line" version="0" id="O71">
+      <object type="Standard - Line" version="0" id="O72">
         <attribute name="obj_pos">
           <point val="19.369,14.6358"/>
         </attribute>
@@ -1601,11 +1627,11 @@
           <real val="0.02"/>
         </attribute>
         <connections>
-          <connection handle="0" to="O70" connection="0"/>
-          <connection handle="1" to="O69" connection="6"/>
+          <connection handle="0" to="O71" connection="0"/>
+          <connection handle="1" to="O70" connection="6"/>
         </connections>
       </object>
-      <object type="Standard - Line" version="0" id="O72">
+      <object type="Standard - Line" version="0" id="O73">
         <attribute name="obj_pos">
           <point val="18.4661,15.049"/>
         </attribute>
@@ -1623,13 +1649,13 @@
           <real val="0.02"/>
         </attribute>
         <connections>
-          <connection handle="0" to="O69" connection="3"/>
-          <connection handle="1" to="O69" connection="4"/>
+          <connection handle="0" to="O70" connection="3"/>
+          <connection handle="1" to="O70" connection="4"/>
         </connections>
       </object>
     </group>
     <group>
-      <object type="Standard - Box" version="0" id="O73">
+      <object type="Standard - Box" version="0" id="O74">
         <attribute name="obj_pos">
           <point val="18.4693,16.2209"/>
         </attribute>
@@ -1652,7 +1678,7 @@
           <boolean val="false"/>
         </attribute>
       </object>
-      <object type="Standard - Line" version="0" id="O74">
+      <object type="Standard - Line" version="0" id="O75">
         <attribute name="obj_pos">
           <point val="18.469,16.6547"/>
         </attribute>
@@ -1670,7 +1696,7 @@
           <real val="0.02"/>
         </attribute>
       </object>
-      <object type="Standard - Line" version="0" id="O75">
+      <object type="Standard - Line" version="0" id="O76">
         <attribute name="obj_pos">
           <point val="18.4693,17.0752"/>
         </attribute>
@@ -1688,26 +1714,26 @@
           <real val="0.02"/>
         </attribute>
         <connections>
-          <connection handle="0" to="O73" connection="3"/>
-          <connection handle="1" to="O73" connection="4"/>
+          <connection handle="0" to="O74" connection="3"/>
+          <connection handle="1" to="O74" connection="4"/>
         </connections>
       </object>
     </group>
-    <object type="Standard - Box" version="0" id="O76">
+    <object type="Standard - Box" version="0" id="O77">
       <attribute name="obj_pos">
-        <point val="11.0462,6.62705"/>
+        <point val="11.0462,6.61621"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.0462,6.62705;18.1332,7.39892"/>
+        <rectangle val="11.0462,6.61621;18.1332,7.39892"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="11.0462,6.62705"/>
+        <point val="11.0462,6.61621"/>
       </attribute>
       <attribute name="elem_width">
         <real val="7.08699"/>
       </attribute>
       <attribute name="elem_height">
-        <real val="0.771875"/>
+        <real val="0.782714"/>
       </attribute>
       <attribute name="border_width">
         <real val="0"/>
@@ -1719,7 +1745,7 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O77">
+    <object type="Standard - Line" version="0" id="O78">
       <attribute name="obj_pos">
         <point val="11,7.4"/>
       </attribute>
@@ -1737,21 +1763,21 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O78">
+    <object type="Standard - Box" version="0" id="O79">
       <attribute name="obj_pos">
         <point val="11.05,8.31875"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.05,8.31875;18.1348,9.1875"/>
+        <rectangle val="11.05,8.31875;18.1883,9.17559"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="11.05,8.31875"/>
       </attribute>
       <attribute name="elem_width">
-        <real val="7.08481"/>
+        <real val="7.13827"/>
       </attribute>
       <attribute name="elem_height">
-        <real val="0.86875"/>
+        <real val="0.856836"/>
       </attribute>
       <attribute name="border_width">
         <real val="0"/>
@@ -1763,15 +1789,15 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O79">
+    <object type="Standard - Line" version="0" id="O80">
       <attribute name="obj_pos">
-        <point val="11,9.2"/>
+        <point val="11.05,9.17559"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.99,8.29;18.21,9.21"/>
+        <rectangle val="11.04,8.29;18.21,9.18559"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="11,9.2"/>
+        <point val="11.05,9.17559"/>
         <point val="18.2,8.3"/>
       </attribute>
       <attribute name="numcp">
@@ -1780,8 +1806,11 @@
       <attribute name="line_width">
         <real val="0.02"/>
       </attribute>
+      <connections>
+        <connection handle="0" to="O79" connection="5"/>
+      </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O80">
+    <object type="Standard - Box" version="0" id="O81">
       <attribute name="obj_pos">
         <point val="11.05,11.8281"/>
       </attribute>
@@ -1807,16 +1836,16 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O81">
+    <object type="Standard - Line" version="0" id="O82">
       <attribute name="obj_pos">
         <point val="11,12.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.99,11.79;18.21,12.61"/>
+        <rectangle val="10.99,11.8;18.2285,12.61"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="11,12.6"/>
-        <point val="18.2,11.8"/>
+        <point val="18.2185,11.81"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1825,7 +1854,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O82">
+    <object type="Standard - Box" version="0" id="O83">
       <attribute name="obj_pos">
         <point val="11.0853,10.0156"/>
       </attribute>
@@ -1851,7 +1880,7 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O83">
+    <object type="Standard - Line" version="0" id="O84">
       <attribute name="obj_pos">
         <point val="11,10.9"/>
       </attribute>
@@ -1869,7 +1898,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Box" version="0" id="O84">
+    <object type="Standard - Box" version="0" id="O85">
       <attribute name="obj_pos">
         <point val="10.9616,13.9094"/>
       </attribute>
@@ -1895,16 +1924,16 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O85">
+    <object type="Standard - Line" version="0" id="O86">
       <attribute name="obj_pos">
-        <point val="10.9,14.7"/>
+        <point val="10.8943,14.8101"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.89,13.89;18.21,14.71"/>
+        <rectangle val="10.8843,13.8994;18.1978,14.8201"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="10.9,14.7"/>
-        <point val="18.2,13.9"/>
+        <point val="10.8943,14.8101"/>
+        <point val="18.1878,13.9094"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1912,13 +1941,16 @@
       <attribute name="line_width">
         <real val="0.02"/>
       </attribute>
+      <connections>
+        <connection handle="1" to="O85" connection="2"/>
+      </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O86">
+    <object type="Standard - Box" version="0" id="O87">
       <attribute name="obj_pos">
         <point val="10.9616,15.6094"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.9616,15.6094;18.1524,16.4719"/>
+        <rectangle val="10.9616,15.6094;18.1524,16.4881"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="10.9616,15.6094"/>
@@ -1927,7 +1959,7 @@
         <real val="7.19081"/>
       </attribute>
       <attribute name="elem_height">
-        <real val="0.8625"/>
+        <real val="0.878686"/>
       </attribute>
       <attribute name="border_width">
         <real val="0"/>
@@ -1939,7 +1971,7 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O87">
+    <object type="Standard - Line" version="0" id="O88">
       <attribute name="obj_pos">
         <point val="10.9,16.5"/>
       </attribute>
@@ -1957,10 +1989,10 @@
         <real val="0.02"/>
       </attribute>
       <connections>
-        <connection handle="1" to="O4" connection="4"/>
+        <connection handle="1" to="O5" connection="4"/>
       </connections>
     </object>
-    <object type="Standard - Box" version="0" id="O88">
+    <object type="Standard - Box" version="0" id="O89">
       <attribute name="obj_pos">
         <point val="10.9263,17.3125"/>
       </attribute>
@@ -1986,7 +2018,7 @@
         <boolean val="true"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O89">
+    <object type="Standard - Line" version="0" id="O90">
       <attribute name="obj_pos">
         <point val="10.9,18.2"/>
       </attribute>
@@ -2004,7 +2036,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O90">
+    <object type="Standard - Line" version="0" id="O91">
       <attribute name="obj_pos">
         <point val="5.6,3.6"/>
       </attribute>
@@ -2022,7 +2054,7 @@
         <real val="0.02"/>
       </attribute>
     </object>
-    <object type="Standard - Line" version="0" id="O91">
+    <object type="Standard - Line" version="0" id="O92">
       <attribute name="obj_pos">
         <point val="5.1,3.6"/>
       </attribute>
@@ -2038,29 +2070,6 @@
       </attribute>
       <attribute name="line_width">
         <real val="0.02"/>
-      </attribute>
-    </object>
-    <object type="Standard - Box" version="0" id="O92">
-      <attribute name="obj_pos">
-        <point val="0.536433,12.9953"/>
-      </attribute>
-      <attribute name="obj_bb">
-        <rectangle val="0.516433,12.9753;18.2288,18.2179"/>
-      </attribute>
-      <attribute name="elem_corner">
-        <point val="0.536433,12.9953"/>
-      </attribute>
-      <attribute name="elem_width">
-        <real val="17.6724"/>
-      </attribute>
-      <attribute name="elem_height">
-        <real val="5.20261"/>
-      </attribute>
-      <attribute name="border_width">
-        <real val="0.04"/>
-      </attribute>
-      <attribute name="show_background">
-        <boolean val="false"/>
       </attribute>
     </object>
     <object type="Embed - Text" version="0" id="O93">
@@ -6247,7 +6256,7 @@
         <point val="1.29889,15.1791"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.29889,14.9402;1.60189,16.7402"/>
+        <rectangle val="1.29889,14.9402;1.60189,16.4402"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOH-TBL[1].KOHNAME#</string>
@@ -6265,8 +6274,7 @@
 &#164;&#162;
 &#164;&#162;
 &#164;&#162;
-&#164;&#162;
-#</string>
+&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
