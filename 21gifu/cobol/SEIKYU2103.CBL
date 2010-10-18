@@ -38,6 +38,9 @@
       *  01.00.03    内田    08/04/23    帳票様式の変更に伴う修正
       *  01.00.04    吉川    10/02/02    公費の種類毎に改頁しないように修正
       *                                  公費の助成がない場合は印字対象外
+      *  01.00.05    吉川    10/10/08    ３併の場合、上限額を超えたあと
+      *                                  再度診療を登録すると
+      *                                  印字されなくなるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -661,9 +664,12 @@
            MOVE    MF100-KOHID             TO  WRK-KOHID
            MOVE    ZERO                    TO  WRK-SEIKYUGK-G
                                                FLG-TYOKI
-      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
-                                               FLG-ERR
-      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
+      *=== 公費助成判定の修正 by Yoshikawa(2010/10/08) start
+      **=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
+      *                                         FLG-ERR
+      **=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
+           MOVE    1                       TO   FLG-ERR
+      *=== 公費助成判定の修正 by Yoshikawa(2010/10/08) end
            DISPLAY "集計開始 入外区分=" RECE02-NYUGAIKBN
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -722,6 +728,7 @@
            END-IF
       *
       *
+           DISPLAY "FLG-ERR =" FLG-ERR
       *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
       **    点数が０のデータは対象外
       *     IF      MF100-TOTALTEN >   ZERO
@@ -1127,6 +1134,24 @@
                    MOVE    2           TO  FLG-TYOKI
                END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== 公費助成判定の修正 by Yoshikawa(2010/10/08) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+               IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                         > SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE     ZERO          TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE     ZERO          TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== 公費助成判定の修正 by Yoshikawa(2010/10/08) end
+      *
            END-PERFORM
       *
            IF  FLG-HEIYOU      =   ZERO
@@ -1146,13 +1171,15 @@
                                                TO  WRK-SEIKYUGK
                    END-IF
                END-IF
-      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
-           ELSE
-      *        ３併で地方公費の助成があるかどうか
-               IF  WRK-SEIKYUGK  =  ZERO
-                   MOVE    1                   TO  FLG-ERR
-               END-IF
-      *=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
+      *=== 公費助成判定の修正 by Yoshikawa(2010/10/08) end
+      **=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) start
+      *     ELSE
+      **        ３併で地方公費の助成があるかどうか
+      *         IF  WRK-SEIKYUGK  =  ZERO
+      *             MOVE    1                   TO  FLG-ERR
+      *         END-IF
+      **=== 地方公費助成なしは印字対象外 by Yoshikawa(2010/02/02) end
+      *=== 公費助成判定の修正 by Yoshikawa(2010/10/08) emd
            END-IF
       *
            ADD WRK-SEIKYUGK                    TO  WRK-SEIKYUGK-G
