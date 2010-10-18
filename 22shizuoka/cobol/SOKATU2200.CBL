@@ -52,6 +52,7 @@
       *                                   合計が印字される不具合を修正
       *  01.00.11    吉川    2008/10/02   最終ページに合計を印字
       *  01.00.12    吉川    2010/04/05   オンライン返戻対応
+      *  01.00.13    吉川    2010/10/13   特別療養費国保対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -208,6 +209,9 @@
       ****2006/05/19 返戻対応
            03  WRK-PARA-SYOKBN     PIC X(01).
       ****	       
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -431,6 +435,9 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-SYOKBN
       ****
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+                                               WRK-PARA-TOKUBETU
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
                                                RECEERR
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
@@ -560,26 +567,42 @@
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
       *
            OPEN     OUTPUT  UPD-FILE
-      ****2006/05/19 返戻対応
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    "2"
-      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
-      *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      *****2006/05/19 返戻対応
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    "2"
+      **=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      **             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *             MOVE    "key37"        TO  WRK-PATH
+      **=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *             MOVE    "key65"     TO  WRK-PATH2
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      **=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      **             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+      *             MOVE    "key38"        TO  WRK-PATH
+      **=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *             MOVE    "key66"     TO  WRK-PATH2
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
+      *****
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
                    MOVE    "key37"        TO  WRK-PATH
-      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
-      *---(01.00.05) LINE ADD START ------------------------------------
-                   MOVE    "key65"     TO  WRK-PATH2
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               WHEN    "1"
-      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
-      *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "1"
                    MOVE    "key38"        TO  WRK-PATH
-      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
-      *---(01.00.05) LINE ADD START ------------------------------------
-                   MOVE    "key66"     TO  WRK-PATH2
-      *---(01.00.05) LINE ADD END   ------------------------------------
+                   MOVE    "key66"        TO  WRK-PATH2
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
            END-EVALUATE
-      ****
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *
            PERFORM  900-SEIKYU-SELECT-SEC
            .
@@ -611,19 +634,29 @@
       *
       *---(01.00.05) LINE ADD START ------------------------------------
            PERFORM  900-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE     1       TO        FLG-KOUKI
-           MOVE    "039"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOUKI-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE    "040"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOUKI-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+           IF  WRK-PARA-TOKUBETU  =  "1"
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+             MOVE     ZERO    TO        FLG-END
+             MOVE     1       TO        FLG-KOUKI
+             MOVE    "039"    TO        WRK-HKNNUM
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOUKI-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+           ELSE
+             MOVE     1       TO        FLG-KOUKI
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+             MOVE     ZERO    TO        FLG-END
+             MOVE    "040"    TO        WRK-HKNNUM
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOUKI-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *---(01.00.05) LINE ADD END   ------------------------------------
            CLOSE   UPD-FILE
            CLOSE   SKT2200TMP-FILE
@@ -841,7 +874,10 @@
        220-HKN-SYUKEI-SEC               SECTION.
       *
       *    一般か退職者か
-           IF  RECE10-HKNNUM  =  "060"
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      *     IF  RECE10-HKNNUM  =  "060"
+           IF  RECE10-HKNNUM  =  "060" OR "068"
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *    年齢チェック
              EVALUATE  TRUE
                WHEN  RECE10-AGE  >= 70
@@ -1475,6 +1511,13 @@
              WHEN  7     MOVE  "○"      TO  SKT2200-TENHYOKBN (5)
            END-EVALUATE
       *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT2200-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+      *
            .
        310-HEAD-HEN-EXT.
            EXIT.
@@ -1508,6 +1551,13 @@
              WHEN  6     MOVE  "○"      TO  SKT2200-TENHYOKBN (4)
              WHEN  7     MOVE  "○"      TO  SKT2200-TENHYOKBN (5)
            END-EVALUATE
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT2200-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *
            .
        310-HEAD-HEN-KOUKI-EXT.
@@ -1741,7 +1791,15 @@
                MOVE   "SKT2200o.red"   TO  SPRT-PRTID
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      *     MOVE    "国保総括表"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
            MOVE    SKT2200             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2055,6 +2113,12 @@
       *
            MOVE    SPACE                   TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"              TO  RECE10-XXEDHKNJANUM
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "000000"                TO  RECE10-SRYYM
+             MOVE  "999999"                TO  RECE10-XXSRYYM
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *
            MOVE   RECE10-REC               TO    MCPDATA-REC.
            MOVE   "DBSELECT"               TO    MCP-FUNC.
