@@ -41,6 +41,7 @@
       *  01.00.05     門間     08/12/02    小計・合計日数を３ｹﾀ→４ｹﾀに修正
       *  01.00.06     吉川     09/07/03    豊後大野市、由布市、国東市の
       *                                    市町村名を取得できるように修正
+      *  01.00.07     吉川     10/10/12    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -443,8 +444,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4401"    TO  JOB-PGID
-           MOVE    "乳幼児医療費助成金請求書" 
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) start
+      *     MOVE    "乳幼児医療費助成金請求書" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    "子ども医療費助成金請求書" 
                                    TO  JOB-SHELLMSG
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -888,6 +893,20 @@
            END-IF
       *    乳幼児−日数
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) start
+      *    適用区分（高額療養費）
+           IF  RECE02-NYUGAIKBN  =  "1"
+             EVALUATE  RECE02-ZAITAKU
+               WHEN  "2"
+                 MOVE      1                   TO  MF100-KOGAKU
+               WHEN  "3"
+                 MOVE      2                   TO  MF100-KOGAKU
+               WHEN  "4"
+                 MOVE      3                   TO  MF100-KOGAKU
+             END-EVALUATE
+           END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
+      *
            WRITE   MF100-REC
       * 
            .
@@ -1140,6 +1159,20 @@
                PERFORM 920-HKNJAINF-SET-SEC
                MOVE    HKNJA-HKNJANAME     TO  SC01-HKNJANAME(IDX)
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) start
+      *        適用区分
+               IF  MF100-NYUGAIKBN  =  "1"
+                 EVALUATE  MF100-KOGAKU
+                   WHEN  1
+                     MOVE    "Ａ"          TO  SC01-KOGAKU(IDX)
+                   WHEN  2
+                     MOVE    "Ｂ"          TO  SC01-KOGAKU(IDX)
+                   WHEN  3
+                     MOVE    "Ｃ"          TO  SC01-KOGAKU(IDX)
+                 END-EVALUATE
+               END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
+      *
       *        小計加算
                ADD     MF100-JNISSU            TO  SUM-SNISSU
                ADD     MF100-TOTALTEN          TO  SUM-STENSU
@@ -1308,8 +1341,12 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4401.red"         TO  SPRT-PRTID
-           MOVE   "乳幼児医療費助成金請求書"
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) start
+      *     MOVE   "乳幼児医療費助成金請求書"
+      *                                 TO  SPRT-TITLE
+           MOVE   "子ども医療費助成金請求書"
                                        TO  SPRT-TITLE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
            MOVE    SC01                TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

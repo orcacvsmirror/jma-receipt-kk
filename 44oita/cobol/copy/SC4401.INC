@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/10/12  帳票様式の変更に伴う修正
+      ********************************************************************
         01  SC01.
             03  SC01-PRTYM          PIC X(16).
             03  SC01-SEIYMD         PIC X(22).
@@ -41,6 +45,9 @@
                 05  SC01-SEIKYUGK   PIC X(07).
                 05  SC01-SRYYM      PIC X(4).
                 05  SC01-HKNJANAME  PIC X(32).
+      *=== 帳票様式の変更 by Yoshikawa(2010/10/12) start
+                05  SC01-KOGAKU     PIC X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2010/10/12) end
             03  SC01-GOKEI-TBL          OCCURS  2 TIMES.
       *--- (2008/12/02) line add&del start monma ---------------------------
       *          05  SC01-GNISSU     PIC X(03).

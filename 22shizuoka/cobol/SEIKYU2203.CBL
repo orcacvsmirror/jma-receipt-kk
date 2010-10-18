@@ -34,6 +34,7 @@
       *                                      板闻怠簇攫鼠を徊救
       *  01.00.02       柒拍    2008/07/18   琅铂辉の瘦副荚戎规の恃构
       *  01.00.03       等李    2009/07/07   赏揪辉の瘦副荚戎规の恃构
+      *  01.00.04       等李    2010/10/07   蘑杉叹恃构
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -351,7 +352,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU2203"    TO  JOB-PGID
-           MOVE    "讫湍基板闻锐懒滇今" 
+      *=== 蘑杉叹恃构 by Yoshikawa(2010/10/07) start
+      *     MOVE    "讫湍基板闻锐懒滇今" 
+           MOVE    "こども板闻锐懒滇今" 
+      *=== 蘑杉叹恃构 by Yoshikawa(2010/10/07) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -937,7 +941,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC2203.red"         TO  SPRT-PRTID
-           MOVE    "讫湍基板闻锐懒滇今"
+      *=== 蘑杉叹恃构 by Yoshikawa(2010/10/07) start
+      *     MOVE    "讫湍基板闻锐懒滇今"
+           MOVE    "こども板闻锐懒滇今"
+      *=== 蘑杉叹恃构 by Yoshikawa(2010/10/07) end
                                     TO  SPRT-TITLE
            MOVE    SC03             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
