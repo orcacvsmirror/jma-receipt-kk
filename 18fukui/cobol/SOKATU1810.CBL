@@ -1299,7 +1299,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1810.red"        TO  SPRT-PRTID
-           MOVE    "πÒ ›¿¡µ·ΩÒ"        TO  SPRT-TITLE
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/10/01) start
+      *     MOVE    "πÒ ›¿¡µ·ΩÒ"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "πÒ ›¿¡µ·ΩÒ"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "πÒ ›¿¡µ·ΩÒ [∆√ ÃŒ≈Õ‹»Ò]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/10/01) end
            MOVE    SKT1810             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
