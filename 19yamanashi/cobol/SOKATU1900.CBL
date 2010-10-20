@@ -1348,7 +1348,15 @@
            MOVE    "SKT1900.red"       TO  SPRT-PRTID
       *=== 改正後の返戻分は新様式で印字 by Yoshikawa(2009/06/30) end
       *****
-           MOVE    "国保総括表"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE    "国保総括表"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
            MOVE    SKT1900             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1518,7 +1526,15 @@
       *     MOVE   "SKT1910"            TO  SPRT-PRTID
            MOVE   "SKT1910.red"        TO  SPRT-PRTID
       *****
-           MOVE    "国保総括表"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE    "国保総括表"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
            MOVE    SKT1910             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1689,7 +1705,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1900o.red"   TO  SPRT-PRTID
-           MOVE    "国保総括表"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE    "国保総括表"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
            MOVE    SKT1900            TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

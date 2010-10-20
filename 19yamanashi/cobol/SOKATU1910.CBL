@@ -1738,7 +1738,15 @@
            END-IF
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****
-           MOVE    "国保請求書"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE    "国保請求書"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書"               TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
            MOVE    SKT1920             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1932,7 +1940,16 @@
       *     MOVE   "SKT1930"            TO  SPRT-PRTID
            MOVE   "SKT1930.red"        TO  SPRT-PRTID
       *****
-           MOVE    "国保請求書（他府県用）"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE    "国保請求書（他府県用）"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書（他府県用）"  TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書（他府県用） [特別療養費]"  
+                                               TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
            MOVE    SKT1930             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
