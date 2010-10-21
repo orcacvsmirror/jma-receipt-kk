@@ -46,6 +46,8 @@
       *  01.00.12    吉川   09/11/18    シス管「2007」のまとめ公費で
       *                                 6つ目以降がまとまらない不具合を修正
       *  01.00.13    吉川   10/07/15    オンライン返戻対応
+      *  01.00.14    吉川   10/10/15    シス管「2010」の公費再掲欄への
+      *                                 地方公費記載設定対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -151,9 +153,15 @@
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
            03  FLG-PTKOHINF        PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+           03  FLG-2010            PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *    添字領域
        01  IDX-AREA.
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+           03  IDX                 PIC 9(04).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
@@ -269,6 +277,13 @@
            03  WRK-2007-MAX        PIC 9(03).
       *=== シス管「2007」対応 by Yoshikawa(2008/09/19) end
       *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+       01  WRK-2010-AREA.
+           03  WRK-2010-TBL          OCCURS  100.
+               05  WRK-2010-KOHNUM   PIC X(03).
+           03  WRK-2010-MAX          PIC 9(03).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -337,6 +352,11 @@
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
       *=== シス管「2007」対応 by Yoshikawa(2008/09/19) end
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *    地方公費保険番号付加情報
+           COPY    "CPSK2010.INC".
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -613,6 +633,53 @@
       *
            MOVE    IDX1                    TO  WRK-2007-MAX
       *=== シス管「2007」対応 by Yoshikawa(2008/09/19) end
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *    請求書公費再掲欄記載情報
+           INITIALIZE                      WRK-2010-AREA
+      *
+           INITIALIZE                      SYS-2010-REC
+           MOVE    "2010"              TO  SYS-2010-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2010-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2010-STYUKYMD (7:2)
+           MOVE    SYS-2010-STYUKYMD   TO  SYS-2010-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2010-HOSPNUM
+           MOVE    SYS-2010-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX            >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2010-REC
+               IF    ( SYS-2010-SAIKEIKBN  =   "1"         )
+               AND   ( SYS-2010-SAIKEI-TAIKBN
+                                           =   "0" OR  "1" )
+                   ADD     1                   TO  IDX
+                   MOVE    SYS-2010-KBNCD(1:3) TO WRK-2010-KOHNUM (IDX)
+               END-IF
+      *
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX                 TO  WRK-2010-MAX
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -986,95 +1053,116 @@
              IF    RECE10-KOHNUM(IDX3)  =  "091"
                MOVE    "051"    TO    RECE10-KOHNUM(IDX3)
              END-IF
-      *---(01.00.03) LINE ADD START -----------------------------------
-             IF    RECE10-KOHNUM(IDX3)  =  "181" OR "182" OR "183"
-                              OR  "185" OR "187" OR "188" OR "189"
-      *---(01.00.09) LINE ADD START -----------------------------------
-      *                        OR  "143" OR "145" OR "146"
-                              OR  "143" OR "145" OR "146" OR "186"
-      *---(01.00.09) LINE ADD END   -----------------------------------
-               MOVE    "180"    TO    RECE10-KOHNUM(IDX3)
-             END-IF
-      *---(01.00.03) LINE ADD END   -----------------------------------
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+             MOVE    ZERO                  TO  FLG-2010
       *
-      *=== 保険番号283等はまとめる by Uchida(2009/06/09) start
-             IF  RECE10-KOHNUM (IDX3)  =  "283" OR "285" OR "289"
-               MOVE  "190"      TO  RECE10-KOHNUM (IDX3)
+      *      請求書公費再掲欄記載情報があるとき
+             IF  WRK-2010-MAX  >  ZERO
+               PERFORM VARYING IDZ1    FROM    1   BY  1
+                       UNTIL   IDZ1    >       WRK-2010-MAX
+                 IF  RECE10-KOHNUM(IDX3)  =  WRK-2010-KOHNUM(IDZ1)
+                   MOVE    1               TO  FLG-2010
+                   MOVE    WRK-2010-MAX    TO  IDZ1
+                 END-IF
+               END-PERFORM
              END-IF
-      *=== 保険番号283等はまとめる by Uchida(2009/06/09) end
+      *
+             IF  FLG-2010  =  ZERO
+      **---(01.00.03) LINE ADD START -----------------------------------
+      *       IF    RECE10-KOHNUM(IDX3)  =  "181" OR "182" OR "183"
+      *                        OR  "185" OR "187" OR "188" OR "189"
+      **---(01.00.09) LINE ADD START -----------------------------------
+      **                        OR  "143" OR "145" OR "146"
+      *                        OR  "143" OR "145" OR "146" OR "186"
+      **---(01.00.09) LINE ADD END   -----------------------------------
+      *         MOVE    "180"    TO    RECE10-KOHNUM(IDX3)
+      *       END-IF
+      **---(01.00.03) LINE ADD END   -----------------------------------
+      **
+      **=== 保険番号283等はまとめる by Uchida(2009/06/09) start
+      *       IF  RECE10-KOHNUM (IDX3)  =  "283" OR "285" OR "289"
+      *         MOVE  "190"      TO  RECE10-KOHNUM (IDX3)
+      *       END-IF
+      **=== 保険番号283等はまとめる by Uchida(2009/06/09) end
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *=== シス管「2007」対応 by Yoshikawa(2008/09/19) start
       *        公費番号まとめ情報があるとき
-             IF  WRK-2007-MAX  >  ZERO
-               MOVE  SPACE     TO  WRK-KOHNAME
-               PERFORM VARYING IDZ1    FROM    1   BY  1
-                       UNTIL   IDZ1    >       WRK-2007-MAX
-                 PERFORM VARYING IDZ2  FROM    1   BY  1
+               IF  WRK-2007-MAX  >  ZERO
+                 MOVE  SPACE     TO  WRK-KOHNAME
+                 PERFORM VARYING IDZ1    FROM    1   BY  1
+                         UNTIL   IDZ1    >       WRK-2007-MAX
+                   PERFORM VARYING IDZ2  FROM    1   BY  1
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *                   UNTIL   IDZ2  >       5
-                         UNTIL   IDZ2  >       10
+      *                     UNTIL   IDZ2  >       5
+                           UNTIL   IDZ2  >       10
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
-                   IF  RECE10-KOHNUM(IDX3)  
-                                 =   WRK-2007-KOHNUM(IDZ1 IDZ2)
-                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
-                                 TO  RECE10-KOHNUM (IDX3)
-                     MOVE  WRK-2007-MEISYO (IDZ1)
-                                 TO  WRK-KOHNAME
+                           OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                     IF  RECE10-KOHNUM(IDX3)  
+                                   =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                       MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                   TO  RECE10-KOHNUM (IDX3)
+                       MOVE  WRK-2007-MEISYO (IDZ1)
+                                   TO  WRK-KOHNAME
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *               MOVE  5             TO  IDZ2
-                     MOVE  10            TO  IDZ2
+      *                 MOVE  5             TO  IDZ2
+                       MOVE  10            TO  IDZ2
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                     MOVE  WRK-2007-MAX  TO  IDZ1
-                   END-IF
+                       MOVE  WRK-2007-MAX  TO  IDZ1
+                     END-IF
+                   END-PERFORM
                  END-PERFORM
-               END-PERFORM
-             END-IF
+               END-IF
       *=== シス管「2007」対応 by Yoshikawa(2008/09/19) end
       *
       *    公費判別
-             PERFORM  VARYING  IDX4  FROM  1  BY  1
-                      UNTIL    IDX4  >     20
-                      OR       SKT0810TMP-KOHNUM (IDX4) = SPACE
-               IF  RECE10-KOHNUM (IDX3)  =  SKT0810TMP-KOHNUM (IDX4)
-                   MOVE  IDX4  TO  CNT-KOH
-                   MOVE  20    TO  IDX4
-               END-IF
-             END-PERFORM
+               PERFORM  VARYING  IDX4  FROM  1  BY  1
+                        UNTIL    IDX4  >     20
+                        OR       SKT0810TMP-KOHNUM (IDX4) = SPACE
+                 IF  RECE10-KOHNUM (IDX3)  =  SKT0810TMP-KOHNUM (IDX4)
+                     MOVE  IDX4  TO  CNT-KOH
+                     MOVE  20    TO  IDX4
+                 END-IF
+               END-PERFORM
       *
       *    該当公費がなかった場合
-             IF  IDX4  < 20
-               MOVE  IDX4  TO  CNT-KOH
-             END-IF
+               IF  IDX4  < 20
+                 MOVE  IDX4  TO  CNT-KOH
+               END-IF
       *
       *    公費名
-             MOVE  RECE10-KOHNUM(IDX3)  TO  SKT0810TMP-KOHNUM(CNT-KOH)
+               MOVE  RECE10-KOHNUM(IDX3)  TO  SKT0810TMP-KOHNUM(CNT-KOH)
       *    療養の給付：件数
-             ADD   1  TO  SKT0810TMP-KKENSU (CNT-KOH IDX2)
+               ADD   1  TO  SKT0810TMP-KKENSU (CNT-KOH IDX2)
       *    療養の給付:診療実日数
-             ADD  RECE10-JNISSU(IDX3 + 1)  TO
-                               SKT0810TMP-KNISSU(CNT-KOH IDX2)
+               ADD  RECE10-JNISSU(IDX3 + 1)  TO
+                                 SKT0810TMP-KNISSU(CNT-KOH IDX2)
       *    療養の給付：点数
-             ADD  RECE10-TOTALTEN(IDX3 + 1)  TO
-                               SKT0810TMP-KTENSU(CNT-KOH IDX2)
+               ADD  RECE10-TOTALTEN(IDX3 + 1)  TO
+                                 SKT0810TMP-KTENSU(CNT-KOH IDX2)
       *
       *    療養の給付：一部負担金
-             ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
-                               SKT0810TMP-KITBFTN(CNT-KOH IDX2)
+               ADD  RECE10-FTNMONEY(IDX3 + 1)  TO
+                                 SKT0810TMP-KITBFTN(CNT-KOH IDX2)
       *
-             IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+               IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
       *    食事療養:件数
-               ADD   1  TO  SKT0810TMP-S-KKENSU(CNT-KOH)
-             END-IF
+                 ADD   1  TO  SKT0810TMP-S-KKENSU(CNT-KOH)
+               END-IF
       *    食事療養:日数
-             ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
-                               SKT0810TMP-S-KNISSU(CNT-KOH)
+               ADD  RECE10-SHOKUJINISSU(IDX3 + 1)  TO
+                                 SKT0810TMP-S-KNISSU(CNT-KOH)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
-                               SKT0810TMP-S-KKINGK(CNT-KOH)
+               ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)  TO
+                                 SKT0810TMP-S-KKINGK(CNT-KOH)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
-                               SKT0810TMP-S-KFTNGK(CNT-KOH)
+               ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
+                                 SKT0810TMP-S-KFTNGK(CNT-KOH)
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+             ELSE
+                 MOVE    1                   TO  FLG-UPD
+             END-IF     
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
            END-PERFORM
       *
       *

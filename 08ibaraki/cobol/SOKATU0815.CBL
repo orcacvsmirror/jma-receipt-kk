@@ -33,6 +33,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    10/02/26    広域連合の保険者番号指定対応
       *  01.00.04    吉川    10/07/15    オンライン返戻対応
+      *  
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -98,6 +99,9 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+           03  FLG-2010            PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
@@ -191,6 +195,13 @@
                    07  WRK-2007-KOHNUM
                                    PIC X(03)   OCCURS  10.
            03  WRK-2007-MAX        PIC 9(03).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+       01  WRK-2010-AREA.
+           03  WRK-2010-TBL          OCCURS  100.
+               05  WRK-2010-KOHNUM   PIC X(03).
+           03  WRK-2010-MAX          PIC 9(03).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-PAGE            PIC 9(03).
@@ -282,6 +293,11 @@
       *
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *    地方公費保険番号付加情報
+           COPY    "CPSK2010.INC".
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -543,6 +559,53 @@
            DISPLAY "SYS-200501-KOUIKIPRTKBN=" SYS-200501-KOUIKIPRTKBN
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/02/26) end
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *    請求書公費再掲欄記載情報
+           INITIALIZE                      WRK-2010-AREA
+      *
+           INITIALIZE                      SYS-2010-REC
+           MOVE    "2010"              TO  SYS-2010-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2010-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2010-STYUKYMD (7:2)
+           MOVE    SYS-2010-STYUKYMD   TO  SYS-2010-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2010-HOSPNUM
+           MOVE    SYS-2010-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX            >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2010-REC
+               IF    ( SYS-2010-SAIKEIKBN  =   "1"         )
+               AND   ( SYS-2010-SAIKEI-TAIKBN
+                                           =   "0" OR  "1" )
+                   ADD     1                   TO  IDX
+                   MOVE    SYS-2010-KBNCD(1:3) TO WRK-2010-KOHNUM (IDX)
+               END-IF
+      *
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX                 TO  WRK-2010-MAX
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
            .
        100-INIT-EXT.
@@ -986,47 +1049,68 @@
                MOVE    "051"               TO  RECE10-KOHNUM (IDZ)
              END-IF
       *
-      *      公費番号まとめ情報があるとき
-      *=== 法別が印字されない不具合修正 by Yoshikawa(2009/02/06) start
-             MOVE      SPACE            TO  WRK-MEISYO
-      *=== 法別が印字されない不具合修正 by Yoshikawa(2009/02/06) end
-             IF        WRK-2007-MAX    >       ZERO
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+             MOVE    ZERO                  TO  FLG-2010
+      *
+      *      請求書公費再掲欄記載情報があるとき
+             IF  WRK-2010-MAX  >  ZERO
                PERFORM VARYING IDZ1    FROM    1   BY  1
-                       UNTIL   IDZ1    >       WRK-2007-MAX
-                 PERFORM VARYING IDZ2  FROM    1   BY  1
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *                   UNTIL   IDZ2  >       5
-                         UNTIL   IDZ2  >       10
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                         OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
-                   IF  RECE10-KOHNUM(IDZ)  
-                                       =   WRK-2007-KOHNUM(IDZ1 IDZ2)
-                     MOVE  WRK-2007-KOHNUM(IDZ1 1)
-                                         TO  RECE10-KOHNUM (IDZ)
-                     MOVE  WRK-2007-MEISYO (IDZ1)
-                                         TO  WRK-MEISYO
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *               MOVE  5             TO  IDZ2
-                     MOVE  10            TO  IDZ2
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                     MOVE  WRK-2007-MAX  TO  IDZ1
-                   END-IF
-                 END-PERFORM
+                       UNTIL   IDZ1    >       WRK-2010-MAX
+                 IF  RECE10-KOHNUM(IDZ)  =  WRK-2010-KOHNUM(IDZ1)
+                   MOVE    1               TO  FLG-2010
+                   MOVE    WRK-2010-MAX    TO  IDZ1
+                 END-IF
                END-PERFORM
              END-IF
       *
-      *      公費番号格納
-             PERFORM VARYING   IDX2    FROM    1   BY  1
-                     UNTIL     IDX2 >          100
-               IF  SUM-KOHNUM (IDX2)   =   SPACE
-                 MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
-                 MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+             IF  FLG-2010  =  ZERO
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
+      *        公費番号まとめ情報があるとき
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2009/02/06) start
+               MOVE      SPACE            TO  WRK-MEISYO
+      *=== 法別が印字されない不具合修正 by Yoshikawa(2009/02/06) end
+               IF        WRK-2007-MAX    >       ZERO
+                 PERFORM VARYING IDZ1    FROM    1   BY  1
+                         UNTIL   IDZ1    >       WRK-2007-MAX
+                   PERFORM VARYING IDZ2  FROM    1   BY  1
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
+      *                     UNTIL   IDZ2  >       5
+                           UNTIL   IDZ2  >       10
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
+                           OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                     IF  RECE10-KOHNUM(IDZ)  
+                                         =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+                       MOVE  WRK-2007-KOHNUM(IDZ1 1)
+                                           TO  RECE10-KOHNUM (IDZ)
+                       MOVE  WRK-2007-MEISYO (IDZ1)
+                                           TO  WRK-MEISYO
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
+      *                 MOVE  5             TO  IDZ2
+                       MOVE  10            TO  IDZ2
+      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
+                       MOVE  WRK-2007-MAX  TO  IDZ1
+                     END-IF
+                   END-PERFORM
+                 END-PERFORM
                END-IF
-               IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
-                 PERFORM 200121-KOH-SYUKEI-01-SEC
-                 MOVE    100             TO  IDX2
-               END-IF
-             END-PERFORM
+      *
+      *        公費番号格納
+               PERFORM VARYING   IDX2    FROM    1   BY  1
+                       UNTIL     IDX2 >          100
+                 IF  SUM-KOHNUM (IDX2)   =   SPACE
+                   MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+                   MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+                 END-IF
+                 IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+                   PERFORM 200121-KOH-SYUKEI-01-SEC
+                   MOVE    100             TO  IDX2
+                 END-IF
+               END-PERFORM
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
+             ELSE
+                 MOVE    1                 TO  FLG-UPD
+             END-IF     
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
            END-PERFORM
            .
        20012-KOH-SYUKEI-EXT.

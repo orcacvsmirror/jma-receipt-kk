@@ -43,6 +43,8 @@
       *  01.00.10    吉川   08/09/19    SPA-AREA初期化
       *  01.00.11    内田   08/11/19    返戻の公費再掲欄が印字されないのを修正
       *  01.00.12    吉川   10/07/15    オンライン返戻対応
+      *  01.00.13    吉川   10/10/15    シス管「2010」の公費再掲欄への
+      *                                 地方公費記載設定対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -134,6 +136,9 @@
       *---(01.00.07) LINE ADD START ------------------------------------
            03  FLG-KOUKI           PIC 9(01).
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+           03  FLG-2010            PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -142,6 +147,11 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+           03  IDX                 PIC 9(04).
+           03  IDZ1                PIC 9(04).
+           03  IDZ2                PIC 9(04).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *
        01  WRK-PARA.
@@ -205,7 +215,13 @@
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
-      *     
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+       01  WRK-2010-AREA.
+           03  WRK-2010-TBL          OCCURS  100.
+               05  WRK-2010-KOHNUM   PIC X(03).
+           03  WRK-2010-MAX          PIC 9(03).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE            PIC 9(02).
@@ -260,6 +276,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *    地方公費保険番号付加情報
+           COPY    "CPSK2010.INC".
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *    請求管理マスタ
            COPY    "CPRCF010.INC".
@@ -484,6 +505,53 @@
                PERFORM 500-ERR-HENSYU-SEC
                MOVE    1                   TO  FLG-END
            END-IF 
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *    請求書公費再掲欄記載情報
+           INITIALIZE                      WRK-2010-AREA
+      *
+           INITIALIZE                      SYS-2010-REC
+           MOVE    "2010"              TO  SYS-2010-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2010-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2010-STYUKYMD (7:2)
+           MOVE    SYS-2010-STYUKYMD   TO  SYS-2010-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2010-HOSPNUM
+           MOVE    SYS-2010-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX            >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2010-REC
+               IF    ( SYS-2010-SAIKEIKBN  =   "1"         )
+               AND   ( SYS-2010-SAIKEI-TAIKBN
+                                           =   "0" OR  "1" )
+                   ADD     1                   TO  IDX
+                   MOVE    SYS-2010-KBNCD(1:3) TO WRK-2010-KOHNUM (IDX)
+               END-IF
+      *
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX                 TO  WRK-2010-MAX
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
@@ -814,35 +882,56 @@
       *    地方公費の集計
       *---(01.00.03) LINE ADD START -----------------------------------
              ELSE
-              IF  RECE10-KOHNUM (IDX3)  =  "181" OR "182" OR "183"
-                                OR "185" OR "187" OR "188" OR "189"
-      *---(01.00.08) LINE ADD START -----------------------------------
-      *                          OR "143" OR "145" OR "146"
-                                OR "143" OR "145" OR "146" OR "186"
-      *---(01.00.08) LINE ADD END   -----------------------------------
-      *---(01.00.07) LINE ADD START ------------------------------------
-      **    件数加算
-      *             ADD       1     TO    SKT0800TMP-KKENSU(1 2)
-      **    点数
-      *             ADD       RECE10-TOTALTEN(IDX3 + 1)
-      *                             TO    SKT0800TMP-KTENSU(1 2)
-      *         END-IF
-               IF    RECE10-HKNNUM  = "039"
-                               OR   "040"
-      *    件数加算
-                   ADD       1     TO    SKT0800TMP-KKENSU(1 4)
-      *    点数
-                   ADD       RECE10-TOTALTEN(IDX3 + 1)
-                                   TO    SKT0800TMP-KTENSU(1 4)
-               ELSE
-      *    件数加算
-                   ADD       1     TO    SKT0800TMP-KKENSU(1 2)
-      *    点数
-                   ADD       RECE10-TOTALTEN(IDX3 + 1)
-                                   TO    SKT0800TMP-KTENSU(1 2)
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *        IF  RECE10-KOHNUM (IDX3)  =  "181" OR "182" OR "183"
+      *                          OR "185" OR "187" OR "188" OR "189"
+      **---(01.00.08) LINE ADD START -----------------------------------
+      **                          OR "143" OR "145" OR "146"
+      *                          OR "143" OR "145" OR "146" OR "186"
+      **---(01.00.08) LINE ADD END   -----------------------------------
+               MOVE    ZERO                  TO  FLG-2010
+      *
+      *        請求書公費再掲欄記載情報があるとき
+               IF  WRK-2010-MAX  >  ZERO
+                 PERFORM VARYING IDZ1    FROM    1   BY  1
+                         UNTIL   IDZ1    >       WRK-2010-MAX
+                   IF  RECE10-KOHNUM(IDX3)  =  WRK-2010-KOHNUM(IDZ1)
+                     MOVE    1               TO  FLG-2010
+                     MOVE    WRK-2010-MAX    TO  IDZ1
+                   END-IF
+                 END-PERFORM
                END-IF
+      *
+               IF  FLG-2010  =  ZERO
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
+      *
+      *---(01.00.07) LINE ADD START ------------------------------------
+      **       件数加算
+      *                ADD       1     TO    SKT0800TMP-KKENSU(1 2)
+      **       点数
+      *                ADD       RECE10-TOTALTEN(IDX3 + 1)
+      *                                TO    SKT0800TMP-KTENSU(1 2)
+      *            END-IF
+                  IF    RECE10-HKNNUM  = "039"
+                                  OR   "040"
+      *       件数加算
+                      ADD       1     TO    SKT0800TMP-KKENSU(1 4)
+      *       点数
+                      ADD       RECE10-TOTALTEN(IDX3 + 1)
+                                      TO    SKT0800TMP-KTENSU(1 4)
+                  ELSE
+      *       件数加算
+                      ADD       1     TO    SKT0800TMP-KKENSU(1 2)
+      *       点数
+                      ADD       RECE10-TOTALTEN(IDX3 + 1)
+                                      TO    SKT0800TMP-KTENSU(1 2)
+                  END-IF
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+               ELSE
+                   MOVE    1                   TO  FLG-UPD
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *---(01.00.07) LINE ADD START -----------------------------------
-              END-IF
+               END-IF
       *---(01.00.03) LINE ADD END   -----------------------------------
              END-IF
            END-PERFORM
@@ -1948,6 +2037,47 @@
        940-PTKOHINF-READ-EXT.
            EXIT.
       *---(01.00.06) LINE ADD END   -----------------------------------
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) start
+      *****************************************************************
+      *    テーブルアクセス処理
+      *****************************************************************
+       900-ORCDBMAIN-SEC               SECTION.
+      *
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+      *
+       900-ORCDBMAIN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    システム管理マスタ読込（ＮＥＸＴ）
+      *****************************************************************
+       900-SYSKANRI-READ-N-SEC         SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-SYSKANRI
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+           .
+       900-SYSKANRI-READ-N-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢＦＥＴＣＨ処理
+      *****************************************************************
+       900-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-DBFETCH-EXT.
+           EXIT.
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *---(01.00.05) LINE ADD START ------------------------------------
       *****************************************************************
       *    医療機関編集情報読み込み
