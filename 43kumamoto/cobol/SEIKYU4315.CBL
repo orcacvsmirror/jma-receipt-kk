@@ -37,6 +37,8 @@
       *  01.00.04    吉川    09/12/18    保険番号143は上限額を超えたら
       *                                  印字対象外とするように修正
       *  01.00.05    吉川    10/08/12    受給者番号は9桁まで印字
+      *  01.00.06    吉川    10/10/18    負担者番号2桁も受給者番号欄に
+      *                                  印字されるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -792,10 +794,18 @@
                     OR       FLG-PRINT        =    1
       * 
       *    受給者証記号・番号
-      *=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) start
-      *       MOVE   MF100-FTNJANUM         TO  SC15-KIGO(IDX)
-      *=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) end
-             MOVE     MF100-JKYSNUM        TO  WRK-MAE-INPUT
+      *=== 負担者番号も受給者番号に加える by Yoshikawa(2010/10/18) start
+      **=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) start
+      **       MOVE   MF100-FTNJANUM         TO  SC15-KIGO(IDX)
+      **=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) end
+      *       MOVE     MF100-JKYSNUM        TO  WRK-MAE-INPUT
+             IF  MF100-FTNJANUM  NOT =  SPACE
+               MOVE   MF100-FTNJANUM(1:2)  TO  WRK-MAE-INPUT(1:)
+               MOVE   MF100-JKYSNUM(1:7)   TO  WRK-MAE-INPUT(3:)
+             ELSE
+               MOVE   MF100-JKYSNUM        TO  WRK-MAE-INPUT
+             END-IF
+      *=== 負担者番号も受給者番号に加える by Yoshikawa(2010/10/18) end
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT         TO  SC15-NUM(IDX)
       *
