@@ -798,16 +798,16 @@
     </object>
     <object type="Standard - Box" version="0" id="O32">
       <attribute name="obj_pos">
-        <point val="15.5881,18"/>
+        <point val="15.602,18"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.5831,17.995;23.9931,18.905"/>
+        <rectangle val="15.597,17.995;23.9931,18.905"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="15.5881,18"/>
+        <point val="15.602,18"/>
       </attribute>
       <attribute name="elem_width">
-        <real val="8.4"/>
+        <real val="8.38608"/>
       </attribute>
       <attribute name="elem_height">
         <real val="0.9"/>
