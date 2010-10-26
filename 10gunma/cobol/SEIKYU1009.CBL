@@ -55,6 +55,7 @@
       *                                  記載しないようにする
       *  01.00.13    吉川    10/08/25    「特」欄の該当公費の上限額に
       *                                  達していない場合でも「特」とする
+      *  01.00.14    吉川    10/10/04    請求額の計算方法変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -844,6 +845,25 @@
               END-PERFORM
            END-IF
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
+      *
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+      *    総点数と公費点数が同じ場合は公費点数は印字しない
+           IF  MF100-H-TOTALTEN       =     MF100-TOTALTEN2
+           OR  MF100-TOTALTEN2        =     ZERO
+             MOVE    ZERO             TO    MF100-TOTALTEN2
+           ELSE
+      *
+             IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
+               IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
+                  COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
+                           ( (MF100-H-TOTALTEN  - MF100-TOTALTEN2) *
+                              MF100-KYURATE  /  10)
+               END-IF
+               COMPUTE  MF100-TOTALTEN2  =
+                        MF100-H-TOTALTEN  -  MF100-TOTALTEN2
+             END-IF
+           END-IF
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
       *
       *=== 公費は限度額未満でも「特」対象 by Yoshikawa(2010/08/25) start
       **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
@@ -1688,16 +1708,18 @@
                  MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
                                              TO  WRK-SEIKYUGK
                END-IF
-      *=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
-               IF  WRK-SEIKYUGK  =  ZERO
-                 IF    RECE02-FTNMONEY(1) >  ZERO
-                   MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
-                 ELSE
-                   MOVE   SYU-SYUCOMPFTN-ENTANI
-                                             TO  WRK-SEIKYUGK
-                 END-IF
-               END-IF
-      *=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) end
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+      **=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
+      *         IF  WRK-SEIKYUGK  =  ZERO
+      *           IF    RECE02-FTNMONEY(1) >  ZERO
+      *             MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
+      *           ELSE
+      *             MOVE   SYU-SYUCOMPFTN-ENTANI
+      *                                       TO  WRK-SEIKYUGK
+      *           END-IF
+      *         END-IF
+      **=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) end
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
              END-IF
       *
              IF  SYU-KOH-HKNNUM(IDX)  =  "010"  OR  "011"  OR
@@ -1751,6 +1773,10 @@
                  MOVE     SYU-SYUCOMPFTN-ENTANI     TO  WRK-SEIKYUGK
                END-IF
              END-IF
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+           ELSE
+             ADD   SYU-TOTAL-HKNTEN     TO  MF100-TOTALTEN2
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
            END-IF
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G

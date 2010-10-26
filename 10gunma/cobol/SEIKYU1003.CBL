@@ -69,6 +69,7 @@
       *  01.00.16    吉川    10/08/25    「特」欄の該当公費の上限額に
       *                                  達していない場合でも「特」とする
       *  01.00.17    吉川    10/09/29    点数欄の上段に記載する条件を変更
+      *  01.00.18    吉川    10/10/04    請求額の計算方法変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -833,6 +834,7 @@
            MOVE  RECE02-YKZFTN      (IDY)  TO  MF100-YKZFTN
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
       *
+           DISPLAY "PTNUM =" MF100-PTNUM
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
       *    請求管理より、保険使用時情報取得
            PERFORM  900-SEIKYU-SELECT-SEC
@@ -886,7 +888,6 @@
            END-IF
            PERFORM  920-SYUNOU-SET-SEC
       *
-           DISPLAY "PTNUM =" MF100-PTNUM
            DISPLAY "福祉MF100-TOTALTEN = " MF100-TOTALTEN
            DISPLAY "公費MF100-TOTALTEN2 = " MF100-TOTALTEN2
            DISPLAY "MF100-COMBIKBN =" MF100-COMBIKBN
@@ -925,6 +926,16 @@
            ELSE
       *      感染症及び精神通院以外は福祉点数を上段に記載
              IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+      *    保険＋全国公費のような、地方公費が絡まないことにより
+      *    収納から正しく請求額を取得できない場合の請求額の計算
+               IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
+                  COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
+                           ( (MF100-H-TOTALTEN  - MF100-TOTALTEN2) *
+                              MF100-KYURATE  /  10)
+               END-IF
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
+      *
       *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) start
       *         MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
                COMPUTE  MF100-TOTALTEN2  =
@@ -932,8 +943,10 @@
       *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) end
              END-IF
              MOVE  MF100-H-TOTALTEN   TO    MF100-TOTALTEN
-             COMPUTE  WRK-SEIKYUGK-G  =  
-                      MF100-TOTALTEN2  *  MF100-KYURATE  /  10
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+      *       COMPUTE  WRK-SEIKYUGK-G  =  
+      *                MF100-TOTALTEN2  *  MF100-KYURATE  /  10
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
            END-IF
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *
@@ -2889,16 +2902,18 @@
                  MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
                                              TO  WRK-SEIKYUGK
                END-IF
-      *=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
-               IF  WRK-SEIKYUGK  =  ZERO
-                 IF    RECE02-FTNMONEY(1) >  ZERO
-                   MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
-                 ELSE
-                   MOVE   SYU-SYUCOMPFTN-ENTANI
-                                             TO  WRK-SEIKYUGK
-                 END-IF
-               END-IF
-      *=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) end
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+      **=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
+      *         IF  WRK-SEIKYUGK  =  ZERO
+      *           IF    RECE02-FTNMONEY(1) >  ZERO
+      *             MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
+      *           ELSE
+      *             MOVE   SYU-SYUCOMPFTN-ENTANI
+      *                                       TO  WRK-SEIKYUGK
+      *           END-IF
+      *         END-IF
+      **=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) end
+      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
              END-IF
       *
              IF  SYU-KOH-HKNNUM(IDX)  =  "010"  OR  "011"  OR

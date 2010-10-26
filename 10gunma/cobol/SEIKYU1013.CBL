@@ -44,6 +44,7 @@
       *  01.00.04    µÈÀî    2010/08/25  ¡ÖÆÃ¡×Íó¤Î³ºÅö¸øÈñ¤Î¾å¸Â³Û¤Ë
       *                                  Ã£¤·¤Æ¤¤¤Ê¤¤¾ì¹ç¤Ç¤â¡ÖÆÃ¡×¤È¤¹¤ë
       *  01.00.05    µÈÀî    2010/09/29  Ê¡»ãÀÁµáÅÀ¿ô¤Ëµ­ºÜ¤¹¤ë¾ò·ï¤òÊÑ¹¹
+      *  01.00.06    µÈÀî    2010/10/04  ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -781,6 +782,7 @@
            MOVE  SPACE                     TO  WRK-ETC-FTNJANUM
            MOVE  SPACE                     TO  WRK-ETC-JKYSNUM
       *
+           DISPLAY "PTNUM =" MF100-PTNUM
       *    ÆÃÍó½é´ü²½
            MOVE  SPACE                     TO  WRK-TOKURAN
       *    °ìÈÌ¹â³ÛÎÅÍÜÈñ
@@ -924,7 +926,6 @@
               END-PERFORM
            END-IF
       *
-           DISPLAY "PTNUM =" MF100-PTNUM
            DISPLAY "Ê¡»ãMF100-TOTALTEN = " MF100-TOTALTEN
            DISPLAY "¸øÈñMF100-TOTALTEN2 = " MF100-TOTALTEN2
            DISPLAY "WRK-TOKURAN =" WRK-TOKURAN
@@ -938,14 +939,25 @@
            ELSE
       *      ´¶À÷¾ÉµÚ¤ÓÀº¿ÀÄÌ±¡°Ê³°¤ÏÊ¡»ãÅÀ¿ô¤ò¾åÃÊ¤Ëµ­ºÜ
              IF  WRK-TOKURAN  NOT =  "10" AND "11" AND "21"
+      *=== ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹ by Yoshikawa(2010/10/04) start
+      *    ÊÝ¸±¡ÜÁ´¹ñ¸øÈñ¤Î¤è¤¦¤Ê¡¢ÃÏÊý¸øÈñ¤¬Íí¤Þ¤Ê¤¤¤³¤È¤Ë¤è¤ê
+      *    ¼ýÇ¼¤«¤éÀµ¤·¤¯ÀÁµá³Û¤ò¼èÆÀ¤Ç¤­¤Ê¤¤¾ì¹ç¤ÎÀÁµá³Û¤Î·×»»
+               IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
+                  COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
+                           ( (MF100-H-TOTALTEN  - MF100-TOTALTEN2) *
+                              MF100-KYURATE  /  10)
+               END-IF
+      *=== ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹ by Yoshikawa(2010/10/04) end
       *=== Ê¡»ãÅÀ¿ô¤Ëµ­ºÜ¤¹¤ë¾ò·ïÊÑ¹¹ by Yoshikawa(2010/09/29) start
       *         MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
                COMPUTE  MF100-TOTALTEN2  =
                         MF100-H-TOTALTEN  -  MF100-TOTALTEN2
       *=== Ê¡»ãÅÀ¿ô¤Ëµ­ºÜ¤¹¤ë¾ò·ïÊÑ¹¹ by Yoshikawa(2010/09/29) end
              END-IF
-             COMPUTE  WRK-SEIKYUGK-G  =  
-                      MF100-TOTALTEN2  *  MF100-KYURATE  /  10
+      *=== ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹ by Yoshikawa(2010/10/04) start
+      *       COMPUTE  WRK-SEIKYUGK-G  =  
+      *                MF100-TOTALTEN2  *  MF100-KYURATE  /  10
+      *=== ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹ by Yoshikawa(2010/10/04) end
       *
              COMPUTE  MF100-ETENSU(1) =
                       MF100-H-TOTALTEN  -  MF100-TOTALTEN2
@@ -2745,16 +2757,18 @@
                    MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
                                                TO  WRK-SEIKYUGK
                  END-IF
-      *=== ÀÁµá³Û·×»»ÊýË¡¤ÎÊÑ¹¹ by Yoshikawa(2010/07/26) start
-                 IF  WRK-SEIKYUGK  =  ZERO
-                   IF    RECE02-FTNMONEY(1) >  ZERO
-                     MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
-                   ELSE
-                     MOVE   SYU-SYUCOMPFTN-ENTANI
-                                               TO  WRK-SEIKYUGK
-                   END-IF
-                 END-IF
-      *=== ÀÁµá³Û·×»»ÊýË¡¤ÎÊÑ¹¹ by Yoshikawa(2010/07/26) end
+      *=== ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹ by Yoshikawa(2010/10/04) start
+      **=== ÀÁµá³Û·×»»ÊýË¡¤ÎÊÑ¹¹ by Yoshikawa(2010/07/26) start
+      *           IF  WRK-SEIKYUGK  =  ZERO
+      *             IF    RECE02-FTNMONEY(1) >  ZERO
+      *               MOVE   SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
+      *             ELSE
+      *               MOVE   SYU-SYUCOMPFTN-ENTANI
+      *                                         TO  WRK-SEIKYUGK
+      *             END-IF
+      *           END-IF
+      **=== ÀÁµá³Û·×»»ÊýË¡¤ÎÊÑ¹¹ by Yoshikawa(2010/07/26) end
+      *=== ÀÁµá³Û¤Î·×»»ÊýË¡ÊÑ¹¹ by Yoshikawa(2010/10/04) end
       *
                  IF  WRK-ETC-KOHNUM(1)       =  SPACE
                  OR                             SYU-KOH-HKNNUM(IDX)
