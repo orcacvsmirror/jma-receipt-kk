@@ -34,6 +34,8 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    吉川    09/01/14    SPA-AREA初期化
+      *  01.00.03    吉川    10/10/25    金額は１０円未満を四捨五入する
+      *                                  請求年月日は空欄のままにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -668,8 +670,10 @@
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
-      *    老人は１円の位を四捨五入し、その他は小数点まで記載する
-           IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) start
+      **    老人は１円の位を四捨五入し、その他は小数点まで記載する
+      *     IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) end
                MOVE    WRK-SEIKYUGK-G  TO  WRK-SEIKYUGK-G2
                DIVIDE  WRK-SEIKYUGK-G2 BY  10
                        GIVING              WRK-KEISAN
@@ -680,9 +684,11 @@
                    ADD     10          TO  WRK-SEIKYUGK-G2
                END-IF
                MOVE    WRK-SEIKYUGK-G2 TO  MF100-SEIKYUGK
-           ELSE
-               MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
-           END-IF
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) start
+      *     ELSE
+      *         MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
+      *     END-IF
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) end
            DISPLAY "集計結果=" MF100-SEIKYUGK
       *
       *
@@ -777,7 +783,10 @@
            MOVE    WRK-SRYYMWH             TO  SC01-SRYYM
       *
       *    請求日付
-           MOVE    WRK-SEIYMDWH            TO  SC01-SEIYMD
+      *=== 請求年月日は空欄にする by Yoshikawa(2010/10/25) start
+      *     MOVE    WRK-SEIYMDWH            TO  SC01-SEIYMD
+           MOVE  "平成　　年　　月　　日"  TO  SC01-SEIYMD
+      *=== 請求年月日は空欄にする by Yoshikawa(2010/10/25) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *    住所
