@@ -27,7 +27,8 @@
       *  09/06/19    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev  修正者  日付        内容
+      * Maj/Min/Rev  修正者    日付      内容
+      *  01.00.01    吉川      10/10/25  金額は１０円未満を四捨五入する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -649,8 +650,10 @@
            COMPUTE WRK-SEIKYUGK-G2 =   WRK-SEIKYUGK-G  +   0.5 
       *
       *    請求額
-      *    老人は１円の位を四捨五入し、その他は小数点まで記載する
-           IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) start
+      **    老人は１円の位を四捨五入し、その他は小数点まで記載する
+      *     IF      RECE02-RJNHKNNUM    NOT =   SPACE
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) end
                MOVE    WRK-SEIKYUGK-G  TO  WRK-SEIKYUGK-G2
                DIVIDE  WRK-SEIKYUGK-G2 BY  10
                        GIVING              WRK-KEISAN
@@ -661,9 +664,11 @@
                    ADD     10          TO  WRK-SEIKYUGK-G2
                END-IF
                MOVE    WRK-SEIKYUGK-G2 TO  MF100-SEIKYUGK
-           ELSE
-               MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
-           END-IF
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) start
+      *     ELSE
+      *         MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
+      *     END-IF
+      *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) end
       *
            DISPLAY "集計結果=" MF100-SEIKYUGK
       *
