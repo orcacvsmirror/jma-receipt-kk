@@ -556,11 +556,11 @@
         <point val="2.3,17"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.285,16.985;5.615,18.64"/>
+        <rectangle val="2.285,16.985;5.61571,18.6206"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="2.3,17"/>
-        <point val="5.6,18.625"/>
+        <point val="5.60071,18.6056"/>
       </attribute>
       <attribute name="numcp">
         <int val="0"/>
