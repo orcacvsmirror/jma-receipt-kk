@@ -981,13 +981,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O40">
       <attribute name="obj_pos">
-        <point val="21.6263,18.8445"/>
+        <point val="21.5886,18.8625"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.6163,17.278;28.41,18.8545"/>
+        <rectangle val="21.5786,17.278;28.41,18.8725"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="21.6263,18.8445"/>
+        <point val="21.5886,18.8625"/>
         <point val="28.4,17.288"/>
       </attribute>
       <attribute name="numcp">
@@ -3582,7 +3582,7 @@
         <point val="2.95,18.5966"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.1016,18.3578;3.7984,18.6578"/>
+        <rectangle val="2.1016,18.3577;3.7984,18.6577"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3762,7 +3762,7 @@
         <point val="21.2823,17.9996"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.2823,17.7608;21.5853,18.0608"/>
+        <rectangle val="21.2823,17.7607;21.5853,18.0607"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4592,7 +4592,7 @@
         <point val="4.25,15.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.25,14.9371;7.482,15.3371"/>
+        <rectangle val="4.25,14.9372;7.482,15.3372"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5096,7 +5096,7 @@
         <point val="16.4922,5.37299"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.4922,5.09428;18.6132,5.44428"/>
+        <rectangle val="16.4922,5.09429;18.6132,5.44429"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5132,7 +5132,7 @@
         <point val="4.35065,5.20544"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.35065,4.96656;5.86565,5.26656"/>
+        <rectangle val="4.35065,4.96655;5.86565,5.26655"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5168,7 +5168,7 @@
         <point val="4.61567,5.62051"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.61567,5.38163;6.37307,5.68163"/>
+        <rectangle val="4.61567,5.38162;6.37307,5.68162"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5204,7 +5204,7 @@
         <point val="2.0185,19.1425"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.0185,18.9674;13.5729,19.1874"/>
+        <rectangle val="2.0185,18.9673;13.5729,19.1873"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5242,7 +5242,7 @@
         <point val="11.7654,6.28869"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.76567,5.85073;11.7654,6.40073"/>
+        <rectangle val="8.7657,5.85073;11.7654,6.40073"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GSEIKYUGK#</string>
@@ -5504,7 +5504,7 @@
         <point val="7,17.885"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.394,17.4868;7,17.9868"/>
+        <rectangle val="6.394,17.4869;7,17.9869"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SYOKEI-AREA.SKENSU#</string>
@@ -5546,7 +5546,7 @@
         <point val="21.235,17.8233"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.8775,17.5685;21.235,17.8885"/>
+        <rectangle val="19.8776,17.5685;21.235,17.8885"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SYOKEI-AREA.SFTNGK#</string>
@@ -5882,7 +5882,7 @@
         <point val="13.1,8.88799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.979,8.60928;13.1,8.95928"/>
+        <rectangle val="10.979,8.60929;13.1,8.95929"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].TENSU#</string>
@@ -5924,7 +5924,7 @@
         <point val="15.55,8.88799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.429,8.60928;15.55,8.95928"/>
+        <rectangle val="13.429,8.60929;15.55,8.95929"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].TAHOU#</string>
@@ -6008,7 +6008,7 @@
         <point val="21.5,8.88799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="20.3365,8.63317;21.5,8.95317"/>
+        <rectangle val="20.3365,8.63318;21.5,8.95318"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].FTNGK#</string>
@@ -6050,7 +6050,7 @@
         <point val="21.8,8.88799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.8,8.68891;24.325,8.93891"/>
+        <rectangle val="21.8,8.68892;24.325,8.93892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].NAME#</string>
@@ -6092,7 +6092,7 @@
         <point val="26.8,8.88799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="26.8,8.68891;28.0625,8.93891"/>
+        <rectangle val="26.8,8.68892;28.0625,8.93892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].SRYKANAME#</string>
@@ -6344,7 +6344,7 @@
         <point val="13.1,9.78799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.979,9.50928;13.1,9.85928"/>
+        <rectangle val="10.979,9.50929;13.1,9.85929"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].TENSU#</string>
@@ -6386,7 +6386,7 @@
         <point val="15.55,9.83799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.429,9.55928;15.55,9.90928"/>
+        <rectangle val="13.429,9.55929;15.55,9.90929"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].TAHOU#</string>
@@ -6470,7 +6470,7 @@
         <point val="21.5,9.78799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="20.3365,9.53317;21.5,9.85317"/>
+        <rectangle val="20.3365,9.53318;21.5,9.85318"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].FTNGK#</string>
@@ -6512,7 +6512,7 @@
         <point val="21.8,9.78799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.8,9.58891;24.325,9.83891"/>
+        <rectangle val="21.8,9.58892;24.325,9.83892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].NAME#</string>
@@ -6554,7 +6554,7 @@
         <point val="26.8,9.78799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="26.8,9.58891;28.0625,9.83891"/>
+        <rectangle val="26.8,9.58892;28.0625,9.83892"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].SRYKANAME#</string>
@@ -10460,7 +10460,7 @@
         <point val="7.65,10.688"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,10.4172;8.06208,10.7572"/>
+        <rectangle val="7.65,10.4173;8.06208,10.7573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].SRYYY#</string>
@@ -10502,7 +10502,7 @@
         <point val="7.65,11.588"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,11.3172;8.06208,11.6572"/>
+        <rectangle val="7.65,11.3173;8.06208,11.6573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].SRYYY#</string>
@@ -10544,7 +10544,7 @@
         <point val="7.65,12.488"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,12.2172;8.06208,12.5572"/>
+        <rectangle val="7.65,12.2173;8.06208,12.5573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].SRYYY#</string>
@@ -10586,7 +10586,7 @@
         <point val="7.65,13.388"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,13.1172;8.06208,13.4572"/>
+        <rectangle val="7.65,13.1173;8.06208,13.4573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[5].SRYYY#</string>
@@ -10628,7 +10628,7 @@
         <point val="7.65,14.288"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,14.0172;8.06208,14.3572"/>
+        <rectangle val="7.65,14.0173;8.06208,14.3573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[6].SRYYY#</string>
@@ -10670,7 +10670,7 @@
         <point val="7.65,15.188"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,14.9172;8.06208,15.2572"/>
+        <rectangle val="7.65,14.9173;8.06208,15.2573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[7].SRYYY#</string>
@@ -10712,7 +10712,7 @@
         <point val="7.65,16.088"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,15.8172;8.06208,16.1572"/>
+        <rectangle val="7.65,15.8173;8.06208,16.1573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[8].SRYYY#</string>
@@ -10754,7 +10754,7 @@
         <point val="7.65,17.038"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65,16.7672;8.06208,17.1072"/>
+        <rectangle val="7.65,16.7673;8.06208,17.1073"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[9].SRYYY#</string>
@@ -10880,7 +10880,7 @@
         <point val="8.25,10.688"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,10.4172;8.66208,10.7572"/>
+        <rectangle val="8.25,10.4173;8.66208,10.7573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].SRYMM#</string>
@@ -10922,7 +10922,7 @@
         <point val="8.25,11.588"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,11.3172;8.66208,11.6572"/>
+        <rectangle val="8.25,11.3173;8.66208,11.6573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].SRYMM#</string>
@@ -10964,7 +10964,7 @@
         <point val="8.25,12.488"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,12.2172;8.66208,12.5572"/>
+        <rectangle val="8.25,12.2173;8.66208,12.5573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].SRYMM#</string>
@@ -11006,7 +11006,7 @@
         <point val="8.25,13.388"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,13.1172;8.66208,13.4572"/>
+        <rectangle val="8.25,13.1173;8.66208,13.4573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[5].SRYMM#</string>
@@ -11048,7 +11048,7 @@
         <point val="8.25,14.288"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,14.0172;8.66208,14.3572"/>
+        <rectangle val="8.25,14.0173;8.66208,14.3573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[6].SRYMM#</string>
@@ -11090,7 +11090,7 @@
         <point val="8.25,15.188"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,14.9172;8.66208,15.2572"/>
+        <rectangle val="8.25,14.9173;8.66208,15.2573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[7].SRYMM#</string>
@@ -11132,7 +11132,7 @@
         <point val="8.25,16.088"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,15.8172;8.66208,16.1572"/>
+        <rectangle val="8.25,15.8173;8.66208,16.1573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[8].SRYMM#</string>
@@ -11174,7 +11174,7 @@
         <point val="8.25,17.038"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.25,16.7672;8.66208,17.1072"/>
+        <rectangle val="8.25,16.7673;8.66208,17.1073"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[9].SRYMM#</string>
