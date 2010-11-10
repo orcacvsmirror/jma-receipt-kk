@@ -56,6 +56,11 @@
         <embed object="string" length="2"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="KYURATE-TBL" occurs="4">
       <element name="KYURATE" occurs="1">
         <appinfo>
@@ -2010,11 +2015,11 @@
         <point val="12.7,28.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9996,28.095;12.705,28.58"/>
+        <rectangle val="9.99906,28.095;12.705,28.6112"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="12.7,28.1"/>
-        <point val="10.0046,28.575"/>
+        <point val="10.0041,28.6062"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -3014,11 +3019,11 @@
         <point val="12.7042,13.1913"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9988,13.1863;12.7092,13.7238"/>
+        <rectangle val="9.99906,13.1863;12.7092,13.705"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="12.7042,13.1913"/>
-        <point val="10.0038,13.7188"/>
+        <point val="10.0041,13.7"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -3051,14 +3056,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O150">
       <attribute name="obj_pos">
-        <point val="12.7042,15.6081"/>
+        <point val="12.7042,15.5956"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9988,15.6031;12.7092,16.1156"/>
+        <rectangle val="9.9988,15.5906;12.7092,16.1031"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="12.7042,15.6081"/>
-        <point val="10.0038,16.1106"/>
+        <point val="12.7042,15.5956"/>
+        <point val="10.0038,16.0981"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -3094,11 +3099,11 @@
         <point val="12.7042,18.0081"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9988,18.0031;12.7092,18.5406"/>
+        <rectangle val="9.99906,18.0031;12.7092,18.5112"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="12.7042,18.0081"/>
-        <point val="10.0038,18.5356"/>
+        <point val="10.0041,18.5062"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -3131,14 +3136,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O154">
       <attribute name="obj_pos">
-        <point val="12.7042,25.1975"/>
+        <point val="12.7042,25.21"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9988,25.1925;12.7092,25.73"/>
+        <rectangle val="9.99906,25.205;12.7092,25.7112"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="12.7042,25.1975"/>
-        <point val="10.0038,25.725"/>
+        <point val="12.7042,25.21"/>
+        <point val="10.0041,25.7062"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -3171,14 +3176,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O156">
       <attribute name="obj_pos">
-        <point val="12.7042,27.5975"/>
+        <point val="12.7042,27.61"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9988,27.5925;12.7092,28.13"/>
+        <rectangle val="9.99906,27.605;12.7092,28.1112"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="12.7042,27.5975"/>
-        <point val="10.0038,28.125"/>
+        <point val="12.7042,27.61"/>
+        <point val="10.0041,28.1062"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -13644,6 +13649,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O431">
+      <attribute name="obj_pos">
+        <point val="9.16268,1.02092"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.16268,0.702403;11.1827,1.1024"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="9.16268,1.02092"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>

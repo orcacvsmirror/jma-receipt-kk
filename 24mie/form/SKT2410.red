@@ -51,6 +51,11 @@
         <embed object="string" length="4"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU" occurs="6">
       <element name="NYUGAI-TBL" occurs="2">
         <element name="KENSU" occurs="1">
@@ -2002,11 +2007,11 @@
         <point val="21.15,19.7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.845,19.695;21.155,20.155"/>
+        <rectangle val="13.8393,19.695;21.155,20.1456"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="21.15,19.7"/>
-        <point val="13.85,20.15"/>
+        <point val="13.8443,20.1406"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -5290,7 +5295,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#202;&#221;&#183;&#242;&#176;&#229;&#206;&#197;&#181;&#161;&#180;&#216;&#164;&#206;#</string>
+            <string>#&#202;&#221;&#184;&#177;&#176;&#229;&#206;&#197;&#181;&#161;&#180;&#216;&#164;&#206;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7701,7 +7706,7 @@
         <point val="9.9,23.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9,23.2611;11.415,23.5611"/>
+        <rectangle val="9.9,23.277;11.314,23.557"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -7712,7 +7717,7 @@
             <font name="Courier"/>
           </attribute>
           <attribute name="height">
-            <real val="0.3"/>
+            <real val="0.28"/>
           </attribute>
           <attribute name="pos">
             <point val="9.9,23.5"/>
@@ -7724,10 +7729,10 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.1818"/>
+            <real val="0.16968"/>
           </attribute>
           <attribute name="multi">
-            <real val="0.1515"/>
+            <real val="0.1414"/>
           </attribute>
         </composite>
       </attribute>
@@ -12985,6 +12990,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O423">
+      <attribute name="obj_pos">
+        <point val="8.32787,2.62443"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.32787,2.30591;10.3479,2.70591"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.32787,2.62443"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>
