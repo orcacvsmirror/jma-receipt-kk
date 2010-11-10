@@ -825,7 +825,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#196;&#185;&#220;&#235;#</string>
+            <string>#&#196;&#185;&#205;&#205;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
