@@ -107,12 +107,12 @@
         </appinfo>
       </element>
     </element>
-    <element name="TOKUBETUKEN" occurs="1">
+    <element name="T-KENSU" occurs="1">
       <appinfo>
         <embed object="string" length="3"/>
       </appinfo>
     </element>
-    <element name="TOKUBEUTTEN" occurs="1">
+    <element name="T-TENSU" occurs="1">
       <appinfo>
         <embed object="string" length="9"/>
       </appinfo>
@@ -980,7 +980,7 @@
         <point val="4.00006,19.2945"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.99006,19.2844;10.66,19.3123"/>
+        <rectangle val="3.99006,19.2845;10.66,19.3123"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="4.00006,19.2945"/>
@@ -4256,7 +4256,7 @@
         <point val="11.2722,8.45521"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.2722,8.09687;11.7267,8.54687"/>
+        <rectangle val="11.2722,8.09688;11.7267,8.54688"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4292,7 +4292,7 @@
         <point val="11.8722,8.45521"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.8722,8.09687;12.3267,8.54687"/>
+        <rectangle val="11.8722,8.09688;12.3267,8.54688"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4328,7 +4328,7 @@
         <point val="12.4847,8.45521"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.4847,8.09687;12.9392,8.54687"/>
+        <rectangle val="12.4847,8.09688;12.9392,8.54688"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -4632,7 +4632,7 @@
         <rectangle val="6.1728,20.4815;6.9,20.8815"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#TOKUBETUKEN#</string>
+        <string>#T-KENSU#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -7449,7 +7449,7 @@
         <rectangle val="8.1184,20.5315;10.3,20.9315"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#TOKUBEUTTEN#</string>
+        <string>#T-TENSU#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>

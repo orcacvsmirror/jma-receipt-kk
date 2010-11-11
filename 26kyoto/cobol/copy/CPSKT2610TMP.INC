@@ -15,12 +15,12 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      ************************************************************
       *    総括一時ファイル     COPY (CPSKT2610TMP.INC)
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
-      ************************************************************
+      *  01.00.01    吉川         10/11/02  特別療養費国保対応
+      ********************************************************************
        01  SKT2610TMP-REC.
            03  SKT2610TMP-KEY.
                05  SKT2610TMP-NYUGAIKBN        PIC  9(01).
@@ -40,4 +40,7 @@
                05  SKT2610TMP-G-KENSU          PIC  9(03).
                05  SKT2610TMP-G-TENSU          PIC  9(07).
            03  SKT2610TMP-GENBAKU              PIC  9(03).
-           03  SKT2610TMP-TOKUBETU             PIC  9(03).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           03  SKT2610TMP-T-KENSU              PIC  9(03).
+           03  SKT2610TMP-T-TENSU              PIC  9(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start

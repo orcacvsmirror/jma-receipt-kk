@@ -41,6 +41,7 @@
       *  01.00.09       内田     08/04/22  帳票様式の変更に伴う修正
       *                                    SPA-AREA初期化
       *  01.00.10       吉川     10/04/05  オンライン返戻対応
+      *  01.00.11       吉川     10/11/02  特別療養費国保対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -142,6 +143,9 @@
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PTKOHINF        PIC 9(01).
            03  FLG-TAKOH           PIC 9(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           03  FLG-TOKU            PIC 9(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -224,6 +228,13 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.08) LINE ADD END   ------------------------------------
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *    集計エリア
+       01  SUM-AREA.
+           03  SUM-T-KENSU           PIC 9(03).
+           03  SUM-T-TENSU           PIC 9(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -336,6 +347,9 @@
            INITIALIZE                  STS-AREA
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           INITIALIZE                  SUM-AREA
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *---(01.00.09) LINE ADD START ------------------------------------
            INITIALIZE                  SPA-AREA
       *---(01.00.09) LINE ADD END   ------------------------------------
@@ -571,11 +585,29 @@
       *
            MOVE     ZERO    TO      FLG-END
            MOVE     ZERO    TO      FLG-UPD
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           MOVE     ZERO    TO      FLG-TOKU
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
-           DISPLAY  "2001 START"
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
-           DISPLAY  "2001 END"
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *    特別療養費国保集計
+           PERFORM  900-SEIKYU-CLOSE-SEC
+           MOVE     ZERO    TO      FLG-END
+           MOVE     1       TO      FLG-TOKU
+           EVALUATE    WRK-PARA-SYOKBN 
+           WHEN    "2"
+               MOVE    "key39"     TO  WRK-PATH
+           WHEN    "1"
+               MOVE    "key40"     TO  WRK-PATH
+           END-EVALUATE
+           PERFORM 900-SEIKYU-SELECT-SEC
+      *
+           PERFORM  2001-KOKUHO-SYUKEI-SEC
+                    UNTIL   FLG-END   =   1
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
            CLOSE   UPD-FILE
            CLOSE   SKT2600TMP-FILE
@@ -642,7 +674,14 @@
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
-           PERFORM  210-HKN-SYUKEI-SEC
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *     PERFORM  210-HKN-SYUKEI-SEC
+           IF  FLG-TOKU  =  ZERO
+             PERFORM  210-HKN-SYUKEI-SEC
+           ELSE
+             PERFORM  210-TOKU-SYUKEI-SEC
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -911,6 +950,30 @@
            .
        2101-SYUKEI-EXT.
            EXIT.
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *****************************************************************
+      *    特別療養費集計処理
+      *****************************************************************
+       210-TOKU-SYUKEI-SEC              SECTION.
+      *
+      *    療養の給付：件数
+           ADD   1                   TO  SKT2600TMP-T-KENSU
+      *    療養の給付：点数
+           ADD   RECE10-TOTALTEN(1)  TO  SKT2600TMP-T-TENSU
+      *
+           IF  FLG-SKT2600TMP  =  1
+               WRITE    SKT2600TMP-REC
+           ELSE
+               REWRITE  SKT2600TMP-REC
+           END-IF
+      *
+           MOVE  1                   TO  FLG-UPD
+      *
+           .
+       210-TOKU-SYUKEI-EXT.
+           EXIT.
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -1072,10 +1135,28 @@
       *     MOVE  WRK-Z3       TO  SKT2640-GENBAKU
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-      *    ※一部負担金減免・猶予、特別療養費は印字しない(手書き)
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *    特別療養費集計
+           ADD   SKT2600TMP-T-KENSU          TO  SUM-T-KENSU
+           ADD   SKT2600TMP-T-TENSU          TO  SUM-T-TENSU
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *
+      *    ※一部負担金減免・猶予は印字しない(手書き)
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           IF  FLG-PRINT  =  1
+      *      特別療養費：件数
+             MOVE  SUM-T-KENSU               TO  WRK-Z3
+             MOVE  WRK-Z3                    TO  SKT2640-T-KENSU
+      *
+      *      特別療養費：点数
+             MOVE  SUM-T-TENSU               TO  WRK-Z9
+             MOVE  WRK-Z9                    TO  SKT2640-T-TENSU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1257,6 +1338,12 @@
       *
            MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           IF  FLG-TOKU  =  1
+             MOVE  "000000"             TO  RECE10-SRYYM
+             MOVE  "999999"             TO  RECE10-XXSRYYM
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
            MOVE    RECE10-REC                 TO  MCPDATA-REC
            MOVE    "DBSELECT"                 TO  MCP-FUNC
@@ -1348,6 +1435,25 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *****************************************************************
+      *    請求管理クローズ
+      *****************************************************************
+       900-SEIKYU-CLOSE-SEC             SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_seikyu"         TO  MCP-TABLE
+           MOVE    WRK-PATH             TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
