@@ -56,6 +56,11 @@
         <embed object="string" length="4"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="KOH-TBL" occurs="2">
       <element name="KOHKENSU" occurs="1">
         <appinfo>
@@ -5317,10 +5322,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O224">
       <attribute name="obj_pos">
-        <point val="17.725,5.65"/>
+        <point val="17.675,5.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.725,5.49074;17.927,5.69074"/>
+        <rectangle val="17.675,5.49074;17.877,5.69074"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -5334,7 +5339,7 @@
             <real val="0.2"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.725,5.65"/>
+            <point val="17.675,5.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6773,10 +6778,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O263">
       <attribute name="obj_pos">
-        <point val="17.7,16.65"/>
+        <point val="17.675,16.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7,16.4907;17.902,16.6907"/>
+        <rectangle val="17.675,16.4907;17.877,16.6907"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -6790,7 +6795,7 @@
             <real val="0.2"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.7,16.65"/>
+            <point val="17.675,16.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6845,10 +6850,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O265">
       <attribute name="obj_pos">
-        <point val="17.7,15.65"/>
+        <point val="17.675,15.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7,15.4907;17.902,15.6907"/>
+        <rectangle val="17.675,15.4907;17.877,15.6907"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -6862,7 +6867,7 @@
             <real val="0.2"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.7,15.65"/>
+            <point val="17.675,15.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -15390,6 +15395,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O475">
+      <attribute name="obj_pos">
+        <point val="9.41552,0.833422"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.41552,0.514903;11.4355,0.914903"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="9.41552,0.833422"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>
