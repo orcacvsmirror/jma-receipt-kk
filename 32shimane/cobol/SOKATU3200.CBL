@@ -36,6 +36,7 @@
       *  01.00.05    門間      08/12/16    SPA-AREA初期化
       *  01.00.06    吉川      10/04/07    オンライン返戻対応
       *  01.00.07    吉川      10/10/06    後期高齢のみの場合でも印字するよう修正
+      *  01.00.08    吉川      10/11/09    電子請求の場合、県単独医療分は記載不要
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -53,6 +54,14 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+      *    請求設定ファイル
+           SELECT  SEIKYU-FILE   ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-SEIKYU.
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
@@ -64,6 +73,13 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
+      *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+       FD  SEIKYU-FILE.
+       01  SEIKYU-REC.
+           03  SEIKYU-SEIKYUKBN    PIC X(01).
+           03  FILLER              PIC X(01).
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -94,6 +110,9 @@
            03  STS-RECE10          PIC X(02).
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+           03  STS-SEIKYU          PIC X(02).
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -146,6 +165,12 @@
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
            03  WRK-SRYYMD          PIC X(08).
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+           03  WRK-SEIKYUKBN       PIC X(01).
+      *
+      *    ファイル名称用エリア
+           03  FILE-NAME           PIC X(512).
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *  
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -338,6 +363,11 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -516,6 +546,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+      *    INIファイル取得
+           PERFORM  110-INI-FILE-SEC
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
+      *
            OPEN    OUTPUT  UPD-FILE
       *
            EVALUATE    WRK-PARA-SYOKBN 
@@ -548,6 +583,44 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+      *****************************************************************
+      *    INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *    請求設定取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/SEIKYU.INI"    TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   SEIKYU-REC
+      *
+           OPEN  INPUT  SEIKYU-FILE
+      *
+           READ SEIKYU-FILE
+             AT END
+               INITIALIZE        SEIKYU-REC
+           END-READ
+      *
+           CLOSE SEIKYU-FILE
+      *
+           DISPLAY "請求設定取得=" SEIKYU-SEIKYUKBN
+           IF    SEIKYU-SEIKYUKBN  =  "1" OR "2"
+             MOVE   SEIKYU-SEIKYUKBN  TO  WRK-SEIKYUKBN
+           ELSE
+             MOVE   "1"               TO  WRK-SEIKYUKBN
+           END-IF
+      *
+           DISPLAY "請求設定 ="           WRK-SEIKYUKBN
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -1151,17 +1224,24 @@
              MOVE   SUM-KG-KENSU        TO  WRK-Z7
              MOVE   WRK-Z7              TO  SKT3200-KGKENSU 
       *
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+      *      県単独医療は紙請求時のみ記載する
+             IF  WRK-SEIKYUKBN  =  "1"
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *    福祉医療件数
-             MOVE   SUM-FKKENSU         TO  WRK-Z7
-             MOVE   WRK-Z7              TO  SKT3200-FKKENSU 
+               MOVE   SUM-FKKENSU         TO  WRK-Z7
+               MOVE   WRK-Z7              TO  SKT3200-FKKENSU 
       *
       *    福祉老人件数
-             MOVE   SUM-FRKENSU         TO  WRK-Z7
-             MOVE   WRK-Z7              TO  SKT3200-FRKENSU 
+               MOVE   SUM-FRKENSU         TO  WRK-Z7
+               MOVE   WRK-Z7              TO  SKT3200-FRKENSU 
       *
       *    乳児医療件数
-             MOVE   SUM-NYKENSU         TO  WRK-Z7
-             MOVE   WRK-Z7              TO  SKT3200-NYKENSU 
+               MOVE   SUM-NYKENSU         TO  WRK-Z7
+               MOVE   WRK-Z7              TO  SKT3200-NYKENSU 
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) start
+             END-IF
+      *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *
              DISPLAY "福祉医療件数"  SUM-FKKENSU 
              DISPLAY "福祉老人件数"  SUM-FRKENSU 
