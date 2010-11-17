@@ -55,6 +55,8 @@
       *                                   485,585,343,443）
       *  01.00.16    吉川    10/04/06    オンライン返戻対応
       *  01.00.17    吉川    10/11/02    特別療養費国保対応
+      *  01.00.18    吉川    10/11/15    複数診療月の返戻がある場合の
+      *                                  請求書枚数のカウント修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1075,11 +1077,13 @@
            ELSE
                MOVE  RECE10-HKNJANUM-S     TO    WRK-CHK-HKNJANUM
                MOVE  RECE10-ZAITAKU        TO    WRK-CHK-ZAITAKU
-      *---(01.00.08) LINE ADD START ------------------------------------
-               IF  RECE10-HENREIYM  NOT =  ZERO
-                   MOVE  RECE10-SRYYM      TO    WRK-CHK-SRYYM
-              END-IF
-      *---(01.00.08) LINE ADD END   ------------------------------------
+      *=== 請求書枚数カウント修正 by Yoshikawa(2010/11/15) start
+      **---(01.00.08) LINE ADD START ------------------------------------
+      *         IF  RECE10-HENREIYM  NOT =  ZERO
+      *             MOVE  RECE10-SRYYM      TO    WRK-CHK-SRYYM
+      *        END-IF
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *=== 請求書枚数カウント修正 by Yoshikawa(2010/11/15) end
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
