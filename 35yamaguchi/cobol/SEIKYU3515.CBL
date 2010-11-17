@@ -49,6 +49,7 @@
       *  01.00.11    等李    09/07/28    省汇板闻锐懒滇驰腕は
       *                                  给锐の锦喇尸を磅机する
       *  01.00.12    等李    10/04/30    磅机滦据戎规の纳裁(781)
+      *  01.00.13    等李    10/11/10    壳闻彩は奠另圭陕薄のみ磅机
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1053,11 +1054,17 @@
              MOVE    MF101-NYUINGYMD     TO  SC15-NYUINGYMD(IDX1)
       *
       *    壳闻彩
-             IF    MF101-SRYKA    =  "00"
-               MOVE    SPACE              TO  SC15-SRYKA(IDX1)
-             ELSE
-               MOVE    MF101-SRYKA        TO  SC15-SRYKA(IDX1)
+      *=== 壳闻彩は奠另圭陕薄のみ磅机 by Yoshikawa(2010/11/10) start
+             IF  SYS-1001-HOSPSBT1  =  1
+      *=== 壳闻彩は奠另圭陕薄のみ磅机 by Yoshikawa(2010/11/10) end
+               IF    MF101-SRYKA    =  "00"
+                 MOVE    SPACE           TO  SC15-SRYKA(IDX1)
+               ELSE
+                 MOVE    MF101-SRYKA     TO  SC15-SRYKA(IDX1)
+               END-IF
+      *=== 壳闻彩は奠另圭陕薄のみ磅机 by Yoshikawa(2010/11/10) start
              END-IF
+      *=== 壳闻彩は奠另圭陕薄のみ磅机 by Yoshikawa(2010/11/10) end
       *
       *    泣眶
              MOVE    MF101-NISSU         TO  WRK-Z2
