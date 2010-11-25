@@ -34,6 +34,8 @@
       *  01.00.03    吉川    2009/10/27  差引請求額欄は、社保・国保の場合
       *                                  1の位を四捨五入、後期高齢は切捨て
       *  01.00.04    吉川    2010/06/11  差引請求額欄は後期高齢も四捨五入する
+      *  01.00.05    吉川    2010/11/22  差引請求額欄が０円の場合は
+      *                                  ０と記載するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2145,8 +2147,12 @@
            MOVE  MF100-TAHOFTNGK       TO  WRK-Z10
            MOVE  WRK-Z10               TO  SC05-SEIKYUGK(3)
       *    差引請求額（窓口負担金）
-           MOVE  MF100-SEIKYUGK        TO  WRK-Z10
-           MOVE  WRK-Z10               TO  SC05-SEIKYUGK(4)
+      *=== 差引請求額欄のゼロ記載対応 by Yoshikawa(2010/11/22) start
+      *     MOVE  MF100-SEIKYUGK        TO  WRK-Z10
+      *     MOVE  WRK-Z10               TO  SC05-SEIKYUGK(4)
+           MOVE  MF100-SEIKYUGK        TO  WRK-KGK10
+           MOVE  WRK-KGK10             TO  SC05-SEIKYUGK(4)
+      *=== 差引請求額欄のゼロ記載対応 by Yoshikawa(2010/11/22) end
       *
            .
        340-HC101-MEISAI-HEN-EXT.
