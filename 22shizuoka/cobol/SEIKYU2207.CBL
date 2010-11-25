@@ -31,6 +31,8 @@
       *  01.00.01    吉川    2010/05/31  同じ法別番号の公費を持っており
       *                                  同月にどちらも使用している場合
       *                                  件数がダブルカウントされるのを修正
+      *  01.00.02    吉川    2010/11/17  同日再診がある場合、備考欄に
+      *                                  「同日再診あり」と記録する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -93,6 +95,10 @@
            03  FLG-BTPARA                 PIC 9(01).
            03  FLG-SYORI                  PIC 9(01).
            03  FLG-MOJI                   PIC 9(01).
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) start
+           03  FLG-SRYACT                 PIC 9(01).
+           03  FLG-DSAISIN                PIC 9(01).
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -232,6 +238,13 @@
       *    改行コード
            03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
       *
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) start
+      *    固定値
+       01  CONST-AREA.
+      *    同日再診診療コード
+           03  CONS-DSAISIN           PIC X(09)   VALUE "112008350".
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) end
+      *
       *****************************************************************
       *    ファイルレイアウト　領域
       *****************************************************************
@@ -269,6 +282,12 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) start
+      *    診療行為マスタ
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -659,6 +678,14 @@
       *     END-EVALUATE
       *=== 件数のダブルカウント修正 by Yoshikawa(2010/05/31) end
       *
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) start
+      *    備考
+           PERFORM  910-SRYACT-SET-SEC
+           IF  FLG-DSAISIN  =  1
+             MOVE  "同日再診あり"           TO   MF100-BIKO
+           END-IF
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) end
+      *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -945,8 +972,11 @@
              MOVE    8                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
       *      
-      *      １６．備考（現在未使用）
-             MOVE    SPACE                   TO  WRK-DATA
+      *      １６．備考
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) start
+      *       MOVE    SPACE                   TO  WRK-DATA
+             MOVE    MF100-BIKO              TO  WRK-DATA
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) end
              MOVE    30                      TO  WRK-NAGASA
              MOVE    1                       TO  WRK-END
              PERFORM 5004-MOJI-HENSYU-SEC
@@ -1319,6 +1349,102 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) start
+      *****************************************************************
+      *  診療情報セット
+      *****************************************************************
+       910-SRYACT-SET-SEC  SECTION.
+      *
+           INITIALIZE                        SRYACT-REC
+                                             FLG-DSAISIN
+      *
+           MOVE  SPA-HOSPNUM             TO  SRY-HOSPNUM
+           MOVE  RECE02-NYUGAIKBN        TO  SRY-NYUGAIKBN
+           MOVE  RECE02-PTID             TO  SRY-PTID
+           MOVE  RECE02-SRYYM            TO  SRY-SRYYM
+           MOVE  SRYACT-REC              TO  MCPDATA-REC
+           MOVE  "DBSELECT"              TO  MCP-FUNC
+           MOVE  "tbl_sryact"            TO  MCP-TABLE
+           MOVE  "key4"                  TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"             USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             PERFORM  915-SRYACT-READ-SEC
+      *
+             PERFORM  UNTIL  FLG-SRYACT  =  1
+      *        同日再診所持チェック
+               PERFORM  915-DSAISIN-CHK-SEC
+      *
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key4"              TO  MCP-PATHNAME
+               PERFORM  915-SRYACT-READ-SEC
+             END-PERFORM
+      *
+           ELSE
+             DISPLAY  "SRYACT SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE  "tbl_sryact"            TO  MCP-TABLE
+           MOVE  "key4"                  TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"             USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       910-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       915-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"               TO  MCP-FUNC
+           CALL  "ORCDBMAIN"             USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC           TO  SRYACT-REC
+             MOVE  ZERO                  TO  FLG-SRYACT
+           ELSE
+             INITIALIZE                  SRYACT-REC
+             MOVE  1                     TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       915-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    同日再診チェック
+      *****************************************************************
+       915-DSAISIN-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                    UNTIL   (IDX3  >     5) OR
+                            (SRY-SRYCD(IDX3)  =  SPACE)
+             IF  SRY-SRYKBN  =  "12"
+               IF  SRY-SRYCD(IDX3)  =  CONS-DSAISIN
+                 MOVE  1                 TO  FLG-DSAISIN
+                 MOVE  5                 TO  IDX3
+               END-IF
+             END-IF
+           END-PERFORM
+           DISPLAY "FLG-DSAISIN =" FLG-DSAISIN
+      *
+           .
+       915-DSAISIN-CHK-EXT.
+           EXIT.
+      *=== 同日再診は備考欄に記録 by Yoshikawa(2010/11/17) end
       *
       *****************************************************************
       *    患者マスタ読込
