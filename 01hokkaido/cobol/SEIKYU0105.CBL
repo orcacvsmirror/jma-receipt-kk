@@ -54,6 +54,8 @@
       *                                    函館市等８市のみにする
       *  01.00.14     吉川     09/09/29    全市町村で長期及び全国公費併用時は
       *                                    公費の助成がなくても印字する
+      *  01.00.15     吉川     10/11/16    室蘭市、釧路市、江別市、根室市は
+      *                                    公費の助成が無い場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -801,24 +803,30 @@
       *    一部負担金がある公費を使用している場合は助成対象判定を行う
            MOVE     ZERO                       TO  FLG-ERR
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) start
-      *    函館、小樽、室蘭、釧路、江別、根室、登別、北広島は、
-      *    助成対象判定を行わない
-           IF  WRK-KOBETUCITYNUM  =  "002" OR "003" OR "005" OR "006"
-                                 OR  "017" OR "023" OR "030" OR "051"
+      *    小樽、登別、北広島は助成対象判定を行わない
+      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) start
+      *     IF  WRK-KOBETUCITYNUM  =  "002" OR "003" OR "005" OR "006"
+      *                           OR  "017" OR "023" OR "030" OR "051"
+           IF  WRK-KOBETUCITYNUM  =  "003" OR "030" OR "051"
+      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
                CONTINUE
            ELSE
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
       *---(01.00.09) LINE ADD START ------------------------------------
       *     IF   MF100-KOHNUM   =  "144"                OR
       *          MF100-KOHNUM   =  "344"
-           IF   MF100-KOHNUM   =  "144"                OR
-                MF100-KOHNUM   =  "344"                OR
-                MF100-KOHNUM   =  "644"                OR
-                MF100-KOHNUM   =  "744"                OR
-                MF100-KOHNUM   =  "844"
+      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) start
+      *     IF   MF100-KOHNUM   =  "144"                OR
+      *          MF100-KOHNUM   =  "344"                OR
+      *          MF100-KOHNUM   =  "644"                OR
+      *          MF100-KOHNUM   =  "744"                OR
+      *          MF100-KOHNUM   =  "844"
+      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
       *---(01.00.09) LINE ADD END   ------------------------------------
              MOVE      1                       TO  FLG-ERR
-           END-IF
+      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) start
+      *     END-IF
+      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) start
            END-IF
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
