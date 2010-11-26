@@ -44,6 +44,8 @@
       *                                加算されてしまう不具合を修正
       *  01.00.10    吉川    10/09/28  前期高齢者９割＋長期の場合、
       *                                請求金額が正しくならないのを修正
+      *  01.00.11    内田    10/11/26  前期高齢者９割該当者の
+      *                                前期高齢者欄、給付割合欄の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -999,7 +1001,9 @@
                IF  MF100-AGE       >=    70
                    EVALUATE MF100-KYURATE
                        WHEN    10
-                           MOVE    "○"    TO    SC23-ZNK9
+      *=== 前期高齢者欄、給付割合欄の修正 by Uchida(2010/11/26) start
+      *                     MOVE    "○"    TO    SC23-ZNK9
+      *=== 前期高齢者欄、給付割合欄の修正 by Uchida(2010/11/26) end
                        WHEN    20
                            MOVE    "○"    TO    SC23-ZNK8
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -1015,7 +1019,14 @@
       *    一部負担割合
            EVALUATE MF100-KYURATE
            WHEN 10
-               MOVE    "○"    TO    SC23-ITB1
+      *=== 前期高齢者欄、給付割合欄の修正 by Uchida(2010/11/26) start
+      *         MOVE    "○"    TO    SC23-ITB1
+               IF  MF100-AGE  <  70
+                   MOVE    "○"    TO    SC23-ITB1
+               ELSE
+                   MOVE    "○"    TO    SC23-ITB2
+               END-IF
+      *=== 前期高齢者欄、給付割合欄の修正 by Uchida(2010/11/26) end
            WHEN 20
                MOVE    "○"    TO    SC23-ITB2
            WHEN 30
