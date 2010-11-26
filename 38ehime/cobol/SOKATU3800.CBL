@@ -46,6 +46,7 @@
       *  01.00.12    吉川      08/09/12    SPA-AREA初期化
       *  01.00.13    吉川      09/03/06    特別療養費国保対応
       *  01.00.14    吉川      10/05/13    オンライン返戻対応
+      *  01.00.15    内田      10/11/26    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1824,8 +1825,12 @@
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2009/03/06) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"            TO  RECE10-SRYYM
-             MOVE  "999999"            TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Uchida(2010/11/26) start
+      *       MOVE  "000000"            TO  RECE10-SRYYM
+      *       MOVE  "999999"            TO  RECE10-XXSRYYM
+             MOVE  000000              TO  RECE10-SRYYM
+             MOVE  999999              TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Uchida(2010/11/26) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2009/03/06) end
       *
