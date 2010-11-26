@@ -41,6 +41,7 @@
       *  01.00.07      吉川     10/01/07    シス管「2007」のまとめ公費で
       *                                     6つ目以降がまとまらない不具合を修正
       *  01.00.08      吉川     10/06/01    オンライン返戻対応
+      *  01.00.09      吉川     10/11/25    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -439,7 +440,10 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *##（地方公費仕様：LNK-PRTKANRI-TERMID)
-           MOVE    "SKT4710TP"         TO  SKT4710TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     MOVE    "SKT4710TP"         TO  SKT4710TP-FILE-ID
+           MOVE    "SKT4710"           TO  SKT4710TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4710TP-TERMID
       *---(01.00.04) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SKT4710TP-HOSPNUM
@@ -1713,7 +1717,10 @@
              MOVE    2    TO    IDX1
              MOVE    1    TO    IDX2
              MOVE    1    TO    IDX3
-             MOVE   999   TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *       MOVE   999   TO    WRK-KOHNUM
+             MOVE  "999"  TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
              PERFORM    UNTIL    IDX1  >    IDX-MAX
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >    IDX-MAX
@@ -1738,7 +1745,10 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
                END-PERFORM
                MOVE  SKT4710TMP-KOH-TBL(IDX3)  TO  SORT-KOH-TBL(IDX1)
-               MOVE  999  TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *        MOVE  999  TO    WRK-KOHNUM
+               MOVE  "999"  TO   WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
                ADD   1    TO    IDX1
              END-PERFORM
            END-IF

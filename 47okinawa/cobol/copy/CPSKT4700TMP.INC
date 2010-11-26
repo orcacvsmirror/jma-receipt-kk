@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         10/11/25  open-cobol1.0対応
       ************************************************************
        01  SKT4700TMP-REC.
            03  SKT4700TMP-KEY.
@@ -27,7 +28,10 @@
            03  SKT4700TMP-HKN-TBL  OCCURS  17.
                05  SKT4700TMP-HKN-NYUGAI-TBL  OCCURS  2.
                    07  SKT4700TMP-KENSU             PIC  9(06).
-               05  SKT4700TMP-GKENSU                PIC  9(06).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *         05  SKT4700TMP-GKENSU                PIC  9(06).
+           03  SKT4700TMP-GKENSU                     PIC  9(06).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            03  SKT4700TMP-KOH-AREA.
                05  SKT4700TMP-KOH-TBL  OCCURS  20.
                    07  SKT4700TMP-KOHNUM            PIC  X(03).

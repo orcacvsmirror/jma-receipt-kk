@@ -188,4 +188,3 @@
            03  MF100-TAHOFTNGK           PIC  9(09).
       *º¹°úÀÁµá³Û
            03  MF100-SEIKYUGK            PIC  9(09).
-      

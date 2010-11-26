@@ -148,6 +148,7 @@
            03  WRK-HKNJANUM            PIC X(05).
            03  WRK-PRTID               PIC X(20).
            03  WRK-KOHNUM              PIC X(03).
+           03  WRK-GYYMM               PIC X(07).
       *
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
@@ -628,10 +629,18 @@
                  MOVE  10000           TO  MF100-FTNMONEY
            END-IF
       *
-           IF    MF100-TYOKI  =  1
-           AND   MF100-TAHOFTN  >=  10000
-                 MOVE  10000           TO  MF100-TAHOFTN
+           IF    MF100-TAHOFTN(2)  NOT =  ZERO
+             IF    MF100-TYOKI  =  1
+             AND   MF100-TAHOFTN(2)  >=  10000
+                   MOVE  10000         TO  MF100-TAHOFTN(2)
+             END-IF
+           ELSE
+             IF    MF100-TYOKI  =  1
+             AND   MF100-TAHOFTN(1)  >=  10000
+                   MOVE  10000         TO  MF100-TAHOFTN(1)
+             END-IF
            END-IF
+      *
       *    長期上位
            IF    MF100-TYOKI  =  2
            AND   MF100-KYUFUGAKU  >=  20000
@@ -643,9 +652,16 @@
                  MOVE  20000           TO  MF100-FTNMONEY
            END-IF
       *
-           IF    MF100-TYOKI  =  2
-           AND   MF100-TAHOFTN  >=  20000
-                 MOVE  20000           TO  MF100-TAHOFTN
+           IF    MF100-TAHOFTN(2)  NOT =  ZERO
+             IF    MF100-TYOKI  =  2
+             AND   MF100-TAHOFTN(2)  >=  20000
+                   MOVE  20000         TO  MF100-TAHOFTN(2)
+             END-IF
+           ELSE
+             IF    MF100-TYOKI  =  2
+             AND   MF100-TAHOFTN(1)  >=  20000
+                   MOVE  20000         TO  MF100-TAHOFTN(1)
+             END-IF
            END-IF
       *
       *    特記事項
@@ -820,20 +836,20 @@
            MOVE    MF100-SRYYM             TO  WRK-SYMD(1:6)
            MOVE    "01"                    TO  WRK-SYMD(7:2)
            PERFORM   31011-SEIWA-HEN-SEC
+           MOVE    SPACE                   TO  WRK-GYYMM
            EVALUATE  LNK-DAY1-GENKIGO
            WHEN  "M"
-             MOVE  1                       TO  WRK-NUM(1:1)
+             MOVE  "1"                     TO  WRK-GYYMM(1:1)
            WHEN  "T"
-             MOVE  2                       TO  WRK-NUM(1:1)
+             MOVE  "2"                     TO  WRK-GYYMM(1:1)
            WHEN  "S"
-             MOVE  3                       TO  WRK-NUM(1:1)
+             MOVE  "3"                     TO  WRK-GYYMM(1:1)
            WHEN  "H"
-             MOVE  4                       TO  WRK-NUM(1:1)
+             MOVE  "4"                     TO  WRK-GYYMM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
-           MOVE    MF100-SRYYM(5:2)        TO  WRK-NUM(4:2)
-           MOVE    WRK-NUM                 TO  WRK-9
-           MOVE    WRK-9                   TO  WRK-NUM
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-GYYMM(2:2)
+           MOVE    MF100-SRYYM(5:2)        TO  WRK-GYYMM(4:2)
+           MOVE    WRK-GYYMM               TO  WRK-NUM
            MOVE    5                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -855,31 +871,31 @@
       *    １７．生年月日
            MOVE    MF100-BIRTHDAY          TO  WRK-SYMD
            PERFORM   31011-SEIWA-HEN-SEC
+           MOVE    SPACE                   TO  WRK-GYYMM
            EVALUATE  LNK-DAY1-GENKIGO
            WHEN  "M"
-             MOVE  1                       TO  WRK-NUM(1:1)
+             MOVE  "1"                     TO  WRK-GYYMM(1:1)
            WHEN  "T"
-             MOVE  2                       TO  WRK-NUM(1:1)
+             MOVE  "2"                     TO  WRK-GYYMM(1:1)
            WHEN  "S"
-             MOVE  3                       TO  WRK-NUM(1:1)
+             MOVE  "3"                     TO  WRK-GYYMM(1:1)
            WHEN  "H"
-             MOVE  4                       TO  WRK-NUM(1:1)
+             MOVE  "4"                     TO  WRK-GYYMM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
-           MOVE    MF100-BIRTHDAY(5:4)     TO  WRK-NUM(4:4)
-           MOVE    WRK-NUM                 TO  WRK-9
-           MOVE    WRK-9                   TO  WRK-NUM
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-GYYMM(2:2)
+           MOVE    MF100-BIRTHDAY(5:4)     TO  WRK-GYYMM(4:4)
+           MOVE    WRK-GYYMM               TO  WRK-NUM
            MOVE    7                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    １８．給付割合
            EVALUATE  MF100-KYURATE(2:1)
              WHEN  1
-                MOVE  "90"                 TO  WRK-NUM
+                MOVE  90                   TO  WRK-NUM
              WHEN  2
-                MOVE  "80"                 TO  WRK-NUM
+                MOVE  80                   TO  WRK-NUM
              WHEN  3
-                MOVE  "70"                 TO  WRK-NUM
+                MOVE  70                   TO  WRK-NUM
            END-EVALUATE
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
@@ -920,7 +936,7 @@
                    MF100-TOTALTEN - MF100-TAHOTEN(1) - MF100-TAHOTEN(2)
              MOVE    WRK-SASITENSU         TO  WRK-NUM
            ELSE
-             MOVE    SPACE                 TO  WRK-NUM
+             MOVE    ZERO                  TO  WRK-NUM
            END-IF
            MOVE    7                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
@@ -938,11 +954,11 @@
                MOVE  6                     TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
              ELSE
-               MOVE  SPACE                 TO  WRK-NUM
+               MOVE  ZERO                  TO  WRK-NUM
                MOVE  1                     TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
       *
-               MOVE  SPACE                 TO  WRK-NUM
+               MOVE  ZERO                  TO  WRK-NUM
                MOVE  1                     TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
              END-IF
@@ -952,15 +968,15 @@
              MOVE  6                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
              MOVE  1                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
       *
-             MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
              MOVE  1                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
       *
-             MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
              MOVE  1                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF
@@ -1159,22 +1175,22 @@
            MOVE    LNK-PRTKANRI-SKYYMD
                                    TO  SFILESV-SKYYMD   (1)
       *    ファイル名は「請求年月＋"_321"＋医療機関コード.CSV」
+           MOVE    SPACE                   TO  WRK-GYYMM
            MOVE    LNK-PRTKANRI-SKYYMD     TO  WRK-SYMD
            PERFORM 31011-SEIWA-HEN-SEC
            EVALUATE  LNK-DAY1-GENKIGO
            WHEN  "M"
-             MOVE  1                       TO  WRK-NUM(1:1)
+             MOVE  "1"                     TO  WRK-GYYMM(1:1)
            WHEN  "T"
-             MOVE  2                       TO  WRK-NUM(1:1)
+             MOVE  "2"                     TO  WRK-GYYMM(1:1)
            WHEN  "S"
-             MOVE  3                       TO  WRK-NUM(1:1)
+             MOVE  "3"                     TO  WRK-GYYMM(1:1)
            WHEN  "H"
-             MOVE  4                       TO  WRK-NUM(1:1)
+             MOVE  "4"                     TO  WRK-GYYMM(1:1)
            END-EVALUATE
-           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-NUM(2:2)
-           MOVE    LNK-PRTKANRI-SKYYMD(5:2) TO  WRK-NUM(4:2)
-           MOVE    WRK-NUM                 TO  WRK-SKYYM
-           STRING  WRK-SKYYM               DELIMITED  BY  SIZE
+           MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-GYYMM(2:2)
+           MOVE    LNK-PRTKANRI-SKYYMD(5:2) TO  WRK-GYYMM(4:2)
+           STRING  WRK-GYYMM               DELIMITED  BY  SPACE
                    "_321"                  DELIMITED  BY  SIZE
                    SYS-1001-HOSPCD         DELIMITED  BY  SIZE
                    ".CSV"                  DELIMITED  BY  SIZE

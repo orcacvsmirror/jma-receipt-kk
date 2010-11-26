@@ -29,6 +29,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者    日付      内容
       *  01.00.01    吉川      10/10/25  金額は１０円未満を四捨五入する
+      *  01.00.02    吉川      10/11/25  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -683,7 +684,10 @@
                ADD     1           TO  CNT-MF100
            ELSE
                DISPLAY "市町村番号対象外 " RECE02-PTNUM
-                       "負担者番号="       RECE02-KOHFTNJANUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *                 "負担者番号="       RECE02-KOHFTNJANUM
+                       "負担者番号="       RECE02-KOHFTNJANUM(IDZ)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            END-IF
       *
            .
@@ -749,7 +753,10 @@
            MOVE  MF100-SRYYM               TO  WRK-SYMD (1:6)
            MOVE  "01"                      TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
-           MOVE  WRK-HENYMDG(11:16)        TO  SC07-SRYMM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     MOVE  WRK-HENYMDG(11:16)        TO  SC07-SRYMM
+           MOVE  WRK-HENYMDG(11:6)         TO  SC07-SRYMM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *
       *    住所
            MOVE  WRK-HOSPADRS              TO  SC07-ADRS

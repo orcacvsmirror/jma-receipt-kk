@@ -37,6 +37,7 @@
       *  01.00.06    吉川      10/04/07    オンライン返戻対応
       *  01.00.07    吉川      10/10/06    後期高齢のみの場合でも印字するよう修正
       *  01.00.08    吉川      10/11/09    電子請求の場合、県単独医療分は記載不要
+      *  01.00.09    吉川      10/11/25    open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -233,7 +234,9 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
-           03  WRK-PATH2           PIC X(50).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     03  WRK-PATH2           PIC X(50).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *****
       *

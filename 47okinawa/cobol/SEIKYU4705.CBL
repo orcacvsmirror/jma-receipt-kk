@@ -36,6 +36,7 @@
       *  01.00.04    µÈÀî    2010/06/11  º¹°úÀÁµá³ÛÍó¤Ï¸å´ü¹âÎð¤â»Í¼Î¸ÞÆþ¤¹¤ë
       *  01.00.05    µÈÀî    2010/11/22  º¹°úÀÁµá³ÛÍó¤¬£°±ß¤Î¾ì¹ç¤Ï
       *                                  £°¤Èµ­ºÜ¤¹¤ë¤è¤¦¤Ë½¤Àµ
+      *  01.00.06    µÈÀî    2010/11/25  open-cobol1.0ÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -208,7 +209,10 @@
            05  WRK-PARA-LINK-SYSYMD  PIC  X(08).
            05  WRK-PARA-LINK-JOBID   PIC  9(07).
            05  WRK-PARA-LINK-SHELLID PIC  X(08).
-           03  WRK-PARA-LINK-HOSPNUM PIC  9(02).
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/11/25) start
+      *     03  WRK-PARA-LINK-HOSPNUM PIC  9(02).
+           05  WRK-PARA-LINK-HOSPNUM PIC  9(02).
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/11/25) end
       *
       *    °ì»þÎÎ°è
        01  WRK-AREA.

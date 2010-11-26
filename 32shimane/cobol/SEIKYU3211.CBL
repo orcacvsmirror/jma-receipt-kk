@@ -150,9 +150,6 @@
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
       *
-      *    パラメータファイル名
-           03  FILE-NAME        PIC X(512).
-      *
            03  WRK-PATH              PIC  X(50).
       *
       *    医療機関情報

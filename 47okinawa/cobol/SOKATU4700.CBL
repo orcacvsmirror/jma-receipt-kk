@@ -35,6 +35,7 @@
       *  01.00.04     長屋    08/05/02  帳票様式に伴う修正
       *  01.00.05     吉川    09/01/14  SPA-AREA初期化
       *  01.00.06     吉川    10/06/01  オンライン返戻対応
+      *  01.00.07     吉川    10/11/25  open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -388,7 +389,10 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *##（地方公費仕様：LNK-PRTKANRI-TERMID)
-           MOVE    "SKT4700TP"         TO  SKT4700TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     MOVE    "SKT4700TP"         TO  SKT4700TP-FILE-ID
+           MOVE    "SKT4700"           TO  SKT4700TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4700TP-TERMID
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SKT4700TP-HOSPNUM
@@ -797,7 +801,10 @@
            INITIALIZE       SKT4700TMP-REC
       *
       *    診療科
-           MOVE  "99"                    TO  SKT4700TMP-RECEKA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     MOVE  "99"                    TO  SKT4700TMP-RECEKA
+           MOVE  99                      TO  SKT4700TMP-RECEKA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
