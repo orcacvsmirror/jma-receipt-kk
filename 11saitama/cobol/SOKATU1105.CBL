@@ -63,6 +63,7 @@
       *  01.00.19    等李    10/02/18   瘦副戎规782は懒滇驰を淡很しない
       *  01.00.20    等李    10/08/03   オンライン手提滦炳
       *  01.00.21    等李    10/10/27   瘦副戎规543は懒滇驰を淡很しない
+      *  01.00.22    等李    10/11/25   open-cobol1.0滦炳
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2372,8 +2373,12 @@
            MOVE    "99999999"              TO  RECE10-XXEDHKNJANUM
       *
       *---(01.00.08) LINE ADD START ------------------------------------
-           MOVE    "000000"                TO  RECE10-SRYYM
-           MOVE    "999999"                TO  RECE10-XXSRYYM
+      *=== open-cobol1.0滦炳 by Yoshikawa(2010/11/25) start
+      *     MOVE    "000000"                TO  RECE10-SRYYM
+      *     MOVE    "999999"                TO  RECE10-XXSRYYM
+           MOVE    000000                  TO  RECE10-SRYYM
+           MOVE    999999                  TO  RECE10-XXSRYYM
+      *=== open-cobol1.0滦炳 by Yoshikawa(2010/11/25) end
       *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE    RECE10-REC              TO  MCPDATA-REC.
            MOVE    "DBSELECT"              TO  MCP-FUNC.

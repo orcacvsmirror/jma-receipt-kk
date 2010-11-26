@@ -49,6 +49,7 @@
       *  01.00.15    等李    10/02/04   シス瓷≈2010∽の给锐浩非腕への
       *                                 孟数给锐淡很肋年滦炳
       *  01.00.16    等李    10/08/03   オンライン手提滦炳
+      *  01.00.17    等李    10/11/25   open-cobol1.0滦炳
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2102,8 +2103,12 @@
       *
       *
       *---(01.00.07) LINE ADD START ------------------------------------
-           MOVE    "000000"            TO  RECE10-SRYYM
-           MOVE    "999999"            TO  RECE10-XXSRYYM
+      *=== open-cobol1.0滦炳 by Yoshikawa(2010/11/25) start
+      *     MOVE    "000000"            TO  RECE10-SRYYM
+      *     MOVE    "999999"            TO  RECE10-XXSRYYM
+           MOVE    000000              TO  RECE10-SRYYM
+           MOVE    999999              TO  RECE10-XXSRYYM
+      *=== open-cobol1.0滦炳 by Yoshikawa(2010/11/25) end
       *---(01.00.07) LINE ADD END   ------------------------------------
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
