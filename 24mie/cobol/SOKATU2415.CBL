@@ -747,158 +747,160 @@
        2001-KOUKI-SYUKEI-EXT.
            EXIT.
       *
-      *****************************************************************
-      *    ¹­°èÏ¢¹ç¡¦ÂåÉ½ÈÖ¹æ¥»¥Ã¥È
-      *****************************************************************
-       200101-HKNJANUM-SET-SEC                SECTION.
-      *
-           EVALUATE  WRK-HKNJANUM(1:2)
-      *      ËÌ³¤Æ»
-             WHEN  "01"
-                 MOVE  "010004"  TO  WRK-HKNJANUM
-      *      ÀÄ¿¹¸©
-             WHEN  "02"
-                 MOVE  "020003"  TO  WRK-HKNJANUM
-      *      ´ä¼ê¸©
-             WHEN  "03"
-                 MOVE  "030002"  TO  WRK-HKNJANUM
-      *      µÜ¾ë¸©
-             WHEN  "04"
-                 MOVE  "040001"  TO  WRK-HKNJANUM
-      *      ½©ÅÄ¸©
-             WHEN  "05"
-                 MOVE  "050000"  TO  WRK-HKNJANUM
-      *      »³·Á¸©
-             WHEN  "06"
-                 MOVE  "060009"  TO  WRK-HKNJANUM
-      *      Ê¡Åç¸©
-             WHEN  "07"
-                 MOVE  "070008"  TO  WRK-HKNJANUM
-      *      °ñ¾ë¸©
-             WHEN  "08"
-                 MOVE  "080007"  TO  WRK-HKNJANUM
-      *      ÆÊÌÚ¸©
-             WHEN  "09"
-                 MOVE  "090006"  TO  WRK-HKNJANUM
-      *      ·²ÇÏ¸©
-             WHEN  "10"
-                 MOVE  "100003"  TO  WRK-HKNJANUM
-      *      ºë¶Ì¸©
-             WHEN  "11"
-                 MOVE  "110002"  TO  WRK-HKNJANUM
-      *      ÀéÍÕ¸©
-             WHEN  "12"
-                 MOVE  "120001"  TO  WRK-HKNJANUM
-      *      ÅìµþÅÔ
-             WHEN  "13"
-                 MOVE  "130000"  TO  WRK-HKNJANUM
-      *      ¿ÀÆàÀî¸©
-             WHEN  "14"
-                 MOVE  "140009"  TO  WRK-HKNJANUM
-      *      ¿·³ã¸©
-             WHEN  "15"
-                 MOVE  "150008"  TO  WRK-HKNJANUM
-      *      ÉÙ»³¸©
-             WHEN  "16"
-                 MOVE  "160007"  TO  WRK-HKNJANUM
-      *      ÀÐÀî¸©
-             WHEN  "17"
-                 MOVE  "170006"  TO  WRK-HKNJANUM
-      *      Ê¡°æ¸©
-             WHEN  "18"
-                 MOVE  "180005"  TO  WRK-HKNJANUM
-      *      »³Íü¸©
-             WHEN  "19"
-                 MOVE  "190004"  TO  WRK-HKNJANUM
-      *      Ä¹Ìî¸©
-             WHEN  "20"
-                 MOVE  "200001"  TO  WRK-HKNJANUM
-      *      ´ôÉì¸©
-             WHEN  "21"
-                 MOVE  "210000"  TO  WRK-HKNJANUM
-      *      ÀÅ²¬¸©
-             WHEN  "22"
-                 MOVE  "220009"  TO  WRK-HKNJANUM
-      *      °¦ÃÎ¸©
-             WHEN  "23"
-                 MOVE  "230008"  TO  WRK-HKNJANUM
-      *      »°½Å¸©
-             WHEN  "24"
-                 MOVE  "240007"  TO  WRK-HKNJANUM
-      *      ¼¢²ì¸©
-             WHEN  "25"
-                 MOVE  "250006"  TO  WRK-HKNJANUM
-      *      µþÅÔÉÜ
-             WHEN  "26"
-                 MOVE  "260005"  TO  WRK-HKNJANUM
-      *      ÂçºåÉÜ
-             WHEN  "27"
-                 MOVE  "270004"  TO  WRK-HKNJANUM
-      *      Ê¼¸Ë¸©
-             WHEN  "28"
-                 MOVE  "280003"  TO  WRK-HKNJANUM
-      *      ÆàÎÉ¸©
-             WHEN  "29"
-                 MOVE  "290002"  TO  WRK-HKNJANUM
-      *      ÏÂ²Î»³¸©
-             WHEN  "30"
-                 MOVE  "300009"  TO  WRK-HKNJANUM
-      *      Ä»¼è¸©
-             WHEN  "31"
-                 MOVE  "310008"  TO  WRK-HKNJANUM
-      *      Åçº¬¸©
-             WHEN  "32"
-                 MOVE  "320007"  TO  WRK-HKNJANUM
-      *      ²¬»³¸©
-             WHEN  "33"
-                 MOVE  "330006"  TO  WRK-HKNJANUM
-      *      ¹­Åç¸©
-             WHEN  "34"
-                 MOVE  "340005"  TO  WRK-HKNJANUM
-      *      »³¸ý¸©
-             WHEN  "35"
-                 MOVE  "350004"  TO  WRK-HKNJANUM
-      *      ÆÁÅç¸©
-             WHEN  "36"
-                 MOVE  "360003"  TO  WRK-HKNJANUM
-      *      ¹áÀî¸©
-             WHEN  "37"
-                 MOVE  "370002"  TO  WRK-HKNJANUM
-      *      °¦É²¸©
-             WHEN  "38"
-                 MOVE  "380001"  TO  WRK-HKNJANUM
-      *      ¹âÃÎ¸©
-             WHEN  "39"
-                 MOVE  "390000"  TO  WRK-HKNJANUM
-      *      Ê¡²¬¸©
-             WHEN  "40"
-                 MOVE  "400007"  TO  WRK-HKNJANUM
-      *      º´²ì¸©
-             WHEN  "41"
-                 MOVE  "410006"  TO  WRK-HKNJANUM
-      *      Ä¹ºê¸©
-             WHEN  "42"
-                 MOVE  "420005"  TO  WRK-HKNJANUM
-      *      ·§ËÜ¸©
-             WHEN  "43"
-                 MOVE  "430004"  TO  WRK-HKNJANUM
-      *      ÂçÊ¬¸©
-             WHEN  "44"
-                 MOVE  "440003"  TO  WRK-HKNJANUM
-      *      µÜºê¸©
-             WHEN  "45"
-                 MOVE  "450002"  TO  WRK-HKNJANUM
-      *      ¼¯»ùÅç¸©
-             WHEN  "46"
-                 MOVE  "460001"  TO  WRK-HKNJANUM
-      *      ²­Æì¸©
-             WHEN  "47"
-                 MOVE  "470000"  TO  WRK-HKNJANUM
-           END-EVALUATE
-      *
-           .
-       200101-HKNJANUM-SET-EXT.
-           EXIT.
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/11/24) start
+      ******************************************************************
+      **    ¹­°èÏ¢¹ç¡¦ÂåÉ½ÈÖ¹æ¥»¥Ã¥È
+      ******************************************************************
+      * 200101-HKNJANUM-SET-SEC                SECTION.
+      **
+      *     EVALUATE  WRK-HKNJANUM(1:2)
+      **      ËÌ³¤Æ»
+      *       WHEN  "01"
+      *           MOVE  "010004"  TO  WRK-HKNJANUM
+      **      ÀÄ¿¹¸©
+      *       WHEN  "02"
+      *           MOVE  "020003"  TO  WRK-HKNJANUM
+      **      ´ä¼ê¸©
+      *       WHEN  "03"
+      *           MOVE  "030002"  TO  WRK-HKNJANUM
+      **      µÜ¾ë¸©
+      *       WHEN  "04"
+      *           MOVE  "040001"  TO  WRK-HKNJANUM
+      **      ½©ÅÄ¸©
+      *       WHEN  "05"
+      *           MOVE  "050000"  TO  WRK-HKNJANUM
+      **      »³·Á¸©
+      *       WHEN  "06"
+      *           MOVE  "060009"  TO  WRK-HKNJANUM
+      **      Ê¡Åç¸©
+      *       WHEN  "07"
+      *           MOVE  "070008"  TO  WRK-HKNJANUM
+      **      °ñ¾ë¸©
+      *       WHEN  "08"
+      *           MOVE  "080007"  TO  WRK-HKNJANUM
+      **      ÆÊÌÚ¸©
+      *       WHEN  "09"
+      *           MOVE  "090006"  TO  WRK-HKNJANUM
+      **      ·²ÇÏ¸©
+      *       WHEN  "10"
+      *           MOVE  "100003"  TO  WRK-HKNJANUM
+      **      ºë¶Ì¸©
+      *       WHEN  "11"
+      *           MOVE  "110002"  TO  WRK-HKNJANUM
+      **      ÀéÍÕ¸©
+      *       WHEN  "12"
+      *           MOVE  "120001"  TO  WRK-HKNJANUM
+      **      ÅìµþÅÔ
+      *       WHEN  "13"
+      *           MOVE  "130000"  TO  WRK-HKNJANUM
+      **      ¿ÀÆàÀî¸©
+      *       WHEN  "14"
+      *           MOVE  "140009"  TO  WRK-HKNJANUM
+      **      ¿·³ã¸©
+      *       WHEN  "15"
+      *           MOVE  "150008"  TO  WRK-HKNJANUM
+      **      ÉÙ»³¸©
+      *       WHEN  "16"
+      *           MOVE  "160007"  TO  WRK-HKNJANUM
+      **      ÀÐÀî¸©
+      *       WHEN  "17"
+      *           MOVE  "170006"  TO  WRK-HKNJANUM
+      **      Ê¡°æ¸©
+      *       WHEN  "18"
+      *           MOVE  "180005"  TO  WRK-HKNJANUM
+      **      »³Íü¸©
+      *       WHEN  "19"
+      *           MOVE  "190004"  TO  WRK-HKNJANUM
+      **      Ä¹Ìî¸©
+      *       WHEN  "20"
+      *           MOVE  "200001"  TO  WRK-HKNJANUM
+      **      ´ôÉì¸©
+      *       WHEN  "21"
+      *           MOVE  "210000"  TO  WRK-HKNJANUM
+      **      ÀÅ²¬¸©
+      *       WHEN  "22"
+      *           MOVE  "220009"  TO  WRK-HKNJANUM
+      **      °¦ÃÎ¸©
+      *       WHEN  "23"
+      *           MOVE  "230008"  TO  WRK-HKNJANUM
+      **      »°½Å¸©
+      *       WHEN  "24"
+      *           MOVE  "240007"  TO  WRK-HKNJANUM
+      **      ¼¢²ì¸©
+      *       WHEN  "25"
+      *           MOVE  "250006"  TO  WRK-HKNJANUM
+      **      µþÅÔÉÜ
+      *       WHEN  "26"
+      *           MOVE  "260005"  TO  WRK-HKNJANUM
+      **      ÂçºåÉÜ
+      *       WHEN  "27"
+      *           MOVE  "270004"  TO  WRK-HKNJANUM
+      **      Ê¼¸Ë¸©
+      *       WHEN  "28"
+      *           MOVE  "280003"  TO  WRK-HKNJANUM
+      **      ÆàÎÉ¸©
+      *       WHEN  "29"
+      *           MOVE  "290002"  TO  WRK-HKNJANUM
+      **      ÏÂ²Î»³¸©
+      *       WHEN  "30"
+      *           MOVE  "300009"  TO  WRK-HKNJANUM
+      **      Ä»¼è¸©
+      *       WHEN  "31"
+      *           MOVE  "310008"  TO  WRK-HKNJANUM
+      **      Åçº¬¸©
+      *       WHEN  "32"
+      *           MOVE  "320007"  TO  WRK-HKNJANUM
+      **      ²¬»³¸©
+      *       WHEN  "33"
+      *           MOVE  "330006"  TO  WRK-HKNJANUM
+      **      ¹­Åç¸©
+      *       WHEN  "34"
+      *           MOVE  "340005"  TO  WRK-HKNJANUM
+      **      »³¸ý¸©
+      *       WHEN  "35"
+      *           MOVE  "350004"  TO  WRK-HKNJANUM
+      **      ÆÁÅç¸©
+      *       WHEN  "36"
+      *           MOVE  "360003"  TO  WRK-HKNJANUM
+      **      ¹áÀî¸©
+      *       WHEN  "37"
+      *           MOVE  "370002"  TO  WRK-HKNJANUM
+      **      °¦É²¸©
+      *       WHEN  "38"
+      *           MOVE  "380001"  TO  WRK-HKNJANUM
+      **      ¹âÃÎ¸©
+      *       WHEN  "39"
+      *           MOVE  "390000"  TO  WRK-HKNJANUM
+      **      Ê¡²¬¸©
+      *       WHEN  "40"
+      *           MOVE  "400007"  TO  WRK-HKNJANUM
+      **      º´²ì¸©
+      *       WHEN  "41"
+      *           MOVE  "410006"  TO  WRK-HKNJANUM
+      **      Ä¹ºê¸©
+      *       WHEN  "42"
+      *           MOVE  "420005"  TO  WRK-HKNJANUM
+      **      ·§ËÜ¸©
+      *       WHEN  "43"
+      *           MOVE  "430004"  TO  WRK-HKNJANUM
+      **      ÂçÊ¬¸©
+      *       WHEN  "44"
+      *           MOVE  "440003"  TO  WRK-HKNJANUM
+      **      µÜºê¸©
+      *       WHEN  "45"
+      *           MOVE  "450002"  TO  WRK-HKNJANUM
+      **      ¼¯»ùÅç¸©
+      *       WHEN  "46"
+      *           MOVE  "460001"  TO  WRK-HKNJANUM
+      **      ²­Æì¸©
+      *       WHEN  "47"
+      *           MOVE  "470000"  TO  WRK-HKNJANUM
+      *     END-EVALUATE
+      **
+      *     .
+      * 200101-HKNJANUM-SET-EXT.
+      *     EXIT.
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/11/24) end
       *
       *****************************************************************
       *    ½¸·×½èÍý

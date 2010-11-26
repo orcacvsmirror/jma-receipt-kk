@@ -57,6 +57,7 @@
       *  01.00.17    吉川    10/11/02    特別療養費国保対応
       *  01.00.18    吉川    10/11/15    複数診療月の返戻がある場合の
       *                                  請求書枚数のカウント修正
+      *  01.00.19    吉川    10/11/24    open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1946,8 +1947,12 @@
            MOVE   "99999999"            TO    RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO  RECE10-SRYYM
-             MOVE  "999999"             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *       MOVE  "000000"             TO  RECE10-SRYYM
+      *       MOVE  "999999"             TO  RECE10-XXSRYYM
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *

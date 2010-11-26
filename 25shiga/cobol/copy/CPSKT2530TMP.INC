@@ -21,10 +21,14 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付      内容
       *  01.00.01    吉川    08/10/20  シス管「2007」の公費まとめ対応
+      *  01.00.02    吉川    10/11/24  open-cobol1.0対応
       ************************************************************
        01  SKT2530TMP-REC.
            03  SKT2530TMP-KEY.
-               05  SKT2530TMP-SYUTURYOKU           PIC  9(01).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *         05  SKT2530TMP-SYUTURYOKU           PIC  9(01).
+               05  SKT2530TMP-SYUTURYOKU           PIC  9(02).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                05  SKT2530TMP-HKNJANUM             PIC  X(06).
                05  SKT2530TMP-HKNJANAME            PIC  X(16).
                05  SKT2530TMP-ZAITAKU              PIC  X(01).

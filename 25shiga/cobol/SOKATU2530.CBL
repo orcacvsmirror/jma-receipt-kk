@@ -47,6 +47,7 @@
       *  01.00.11    吉川    10/04/16    印字対象番号の追加（340）
       *                                  政令指定都市対応（相模原市）
       *  01.00.12    吉川    10/11/01    特別療養費国保対応
+      *  01.00.13    吉川    10/11/24    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -451,7 +452,10 @@
                                    SPA-AREA
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
-           MOVE    "SKT2530TP"         TO  SKT2530TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *     MOVE    "SKT2530TP"         TO  SKT2530TP-FILE-ID
+           MOVE    "SKT2530"         TO  SKT2530TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT2530TP-TERMID
       *---(01.00.04) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SKT2530TP-HOSPNUM
@@ -2576,8 +2580,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/01) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO  RECE10-SRYYM
-             MOVE  "999999"             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *       MOVE  "000000"             TO  RECE10-SRYYM
+      *       MOVE  "999999"             TO  RECE10-XXSRYYM
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/01) end
       *

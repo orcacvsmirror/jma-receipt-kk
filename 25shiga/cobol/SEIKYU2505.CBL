@@ -36,6 +36,7 @@
       *  01.00.03    吉川    09/11/10    特記事項０３を持っている場合は
       *                                  印字対象外とする
       *  01.00.04    吉川    10/04/16    印字対象番号の追加（340）
+      *  01.00.05    吉川    10/11/24    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -224,7 +225,10 @@
                05  WRK-TOKKI             PIC X(02).
                05  WRK-TOWN              PIC 9(03).
                05  WRK-CHK-SRYYM         PIC 9(06).
-               05  WRK-HKNJACVS          PIC 9(08).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *         05  WRK-HKNJACVS          PIC 9(08).
+               05  WRK-HKNJACVS          PIC X(08).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                05  WRK-JKYSNUMCVS        PIC 9(07).
                05  WRK-MOJIST            PIC 9(03).
                05  WRK-MOJIED            PIC 9(03).
@@ -1052,7 +1056,10 @@
            INITIALIZE                      LNK-DAY1-AREA
            MOVE    "11"                    TO  LNK-DAY1-IRAI
            MOVE    MF100-SRYYM             TO  LNK-DAY1-YMD(1:6)
-           MOVE    01                      TO  LNK-DAY1-YMD(7:)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *     MOVE    01                      TO  LNK-DAY1-YMD(7:)
+           MOVE    "01"                    TO  LNK-DAY1-YMD(7:)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
            CALL    "ORCSDAY"               USING   STS-AREA-DAY
                                                    LNK-DAY1-AREA
       *

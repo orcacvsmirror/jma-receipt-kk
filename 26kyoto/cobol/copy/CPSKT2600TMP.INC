@@ -15,12 +15,13 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      ************************************************************
       *    総括一時ファイル     COPY (CPSKT2600TMP.INC)
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
-      ************************************************************
+      *  01.00.01    吉川         10/11/02  特別療養費国保対応
+      *  01.00.02    吉川         10/11/24  open-cobol1.0対応(多重定義修正)
+      ********************************************************************
        01  SKT2600TMP-REC.
            03  SKT2600TMP-KEY.
                05  SKT2600TMP-NYUGAIKBN        PIC  9(01).
@@ -40,5 +41,10 @@
            03  SKT2600TMP-GENMEN-TBL.
                05  SKT2600TMP-G-KENSU          PIC  9(03).
                05  SKT2600TMP-G-TENSU          PIC  9(07).
-           03  SKT2600TMP-GENBAKU              PIC  9(03).
-           03  SKT2600TMP-TOKUBETU             PIC  9(03).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *     03  SKT2600TMP-GENBAKU              PIC  9(03).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+           03  SKT2600TMP-T-KENSU              PIC  9(03).
+           03  SKT2600TMP-T-TENSU              PIC  9(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end

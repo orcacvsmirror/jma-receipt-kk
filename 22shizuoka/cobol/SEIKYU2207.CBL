@@ -33,6 +33,7 @@
       *                                  件数がダブルカウントされるのを修正
       *  01.00.02    吉川    2010/11/17  同日再診がある場合、備考欄に
       *                                  「同日再診あり」と記録する
+      *  01.00.03    吉川    2010/11/25  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -193,7 +194,9 @@
       *    パラメータファイル名
            03  FILE-NAME                  PIC X(512).
       *
-           03  WRK-PATH                   PIC  X(50).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     03  WRK-PATH                   PIC  X(50).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME               PIC X(100).
@@ -805,7 +808,10 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    医療機関名称２
-           MOVE    WRK-HOSPNAME(41:80)     TO  WRK-DATA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     MOVE    WRK-HOSPNAME(41:80)     TO  WRK-DATA
+           MOVE    WRK-HOSPNAME(41:40)     TO  WRK-DATA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -820,7 +826,10 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    所在地２
-           MOVE    WRK-HOSPADRS(41:80)     TO  WRK-DATA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *     MOVE    WRK-HOSPADRS(41:80)     TO  WRK-DATA
+           MOVE    WRK-HOSPADRS(41:40)     TO  WRK-DATA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            MOVE    40                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -877,7 +886,10 @@
              INITIALIZE                        WRK-REC
                                                WRK-REC-LENGTH
       *      １．レコード区分
-             MOVE    1                       TO  WRK-DATA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *       MOVE    1                       TO  WRK-DATA
+             MOVE    "1"                     TO  WRK-DATA
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
              MOVE    1                       TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
       *

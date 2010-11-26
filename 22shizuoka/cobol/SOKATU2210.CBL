@@ -42,6 +42,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.10    吉川    10/04/05    オンライン返戻対応
       *  01.00.11    吉川    10/10/13    特別療養費国保対応
+      *  01.00.12    吉川    10/11/25    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -785,12 +786,13 @@
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
-           DISPLAY "RECE10-SRYYM"RECE10-SRYYM
-           DISPLAY "WRK-CONS-SRYYM-200804"WRK-CONS-SRYYM-200804
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
       *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) start
       *         MOVE  RECE10-SRYYM          TO  SKT2210TMP-SRYYM
-               MOVE  "200803"              TO  SKT2210TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *         MOVE  "200803"              TO  SKT2210TMP-SRYYM
+               MOVE  200803                TO  SKT2210TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *=== 旧様式の返戻をまとめて印字 by Yoshikawa(2008/06/17) end
                DISPLAY "平成２０年３月以前は旧様式"SKT2210TMP-SRYYM
            END-IF
@@ -2306,8 +2308,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"                TO  RECE10-SRYYM
-             MOVE  "999999"                TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *       MOVE  "000000"                TO  RECE10-SRYYM
+      *       MOVE  "999999"                TO  RECE10-XXSRYYM
+             MOVE  000000                  TO  RECE10-SRYYM
+             MOVE  999999                  TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *

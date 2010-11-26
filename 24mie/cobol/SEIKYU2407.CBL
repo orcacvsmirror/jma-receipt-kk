@@ -32,6 +32,7 @@
       *                                  記載されるのを修正
       *                                  助成種別毎に印字する
       *  01.00.02    吉川    10/08/05    処方せん発行区分の判定方法変更
+      *  01.00.03    吉川    10/11/24    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -882,14 +883,24 @@
                MOVE  ZERO               TO  SC07-BIRTHDAY (IDX1)(6:1)
              END-IF
              EVALUATE  TRUE
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *         WHEN  WRK-HENYMDG1(1:1)  =  "M"
+      *           MOVE  1                TO  SC07-BIRTHDAY (IDX1)(1:1)
+      *         WHEN  WRK-HENYMDG1(1:1)  =  "T"
+      *           MOVE  2                TO  SC07-BIRTHDAY (IDX1)(1:1)
+      *         WHEN  WRK-HENYMDG1(1:1)  =  "S"
+      *           MOVE  3                TO  SC07-BIRTHDAY (IDX1)(1:1)
+      *         WHEN  WRK-HENYMDG1(1:1)  =  "H"
+      *           MOVE  4                TO  SC07-BIRTHDAY (IDX1)(1:1)
                WHEN  WRK-HENYMDG1(1:1)  =  "M"
-                 MOVE  1                TO  SC07-BIRTHDAY (IDX1)(1:1)
+                 MOVE  "1"              TO  SC07-BIRTHDAY (IDX1)(1:1)
                WHEN  WRK-HENYMDG1(1:1)  =  "T"
-                 MOVE  2                TO  SC07-BIRTHDAY (IDX1)(1:1)
+                 MOVE  "2"              TO  SC07-BIRTHDAY (IDX1)(1:1)
                WHEN  WRK-HENYMDG1(1:1)  =  "S"
-                 MOVE  3                TO  SC07-BIRTHDAY (IDX1)(1:1)
+                 MOVE  "3"              TO  SC07-BIRTHDAY (IDX1)(1:1)
                WHEN  WRK-HENYMDG1(1:1)  =  "H"
-                 MOVE  4                TO  SC07-BIRTHDAY (IDX1)(1:1)
+                 MOVE  "4"              TO  SC07-BIRTHDAY (IDX1)(1:1)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
              END-EVALUATE
       *
       *    診療年月
@@ -1169,12 +1180,20 @@
                      RECE02-KOHNUM (2)  =  "165" OR
                      RECE02-KOHNUM (3)  =  "165" OR
                      RECE02-KOHNUM (4)  =  "165"
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *            IF  (RECE02-KYURATE  = 30  AND
+      *                 RECE02-TOTALTEN  <  501)
+      *            OR  (RECE02-KYURATE  = 20  AND
+      *                 RECE02-TOTALTEN  <  751)
+      *            OR  (RECE02-KYURATE  = 10  AND
+      *                 RECE02-TOTALTEN  <  1501)
                   IF  (RECE02-KYURATE  = 30  AND
-                       RECE02-TOTALTEN  <  501)
+                       RECE02-TOTALTEN(1)  <  501)
                   OR  (RECE02-KYURATE  = 20  AND
-                       RECE02-TOTALTEN  <  751)
+                       RECE02-TOTALTEN(1)  <  751)
                   OR  (RECE02-KYURATE  = 10  AND
-                       RECE02-TOTALTEN  <  1501)
+                       RECE02-TOTALTEN(1)  <  1501)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                     GO  TO  900-KOHSKY-READ-SEC
                   END-IF
                 END-IF
@@ -1184,12 +1203,14 @@
                      RECE02-KOHNUM (2)  =  "164" OR
                      RECE02-KOHNUM (3)  =  "164" OR
                      RECE02-KOHNUM (4)  =  "164"
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
                   IF  (RECE02-KYURATE  = 30  AND
-                       RECE02-TOTALTEN  <  1067)
+                       RECE02-TOTALTEN(1)  <  1067)
                   OR  (RECE02-KYURATE  = 20  AND
-                       RECE02-TOTALTEN  <  1601)
+                       RECE02-TOTALTEN(1)  <  1601)
                   OR  (RECE02-KYURATE  = 10  AND
-                       RECE02-TOTALTEN  <  3201)
+                       RECE02-TOTALTEN(1)  <  3201)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                     GO  TO  900-KOHSKY-READ-SEC
                   END-IF
                 END-IF

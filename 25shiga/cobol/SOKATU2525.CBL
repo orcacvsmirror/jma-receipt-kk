@@ -39,6 +39,7 @@
       *  01.00.06    等李    2010/03/16  泼年祭吹が淡很されない稍恶圭を饯赖
       *  01.00.07    等李    2010/03/30  弓拌息圭の瘦副荚戎规回年滦炳
       *  01.00.08    等李    2010/04/05  オンライン手提滦炳
+      *  01.00.09    等李    2010/11/24  open-cobol1.0滦炳
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -152,7 +153,9 @@
            03  WRK-HENYMDG         PIC X(22).
       *
            03  WRK-CNT             PIC 9(02).
-           03  WRK-KOHNUM          PIC X(03).
+      *=== open-cobol1.0滦炳 by Yoshikawa(2010/11/24) start
+      *     03  WRK-KOHNUM          PIC X(03).
+      *=== open-cobol1.0滦炳 by Yoshikawa(2010/11/24) end
            03  WRK-HKNJANUM        PIC X(06).
       *=== 给锐砷么荚戎规の片2峰髓に礁纷 by Yoshikawa(2008/05/23) start
            03  WRK-FTNJANUM        PIC X(08).

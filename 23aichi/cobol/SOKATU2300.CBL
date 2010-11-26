@@ -41,6 +41,7 @@
       *  01.00.10    吉川     09/11/19    公費欄は全国公費であれば集計
       *  01.00.11    吉川     10/04/05    オンライン返戻対応
       *  01.00.12    吉川     10/11/01    特別療養費国保対応
+      *  01.00.13    吉川     10/11/25    open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1366,8 +1367,12 @@
            MOVE    "99999999"           TO  RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/01) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO  RECE10-SRYYM
-             MOVE  "999999"             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *       MOVE  "000000"             TO  RECE10-SRYYM
+      *       MOVE  "999999"             TO  RECE10-XXSRYYM
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/01) end
       *

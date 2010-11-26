@@ -55,6 +55,7 @@
       *  01.00.14    吉川    09/09/15    様式統一に伴い、帳票名称変更
       *  01.00.15    吉川    10/08/13    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.16    吉川    10/11/24    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -855,7 +856,10 @@
                OR  RECE10-ETC-KOHNUM (3)  =  "972"
                OR  RECE10-ETC-KOHNUM (4)  =  "972"
                  IF  MF100-ETCKOHFTN  >  10000
-                     MOVE  "10000"        TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *               MOVE  "10000"        TO  MF100-ETCKOHFTN
+                     MOVE  10000          TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                  END-IF
                END-IF
                IF  RECE10-ETC-KOHNUM (1)  =  "974"
@@ -863,7 +867,10 @@
                OR  RECE10-ETC-KOHNUM (3)  =  "974"
                OR  RECE10-ETC-KOHNUM (4)  =  "974"
                  IF  MF100-ETCKOHFTN  >  20000
-                     MOVE  "20000"        TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *               MOVE  "20000"        TO  MF100-ETCKOHFTN
+                     MOVE  20000          TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                  END-IF
                END-IF
       *---(01.00.10) LINE ADD END   ------------------------------------
@@ -918,7 +925,10 @@
                      OR  RECE10-ETC-KOHNUM (3)  =  "972"
                      OR  RECE10-ETC-KOHNUM (4)  =  "972"
                        IF  MF100-ETCKOHFTN  >  10000
-                           MOVE  "10000"        TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *                     MOVE  "10000"        TO  MF100-ETCKOHFTN
+                           MOVE  10000          TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                        END-IF
                      END-IF
                      IF  RECE10-ETC-KOHNUM (1)  =  "974"
@@ -926,7 +936,10 @@
                      OR  RECE10-ETC-KOHNUM (3)  =  "974"
                      OR  RECE10-ETC-KOHNUM (4)  =  "974"
                        IF  MF100-ETCKOHFTN  >  20000
-                           MOVE  "20000"        TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *                     MOVE  "20000"        TO  MF100-ETCKOHFTN
+                           MOVE  20000          TO  MF100-ETCKOHFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                        END-IF
                      END-IF
       *---(01.00.10) LINE ADD END   ------------------------------------

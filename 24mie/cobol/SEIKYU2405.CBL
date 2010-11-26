@@ -30,6 +30,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    09/11/26    市町村番号と異なる市町村名が
       *                                  印字される不具合を修正
+      *  01.00.02    吉川    10/11/24    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -176,7 +177,8 @@
            03  WRK-HOSPTEL           PIC X(15).
       *
       *    件数カウントテーブル
-      01   WRK-KENSU-TBL-AREA.
+      *    
+       01  WRK-KENSU-TBL-AREA.
            03  WRK-KENSU-TBL   OCCURS 6.
                05  WRK-KENSU         PIC 9(05).
       *
@@ -976,12 +978,20 @@
                      RECE02-KOHNUM (2)  =  "165" OR
                      RECE02-KOHNUM (3)  =  "165" OR
                      RECE02-KOHNUM (4)  =  "165"
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *            IF  (RECE02-KYURATE  = 30  AND
+      *                 RECE02-TOTALTEN  <  501)
+      *            OR  (RECE02-KYURATE  = 20  AND
+      *                 RECE02-TOTALTEN  <  751)
+      *            OR  (RECE02-KYURATE  = 10  AND
+      *                 RECE02-TOTALTEN  <  1501)
                   IF  (RECE02-KYURATE  = 30  AND
-                       RECE02-TOTALTEN  <  501)
+                       RECE02-TOTALTEN(1)  <  501)
                   OR  (RECE02-KYURATE  = 20  AND
-                       RECE02-TOTALTEN  <  751)
+                       RECE02-TOTALTEN(1)  <  751)
                   OR  (RECE02-KYURATE  = 10  AND
-                       RECE02-TOTALTEN  <  1501)
+                       RECE02-TOTALTEN(1)  <  1501)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                     GO  TO  900-KOHSKY-READ-SEC
                   END-IF
                 END-IF
@@ -991,12 +1001,20 @@
                      RECE02-KOHNUM (2)  =  "164" OR
                      RECE02-KOHNUM (3)  =  "164" OR
                      RECE02-KOHNUM (4)  =  "164"
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *            IF  (RECE02-KYURATE  = 30  AND
+      *                 RECE02-TOTALTEN  <  1067)
+      *            OR  (RECE02-KYURATE  = 20  AND
+      *                 RECE02-TOTALTEN  <  1601)
+      *            OR  (RECE02-KYURATE  = 10  AND
+      *                 RECE02-TOTALTEN  <  3201)
                   IF  (RECE02-KYURATE  = 30  AND
-                       RECE02-TOTALTEN  <  1067)
+                       RECE02-TOTALTEN(1)  <  1067)
                   OR  (RECE02-KYURATE  = 20  AND
-                       RECE02-TOTALTEN  <  1601)
+                       RECE02-TOTALTEN(1)  <  1601)
                   OR  (RECE02-KYURATE  = 10  AND
-                       RECE02-TOTALTEN  <  3201)
+                       RECE02-TOTALTEN(1)  <  3201)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
                     GO  TO  900-KOHSKY-READ-SEC
                   END-IF
                 END-IF

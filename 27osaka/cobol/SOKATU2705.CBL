@@ -33,6 +33,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/03/30  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/04/06  オンライン返戻対応
+      *  01.00.05    吉川    2010/11/24  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -145,7 +146,9 @@
            03  WRK-HENYMDG         PIC X(22).
       *
            03  WRK-CNT             PIC 9(02).
-           03  WRK-KOHNUM          PIC X(03).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
+      *     03  WRK-KOHNUM          PIC X(03).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
            03  WRK-HKNJANUM        PIC X(06).
       *
            03  WRK-Z4              PIC ZZZZ.

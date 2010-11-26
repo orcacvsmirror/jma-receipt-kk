@@ -53,6 +53,7 @@
       *  01.00.11    吉川    2008/10/02   最終ページに合計を印字
       *  01.00.12    吉川    2010/04/05   オンライン返戻対応
       *  01.00.13    吉川    2010/10/13   特別療養費国保対応
+      *  01.00.14    吉川    2010/11/25   open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -766,12 +767,18 @@
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
       *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) start
       *         MOVE  RECE10-SRYYM        TO  SKT2200TMP-SRYYM
-             MOVE  "200803"            TO  SKT2200TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *       MOVE  "200803"            TO  SKT2200TMP-SRYYM
+             MOVE  200803              TO  SKT2200TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            ELSE
              IF  WRK-PARA-SYOKBN  =  "2"
       *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) start
       *         MOVE  RECE10-SRYYM      TO  SKT2200TMP-SRYYM
-               MOVE  "200804"      TO  SKT2200TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *         MOVE  "200804"      TO  SKT2200TMP-SRYYM
+               MOVE  200804        TO  SKT2200TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *=== 返戻が旧帳票で出る不具合修正 by Yoshikawa(2008/07/04) end
              END-IF
       *=== 旧様式の返戻・月遅れ処理修正 by Yoshikawa(2008/06/23) end
@@ -2115,8 +2122,12 @@
            MOVE    "99999999"              TO  RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"                TO  RECE10-SRYYM
-             MOVE  "999999"                TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      *       MOVE  "000000"                TO  RECE10-SRYYM
+      *       MOVE  "999999"                TO  RECE10-XXSRYYM
+             MOVE  000000                  TO  RECE10-SRYYM
+             MOVE  999999                  TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *
