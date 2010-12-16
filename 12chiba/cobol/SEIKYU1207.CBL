@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム叹        : ＯＲＣＡ
       *  サブシステム叹    : 孟数给锐
-      *  コンポ〖ネント叹  : 篱驼ˇ讫湍基板闻锐另崇山
+      *  コンポ〖ネント叹  : 篱驼ˇ灰ども板闻锐另崇山
       *                      (183,283,383,483,583,683)
       *  瓷妄荚            : 
       *  侯喇泣烧    侯度荚        淡揭
@@ -36,6 +36,7 @@
       *  01.00.03     等李     08/10/10    SPA-AREA介袋步
       *  01.00.04     等李     08/12/02    磅机滦据戎规の纳裁(583,683)
       *  01.00.05     等李     09/02/18    给锐の锦喇がない眷圭は磅机しない
+      *  01.00.06     等李     10/12/03    蘑杉屯及の恃构に燃う饯赖
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -398,8 +399,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU1207"    TO  JOB-PGID
-           MOVE    "讫湍基板闻锐另崇山" 
+      *=== 蘑杉屯及の恃构に燃う饯赖 by Yoshikawa(2010/12/03) start
+      *     MOVE    "讫湍基板闻锐另崇山" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    "灰ども板闻锐另崇山" 
                                    TO  JOB-SHELLMSG
+      *=== 蘑杉屯及の恃构に燃う饯赖 by Yoshikawa(2010/12/03) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -1006,8 +1011,11 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SC1207.red"        TO  SPRT-PRTID
-           MOVE    "讫湍基板闻锐另崇山"
-                                    TO  SPRT-TITLE
+      *=== 蘑杉屯及の恃构に燃う饯赖 by Yoshikawa(2010/12/03) start
+      *     MOVE    "讫湍基板闻锐另崇山"
+      *                              TO  SPRT-TITLE
+           MOVE    "灰ども板闻锐另崇山"  TO  SPRT-TITLE
+      *=== 蘑杉屯及の恃构に燃う饯赖 by Yoshikawa(2010/12/03) end
            MOVE    SC07             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

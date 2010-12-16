@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 千葉・乳幼児医療費請求書
+      *  コンポーネント名  : 千葉・子ども医療費請求書
       *                      (183,283,383,483,583,683)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -38,6 +38,7 @@
       *                                   SPA-AREA初期化
       *  01.00.05     吉川    08/12/02    印字対象番号の追加(583,683)
       *  01.00.06     吉川    09/02/18    公費の助成がない場合は印字しない
+      *  01.00.07     吉川    10/12/03    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -423,8 +424,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU1209"    TO  JOB-PGID
-           MOVE    "乳幼児医療費請求書" 
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) start
+      *     MOVE    "乳幼児医療費請求書" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    "子ども医療費請求書" 
                                    TO  JOB-SHELLMSG
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -809,6 +814,17 @@
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) start
+           EVALUATE  RECE02-ZAITAKU
+             WHEN  "2"
+               MOVE  "17"              TO  MF100-TOKKI
+             WHEN  "3"
+               MOVE  "18"              TO  MF100-TOKKI
+             WHEN  "4"
+               MOVE  "19"              TO  MF100-TOKKI
+           END-EVALUATE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) end
+      *
       *    保険者番号チェック処理
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/18) start
       *     MOVE    ZERO               TO   FLG-ERR
@@ -1095,6 +1111,11 @@
             PERFORM  950-HKNNUM-SET-SEC
             MOVE  HKN-HBTNUM             TO   SC09-KOHNUM(IDX1)
       *
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) start
+      *    特記事項
+            MOVE  MF100-TOKKI            TO   SC09-TOKKI(IDX1)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) end
+      *
       *    合計小計
       *    件数
              ADD  1                      TO  SUM-GKENSU
@@ -1175,8 +1196,11 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC1209.red"            TO  SPRT-PRTID
-           MOVE    "乳幼児医療費請求書"
-                                    TO  SPRT-TITLE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) start
+      *     MOVE    "乳幼児医療費請求書"
+      *                              TO  SPRT-TITLE
+           MOVE    "子ども医療費請求書"   TO  SPRT-TITLE
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/12/03) end
            MOVE    SC09             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
