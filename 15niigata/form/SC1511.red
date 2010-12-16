@@ -112,7 +112,7 @@
         <point val="8.84292,7.87129"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.82292,7.8513;18.0154,10.4888"/>
+        <rectangle val="8.82292,7.85129;18.0154,10.4888"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="8.84292,7.87129"/>
@@ -222,7 +222,7 @@
         <point val="16.8578,3.06328"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.8529,3.05828;16.8642,3.95654"/>
+        <rectangle val="16.8528,3.05828;16.8642,3.95654"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="16.8578,3.06328"/>
@@ -244,11 +244,11 @@
         <point val="15.5455,2.61159"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.5405,2.60659;15.5543,3.95009"/>
+        <rectangle val="15.5391,2.60659;15.5505,3.95535"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="15.5455,2.61159"/>
-        <point val="15.5493,3.94509"/>
+        <point val="15.5441,3.95035"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -392,7 +392,7 @@
         <point val="13.8957,9.16473"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.8907,9.15972;13.9098,10.4721"/>
+        <rectangle val="13.8907,9.15973;13.9098,10.4721"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="13.8957,9.16473"/>
@@ -410,7 +410,7 @@
         <point val="15.921,9.16473"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.9039,9.15972;15.926,10.4746"/>
+        <rectangle val="15.9039,9.15973;15.926,10.4746"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="15.921,9.16473"/>
@@ -687,7 +687,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#(&#200;&#239;&#205;&#195;&#188;&#212;&#202;&#221;&#184;&#177;&#178;&#195;&#198;&#254;&#188;&#212;&#205;&#209;)#</string>
+            <string>#(&#200;&#239;&#205;&#209;&#188;&#212;&#202;&#221;&#184;&#177;&#178;&#195;&#198;&#254;&#188;&#212;&#205;&#209;)#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -754,7 +754,7 @@
         <point val="10.3452,8.63965"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.93118,8.32113;11.7592,8.72113"/>
+        <rectangle val="8.9312,8.32113;11.7592,8.72113"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -790,7 +790,7 @@
         <point val="10.3565,9.94753"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.22526,9.62901;11.4877,10.029"/>
+        <rectangle val="9.2253,9.62901;11.4877,10.029"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1186,7 +1186,7 @@
         <point val="10.12,22.6902"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.65562,22.3717;12.5844,22.7717"/>
+        <rectangle val="7.6556,22.3717;12.5844,22.7717"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
