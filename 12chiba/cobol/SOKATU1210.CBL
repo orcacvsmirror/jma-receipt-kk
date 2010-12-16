@@ -46,6 +46,7 @@
       *  01.00.12    吉川    10/04/02    特別療養費国保対応
       *  01.00.13    吉川    10/08/03    オンライン返戻対応
       *  01.00.14    吉川    10/09/10    公費欄に長期の点数と負担金を記載する
+      *  01.00.15    吉川    10/12/03    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2831,8 +2832,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/04/02) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"            TO    RECE10-SRYYM
-             MOVE  "999999"            TO    RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/03) start
+      *       MOVE  "000000"            TO    RECE10-SRYYM
+      *       MOVE  "999999"            TO    RECE10-XXSRYYM
+             MOVE  000000              TO    RECE10-SRYYM
+             MOVE  999999              TO    RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/03) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/04/02) end
       *

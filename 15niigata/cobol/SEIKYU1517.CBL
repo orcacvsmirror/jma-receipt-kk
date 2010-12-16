@@ -56,6 +56,7 @@
       *                                  SPA-AREA初期化
       *  01.00.10    吉川    10/02/08    複数科診療の場合、患者負担額が
       *                                  四捨五入されない不具合を修正
+      *  01.00.11    吉川    10/12/06    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -784,16 +785,30 @@
              MOVE   1  TO  MF100-KEIKA
            END-IF
       *
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/06) start
+           IF  RECE02-NYUGAIKBN  =  "1"
+             MOVE   1   TO   IDX2
+           ELSE
+             MOVE   2   TO   IDX2
+           END-IF
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/06) end
+      *
       *    保険負担額
            IF  RECE02-NYUGAIKBN  =  1
            OR  RECE02-ZAITAKU    =  1
              IF  RECE02-FTNMONEY (1)  =  ZERO
-               COMPUTE  MF100-HKNGAKU(RECE02-NYUGAIKBN)  =
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/06) start
+      *         COMPUTE  MF100-HKNGAKU(RECE02-NYUGAIKBN)  =
+               COMPUTE  MF100-HKNGAKU(IDX2)  =
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/06) end
                         RECE02-TOTALTEN (1)  *
                         RECE02-KYURATE  /  10
              ELSE
                MOVE  RECE02-FTNMONEY(1)  TO
-                     MF100-HKNGAKU(RECE02-NYUGAIKBN)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/06) start
+      *               MF100-HKNGAKU(RECE02-NYUGAIKBN)
+                     MF100-HKNGAKU(IDX2)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/06) end
              END-IF
            END-IF
       *

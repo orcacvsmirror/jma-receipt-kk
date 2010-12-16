@@ -38,6 +38,7 @@
       *  01.00.06    内田     08/06/10    国保がない場合でも印刷
       *  01.00.07    吉川     10/04/02    特別療養費国保対応
       *  01.00.08    吉川     10/08/03    オンライン返戻対応
+      *  01.00.09    吉川     10/12/03    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -386,7 +387,10 @@
                                    SPA-AREA
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
-           MOVE    "SKT1200TP"         TO  SKT1200TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/03) start
+      *     MOVE    "SKT1200TP"         TO  SKT1200TP-FILE-ID
+           MOVE    "SKT1200"           TO  SKT1200TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/03) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT1200TP-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  SKT1200TP-HOSPNUM
       *
@@ -1119,8 +1123,12 @@
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2010/04/02) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"            TO    RECE10-SRYYM
-             MOVE  "999999"            TO    RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/03) start
+      *       MOVE  "000000"            TO    RECE10-SRYYM
+      *       MOVE  "999999"            TO    RECE10-XXSRYYM
+             MOVE  000000              TO    RECE10-SRYYM
+             MOVE  999999              TO    RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/03) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/04/02) end
       *
