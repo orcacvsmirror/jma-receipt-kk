@@ -46,6 +46,8 @@
       *  01.00.11    吉川    10/01/07    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.12    吉川    10/06/01    オンライン返戻対応
+      *  01.00.13    吉川    10/12/07    鹿児島県奄美市等豪雨対応
+      *                                  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -744,10 +746,20 @@
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
       *---(01.00.06) LINE ADD START ------------------------------------
       *         MOVE  RECE10-SRYYM          TO  SKT4610TMP-SRYYM
-               MOVE  "200803"              TO  SKT4610TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *         MOVE  "200803"              TO  SKT4610TMP-SRYYM
+               MOVE  200803                TO  SKT4610TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
       *---(01.00.06) LINE ADD END   ------------------------------------
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *=== 鹿児島県奄美市等豪雨対応 by Yoshikawa(2010/12/07) start
+      *    鹿児島県奄美市等豪雨の対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)   TO  SKT4610TMP-GENMEN
+           END-IF
+      *=== 鹿児島県奄美市等豪雨対応 by Yoshikawa(2010/12/07) end
       *
            PERFORM 900-SKTTMP-READ-SEC
       *
@@ -1085,9 +1097,14 @@
       *
                    PERFORM KOH-SORT-SEC
       *
-                   PERFORM UNTIL   (SKT4610TMP-KOHNUM (WRK-CNT) = SPACE)
-                           AND     (FLG-PASS    =  1  )
-                           OR      (WRK-CNT     >   20)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *             PERFORM UNTIL   (SKT4610TMP-KOHNUM (WRK-CNT) = SPACE)
+      *                     AND     (FLG-PASS    =  1  )
+      *                     OR      (WRK-CNT     >   20)
+                   PERFORM UNTIL (SKT4610TMP-KOHNUM (WRK-CNT) = SPACE
+                                  AND  FLG-PASS  =  1)
+                           OR    (WRK-CNT     >   20)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
       *
       *                帳票編集<見出し>処理
                        PERFORM 311-HEAD-HEN-SEC
