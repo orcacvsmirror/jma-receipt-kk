@@ -40,6 +40,8 @@
       *  01.00.04    吉川    10/07/12  月途中で負担者番号が変更された場合
       *                                実日数欄はその負担者番号で
       *                                診療した日数を記載する
+      *  01.00.05    吉川    10/12/14  月途中で負担者番号が変更された場合
+      *                                実日数欄は診療月の合計を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1446,9 +1448,12 @@
       *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) start
       *            月途中に負担者番号の変更がない公費のみ、保険の実日数
       *             MOVE  RECE10-JNISSU (1)    TO  MF100-JNISSU
-                   IF  FLG-FTNJANUM  =  ZERO
-                     MOVE  RECE10-JNISSU (1)  TO  MF100-JNISSU
-                   END-IF
+      *=== 実日数は診療月の合計を記載 by Yoshikawa(2010/12/14) start
+      *             IF  FLG-FTNJANUM  =  ZERO
+      *               MOVE  RECE10-JNISSU (1)  TO  MF100-JNISSU
+      *             END-IF
+                   MOVE  RECE10-JNISSU (1)    TO  MF100-JNISSU
+      *=== 実日数は診療月の合計を記載 by Yoshikawa(2010/12/14) end
       *=== 実日数の処理方法変更 by Yoshikawa(2010/07/12) end
                    MOVE  RECE10-TOTALTEN (1)  TO  MF100-TOTALTEN
                END-IF
