@@ -11,6 +11,11 @@
         <embed object="string" length="14"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="NO" occurs="1">
       <appinfo>
         <embed object="string" length="4"/>
@@ -5657,7 +5662,7 @@
         <point val="1.70005,6.41997"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.27585,6.14126;1.70005,6.49126"/>
+        <rectangle val="1.27585,6.14127;1.70005,6.49127"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[0].HBTNUM#</string>
@@ -5699,7 +5704,7 @@
         <point val="1.40523,6.81997"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.40523,6.62089;1.65773,7.87089"/>
+        <rectangle val="1.40523,6.6209;1.65773,7.8709"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[0].TANSEIDONAME#</string>
@@ -5874,7 +5879,7 @@
         <point val="11.6802,6.375"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.77133,6.0963;11.6802,6.4463"/>
+        <rectangle val="9.7713,6.0963;11.6802,6.4463"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[0].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -6042,7 +6047,7 @@
         <point val="11.6802,6.875"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.77133,6.5963;11.6802,6.9463"/>
+        <rectangle val="9.7713,6.5963;11.6802,6.9463"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[0].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -6469,7 +6474,7 @@
         <point val="11.7019,8.3737"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.79299,8.095;11.7019,8.445"/>
+        <rectangle val="9.793,8.095;11.7019,8.445"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[1].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -6637,7 +6642,7 @@
         <point val="11.7019,8.8737"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.79299,8.595;11.7019,8.945"/>
+        <rectangle val="9.793,8.595;11.7019,8.945"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[1].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -7064,7 +7069,7 @@
         <point val="11.6769,10.3645"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,10.0858;11.6769,10.4358"/>
+        <rectangle val="9.768,10.0858;11.6769,10.4358"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[2].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -7232,7 +7237,7 @@
         <point val="11.6769,10.8645"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,10.5858;11.6769,10.9358"/>
+        <rectangle val="9.768,10.5858;11.6769,10.9358"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[2].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -7659,7 +7664,7 @@
         <point val="11.6519,12.3895"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.74299,12.1108;11.6519,12.4608"/>
+        <rectangle val="9.743,12.1108;11.6519,12.4608"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[3].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -7827,7 +7832,7 @@
         <point val="11.6519,12.8895"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.74299,12.6108;11.6519,12.9608"/>
+        <rectangle val="9.743,12.6108;11.6519,12.9608"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[3].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -8254,7 +8259,7 @@
         <point val="11.6519,14.3807"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.74299,14.102;11.6519,14.452"/>
+        <rectangle val="9.743,14.102;11.6519,14.452"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[4].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -8422,7 +8427,7 @@
         <point val="11.6519,14.8807"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.74299,14.602;11.6519,14.952"/>
+        <rectangle val="9.743,14.602;11.6519,14.952"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[4].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -8849,7 +8854,7 @@
         <point val="11.6769,16.3807"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,16.102;11.6769,16.452"/>
+        <rectangle val="9.768,16.102;11.6769,16.452"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[5].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -9017,7 +9022,7 @@
         <point val="11.6769,16.8807"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,16.602;11.6769,16.952"/>
+        <rectangle val="9.768,16.602;11.6769,16.952"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[5].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -9444,7 +9449,7 @@
         <point val="11.6769,18.3847"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,18.106;11.6769,18.456"/>
+        <rectangle val="9.768,18.106;11.6769,18.456"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[6].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -9612,7 +9617,7 @@
         <point val="11.6769,18.8847"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,18.606;11.6769,18.956"/>
+        <rectangle val="9.768,18.606;11.6769,18.956"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[6].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -10039,7 +10044,7 @@
         <point val="11.6769,20.3847"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,20.106;11.6769,20.456"/>
+        <rectangle val="9.768,20.106;11.6769,20.456"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[7].NYUGAI-TBL[0].K-ITBFTN#</string>
@@ -10207,7 +10212,7 @@
         <point val="11.6769,20.8847"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.76799,20.606;11.6769,20.956"/>
+        <rectangle val="9.768,20.606;11.6769,20.956"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[7].NYUGAI-TBL[1].K-ITBFTN#</string>
@@ -10408,6 +10413,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O302">
+      <attribute name="obj_pos">
+        <point val="9.37638,1.85187"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.37638,1.53335;11.3964,1.93335"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="9.37638,1.85187"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>
