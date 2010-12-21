@@ -40,6 +40,7 @@
       *  02.00.01       吉川    10/06/02        SPA-AREA初期化
       *                                         システム管理マスタ「1901」の
       *                                         医療機関情報を参照
+      *  02.00.02       吉川    10/12/08        open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -184,7 +185,9 @@
            03  WRK-NYUNISSUX   PIC Z9.
            03  WRK-GTENSUX     PIC ZZ,ZZ9.
            03  WRK-GTEN-WARIX  PIC ZZZ,ZZ9.
-           03  WRK-YKZFTNX     PIC ZZ,ZZ9.
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *     03  WRK-YKZFTNX     PIC ZZ,ZZ9.
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
            03  WRK-GKINGKX     PIC ZZZ,ZZ9.
       *
       *    合計エリア
@@ -589,24 +592,29 @@
            END-PERFORM
       *
       *    保険者名
-           INITIALIZE                       HKNJAINF-REC
-           MOVE     SYS-1001-HOSPNUM    TO  HKNJA-HOSPNUM
-           MOVE     MF100-HKNJANUM-KEY  TO  HKNJA-HKNJANUM
-           MOVE     HKNJAINF-REC        TO  MCPDATA-REC
-           PERFORM  900-HKNJAINF-INV-SEC
-           IF       FLG-HKNJAINF        =   ZERO
-                    MOVE    HKNJA-HKNJANAME
-                                        TO  SC11-NKJANAME
-           ELSE
-                    MOVE    SPACE       TO  SC11-NKJANAME
-           END-IF   
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *     INITIALIZE                       HKNJAINF-REC
+      *     MOVE     SYS-1001-HOSPNUM    TO  HKNJA-HOSPNUM
+      *     MOVE     MF100-HKNJANUM-KEY  TO  HKNJA-HKNJANUM
+      *     MOVE     HKNJAINF-REC        TO  MCPDATA-REC
+      *     PERFORM  900-HKNJAINF-INV-SEC
+      *     IF       FLG-HKNJAINF        =   ZERO
+      *              MOVE    HKNJA-HKNJANAME
+      *                                  TO  SC11-NKJANAME
+      *     ELSE
+      *              MOVE    SPACE       TO  SC11-NKJANAME
+      *     END-IF   
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
       *
       *    請求日付
            MOVE  WRK-SYSYMDWH           TO  SC11-SEIYMD
       *
            MOVE  SYS-1002-POST(1:3)     TO  SC11-POST(1:3)
            MOVE  "-"                    TO  SC11-POST(4:1)
-           MOVE  SYS-1002-POST(4:7)     TO  SC11-POST(5:8)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *     MOVE  SYS-1002-POST(4:7)     TO  SC11-POST(5:8)
+           MOVE  SYS-1002-POST(4:4)     TO  SC11-POST(5:4)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
       *=== シス管「1901」対応 by Yoshikawa(2010/06/02) start
       **    住所
       *     MOVE  SYS-1002-ADRS          TO  SC11-ADRS
@@ -633,7 +641,7 @@
                MOVE    KEY-N-STSCD     TO  WRK-STSCD
                MOVE    KEY-N-NYUGAI    TO  WRK-NYUGAI
                PERFORM 31014-GOUKEI-GET-SEC
-　　           MOVE  1  TO  FLG-KEY
+               MOVE  1  TO  FLG-KEY
            END-IF
       *
       *    振込み先銀行
@@ -928,19 +936,21 @@
                MOVE  WRK-GKOHFTNX  TO  SC11-GKOHFTN
              WHEN    WRK-STSCD     =   SUM-STSCD (IDX-GOU) AND
                      WRK-NYUGAI    =   SUM-NYUGAI (IDX-GOU)
-  　　*　  請求件数
+      *    請求件数
                MOVE  SUM-GKENSU  (IDX-GOU) TO  WRK-GKENSUX
                MOVE  WRK-GKENSUX   TO  SC11-GKENSU
-  　                                   SC11-GKEN
-  　　*　  請求件数（国保）
-               MOVE  SUM-GKENSUK (IDX-GOU) TO  WRK-GKENSUX
-               MOVE  WRK-GKENSUX   TO  SC11-GKENK
-  　　*　  請求件数（社保）
-               MOVE  SUM-GKENSUS (IDX-GOU) TO  WRK-GKENSUX
-               MOVE  WRK-GKENSUX   TO  SC11-GKENS
-      *    点数
-               MOVE  SUM-TENSU   (IDX-GOU) TO  WRK-GTENSUX
-               MOVE  WRK-GTENSUX   TO  SC11-GTENSU
+                                       SC11-GKEN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      **    請求件数（国保）
+      *         MOVE  SUM-GKENSUK (IDX-GOU) TO  WRK-GKENSUX
+      *         MOVE  WRK-GKENSUX   TO  SC11-GKENK
+      **    請求件数（社保）
+      *         MOVE  SUM-GKENSUS (IDX-GOU) TO  WRK-GKENSUX
+      *         MOVE  WRK-GKENSUX   TO  SC11-GKENS
+      **    点数
+      *         MOVE  SUM-TENSU   (IDX-GOU) TO  WRK-GTENSUX
+      *         MOVE  WRK-GTENSUX   TO  SC11-GTENSU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
       *    請求金額
                MOVE  SUM-GKOHFTN (IDX-GOU)  TO  WRK-GKOHFTNX
                MOVE  WRK-GKOHFTNX  TO  SC11-GKOHFTN

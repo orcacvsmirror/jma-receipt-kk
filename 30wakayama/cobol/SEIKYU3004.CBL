@@ -52,6 +52,7 @@
       *                                         °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *                                         ¤«¤Ä¤é¤®Ä®¤ÏÌ¤½¢³Ø¤ÇÄ¢É¼¤òÊ¬¤±¤ë
       *  02.00.02       µÈÀî    10/06/24        ÏÂ²Î»³»Ô¡¢¶¶ËÜ»Ô°Ê³°¤ÎÄ¢É¼ÇÑ»ß
+      *  02.00.03       µÈÀî    10/12/08        open-cobol1.0ÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -841,7 +842,10 @@
       *    Í¹ÊØÈÖ¹æ
            MOVE  SYS-1002-POST(1:3)     TO  SC03-POST(1:3)
            MOVE  "-"                    TO  SC03-POST(4:1)
-           MOVE  SYS-1002-POST(4:7)     TO  SC03-POST(5:8)
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) start
+      *     MOVE  SYS-1002-POST(4:7)     TO  SC03-POST(5:8)
+           MOVE  SYS-1002-POST(4:4)     TO  SC03-POST(5:4)
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) end
       *
       *=== ¥·¥¹´É¡Ö1901¡×ÂÐ±þ by Yoshikawa(2010/06/02) start
       **    ½»½ê
@@ -868,7 +872,7 @@
            IF  FLG-KEY = 0
                MOVE    KEY-N-STSCD     TO  WRK-STSCD
                PERFORM 31014-GOUKEI-GET-SEC
-¡¡¡¡           MOVE  1  TO  FLG-KEY
+               MOVE  1  TO  FLG-KEY
            END-IF
       *
       *    ¿¶¹þ¤ßÀè¶ä¹Ô
@@ -990,7 +994,10 @@
              END-EVALUATE 
              IF  MF100-KEY(5:5)    =   "30024"
                  IF  MF100-HKNNUM   =   "060" OR "067"
-                     NEXT SENTENCE
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) start
+      *               NEXT SENTENCE
+                     CONTINUE
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) end
                  ELSE
                      IF  MF100-HONKZKKBN    =  "2"
                          MOVE  SPACE TO  SC03-HKNKBN-SYHH (CNT-LINE)
@@ -1098,13 +1105,22 @@
              MOVE  MF100-SRYYM         TO  WRK-SYMD (1:6)
              MOVE  "01"                TO  WRK-SYMD (7:2)
              PERFORM 31012-SEIWA-HEN-SEC
-             MOVE  WRK-HENYMDG(05:04)  TO SC03-SRNISU-FROM-YY
-             MOVE  WRK-HENYMDG(11:04)  TO SC03-SRNISU-FROM-MM
-             MOVE "£°£±"                  TO  SC03-SRNISU-FROM-DD
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) start
+      *       MOVE  WRK-HENYMDG(05:04)  TO SC03-SRNISU-FROM-YY
+      *       MOVE  WRK-HENYMDG(11:04)  TO SC03-SRNISU-FROM-MM
+      *       MOVE "£°£±"                  TO  SC03-SRNISU-FROM-DD
+      **    ¿ÇÎÅ¼ÂÆü¿ô½ªÎ»Æü
+      *       MOVE  WRK-HENYMDG(05:04)  TO SC03-SRNISU-TO-YY
+      *       MOVE  WRK-HENYMDG(11:04)  TO SC03-SRNISU-TO-MM
+      *       MOVE "¡¡Ëö"                  TO  SC03-SRNISU-TO-DD
+             MOVE  WRK-HENYMDG(05:04)  TO SC03-SRNISU-FROM-YY (CNT-LINE)
+             MOVE  WRK-HENYMDG(11:04)  TO SC03-SRNISU-FROM-MM (CNT-LINE)
+             MOVE "£°£±"               TO SC03-SRNISU-FROM-DD (CNT-LINE)
       *    ¿ÇÎÅ¼ÂÆü¿ô½ªÎ»Æü
-             MOVE  WRK-HENYMDG(05:04)  TO SC03-SRNISU-TO-YY
-             MOVE  WRK-HENYMDG(11:04)  TO SC03-SRNISU-TO-MM
-             MOVE "¡¡Ëö"                  TO  SC03-SRNISU-TO-DD
+             MOVE  WRK-HENYMDG(05:04)  TO SC03-SRNISU-TO-YY (CNT-LINE)
+             MOVE  WRK-HENYMDG(11:04)  TO SC03-SRNISU-TO-MM (CNT-LINE)
+             MOVE "¡¡Ëö"               TO SC03-SRNISU-TO-DD (CNT-LINE)
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) start
       *    ¼ÂÆü¿ô
              IF  MF100-KEY(5:5)   =   "30003" OR "30020" OR "30031" OR
                                        "30024"
@@ -1417,71 +1433,73 @@
        390-PRINT-OUT-EXT.
            EXIT.
       *
-      *****************************************************************
-      *    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý
-      *****************************************************************
-       395-GOKEI-PRINT-SEC  SECTION.
-      *
-           ADD   1                 TO  CNT-PAGE
-           MOVE  KEY-O-STSCD       TO  WRK-STSCD
-           PERFORM 31014-GOUKEI-GET-SEC
-      *    °åÎÅÈñÀÁµá³Û
-           MOVE  WRK-KOHFTN        TO  WRK-GKINGKX
-           MOVE  WRK-GKINGKX       TO  SC03-GAIRAI-GITBFTN
-      *
-      *    ÌôºÞ°ìÉôÉéÃ´ÀÁµá³Û
-           MOVE  WRK-YKZFTN        TO  WRK-YKZFTNX
-           MOVE  WRK-YKZFTNX       TO  SC03-GAIRAI-GYKZFTN
-      *
-      *    °åÎÅÈñÀÁµá·ï¿ô
-           MOVE  WRK-KOHKENSU      TO  WRK-KOHKENSUX
-           MOVE  WRK-KOHKENSUX     TO  SC03-GAIRAI-GKEN
-      *
-      *    ÌôºÞ°ìÉôÉéÃ´ÀÁµá·ï¿ô
-           MOVE  WRK-YKZKENSU      TO  WRK-YKZKENSUX
-           MOVE  WRK-YKZKENSUX     TO  SC03-GAIRAI-GYKZKEN
-      *
-           MOVE   "SC3003"         TO  WRK-GID
-           MOVE    WRK-KAIP-PNO    TO  WRK-GPRT-CTV
-           MOVE   "1.red"          TO  WRK-GFILE
-           MOVE    WRK-GPRT-ID     TO  SPRT-PRTID
-      *
-           MOVE    "¤Ò¤È¤ê¿Æ"          TO  SPRT-TITLE
-           MOVE    SC03                TO  SPRT-PRTDATA
-           MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
-           MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
-           MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-           CALL    "ORCSPRT"           USING
-                                       ORCSPRTAREA
-                                       SPA-AREA
-           IF      SPRT-RETURN     =   ZERO
-                ADD     1               TO  CNT-PRINT
-           ELSE
-               MOVE    "Ä¢É¼£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
-                                   TO  WRK-RECEERR
-               PERFORM 500-ERR-HENSYU-SEC
-           END-IF
-      *
-      *    ¥ï¡¼¥¯²Ã»»¥¨¥ê¥¢¥¯¥ê¥¢
-           MOVE    ZERO            TO  WRK-KOHFTN
-           MOVE    ZERO            TO  WRK-YKZFTN
-           MOVE    ZERO            TO  WRK-KOHKENSU
-           MOVE    ZERO            TO  WRK-YKZKENSU
-           MOVE    ZERO            TO  WRK-GKENSU
-           .
-       395-GOUKEI-PRINT-EXT.
-           EXIT.
-      *
-      *****************************************************************
-      *    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý¡¡¥Ñ¥¿¡¼¥ó£²
-      *****************************************************************
-       3951-GOKEI-PRINT-SEC  SECTION.
-      *
-           MOVE  KEY-O-STSCD       TO  WRK-STSCD
-           PERFORM 31014-GOUKEI-GET-SEC
-           .
-       3951-GOUKEI-PRINT-EXT.
-           EXIT.
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) start
+      ******************************************************************
+      **    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý
+      ******************************************************************
+      * 395-GOKEI-PRINT-SEC  SECTION.
+      **
+      *     ADD   1                 TO  CNT-PAGE
+      *     MOVE  KEY-O-STSCD       TO  WRK-STSCD
+      *     PERFORM 31014-GOUKEI-GET-SEC
+      **    °åÎÅÈñÀÁµá³Û
+      *     MOVE  WRK-KOHFTN        TO  WRK-GKINGKX
+      *     MOVE  WRK-GKINGKX       TO  SC03-GAIRAI-GITBFTN
+      **
+      **    ÌôºÞ°ìÉôÉéÃ´ÀÁµá³Û
+      *     MOVE  WRK-YKZFTN        TO  WRK-YKZFTNX
+      *     MOVE  WRK-YKZFTNX       TO  SC03-GAIRAI-GYKZFTN
+      **
+      **    °åÎÅÈñÀÁµá·ï¿ô
+      *     MOVE  WRK-KOHKENSU      TO  WRK-KOHKENSUX
+      *     MOVE  WRK-KOHKENSUX     TO  SC03-GAIRAI-GKEN
+      **
+      **    ÌôºÞ°ìÉôÉéÃ´ÀÁµá·ï¿ô
+      *     MOVE  WRK-YKZKENSU      TO  WRK-YKZKENSUX
+      *     MOVE  WRK-YKZKENSUX     TO  SC03-GAIRAI-GYKZKEN
+      **
+      *     MOVE   "SC3003"         TO  WRK-GID
+      *     MOVE    WRK-KAIP-PNO    TO  WRK-GPRT-CTV
+      *     MOVE   "1.red"          TO  WRK-GFILE
+      *     MOVE    WRK-GPRT-ID     TO  SPRT-PRTID
+      **
+      *     MOVE    "¤Ò¤È¤ê¿Æ"          TO  SPRT-TITLE
+      *     MOVE    SC03                TO  SPRT-PRTDATA
+      *     MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
+      *     MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
+      *     MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *     CALL    "ORCSPRT"           USING
+      *                                 ORCSPRTAREA
+      *                                 SPA-AREA
+      *     IF      SPRT-RETURN     =   ZERO
+      *          ADD     1               TO  CNT-PRINT
+      *     ELSE
+      *         MOVE    "Ä¢É¼£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
+      *                             TO  WRK-RECEERR
+      *         PERFORM 500-ERR-HENSYU-SEC
+      *     END-IF
+      **
+      **    ¥ï¡¼¥¯²Ã»»¥¨¥ê¥¢¥¯¥ê¥¢
+      *     MOVE    ZERO            TO  WRK-KOHFTN
+      *     MOVE    ZERO            TO  WRK-YKZFTN
+      *     MOVE    ZERO            TO  WRK-KOHKENSU
+      *     MOVE    ZERO            TO  WRK-YKZKENSU
+      *     MOVE    ZERO            TO  WRK-GKENSU
+      *     .
+      * 395-GOUKEI-PRINT-EXT.
+      *     EXIT.
+      **
+      ******************************************************************
+      **    Ä¢É¼ÊÔ½¸<¹ç·×>½èÍý¡¡¥Ñ¥¿¡¼¥ó£²
+      ******************************************************************
+      * 3951-GOKEI-PRINT-SEC  SECTION.
+      **
+      *     MOVE  KEY-O-STSCD       TO  WRK-STSCD
+      *     PERFORM 31014-GOUKEI-GET-SEC
+      *     .
+      * 3951-GOUKEI-PRINT-EXT.
+      *     EXIT.
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2010/12/08) end
       *
       *****************************************************************
       *    À¾ÎñÆüËÜ¸ìÊÑ´¹½èÍý

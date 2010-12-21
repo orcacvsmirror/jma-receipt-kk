@@ -38,6 +38,7 @@
       *  02.00.01       吉川    10/06/02         SPA-AREA初期化
       *                                          かつらぎ町は未就学で帳票を分ける
       *  02.00.02       吉川    10/06/09         個別発行の処理方法変更
+      *  02.00.03       吉川    10/12/08         open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -381,7 +382,10 @@
       *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) end
       *
            IF  MF100-KEY(7:3)         = "018"
-               NEXT SENTENCE
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *         NEXT SENTENCE
+               CONTINUE
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
            ELSE
       *=== 個別発行の処理方法の変更 by Yoshikawa(2010/06/09) start
              IF  FLG-ERR              =  ZERO

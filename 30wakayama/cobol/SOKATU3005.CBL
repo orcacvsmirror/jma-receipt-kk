@@ -34,6 +34,7 @@
       *                                   6つ目以降がまとまらない不具合を修正
       *                                   オンライン返戻対応
       *                                   広域連合の保険者番号指定対応
+      *  04.03.02    吉川       10/12/08  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1621,7 +1622,10 @@
                     RECE10-NYUGAIKBN   =   2)     OR 
                    (FLG-NYUIN          =   1      AND
                     RECE10-NYUGAIKBN   =   1) 
-                      NEXT SENTENCE
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *                NEXT SENTENCE
+                      CONTINUE
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
                ELSE
                       PERFORM 900-SEIKYU-READ-SEC
                END-IF

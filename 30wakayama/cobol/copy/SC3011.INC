@@ -83,4 +83,6 @@
               03  SC11-GKENK  PIC X(4).
               03  SC11-GKENS  PIC X(4).
               03  SC11-GITBFTN    PIC X(7).
-              03  SC11-GTENSU PIC X(10).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *        03  SC11-GTENSU PIC X(10).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
