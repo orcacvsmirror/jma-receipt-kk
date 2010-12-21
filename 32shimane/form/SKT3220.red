@@ -56,6 +56,11 @@
         <embed object="string" length="2"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="NO" occurs="1">
       <appinfo>
         <embed object="string" length="4"/>
@@ -3477,7 +3482,7 @@
         <point val="2.57471,7.99636"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.56971,7.99136;2.86259,8.30192"/>
+        <rectangle val="2.56971,7.99136;2.86259,8.30193"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="2.57471,7.99636"/>
@@ -3536,7 +3541,7 @@
         <point val="2.57471,8.54446"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.56971,8.53946;2.86259,8.85002"/>
+        <rectangle val="2.56971,8.53946;2.86259,8.85003"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="2.57471,8.54446"/>
@@ -3595,7 +3600,7 @@
         <point val="2.57471,9.11023"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.56971,9.10523;2.86259,9.41579"/>
+        <rectangle val="2.56971,9.10523;2.86259,9.4158"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="2.57471,9.11023"/>
@@ -6170,10 +6175,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O216">
       <attribute name="obj_pos">
-        <point val="9.13373,3.93494"/>
+        <point val="5.1938,3.93494"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.13373,3.17846;10.0932,4.12846"/>
+        <rectangle val="5.1938,3.17846;6.1533,4.12846"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAIMARU#</string>
@@ -6193,7 +6198,7 @@
             <real val="0.95"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.13373,3.93494"/>
+            <point val="5.1938,3.93494"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6212,10 +6217,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O217">
       <attribute name="obj_pos">
-        <point val="9.24379,3.74618"/>
+        <point val="5.30386,3.74618"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.24379,3.2684;9.84979,3.8684"/>
+        <rectangle val="5.30386,3.2684;5.90986,3.8684"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAIMOJI#</string>
@@ -6235,7 +6240,7 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.24379,3.74618"/>
+            <point val="5.30386,3.74618"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13346,6 +13351,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1616"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O387">
+      <attribute name="obj_pos">
+        <point val="8.41016,4.16961"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.41016,3.85109;10.4302,4.25109"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.41016,4.16961"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>
