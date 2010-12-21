@@ -50,6 +50,9 @@
       *  01.00.11    吉川    2010/08/03    オンライン返戻対応
       *                                    特別療養費国保対応
       *  01.00.12    吉川    2010/10/08    再印刷時の帳票タイトル修正
+      *  01.00.13    吉川    2010/12/15    特別療養費国保(068)が退職者に
+      *                                    記載される不具合を修正
+      *                                    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -795,7 +798,10 @@
            IF      RECE10-RJNHKNNUM    NOT =   SPACE
                MOVE    3               TO  IDX2
            ELSE
-               IF      RECE10-HKNNUM   =   "060"
+      *=== 特療費の記載場所不具合対応 by Yoshikawa(2010/12/15) start
+      *         IF      RECE10-HKNNUM   =   "060"
+               IF      RECE10-HKNNUM   =   "060" OR "068"
+      *=== 特療費の記載場所不具合対応 by Yoshikawa(2010/12/15) end
                    MOVE    1           TO  IDX2
                ELSE
                    MOVE    2           TO  IDX2
@@ -1257,8 +1263,12 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/03) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"               TO  RECE10-SRYYM
-             MOVE  "999999"               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
+      *       MOVE  "000000"               TO  RECE10-SRYYM
+      *       MOVE  "999999"               TO  RECE10-XXSRYYM
+             MOVE  000000                 TO  RECE10-SRYYM
+             MOVE  999999                 TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/03) end
       *
@@ -1840,7 +1850,10 @@
            IF  COMB-HKNNUM  =  "060" OR "067" OR "068" OR "069"
                             OR "039" OR "040"
                MOVE     1                  TO  SKT1300TMP-SYUTURYOKU
-               MOVE     1                  TO  SKT1300TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
+      *         MOVE     1                  TO  SKT1300TMP-ZAITAKU
+               MOVE     "1"                TO  SKT1300TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) end
            END-IF
       *
            PERFORM  910-HKNCOMBI-CLOSE-SEC
