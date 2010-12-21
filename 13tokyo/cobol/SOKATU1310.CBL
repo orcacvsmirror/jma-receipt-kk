@@ -41,6 +41,7 @@
       *                                  特別療養費国保対応
       *                                  代表保険者番号追加(146001)
       *  01.00.07    吉川    10/10/08    再印刷時の帳票タイトル修正
+      *  01.00.08    吉川    10/12/15    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1968,7 +1969,10 @@
                                        WRK-CONS-ZAITAKU4  OR
                                        WRK-CONS-ZAITAKU5  OR
                                        WRK-CONS-ZAITAKU6
-                 MOVE  1  TO  SKT1310TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
+      *           MOVE  1  TO  SKT1310TMP-ZAITAKU
+                 MOVE  "1"  TO  SKT1310TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) end
                END-IF
              END-IF
            END-PERFORM
@@ -2017,8 +2021,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/03) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO  RECE10-SRYYM
-             MOVE  "999999"             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
+      *       MOVE  "000000"             TO  RECE10-SRYYM
+      *       MOVE  "999999"             TO  RECE10-XXSRYYM
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/03) end
       *
