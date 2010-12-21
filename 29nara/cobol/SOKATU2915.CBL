@@ -35,6 +35,7 @@
       *  01.00.03    吉川    2010/03/31  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/04/06  オンライン返戻対応
       *  01.00.05    吉川    2010/05/21  長期は分けて印字する
+      *  01.00.06    吉川    2010/12/08  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -774,9 +775,15 @@
       *
       *    出力順
            IF     RECE10-PREFKBN   =    "1"
-             MOVE     "1"                TO   SKT2915TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *       MOVE     "1"                TO   SKT2915TMP-SYUTURYOKU
+             MOVE     1                  TO   SKT2915TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
            ELSE
-             MOVE     "2"                TO   SKT2915TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      *       MOVE     "2"                TO   SKT2915TMP-SYUTURYOKU
+             MOVE     2                  TO   SKT2915TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
            END-IF
       *
       *    長期
