@@ -22,6 +22,7 @@
       * Maj/Min/Rev  修正者   日付        内容
       * 01.00.01    門間    2008/11/20  シス管「2007」公費まとめ対応
       * 01.00.02    内田    2009/09/29  平成21年台風第9号対応（対象者別集計）
+      * 01.00.03    吉川    2010/12/09  open-cobol1.0対応
       ************************************************************
        01  SKT3310TMP-REC.
            03  SKT3310TMP-KEY.
@@ -76,7 +77,10 @@
                    07  SKT3310TMP-BKENSU                 PIC  9(05).
                    07  SKT3310TMP-BITBFTN                PIC  9(09).
                    07  SKT3310TMP-BYKZFTN                PIC  9(09).
-               05  SKT3310TMP-BIKO-TBL-R REDEFINES SKT3310TMP-BIKO-TBL.
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/09) start
+      *         05  SKT3310TMP-BIKO-TBL-R REDEFINES SKT3310TMP-BIKO-TBL.
+               05  SKT3310TMP-BIKO-TBL-R.
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/09) end
                    07  SKT3310TMP-BIKO-TBL-RR  OCCURS  20.
                        09  SKT3310TMP-BKOHNUM-R          PIC  X(04).
       *--- (2008/11/20) LINE ADD START MONMA ---------------------------
