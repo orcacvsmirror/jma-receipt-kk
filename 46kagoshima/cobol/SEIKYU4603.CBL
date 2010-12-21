@@ -34,6 +34,7 @@
       *  01.00.03    内田    08/01/29    csvファイル名の修正（西暦→和暦）
       *  01.00.04    門間    08/12/16    SPA-AREA初期化
       *  01.00.05    吉川    09/07/01    生年月日は頭ゼロ付きで表す
+      *  01.00.06    吉川    10/12/07    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -194,6 +195,9 @@
       *---(01.00.03) LINE ADD START ------------------------------------
            03  WRK-WAREKI          PIC 9(04).
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+           03  WRK-GYYMM           PIC X(07).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
       *
            03  WRK-REC             PIC X(500).
            03  WRK-REC-LENGTH      PIC 9(04).
@@ -835,7 +839,10 @@
                                                WRK-REC-LENGTH
       *
       *    レコード区分
-           MOVE    "1"                     TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *     MOVE    "1"                     TO  WRK-NUM
+           MOVE    1                       TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -867,7 +874,10 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    事業番号
-           MOVE    "1"                     TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *     MOVE    "1"                     TO  WRK-NUM
+           MOVE    1                       TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -911,14 +921,17 @@
                                               WRK-REC-LENGTH
       *
       *        レコード区分
-               MOVE    "2"                 TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *         MOVE    "2"                 TO  WRK-NUM
+               MOVE    2                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                MOVE    1                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
       *
       *        医療機関番号
                MOVE    SYS-1001-PREFNUM    TO  WRK-DATA(1:2)
                MOVE    SYS-1001-TENHYOKBN  TO  WRK-DATA(3:1)
-    　         MOVE    SYS-1001-HOSPCD     TO  WRK-DATA(4:)
+               MOVE    SYS-1001-HOSPCD     TO  WRK-DATA(4:)
                MOVE    10                  TO  WRK-NAGASA
                PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -926,7 +939,10 @@
                IF  SYS-1001-HOSPSBT1  =  1
                  MOVE  MF100-SRYKA         TO  WRK-NUM
                ELSE
-                 MOVE  "00"                TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *           MOVE  "00"                TO  WRK-NUM
+                 MOVE  00                  TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                END-IF
                MOVE    2                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
@@ -942,7 +958,10 @@
                PERFORM 5005-NUM-HENSYU-SEC
       *
       *        事業番号
-               MOVE    "1"                 TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *         MOVE    "1"                 TO  WRK-NUM
+               MOVE    1                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                MOVE    1                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -963,32 +982,54 @@
       *         PERFORM 31012-SEIWA-HEN-SEC
       *         EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
                PERFORM   31011-SEIWA-HEN-SEC
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *         EVALUATE  LNK-DAY1-GENKIGO
+      **=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
+      *           WHEN  "M"
+      *             MOVE  "1"               TO  WRK-NUM (1:1)
+      *           WHEN  "T"
+      *             MOVE  "2"               TO  WRK-NUM (1:1)
+      *           WHEN  "S"
+      *             MOVE  "3"               TO  WRK-NUM (1:1)
+      *           WHEN  "H"
+      *             MOVE  "4"               TO  WRK-NUM (1:1)
+      *         END-EVALUATE
+      **=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) start
+      **         MOVE    LNK-DAY2-EDTYMD1 (2:2)  TO  WRK-NUM (2:2)
+      *         MOVE    LNK-DAY1-WYMD (2:2)     TO  WRK-NUM (2:2)
+      **=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
+      *         MOVE    MF100-BIRTHDAY (5:4)    TO  WRK-NUM (4:4)
+      *         MOVE    WRK-NUM                 TO  WRK-9
+      *         MOVE    WRK-9                   TO  WRK-NUM
+               MOVE    SPACE               TO  WRK-GYYMM
                EVALUATE  LNK-DAY1-GENKIGO
-      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
                  WHEN  "M"
-                   MOVE  "1"               TO  WRK-NUM (1:1)
+                   MOVE  "1"               TO  WRK-GYYMM(1:1)
                  WHEN  "T"
-                   MOVE  "2"               TO  WRK-NUM (1:1)
+                   MOVE  "2"               TO  WRK-GYYMM(1:1)
                  WHEN  "S"
-                   MOVE  "3"               TO  WRK-NUM (1:1)
+                   MOVE  "3"               TO  WRK-GYYMM(1:1)
                  WHEN  "H"
-                   MOVE  "4"               TO  WRK-NUM (1:1)
+                   MOVE  "4"               TO  WRK-GYYMM(1:1)
                END-EVALUATE
-      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) start
-      *         MOVE    LNK-DAY2-EDTYMD1 (2:2)  TO  WRK-NUM (2:2)
-               MOVE    LNK-DAY1-WYMD (2:2)     TO  WRK-NUM (2:2)
-      *=== 生年月日は頭ゼロ付きで表す by Yoshikawa(2009/07/01) end
-               MOVE    MF100-BIRTHDAY (5:4)    TO  WRK-NUM (4:4)
-               MOVE    WRK-NUM                 TO  WRK-9
-               MOVE    WRK-9                   TO  WRK-NUM
+               MOVE  LNK-DAY1-WYMD(2:2)    TO  WRK-GYYMM(2:2)
+               MOVE  MF100-BIRTHDAY(5:4)   TO  WRK-GYYMM(4:4)
+               MOVE  WRK-GYYMM             TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                MOVE    7                       TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
       *
       *        保険区分
                IF  MF100-HKNNUM  =  "060" OR "067" OR "068" OR "069"
-                   MOVE    "1"             TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *             MOVE    "1"             TO  WRK-NUM
+                   MOVE    1               TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                ELSE
-                   MOVE    "2"             TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *             MOVE    "2"             TO  WRK-NUM
+                   MOVE    2               TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                END-IF
                MOVE    1                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
@@ -1005,12 +1046,20 @@
       *
       *        負担割合
                EVALUATE    MF100-KYURATE
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *             WHEN  10
+      *                 MOVE    "1"         TO  WRK-NUM
+      *             WHEN  20
+      *                 MOVE    "2"         TO  WRK-NUM
+      *             WHEN  30
+      *                 MOVE    "3"         TO  WRK-NUM
                    WHEN  10
-                       MOVE    "1"         TO  WRK-NUM
+                       MOVE    1           TO  WRK-NUM
                    WHEN  20
-                       MOVE    "2"         TO  WRK-NUM
+                       MOVE    2           TO  WRK-NUM
                    WHEN  30
-                       MOVE    "3"         TO  WRK-NUM
+                       MOVE    3           TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                END-EVALUATE
                MOVE    1                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
@@ -1035,23 +1084,41 @@
                  MOVE    MF100-SRYYM          TO  WRK-SYMD (1:6)
                  MOVE    "01"                 TO  WRK-SYMD (7:2)
                  PERFORM 31012-SEIWA-HEN-SEC
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *           EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
+      *             WHEN  "M"
+      *               MOVE  "1"                TO  WRK-NUM (1:1)
+      *             WHEN  "T"
+      *               MOVE  "2"                TO  WRK-NUM (1:1)
+      *             WHEN  "S"
+      *               MOVE  "3"                TO  WRK-NUM (1:1)
+      *             WHEN  "H"
+      *               MOVE  "4"                TO  WRK-NUM (1:1)
+      *           END-EVALUATE
+      *           MOVE    LNK-DAY2-EDTYMD1 (2:2)   TO  WRK-NUM (2:2)
+      *           MOVE    MF100-SRYYM(5:2)     TO  WRK-NUM (4:2)
+      *           MOVE    WRK-NUM              TO  WRK-9
+      *           MOVE    WRK-9                TO  WRK-NUM
+      *         ELSE
+      *           MOVE    "00000"              TO  WRK-NUM
+      *         END-IF
                  EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
                    WHEN  "M"
-                     MOVE  "1"                TO  WRK-NUM (1:1)
+                     MOVE  "1"                TO  WRK-GYYMM(1:1)
                    WHEN  "T"
-                     MOVE  "2"                TO  WRK-NUM (1:1)
+                     MOVE  "2"                TO  WRK-GYYMM(1:1)
                    WHEN  "S"
-                     MOVE  "3"                TO  WRK-NUM (1:1)
+                     MOVE  "3"                TO  WRK-GYYMM(1:1)
                    WHEN  "H"
-                     MOVE  "4"                TO  WRK-NUM (1:1)
+                     MOVE  "4"                TO  WRK-GYYMM(1:1)
                  END-EVALUATE
-                 MOVE    LNK-DAY2-EDTYMD1 (2:2)   TO  WRK-NUM (2:2)
-                 MOVE    MF100-SRYYM(5:2)     TO  WRK-NUM (4:2)
-                 MOVE    WRK-NUM              TO  WRK-9
-                 MOVE    WRK-9                TO  WRK-NUM
+                 MOVE  LNK-DAY2-EDTYMD1(2:2)  TO  WRK-GYYMM(2:2)
+                 MOVE  MF100-SRYYM(5:2)       TO  WRK-GYYMM(4:2)
+                 MOVE  WRK-GYYMM              TO  WRK-NUM
                ELSE
-                 MOVE    "00000"              TO  WRK-NUM
+                 MOVE    00000                TO  WRK-NUM
                END-IF
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                MOVE    5                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -1061,7 +1128,10 @@
                  PERFORM  900-HKNNUM-SET-SEC
                  MOVE    HKN-HBTNUM        TO  WRK-NUM
                ELSE
-                 MOVE  "00"                TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *           MOVE  "00"                TO  WRK-NUM
+                 MOVE  00                  TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                END-IF
                MOVE    2                   TO  WRK-NAGASA
                PERFORM 5005-NUM-HENSYU-SEC
@@ -1072,7 +1142,10 @@
                  PERFORM  900-HKNNUM-SET-SEC
                  MOVE    HKN-HBTNUM        TO  WRK-NUM
                ELSE
-                 MOVE  "00"                TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *           MOVE  "00"                TO  WRK-NUM
+                 MOVE  00                  TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
                END-IF
                MOVE    2                   TO  WRK-NAGASA
                MOVE    1                   TO  WRK-END

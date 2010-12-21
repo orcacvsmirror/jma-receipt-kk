@@ -46,6 +46,7 @@
       *  01.00.12    吉川    10/01/07    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.13    吉川    10/06/01    オンライン返戻対応
+      *  01.00.14    吉川    10/12/07    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2089,7 +2090,10 @@
       *
       *    返戻区分
            IF      RECE10-HENREIYM NOT =   "000000"
-               MOVE    1       TO  SKT4610TMP-HENREIKBN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
+      *         MOVE    1       TO  SKT4610TMP-HENREIKBN
+               MOVE    "1"         TO  SKT4610TMP-HENREIKBN
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
            END-IF
       *
            PERFORM 901-SKTTMP-READ-SEC
