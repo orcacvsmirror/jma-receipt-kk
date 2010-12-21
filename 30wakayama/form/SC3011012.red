@@ -378,11 +378,6 @@
           <embed object="string" length="7"/>
         </appinfo>
       </element>
-      <element name="GTENSU" occurs="1">
-        <appinfo>
-          <embed object="string" length="10"/>
-        </appinfo>
-      </element>
     </element>
   </dictionarydata>
   <diagramdata>

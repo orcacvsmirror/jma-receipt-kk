@@ -378,11 +378,6 @@
           <embed object="string" length="7"/>
         </appinfo>
       </element>
-      <element name="GTENSU" occurs="1">
-        <appinfo>
-          <embed object="string" length="10"/>
-        </appinfo>
-      </element>
     </element>
   </dictionarydata>
   <diagramdata>
@@ -7533,7 +7528,7 @@
         <point val="22.1121,2.54588"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="22.1121,1.98216;27.0611,2.68216"/>
+        <rectangle val="22.1121,1.98847;27.0611,2.68847"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPCDN#</string>
@@ -7550,7 +7545,7 @@
             <string>#&#163;&#177;&#163;&#178;&#163;&#179;&#163;&#180;&#163;&#181;&#163;&#182;&#163;&#183;#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.7"/>
@@ -7565,7 +7560,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.17675"/>
+            <real val="0.4242"/>
           </attribute>
           <attribute name="multi">
             <real val="0.3535"/>
@@ -7842,7 +7837,7 @@
         <point val="13.3728,10.4375"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.2213,10.1959;13.3728,10.4959"/>
+        <rectangle val="13.191,10.1986;13.3728,10.4986"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[0].FTNWARIAI2#</string>
@@ -7856,7 +7851,7 @@
             <string>#9#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.3"/>
@@ -7871,7 +7866,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.07575"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -8136,7 +8131,7 @@
         <point val="13.3487,12.0625"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.1972,11.8209;13.3487,12.1209"/>
+        <rectangle val="13.1669,11.8236;13.3487,12.1236"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[1].FTNWARIAI2#</string>
@@ -8150,7 +8145,7 @@
             <string>#9#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.3"/>
@@ -8165,7 +8160,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.07575"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -8430,7 +8425,7 @@
         <point val="13.3612,13.7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.2097,13.4584;13.3612,13.7584"/>
+        <rectangle val="13.1794,13.4611;13.3612,13.7611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[2].FTNWARIAI2#</string>
@@ -8444,7 +8439,7 @@
             <string>#9#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.3"/>
@@ -8459,7 +8454,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.07575"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -8724,7 +8719,7 @@
         <point val="13.3737,15.375"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.2222,15.1334;13.3737,15.4334"/>
+        <rectangle val="13.1919,15.1361;13.3737,15.4361"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[3].FTNWARIAI2#</string>
@@ -8738,7 +8733,7 @@
             <string>#9#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.3"/>
@@ -8753,7 +8748,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.07575"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
@@ -9018,7 +9013,7 @@
         <point val="13.3478,16.9375"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.1963,16.6959;13.3478,16.9959"/>
+        <rectangle val="13.166,16.6986;13.3478,16.9986"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#MEISAI-TBL[4].FTNWARIAI2#</string>
@@ -9032,7 +9027,7 @@
             <string>#9#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.3"/>
@@ -9047,7 +9042,7 @@
             <enum val="2"/>
           </attribute>
           <attribute name="single">
-            <real val="0.07575"/>
+            <real val="0.1818"/>
           </attribute>
           <attribute name="multi">
             <real val="0.1515"/>
