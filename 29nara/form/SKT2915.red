@@ -619,11 +619,11 @@
         <point val="1.03766,4.29765"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.02766,4.28329;9.34942,4.30765"/>
+        <rectangle val="1.02766,4.28765;9.35886,4.31"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="1.03766,4.29765"/>
-        <point val="9.33942,4.29329"/>
+        <point val="9.34886,4.3"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -833,11 +833,11 @@
         <point val="1.05055,3.34686"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.04555,3.33422;20.2989,3.35186"/>
+        <rectangle val="1.04555,3.34186;20.3052,3.355"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="1.05055,3.34686"/>
-        <point val="20.2939,3.33922"/>
+        <point val="20.3002,3.35"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -4080,7 +4080,7 @@
         <point val="2.5,9.54399"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5,9.34266;2.7525,10.5927"/>
+        <rectangle val="2.5,9.34492;2.7525,10.5949"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KOHNAME#</string>
@@ -4101,7 +4101,7 @@
 &#164;&#162;#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.25"/>
@@ -4116,7 +4116,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.063125"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -4129,7 +4129,7 @@
         <point val="2.5,11.294"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5,11.0927;2.7525,12.3427"/>
+        <rectangle val="2.5,11.0949;2.7525,12.3449"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KOHNAME#</string>
@@ -4150,7 +4150,7 @@
 &#164;&#162;#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.25"/>
@@ -4165,7 +4165,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.063125"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -6950,7 +6950,7 @@
         <point val="2.5,12.994"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5,12.7927;2.7525,14.0427"/>
+        <rectangle val="2.5,12.7949;2.7525,14.0449"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KOHNAME#</string>
@@ -6971,7 +6971,7 @@
 &#164;&#162;#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.25"/>
@@ -6986,7 +6986,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.063125"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -6999,7 +6999,7 @@
         <point val="2.5,14.694"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5,14.4927;2.7525,15.7427"/>
+        <rectangle val="2.5,14.4949;2.7525,15.7449"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KOHNAME#</string>
@@ -7020,7 +7020,7 @@
 &#164;&#162;#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.25"/>
@@ -7035,7 +7035,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.063125"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
@@ -7048,7 +7048,7 @@
         <point val="2.5,16.394"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.5,16.1927;2.7525,17.4427"/>
+        <rectangle val="2.5,16.1949;2.7525,17.4449"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KOHNAME#</string>
@@ -7069,7 +7069,7 @@
 &#164;&#162;#</string>
           </attribute>
           <attribute name="font">
-            <font name="Times-Roman"/>
+            <font name="Courier"/>
           </attribute>
           <attribute name="height">
             <real val="0.25"/>
@@ -7084,7 +7084,7 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.063125"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
             <real val="0.12625"/>
