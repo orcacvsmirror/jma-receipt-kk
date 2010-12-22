@@ -180,4 +180,3 @@
       *特記事項
            03  MF100-TOKKI               PIC  X(02)  OCCURS 4.
       *=== 特記事項追加 by Yoshikawa(2009/05/14) end
-      

@@ -58,6 +58,7 @@
       *  01.00.16    吉川     09/05/14    特記事項を印字する
       *  01.00.17    吉川     09/05/27    H21年5月特定疾患改正対応
       *  01.00.18    吉川     09/10/30    印字対象番号の追加（690,780）
+      *  01.00.19    吉川     10/12/16    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -242,7 +243,10 @@
            05  WRK-PARA-LINK-SHELLID PIC  X(08).
       *---(01.00.09) LINE ADD START ------------------------------------
       *     05  WRK-PARA-LINK-HOSPID  PIC  X(24). 
-           03  WRK-PARA-LINK-HOSPNUM PIC  9(02).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *     03  WRK-PARA-LINK-HOSPNUM PIC  9(02).
+           05  WRK-PARA-LINK-HOSPNUM PIC  9(02).
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *    一時領域

@@ -34,6 +34,7 @@
       *                                  同一患者で入院と外来がある場合
       *                                  1行にまとめて印字する
       *                                  印字対象番号の追加（680）
+      *  01.00.03    吉川    2010/12/16  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -766,7 +767,10 @@
       *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) start
            ELSE
                DISPLAY "市町村番号対象外 " RECE02-PTNUM
-                       "負担者番号="       RECE02-KOHFTNJANUM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *                 "負担者番号="       RECE02-KOHFTNJANUM
+                       "負担者番号="       RECE02-KOHFTNJANUM(IDZ)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
            END-IF
       *
            .

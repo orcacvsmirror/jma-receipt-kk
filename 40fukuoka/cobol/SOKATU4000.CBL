@@ -61,6 +61,7 @@
       *  01.00.22    吉川    10/06/10    返戻時、乳障母の値が当月分に
       *                                  記載される不具合を修正
       *  01.00.23    吉川    10/06/29    乳障親欄は当月分と返戻分を合算する
+      *  01.00.24    吉川    10/12/16    open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -872,13 +873,19 @@
       *---(01.00.13) LINE ADD START ------------------------------------
            ELSE
       *      レセ電で返戻、もしくは紙レセで当月か
-             IF  (WRK-PARA-SYOKBN  =  2  AND
-      *---(01.00.14) LINE ADD START ------------------------------------
-      *            SYS-2005-KKHRECEKBN  NOT = ZERO  OR  SPACE)
-                  SYS-2005-KKHRECEKBN  NOT = ZERO  AND  SPACE)
-      *---(01.00.14) LINE ADD END   ------------------------------------
-             OR  (WRK-PARA-SYOKBN  =  1  AND
-                  SYS-2005-KKHRECEKBN  =  ZERO  OR  SPACE)
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *       IF  (WRK-PARA-SYOKBN  =  2  AND
+      **---(01.00.14) LINE ADD START ------------------------------------
+      **            SYS-2005-KKHRECEKBN  NOT = ZERO  OR  SPACE)
+      *            SYS-2005-KKHRECEKBN  NOT = ZERO  AND  SPACE)
+      **---(01.00.14) LINE ADD END   ------------------------------------
+      *       OR  (WRK-PARA-SYOKBN  =  1  AND
+      *            SYS-2005-KKHRECEKBN  =  ZERO  OR  SPACE)
+             IF  ((WRK-PARA-SYOKBN  =  2)  AND 
+                  (SYS-2005-KKHRECEKBN  NOT = ZERO  AND  SPACE))
+             OR  ((WRK-PARA-SYOKBN  =  1)  AND
+                  (SYS-2005-KKHRECEKBN  =  ZERO  OR  SPACE))
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *      乳障母のみの場合
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) start
       *         IF  WRK-KOH-GKENSU(3)  >  ZERO

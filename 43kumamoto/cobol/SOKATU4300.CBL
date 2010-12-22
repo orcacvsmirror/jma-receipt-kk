@@ -42,6 +42,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.09    吉川    10/01/14    国保・退職者の総件数を印字する
       *  01.00.10    吉川    10/06/01    オンライン返戻対応
+      *  01.00.11    吉川    10/12/16    open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -783,12 +784,18 @@
       *     MOVE  RECE10-SRYYM        TO  SKT4300TMP-SRYYM
       **---(01.00.03) LINE ADD END   ------------------------------------
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-               MOVE  "200803"    TO  SKT4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *         MOVE  "200803"    TO  SKT4300TMP-SRYYM
+               MOVE  200803      TO  SKT4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
                MOVE  1           TO  SKT4300TMP-KBN
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
            ELSE
-               MOVE   SPACE      TO  SKT4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *         MOVE   SPACE      TO  SKT4300TMP-SRYYM
+               MOVE   ZERO       TO  SKT4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
                MOVE   2          TO  SKT4300TMP-KBN
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
@@ -1031,12 +1038,18 @@
       *       MOVE  RECE10-SRYYM    TO    KOH4300TMP-SRYYM
       **---(01.00.03) LINE ADD END   ------------------------------------
              IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-                 MOVE  "200803"    TO  KOH4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *           MOVE  "200803"    TO  KOH4300TMP-SRYYM
+                 MOVE  200803      TO  KOH4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
                  MOVE  1           TO  KOH4300TMP-KBN
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end
              ELSE
-               MOVE   SPACE      TO  KOH4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *         MOVE   SPACE      TO  KOH4300TMP-SRYYM
+               MOVE   ZERO         TO  KOH4300TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) start
                MOVE    2           TO  KOH4300TMP-KBN
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/04) end

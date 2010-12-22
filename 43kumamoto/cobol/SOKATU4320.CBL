@@ -44,6 +44,7 @@
       *  01.00.08    吉川    10/01/07    シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.09    吉川    10/06/01    オンライン返戻対応
+      *  01.00.10    吉川    10/12/16    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -758,7 +759,10 @@
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
       *---(01.00.05) LINE ADD START ------------------------------------
       *       MOVE   RECE10-SRYYM    TO   SKT4320TMP-SRYYM
-             MOVE   "200803"        TO   SKT4320TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *       MOVE   "200803"        TO   SKT4320TMP-SRYYM
+             MOVE   200803          TO   SKT4320TMP-SRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
       *

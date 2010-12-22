@@ -40,6 +40,7 @@
       *  01.00.07    吉川    2010/05/14  広域連合の保険者番号指定対応
       *  01.00.08    吉川    2010/06/10  公費欄の1行目は常に「19」が
       *                                  印字されているのを修正
+      *  01.00.09    吉川    2010/12/16  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -788,9 +789,15 @@
       *
       *    出力順
            IF     RECE10-PREFKBN   =    "1"
-             MOVE     "1"                TO   SKT4025TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *       MOVE     "1"                TO   SKT4025TMP-SYUTURYOKU
+             MOVE     1                  TO   SKT4025TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
            ELSE
-             MOVE     "2"                TO   SKT4025TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+      *       MOVE     "2"                TO   SKT4025TMP-SYUTURYOKU
+             MOVE     2                  TO   SKT4025TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
            END-IF
       *
       *    中国九州北部豪雨の対象者は別帳票
