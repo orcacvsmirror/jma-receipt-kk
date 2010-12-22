@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 宮城・乳幼児医療費助成事業 社会保険分総括表
-      *                      (183,383,483)
+      *                      (183,383,483,583,683,783)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/10/02    山口          再作成
@@ -36,6 +36,7 @@
       *  01.00.02    吉川    09/04/08    SPA-AREA初期化
       *  01.00.03    吉川    10/06/04    川崎町、富谷町、美里町は
       *                                  食事療養費を半額助成とする
+      *  01.00.04    吉川    10/12/13    対象保険番号の追加（583,683,783）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -596,6 +597,9 @@
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
              IF  RECE02-KOHNUM (IDZ) =   "183" OR "383"OR "483"
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+                                     OR  "583" OR "683" OR "783"
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1534,10 +1538,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+      *         IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
                IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
                 OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
                 OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
                 OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
