@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 宮城・乳幼児医療費請求書(社保用)
-      *                      (183,383,483)
+      *                      (183,383,483,583,683,783)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/11/02    山口          新規作成
@@ -40,6 +40,8 @@
       *                                  その特記事項を印字する
       *  01.00.05    吉川    10/06/04    川崎町、富谷町、美里町は
       *                                  食事療養費を半額助成とする
+      *  01.00.06    吉川    10/12/13    対象保険番号の追加（583,683,783）
+      *                                  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -640,6 +642,9 @@
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
              IF  RECE02-KOHNUM (IDZ) =   "183" OR "383"OR "483"
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+                                     OR  "583" OR "683" OR "783"
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -741,7 +746,10 @@
       *
       *    長期
            IF    FLG-TYOKI    =    1
-             MOVE    1                TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) start
+      *       MOVE    1                TO    MF100-TYOKI
+             MOVE    "1"              TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) end
              IF  WRK-SEIKYUGK-G2    >=  10000
                MOVE    10000          TO    WRK-SEIKYUGK-G2
              END-IF
@@ -749,7 +757,10 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *    長期上位
            IF    FLG-TYOKI    =    2
-             MOVE    1                TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) start
+      *       MOVE    1                TO    MF100-TYOKI
+             MOVE    "1"              TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) end
              IF  WRK-SEIKYUGK-G2    >=  20000
                MOVE    20000          TO    WRK-SEIKYUGK-G2
              END-IF
@@ -870,12 +881,18 @@
            END-IF
       *
            IF    FLG-TYOKI    =    1
-             MOVE    1                TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) start
+      *       MOVE    1                TO    MF100-TYOKI
+             MOVE    "1"              TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) end
            END-IF
       *---(01.00.01) LINE ADD START ------------------------------------
       *    長期上位
            IF    FLG-TYOKI    =    2
-             MOVE    1                TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) start
+      *       MOVE    1                TO    MF100-TYOKI
+             MOVE    "1"              TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/13) end
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
@@ -1814,10 +1831,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+      *         IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
+      *          OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
                IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
                 OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
                 OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
                 OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
+                                   OR "583" OR "683" OR "783"
+      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
