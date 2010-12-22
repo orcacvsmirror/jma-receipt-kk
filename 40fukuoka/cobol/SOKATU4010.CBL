@@ -54,6 +54,7 @@
       *  01.00.17    吉川     09/11/06    シス管「2007」のまとめ公費で
       *                                   6つ目以降がまとまらない不具合を修正
       *  01.00.18    吉川     10/01/22    オンライン返戻対応
+      *  01.00.19    吉川     10/12/16    続紙は様式第六（ニ）を使用する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1233,22 +1234,30 @@
       *
       *    ２枚目に印刷するデータが有る時だけ印刷する
              IF    SKT4010TMP-PAGE2-FLG  =  1
-      *    帳票編集<見出し>処理
-                 PERFORM 311-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-                 PERFORM 321-BODY-HEN-SEC
-      *    帳票印刷処理
-                 PERFORM 331-PRINT-OUT-SEC
+      *=== 使用する続紙を変更 by Yoshikawa(2010/12/16) start
+      **    帳票編集<見出し>処理
+      *           PERFORM 311-HEAD-HEN-SEC
+      **    帳票編集<明細>処理
+      *           PERFORM 321-BODY-HEN-SEC
+      **    帳票印刷処理
+      *           PERFORM 331-PRINT-OUT-SEC
+      *=== 使用する続紙を変更 by Yoshikawa(2010/12/16) end
       *
       *    公費の続紙が必要な場合だけ印刷する
                  PERFORM  UNTIL
                      SKT4010TMP-KOHNUM(WRK-CNT) = SPACE
-      **    帳票編集<見出し>処理
+      *=== 使用する続紙を変更 by Yoshikawa(2010/12/16) start
+                               AND    FLG-PASS  =  1
+      *=== 使用する続紙を変更 by Yoshikawa(2010/12/16) end
+      *    帳票編集<見出し>処理
                    PERFORM 312-HEAD-HEN-SEC
       *    帳票編集<明細>処理
                    PERFORM 322-BODY-HEN-SEC
       *    帳票印刷処理
                    PERFORM 332-PRINT-OUT-SEC
+      *=== 使用する続紙を変更 by Yoshikawa(2010/12/16) start
+                   MOVE  1  TO  FLG-PASS
+      *=== 使用する続紙を変更 by Yoshikawa(2010/12/16) end
                  END-PERFORM
              END-IF
                MOVE  ZERO  TO  FLG-PASS
