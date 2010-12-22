@@ -39,6 +39,8 @@
       *  01.00.05    吉川    10/08/12    受給者番号は9桁まで印字
       *  01.00.06    吉川    10/10/18    負担者番号2桁も受給者番号欄に
       *                                  印字されるように修正
+      *  01.00.07    吉川    10/12/16    負担者番号全角対応
+      *                                  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -800,8 +802,14 @@
       **=== 受給者番号9桁印字 by Yoshikawa(2010/08/12) end
       *       MOVE     MF100-JKYSNUM        TO  WRK-MAE-INPUT
              IF  MF100-FTNJANUM  NOT =  SPACE
-               MOVE   MF100-FTNJANUM(1:2)  TO  WRK-MAE-INPUT(1:)
-               MOVE   MF100-JKYSNUM(1:7)   TO  WRK-MAE-INPUT(3:)
+      *=== 負担者番号全角対応 by Yoshikawa(2010/12/16) start
+      *         MOVE   MF100-FTNJANUM(1:2)  TO  WRK-MAE-INPUT(1:)
+      *         MOVE   MF100-JKYSNUM(1:7)   TO  WRK-MAE-INPUT(3:)
+               STRING  MF100-FTNJANUM          DELIMITED  BY  SPACE
+                       MF100-JKYSNUM           DELIMITED  BY  SIZE
+                       INTO                    WRK-MAE-INPUT
+               END-STRING
+      *=== 負担者番号全角対応 by Yoshikawa(2010/12/16) end
              ELSE
                MOVE   MF100-JKYSNUM        TO  WRK-MAE-INPUT
              END-IF
@@ -1004,6 +1012,9 @@
                  MOVE  SYU-KOH-HKNNUM(IDX)  TO  MF100-ETC-KOHNUM
                  ADD   SYU-TOTAL-HKNTEN     TO  MF100-KESETEN
                  MOVE  4                    TO  IDX
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) start
+               END-IF
+      *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
              END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
