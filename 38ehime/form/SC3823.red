@@ -7780,10 +7780,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O227">
       <attribute name="obj_pos">
-        <point val="15.835,9.32362"/>
+        <point val="15.935,9.32362"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.835,8.84584;16.441,9.44584"/>
+        <rectangle val="15.935,8.84584;16.541,9.44584"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KANJA-TBL.TANJOG3#</string>
@@ -7803,7 +7803,7 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="15.835,9.32362"/>
+            <point val="15.935,9.32362"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7822,10 +7822,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O228">
       <attribute name="obj_pos">
-        <point val="16.5351,9.29861"/>
+        <point val="16.6226,9.29861"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="16.5351,8.82083;17.1411,9.42083"/>
+        <rectangle val="16.6226,8.82083;17.2286,9.42083"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KANJA-TBL.TANJOG4#</string>
@@ -7845,7 +7845,7 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="16.5351,9.29861"/>
+            <point val="16.6226,9.29861"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
