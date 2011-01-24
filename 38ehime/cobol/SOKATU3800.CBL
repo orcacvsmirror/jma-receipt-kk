@@ -47,6 +47,8 @@
       *  01.00.13    吉川      09/03/06    特別療養費国保対応
       *  01.00.14    吉川      10/05/13    オンライン返戻対応
       *  01.00.15    内田      10/11/26    open-cobol1.0対応
+      *  01.00.16    吉川      11/01/12    特別療養費分を出力時
+      *                                    印刷画面の帳票タイトル名修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1407,7 +1409,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT3800.red"       TO  SPRT-PRTID
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *     MOVE    "国保総括表"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            MOVE    SKT3800             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1665,7 +1675,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT3810.red"       TO  SPRT-PRTID
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *     MOVE    "国保総括表"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            MOVE    SKT3810             TO  SPRT-PRTDATA
              DISPLAY  "県内数３=" SKT3800TMP-KENNAI-KENSU
                       " 紙３=" SKT3810-KENNAISU
