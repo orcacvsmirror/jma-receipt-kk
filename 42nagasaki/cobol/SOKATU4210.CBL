@@ -49,6 +49,8 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.10    吉川    10/05/17    オンライン返戻対応
       *  01.00.11    吉川    10/08/17    再印刷画面に返戻分は「返戻分」と表示
+      *  01.00.12    吉川    11/01/12    特別療養費国保対応
+      *                                  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -177,7 +179,9 @@
            03  WRK-PARA-HKNJANUM   PIC X(08).
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYOKBN     PIC X(01).
-      *
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -213,6 +217,9 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH            PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+           03  WRK-PATH2           PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -397,6 +404,9 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-HKNJANUM
                                                WRK-PARA-SYOKBN
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+                                               WRK-PARA-TOKUBETU
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *---(01.00.05) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.05) LINE ADD END   ------------------------------------
@@ -424,7 +434,10 @@
                                    SPA-AREA
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
-           MOVE    "SKT4210TP"         TO  SKT4210TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      *     MOVE    "SKT4210TP"         TO  SKT4210TP-FILE-ID
+           MOVE    "SKT4210"           TO  SKT4210TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4210TP-TERMID
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SKT4210TP-HOSPNUM
@@ -571,18 +584,34 @@
       *
            PERFORM  110-INI-FILE-SEC
       *
-           EVALUATE    WRK-PARA-SYOKBN 
-               WHEN    "2"
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
-                   MOVE    "key37"                  TO  WRK-PATH
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               WHEN    "1"
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-                   MOVE    "key38"                  TO  WRK-PATH
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *     EVALUATE    WRK-PARA-SYOKBN 
+      *         WHEN    "2"
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *             MOVE    "key37"                  TO  WRK-PATH
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+      *             MOVE    "key38"                  TO  WRK-PATH
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE    "key37"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "1"
+                   MOVE    "key38"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
            END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
            OPEN    OUTPUT  UPD-FILE
       *  
@@ -708,9 +737,17 @@
       *---(01.00.06) LINE ADD START ------------------------------------
       *    平成２０年３月以前の前期９割、退職前期、３歳未満、老人は旧様式
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-             IF  (RECE10-HKNNUM  =  "060"  AND  RECE10-AGE  >=  70
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *       IF  (RECE10-HKNNUM  =  "060"  AND  RECE10-AGE  >=  70
+             IF  ((RECE10-HKNNUM  =  "060" OR "068")
+                  AND  RECE10-AGE  >=  70
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
                   AND  RECE10-KYURATE  =  9)
-             OR  (RECE10-HKNNUM  =  "067"  AND  RECE10-AGE  >=  70)
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *       OR  (RECE10-HKNNUM  =  "067"  AND  RECE10-AGE  >=  70)
+             OR  ((RECE10-HKNNUM  =  "067" OR "069")
+                  AND  RECE10-AGE  >=  70)
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
              OR  (RECE10-AGE  <  3)
              OR  (RECE10-RJNHKNNUM  NOT =  SPACE)
                MOVE  RECE10-SRYYM          TO  SKT4210TMP-SRYYM
@@ -762,7 +799,10 @@
            OR     RECE10-ETC-KOHNUM(3)  =  "972"  OR  "974"
            OR     RECE10-ETC-KOHNUM(4)  =  "972"  OR  "974"
       *---(01.00.05) LINE ADD END   ------------------------------------
-             MOVE        1          TO   SKT4210TMP-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      *       MOVE        1          TO   SKT4210TMP-TYOKI
+             MOVE        "1"        TO   SKT4210TMP-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
            END-IF
       *
       *
@@ -817,7 +857,10 @@
              MOVE     1          TO    SKT4210TMP-PAGE-FLG1
       *****
       *    退職者かどうか
-             IF  RECE10-HKNNUM  =  "060"
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *       IF  RECE10-HKNNUM  =  "060"
+             IF  RECE10-HKNNUM  =  "060" OR "068"
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
                IF  RECE10-AGE  >= 70
       *---(01.00.06) LINE ADD START ------------------------------------
       *           IF  RECE10-KYURATE  =  9
@@ -1485,6 +1528,12 @@
            WHEN OTHER
              MOVE    " 70"                  TO  SKT4210-KYURATE
            END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4210-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
       *    ページ番号
            MOVE      CNT-PAGE               TO  WRK-Z4
@@ -1566,14 +1615,27 @@
       *     MOVE   "SKT4210.red"        TO  SPRT-PRTID
            MOVE   "SKT4210o.red"       TO  SPRT-PRTID
       *---(01.00.06) LINE ADD END   ------------------------------------
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           IF  WRK-PARA-SYOKBN  =  "1"
-             MOVE  "国保請求書"            TO  SPRT-TITLE
-           ELSE
-             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
-           END-IF
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     IF  WRK-PARA-SYOKBN  =  "1"
+      *       MOVE  "国保請求書"            TO  SPRT-TITLE
+      *     ELSE
+      *       MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+      *     END-IF
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                                 TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
            MOVE    SKT4210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1651,6 +1713,12 @@
              MOVE  "長"                  TO  SKT4220-TYOKI1
              MOVE  "○"                  TO  SKT4220-TYOKI2
            END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4220-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
       *    ページ番号
            MOVE    CNT-PAGE              TO  WRK-Z4
@@ -1783,14 +1851,27 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4220.red"        TO  SPRT-PRTID
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           IF  WRK-PARA-SYOKBN  =  "1"
-             MOVE  "国保請求書"            TO  SPRT-TITLE
-           ELSE
-             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
-           END-IF
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     IF  WRK-PARA-SYOKBN  =  "1"
+      *       MOVE  "国保請求書"            TO  SPRT-TITLE
+      *     ELSE
+      *       MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+      *     END-IF
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                                 TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            MOVE    SKT4220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1833,6 +1914,12 @@
              MOVE  "長"                  TO  SKT4230-TYOKI1
              MOVE  "○"                  TO  SKT4230-TYOKI2
            END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4230-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
       *    ページ番号
            MOVE    CNT-PAGE              TO  WRK-Z4
@@ -1965,14 +2052,27 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4230.red"        TO  SPRT-PRTID
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           IF  WRK-PARA-SYOKBN  =  "1"
-             MOVE  "国保請求書"            TO  SPRT-TITLE
-           ELSE
-             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
-           END-IF
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     IF  WRK-PARA-SYOKBN  =  "1"
+      *       MOVE  "国保請求書"            TO  SPRT-TITLE
+      *     ELSE
+      *       MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+      *     END-IF
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                                 TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            MOVE    SKT4230             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2039,6 +2139,12 @@
              MOVE  "長"                  TO  SKT4210-TYOKI1
              MOVE  "○"                  TO  SKT4210-TYOKI2
            END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4210-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
       *    ページ番号
            MOVE      CNT-PAGE               TO  WRK-Z4
@@ -2193,14 +2299,27 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4210.red"        TO  SPRT-PRTID
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           IF  WRK-PARA-SYOKBN  =  "1"
-             MOVE  "国保請求書"            TO  SPRT-TITLE
-           ELSE
-             MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
-           END-IF
-      *=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     IF  WRK-PARA-SYOKBN  =  "1"
+      *       MOVE  "国保請求書"            TO  SPRT-TITLE
+      *     ELSE
+      *       MOVE  "国保請求書［返戻分］"  TO  SPRT-TITLE
+      *     END-IF
+      **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                                 TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            MOVE    SKT4210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2257,7 +2376,10 @@
              MOVE    2    TO    IDX1
              MOVE    1    TO    IDX2
              MOVE    1    TO    IDX3
-             MOVE   999   TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      *       MOVE   999   TO    WRK-KOHNUM
+             MOVE  "999"  TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
              PERFORM    UNTIL    IDX1  >    IDX-MAX
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >    IDX-MAX
@@ -2269,7 +2391,10 @@
                  END-IF
                END-PERFORM
                MOVE  SKT4210TMP-KOH-TBL(IDX3)  TO  SORT-KOH-TBL(IDX1)
-               MOVE  999  TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      *         MOVE  999  TO    WRK-KOHNUM
+               MOVE  "999"  TO  WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
                ADD   1    TO    IDX1
              END-PERFORM
            END-IF
@@ -2313,7 +2438,10 @@
              MOVE    2    TO    IDX1
              MOVE    1    TO    IDX2
              MOVE    1    TO    IDX3
-             MOVE   999   TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      *       MOVE   999   TO    WRK-KOHNUM
+             MOVE  "999"  TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
              PERFORM    UNTIL    IDX1  >    IDX-MAX
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >    IDX-MAX
@@ -2325,7 +2453,10 @@
                  END-IF
                END-PERFORM
                MOVE  SKT4210TMP-RKOH-TBL(IDX3)  TO  SORT-KOH-TBL(IDX1)
-               MOVE  999  TO    WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      *         MOVE  999  TO    WRK-KOHNUM
+               MOVE  "999"  TO  WRK-KOHNUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
                ADD   1    TO    IDX1
              END-PERFORM
            END-IF
@@ -2646,6 +2777,12 @@
                MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
                MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
            END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
