@@ -32,6 +32,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    門間    08/12/17    SPA-AREA初期化
+      *  01.00.03    吉川    11/01/11    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -709,7 +710,10 @@
            MOVE  RECE02-TEISYUTUSAKI TO  MF100-TEISYUTUSAKI
            MOVE  RECE02-HKN          TO  MF100-HKN
            MOVE  RECE02-SRYKA(1)     TO  MF100-SRYKA
-           MOVE  1                   TO  MF100-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/11) start
+      *     MOVE  1                   TO  MF100-KBN
+           MOVE  "1"                 TO  MF100-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/11) end
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM 
@@ -839,7 +843,10 @@
            MOVE  RECE02-BIRTHDAY     TO  MF100-BIRTHDAY
            MOVE  RECE02-TEISYUTUSAKI TO  MF100-TEISYUTUSAKI
            MOVE  RECE02-HKN          TO  MF100-HKN
-           MOVE  1                   TO  MF100-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/11) start
+      *     MOVE  1                   TO  MF100-KBN
+           MOVE  "1"                 TO  MF100-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/11) end
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM 
