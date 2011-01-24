@@ -56,6 +56,11 @@
         <embed object="string" length="2"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU" occurs="11">
       <element name="NYUGAIKBN" occurs="2">
         <element name="KENSU" occurs="1">
@@ -9944,7 +9949,7 @@
         <point val="12.55,13.2089"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,12.9142;12.55,13.2842"/>
+        <rectangle val="10.532,12.9143;12.55,13.2843"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].NYUGAIKBN[0].ITBFTN2#</string>
@@ -9986,7 +9991,7 @@
         <point val="12.55,13.7324"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,13.4377;12.55,13.8077"/>
+        <rectangle val="10.532,13.4378;12.55,13.8078"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].NYUGAIKBN[1].ITBFTN2#</string>
@@ -10028,7 +10033,7 @@
         <point val="12.55,14.2559"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,13.9612;12.55,14.3312"/>
+        <rectangle val="10.532,13.9613;12.55,14.3313"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].NYUGAIKBN[0].ITBFTN2#</string>
@@ -10070,7 +10075,7 @@
         <point val="12.55,14.7795"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.532,14.4848;12.55,14.8548"/>
+        <rectangle val="10.532,14.4849;12.55,14.8549"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].NYUGAIKBN[1].ITBFTN2#</string>
@@ -14163,6 +14168,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O390">
+      <attribute name="obj_pos">
+        <point val="8.92635,1.38369"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.92635,1.06517;10.9463,1.46517"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.92635,1.38369"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>

@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * “úˆã•W€ƒŒƒZƒvƒgƒ\ƒtƒgiJMA standard receipt softwarej
+      * Æü°åÉ¸½à¥ì¥»¥×¥È¥½¥Õ¥È¡ÊJMA standard receipt software¡Ë
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -15,9 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      *  ƒRƒs[‹åC³—š—ğ
-      * Maj/Min/Rev  C³Ò  “ú•t        “à—e
-      *  01.00.01    ‹gì    2009/06/08  “_”A‹àŠzAH–‰ñ”‚ÌƒoƒCƒg”‘‰Á
+      *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
+      * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
+      *  01.00.01    µÈÀî    2009/06/08  ÅÀ¿ô¡¢¶â³Û¡¢¿©»ö²ó¿ô¤Î¥Ğ¥¤¥È¿ôÁı²Ã
+      *  01.00.02    µÈÀî    2011/01/11  ÆÃÊÌÎÅÍÜÈñ¹ñÊİÂĞ±ş
       ********************************************************************
         01  SKT3605.
             02  SKT3605-PREF    PIC X(08).
@@ -31,6 +32,9 @@
             02  SKT3605-PREFKBN PIC X(8).
             02  SKT3605-ZAI1    PIC X(2).
             02  SKT3605-ZAI2    PIC X(2).
+      *=== ÆÃÊÌÎÅÍÜÈñ¹ñÊİÂĞ±ş by Yoshikawa(2011/01/11) start
+            02  SKT3605-TOKUBETU    PIC X(10).
+      *=== ÆÃÊÌÎÅÍÜÈñ¹ñÊİÂĞ±ş by Yoshikawa(2011/01/11) end
             02  SKT3605-SEIKYU          OCCURS  11 TIMES.
               03  SKT3605-NYUGAIKBN       OCCURS  2 TIMES.
                 04  SKT3605-KENSU   PIC X(5).
