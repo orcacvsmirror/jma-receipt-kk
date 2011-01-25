@@ -37,6 +37,7 @@
       *  01.00.06    吉川    10/04/12    対象保険番号の追加（743）
       *  01.00.07    吉川    10/08/12    同一負担者番号、同一受給者番号で
       *                                  適用期間が異なる場合、別行に印字
+      *  01.00.08    吉川    11/01/13    社保・国保組合のみ印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1418,6 +1419,20 @@
                    AND     PTINF-TSTPTNUMKBN   =   "1"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF   
+      *
+      *=== 社保・国保組合のみ印字 by Yoshikawa(2011/01/13) start
+      *        市町村国保は対象外
+                   EVALUATE  RECE02-HKNNUM
+                   WHEN "060"
+                   WHEN "068"
+                     IF      RECE02-HKNJANUM(3:1)  NOT  =  "3"
+                       GO  TO  900-KOHSKY-READ-SEC
+                     END-IF
+                   WHEN "067"
+                   WHEN "069"
+                       GO  TO  900-KOHSKY-READ-SEC
+                   END-EVALUATE
+      *=== 社保・国保組合のみ印字 by Yoshikawa(2011/01/13) end
       *
       *        個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
