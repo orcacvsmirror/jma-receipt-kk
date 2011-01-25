@@ -39,6 +39,7 @@
       *  01.00.04     Ìç´Ö    2008/10/09  SPA-AREA¤Î½é´ü²½
       *  01.00.05     ÆâÅÄ    2009/11/13  Ä¢É¼¾åÉô¤Î¸øÈñ¼ïÊÌ¤Ï»ÔÄ®Â¼¸øÈñ¤Î¾ì¹ç
       *                                   ¼õµë¼ÔÈÖ¹æ¤Î»ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ¤¹¤ë
+      *  01.00.06     µÈÀî    2011/01/17  Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1116,40 +1117,42 @@
            MOVE    SYS-1001-HOSPCDN        TO  SC07-HOSPCDN
       *
       *    ¸øÈñ¶èÊ¬
-           EVALUATE    MF101-KOHNUM
-               WHEN "110"
-                   MOVE    "¡û"            TO  SC07-KOHKBN(1)
-               WHEN "120"
-                   MOVE    "¡û"            TO  SC07-KOHKBN(2)
-               WHEN "130"
-                   MOVE    "¡û"            TO  SC07-KOHKBN(3)
-               WHEN "140"
-                   MOVE    "¡û"            TO  SC07-KOHKBN(4)
-               WHEN "150"
-                   MOVE    "¡û"            TO  SC07-KOHKBN(5)
-      *=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) start
-               WHEN OTHER
-                   EVALUATE  MF101-JKYSNUM(3:2)
-                     WHEN  "60"
-                       MOVE    "¡û"        TO  SC07-KOHKBN(1)
-                     WHEN  "70"
-                       MOVE    "¡û"        TO  SC07-KOHKBN(2)
-                     WHEN  "81"
-                     WHEN  "82"
-                     WHEN  "83"
-                       MOVE    "¡û"        TO  SC07-KOHKBN(3)
-                     WHEN  "91"
-                     WHEN  "92"
-                     WHEN  "93"
-                     WHEN  "94"
-                     WHEN  "95"
-                     WHEN  "96"
-                       MOVE    "¡û"        TO  SC07-KOHKBN(4)
-                     WHEN  "65"
-                       MOVE    "¡û"        TO  SC07-KOHKBN(5)
-                   END-EVALUATE
-      *=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) end
-           END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2011/01/17) start
+      *     EVALUATE    MF101-KOHNUM
+      *         WHEN "110"
+      *             MOVE    "¡û"            TO  SC07-KOHKBN(1)
+      *         WHEN "120"
+      *             MOVE    "¡û"            TO  SC07-KOHKBN(2)
+      *         WHEN "130"
+      *             MOVE    "¡û"            TO  SC07-KOHKBN(3)
+      *         WHEN "140"
+      *             MOVE    "¡û"            TO  SC07-KOHKBN(4)
+      *         WHEN "150"
+      *             MOVE    "¡û"            TO  SC07-KOHKBN(5)
+      **=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) start
+      *         WHEN OTHER
+      *             EVALUATE  MF101-JKYSNUM(3:2)
+      *               WHEN  "60"
+      *                 MOVE    "¡û"        TO  SC07-KOHKBN(1)
+      *               WHEN  "70"
+      *                 MOVE    "¡û"        TO  SC07-KOHKBN(2)
+      *               WHEN  "81"
+      *               WHEN  "82"
+      *               WHEN  "83"
+      *                 MOVE    "¡û"        TO  SC07-KOHKBN(3)
+      *               WHEN  "91"
+      *               WHEN  "92"
+      *               WHEN  "93"
+      *               WHEN  "94"
+      *               WHEN  "95"
+      *               WHEN  "96"
+      *                 MOVE    "¡û"        TO  SC07-KOHKBN(4)
+      *               WHEN  "65"
+      *                 MOVE    "¡û"        TO  SC07-KOHKBN(5)
+      *             END-EVALUATE
+      **=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) end
+      *     END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2011/01/17) end
       *
       *    ÊÝ¸±¶èÊ¬
            IF      MF101-RJNHKNNUM     NOT =   SPACE
@@ -1442,40 +1445,42 @@
            MOVE    SYS-1001-HOSPCDN        TO  SC08-HOSPCDN
       *
       *    ¸øÈñ¶èÊ¬
-           EVALUATE    MF101-KOHNUM
-               WHEN "110"
-                   MOVE    "¡û"            TO  SC08-KOHKBN(1)
-               WHEN "120"
-                   MOVE    "¡û"            TO  SC08-KOHKBN(2)
-               WHEN "130"
-                   MOVE    "¡û"            TO  SC08-KOHKBN(3)
-               WHEN "140"
-                   MOVE    "¡û"            TO  SC08-KOHKBN(4)
-               WHEN "150"
-                   MOVE    "¡û"            TO  SC08-KOHKBN(5)
-      *=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) start
-               WHEN OTHER
-                   EVALUATE  MF101-JKYSNUM(3:2)
-                     WHEN  "60"
-                       MOVE    "¡û"        TO  SC08-KOHKBN(1)
-                     WHEN  "70"
-                       MOVE    "¡û"        TO  SC08-KOHKBN(2)
-                     WHEN  "81"
-                     WHEN  "82"
-                     WHEN  "83"
-                       MOVE    "¡û"        TO  SC08-KOHKBN(3)
-                     WHEN  "91"
-                     WHEN  "92"
-                     WHEN  "93"
-                     WHEN  "94"
-                     WHEN  "95"
-                     WHEN  "96"
-                       MOVE    "¡û"        TO  SC08-KOHKBN(4)
-                     WHEN  "65"
-                       MOVE    "¡û"        TO  SC08-KOHKBN(5)
-                   END-EVALUATE
-      *=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) end
-           END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2011/01/17) start
+      *     EVALUATE    MF101-KOHNUM
+      *         WHEN "110"
+      *             MOVE    "¡û"            TO  SC08-KOHKBN(1)
+      *         WHEN "120"
+      *             MOVE    "¡û"            TO  SC08-KOHKBN(2)
+      *         WHEN "130"
+      *             MOVE    "¡û"            TO  SC08-KOHKBN(3)
+      *         WHEN "140"
+      *             MOVE    "¡û"            TO  SC08-KOHKBN(4)
+      *         WHEN "150"
+      *             MOVE    "¡û"            TO  SC08-KOHKBN(5)
+      **=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) start
+      *         WHEN OTHER
+      *             EVALUATE  MF101-JKYSNUM(3:2)
+      *               WHEN  "60"
+      *                 MOVE    "¡û"        TO  SC08-KOHKBN(1)
+      *               WHEN  "70"
+      *                 MOVE    "¡û"        TO  SC08-KOHKBN(2)
+      *               WHEN  "81"
+      *               WHEN  "82"
+      *               WHEN  "83"
+      *                 MOVE    "¡û"        TO  SC08-KOHKBN(3)
+      *               WHEN  "91"
+      *               WHEN  "92"
+      *               WHEN  "93"
+      *               WHEN  "94"
+      *               WHEN  "95"
+      *               WHEN  "96"
+      *                 MOVE    "¡û"        TO  SC08-KOHKBN(4)
+      *               WHEN  "65"
+      *                 MOVE    "¡û"        TO  SC08-KOHKBN(5)
+      *             END-EVALUATE
+      **=== »ö¶È¥³¡¼¥É¤ÇÈ½ÊÌ by Uchida(2009/11/13) end
+      *     END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2011/01/17) end
       *
       *    ÊÝ¸±¶èÊ¬
            IF      MF101-RJNHKNNUM     NOT =   SPACE
