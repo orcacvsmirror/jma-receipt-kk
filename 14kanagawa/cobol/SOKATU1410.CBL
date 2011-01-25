@@ -57,6 +57,7 @@
       *  01.00.16    吉川    10/08/04    オンライン返戻対応
       *                                  特別療養費国保対応
       *                                  相模原市の代表番号追加
+      *  01.00.17    吉川    11/01/25    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1871,8 +1872,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO  RECE10-SRYYM
-             MOVE  "999999"             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/25) start
+      *       MOVE  "000000"             TO  RECE10-SRYYM
+      *       MOVE  "999999"             TO  RECE10-XXSRYYM
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/25) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
