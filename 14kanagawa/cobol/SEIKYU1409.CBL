@@ -42,6 +42,7 @@
       *  01.00.08    等李     09/05/01    陕叹眶が2是笆惯までまたがると
       *                                   1是誊が磅机されない稍恶圭を饯赖
       *  01.00.09    等李     10/09/21    悸泣眶がゼロの眷圭は0を磅机
+      *  01.00.10    等李     11/01/25    泼淡祸灌に光驰闻蛙锐を磅机する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1109,6 +1110,18 @@
                MOVE    "１６墓２"  TO  SC09-TOKKI
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 泼淡祸灌に光驰闻蛙锐を磅机する by Yoshikawa(2011/01/25) start
+      *    光驰闻蛙锐
+           EVALUATE  MF101-ZAITAKU 
+             WHEN  "2"
+               MOVE    "１７惧疤"  TO  SC09-TOKKI
+             WHEN  "3"
+               MOVE    "１８办忍"  TO  SC09-TOKKI
+             WHEN  "4"
+               MOVE    "１９你疥"  TO  SC09-TOKKI
+           END-EVALUATE
+      *=== 泼淡祸灌に光驰闻蛙锐を磅机する by Yoshikawa(2011/01/25) end
       *
            IF      MF101-ZAITAKU   =  "1"
                MOVE    "７０"      TO  SC09-ZAISOU
