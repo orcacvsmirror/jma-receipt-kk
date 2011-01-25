@@ -44,6 +44,10 @@
       *                                   診療年月を印字する
       *  01.00.08     吉川    10/02/22    全国公費を併用している場合
       *                                   備考欄に法別と負担額を印字する
+      *  01.00.09     吉川    11/01/18    全国公費を併用している場合の
+      *                                   備考欄の印字修正
+      *                                   全国公費の自己負担分がある場合
+      *                                   点数欄はゼロを印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -960,17 +964,31 @@
       *
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
            IF  MF100-TAHOUFTN  NOT =  ZERO
-      *    他法法別
-             MOVE     MF100-TAHOUHBT         TO   SC11-TAHOUHBT
+      *=== 全国公費併用時の備考欄記載変更 by Yoshikawa(2011/01/18) start
+      **    他法法別
+      *       MOVE     MF100-TAHOUHBT         TO   SC11-TAHOUHBT
+      **
+      **    他法負担額
+      *       MOVE     MF100-TAHOUFTN         TO   WRK-Z6
+      *       MOVE     WRK-Z6                 TO   WRK-MAE-INPUT
+      *       PERFORM  2009-HENKAN-SEC
+      *       STRING   WRK-OUT-INPUT          DELIMITED  BY  SPACE
+      *                "円"                   DELIMITED  BY  SIZE
+      *                INTO                        SC11-TAHOUFTN
+      *       END-STRING
+      *    点数はゼロを印字
+             MOVE    ZERO                    TO   WRK-Z9
+             MOVE    WRK-Z9                  TO   WRK-MAE-INPUT
+             PERFORM 2009-HENKAN-SEC
+             MOVE    WRK-OUT-INPUT           TO   SC11-TENSU
       *
-      *    他法負担額
-             MOVE     MF100-TAHOUFTN         TO   WRK-Z6
-             MOVE     WRK-Z6                 TO   WRK-MAE-INPUT
-             PERFORM  2009-HENKAN-SEC
-             STRING   WRK-OUT-INPUT          DELIMITED  BY  SPACE
-                      "円"                   DELIMITED  BY  SIZE
-                      INTO                        SC11-TAHOUFTN
+      *    全国公費併用時の備考
+             STRING   "公費"                 DELIMITED  BY  SIZE
+                      MF100-TAHOUHBT         DELIMITED  BY  SIZE
+                      "に係る患者負担額"     DELIMITED  BY  SIZE
+                      INTO                        SC11-BIKOTAHOU
              END-STRING
+      *=== 全国公費併用時の備考欄記載変更 by Yoshikawa(2011/01/18) end
            END-IF
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *
