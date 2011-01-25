@@ -47,6 +47,7 @@
       *  01.00.11    吉川    2009/11/20  シス管「2007」のまとめ公費で
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.12    吉川    2010/07/01  オンライン返戻対応
+      *  01.00.13    吉川    2011/01/17  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -423,7 +424,10 @@
                                    SPA-AREA
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
-           MOVE    "SKT0310TP"         TO  SKT0310TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/17) start
+      *     MOVE    "SKT0310TP"         TO  SKT0310TP-FILE-ID
+           MOVE    "SKT0310"           TO  SKT0310TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2011/01/17) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT0310TP-TERMID
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SKT0310TP-HOSPNUM
