@@ -37,6 +37,8 @@
       *                                SPA-AREA½é´ü²½
       *  01.00.05    ÆâÅÄ    08/08/27  ´ä¼êµÜ¾ëÆâÎ¦ÃÏ¿ÌÂÐ±þ¡ÊÂÐ¾Ý¼ÔÊÌ½¸·×¡Ë
       *  01.00.06    µÈÀî    10/07/01  ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
+      *  01.00.07    µÈÀî    11/01/14  ¸øÈñºÆ·ÇÍó¤Î6ºÐÍó¤Ë3¡Á5ºÐ¤¬
+      *                                ½¸·×¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç¤ò½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -865,11 +867,20 @@
                  MOVE    2    TO    IDX4
                END-IF
              ELSE
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) start
+              IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+              AND  (RECE10-FLG (1)   =  1)
+                MOVE  3     TO  IDX4
+              ELSE
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) end
                IF  RECE10-AGE < 3
                  MOVE    3    TO    IDX4
                ELSE
                  MOVE    4    TO    IDX4
                END-IF
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) start
+              END-IF
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) end
              END-IF
            ELSE
              IF  RECE10-AGE >= 70
@@ -879,6 +890,12 @@
                  MOVE  7    TO    IDX4
                END-IF
              ELSE
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) start
+              IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+              AND  (RECE10-FLG (1)   =  1)
+                MOVE   9    TO    IDX4
+              ELSE
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) end
                IF  RECE10-AGE < 3
                  MOVE  9    TO    IDX4
                ELSE
@@ -888,6 +905,9 @@
                    MOVE    8    TO    IDX4
                  END-IF
                END-IF
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) start
+              END-IF
+      *=== 3¡Á5ºÐ¤¬°õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2011/01/14) end
              END-IF
            END-IF
       *
