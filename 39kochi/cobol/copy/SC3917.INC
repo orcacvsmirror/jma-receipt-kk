@@ -70,3 +70,7 @@
             03  SC17-TAHOUHBT                    PIC X(02).
       *他法負担額
             03  SC17-TAHOUFTN                    PIC X(14).
+      *=== 備考欄追加 by Yoshikawa(2011/01/18) start
+      *備考（全国公費に係る患者負担）
+            03  SC17-BIKOTAHOU                   PIC X(28).
+      *=== 備考欄追加 by Yoshikawa(2011/01/18) end
