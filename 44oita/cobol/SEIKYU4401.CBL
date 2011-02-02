@@ -42,6 +42,10 @@
       *  01.00.06     吉川     09/07/03    豊後大野市、由布市、国東市の
       *                                    市町村名を取得できるように修正
       *  01.00.07     吉川     10/10/12    帳票様式の変更に伴う修正
+      *  01.00.08     吉川     11/02/01    高額療養費の対象で
+      *                                    限度額認定証を持っていない場合
+      *                                    適用区分は「Ｄ」とする
+      *                                    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -113,6 +117,9 @@
            03  FLG-SYORI      PIC 9(01).
            03  FLG-HKNJAINF   PIC 9(01).
            03  FLG-RECE10     PIC 9(01).
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) start
+           03  FLG-TEKIYOD    PIC 9(01).
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -272,7 +279,7 @@
       *
       *=== 豊後大野市等の市町村名取得 by Yoshikawa(2009/07/03) start
       *    固定領域
-      01   CONS-AREA.
+       01  CONS-AREA.
       *    市町村番号(FTN=負担者番号、CITY=保険者番号)
            03  CONS-CITYNUM.
       *        豊後大野
@@ -798,6 +805,9 @@
            MOVE    MF100-KOHNUM    TO  WRK-KOHNUM
            MOVE    MF100-KOHID     TO  WRK-KOHID
            MOVE    ZERO            TO  FLG-TYOKI
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) start
+                                       FLG-TEKIYOD
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) end
       *
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -904,6 +914,11 @@
                WHEN  "4"
                  MOVE      3                   TO  MF100-KOGAKU
              END-EVALUATE
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) start
+             IF  FLG-TEKIYOD  =  1
+               MOVE      4                     TO  MF100-KOGAKU
+             END-IF
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) end
            END-IF
       *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
       *
@@ -1084,12 +1099,20 @@
       *        全国公費を併用しており、一部負担金欄に記載する場合は
       *        何も記載しない
                EVALUATE    MF100-KYURATE
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/01) start
+      *             WHEN    10
+      *                 MOVE    1       TO  SC01-FTNRATE(IDX)
+      *             WHEN    20
+      *                 MOVE    2       TO  SC01-FTNRATE(IDX)
+      *             WHEN    30
+      *                 MOVE    3       TO  SC01-FTNRATE(IDX)
                    WHEN    10
-                       MOVE    1       TO  SC01-FTNRATE(IDX)
+                       MOVE    "1"     TO  SC01-FTNRATE(IDX)
                    WHEN    20
-                       MOVE    2       TO  SC01-FTNRATE(IDX)
+                       MOVE    "2"     TO  SC01-FTNRATE(IDX)
                    WHEN    30
-                       MOVE    3       TO  SC01-FTNRATE(IDX)
+                       MOVE    "3"     TO  SC01-FTNRATE(IDX)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/01) end
                END-EVALUATE
       *
       *        日数
@@ -1169,6 +1192,10 @@
                      MOVE    "Ｂ"          TO  SC01-KOGAKU(IDX)
                    WHEN  3
                      MOVE    "Ｃ"          TO  SC01-KOGAKU(IDX)
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) start
+                   WHEN  4
+                     MOVE    "Ｄ"          TO  SC01-KOGAKU(IDX)
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) end
                  END-EVALUATE
                END-IF
       *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
@@ -1817,6 +1844,16 @@
                    MOVE    2       TO      FLG-TYOKI
                END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) start
+      *        限度額認定証を持っていない場合の高額療養費相当額が
+      *        計算されていたら、適用区分Dのフラグを立てる
+               IF  SYU-KOH-HKNNUM(IDX)  =  "183" OR "283"
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX)  <  SYU-KOH-FTN-ENTANI
+                   MOVE    1       TO      FLG-TEKIYOD
+                 END-IF
+               END-IF
+      *=== 適用区分の修正 by Yoshikawa(2011/02/01) end
       *
            END-PERFORM
       *
