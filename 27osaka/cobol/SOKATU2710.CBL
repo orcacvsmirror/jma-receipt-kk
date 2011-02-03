@@ -43,6 +43,7 @@
       *  01.00.08    吉川    10/04/06    オンライン返戻対応
       *  01.00.09    吉川    10/11/02    特別療養費国保対応
       *  01.00.10    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.11    吉川    11/02/02    政令指定都市も区毎に集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -694,24 +695,26 @@
       *    在総診・在医総は別紙に出力する。
            MOVE    RECE10-ZAITAKU        TO  SKT2710TMP-ZAITAKU
       *
-      **    京都市の場合、代表番号セット
-           IF  SKT2710TMP-HKNJANUM (1:3) = "264"
-      *
-             IF    SKT2710TMP-HKNJANUM  <  SKT2710TMP-HKNJANUM2
-               OR  SKT2710TMP-HKNJANUM2 =  SPACE
-               MOVE  SKT2710TMP-HKNJANUM TO SKT2710TMP-HKNJANUM2
-             END-IF
-             MOVE  "264002"  TO  SKT2710TMP-HKNJANUM
-           END-IF
-      **    神戸市の場合、代表番号セット
-           IF  SKT2710TMP-HKNJANUM (1:3) = "284"
-             IF    SKT2710TMP-HKNJANUM  <  SKT2710TMP-HKNJANUM2
-               OR  SKT2710TMP-HKNJANUM2 =  SPACE
-               MOVE  SKT2710TMP-HKNJANUM TO SKT2710TMP-HKNJANUM2
-             END-IF
-      *
-             MOVE  "284000"  TO  SKT2710TMP-HKNJANUM
-           END-IF
+      *=== 代表番号ではなく区毎に集計 by Yoshikawa(2011/02/02) start
+      ***    京都市の場合、代表番号セット
+      *     IF  SKT2710TMP-HKNJANUM (1:3) = "264"
+      **
+      *       IF    SKT2710TMP-HKNJANUM  <  SKT2710TMP-HKNJANUM2
+      *         OR  SKT2710TMP-HKNJANUM2 =  SPACE
+      *         MOVE  SKT2710TMP-HKNJANUM TO SKT2710TMP-HKNJANUM2
+      *       END-IF
+      *       MOVE  "264002"  TO  SKT2710TMP-HKNJANUM
+      *     END-IF
+      ***    神戸市の場合、代表番号セット
+      *     IF  SKT2710TMP-HKNJANUM (1:3) = "284"
+      *       IF    SKT2710TMP-HKNJANUM  <  SKT2710TMP-HKNJANUM2
+      *         OR  SKT2710TMP-HKNJANUM2 =  SPACE
+      *         MOVE  SKT2710TMP-HKNJANUM TO SKT2710TMP-HKNJANUM2
+      *       END-IF
+      **
+      *       MOVE  "284000"  TO  SKT2710TMP-HKNJANUM
+      *     END-IF
+      *=== 代表番号ではなく区毎に集計 by Yoshikawa(2011/02/02) end
       *---(01.00.03) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
            IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
