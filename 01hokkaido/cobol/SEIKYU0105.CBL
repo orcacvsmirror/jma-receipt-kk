@@ -56,6 +56,8 @@
       *                                    公費の助成がなくても印字する
       *  01.00.15     吉川     10/11/16    室蘭市、釧路市、江別市、根室市は
       *                                    公費の助成が無い場合は印字対象外
+      *  01.00.16     吉川     11/02/04    小樽市、登別市、北広島市は
+      *                                    公費の助成が無い場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -807,10 +809,12 @@
       *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) start
       *     IF  WRK-KOBETUCITYNUM  =  "002" OR "003" OR "005" OR "006"
       *                           OR  "017" OR "023" OR "030" OR "051"
-           IF  WRK-KOBETUCITYNUM  =  "003" OR "030" OR "051"
-      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
-               CONTINUE
-           ELSE
+      *=== 公費助成判定をする市町村の変更 by Yoshikawa(2011/02/04) start
+      *     IF  WRK-KOBETUCITYNUM  =  "003" OR "030" OR "051"
+      **=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
+      *         CONTINUE
+      *     ELSE
+      *=== 公費助成判定をする市町村の変更 by Yoshikawa(2011/02/04) end
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
       *---(01.00.09) LINE ADD START ------------------------------------
       *     IF   MF100-KOHNUM   =  "144"                OR
@@ -828,7 +832,9 @@
       *     END-IF
       *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) start
-           END-IF
+      *=== 公費助成判定をする市町村の変更 by Yoshikawa(2011/02/04) start
+      *     END-IF
+      *=== 公費助成判定をする市町村の変更 by Yoshikawa(2011/02/04) end
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
       *
       *    長期・結核・精神編集

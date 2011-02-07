@@ -80,6 +80,8 @@
       *                                    印字されない場合があるのを修正
       *  01.00.22     吉川     10/11/16    室蘭市、釧路市、江別市、根室市は
       *                                    公費の助成が無い場合は印字対象外
+      *  01.00.23     吉川     11/02/04    小樽市、登別市、北広島市は
+      *                                    公費の助成が無い場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -864,13 +866,16 @@
       *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) start
       *     IF  WRK-KOBETUCITYNUM  =  "003" OR "005" OR "006" OR  "017"
       *                           OR  "023" OR "030" OR "051"
-           IF  WRK-KOBETUCITYNUM  =  "003" OR "030" OR "051"
-      *=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
-      *=== 函館市は公費の助成がなくても印字 by Yoshikawa(2010/02/12) end
-               CONTINUE
-           ELSE
-               MOVE     1                        TO  FLG-ERR
-           END-IF
+      *=== 公費助成判定をする市町村の変更 by Yoshikawa(2011/02/04) start
+      *     IF  WRK-KOBETUCITYNUM  =  "003" OR "030" OR "051"
+      **=== 助成判定市町村の変更 by Yoshikawa(2010/11/16) end
+      **=== 函館市は公費の助成がなくても印字 by Yoshikawa(2010/02/12) end
+      *         CONTINUE
+      *     ELSE
+      *         MOVE     1                        TO  FLG-ERR
+      *     END-IF
+           MOVE     1                          TO  FLG-ERR
+      *=== 公費助成判定をする市町村の変更 by Yoshikawa(2011/02/04) end
       *=== 助成なしの記載は函館等8市のみ by Yoshikawa(2009/07/08) end
       *
       *    長期・結核・精神編集
