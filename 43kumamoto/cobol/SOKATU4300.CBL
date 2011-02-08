@@ -43,6 +43,8 @@
       *  01.00.09    吉川    10/01/14    国保・退職者の総件数を印字する
       *  01.00.10    吉川    10/06/01    オンライン返戻対応
       *  01.00.11    吉川    10/12/16    open-cobol1.0対応
+      *  01.00.12    吉川    11/02/07    ３併の場合、公費の件数が正しく
+      *                                  カウントされない不具合を修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1027,11 +1029,17 @@
       *****************************************************************
        220-KOH-SYUKEI-SEC        SECTION.
       *
-           INITIALIZE       KOH4300TMP-REC
+      *=== 3併の公費件数カウントミス修正 by Yoshikawa(2011/02/07) start
+      *     INITIALIZE       KOH4300TMP-REC
+      *=== 3併の公費件数カウントミス修正 by Yoshikawa(2011/02/07) end
       *
            PERFORM VARYING IDX3     FROM    1   BY  1
                    UNTIL   IDX3     >       4
                    OR  RECE10-KOHNUM (IDX3) =   SPACE
+      *
+      *=== 3併の公費件数カウントミス修正 by Yoshikawa(2011/02/07) start
+             INITIALIZE       KOH4300TMP-REC
+      *=== 3併の公費件数カウントミス修正 by Yoshikawa(2011/02/07) end
       *
       *=== 月遅れ・返戻処理の修正 by Yoshikawa(2008/06/17) start
       **---(01.00.03) LINE ADD START ------------------------------------
