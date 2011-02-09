@@ -35,6 +35,8 @@
       *                                  1行にまとめて印字する
       *                                  印字対象番号の追加（680）
       *  01.00.03    吉川    2010/12/16  open-cobol1.0対応
+      *  01.00.04    吉川    2011/02/08  負担者番号毎に改頁するように修正
+      *                                  請求金額合計は頁毎に計算する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -684,6 +686,15 @@
                MOVE  "500"                 TO  MF100-CITYNUM
            END-IF
       *
+      *=== 負担者番号毎に改頁 by Yoshikawa(2011/02/08) start
+      *    区分（1=一般、2=後期高齢）
+           IF  MF100-HKNNUM  =  "039" OR "040"
+               MOVE  "2"                   TO  MF100-KBN
+           ELSE
+               MOVE  "1"                   TO  MF100-KBN
+           END-IF
+      *=== 負担者番号毎に改頁 by Yoshikawa(2011/02/08) end
+      *
       *=== 同一患者の入院と外来は1行で印字 by Yoshikawa(2009/08/20) start
       *    一時ファイル読み込み
            PERFORM  900-SKTTMP-READ-SEC
@@ -1075,12 +1086,16 @@
            END-PERFORM
       *
       *    合計印字
-           IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+      *=== 合計は頁毎に印字 by Yoshikawa(2011/02/08) start
+      *     IF  FLG-PRINT  =  1  OR  KEY-NEW  NOT =  KEY-OLD
+      *=== 合計は頁毎に印字 by Yoshikawa(2011/02/08) end
              MOVE  SUM-SEIKYUGK          TO  WRK-Z10
              MOVE  WRK-Z10               TO  SC23-GSEIKYUGK
       *
              INITIALIZE                      SUM-AREA
-           END-IF
+      *=== 合計は頁毎に印字 by Yoshikawa(2011/02/08) start
+      *     END-IF
+      *=== 合計は頁毎に印字 by Yoshikawa(2011/02/08) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1431,12 +1446,15 @@
                AT  END
                    MOVE  1  TO  FLG-PRINT
                NOT AT  END
-      *            後期高齢者は帳票を分ける
-                   IF  MF100-HKNNUM  =  "039" OR "040"
-                     MOVE  "2"          TO  KEY-N-KBN
-                   ELSE
-                     MOVE  "1"          TO  KEY-N-KBN
-                   END-IF
+      *=== 負担者番号毎に改頁 by Yoshikawa(2011/02/08) start
+      **            後期高齢者は帳票を分ける
+      *             IF  MF100-HKNNUM  =  "039" OR "040"
+      *               MOVE  "2"          TO  KEY-N-KBN
+      *             ELSE
+      *               MOVE  "1"          TO  KEY-N-KBN
+      *             END-IF
+                   MOVE  MF100-KBN      TO  KEY-N-KBN
+      *=== 負担者番号毎に改頁 by Yoshikawa(2011/02/08) end
                    MOVE  MF100-CITYNUM  TO  KEY-N-CITYNUM
            END-READ
            .
