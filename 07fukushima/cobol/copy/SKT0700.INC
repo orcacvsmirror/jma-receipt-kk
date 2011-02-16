@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2011/02/09  特別療養費国保対応
+      ********************************************************************
        01  SKT0700.
       *
            03  SKT0700-TBL-A.
@@ -70,6 +74,10 @@
                        09  SKT0700-G-SNISSU        PIC  X(06).
       *合計ー食事金額
                        09  SKT0700-G-SKINGK        PIC  X(11).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *特別療養費
+               05  SKT0700-TOKUBETU                PIC  X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
            03  SKT0700-TBL-B.
       *請求年月
                05  SKT0700-B-SEIYM                 PIC  X(16).
@@ -123,3 +131,7 @@
                        09  SKT0700-B-G-SNISSU      PIC  X(06).
       *合計ー食事金額
                        09  SKT0700-B-G-SKINGK      PIC  X(11).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *特別療養費
+               05  SKT0700-B-TOKUBETU              PIC  X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end

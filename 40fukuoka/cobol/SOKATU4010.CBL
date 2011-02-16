@@ -55,6 +55,7 @@
       *                                   6つ目以降がまとまらない不具合を修正
       *  01.00.18    吉川     10/01/22    オンライン返戻対応
       *  01.00.19    吉川     10/12/16    続紙は様式第六（ニ）を使用する
+      *  01.00.20    吉川     11/02/09    特別療養費国保対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -183,7 +184,9 @@
            03  WRK-PARA-HKNJANUM   PIC X(08).
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYOKBN     PIC X(01).
-      *
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -232,6 +235,9 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH            PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+           03  WRK-PATH2             PIC X(50).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -425,6 +431,9 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-HKNJANUM
                                                WRK-PARA-SYOKBN
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+                                               WRK-PARA-TOKUBETU
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *---(01.00.08) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.08) LINE ADD END   ------------------------------------
@@ -634,18 +643,34 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *
-           EVALUATE    WRK-PARA-SYOKBN 
-               WHEN    "2"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
-                   MOVE    "key37"                  TO  WRK-PATH
-      *---(01.00.08) LINE ADD END   ------------------------------------
-               WHEN    "1"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-                   MOVE    "key38"                  TO  WRK-PATH
-      *---(01.00.08) LINE ADD END   ------------------------------------
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *     EVALUATE    WRK-PARA-SYOKBN 
+      *         WHEN    "2"
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *             MOVE    "key37"                  TO  WRK-PATH
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+      *             MOVE    "key38"                  TO  WRK-PATH
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE    "key37"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "1"
+                   MOVE    "key38"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
            END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -863,7 +888,10 @@
              MOVE    1    TO    SKT4010TMP-PAGE2-FLG
            ELSE
       *    一般国保か
-             IF  RECE10-HKNNUM  =  "060"
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *       IF  RECE10-HKNNUM  =  "060"
+             IF  RECE10-HKNNUM  =  "060" OR "068"
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
                IF  RECE10-AGE  >= 70
                  IF  RECE10-KYURATE  =  9
                    MOVE    1     TO    IDX1
@@ -1319,6 +1347,14 @@
       *    ページ番号
            MOVE      CNT-PAGE            TO  WRK-Z4
            MOVE      WRK-Z4              TO  SKT4010-NO
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4010-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
+      *
            .
        310-HEAD-HEN-EXT.
            EXIT.
@@ -1391,7 +1427,17 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4010.red"            TO  SPRT-PRTID
-           MOVE    "国保請求書(市町村用１)"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *     MOVE    "国保請求書(市町村用１)"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書(市町村用)"
+                                       TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書(市町村用)［特別療養費］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
            MOVE    SKT4010             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1460,6 +1506,13 @@
            MOVE      CNT-PAGE            TO  WRK-Z4
            MOVE      WRK-Z4              TO  SKT4020-NO
       *           
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4020-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
+      *
            .
        311-HEAD-HEN-EXT.
            EXIT.
@@ -1625,7 +1678,17 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4020.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書(市町村用２)"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *     MOVE    "国保請求書(市町村用２)"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書(市町村用)"
+                                       TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書(市町村用)［特別療養費］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
            MOVE    SKT4020             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1693,6 +1756,13 @@
       *    ページ番号
            MOVE      CNT-PAGE            TO  WRK-Z4
            MOVE      WRK-Z4              TO  SKT4040-NO
+      *
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *    特別療養費
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "特別療養費"          TO  SKT4040-TOKUBETU
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
            .
        312-HEAD-HEN-EXT.
@@ -1789,7 +1859,17 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4040.red"            TO  SPRT-PRTID
-           MOVE    "国保請求書(市町村用３)"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+      *     MOVE    "国保請求書(市町村用３)"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書(市町村用)"
+                                       TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書(市町村用)［特別療養費］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
            MOVE    SKT4040             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2104,6 +2184,12 @@
                MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
                MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
            END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+           END-IF
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC

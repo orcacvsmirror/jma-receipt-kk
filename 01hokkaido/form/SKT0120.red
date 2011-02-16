@@ -31,6 +31,11 @@
         <embed object="string" length="2"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU-TBL" occurs="2">
       <element name="NYUGAI-TBL" occurs="2">
         <element name="KENSU" occurs="1">
@@ -455,11 +460,11 @@
         <point val="10.9,1.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.89,1.39;10.91,2.11"/>
+        <rectangle val="10.89,1.39;10.9154,2.21848"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="10.9,1.4"/>
-        <point val="10.9,2.1"/>
+        <point val="10.9054,2.20848"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -511,13 +516,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O11">
       <attribute name="obj_pos">
-        <point val="4.98923,3.9311"/>
+        <point val="4.99106,3.92226"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.96567,3.9261;4.99423,20.005"/>
+        <rectangle val="4.96567,3.91726;4.99606,20.005"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="4.98923,3.9311"/>
+        <point val="4.99106,3.92226"/>
         <point val="4.97067,20"/>
       </attribute>
       <attribute name="numcp">
@@ -1471,11 +1476,11 @@
         <point val="14,4.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.995,4.495;14.0094,5.10217"/>
+        <rectangle val="13.995,4.495;14.0102,5.12868"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="14,4.5"/>
-        <point val="14.0044,5.09717"/>
+        <point val="14.0052,5.12368"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1576,14 +1581,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O69">
       <attribute name="obj_pos">
-        <point val="13.9863,9.4258"/>
+        <point val="13.988,9.4008"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.9813,9.4208;14.0089,10.5262"/>
+        <rectangle val="13.9826,9.3958;13.993,10.4997"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="13.9863,9.4258"/>
-        <point val="14.0039,10.5212"/>
+        <point val="13.988,9.4008"/>
+        <point val="13.9876,10.4947"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1741,11 +1746,11 @@
         <point val="15.2047,8.82302"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.1913,8.81802;15.2097,9.11277"/>
+        <rectangle val="15.1997,8.81802;15.2121,9.10544"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="15.2047,8.82302"/>
-        <point val="15.1963,9.10777"/>
+        <point val="15.2071,9.10044"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1921,11 +1926,11 @@
         <point val="17.8018,8.81419"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7885,8.80919;17.8068,9.10394"/>
+        <rectangle val="17.7968,8.80919;17.8093,9.10544"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="17.8018,8.81419"/>
-        <point val="17.7935,9.09894"/>
+        <point val="17.8043,9.10044"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1954,14 +1959,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O90">
       <attribute name="obj_pos">
-        <point val="17.7921,11.4909"/>
+        <point val="17.7866,11.5033"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7816,11.4859;17.7971,11.7983"/>
+        <rectangle val="17.7816,11.4983;17.7916,11.816"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="17.7921,11.4909"/>
-        <point val="17.7866,11.7933"/>
+        <point val="17.7866,11.5033"/>
+        <point val="17.7866,11.811"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1990,14 +1995,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O92">
       <attribute name="obj_pos">
-        <point val="17.7828,14.088"/>
+        <point val="17.7828,14.1057"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7778,14.083;17.7898,14.4043"/>
+        <rectangle val="17.7778,14.1007;17.7898,14.422"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="17.7828,14.088"/>
-        <point val="17.7848,14.3993"/>
+        <point val="17.7828,14.1057"/>
+        <point val="17.7848,14.417"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -2047,11 +2052,11 @@
         <point val="17.7876,16.7912"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7796,16.7862;17.7926,17.0986"/>
+        <rectangle val="17.7816,16.7862;17.7926,17.109"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="17.7876,16.7912"/>
-        <point val="17.7846,17.0936"/>
+        <point val="17.7866,17.104"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -2062,13 +2067,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O96">
       <attribute name="obj_pos">
-        <point val="17.7855,19.4258"/>
+        <point val="17.7861,19.3993"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.7805,19.4208;17.7905,19.7311"/>
+        <rectangle val="17.7805,19.3943;17.7911,19.7311"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="17.7855,19.4258"/>
+        <point val="17.7861,19.3993"/>
         <point val="17.7855,19.7261"/>
       </attribute>
       <attribute name="numcp">
@@ -13197,11 +13202,11 @@
         <point val="11.0388,3.15195"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.0338,3.14695;19.1532,3.19241"/>
+        <rectangle val="11.0338,3.13988;19.1435,3.15695"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="11.0388,3.15195"/>
-        <point val="19.1482,3.18741"/>
+        <point val="19.1385,3.14488"/>
       </attribute>
       <attribute name="numcp">
         <int val="0"/>
@@ -13374,6 +13379,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.404"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O380">
+      <attribute name="obj_pos">
+        <point val="9.79022,1.00732"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.79022,0.688799;11.8102,1.0888"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="9.79022,1.00732"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>
