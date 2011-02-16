@@ -36,6 +36,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.03    内田    08/04/06    SPA-AREA初期化
+      *  01.00.04    吉川    11/02/09    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -689,7 +690,10 @@
            IF    FLG-TYOKI    =    1  AND
                  WRK-SEIKYUGK-G    >  10000
                MOVE    10000          TO    WRK-SEIKYUGK-G
-               MOVE    1              TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/09) start
+      *         MOVE    1              TO    MF100-TYOKI
+               MOVE    "1"            TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/09) end
            END-IF
       *
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -697,7 +701,10 @@
            IF    FLG-TYOKI    =    2  AND
                  WRK-SEIKYUGK-G    >  20000
                MOVE    20000          TO    WRK-SEIKYUGK-G
-               MOVE    1              TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/09) start
+      *         MOVE    1              TO    MF100-TYOKI
+               MOVE    "1"            TO    MF100-TYOKI
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/09) end
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
