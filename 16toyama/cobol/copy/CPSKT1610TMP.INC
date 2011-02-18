@@ -15,15 +15,18 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      ************************************************************
-      *    ¿ÇÎÅÊó½·ÀÁµá½ñ     COPY (CPSKT1610TMP.INC)              *
+      *    ¿ÇÎÅÊó½·ÀÁµá½ñ     COPY (CPSKT1610TMP.INC)
       *
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
-      ************************************************************
+      *  01.00.01    µÈÀî         11/02/17  open-cobol1.0ÂÐ±þ
+      ********************************************************************
        01  SKT1610TMP-REC.
            03  SKT1610TMP-KEY.
-               05  SKT1610TMP-SYUTURYOKU              PIC X(01).
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2011/02/17) start
+      *         05  SKT1610TMP-SYUTURYOKU              PIC X(01).
+               05  SKT1610TMP-SYUTURYOKU              PIC 9(01).
+      *=== open-cobol1.0ÂÐ±þ by Yoshikawa(2011/02/17) end
                05  SKT1610TMP-HKNJANUM                PIC X(06).
                05  SKT1610TMP-KYURATE                 PIC 9(03).
            03  SKT1610TMP-TBL             OCCURS  11.

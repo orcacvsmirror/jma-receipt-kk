@@ -30,6 +30,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/10/07  和暦は頭ゼロ付きで表す
       *  01.00.02    吉川    2008/10/28  ファイル名に県番号と点数表追加
+      *  01.00.03    吉川    2011/02/17  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -718,9 +719,12 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ５．市町村コード（「172014」固定）
-           MOVE    "172014"                TO  WRK-NUM
-           MOVE    WRK-NUM                 TO  WRK-9
-           MOVE    WRK-9                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     MOVE    "172014"                TO  WRK-NUM
+      *     MOVE    WRK-NUM                 TO  WRK-9
+      *     MOVE    WRK-9                   TO  WRK-NUM
+           MOVE    172014                  TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
            MOVE    6                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *

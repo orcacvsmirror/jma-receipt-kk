@@ -39,6 +39,7 @@
       *                                      印字対象外とする
       *  01.00.05       吉川    2009/03/18   退院していない入院患者が
       *                                      取得されない不具合を修正
+      *  01.00.06       吉川    2011/02/17   open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -311,8 +312,10 @@
        01  PTKOHINF-REC.
            COPY    "CPPTKOHINF.INC".
       *
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
       *    全角チェックパラメタ
-           COPY    "CPORCSKANACHK.INC".
+      *     COPY    "CPORCSKANACHK.INC".
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -1391,6 +1394,7 @@
                PERFORM 900-KOHSKY-READ-SEC
            ELSE
                MOVE    1               TO  FLG-END
+               PERFORM 900-KOHSKY-CLOSE-SEC
            END-IF
            .
        900-KOHSKY-START-EXT.
