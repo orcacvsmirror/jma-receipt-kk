@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/02/10  特別療養費国保対応
+      ********************************************************************
        01  SKT4330.
       *ページ番号
            03  SKT4330-NO                  PIC  X(04).
@@ -38,6 +42,10 @@
            03  SKT4330-HKNJANAME           PIC  X(24).
       *一般・在宅メッセージ
            03  SKT4330-ZAI                 PIC  X(32).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/10) start
+      *特別療養費
+           03  SKT4330-TOKUBETU            PIC  X(10).
+      *=== 特別療養費国保対応 by Yoshikawa(2011/02/10) end
       *療養の給付テーブル
            03  SKT4330-SEIKYU  OCCURS  2.
                05  SKT4330-NYUGAI-TBL  OCCURS  2.

@@ -1,3 +1,25 @@
+      *******************************************************************
+      * Project code name "ORCA"
+      * Æü°åÉ¸½à¥ì¥»¥×¥È¥½¥Õ¥È¡ÊJMA standard receipt software¡Ë
+      * Copyright(C) 2002 JMA (Japan Medical Association)
+      *
+      * This program is part of "JMA standard receipt software".
+      *
+      *     This program is distributed in the hope that it will be useful
+      * for further advancement in medical care, according to JMA Open
+      * Source License, but WITHOUT ANY WARRANTY.
+      *     Everyone is granted permission to use, copy, modify and
+      * redistribute this program, but only under the conditions described
+      * in the JMA Open Source License. You should have received a copy of
+      * this license along with this program. If not, stop using this
+      * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
+      * 113-8621, Japan.
+      ********************************************************************
+      *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
+      * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    µÈÀî         10/01/14  ¹ñÊİ¡¦Âà¿¦¤ÎÁí·ï¿ô¤ò°õ»ú
+      *  01.00.02    µÈÀî         11/02/10  ÆÃÊÌÎÅÍÜÈñ¹ñÊİÂĞ±ş
+      ********************************************************************
         01  SKT4300.
             02  SKT4300-SRYYM   PIC X(16).
             02  SKT4300-POST.
@@ -11,6 +33,9 @@
             02  SKT4300-TEL PIC X(15).
             02  SKT4300-KAISETU PIC X(30).
             02  SKT4300-HOSPCDN PIC X(20).
+      *=== ÆÃÊÌÎÅÍÜÈñ¹ñÊİÂĞ±ş by Yoshikawa(2011/02/10) start
+            02  SKT4300-TOKUBETU PIC X(10).
+      *=== ÆÃÊÌÎÅÍÜÈñ¹ñÊİÂĞ±ş by Yoshikawa(2011/02/10) end
             02  SKT4300-SEIKYU          OCCURS  8 TIMES.
               03  SKT4300-HKNJANAME   PIC X(20).
               03  SKT4300-KYURATE PIC X(6).
@@ -41,7 +66,7 @@
               03  SKT4300-K-SKENSU    PIC X(4).
               03  SKT4300-K-SKINGK    PIC X(7).
               03  SKT4300-K-SFTNGK    PIC X(7).
-      *=== ‘•ÛE‘ŞE‚Ì‘Œ”‚ğˆóš by Yoshikawa(2010/01/14) start
+      *=== ¹ñÊİ¡¦Âà¿¦¤ÎÁí·ï¿ô¤ò°õ»ú by Yoshikawa(2010/01/14) start
             02  SKT4300-SOUKENSU-TBL    OCCURS  3 TIMES.
               03  SKT4300-SOUKENSU    PIC X(7).
-      *=== ‘•ÛE‘ŞE‚Ì‘Œ”‚ğˆóš by Yoshikawa(2010/01/14) end
+      *=== ¹ñÊİ¡¦Âà¿¦¤ÎÁí·ï¿ô¤ò°õ»ú by Yoshikawa(2010/01/14) end
