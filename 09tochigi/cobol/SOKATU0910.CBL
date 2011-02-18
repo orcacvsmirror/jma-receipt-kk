@@ -37,6 +37,9 @@
       *                                   6つ目以降がまとまらない不具合を修正
       *  01.00.05      吉川   10/02/03    特別療養費国保対応
       *  01.00.06      吉川   10/07/15    オンライン返戻対応
+      *  01.00.07      吉川   11/02/17    open-cobol1.0対応
+      *                                   特別療養費印刷時の再印刷画面の
+      *                                   帳票タイトル変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1223,7 +1226,15 @@
              MOVE  "SKT0910.red"       TO  SPRT-PRTID
            END-IF
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
-           MOVE    "国保請求書１"  TO  SPRT-TITLE
+      *=== 特別療養費の印刷タイトル変更 by Yoshikawa(2011/02/17) start
+      *     MOVE    "国保請求書１"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書"      TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費の印刷タイトル変更 by Yoshikawa(2011/02/17) end
            MOVE    SKT0910             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1364,7 +1375,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT0911.red"   TO  SPRT-PRTID
-           MOVE    "国保請求書２"  TO  SPRT-TITLE
+      *=== 特別療養費の印刷タイトル変更 by Yoshikawa(2011/02/17) start
+      *     MOVE    "国保請求書２"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書"      TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費の印刷タイトル変更 by Yoshikawa(2011/02/17) end
            MOVE    SKT0911             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1804,8 +1823,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/02/03) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"                TO  RECE10-SRYYM
-             MOVE  "999999"                TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *       MOVE  "000000"                TO  RECE10-SRYYM
+      *       MOVE  "999999"                TO  RECE10-XXSRYYM
+             MOVE    000000                TO  RECE10-SRYYM
+             MOVE    999999                TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/02/03) end
       *
