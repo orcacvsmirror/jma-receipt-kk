@@ -43,6 +43,7 @@
       *  01.00.09    吉川    10/01/26    190は助成の有無に関わらず記載
       *  01.00.10    吉川    10/06/15    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.11    吉川    11/02/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -212,7 +213,9 @@
                05  WRK-T-SNISSU      PIC 9(02).
                05  WRK-T-SKINGK      PIC 9(09).
                05  WRK-T-SFTNGK      PIC 9(09).
-           03  WRK-KOHID             PIC 9(10).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) start
+      *     03  WRK-KOHID             PIC 9(10).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) end
       *
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
