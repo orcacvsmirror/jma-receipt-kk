@@ -36,6 +36,7 @@
       *  01.00.04    内田    07/09/26    日レセver4.0対応
       *  01.00.05    吉川    08/09/11    SPA-AREA初期化
       *  01.00.06    吉川    09/09/07    診療科名を印字する
+      *  01.00.07    吉川    11/02/16    公費請求テーブルclose処理位置変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1017,20 +1018,21 @@
       *****************************************************************
        300-END-SEC   SECTION.
       *
-      *
-           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *     MOVE    PATH-TBL-KOHSKY-KEY2       TO  MCP-PATH
-      *     CALL    "MCPSUB"             USING
-      *                                  MCPAREA
-      *                                  MCPDATA-REC
-           MOVE    "tbl_kohsky"       TO  MCP-TABLE
-           MOVE    "key2"             TO  MCP-PATHNAME
-           CALL    "ORCDBMAIN"        USING
-                                      MCPAREA
-                                      MCPDATA-REC
-                                      SPA-AREA
-      *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) start
+      *     MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **     MOVE    PATH-TBL-KOHSKY-KEY2       TO  MCP-PATH
+      **     CALL    "MCPSUB"             USING
+      **                                  MCPAREA
+      **                                  MCPDATA-REC
+      *     MOVE    "tbl_kohsky"       TO  MCP-TABLE
+      *     MOVE    "key2"             TO  MCP-PATHNAME
+      *     CALL    "ORCDBMAIN"        USING
+      *                                MCPAREA
+      *                                MCPDATA-REC
+      *                                SPA-AREA
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) end
       *
            CLOSE  MF100-FILE
            MOVE  CNT-PAGE  TO  WRK-PARA-PAGE
@@ -1110,6 +1112,9 @@
                PERFORM 900-KOHSKY-READ-SEC
            ELSE
                MOVE    1                   TO  FLG-END
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) start
+               PERFORM 900-KOHSKY-CLOSE-SEC
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) end
            END-IF
            .
        900-KOHSKY-START-EXT.
@@ -1192,10 +1197,31 @@
                END-IF
            ELSE
                MOVE    1               TO  FLG-END
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) start
+               PERFORM 900-KOHSKY-CLOSE-SEC
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) end
            END-IF
            .
        900-KOHSKY-READ-EXT.
            EXIT.
+      *
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) start
+      *****************************************************************
+      *    公費請求書マスタクローズ
+      *****************************************************************
+       900-KOHSKY-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE    "tbl_kohsky"          TO  MCP-TABLE
+           MOVE    "key2"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           .
+       900-KOHSKY-CLOSE-EXT.
+           EXIT.
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/16) end
       *
       *****************************************************************
       *    患者マスタ読込
