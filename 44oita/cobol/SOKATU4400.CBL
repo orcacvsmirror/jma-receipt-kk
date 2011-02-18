@@ -36,6 +36,7 @@
       *                                  πÒ ›§¨§ §§æÏπÁ§«§‚∞ıª˙§π§Î
       *  01.00.04    µ»¿Ó    08/11/20    SPA-AREAΩÈ¥¸≤Ω
       *  01.00.05    µ»¿Ó    10/06/01    •™•Û•È•§•Û ÷Ã·¬–±˛
+      *  01.00.06    µ»¿Ó    11/02/10    ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -150,6 +151,9 @@
       *---(01.00.01) LINE ADD START ------------------------------------
            03  WRK-PARA-SYOKBN     PIC X(01).
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
       *
       *    ∞Ïª˛ŒŒ∞Ë
        01  WRK-AREA.
@@ -330,6 +334,9 @@
       *                                         WRK-PARA-HOSPID
                                                WRK-PARA-HOSPNUM
                                                WRK-PARA-SYOKBN
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+                                               WRK-PARA-TOKUBETU
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
                                                RECEERR
       *---(01.00.01) LINE ADD END   ------------------------------------
            END-UNSTRING
@@ -453,20 +460,36 @@
       *
            OPEN     OUTPUT  UPD-FILE
       *
-      *---(01.00.01) LINE ADD START ------------------------------------
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    "2"
-                   MOVE    "key37"     TO  WRK-PATH
-      *---(01.00.02) LINE ADD START ------------------------------------
-                   MOVE    "key65"     TO  WRK-PATH2
-      *---(01.00.02) LINE ADD END   ------------------------------------
-               WHEN    "1"
-                   MOVE    "key38"     TO  WRK-PATH
-      *---(01.00.02) LINE ADD START ------------------------------------
-                   MOVE    "key66"     TO  WRK-PATH2
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+      **---(01.00.01) LINE ADD START ------------------------------------
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    "2"
+      *             MOVE    "key37"     TO  WRK-PATH
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *             MOVE    "key65"     TO  WRK-PATH2
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      *             MOVE    "key38"     TO  WRK-PATH
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *             MOVE    "key66"     TO  WRK-PATH2
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
+      **---(01.00.01) LINE ADD END   ------------------------------------
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE    "key37"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "1"
+                   MOVE    "key38"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+                   MOVE    "key65"        TO  WRK-PATH2
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
+                   MOVE    "key66"        TO  WRK-PATH2
            END-EVALUATE
-      *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
       *
            PERFORM  900-SEIKYU-SELECT-SEC
            .
@@ -490,18 +513,29 @@
       *
       *---(01.00.02) LINE ADD START ------------------------------------
            PERFORM  900-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE     1       TO        FLG-KOUKI
-           MOVE    "039"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE    "040"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+           IF  WRK-PARA-TOKUBETU  =  "1"
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
+             MOVE     ZERO    TO        FLG-END
+             MOVE     1       TO        FLG-KOUKI
+             MOVE    "039"    TO        WRK-HKNNUM
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOKUHO-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+           ELSE
+             MOVE     1       TO        FLG-KOUKI
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
+             MOVE     ZERO    TO        FLG-END
+             MOVE    "040"    TO        WRK-HKNNUM
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOKUHO-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+           END-IF
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            CLOSE   SKT4400TMP-FILE
@@ -764,6 +798,13 @@
            ELSE
                MOVE    "¢˛"            TO  SKT4400-KENKBN(2)
            END-IF
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+      *    ∆√ ÃŒ≈Õ‹»Ò
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  "∆√ ÃŒ≈Õ‹»Ò"        TO  SKT4400-TOKUBETU
+           END-IF
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
+      *
            .
        310-HEAD-HEN-EXT.
            EXIT.
@@ -833,7 +874,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4400.red"        TO  SPRT-PRTID
-           MOVE    "ø«Œ≈ ÛΩ∑¡Ì≥Á…º"    TO  SPRT-TITLE
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+      *     MOVE    "ø«Œ≈ ÛΩ∑¡Ì≥Á…º"    TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "ø«Œ≈ ÛΩ∑¡Ì≥Á…º"  TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "ø«Œ≈ ÛΩ∑¡Ì≥Á…º°Œ∆√ ÃŒ≈Õ‹»Ò°œ"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
            MOVE    SKT4400             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -988,6 +1037,12 @@
       *
            MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) start
+           IF  WRK-PARA-TOKUBETU  =  "2"
+             MOVE  000000              TO  RECE10-SRYYM
+             MOVE  999999              TO  RECE10-XXSRYYM
+           END-IF
+      *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2011/02/10) end
       *
            MOVE    RECE10-REC               TO  MCPDATA-REC
            MOVE    "DBSELECT"               TO  MCP-FUNC
