@@ -34,6 +34,7 @@
       *  01.00.02    内田   2008/04/22   帳票様式の変更に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.03    吉川   2010/07/01   オンライン返戻対応
+      *  01.00.04    吉川   2011/02/14   後期高齢者のみの場合でも印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -302,7 +303,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2011/02/14) start
+      *             UNTIL       FLG-END     =   1
+      *=== 後期高齢のみでも印字 by Yoshikawa(2011/02/14) end
       *
            PERFORM 300-END-SEC
       *
@@ -501,7 +504,9 @@
            CLOSE            SKT0400TMP-FILE
            OPEN     I-O     SKT0400TMP-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2011/02/14) start
+      *     MOVE     ZERO    TO      FLG-END
+      *=== 後期高齢のみでも印字 by Yoshikawa(2011/02/14) end
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
