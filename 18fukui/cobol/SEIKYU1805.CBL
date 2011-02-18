@@ -53,6 +53,8 @@
       *                                      同月内に保険を切替えた場合の
       *                                      点数と負担金の不具合を修正
       *  01.00.12       吉川    2009/04/02   特定負無の法別と点数を記載する
+      *  01.00.13       吉川    2011/02/17   open-cobol1.0対応
+      *                                      公費請求テーブルclose処理位置変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -170,6 +172,9 @@
            03  WRK-SRYYM              PIC X(09).
            03  WRK-POST               PIC X(09).
       *
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+           03  WRK-Z1                 PIC Z.
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
            03  WRK-Z2                 PIC ZZ.
            03  WRK-Z6                 PIC ZZ,ZZZ.
            03  WRK-Z7                 PIC ZZZ,ZZZ.
@@ -177,8 +182,10 @@
       *
            03  WRK-SRYYMWH            PIC X(16).
            03  WRK-SEIYMDWH           PIC X(22).
-           03  WRK-HENYMDG            PIC X(22).
-           03  WRK-HENYMDG1           PIC X(09).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     03  WRK-HENYMDG            PIC X(22).
+      *     03  WRK-HENYMDG1           PIC X(09).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
            03  WRK-PAGE               PIC 9(02).
            03  WRK-AMARI              PIC 9(02).
            03  WRK-GKINGAKU           PIC 9(07).
@@ -232,14 +239,38 @@
            03  WRK-HOSPTEL           PIC X(15).
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
       *
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *    年齢
+           03  WRK-CALC-YMD1.
+              05  WRK-CALC-YY1     PIC 9(04).
+              05  WRK-CALC-MM1     PIC 9(02).
+              05  WRK-CALC-DD1     PIC 9(02).
+      *
+           03  WRK-CALC-YMD2.
+              05  WRK-CALC-YY2     PIC 9(04).
+              05  WRK-CALC-MM2     PIC 9(02).
+              05  WRK-CALC-DD2     PIC 9(02).
+           03  WRK-AGE-YY             PIC S9(04).
+           03  WRK-AGE-MM             PIC S9(02).
+           03  WRK-AGE-G.
+              05  WRK-AGE-Z           PIC ZZ9.
+              05  WRK-AGE-MEI         PIC X(02).
+              05                      PIC X(01).
+           03  WRK-AGE-M-R     REDEFINES   WRK-AGE-G.
+              05  WRK-AGE-M-Z         PIC Z9.
+              05  WRK-AGE-M-MEI       PIC X(04).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
+      *
       *    編集用エリア
-           03  WRK-ITBFTNX         PIC ZZZ,ZZZ.
-           03  WRK-KENSUX          PIC Z,ZZZ.
-           03  WRK-Z1              PIC Z.
-           03  WRK-Z2              PIC ZZ.
-           03  WRK-Z6              PIC ZZ,ZZZ.
-           03  WRK-Z7              PIC ZZZ,ZZZ.
-           03  WRK-Z10             PIC ZZ,ZZZ,ZZZ.
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     03  WRK-ITBFTNX         PIC ZZZ,ZZZ.
+      *     03  WRK-KENSUX          PIC Z,ZZZ.
+      *     03  WRK-Z1              PIC Z.
+      *     03  WRK-Z2              PIC ZZ.
+      *     03  WRK-Z6              PIC ZZ,ZZZ.
+      *     03  WRK-Z7              PIC ZZZ,ZZZ.
+      *     03  WRK-Z10             PIC ZZ,ZZZ,ZZZ.
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *
       *市町村コード確認用
        01  WRK-DATA.
@@ -277,25 +308,27 @@
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
       *　　年齢
-           03  WRK-CALC-YMD1.
-              05  WRK-CALC-YY1     PIC 9(04).
-              05  WRK-CALC-MM1     PIC 9(02).
-              05  WRK-CALC-DD1     PIC 9(02).
-      *
-           03  WRK-CALC-YMD2.
-              05  WRK-CALC-YY2     PIC 9(04).
-              05  WRK-CALC-MM2     PIC 9(02).
-              05  WRK-CALC-DD2     PIC 9(02).
-           03  WRK-AGE-YY             PIC S9(04).
-           03  WRK-AGE-MM             PIC S9(02).
-           03  WRK-AGE-G.
-              05  WRK-AGE-Z           PIC ZZ9.
-              05  WRK-AGE-MEI         PIC X(02).
-              05                      PIC X(01).
-           03  WRK-AGE-M-R     REDEFINES   WRK-AGE-G.
-              05  WRK-AGE-M-Z         PIC Z9.
-              05  WRK-AGE-M-MEI       PIC X(04).
+      *     03  WRK-CALC-YMD1.
+      *        05  WRK-CALC-YY1     PIC 9(04).
+      *        05  WRK-CALC-MM1     PIC 9(02).
+      *        05  WRK-CALC-DD1     PIC 9(02).
+      **
+      *     03  WRK-CALC-YMD2.
+      *        05  WRK-CALC-YY2     PIC 9(04).
+      *        05  WRK-CALC-MM2     PIC 9(02).
+      *        05  WRK-CALC-DD2     PIC 9(02).
+      *     03  WRK-AGE-YY             PIC S9(04).
+      *     03  WRK-AGE-MM             PIC S9(02).
+      *     03  WRK-AGE-G.
+      *        05  WRK-AGE-Z           PIC ZZ9.
+      *        05  WRK-AGE-MEI         PIC X(02).
+      *        05                      PIC X(01).
+      *     03  WRK-AGE-M-R     REDEFINES   WRK-AGE-G.
+      *        05  WRK-AGE-M-Z         PIC Z9.
+      *        05  WRK-AGE-M-MEI       PIC X(04).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *
            COPY  "CPSHELLTBL.INC".
       *
@@ -361,8 +394,10 @@
        01  PTKOHINF-REC.
            COPY  "CPPTKOHINF.INC".
       *
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
       *    全角チェックパラメタ
-           COPY    "CPORCSKANACHK.INC".
+      *     COPY    "CPORCSKANACHK.INC".
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -758,13 +793,20 @@
            MOVE   RECE01-JNISSUINF   (IDY)  TO  MF110-JNISSUINF
            MOVE   RECE01-TOTALTENINF (IDY)  TO  MF110-TOTALTENINF
            MOVE   RECE01-FTNMONEYINF (IDY)  TO  MF110-FTNMONEYINF
-           MOVE   RECE01-YKZFTNINF   (IDY)  TO  MF110-YKZFTNINF
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     MOVE   RECE01-YKZFTNINF   (IDY)  TO  MF110-YKZFTNINF
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       ** 2007/08/01 nagaya  START 食事療養費負担額印字修正
       *コメント化
       *     MOVE   RECE01-SHOKUJIINF  (IDY)  TO  MF110-SHOKUJIINF
-           MOVE   RECE01-SHOKUJINISSU       TO  MF110-SHOKUJIKAISU
-           MOVE   RECE01-SHOKUJIRYOYOHI     TO  MF110-SHOKUJIRYOYOHI
-           MOVE   RECE01-SHOKUJIFTN         TO  MF110-SHOKUJIFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     MOVE   RECE01-SHOKUJINISSU       TO  MF110-SHOKUJIKAISU
+      *     MOVE   RECE01-SHOKUJIRYOYOHI     TO  MF110-SHOKUJIRYOYOHI
+      *     MOVE   RECE01-SHOKUJIFTN         TO  MF110-SHOKUJIFTN
+           MOVE   RECE01-SHOKUJINISSU(1)    TO  MF110-SHOKUJIKAISU
+           MOVE   RECE01-SHOKUJIRYOYOHI(1)  TO  MF110-SHOKUJIRYOYOHI
+           MOVE   RECE01-SHOKUJIFTN(1)      TO  MF110-SHOKUJIFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       ** 2007/08/01 nagaya END
       *=== H20年4月改正対応 by Yoshikawa(2008/05/16) start
            PERFORM  VARYING  IDX  FROM  1  BY  1  UNTIL  IDX  >  5
@@ -1069,7 +1111,9 @@
       *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
            PERFORM   800-SYUNOU-SET-SEC
            MOVE   WRK-KOHFTN          TO   MF110-ITBFTN
-           MOVE   WRK-YKZFTN          TO   MF110-YKZFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     MOVE   WRK-YKZFTN          TO   MF110-YKZFTN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *
       *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) start
       *     WRITE  MF110-REC
@@ -1237,12 +1281,18 @@
            MOVE  "電話番号"              TO  SC1805-HOSPTEL(1:8)
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) start
       *     MOVE  SYS-1002-TEL            TO  SC1805-HOSPTEL(9:32)
-           MOVE  WRK-HOSPTEL             TO  SC1805-HOSPTEL(9:32)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     MOVE  WRK-HOSPTEL             TO  SC1805-HOSPTEL(9:32)
+           MOVE  WRK-HOSPTEL             TO  SC1805-HOSPTEL(9:)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
       *
       *    FAX
            MOVE  "ＦＡＸ"                TO  SC1805-HOSPFAX(1:6)
-           MOVE  SYS-1002-FAX            TO  SC1805-HOSPFAX(7:30)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *     MOVE  SYS-1002-FAX            TO  SC1805-HOSPFAX(7:30)
+           MOVE  SYS-1002-FAX            TO  SC1805-HOSPFAX(7:)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *
       *    市町村コード
            MOVE  MF110-CITYCD            TO  WRK-CITYCD
@@ -1295,8 +1345,12 @@
              MOVE    WRK-HENYMDG(17:4)       TO  SC1805-TANJODD (IDX1)
       *       MOVE  WRK-HENYMDG          TO    SC1805-BIRTHDAY (IDX1)
       *　保険者番号
-             MOVE  MF110-KOHJKYSNUM(3:20)      
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *       MOVE  MF110-KOHJKYSNUM(3:20)      
+      *                                  TO    SC1805-JKYSNUM (IDX1)
+             MOVE  MF110-KOHJKYSNUM(3:17)      
                                         TO    SC1805-JKYSNUM (IDX1)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
       *　記号
              MOVE  MF110-KIGO           TO    SC1805-HKNKIGO (IDX1)
       *　番号
@@ -1811,6 +1865,9 @@
                         PERFORM  810-SEIKYU-SEC
                      END-IF
       *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
+      *=== END-IF漏れ修正 by Yoshikawa(2011/02/17) start
+                   END-IF
+      *=== END-IF漏れ修正 by Yoshikawa(2011/02/17) end
       *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) start
                  END-IF
       *=== 請求取消情報は取得しない by Yoshikawa(2008/06/06) end
@@ -2061,6 +2118,9 @@
               PERFORM 900-KOHSKY-READ-SEC
            ELSE
               MOVE    1                TO  FLG-END
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/17) start
+              PERFORM 900-KOHSKY-CLOSE-SEC
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/17) end
            END-IF
            .
        900-KOHSKY-START-EXT.
@@ -2162,10 +2222,31 @@
               END-IF
            ELSE
               MOVE    1                   TO  FLG-END
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/17) start
+              PERFORM 900-KOHSKY-CLOSE-SEC
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/17) end
            END-IF
            .
        900-KOHSKY-READ-EXT.
            EXIT.
+      *
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/17) start
+      *****************************************************************
+      *    公費請求書マスタクローズ
+      *****************************************************************
+       900-KOHSKY-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE    "tbl_kohsky"          TO  MCP-TABLE
+           MOVE    "key2"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           .
+       900-KOHSKY-CLOSE-EXT.
+           EXIT.
+      *=== 公費請求テーブルclose位置変更 by Yoshikawa(2011/02/17) end
       *
       *****************************************************************
       *    請求管理　読み込み 
