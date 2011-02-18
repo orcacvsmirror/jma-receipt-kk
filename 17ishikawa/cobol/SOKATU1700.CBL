@@ -34,6 +34,9 @@
       *                                  SPA-AREA初期化
       *  01.00.03    吉川    10/08/19    オンライン返戻対応
       *                                  特別療養費国保対応
+      *  01.00.04    吉川    11/02/17    open-cobol1.0対応
+      *                                  特別療養費印刷時の再印刷画面の
+      *                                  帳票タイトル変更
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1072,7 +1075,15 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1700.red"        TO  SPRT-PRTID
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 特別療養費の印刷タイトル変更 by Yoshikawa(2011/02/17) start
+      *     MOVE    "国保総括表"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費の印刷タイトル変更 by Yoshikawa(2011/02/17) end
            MOVE    SKT1700             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1212,8 +1223,12 @@
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/19) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"            TO  RECE10-SRYYM
-             MOVE  "999999"            TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) start
+      *       MOVE  "000000"            TO  RECE10-SRYYM
+      *       MOVE  "999999"            TO  RECE10-XXSRYYM
+             MOVE    000000            TO  RECE10-SRYYM
+             MOVE    999999            TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/17) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/19) end
       *
