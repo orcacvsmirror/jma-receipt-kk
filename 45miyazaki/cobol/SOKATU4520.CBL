@@ -31,6 +31,7 @@
       *  01.00.02    内田    07/10/06    日レセver4.0対応
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
+      *  01.00.03    吉川    11/02/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -382,7 +383,10 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *##（地方公費仕様：LNK-PRTKANRI-TERMID)
-           MOVE    "SKT4520TP"         TO  SKT4520TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) start
+      *     MOVE    "SKT4520TP"         TO  SKT4520TP-FILE-ID
+           MOVE    "SKT4520"           TO  SKT4520TP-FILE-ID
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) end
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4520TP-TERMID
       *---(01.00.02) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SKT4520TP-HOSPNUM
@@ -579,7 +583,10 @@
       *
       *    在総診・在医総チェック
            IF      RECE10-ZAITAKU  NOT =   SPACE
-               MOVE    1       TO  SKT4520TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) start
+      *         MOVE    1       TO  SKT4520TMP-ZAITAKU
+               MOVE    "1"     TO  SKT4520TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) end
            END-IF
       *
       *
@@ -1504,7 +1511,10 @@
              MOVE    2    TO    IDX1
              MOVE    1    TO    IDX2
              MOVE    1    TO    IDX3
-             MOVE   9999  TO    WRK-KOH-KEY
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) start
+      *       MOVE   9999  TO    WRK-KOH-KEY
+             MOVE   HIGH-VALUE  TO    WRK-KOH-KEY
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) end
              PERFORM    UNTIL    IDX1  >    IDX-MAX
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >    IDX-MAX
@@ -1517,7 +1527,10 @@
                  END-IF
                END-PERFORM
                MOVE  SKT4520TMP-KOH-TBL(IDX3)  TO  SORT-KOH-TBL(IDX1)
-               MOVE  9999 TO    WRK-KOH-KEY
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) start
+      *         MOVE  9999 TO    WRK-KOH-KEY
+               MOVE  HIGH-VALUE  TO    WRK-KOH-KEY
+      *=== open-cobol1.0対応 by Yoshikawa(2011/02/10) end
                ADD   1    TO    IDX1
              END-PERFORM
            END-IF
