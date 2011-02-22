@@ -26,7 +26,7 @@
                05  SKT1510TMP-SYUTURYOKU            PIC  9(01).
                05  SKT1510TMP-HKNJANUM              PIC  X(06).
                05  SKT1510TMP-ZAITAKU               PIC  X(01).
-               05  SKT1510TMP-GENMEN                PIC  X(01).
+               05  SKT1510TMP-GENMEN                PIC  X(05).
            03  SKT1510TMP-HKN-AREA  OCCURS  11.
                05  SKT1510TMP-NYUGAI-TBL OCCURS 2.
                    07  SKT1510TMP-KENSU             PIC  9(05).

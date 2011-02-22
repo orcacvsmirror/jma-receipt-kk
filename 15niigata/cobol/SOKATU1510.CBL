@@ -40,6 +40,7 @@
       *  01.00.08    吉川    10/08/04    オンライン返戻対応
       *                                  特別療養費国保対応
       *  01.00.09    吉川    10/12/06    open-cobol1.0対応
+      *  01.00.10    吉川    11/02/21    新潟県各地大雪対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -679,7 +680,10 @@
       *---(01.00.03) LINE ADD START ------------------------------------
       *    中越沖地震減免対象者は別帳票
            IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-             MOVE  "1"                   TO  SKT1510TMP-GENMEN
+      *=== 災害対応 by Yoshikawa(2011/02/21) start
+      *       MOVE  "1"                   TO  SKT1510TMP-GENMEN
+             MOVE  RECE10-ETC-YKZFTN (1)   TO  SKT1510TMP-GENMEN
+      *=== 災害対応 by Yoshikawa(2011/02/21) end
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
