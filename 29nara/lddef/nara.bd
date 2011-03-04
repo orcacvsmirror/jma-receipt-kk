@@ -4,6 +4,7 @@ arraysize	20;
 textsize	400;
 
 bind	"SEIKYU2909"	"OpenCOBOL";
+bind	"SEIKYU2911"	"OpenCOBOL";
 bind	"SOKATU2910"	"OpenCOBOL";
 bind	"SOKATU2915"	"OpenCOBOL";
 
