@@ -35,6 +35,7 @@
       *  01.00.04    門間    08/12/16    SPA-AREA初期化
       *  01.00.05    吉川    09/07/01    生年月日は頭ゼロ付きで表す
       *  01.00.06    吉川    10/12/07    open-cobol1.0対応
+      *  01.00.07    吉川    11/03/03    実診療年月が正しく表示されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -198,6 +199,9 @@
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) start
            03  WRK-GYYMM           PIC X(07).
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/07) end
+      *=== 実診診療年月の不正な値修正 by Yoshikawa(2011/03/03) start
+           03  WRK-GYYMM2          PIC X(05).
+      *=== 実診診療年月の不正な値修正 by Yoshikawa(2011/03/03) end
       *
            03  WRK-REC             PIC X(500).
            03  WRK-REC-LENGTH      PIC 9(04).
@@ -1102,19 +1106,34 @@
       *         ELSE
       *           MOVE    "00000"              TO  WRK-NUM
       *         END-IF
+      *=== 実診診療年月の不正な値修正 by Yoshikawa(2011/03/03) start
+      *           EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
+      *             WHEN  "M"
+      *               MOVE  "1"                TO  WRK-GYYMM(1:1)
+      *             WHEN  "T"
+      *               MOVE  "2"                TO  WRK-GYYMM(1:1)
+      *             WHEN  "S"
+      *               MOVE  "3"                TO  WRK-GYYMM(1:1)
+      *             WHEN  "H"
+      *               MOVE  "4"                TO  WRK-GYYMM(1:1)
+      *           END-EVALUATE
+      *           MOVE  LNK-DAY2-EDTYMD1(2:2)  TO  WRK-GYYMM(2:2)
+      *           MOVE  MF100-SRYYM(5:2)       TO  WRK-GYYMM(4:2)
+      *           MOVE  WRK-GYYMM              TO  WRK-NUM
                  EVALUATE  LNK-DAY2-EDTYMD1 (1:1)
                    WHEN  "M"
-                     MOVE  "1"                TO  WRK-GYYMM(1:1)
+                     MOVE  "1"                TO  WRK-GYYMM2(1:1)
                    WHEN  "T"
-                     MOVE  "2"                TO  WRK-GYYMM(1:1)
+                     MOVE  "2"                TO  WRK-GYYMM2(1:1)
                    WHEN  "S"
-                     MOVE  "3"                TO  WRK-GYYMM(1:1)
+                     MOVE  "3"                TO  WRK-GYYMM2(1:1)
                    WHEN  "H"
-                     MOVE  "4"                TO  WRK-GYYMM(1:1)
+                     MOVE  "4"                TO  WRK-GYYMM2(1:1)
                  END-EVALUATE
-                 MOVE  LNK-DAY2-EDTYMD1(2:2)  TO  WRK-GYYMM(2:2)
-                 MOVE  MF100-SRYYM(5:2)       TO  WRK-GYYMM(4:2)
-                 MOVE  WRK-GYYMM              TO  WRK-NUM
+                 MOVE  LNK-DAY2-EDTYMD1(2:2)  TO  WRK-GYYMM2(2:2)
+                 MOVE  MF100-SRYYM(5:2)       TO  WRK-GYYMM2(4:2)
+                 MOVE  WRK-GYYMM2             TO  WRK-NUM
+      *=== 実診診療年月の不正な値修正 by Yoshikawa(2011/03/03) end
                ELSE
                  MOVE    00000                TO  WRK-NUM
                END-IF
