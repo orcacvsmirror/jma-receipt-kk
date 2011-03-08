@@ -46,6 +46,7 @@
       *                                請求金額が正しくならないのを修正
       *  01.00.11    内田    10/11/26  前期高齢者９割該当者の
       *                                前期高齢者欄、給付割合欄の修正
+      *  01.00.12    吉川    11/03/04  診療日数が無い場合は0を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -149,6 +150,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
+      *=== 診療日数が無い場合は0を印字 by Yoshikawa(2011/03/04) start
+           03  WRK-Z2-9              PIC Z9.
+      *=== 診療日数が無い場合は0を印字 by Yoshikawa(2011/03/04) end
            03  WRK-Z7                PIC ZZZ,ZZZ.
            03  WRK-Z10               PIC ZZ,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
@@ -1110,8 +1114,12 @@
                MOVE    "◯"        TO  SC23-NYUGAIKBN1
       *
       *    日数
-               MOVE    MF100-JNISSU        TO  WRK-Z2
-               MOVE    WRK-Z2              TO  SC23-N-SRYNISSU
+      *=== 診療日数が無い場合は0を印字 by Yoshikawa(2011/03/04) start
+      *         MOVE    MF100-JNISSU        TO  WRK-Z2
+      *         MOVE    WRK-Z2              TO  SC23-N-SRYNISSU
+               MOVE    MF100-JNISSU        TO  WRK-Z2-9
+               MOVE    WRK-Z2-9            TO  SC23-N-SRYNISSU
+      *=== 診療日数が無い場合は0を印字 by Yoshikawa(2011/03/04) end
       *    入退院日セット
                MOVE    MF100-NYUINYMD  TO  WRK-SYMD
                PERFORM 31012-SEIWA-HEN-SEC
@@ -1139,8 +1147,12 @@
                END-PERFORM
       *
       *    日数
-               MOVE    MF100-JNISSU        TO  WRK-Z2
-               MOVE    WRK-Z2              TO  SC23-G-SRYNISSU
+      *=== 診療日数が無い場合は0を印字 by Yoshikawa(2011/03/04) start
+      *         MOVE    MF100-JNISSU        TO  WRK-Z2
+      *         MOVE    WRK-Z2              TO  SC23-G-SRYNISSU
+               MOVE    MF100-JNISSU        TO  WRK-Z2-9
+               MOVE    WRK-Z2-9            TO  SC23-G-SRYNISSU
+      *=== 診療日数が無い場合は0を印字 by Yoshikawa(2011/03/04) end
            END-IF
       *
       *    点数
