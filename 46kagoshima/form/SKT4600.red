@@ -91,6 +91,11 @@
         <embed object="string" length="5"/>
       </appinfo>
     </element>
+    <element name="TOKUBETU" occurs="1">
+      <appinfo>
+        <embed object="string" length="10"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU" occurs="13">
       <element name="NYUGAI-TBL" occurs="2">
         <element name="KENSU" occurs="1">
@@ -7622,10 +7627,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O259">
       <attribute name="obj_pos">
-        <point val="10.35,1.42642"/>
+        <point val="10.35,1.82642"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.35,1.02827;15.703,1.52827"/>
+        <rectangle val="10.35,1.42827;15.703,1.92827"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -7639,7 +7644,7 @@
             <real val="0.5"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.35,1.42642"/>
+            <point val="10.35,1.82642"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8202,10 +8207,10 @@
   <layer name="&#186;&#185;&#164;&#183;&#185;&#254;&#164;&#223;" visible="true">
     <object type="Embed - Text" version="0" id="O275">
       <attribute name="obj_pos">
-        <point val="6.16172,1.41248"/>
+        <point val="6.16172,1.83748"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.16172,1.01433;10.2017,1.51433"/>
+        <rectangle val="6.16172,1.43933;10.2017,1.93933"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SRYYM#</string>
@@ -8225,7 +8230,7 @@
             <real val="0.5"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.16172,1.41248"/>
+            <point val="6.16172,1.83748"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -13622,6 +13627,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O404">
+      <attribute name="obj_pos">
+        <point val="9.53771,1.125"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.53771,0.806481;11.5577,1.20648"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKUBETU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#198;&#195;&#202;&#204;&#206;&#197;&#205;&#220;&#200;&#241;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="9.53771,1.125"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
           </attribute>
         </composite>
       </attribute>
