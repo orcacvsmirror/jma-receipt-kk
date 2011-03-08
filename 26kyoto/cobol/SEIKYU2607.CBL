@@ -37,6 +37,8 @@
       *  01.00.04    吉川    09/09/03    帳票様式の変更に伴う修正
       *  01.00.05    吉川    10/08/13    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.06    吉川    11/03/02    対象公費を持つ患者がいない場合でも
+      *                                  INIファイルで印刷できるようにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -63,6 +65,14 @@
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) end
       *
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+      *    印刷設定ファイル
+           SELECT  YOBOU-FILE ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-YOBOU.
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -81,6 +91,12 @@
            03  TAISYO-DAT-KOHNUM   PIC X(03). 
            03  TAISYO-DAT-KAIGYO   PIC X(01). 
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) end
+      *
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+       FD  YOBOU-FILE.
+       01  YOBOU-REC.
+           03  YOBOU-PRINT         PIC X(01).
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
       *
 006900*    エラーファイル
        FD  RECEERR-FILE.
@@ -122,6 +138,9 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) start
            03  STS-TAISYOKOHI PIC X(02).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) end
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+           03  STS-YOBOU      PIC X(02).
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -348,7 +367,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL  FLG-END = 1
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+      *             UNTIL  FLG-END = 1
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
       *
            PERFORM 300-END-SEC
       *
@@ -646,6 +667,33 @@
       *
            CLOSE TAISYOKOHI-FILE
       *
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+      *    印刷設定ファイル読み込み
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/YOBOU.INI"        TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   YOBOU-REC
+      *
+           OPEN  INPUT  YOBOU-FILE
+      *
+           READ YOBOU-FILE NEXT
+             AT END
+               MOVE    "0"               TO  YOBOU-PRINT
+               DISPLAY "印刷区分ファイル 読み込み失敗"  
+           END-READ
+           DISPLAY "印刷区分=" YOBOU-REC
+      * 
+      *    不正なデータは0を設定
+           IF  YOBOU-PRINT  NOT =  "0" AND "1"
+              MOVE    "0"                TO  YOBOU-PRINT
+           END-IF
+      *
+           CLOSE YOBOU-FILE
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
+      *
            .
        110-INI-FILE-EXT.
            EXIT.
@@ -660,7 +708,9 @@
            CLOSE            MF100-FILE
            OPEN     I-O     MF100-FILE
       *
-           MOVE     ZERO    TO      FLG-END
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+      *     MOVE     ZERO    TO      FLG-END
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
       *
            PERFORM  2001-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
@@ -668,6 +718,9 @@
            CLOSE   MF100-FILE
       *
            IF       CNT-RECE02   >       0
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) start
+           OR       YOBOU-PRINT  =  "1"
+      *=== 印刷の可否をINIファイルで設定 by Yoshikawa(2011/03/02) end
                     PERFORM   2002-PRINT-SEC
            END-IF
            MOVE   1   TO   FLG-END
