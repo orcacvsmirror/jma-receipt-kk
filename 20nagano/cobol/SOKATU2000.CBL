@@ -41,6 +41,7 @@
       *                                  診療年月がおかしくなるのを修正
       *  01.00.08    吉川    10/10/01    オンライン返戻対応
       *                                  特別療養費国保対応
+      *  01.00.09    吉川    11/03/07    open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -809,7 +810,10 @@
            MOVE    "2"                   TO  SKT2000TMP-GOKEIKBN
       *---(01.00.02) LINE ADD START ------------------------------------
            IF  RECE10-RJNHKNNUM  NOT =  SPACE
-               MOVE  1                   TO  SKT2000TMP-RJNFLG
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         MOVE  1                   TO  SKT2000TMP-RJNFLG
+               MOVE  "1"                 TO  SKT2000TMP-RJNFLG
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -1054,7 +1058,10 @@
                IF  FLG-PRINT  NOT =  1
                  PERFORM 320-BODY-HEN-SEC
                ELSE
-                 MOVE  2  TO  KEY-OLD
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *           MOVE  2  TO  KEY-OLD
+                 MOVE  "2"  TO  KEY-OLD
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
                END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
@@ -1106,7 +1113,10 @@
       *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) end
              IF  WRK-SMM  =  1
                COMPUTE  WRK-SYY  =  WRK-SYY  -  1
-               MOVE  "12"                    TO  WRK-SMM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         MOVE  "12"                    TO  WRK-SMM
+               MOVE  12                      TO  WRK-SMM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
              ELSE
                COMPUTE  WRK-SMM  =  WRK-SMM  -  1
              END-IF

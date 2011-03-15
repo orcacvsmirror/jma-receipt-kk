@@ -37,6 +37,7 @@
       *  01.00.05    吉川    2010/08/16  返戻分が2枚以上になる場合、
       *                                  診療年月がおかしくなるのを修正
       *  01.00.06    吉川    2010/10/01  オンライン返戻対応
+      *  01.00.07    吉川    2011/03/07  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1168,7 +1169,10 @@
       *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) end
              IF  WRK-SMM  =  1
                COMPUTE  WRK-SYY  =  WRK-SYY  -  1
-               MOVE  "12"                TO  WRK-SMM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         MOVE  "12"                TO  WRK-SMM
+               MOVE  12                  TO  WRK-SMM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
              ELSE
                COMPUTE  WRK-SMM  =  WRK-SMM  -  1
              END-IF

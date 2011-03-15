@@ -33,6 +33,7 @@
       *                                  診療年月がおかしくなるのを修正
       *  01.00.03    吉川    2010/10/01  オンライン返戻対応
       *                                  特別療養費国保対応
+      *  01.00.04    吉川    2011/03/07  open-cobol1.0対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -968,7 +969,10 @@
       *=== 返戻分の診療年月の不具合修正 by Yoshikawa(2010/08/16) end
              IF  WRK-SMM  =  1
                COMPUTE  WRK-SYY  =  WRK-SYY  -  1
-               MOVE  "12"                    TO  WRK-SMM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         MOVE  "12"                    TO  WRK-SMM
+               MOVE  12                      TO  WRK-SMM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
              ELSE
                COMPUTE  WRK-SMM  =  WRK-SMM  -  1
              END-IF
@@ -1142,7 +1146,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT2050.red"       TO  SPRT-PRTID
-           MOVE    "国保請求書（入院外）"  TO  SPRT-TITLE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-TOKUBETU
+             WHEN  "1"
+               MOVE  "国保請求書（入院外）"  TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保請求書（入院外） [特別療養費]" 
+                                             TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
            MOVE    SKT2050             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1479,8 +1492,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO  RECE10-SRYYM
-             MOVE  "999999"             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *       MOVE  "000000"             TO  RECE10-SRYYM
+      *       MOVE  "999999"             TO  RECE10-XXSRYYM
+             MOVE  000000               TO  RECE10-SRYYM
+             MOVE  999999               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
       *
