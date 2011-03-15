@@ -47,6 +47,9 @@
       *  02.05.09    吉川    09/06/02    H21年5月特定疾患改正対応
       *                                  入院の後期高齢の場合保険種別が
       *                                  「1社・国」に○が付く不具合を修正
+      *  02.05.10    吉川    11/03/07    主保険＋全国公費の組合せのデータが
+      *                                  集計されないのを修正
+      *                                  生保は集計対象外とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -963,16 +966,34 @@
       *     MOVE  RECE02-JNISSU      (IDY)  TO  MF101-JNISSU
       *     MOVE  RECE02-FTNMONEY    (IDY)  TO  MF101-FTNMONEY2
       *     MOVE  RECE02-TOTALTEN    (IDY)  TO  MF101-TOTALTEN
-           MOVE  RECE02-JNISSU      (1)  TO  MF101-JNISSU
-           MOVE  RECE02-FTNMONEY    (1)  TO  MF101-FTNMONEY2
-           MOVE  RECE02-TOTALTEN    (1)  TO  MF101-TOTALTEN
-      *---(02.05.06) LINE ADD END   ------------------------------------
-      *---(02.05.04) LINE ADD START ------------------------------------
-      *    主保険の食事データを取得
-      ****2006/01/11 @@@@-BRAND  START
-      * 地方公費の食事パラメータの取得
-      *       MOVE  RECE02-SHOKUJIINF(IDY)     TO  MF101-SHOKUJIINF
-           MOVE  RECE02-SHOKUJIINF(1)      TO  MF101-SHOKUJIINF
+      *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) start
+      *     MOVE  RECE02-JNISSU      (1)  TO  MF101-JNISSU
+      *     MOVE  RECE02-FTNMONEY    (1)  TO  MF101-FTNMONEY2
+      *     MOVE  RECE02-TOTALTEN    (1)  TO  MF101-TOTALTEN
+      **---(02.05.06) LINE ADD END   ------------------------------------
+      **---(02.05.04) LINE ADD START ------------------------------------
+      **    主保険の食事データを取得
+      *****2006/01/11 @@@@-BRAND  START
+      ** 地方公費の食事パラメータの取得
+      **       MOVE  RECE02-SHOKUJIINF(IDY)     TO  MF101-SHOKUJIINF
+      *     MOVE  RECE02-SHOKUJIINF(1)      TO  MF101-SHOKUJIINF
+           PERFORM  900-SEIKYU-READ-SEC
+      *    生保は主保険＋福祉のみのデータを取得
+           IF  RECE10-KOHNUM(1)  =  "012"
+           OR  RECE10-KOHNUM(2)  =  "012"
+           OR  RECE10-KOHNUM(3)  =  "012"
+           OR  RECE10-KOHNUM(4)  =  "012"
+             MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
+             MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
+             MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
+             MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+           ELSE
+             MOVE  RECE10-JNISSU(1)        TO  MF101-JNISSU
+             MOVE  RECE10-FTNMONEY(1)      TO  MF101-FTNMONEY2
+             MOVE  RECE10-TOTALTEN(1)      TO  MF101-TOTALTEN
+             MOVE  RECE10-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+           END-IF
+      *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) end
       ****2006/01/11 @@@@-BRAND  END
       *---(02.05.04) LINE ADD END   ------------------------------------
       *
@@ -986,24 +1007,30 @@
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     2  OR
                       RECE10-KOHNUM(IDX)  =  SPACE
-               MOVE    RECE10-JNISSU(IDX + 1)     TO  MF101-ENISSU(IDX)
-               MOVE    RECE10-TOTALTEN(IDX + 1)   TO  MF101-ETENSU(IDX)
-               MOVE    RECE10-FTNMONEY(IDX + 1)   TO  MF101-EITBFTN(IDX)
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) start
+               IF  RECE10-KOHNUM(IDX)  NOT =  "012"
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) end
+                 MOVE    RECE10-JNISSU(IDX + 1)   TO  MF101-ENISSU(IDX)
+                 MOVE    RECE10-TOTALTEN(IDX + 1) TO  MF101-ETENSU(IDX)
+                 MOVE    RECE10-FTNMONEY(IDX + 1) TO  MF101-EITBFTN(IDX)
       ****2006/01/26 onuki add.
       *食事日数
-	       MOVE    RECE10-SHOKUJINISSU(IDX + 1)
-	                               TO  MF101-E-SHOKUJINISSU(IDX)
+                 MOVE    RECE10-SHOKUJINISSU(IDX + 1)
+                                     TO  MF101-E-SHOKUJINISSU(IDX)
       *食事療養日
-	       MOVE    RECE10-SHOKUJIRYOYOHI(IDX + 1)
-	                               TO  MF101-E-SHOKUJIRYOYOHI(IDX)
-      *食事標準負担額	   
-	       MOVE    RECE10-SHOKUJIFTN(IDX + 1)
-	                               TO  MF101-E-SHOKUJIFTN(IDX)
+                 MOVE    RECE10-SHOKUJIRYOYOHI(IDX + 1)
+                                     TO  MF101-E-SHOKUJIRYOYOHI(IDX)
+      *食事標準負担額
+                 MOVE    RECE10-SHOKUJIFTN(IDX + 1)
+                                     TO  MF101-E-SHOKUJIFTN(IDX)
       *
-               MOVE    RECE10-KOHNUM(IDX)         TO  WRK-KOHNUM
-               PERFORM 930-PTKOHINF-SET-SEC
-               MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
-               MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
+                 MOVE    RECE10-KOHNUM(IDX)         TO  WRK-KOHNUM
+                 PERFORM 930-PTKOHINF-SET-SEC
+                 MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
+                 MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) start
+               END-IF
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) end
              END-PERFORM
       *=== 特記事項印字修正 by Yoshikawa(2008/06/03) start
       *特記事項

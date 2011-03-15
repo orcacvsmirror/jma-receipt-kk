@@ -40,6 +40,10 @@
       *  01.00.06    内田    2009/02/24    食事療養費等は０円なら０と記録する
       *  01.00.07    吉川    2010/09/27    市町村番号が「000」の場合、
       *                                    件数が正しくならないのを修正
+      *  01.00.08    吉川    2011/03/07    主保険＋全国公費の組合せのデータが
+      *                                    集計されないのを修正
+      *                                    生保は集計対象外とするように修正
+      *                                    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -192,12 +196,15 @@
                05  WRK-TOKKI             PIC X(02).
                05  WRK-TOWN              PIC 9(03).
                05  WRK-CHK-SRYYM         PIC 9(06).
-               05  WRK-HKNJACVS          PIC 9(08).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         05  WRK-HKNJACVS          PIC 9(08).
+               05  WRK-HKNJACVS          PIC X(08).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
                05  WRK-MOJIST            PIC 9(03).
                05  WRK-MOJIED            PIC 9(03).
                05  WRK-RATE              PIC 9(02).
                05  WRK-MOJIHEN           PIC 9(10).
-     *
+      *
                05  WRK-JNISSU            PIC X(03).
                05  WRK-EJNISSU1          PIC X(03).
                05  WRK-EJNISSU2          PIC X(03).
@@ -622,13 +629,35 @@
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF101-KOHINF
            COMPUTE  IDY  =  IDZ  +  1
       *    保険のデータ取得
-           MOVE  RECE02-JNISSU      (1)    TO  MF101-JNISSU
-           MOVE  RECE02-FTNMONEY    (1)    TO  MF101-FTNMONEY2
-           MOVE  RECE02-TOTALTEN    (1)    TO  MF101-TOTALTEN
-           MOVE  RECE02-SHOKUJIINF  (1)    TO  MF101-SHOKUJIINF
+      *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) start
+      *     MOVE  RECE02-JNISSU      (1)    TO  MF101-JNISSU
+      *     MOVE  RECE02-FTNMONEY    (1)    TO  MF101-FTNMONEY2
+      *     MOVE  RECE02-TOTALTEN    (1)    TO  MF101-TOTALTEN
+      *     MOVE  RECE02-SHOKUJIINF  (1)    TO  MF101-SHOKUJIINF
+      *    生保は主保険＋福祉のみのデータを取得
+           PERFORM  900-SEIKYU-READ-SEC
+           IF  RECE10-KOHNUM(1)  =  "012"
+           OR  RECE10-KOHNUM(2)  =  "012"
+           OR  RECE10-KOHNUM(3)  =  "012"
+           OR  RECE10-KOHNUM(4)  =  "012"
+             MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
+             MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
+             MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
+             MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+           ELSE
+             MOVE  RECE10-JNISSU(1)        TO  MF101-JNISSU
+             MOVE  RECE10-FTNMONEY(1)      TO  MF101-FTNMONEY2
+             MOVE  RECE10-TOTALTEN(1)      TO  MF101-TOTALTEN
+             MOVE  RECE10-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+           END-IF
+      *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) end
       *
       *    正しい市町村番号か
            IF  RECE02-KOHFTNJANUM(IDZ)(1:3)  >  150
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+           OR  RECE02-KOHFTNJANUM(IDZ)  =  SPACE
+               MOVE  ZERO  TO  CNT-RECE02
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
                MOVE    "不明な負担者番号です。患者番号："
                                          TO  WRK-RECEERR
                MOVE  RECE02-PTNUM        TO  WRK-RECEERR(33:)
@@ -672,25 +701,31 @@
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     2  OR
                       RECE10-KOHNUM(IDX)  =  SPACE
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) start
+               IF  RECE10-KOHNUM(IDX)  NOT =  "012"
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) end
       *---(01.00.01) LINE ADD START ------------------------------------
-               MOVE    RECE10-KOHNUM(IDX)         TO  MF101-EKOHNUM(IDX)
+                 MOVE    RECE10-KOHNUM(IDX)       TO  MF101-EKOHNUM(IDX)
       *---(01.00.01) LINE ADD END   ------------------------------------
-               MOVE    RECE10-JNISSU(IDX + 1)     TO  MF101-ENISSU(IDX)
-               MOVE    RECE10-TOTALTEN(IDX + 1)   TO  MF101-ETENSU(IDX)
-               MOVE    RECE10-FTNMONEY(IDX + 1)   TO  MF101-EITBFTN(IDX)
+                 MOVE    RECE10-JNISSU(IDX + 1)   TO  MF101-ENISSU(IDX)
+                 MOVE    RECE10-TOTALTEN(IDX + 1) TO  MF101-ETENSU(IDX)
+                 MOVE    RECE10-FTNMONEY(IDX + 1) TO  MF101-EITBFTN(IDX)
       *食事日数
-	       MOVE    RECE10-SHOKUJINISSU(IDX + 1)
-	                               TO  MF101-E-SHOKUJINISSU(IDX)
+                 MOVE    RECE10-SHOKUJINISSU(IDX + 1)
+                                     TO  MF101-E-SHOKUJINISSU(IDX)
       *食事療養日
-	       MOVE    RECE10-SHOKUJIRYOYOHI(IDX + 1)
-	                               TO  MF101-E-SHOKUJIRYOYOHI(IDX)
-      *食事標準負担額	   
-	       MOVE    RECE10-SHOKUJIFTN(IDX + 1)
-	                               TO  MF101-E-SHOKUJIFTN(IDX)
-               MOVE    RECE10-KOHNUM(IDX)         TO  WRK-KOHNUM
-               PERFORM 930-PTKOHINF-SET-SEC
-               MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
-               MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
+                 MOVE    RECE10-SHOKUJIRYOYOHI(IDX + 1)
+                                     TO  MF101-E-SHOKUJIRYOYOHI(IDX)
+      *食事標準負担額
+                 MOVE    RECE10-SHOKUJIFTN(IDX + 1)
+                                     TO  MF101-E-SHOKUJIFTN(IDX)
+                 MOVE    RECE10-KOHNUM(IDX)         TO  WRK-KOHNUM
+                 PERFORM 930-PTKOHINF-SET-SEC
+                 MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
+                 MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) start
+               END-IF
+      *=== 生保は集計対象外 by Yoshikawa(2011/03/07) end
              END-PERFORM
       *    特記事項
              PERFORM  VARYING  IDX  FROM  1  BY  1
@@ -838,7 +873,7 @@
       *
            PERFORM  VARYING  IDX3  FROM  1  BY  1
                     UNTIL    FLG-PRINT   =  1
-      *   　  ＣＳＶ<総括>処理
+      *       ＣＳＶ<総括>処理
               PERFORM  331-CSVSOKATU-HEN-SEC
       *
               PERFORM  UNTIL  MF101-KOHFTNJANUM(1:3) NOT  =  WRK-TOWN
@@ -951,7 +986,10 @@
            IF  SYS-1001-HOSPSBT1  =  1
                MOVE  MF101-SRYKA           TO  WRK-NUM
            ELSE
-               MOVE  "00"                  TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         MOVE  "00"                  TO  WRK-NUM
+               MOVE  00                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
@@ -993,7 +1031,10 @@
       *    レセプト
       *
       *    レコード区分
-           MOVE    "3"                     TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *     MOVE    "3"                     TO  WRK-NUM
+           MOVE    3                       TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -1092,14 +1133,24 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    １２．給付割合
-           EVALUATE  TRUE
-             WHEN  MF101-KYURATE  =  "030"
-               MOVE  "70"      TO       WRK-RATE
-             WHEN  MF101-KYURATE  =  "020"
-               MOVE  "80"      TO       WRK-RATE
-             WHEN  MF101-KYURATE  =  "010"
-               MOVE  "90"      TO       WRK-RATE
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *     EVALUATE  TRUE
+      *       WHEN  MF101-KYURATE  =  "030"
+      *         MOVE  "70"      TO       WRK-RATE
+      *       WHEN  MF101-KYURATE  =  "020"
+      *         MOVE  "80"      TO       WRK-RATE
+      *       WHEN  MF101-KYURATE  =  "010"
+      *         MOVE  "90"      TO       WRK-RATE
+      *     END-EVALUATE
+           EVALUATE  MF101-KYURATE
+             WHEN  30
+               MOVE  70        TO  WRK-RATE
+             WHEN  20
+               MOVE  80        TO  WRK-RATE
+             WHEN  10
+               MOVE  90        TO  WRK-RATE
            END-EVALUATE
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
            MOVE    WRK-RATE                TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
@@ -1379,7 +1430,10 @@
       *    合計
       *
       *    レコード区分
-           MOVE    "8"                     TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *     MOVE    "8"                     TO  WRK-NUM
+           MOVE    8                       TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -1423,7 +1477,10 @@
       *　　トレーラ
       *
       *    レコード区分
-           MOVE    "9"                     TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *     MOVE    "9"                     TO  WRK-NUM
+           MOVE    9                       TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
@@ -1570,6 +1627,9 @@
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+                                   SPA-AREA
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
       *
            PERFORM 900-DBDISCONNECT-SEC
            .
@@ -1720,7 +1780,6 @@
       *****************************************************************
       *    公費請求マスタCLOSE
       *****************************************************************
-
        900-KOHSKY-CLOSE-SEC           SECTION.
       *
            MOVE    "DBCLOSECURSOR"       TO  MCP-FUNC
@@ -1857,11 +1916,11 @@
       * 主保険の食事療養費情報から食事療養費、標準負担額を取得
       * ※全国公費分がある場合に限り取得しているため、主保険で代用
                  ADD  SYU-SYUSKJ-NISSU
-		                    TO  WRK-ETC-SKJ-NISSU(IDY)
+                           TO  WRK-ETC-SKJ-NISSU(IDY)
                  ADD  SYU-SYUSKJ-RYOYOHI
-		                    TO  WRK-ETC-SKJ-RYOYOHI(IDY)
+                           TO  WRK-ETC-SKJ-RYOYOHI(IDY)
                  ADD  SYU-SYUSKJ-FTN
-		                    TO  WRK-ETC-SKJ-FTN(IDY)
+                           TO  WRK-ETC-SKJ-FTN(IDY)
                END-IF
       *
                IF  SYU-KOH-HKNNUM(IDX) = "972"
