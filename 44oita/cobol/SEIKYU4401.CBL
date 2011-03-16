@@ -46,6 +46,8 @@
       *                                    限度額認定証を持っていない場合
       *                                    適用区分は「Ｄ」とする
       *                                    open-cobol1.0対応
+      *  01.00.09     吉川     11/03/14    佐伯市と姫島村の場合は、
+      *                                    一部負担金欄は0と記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -152,6 +154,9 @@
            03  WRK-Z4              PIC ZZZZ.
       *--- (2008/12/02) line add end   monma ---------------------------
            03  WRK-Z6              PIC ZZ,ZZZ.
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) start
+           03  WRK-Z6-9            PIC ZZ,ZZ9.
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) end
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
            03  WRK-SRYYMWH         PIC X(16).
@@ -291,6 +296,12 @@
       *        国東
                05  CONS-KUNISAKI-FTN   PIC X(02)  VALUE  "17".
                05  CONS-KUNISAKI-CITY  PIC X(03)  VALUE  "103".
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) start
+      *        佐伯市
+               05  CONS-SAIKI-CITYNUM  PIC X(02)  VALUE  "05".
+      *        姫島村
+               05  CONS-HIMESHIMA-CITYNUM  PIC X(02)  VALUE  "16".
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) end
       *=== 豊後大野市等の市町村名取得 by Yoshikawa(2009/07/03) end
       *
       *    DB参照用
@@ -922,6 +933,14 @@
            END-IF
       *=== 帳票様式の変更に伴う修正 by Yoshikawa(2010/10/12) end
       *
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) start
+      *    佐伯市、姫島村は自己負担はゼロ
+           IF  MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM
+                                   OR  CONS-HIMESHIMA-CITYNUM
+             MOVE    ZERO                      TO  MF100-FTNMONEY
+           END-IF
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) end
+      *
            WRITE   MF100-REC
       * 
            .
@@ -1148,8 +1167,19 @@
                MOVE    WRK-Z2              TO  SC01-NNISSU(IDX)
       *
       *        乳幼児−一部負担額
-               MOVE    MF100-FTNMONEY      TO  WRK-Z6
-               MOVE    WRK-Z6              TO  SC01-NYUFTNGK(IDX)
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) start
+               IF  (MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM
+                                        OR  CONS-HIMESHIMA-CITYNUM)
+               AND (MF100-FTNMONEY  =  ZERO)
+                 MOVE    MF100-FTNMONEY    TO  WRK-Z6-9
+                 MOVE    WRK-Z6-9          TO  SC01-NYUFTNGK(IDX)
+               ELSE
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) end
+                 MOVE    MF100-FTNMONEY    TO  WRK-Z6
+                 MOVE    WRK-Z6            TO  SC01-NYUFTNGK(IDX)
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) start
+               END-IF
+      *=== 佐伯市等は一部負担金は0 by Yoshikawa(2011/03/14) end
       *
       *        市町村負担額
                COMPUTE  WRK-ITBFTN = MF100-KOHFTNGK + MF100-KOHITBFTN
