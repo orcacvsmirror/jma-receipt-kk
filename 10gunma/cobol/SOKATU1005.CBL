@@ -33,6 +33,7 @@
       *                                  処理名等を「後期高齢者総括表」へ変更
       *  01.00.03    吉川    10/03/01    広域連合の保険者番号指定対応
       *  01.00.04    吉川    10/07/15    オンライン返戻対応
+      *  01.00.05    吉川    11/03/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -546,9 +547,14 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *    群馬県を優先
            IF  RECE10-HKNJANUM (3:2)  =  "10"
-               MOVE  1                  TO  SKT1005TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *         MOVE  1                  TO  SKT1005TMP-SYUTURYOKU
+      *     ELSE
+      *         MOVE  2                  TO  SKT1005TMP-SYUTURYOKU
+               MOVE  "1"                TO  SKT1005TMP-SYUTURYOKU
            ELSE
-               MOVE  2                  TO  SKT1005TMP-SYUTURYOKU
+               MOVE  "2"                TO  SKT1005TMP-SYUTURYOKU
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *

@@ -38,6 +38,7 @@
       *  01.00.07    内田     08/06/18    国保がない場合でも印字する
       *  01.00.08    内田     08/09/09    SPA-AREA初期化
       *  01.00.09    吉川     10/04/07    オンライン返戻対応
+      *  01.00.10    吉川     11/03/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1688,8 +1689,12 @@
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
       *---(01.00.03) LINE ADD START ------------------------------------
            IF  WRK-PARA-TOKUBETU  =  2
-             MOVE    "000000"          TO  RECE10-SRYYM
-             MOVE    "999999"          TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/03/10) start
+      *       MOVE    "000000"          TO  RECE10-SRYYM
+      *       MOVE    "999999"          TO  RECE10-XXSRYYM
+             MOVE    000000            TO  RECE10-SRYYM
+             MOVE    999999            TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2010/03/10) end
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE    RECE10-REC          TO  MCPDATA-REC

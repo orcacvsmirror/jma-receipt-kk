@@ -22,6 +22,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/08/25  SKT1000TMP-TYOKI追加
+      *  01.00.02    吉川    2011/03/10  KBNを数値から文字に変更
       ************************************************************
        01  SKT1000TMP-REC.
            03  SKT1000TMP-KEY.
@@ -33,7 +34,10 @@
                05  SKT1000TMP-ZAITAKU        PIC  X(01).
                05  SKT1000TMP-SYUBETU        PIC  9(01).
                05  SKT1000TMP-JYUNJO         PIC  9(02).
-               05  SKT1000TMP-KBN            PIC  9(01).
+      *=== 数値から文字に変更 by Yoshikawa(2011/03/10) start
+      *         05  SKT1000TMP-KBN            PIC  9(01).
+               05  SKT1000TMP-KBN            PIC  X(01).
+      *=== 数値から文字に変更 by Yoshikawa(2011/03/10) end
                05  SKT1000TMP-KYURATE        PIC  9(02).
            03  SKT1000TMP-DATA.
                05  SKT1000TMP-KENSU          PIC  9(06).

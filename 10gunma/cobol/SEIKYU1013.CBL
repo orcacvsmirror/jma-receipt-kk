@@ -45,6 +45,7 @@
       *                                  達していない場合でも「特」とする
       *  01.00.05    吉川    2010/09/29  福祉請求点数に記載する条件を変更
       *  01.00.06    吉川    2010/10/04  請求額の計算方法変更
+      *  01.00.07    吉川    2011/03/10  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -224,8 +225,10 @@
            03  WRK-HENSHU.
                05  WRK-SOUGOKEIKENSU      PIC 9(07).
       *
-               05  WRK-RATE               PIC 9(02).
-               05  WRK-MOJIHEN            PIC 9(10).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *         05  WRK-RATE               PIC 9(02).
+      *         05  WRK-MOJIHEN            PIC 9(10).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
       *
                05  WRK-RECENO             PIC 9(05).
                05  WRK-RECEHKNSHU         PIC 9(01).
@@ -282,7 +285,9 @@
       *    パラメータファイル名
            03  FILE-NAME                  PIC X(512).
       *
-           03  WRK-PATH                   PIC  X(50).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *     03  WRK-PATH                   PIC  X(50).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME               PIC X(100).
@@ -801,7 +806,13 @@
            END-IF
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
       *    請求管理より、保険使用時情報取得
-           MOVE  RECE10-KOHINF             TO  WRK-KOHINF
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *     MOVE  RECE10-KOHINF             TO  WRK-KOHINF
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  4
+             MOVE  RECE10-KOHINF(IDX)      TO  WRK-KOHINF(IDX)
+           END-PERFORM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *
       *    請求管理情報より、他公費情報取得
@@ -1884,7 +1895,10 @@
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF
@@ -1895,7 +1909,10 @@
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF
@@ -1918,7 +1935,10 @@
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF
@@ -1929,7 +1949,10 @@
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF
@@ -1945,7 +1968,10 @@
              MOVE  4                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
              MOVE  4                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF
@@ -1971,7 +1997,10 @@
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
-             MOVE  SPACE                   TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  SPACE                   TO  WRK-NUM
+             MOVE  ZERO                    TO  WRK-NUM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
            END-IF

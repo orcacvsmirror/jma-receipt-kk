@@ -58,6 +58,7 @@
       *  01.00.15    吉川    10/08/25    「特」欄の該当公費の上限額に
       *                                  達していない場合でも「特」とする
       *  01.00.16    吉川    10/10/04    請求額の計算方法変更
+      *  01.00.17    吉川    11/03/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -774,7 +775,13 @@
       *    請求管理より、保険使用時情報取得
            PERFORM  900-SEIKYU-SELECT-SEC
            MOVE  RECE10-TOTALTEN(1)        TO  MF100-H-TOTALTEN
-           MOVE  RECE10-KOHINF             TO  WRK-KOHINF
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *     MOVE  RECE10-KOHINF             TO  WRK-KOHINF
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  4
+             MOVE  RECE10-KOHINF(IDX)      TO  WRK-KOHINF(IDX)
+           END-PERFORM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *
       *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/28) start

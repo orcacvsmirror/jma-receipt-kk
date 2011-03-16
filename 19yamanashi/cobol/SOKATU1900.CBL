@@ -47,6 +47,7 @@
       *                                    印字される不具合を修正
       *  01.00.16       吉川     10/10/01  オンライン返戻対応
       *                                    特別療養費国保対応
+      *  01.00.17       吉川     11/03/10  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2085,8 +2086,12 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"               TO  RECE10-SRYYM
-             MOVE  "999999"               TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  "000000"               TO  RECE10-SRYYM
+      *       MOVE  "999999"               TO  RECE10-XXSRYYM
+             MOVE  000000                 TO  RECE10-SRYYM
+             MOVE  999999                 TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
       *

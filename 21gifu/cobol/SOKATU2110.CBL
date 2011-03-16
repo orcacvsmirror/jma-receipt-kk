@@ -44,6 +44,7 @@
       *                                      6つ目以降がまとまらない不具合を修正
       *  01.00.10       吉川     10/04/05    オンライン返戻対応
       *  01.00.11       吉川     10/10/13    特別療養費国保対応
+      *  01.00.12       吉川     11/03/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2335,7 +2336,10 @@
                                        CONS-ZAITAKU4  OR
                                        CONS-ZAITAKU5  OR
                                        CONS-ZAITAKU6
-                 MOVE  1  TO  SKT2110TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *           MOVE  1  TO  SKT2110TMP-ZAITAKU
+                 MOVE  "1"  TO  SKT2110TMP-ZAITAKU
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
                END-IF
              END-IF
            END-PERFORM
@@ -2366,8 +2370,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"                TO  RECE10-SRYYM
-             MOVE  "999999"                TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE  "000000"                TO  RECE10-SRYYM
+      *       MOVE  "999999"                TO  RECE10-XXSRYYM
+             MOVE  000000                  TO  RECE10-SRYYM
+             MOVE  999999                  TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
       *

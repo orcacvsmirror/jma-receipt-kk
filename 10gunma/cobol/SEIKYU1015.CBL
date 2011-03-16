@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2011/03/10  open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -163,7 +164,9 @@
            03  WRK-OUT-INPUT         PIC X(200).
       *
       *    パラメータファイル名
-           03  FILE-NAME        PIC X(512).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
       *
            03  WRK-PATH              PIC  X(50).
       *

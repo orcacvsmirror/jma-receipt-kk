@@ -40,6 +40,7 @@
       * 01.00.09     内田    2009/01/14    SPA-AREA初期化
       * 01.00.10     吉川    2009/08/25    長期は別帳票とする
       * 01.00.11     吉川    2010/07/15    オンライン返戻対応
+      * 01.00.12     吉川    2011/03/10    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -644,18 +645,30 @@
       *    本家入外区分
              IF  RECE10-KYURATE  =  9
                IF  RECE10-NYUGAIKBN  =  1
-                 MOVE  7  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *           MOVE  7  TO  SKT1000TMP-KBN
+                 MOVE  "7"  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
                  MOVE  1  TO  SKT1000TMP-JYUNJO
                ELSE
-                 MOVE  8  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *           MOVE  8  TO  SKT1000TMP-KBN
+                 MOVE  "8"  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
                  MOVE  2  TO  SKT1000TMP-JYUNJO
                END-IF
              ELSE
                IF  RECE10-NYUGAIKBN  =  1
-                 MOVE  9  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *           MOVE  9  TO  SKT1000TMP-KBN
+                 MOVE  "9"  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
                  MOVE  3  TO  SKT1000TMP-JYUNJO
                ELSE
-                 MOVE  0  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *           MOVE  0  TO  SKT1000TMP-KBN
+                 MOVE  "0"  TO  SKT1000TMP-KBN
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
                  MOVE  4  TO  SKT1000TMP-JYUNJO
                END-IF
              END-IF
@@ -1412,8 +1425,12 @@
       *
       *---(01.00.06) LINE ADD START ------------------------------------
            IF  WRK-PARA-TOKUBETU  =  2
-             MOVE    "000000"           TO  RECE10-SRYYM
-             MOVE    "999999"           TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
+      *       MOVE    "000000"           TO  RECE10-SRYYM
+      *       MOVE    "999999"           TO  RECE10-XXSRYYM
+             MOVE    000000             TO  RECE10-SRYYM
+             MOVE    999999             TO  RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
