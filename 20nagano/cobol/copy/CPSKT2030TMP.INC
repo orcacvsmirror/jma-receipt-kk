@@ -17,6 +17,7 @@
       ********************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者   日付        内容
+      *  01.00.01    吉川     11/03/15   東北地方太平洋沖地震対応（対象者別集計）
       ************************************************************
        01  SKT2030TMP-REC.
            03  SKT2030TMP-KEY.
@@ -24,6 +25,9 @@
                05  SKT2030TMP-HKNJANUM         PIC  X(06).
                05  SKT2030TMP-SRYYM            PIC  9(06).
                05  SKT2030TMP-ZAITAKU          PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/03/15) start
+               05  SKT2030TMP-GENMEN           PIC  X(05).
+      *=== 災害対応 by Yoshikawa(2011/03/15) end
            03  SKT2030TMP-IPAN-TBL    OCCURS  7.
                05  SKT2030TMP-KENSU            PIC  9(06).
                05  SKT2030TMP-NISSU            PIC  9(06).

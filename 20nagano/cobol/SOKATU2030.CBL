@@ -34,6 +34,7 @@
       *  01.00.03    吉川    2010/10/01  オンライン返戻対応
       *                                  特別療養費国保対応
       *  01.00.04    吉川    2011/03/07  open-cobol1.0対応
+      *  01.00.05    吉川    2011/03/15  東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -712,6 +713,13 @@
       *
       *    在宅
            MOVE    RECE10-ZAITAKU      TO  SKT2030TMP-ZAITAKU
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/15) start
+      *    災害対象者は別集計
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT2030TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/15) end
       *
            PERFORM 900-SKTTMP-READ-SEC
       *

@@ -42,6 +42,7 @@
       *                                  代表保険者番号追加(146001)
       *  01.00.07    吉川    10/10/08    再印刷時の帳票タイトル修正
       *  01.00.08    吉川    10/12/15    open-cobol1.0対応
+      *  01.00.09    吉川    11/03/15    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -791,6 +792,14 @@
              PERFORM  960-SRYACT-SET-SEC
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/15) start
+      *    災害対象者は別集計
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1310TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/15) end
+      *
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
