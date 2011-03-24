@@ -40,6 +40,8 @@
       *  01.00.07    吉川    08/09/09    SPA-AREA初期化
       *  01.00.08    吉川    09/11/05    特別療養費国保対応
       *  01.00.09    吉川    10/07/02    オンライン返戻対応
+      *  01.00.10    吉川    11/03/08    open-cobol1.0対応
+      *  01.00.11    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -647,6 +649,13 @@
            ELSE
              MOVE        2          TO   SKT0610TMP-SYUTURYOKU
            END-IF
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0610TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
            PERFORM  220-HKN-SYUKEI-SEC
@@ -1374,8 +1383,12 @@
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) start
            IF  WRK-PARA-TOKUBETU  =  "2"
-             MOVE  "000000"             TO    RECE10-SRYYM
-             MOVE  "999999"             TO    RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *       MOVE  "000000"             TO    RECE10-SRYYM
+      *       MOVE  "999999"             TO    RECE10-XXSRYYM
+             MOVE  000000               TO    RECE10-SRYYM
+             MOVE  999999               TO    RECE10-XXSRYYM
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       *
