@@ -56,6 +56,8 @@
       *  01.00.15    等李    10/08/13    滦据给锐戎规をINIファイルから
       *                                  艰评するようにする
       *  01.00.16    等李    10/11/24    open-cobol1.0滦炳
+      *  01.00.17    等李    11/03/18    75盒毗茫奉で给锐尸吹荚砷么驰が
+      *                                  磅机されない稍恶圭を饯赖
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -966,6 +968,9 @@
                 MOVE  RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
             ELSE
               IF   RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
+      *=== 75盒毗茫奉の给锐砷么驰腕の饯赖 by Yoshikawa(2011/03/18) start
+              AND  RECE02-FTNMONEY(1)  >  ZERO
+      *=== 75盒毗茫奉の给锐砷么驰腕の饯赖 by Yoshikawa(2011/03/18) end
               AND  MF100-ETCKOHFTN     NOT = ZERO
                 MOVE  RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
               END-IF
