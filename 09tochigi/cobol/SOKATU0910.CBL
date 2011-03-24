@@ -40,6 +40,7 @@
       *  01.00.07      吉川   11/02/17    open-cobol1.0対応
       *                                   特別療養費印刷時の再印刷画面の
       *                                   帳票タイトル変更
+      *  01.00.08      吉川   11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -754,6 +755,12 @@
            END-IF
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) end
       *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0910TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

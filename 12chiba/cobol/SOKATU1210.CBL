@@ -47,6 +47,7 @@
       *  01.00.13    吉川    10/08/03    オンライン返戻対応
       *  01.00.14    吉川    10/09/10    公費欄に長期の点数と負担金を記載する
       *  01.00.15    吉川    10/12/03    open-cobol1.0対応
+      *  01.00.16    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -873,6 +874,13 @@
       *
       *    在宅・在医総
            MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1210TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

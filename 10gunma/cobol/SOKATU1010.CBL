@@ -46,6 +46,7 @@
       *  01.00.11    吉川    09/08/25    長期は別帳票とする
       *  01.00.12    吉川    10/07/15    オンライン返戻対応
       *  01.00.13    吉川    11/03/10    open-cobol1.0対応
+      *  01.00.14    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -672,6 +673,13 @@
       *
       *    県内・県外区分
            MOVE     RECE10-PREFKBN   TO  SKT1010TMP-PREFKBN
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1010TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

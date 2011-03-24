@@ -19,13 +19,17 @@
       *    診療報酬請求書     COPY (CPSKT0610TMP.INC)            *
       *
       *  コピー句修正履歴
-      * Maj/Min/Rev  修正者       日付      内容
+      * Maj/Min/Rev  修正者   日付       内容
+      *  01.00.01    吉川     11/03/24   東北地方太平洋沖地震対応（対象者別集計）
       ************************************************************
        01  SKT0610TMP-REC.
            03      SKT0610TMP-KEY.
              05    SKT0610TMP-SYUTURYOKU            PIC  9(01).
              05    SKT0610TMP-HKNJANUM              PIC  X(06).
              05    SKT0610TMP-NYUGAIKBN             PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+             05    SKT0610TMP-GENMEN                PIC  X(05).
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
            03      SKT0610TMP-DATA.
              05    SKT0610TMP-SEIKYU-TBL            OCCURS    13.
                07  SKT0610TMP-KENSU                 PIC  9(06).

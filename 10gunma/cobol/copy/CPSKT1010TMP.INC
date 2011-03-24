@@ -24,6 +24,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/08/25  SKT1010TMP-TYOKI追加
+      *  01.00.02    吉川    2011/03/24  東北地方太平洋沖地震対応（対象者別集計）
       ************************************************************
        01  SKT1010TMP-REC.
            03  SKT1010TMP-KEY.
@@ -34,6 +35,9 @@
                05  SKT1010TMP-SRYYM          PIC  9(06).
                05  SKT1010TMP-PREFKBN        PIC  X(01).
                05  SKT1010TMP-TYOKI          PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+               05  SKT1010TMP-GENMEN         PIC  X(05).
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
            03  SKT1010TMP-KYURATE            PIC  9(02).
            03  SKT1010TMP-FLG1               PIC  9(01).
            03  SKT1010TMP-FLG2               PIC  9(01).

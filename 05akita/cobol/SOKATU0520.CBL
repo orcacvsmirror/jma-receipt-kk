@@ -39,6 +39,7 @@
       *  01.00.06    内田    09/04/02    点数表区分追加
       *  01.00.07    吉川    10/07/01    オンライン返戻対応
       *  01.00.08    吉川    10/07/28    食事療養を記載しない公費の追加
+      *  01.00.09    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -685,6 +686,13 @@
                END-IF
            END-IF
       *=== 国組3〜6歳は分けない by Yoshikawa(2008/10/22) end
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0520TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

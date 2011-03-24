@@ -50,6 +50,7 @@
       *                                 地方公費記載設定対応
       *  01.00.16    吉川    10/08/03   オンライン返戻対応
       *  01.00.17    吉川    10/11/25   open-cobol1.0対応
+      *  01.00.18    吉川    11/03/24   東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -822,6 +823,13 @@
                    MOVE    3       TO  SKT1110TMP-SYUTURYOKU
                END-IF
            END-IF
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1110TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  800-SKTTMP-READ-SEC
       *

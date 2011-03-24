@@ -22,6 +22,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/07/07  H20年4月改正前は旧様式で印字
       *  01.00.02    吉川    2008/10/09  公費名追加
+      *  01.00.03    吉川    2011/03/24  東北地方太平洋沖地震対応（対象者別集計）
       ************************************************************
        01  SKT0910TMP-REC.
            03  SKT0910TMP-KEY.
@@ -30,6 +31,9 @@
                05  SKT0910TMP-KBN                   PIC  X(04).
                05  SKT0910TMP-PREFKBN               PIC  X(01).
                05  SKT0910TMP-ZAITAKU               PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+               05  SKT0910TMP-GENMEN                PIC  X(05).
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *=== H20年4月改正前は旧様式 by Yoshikawa(2008/07/07) start
       *     03  SKT0910TMP-HKN-AREA  OCCURS  7.
            03  SKT0910TMP-HKN-AREA  OCCURS  11.

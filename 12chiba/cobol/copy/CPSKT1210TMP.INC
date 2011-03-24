@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付      内容
       *  01.00.01    吉川    08/10/10  シス管「2007」公費まとめ対応
+      *  01.00.02    吉川    11/03/24  東北地方太平洋沖地震対応（対象者別集計）
       ************************************************************
        01  SKT1210TMP-REC.
            03  SKT1210TMP-KEY.
@@ -32,6 +33,9 @@
                05  SKT1210TMP-RECEKA               PIC  X(02).
       ***** 08/01/09 ADD
                05  SKT1210TMP-ZAITAKU              PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+               05  SKT1210TMP-GENMEN               PIC  X(05).
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
                05  SKT1210TMP-SRYYM                PIC  9(06).
            03  SKT1210TMP-SEIKYU-TBL     OCCURS  11.
                05  SKT1210TMP-KENSU                PIC  9(06).

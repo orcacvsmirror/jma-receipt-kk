@@ -47,6 +47,7 @@
       *                                   6つ目以降がまとまらない不具合を修正
       *  01.00.11    吉川    2010/06/17   オンライン返戻対応
       *  01.00.12    吉川    2010/09/14   返戻の場合旧帳票が印字されるのを修正
+      *  01.00.13    吉川    2011/03/24   東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -708,6 +709,13 @@
                MOVE      3          TO   SKT0210TMP-SYUTURYOKU
              END-IF
            END-IF
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0210TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

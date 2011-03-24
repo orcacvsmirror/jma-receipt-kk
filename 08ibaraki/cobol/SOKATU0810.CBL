@@ -49,6 +49,7 @@
       *  01.00.14    吉川   10/10/15    シス管「2010」の公費再掲欄への
       *                                 地方公費記載設定対応
       *  01.00.15    吉川   11/01/11    特別療養費国保対応
+      *  01.00.16    吉川   11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -911,6 +912,13 @@
                MOVE  RECE10-SRYYM          TO  SKT0810TMP-SRYYM
            END-IF
       *---(01.00.08) LINE ADD END   ------------------------------------
+      *
+      *=== 災害対応 by Yoshikawa(2011/03/24) start
+      *    災害対象者は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0810TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
