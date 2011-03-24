@@ -41,6 +41,7 @@
       *  01.00.07    内田    08/06/04    帳票様式の変更に伴う修正
       *  01.00.08    吉川    08/09/09    SPA-AREA初期化
       *  01.00.09    吉川    10/03/08    保険点数欄は公費合計点数を印字する
+      *  01.00.10    吉川    11/03/07    open-cobol1.0対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -821,8 +822,12 @@
                MOVE    RECE10-FTNMONEY(IDX + 1)   TO  MF101-EITBFTN(IDX)
                MOVE    RECE10-KOHNUM(IDX)         TO  WRK-KOHNUM
       *---(01.00.04) LINE ADD START ------------------------------------
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *         MOVE    RECE10-SHOKUJIINF(IDX + 1)
+      *                                     TO  MF101-ESHOKUJIINF
                MOVE    RECE10-SHOKUJIINF(IDX + 1)
-                                           TO  MF101-ESHOKUJIINF
+                                           TO  MF101-ESHOKUJIINF(IDX)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
       *---(01.00.04) LINE ADD END   ------------------------------------
                PERFORM 930-PTKOHINF-SET-SEC
                MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
@@ -2071,20 +2076,36 @@
            MOVE    WRK-Z9                  TO  SC10-SKJFTN(1)
       *
            IF  MF101-ESHOKUJINISSU (1)  NOT =  ZERO
-             MOVE    MF101-ESHOKUJINISSU    TO  WRK-Z2
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *       MOVE    MF101-ESHOKUJINISSU    TO  WRK-Z2
+      *       MOVE    WRK-Z2                 TO  SC10-SNISSU(2)
+      *       MOVE    MF101-ESHOKUJIRYOYOHI  TO  WRK-Z9
+      *       MOVE    WRK-Z9                 TO  SC10-SKJRYOHOHI(2)
+      *       MOVE    MF101-ESHOKUJIFTN      TO  WRK-Z9
+      *       MOVE    WRK-Z9                 TO  SC10-SKJFTN(2)
+             MOVE    MF101-ESHOKUJINISSU(1) TO  WRK-Z2
              MOVE    WRK-Z2                 TO  SC10-SNISSU(2)
-             MOVE    MF101-ESHOKUJIRYOYOHI  TO  WRK-Z9
+             MOVE    MF101-ESHOKUJIRYOYOHI(1)  TO  WRK-Z9
              MOVE    WRK-Z9                 TO  SC10-SKJRYOHOHI(2)
-             MOVE    MF101-ESHOKUJIFTN      TO  WRK-Z9
+             MOVE    MF101-ESHOKUJIFTN(1)   TO  WRK-Z9
              MOVE    WRK-Z9                 TO  SC10-SKJFTN(2)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
            IF  MF101-ESHOKUJINISSU (2)  NOT =  ZERO
-             MOVE    MF101-ESHOKUJINISSU    TO  WRK-Z2
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) start
+      *       MOVE    MF101-ESHOKUJINISSU    TO  WRK-Z2
+      *       MOVE    WRK-Z2                 TO  SC10-SNISSU(3)
+      *       MOVE    MF101-ESHOKUJIRYOYOHI  TO  WRK-Z9
+      *       MOVE    WRK-Z9                 TO  SC10-SKJRYOHOHI(3)
+      *       MOVE    MF101-ESHOKUJIFTN      TO  WRK-Z9
+      *       MOVE    WRK-Z9                 TO  SC10-SKJFTN(3)
+             MOVE    MF101-ESHOKUJINISSU(2) TO  WRK-Z2
              MOVE    WRK-Z2                 TO  SC10-SNISSU(3)
-             MOVE    MF101-ESHOKUJIRYOYOHI  TO  WRK-Z9
+             MOVE    MF101-ESHOKUJIRYOYOHI(2)  TO  WRK-Z9
              MOVE    WRK-Z9                 TO  SC10-SKJRYOHOHI(3)
-             MOVE    MF101-ESHOKUJIFTN      TO  WRK-Z9
+             MOVE    MF101-ESHOKUJIFTN(2)   TO  WRK-Z9
              MOVE    WRK-Z9                 TO  SC10-SKJFTN(3)
+      *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
       *
       *    傷病名編集処理
