@@ -107,6 +107,11 @@
         </appinfo>
       </element>
     </element>
+    <element name="GENMEN" occurs="1">
+      <appinfo>
+        <embed object="string" length="12"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -9150,6 +9155,48 @@
           </attribute>
           <attribute name="alignment">
             <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O285">
+      <attribute name="obj_pos">
+        <point val="2.12014,2.65018"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="2.12014,2.41129;3.93814,2.71129"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#GENMEN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#202;&#204;&#164;&#179;&#206;&#196;&#234;&#202;&#172;&#161;&#203;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="2.12014,2.65018"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.1818"/>

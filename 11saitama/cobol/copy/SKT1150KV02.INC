@@ -35,3 +35,6 @@
             02  HCM2KV02-SEIDONAME
                     PIC X(8)    OCCURS  5 TIMES.
       *=== H20”N10Œ‰ü³‘Î‰ by Yoshikawa(2008/10/24) start
+      *=== ĞŠQ‘Î‰ by Yoshikawa(2011/04/01) start
+            02  HCM2KV02-GENMEN PIC X(12).
+      *=== ĞŠQ‘Î‰ by Yoshikawa(2011/04/01) end

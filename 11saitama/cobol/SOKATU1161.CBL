@@ -50,6 +50,7 @@
       *                                     シス管「2007」公費まとめ対応
       *  01.01.07    吉川         08/12/15  平成20年3月以前の月遅れ分は
       *                                     旧様式で帳票を分けるように修正
+      *  01.01.08    吉川         11/04/01  東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -344,6 +345,9 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-NYUGAIKBN  PIC X(01).
            03  WRK-PARA-SYOKBN     PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+           03  WRK-PARA-GENMENKBN  PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
       *
        01  WRK-SYOKBN              PIC X(01).
       *---(01.01.04) LINE ADD START ------------------------------------
@@ -601,6 +605,15 @@
                    MOVE    "（返戻分）"  TO  HCM2K-TITLE1
            END-EVALUATE           
            DISPLAY "WRK-SYOKBN CHK END"
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+      *    災害対象者
+           EVALUATE  WRK-PARA-GENMENKBN
+             WHEN  "2"
+               MOVE    "（未確定分）"    TO  HCM2K-GENMEN
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
+      *
            .
        310-HEAD-HEN-01-EXT.
            EXIT.
@@ -626,6 +639,14 @@
                WHEN    "2"
                    MOVE    "（返戻分）"  TO  HCM2L-TITLE1
            END-EVALUATE           
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+      *    災害対象者
+           EVALUATE  WRK-PARA-GENMENKBN
+             WHEN  "2"
+               MOVE    "（未確定分）"    TO  HCM2L-GENMEN
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
       *
            .
        310-HEAD-HEN-02-EXT.

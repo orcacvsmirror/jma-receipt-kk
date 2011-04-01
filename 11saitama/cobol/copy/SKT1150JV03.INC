@@ -41,3 +41,6 @@
             02  HCM2JV03-TITLE1 PIC X(10).
             02  HCM2JV03-AVG-TBL        OCCURS  3  TIMES.
               03  HCM2JV03-AVG        PIC X(11).
+      *=== ç–äQëŒâû by Yoshikawa(2011/04/01) start
+            02  HCM2JV03-GENMEN PIC X(12).
+      *=== ç–äQëŒâû by Yoshikawa(2011/04/01) end

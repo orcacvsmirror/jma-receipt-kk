@@ -65,6 +65,7 @@
       *  01.02.14    吉川       10/02/10  公費名称はシス管「2007」の
       *                                   「表示名称２」を使用する
       *  01.02.15    吉川       10/08/03  オンライン返戻対応
+      *  01.02.16    吉川       11/04/01  東北地方太平洋沖地震対応（対象者別集計）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -168,6 +169,9 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-NYUGAIKBN  PIC X(01).
            03  WRK-PARA-SYOKBN     PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+           03  WRK-PARA-GENMENKBN  PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
       *          
       *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
            03  WRK-MEISYO          PIC X(44).
@@ -399,6 +403,9 @@
       *                                         WRK-PARA-NYUGAIKBN
       *****
                                                WRK-PARA-SYOKBN
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+                                               WRK-PARA-GENMENKBN
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
       *---(01.02.07) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.02.07) LINE ADD END   ------------------------------------
@@ -417,8 +424,18 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "ORCBM022"      TO  JOB-PGID
-           MOVE    "社保総括表（改正版）"
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+      *     MOVE    "社保総括表（改正版）"
+      *                             TO  JOB-SHELLMSG
+           EVALUATE  WRK-PARA-GENMENKBN
+             WHEN  "1" 
+               MOVE    "社保総括表（改正版）"
                                    TO  JOB-SHELLMSG
+             WHEN  "2"
+               MOVE    "未確定分・社保総括表（改正版）"
+                                   TO  JOB-SHELLMSG
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA  
                                    JOBKANRI-REC
@@ -1752,6 +1769,20 @@
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/08/03) end
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/01) start
+      *        災害対象者判定
+               EVALUATE  WRK-PARA-GENMENKBN
+                 WHEN  "1"
+                   IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+                     GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+                 WHEN  "2"
+                   IF  RECE10-ETC-YKZFTN(1)  =  ZERO
+                     GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+               END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/01) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

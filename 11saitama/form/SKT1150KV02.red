@@ -151,6 +151,11 @@
         <embed object="string" length="8"/>
       </appinfo>
     </element>
+    <element name="GENMEN" occurs="1">
+      <appinfo>
+        <embed object="string" length="12"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -21403,7 +21408,7 @@
         <point val="4.24382,20.3077"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.24382,20.0848;5.37502,20.3648"/>
+        <rectangle val="4.24382,20.0847;5.37502,20.3647"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIDONAME[3]#</string>
@@ -21478,6 +21483,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.1414"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O642">
+      <attribute name="obj_pos">
+        <point val="2.63953,4.73233"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="2.63953,4.49344;4.45753,4.79344"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#GENMEN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#202;&#204;&#164;&#179;&#206;&#196;&#234;&#202;&#172;&#161;&#203;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="2.63953,4.73233"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
           </attribute>
         </composite>
       </attribute>
