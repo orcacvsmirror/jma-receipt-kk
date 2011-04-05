@@ -43,12 +43,22 @@
       *                                  在総診とするように修正
       *  01.00.11     吉川   2010/03/11  帳票様式の変更に伴う修正
       *  01.00.12     吉川   2010/07/01  オンライン返戻対応
+      *  01.00.13     吉川   2011/04/04  東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    請求書一時ファイル
+           SELECT  SKT0300TMP-FILE ASSIGN    SKT0300TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT0300TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT0300.
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
       *    岩手保険者データ
            SELECT  HKNJA-FILE     ASSIGN FILE-NAME
@@ -69,6 +79,11 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+       FD  SKT0300TMP-FILE.
+           COPY    "CPSKT0300TMP.INC".
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
       *    岩手保険者データ
        FD  HKNJA-FILE.
            01  HKNJA-REC.
@@ -88,6 +103,13 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    請求書一時ファイル 名称領域
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT0300TP//.
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
 006900*    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -119,13 +141,18 @@
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
       *    請求書一時データ
-           COPY    "CPSKT0300TMP.INC".
+      *     COPY    "CPSKT0300TMP.INC".
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            COPY    "SKT0300.INC".
       *
       *    スパ領域
        01  STS-AREA.
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           03  STS-SKT0300         PIC X(02).
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            03  STS-TOWN            PIC X(02).
            03  STS-RECE10          PIC X(02).
            03  STS-RECEERR         PIC X(02).
@@ -134,6 +161,10 @@
       *    フラグ領域
        01  FLG-AREA.
            03  FLG-END             PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           03  FLG-SKT0300TMP      PIC 9(01).
+           03  FLG-PRINT           PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            03  FLG-RECE10          PIC 9(01).
            03  FLG-SYSKANRI        PIC 9(01).
            03  FLG-PTINF           PIC 9(01).
@@ -398,6 +429,11 @@
                                    SPA-AREA
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           MOVE    "SKT0300"           TO  SKT0300TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT0300TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT0300TP-HOSPNUM
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -516,6 +552,12 @@
       *****************************************************************
        200-MAIN-SEC                SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           OPEN     OUTPUT  SKT0300TMP-FILE
+           CLOSE            SKT0300TMP-FILE
+           OPEN     I-O     SKT0300TMP-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
            MOVE     ZERO    TO      FLG-END
            MOVE     ZERO    TO      FLG-UPD
       *
@@ -523,6 +565,9 @@
                     UNTIL   FLG-END   =   1
       *
            CLOSE   UPD-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           CLOSE   SKT0300TMP-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            IF       FLG-UPD   =       1
                     PERFORM   2002-PRINT-SEC
@@ -576,11 +621,25 @@
       *****************************************************************
        2001-KOKUHO-SYUKEI-SEC              SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           INITIALIZE       SKT0300TMP-REC
+      *
+      *    TMPキーセット
+      *
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM
            ELSE
              MOVE  RECE10-HKNJANUM(3:6)  TO  WRK-HKNJANUM
            END-IF
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           IF  RECE10-HKNJANUM  =  ZERO
+             MOVE  999999                TO  WRK-HKNJANUM
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
       *    保険者数（既にカウントした保険者か）
            INITIALIZE  FLG-HKNJACNT
@@ -634,6 +693,9 @@
       *
       *    県内・県外区分
            IF  RECE10-PREFKBN  =  1
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           OR  RECE10-HKNJANUM  =  ZERO
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
              MOVE  1  TO  IDX3
            ELSE
              MOVE  2  TO  IDX3
@@ -848,6 +910,9 @@
       *    請求先処理（カウントしてない保険者のみ）
            IF  FLG-HKNJACNT  =  ZERO
              IF  RECE10-PREFKBN  =  1
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+             OR  RECE10-HKNJANUM  =  ZERO
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
                PERFORM  VARYING  IDX4  FROM  1  BY  1
                         UNTIL    HKNJA03-NUM(IDX4) = ZERO
                  IF  WRK-HKNJANUM  =  HKNJA03-HKNJANUM(IDX4)
@@ -859,7 +924,10 @@
       *             MOVE  64  TO  IDX4
       *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *             MOVE  40  TO  IDX4
-                   MOVE  39  TO  IDX4
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *             MOVE  39  TO  IDX4
+                   MOVE  40  TO  IDX4
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== 請求先名(県内)追加63→64 ADD By NAKAGAWA (2006/08/29) end
@@ -904,6 +972,14 @@
                ADD   1  TO  SKT0300TMP-GOKEIHKNJA(2)
              END-IF
            END-IF
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           IF  FLG-SKT0300TMP  =  1
+             WRITE    SKT0300TMP-REC
+           ELSE
+             REWRITE  SKT0300TMP-REC
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            MOVE    1    TO  FLG-UPD
       *
@@ -1024,19 +1100,38 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           OPEN     INPUT       SKT0300TMP-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
            MOVE     1           TO       WRK-CNT
            MOVE     ZERO        TO       FLG-PASS
-           PERFORM  UNTIL       SKT0300TMP-KENMEI (WRK-CNT) = ZERO
-             AND    FLG-PASS    =        1
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
+             PERFORM  UNTIL       SKT0300TMP-KENMEI (WRK-CNT) = ZERO
+               AND    FLG-PASS    =        1
       *
       *    帳票編集<見出し>処理
-             PERFORM 310-HEAD-HEN-SEC
+               PERFORM 310-HEAD-HEN-SEC
       *    帳票編集<明細>処理
-             PERFORM 320-BODY-HEN-SEC
+               PERFORM 320-BODY-HEN-SEC
       *    帳票印刷処理
-             PERFORM 330-PRINT-OUT-SEC
-             MOVE    1          TO       FLG-PASS
+               PERFORM 330-PRINT-OUT-SEC
+               MOVE    1          TO       FLG-PASS
+             END-PERFORM
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+             MOVE  ZERO   TO  FLG-PASS
+      *      一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+             MOVE  1  TO  WRK-CNT
            END-PERFORM
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            .
        2002-PRINT-EXT.
@@ -1175,7 +1270,10 @@
       *                UNTIL    IDX1  >     64
       *=== 帳票様式の変更 by Yoshikawa(2010/03/11) start
       *                UNTIL    IDX1  >     40
-                      UNTIL    IDX1  >     39
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *                UNTIL    IDX1  >     39
+                      UNTIL    IDX1  >     40
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *=== 帳票様式の変更 by Yoshikawa(2010/03/11) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== 請求先名(県内)追加63→64 ADD By NAKAGAWA (2006/08/29) end
@@ -1709,6 +1807,24 @@
        800-PTINF-READ-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT0300TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT0300TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT0300TMP
+           END-READ
+      *
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *****************************************************************
       *    請求管理ＤＢ更新用ファイル読込
       *****************************************************************
@@ -1843,6 +1959,21 @@
        910-SEIKYU-INV-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT0300TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *      
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *****************************************************************
       *    保険者データ読込
       *****************************************************************
