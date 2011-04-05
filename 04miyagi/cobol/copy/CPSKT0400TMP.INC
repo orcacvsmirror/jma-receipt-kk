@@ -20,10 +20,14 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/04/04  東北地方太平洋沖地震
       ************************************************************
        01  SKT0400TMP-REC.
            03    SKT0400TMP-KEY.
                05    SKT0400TMP-KBN           PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+               05    SKT0400TMP-GENMEN        PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            03    SKT0400TMP-SEIKYU-TBL        OCCURS 17.
                05    SKT0400TMP-NYUGAI-TBL    OCCURS 2.

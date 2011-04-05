@@ -46,6 +46,7 @@
       *  01.00.13    吉川   10/10/15    シス管「2010」の公費再掲欄への
       *                                 地方公費記載設定対応
       *  01.00.14    吉川   11/01/11    特別療養費国保対応
+      *  01.00.15    吉川   11/04/04    東北地方太平洋沖地震対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -755,6 +756,28 @@
              END-IF
            END-IF
       *---(01.00.06) LINE ADD END   -----------------------------------
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    災害対応
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+      *      災害非該当、記載無し
+             WHEN  ZERO
+             WHEN  3
+               CONTINUE
+      *      災１、災２
+             WHEN  2
+             WHEN  4
+               MOVE    "1"                 TO  SKT0800TMP-GENMEN
+      *      不詳、不詳・災１
+             WHEN  OTHER
+      *        保険者番号の有無で分ける
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE  "1"                 TO  SKT0800TMP-GENMEN
+               ELSE
+                 MOVE  "2"                 TO  SKT0800TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            PERFORM  900-SKYTMP-READ-SEC
       *

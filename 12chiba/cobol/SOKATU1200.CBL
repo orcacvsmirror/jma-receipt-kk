@@ -39,6 +39,7 @@
       *  01.00.07    吉川     10/04/02    特別療養費国保対応
       *  01.00.08    吉川     10/08/03    オンライン返戻対応
       *  01.00.09    吉川     10/12/03    open-cobol1.0対応
+      *  01.00.10    吉川     11/04/04    東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -650,6 +651,28 @@
       *
       *    診療科
            MOVE  RECE10-RECEKA         TO  SKT1200TMP-RECEKA
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    災害対応
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+      *      災害非該当、記載無し
+             WHEN  ZERO
+             WHEN  3
+               CONTINUE
+      *      災１、災２
+             WHEN  2
+             WHEN  4
+               MOVE    "1"             TO  SKT1200TMP-GENMEN
+      *      不詳、不詳・災１
+             WHEN  OTHER
+      *        保険者番号の有無で分ける
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE  "1"             TO  SKT1200TMP-GENMEN
+               ELSE
+                 MOVE  "2"             TO  SKT1200TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *

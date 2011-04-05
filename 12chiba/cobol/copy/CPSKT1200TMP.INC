@@ -20,10 +20,14 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/04/04  東北地方太平洋沖地震対応
       ************************************************************
        01  SKT1200TMP-REC.
            03  SKT1200TMP-KEY.
                05  SKT1200TMP-RECEKA               PIC  X(02).
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+               05  SKT1200TMP-GENMEN               PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            03  SKT1200TMP-SEIKYU-TBL  OCCURS 6.
                05  SKT1200TMP-KENSU                PIC  9(06).
                05  SKT1200TMP-TENSU                PIC  9(10).

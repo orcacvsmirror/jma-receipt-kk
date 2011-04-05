@@ -46,12 +46,22 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.11    吉川     10/06/17   オンライン返戻対応
       *  01.00.12    吉川     10/09/14   返戻の場合旧帳票が印字されるのを修正
+      *  01.00.13    吉川     11/04/04   東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    請求書一時ファイル
+           SELECT  SKT0200TMP-FILE ASSIGN    SKT0200TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT0200TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT0200.
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
 006900*    請求ＤＢ更新用ファイル
            SELECT  UPD-FILE        ASSIGN  RECEUPD
@@ -66,6 +76,10 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+       FD  SKT0200TMP-FILE.
+           COPY    "CPSKT0200TMP.INC".
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
 006900*    請求ＤＢ更新用ファイル
        FD  UPD-FILE.
@@ -77,6 +91,13 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    請求書一時ファイル 名称領域
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT0200TP//.
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
 006900*    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -332,7 +353,9 @@
            PERFORM 100-INIT-SEC
       *
            PERFORM 200-MAIN-SEC
-                   UNTIL       FLG-END     =   1
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *             UNTIL       FLG-END     =   1
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            PERFORM 300-END-SEC
       *
@@ -408,6 +431,11 @@
                                    SPA-AREA
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           MOVE    "SKT0200"           TO  SKT0200TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT0200TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT0200TP-HOSPNUM
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -578,13 +606,24 @@
       *****************************************************************
        200-MAIN-SEC                SECTION.
       *
-           MOVE     ZERO    TO      FLG-END
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           OPEN     OUTPUT  SKT0200TMP-FILE
+           CLOSE            SKT0200TMP-FILE
+           OPEN     I-O     SKT0200TMP-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *     MOVE     ZERO    TO      FLG-END
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            MOVE     ZERO    TO      FLG-UPD
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
            CLOSE   UPD-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           CLOSE   SKT0200TMP-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            IF       FLG-UPD   =       1
                     PERFORM   2002-PRINT-SEC
@@ -638,6 +677,34 @@
       *    保険者番号別集計処理
       *****************************************************************
        2001-KOKUHO-SYUKEI-SEC              SECTION.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           INITIALIZE       SKT0200TMP-REC
+      *
+      *    TMPキーセット
+      *    
+      *    災害対応
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+      *      災害非該当、記載無し
+             WHEN  ZERO
+             WHEN  3
+               CONTINUE
+      *      災１、災２
+             WHEN  2
+             WHEN  4
+               MOVE    "1"                 TO  SKT0200TMP-GENMEN
+      *      不詳、不詳・災１
+             WHEN  OTHER
+      *        保険者番号の有無で分ける
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE  "1"                 TO  SKT0200TMP-GENMEN
+               ELSE
+                 MOVE  "2"                 TO  SKT0200TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            PERFORM  210-HKN-SYUKEI-SEC
       *
@@ -824,6 +891,14 @@
              PERFORM  220-KOH-SYUKEI-SEC
            END-IF
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           IF  FLG-SKT0200TMP  =  1
+             WRITE    SKT0200TMP-REC
+           ELSE
+             REWRITE  SKT0200TMP-REC
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
            MOVE    1    TO  FLG-UPD
       *
            .
@@ -835,39 +910,71 @@
       *****************************************************************
        2101-SYUKEI-SEC         SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      **    療養の給付：件数
+      *     ADD   1                   TO  SUM-KENSU (IDX1 IDX2)
+      **    療養の給付:診療実日数
+      *     ADD   RECE10-JNISSU (1)   TO  SUM-NISSU (IDX1 IDX2)
+      **    療養の給付：点数
+      *     ADD   RECE10-TOTALTEN(1)  TO  SUM-TENSU (IDX1 IDX2)
+      **    療養の給付：薬剤一部負担金
+      *     ADD   RECE10-YKZFTN (1)   TO  SUM-YKZFTN(IDX1 IDX2)
+      **    療養の給付：一部負担金
+      *     ADD   RECE10-FTNMONEY(1)  TO  SUM-ITBFTN(IDX1 IDX2)
+      **    食事療養
+      *     IF  RECE10-SHOKUJINISSU(1) >  0
+      **    療養の給付：件数
+      *       ADD   1                       TO  SUM-S-KENSU (IDX1)
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **    療養の給付:診療実日数
+      *     ADD   RECE10-SHOKUJINISSU (1)   TO  SUM-S-NISSU (IDX1)
+      **    療養の給付：金額
+      *     ADD   RECE10-SHOKUJIRYOYOHI(1)  TO  SUM-S-KINGAKU(IDX1)
+      **    療養の給付：標準負担額
+      *     ADD   RECE10-SHOKUJIFTN(1)      TO  SUM-S-FTNGAKU(IDX1)
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **     END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **
+      **    合計件数
+      *     IF  IDX1 = 13 OR 14
+      *       ADD  1  TO  SUM-RGKENSU
+      *     ELSE
+      *       ADD  1  TO  SUM-GKENSU
+      *     END-IF
+      *     
       *    療養の給付：件数
-           ADD   1                   TO  SUM-KENSU (IDX1 IDX2)
+           ADD   1                   TO  SKT0200TMP-KENSU (IDX1 IDX2)
       *    療養の給付:診療実日数
-           ADD   RECE10-JNISSU (1)   TO  SUM-NISSU (IDX1 IDX2)
+           ADD   RECE10-JNISSU (1)   TO  SKT0200TMP-NISSU (IDX1 IDX2)
       *    療養の給付：点数
-           ADD   RECE10-TOTALTEN(1)  TO  SUM-TENSU (IDX1 IDX2)
-      *    療養の給付：薬剤一部負担金
-           ADD   RECE10-YKZFTN (1)   TO  SUM-YKZFTN(IDX1 IDX2)
+           ADD   RECE10-TOTALTEN(1)  TO  SKT0200TMP-TENSU (IDX1 IDX2)
       *    療養の給付：一部負担金
-           ADD   RECE10-FTNMONEY(1)  TO  SUM-ITBFTN(IDX1 IDX2)
+           ADD   RECE10-FTNMONEY(1)  TO  SKT0200TMP-ITBFTN(IDX1 IDX2)
       *    食事療養
            IF  RECE10-SHOKUJINISSU(1) >  0
       *    療養の給付：件数
-             ADD   1                       TO  SUM-S-KENSU (IDX1)
-      *---(01.00.05) LINE ADD START ------------------------------------
+             ADD   1                 TO  SKT0200TMP-S-KENSU (IDX1)
            END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
       *    療養の給付:診療実日数
-           ADD   RECE10-SHOKUJINISSU (1)   TO  SUM-S-NISSU (IDX1)
+           ADD   RECE10-SHOKUJINISSU (1) 
+                                     TO  SKT0200TMP-S-NISSU (IDX1)
       *    療養の給付：金額
-           ADD   RECE10-SHOKUJIRYOYOHI(1)  TO  SUM-S-KINGAKU(IDX1)
+           ADD   RECE10-SHOKUJIRYOYOHI(1)
+                                     TO  SKT0200TMP-S-KINGAKU(IDX1)
       *    療養の給付：標準負担額
-           ADD   RECE10-SHOKUJIFTN(1)      TO  SUM-S-FTNGAKU(IDX1)
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *     END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
+           ADD   RECE10-SHOKUJIFTN(1)
+                                     TO  SKT0200TMP-S-FTNGAKU(IDX1)
       *
       *    合計件数
            IF  IDX1 = 13 OR 14
-             ADD  1  TO  SUM-RGKENSU
+             ADD  1  TO  SKT0200TMP-RGKENSU
            ELSE
-             ADD  1  TO  SUM-GKENSU
+             ADD  1  TO  SKT0200TMP-GKENSU
            END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            MOVE    1               TO  FLG-UPD
            .
@@ -931,11 +1038,67 @@
                END-IF
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      **    公費判別
+      *         PERFORM  VARYING  IDX4  FROM  1  BY  1
+      *                  UNTIL    IDX4  >     20
+      *                  OR       SUM-KOHNUM (IDX4) = SPACE
+      *           IF  RECE10-KOHNUM (IDX3)  =  SUM-KOHNUM (IDX4)
+      *               MOVE  IDX4  TO  CNT-KOH
+      *               MOVE  20    TO  IDX4
+      *           END-IF
+      *         END-PERFORM
+      **
+      **    該当公費がなかった場合
+      *         IF  IDX4  < 20
+      *           MOVE  IDX4  TO  CNT-KOH
+      *         END-IF
+      **    公費名
+      *         MOVE  RECE10-KOHNUM(IDX3)  TO  SUM-KOHNUM(CNT-KOH)
+      **---(01.00.09) LINE ADD START ------------------------------------
+      **    公費名称
+      *         MOVE  WRK-KOHNAME          TO  SUM-KOHNAME(CNT-KOH)
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      **    療養の給付：件数
+      *         ADD   1  TO  SUM-KKENSU (CNT-KOH IDX2)
+      **    療養の給付:診療実日数
+      *         ADD   RECE10-JNISSU (IDX3 + 1)
+      *                                 TO  SUM-KNISSU(CNT-KOH IDX2)
+      **    療養の給付：点数
+      *         ADD   RECE10-TOTALTEN(IDX3 + 1)
+      *                                 TO  SUM-KTENSU(CNT-KOH IDX2)
+      **    療養の給付：薬剤一部負担金
+      *         ADD   RECE10-YKZFTN (IDX3 + 1)
+      *                                 TO  SUM-KYKZFTN(CNT-KOH IDX2)
+      **    療養の給付：一部負担金
+      *         ADD   RECE10-FTNMONEY (IDX3 + 1)
+      *                                 TO  SUM-KITBFTN(CNT-KOH IDX2)
+      **    食事療養
+      *         IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
+      **    療養の給付：件数
+      *           ADD   1               TO  SUM-S-KKENSU (CNT-KOH)
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *         END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **    療養の給付：日数
+      *         ADD  RECE10-SHOKUJINISSU (IDX3 + 1)
+      *                                 TO SUM-S-KNISSU(CNT-KOH)
+      **    療養の給付：金額
+      *         ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)
+      *                                 TO SUM-S-KKINGAKU(CNT-KOH)
+      **    療養の給付：標準負担額
+      *         ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  
+      *                                 TO SUM-S-KFTNGAKU(CNT-KOH)
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **         END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *       END-IF
+      *       
       *    公費判別
                PERFORM  VARYING  IDX4  FROM  1  BY  1
                         UNTIL    IDX4  >     20
-                        OR       SUM-KOHNUM (IDX4) = SPACE
-                 IF  RECE10-KOHNUM (IDX3)  =  SUM-KOHNUM (IDX4)
+                        OR       SKT0200TMP-KOHNUM(IDX4) = SPACE
+                 IF  RECE10-KOHNUM (IDX3)  =  SKT0200TMP-KOHNUM (IDX4)
                      MOVE  IDX4  TO  CNT-KOH
                      MOVE  20    TO  IDX4
                  END-IF
@@ -946,45 +1109,36 @@
                  MOVE  IDX4  TO  CNT-KOH
                END-IF
       *    公費名
-               MOVE  RECE10-KOHNUM(IDX3)  TO  SUM-KOHNUM(CNT-KOH)
-      *---(01.00.09) LINE ADD START ------------------------------------
+               MOVE  RECE10-KOHNUM(IDX3)  TO  SKT0200TMP-KOHNUM(CNT-KOH)
       *    公費名称
-               MOVE  WRK-KOHNAME          TO  SUM-KOHNAME(CNT-KOH)
-      *---(01.00.09) LINE ADD END   ------------------------------------
+               MOVE  WRK-KOHNAME    TO  SKT0200TMP-KOHNAME(CNT-KOH)
       *    療養の給付：件数
-               ADD   1  TO  SUM-KKENSU (CNT-KOH IDX2)
+               ADD   1  TO  SKT0200TMP-KKENSU (CNT-KOH IDX2)
       *    療養の給付:診療実日数
                ADD   RECE10-JNISSU (IDX3 + 1)
-                                       TO  SUM-KNISSU(CNT-KOH IDX2)
+                                    TO  SKT0200TMP-KNISSU(CNT-KOH IDX2)
       *    療養の給付：点数
                ADD   RECE10-TOTALTEN(IDX3 + 1)
-                                       TO  SUM-KTENSU(CNT-KOH IDX2)
-      *    療養の給付：薬剤一部負担金
-               ADD   RECE10-YKZFTN (IDX3 + 1)
-                                       TO  SUM-KYKZFTN(CNT-KOH IDX2)
+                                    TO  SKT0200TMP-KTENSU(CNT-KOH IDX2)
       *    療養の給付：一部負担金
                ADD   RECE10-FTNMONEY (IDX3 + 1)
-                                       TO  SUM-KITBFTN(CNT-KOH IDX2)
+                                    TO  SKT0200TMP-KITBFTN(CNT-KOH IDX2)
       *    食事療養
                IF  RECE10-SHOKUJINISSU(IDX3 + 1)  >  0
       *    療養の給付：件数
-                 ADD   1               TO  SUM-S-KKENSU (CNT-KOH)
-      *---(01.00.05) LINE ADD START ------------------------------------
+                 ADD   1            TO  SKT0200TMP-S-KKENSU (CNT-KOH)
                END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
       *    療養の給付：日数
                ADD  RECE10-SHOKUJINISSU (IDX3 + 1)
-                                       TO SUM-S-KNISSU(CNT-KOH)
+                                    TO  SKT0200TMP-S-KNISSU(CNT-KOH)
       *    療養の給付：金額
                ADD  RECE10-SHOKUJIRYOYOHI(IDX3 + 1)
-                                       TO SUM-S-KKINGAKU(CNT-KOH)
+                                    TO  SKT0200TMP-S-KKINGAKU(CNT-KOH)
       *    療養の給付：標準負担額
                ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  
-                                       TO SUM-S-KFTNGAKU(CNT-KOH)
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *         END-IF
-      *---(01.00.05) LINE ADD END   ------------------------------------
+                                    TO  SKT0200TMP-S-KFTNGAKU(CNT-KOH)
              END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            END-PERFORM
       *
            .
@@ -1008,28 +1162,52 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           OPEN     INPUT       SKT0200TMP-FILE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
            MOVE     ZERO        TO       FLG-PRINT
            MOVE     1           TO       WRK-CNT
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+           MOVE     ZERO        TO       FLG-PASS
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
-      *    一般
-      *    帳票編集<見出し>処理
-           PERFORM 310-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-           PERFORM 320-BODY-HEN-SEC
-      *    帳票印刷処理
-           PERFORM 330-PRINT-OUT-SEC
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
       *
-      *    公費がのこっているか
-           PERFORM  UNTIL  SUM-KOHNUM (WRK-CNT) = SPACE
-                    AND    FLG-PASS  =  1
-      *    帳票編集<見出し>処理
-               PERFORM 311-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-               PERFORM 321-BODY-HEN-SEC
-      *    帳票印刷処理
-               PERFORM 331-PRINT-OUT-SEC
-               MOVE  1  TO  FLG-PASS
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+      *
+      *      一般
+      *      帳票編集<見出し>処理
+             PERFORM 310-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+             PERFORM 320-BODY-HEN-SEC
+      *      帳票印刷処理
+             PERFORM 330-PRINT-OUT-SEC
+      *
+      *      公費がのこっているか
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *       PERFORM  UNTIL  SUM-KOHNUM (WRK-CNT) = SPACE
+             PERFORM  UNTIL  SKT0200TMP-KOHNUM (WRK-CNT) = SPACE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
+                      AND    FLG-PASS  =  1
+      *      帳票編集<見出し>処理
+                 PERFORM 311-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+                 PERFORM 321-BODY-HEN-SEC
+      *      帳票印刷処理
+                 PERFORM 331-PRINT-OUT-SEC
+                 MOVE  1  TO  FLG-PASS
+             END-PERFORM
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+             MOVE  ZERO   TO  FLG-PASS
+      *      一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+             MOVE  1  TO  WRK-CNT
            END-PERFORM
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            .
        2002-PRINT-EXT.
@@ -1089,40 +1267,77 @@
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      **    療養の給付：件数
+      *         MOVE  SUM-KENSU (IDX1 IDX2)   TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0200-KENSU(IDX1 IDX2)
+      **
+      **    療養の給付：日数
+      *         MOVE  SUM-NISSU (IDX1 IDX2)   TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0200-NISSU(IDX1 IDX2)
+      **
+      **    療養の給付：点数
+      *         MOVE  SUM-TENSU (IDX1 IDX2)   TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT0200-TENSU(IDX1 IDX2)
+      **
+      **    療養の給付：一部負担金
+      *         IF  IDX1  =  1 OR 2 OR 9 OR 10
+      *           MOVE  SUM-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT0200-ITBFTN(IDX1 IDX2)
+      *         END-IF
+      *       END-PERFORM
+      **
+      **    食事療養：件数
+      *       MOVE  SUM-S-KENSU (IDX1)   TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0200-S-KENSU(IDX1)
+      **
+      **    食事療養：日数
+      *       MOVE  SUM-S-NISSU (IDX1)   TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0200-S-NISSU(IDX1)
+      **
+      **    食事療養：金額
+      *       MOVE  SUM-S-KINGAKU (IDX1)  TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0200-S-KINGAKU(IDX1)
+      **
+      **    食事療養：標準負担額
+      *       MOVE  SUM-S-FTNGAKU (IDX1)  TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0200-S-FTNGAKU(IDX1)
+      *       
       *    療養の給付：件数
-               MOVE  SUM-KENSU (IDX1 IDX2)   TO  WRK-Z5
+               MOVE  SKT0200TMP-KENSU (IDX1 IDX2)   TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT0200-KENSU(IDX1 IDX2)
       *
       *    療養の給付：日数
-               MOVE  SUM-NISSU (IDX1 IDX2)   TO  WRK-Z5
+               MOVE  SKT0200TMP-NISSU (IDX1 IDX2)   TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT0200-NISSU(IDX1 IDX2)
       *
       *    療養の給付：点数
-               MOVE  SUM-TENSU (IDX1 IDX2)   TO  WRK-Z9
+               MOVE  SKT0200TMP-TENSU (IDX1 IDX2)   TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT0200-TENSU(IDX1 IDX2)
       *
       *    療養の給付：一部負担金
                IF  IDX1  =  1 OR 2 OR 9 OR 10
-                 MOVE  SUM-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
+                 MOVE  SKT0200TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT0200-ITBFTN(IDX1 IDX2)
                END-IF
              END-PERFORM
       *
       *    食事療養：件数
-             MOVE  SUM-S-KENSU (IDX1)   TO  WRK-Z5
+             MOVE  SKT0200TMP-S-KENSU (IDX1)   TO  WRK-Z5
              MOVE  WRK-Z5   TO  SKT0200-S-KENSU(IDX1)
       *
       *    食事療養：日数
-             MOVE  SUM-S-NISSU (IDX1)   TO  WRK-Z5
+             MOVE  SKT0200TMP-S-NISSU (IDX1)   TO  WRK-Z5
              MOVE  WRK-Z5   TO  SKT0200-S-NISSU(IDX1)
       *
       *    食事療養：金額
-             MOVE  SUM-S-KINGAKU (IDX1)  TO  WRK-Z9
+             MOVE  SKT0200TMP-S-KINGAKU (IDX1)  TO  WRK-Z9
              MOVE  WRK-Z9   TO  SKT0200-S-KINGAKU(IDX1)
       *
       *    食事療養：標準負担額
-             MOVE  SUM-S-FTNGAKU (IDX1)  TO  WRK-Z9
+             MOVE  SKT0200TMP-S-FTNGAKU (IDX1)  TO  WRK-Z9
              MOVE  WRK-Z9   TO  SKT0200-S-FTNGAKU(IDX1)
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            END-PERFORM
       *
            .
@@ -1213,38 +1428,72 @@
                ADD  1  TO  IDX4
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >     2
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      **    療養の給付：件数
+      *           MOVE  SUM-KENSU (IDX1 IDX2)   TO  WRK-Z5
+      *           MOVE  WRK-Z5   TO  SKT0210-KENSU(IDX4 IDX2)
+      **
+      **    療養の給付：日数
+      *           MOVE  SUM-NISSU (IDX1 IDX2)   TO  WRK-Z5
+      *           MOVE  WRK-Z5   TO  SKT0210-NISSU(IDX4 IDX2)
+      **
+      **    療養の給付：点数
+      *           MOVE  SUM-TENSU (IDX1 IDX2)   TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT0210-TENSU(IDX4 IDX2)
+      **
+      **    療養の給付：一部負担金
+      *           MOVE  SUM-ITBFTN (IDX1 IDX2)  TO  WRK-Z11
+      *           MOVE  WRK-Z11  TO  SKT0210-ITBFTN(IDX4 IDX2)
+      *         END-PERFORM
+      **
+      **    食事療養：件数
+      *           MOVE  SUM-S-KENSU (IDX1)   TO  WRK-Z5
+      *           MOVE  WRK-Z5   TO  SKT0210-S-KENSU(IDX4)
+      **
+      **    食事療養：日数
+      *           MOVE  SUM-S-NISSU (IDX1)   TO  WRK-Z5
+      *           MOVE  WRK-Z5   TO  SKT0210-S-NISSU(IDX4)
+      **
+      **    食事療養：金額
+      *           MOVE  SUM-S-KINGAKU (IDX1)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT0210-S-KINGAKU(IDX4)
+      **
+      **    食事療養：標準負担額
+      *           MOVE  SUM-S-FTNGAKU (IDX1)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT0210-S-FTNGAKU(IDX4)
       *    療養の給付：件数
-                 MOVE  SUM-KENSU (IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  SKT0200TMP-KENSU (IDX1 IDX2)   TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT0210-KENSU(IDX4 IDX2)
       *
       *    療養の給付：日数
-                 MOVE  SUM-NISSU (IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  SKT0200TMP-NISSU (IDX1 IDX2)   TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT0210-NISSU(IDX4 IDX2)
       *
       *    療養の給付：点数
-                 MOVE  SUM-TENSU (IDX1 IDX2)   TO  WRK-Z9
+                 MOVE  SKT0200TMP-TENSU (IDX1 IDX2)   TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT0210-TENSU(IDX4 IDX2)
       *
       *    療養の給付：一部負担金
-                 MOVE  SUM-ITBFTN (IDX1 IDX2)  TO  WRK-Z11
+                 MOVE  SKT0200TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z11
                  MOVE  WRK-Z11  TO  SKT0210-ITBFTN(IDX4 IDX2)
                END-PERFORM
       *
       *    食事療養：件数
-                 MOVE  SUM-S-KENSU (IDX1)   TO  WRK-Z5
+                 MOVE  SKT0200TMP-S-KENSU (IDX1)   TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT0210-S-KENSU(IDX4)
       *
       *    食事療養：日数
-                 MOVE  SUM-S-NISSU (IDX1)   TO  WRK-Z5
+                 MOVE  SKT0200TMP-S-NISSU (IDX1)   TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT0210-S-NISSU(IDX4)
       *
       *    食事療養：金額
-                 MOVE  SUM-S-KINGAKU (IDX1)  TO  WRK-Z9
+                 MOVE  SKT0200TMP-S-KINGAKU (IDX1)  TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT0210-S-KINGAKU(IDX4)
       *
       *    食事療養：標準負担額
-                 MOVE  SUM-S-FTNGAKU (IDX1)  TO  WRK-Z9
+                 MOVE  SKT0200TMP-S-FTNGAKU (IDX1)  TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT0210-S-FTNGAKU(IDX4)
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
              END-PERFORM
            END-IF
       *
@@ -1265,20 +1514,30 @@
                     UNTIL   IDX3   >     WRK-KOHMAX
       *---(01.00.08) LINE ADD END   ------------------------------------
                     OR  WRK-CNT    >    20
-                    OR  SUM-KOHNUM (WRK-CNT) = SPACE
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *              OR  SUM-KOHNUM (WRK-CNT) = SPACE
+                    OR  SKT0200TMP-KOHNUM (WRK-CNT) = SPACE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *    公費名
       ***** 05/12/01 yamaguchi DEL
       *       PERFORM  950-HKNNUM-SET-SEC
       *       MOVE  HKN-TANSEIDONAME   TO  SKT0210-KOHNAME (IDX3)
       ***** 05/12/01 yamaguchi INS
-             IF  SUM-KOHNUM(WRK-CNT)  =  "180"
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *       IF  SUM-KOHNUM(WRK-CNT)  =  "180"
+             IF  SKT0200TMP-KOHNUM(WRK-CNT)  =  "180"
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
                MOVE  "マル障"           TO  SKT0210-KOHNAME (IDX3)
              ELSE
       *---(01.00.09) LINE ADD START ------------------------------------
       *         PERFORM  950-HKNNUM-SET-SEC
       *         MOVE  HKN-TANSEIDONAME   TO  SKT0210-KOHNAME (IDX3)
-               IF  SUM-KOHNAME (WRK-CNT)  NOT =  SPACE
-                 MOVE  SUM-KOHNAME (WRK-CNT)
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *         IF  SUM-KOHNAME (WRK-CNT)  NOT =  SPACE
+      *           MOVE  SUM-KOHNAME (WRK-CNT)
+               IF  SKT0200TMP-KOHNAME (WRK-CNT)  NOT =  SPACE
+                 MOVE  SKT0200TMP-KOHNAME (WRK-CNT)
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
                                           TO  SKT0210-KOHNAME (IDX3)
                ELSE
                  PERFORM  950-HKNNUM-SET-SEC
@@ -1290,38 +1549,72 @@
       *
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      **    療養の給付：件数
+      *         MOVE  SUM-KKENSU (WRK-CNT IDX2)   TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0210-KKENSU (IDX3 IDX2)
+      **
+      **    療養の給付：日数
+      *         MOVE  SUM-KNISSU (WRK-CNT IDX2)   TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0210-KNISSU (IDX3 IDX2)
+      **
+      **    療養の給付：点数
+      *         MOVE  SUM-KTENSU (WRK-CNT IDX2)   TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT0210-KTENSU (IDX3 IDX2)
+      **
+      **    療養の給付：一部負担金
+      *         MOVE  SUM-KITBFTN (WRK-CNT IDX2)  TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT0210-KITBFTN (IDX3 IDX2)
+      *       END-PERFORM
+      **
+      **    食事療養：件数
+      *       MOVE  SUM-S-KKENSU (WRK-CNT)   TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0210-S-KKENSU(IDX3)
+      **
+      **    食事療養：日数
+      *       MOVE  SUM-S-KNISSU (WRK-CNT)   TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0210-S-KNISSU(IDX3)
+      **
+      **    食事療養：金額
+      *       MOVE  SUM-S-KKINGAKU (WRK-CNT)  TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0210-S-KKINGAKU(IDX3)
+      **
+      **    食事療養：標準負担額
+      *       MOVE  SUM-S-KFTNGAKU (WRK-CNT)  TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0210-S-KFTNGAKU(IDX3)
       *    療養の給付：件数
-               MOVE  SUM-KKENSU (WRK-CNT IDX2)   TO  WRK-Z5
+               MOVE  SKT0200TMP-KKENSU (WRK-CNT IDX2)   TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT0210-KKENSU (IDX3 IDX2)
       *
       *    療養の給付：日数
-               MOVE  SUM-KNISSU (WRK-CNT IDX2)   TO  WRK-Z5
+               MOVE  SKT0200TMP-KNISSU (WRK-CNT IDX2)   TO  WRK-Z5
                MOVE  WRK-Z5   TO  SKT0210-KNISSU (IDX3 IDX2)
       *
       *    療養の給付：点数
-               MOVE  SUM-KTENSU (WRK-CNT IDX2)   TO  WRK-Z9
+               MOVE  SKT0200TMP-KTENSU (WRK-CNT IDX2)   TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT0210-KTENSU (IDX3 IDX2)
       *
       *    療養の給付：一部負担金
-               MOVE  SUM-KITBFTN (WRK-CNT IDX2)  TO  WRK-Z9
+               MOVE  SKT0200TMP-KITBFTN (WRK-CNT IDX2)  TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT0210-KITBFTN (IDX3 IDX2)
              END-PERFORM
       *
       *    食事療養：件数
-             MOVE  SUM-S-KKENSU (WRK-CNT)   TO  WRK-Z5
+             MOVE  SKT0200TMP-S-KKENSU (WRK-CNT)   TO  WRK-Z5
              MOVE  WRK-Z5   TO  SKT0210-S-KKENSU(IDX3)
       *
       *    食事療養：日数
-             MOVE  SUM-S-KNISSU (WRK-CNT)   TO  WRK-Z5
+             MOVE  SKT0200TMP-S-KNISSU (WRK-CNT)   TO  WRK-Z5
              MOVE  WRK-Z5   TO  SKT0210-S-KNISSU(IDX3)
       *
       *    食事療養：金額
-             MOVE  SUM-S-KKINGAKU (WRK-CNT)  TO  WRK-Z9
+             MOVE  SKT0200TMP-S-KKINGAKU (WRK-CNT)  TO  WRK-Z9
              MOVE  WRK-Z9   TO  SKT0210-S-KKINGAKU(IDX3)
       *
       *    食事療養：標準負担額
-             MOVE  SUM-S-KFTNGAKU (WRK-CNT)  TO  WRK-Z9
+             MOVE  SKT0200TMP-S-KFTNGAKU (WRK-CNT)  TO  WRK-Z9
              MOVE  WRK-Z9   TO  SKT0210-S-KFTNGAKU(IDX3)
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
              ADD  1  TO  WRK-CNT
            END-PERFORM
@@ -1511,7 +1804,10 @@
       *     MOVE  SYS-1001-HOSPID         TO  HKN-HOSPID
            MOVE  SPA-HOSPNUM             TO  HKN-HOSPNUM
       *---(01.00.07) LINE ADD END   ------------------------------------
-           MOVE  SUM-KOHNUM(WRK-CNT)     TO  HKN-HKNNUM
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *     MOVE  SUM-KOHNUM(WRK-CNT)     TO  HKN-HKNNUM
+           MOVE  SKT0200TMP-KOHNUM(WRK-CNT)     TO  HKN-HKNNUM
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
            MOVE  HKNNUM-REC              TO  MCPDATA-REC
            MOVE  "DBSELECT"              TO  MCP-FUNC
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -1751,6 +2047,24 @@
        800-PTINF-READ-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT0200TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT0200TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT0200TMP
+           END-READ
+      *
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *****************************************************************
       *    請求管理ＤＢ更新用ファイル読込
       *****************************************************************
@@ -1885,6 +2199,21 @@
        910-SEIKYU-INV-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT0200TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *      
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *****************************************************************
       *    全角変換処理
       *****************************************************************

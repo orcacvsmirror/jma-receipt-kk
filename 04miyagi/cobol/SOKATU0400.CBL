@@ -35,6 +35,7 @@
       *                                  SPA-AREA初期化
       *  01.00.03    吉川   2010/07/01   オンライン返戻対応
       *  01.00.04    吉川   2011/02/14   後期高齢者のみの場合でも印字する
+      *  01.00.05    吉川   2011/04/04   東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -589,6 +590,28 @@
       *TMP-FILE キーセット
       *
            INITIALIZE       SKT0400TMP-REC
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *    災害対応
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+      *      災害非該当、記載無し
+             WHEN  ZERO
+             WHEN  3
+               CONTINUE
+      *      災１、災２
+             WHEN  2
+             WHEN  4
+               MOVE    "1"                 TO  SKT0400TMP-GENMEN
+      *      不詳、不詳・災１
+             WHEN  OTHER
+      *        保険者番号の有無で分ける
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE  "1"                 TO  SKT0400TMP-GENMEN
+               ELSE
+                 MOVE  "2"                 TO  SKT0400TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
            PERFORM  800-SKTTMP-READ-SEC
       *

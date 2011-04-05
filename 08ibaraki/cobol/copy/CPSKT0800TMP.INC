@@ -21,10 +21,14 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01       長屋   08/04/26    帳票様式に伴う修正
+      *  01.00.02       吉川   11/04/04    東北地方太平洋沖地震対応
       ************************************************************
        01  SKT0800TMP-REC.
            03  SKT0800TMP-KEY.
                05  SKT0800TMP-PREFKBN           PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+               05  SKT0800TMP-GENMEN            PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *---(01.00.01) LINE ADD START -----------------------------------
       *     03       SKT0800TMP-SEIKYU-TBL OCCURS 3.
            03       SKT0800TMP-SEIKYU-TBL OCCURS 4.

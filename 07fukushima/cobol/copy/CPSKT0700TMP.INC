@@ -20,11 +20,16 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/04/04  東北地方太平洋沖地震対応
       ************************************************************
        01  SKT0700TMP-REC.
            03  SKT0700TMP-KEY.
       *医療機関コード
                05  SKT0700TMP-HOSPCD               PIC  X(20).
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *減免区分
+               05  SKT0700TMP-GENMEN               PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/04) end
       *保険者数ー県内
            03  SKT0700TMP-KENNAI-HKNJSU            PIC  9(06).
       *保険者数ー県外
@@ -59,3 +64,13 @@
                    07  SKT0700TMP-G-SNISSU         PIC  9(06).
       *合計ー食事金額
                    07  SKT0700TMP-G-SKINGK         PIC  9(11).
+      *=== 災害対応 by Yoshikawa(2011/04/04) start
+      *県内保険者数
+           03  SKT0700TMP-KENNAI.
+               05  SKT0700TMP-KENNAI-MAX    PIC 9(04).
+               05  SKT0700TMP-KENNAI-HKNJA  PIC X(06) OCCURS 100.
+      *県外保険者数
+           03  SKT0700TMP-KENGAI.
+               05  SKT0700TMP-KENGAI-MAX    PIC 9(04).
+               05  SKT0700TMP-KENGAI-HKNJA  PIC X(06) OCCURS 100.
+      *=== 災害対応 by Yoshikawa(2011/04/04) end

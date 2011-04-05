@@ -38,6 +38,7 @@
       *  01.00.06    µÈÀî    10/07/02    ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *  01.00.07    µÈÀî    11/02/09    ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
       *                                  open-cobol1.0ÂÐ±þ
+      *  01.00.08    µÈÀî    11/04/04    ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -749,6 +750,30 @@
            INITIALIZE       SKT0700TMP-REC
            INITIALIZE       WRK-HKNJANUM
       *
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *    ºÒ³²ÂÐ±þ
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+      *      ºÒ³²Èó³ºÅö¡¢µ­ºÜÌµ¤·
+             WHEN  ZERO
+             WHEN  3
+               CONTINUE
+      *      ºÒ£±¡¢ºÒ£²
+             WHEN  2
+             WHEN  4
+               MOVE    "1"                 TO  SKT0700TMP-GENMEN
+      *      ÉÔ¾Ü¡¢ÉÔ¾Ü¡¦ºÒ£±
+             WHEN  OTHER
+      *        ÊÝ¸±¼ÔÈÖ¹æ¤ÎÍ­Ìµ¤ÇÊ¬¤±¤ë
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE  "1"                 TO  SKT0700TMP-GENMEN
+               ELSE
+                 MOVE  "2"                 TO  SKT0700TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *
+           PERFORM  900-SKTTMP-READ-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
+      *
            IF       RECE10-HKNJANUM(7:2)  =     SPACE
                     MOVE    RECE10-HKNJANUM(1:6)    TO
                             WRK-HKNJANUM(1:6)
@@ -783,7 +808,9 @@
       *              SKT0700TMP-HOSPCD
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
-           PERFORM  900-SKTTMP-READ-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *     PERFORM  900-SKTTMP-READ-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
       *
       *    ¹ñÊÝ¡¦Ï·¿ÍÊ¬
            PERFORM  210-HKN-SYUKEI-SEC
@@ -818,15 +845,26 @@
       *
            PERFORM    VARYING  IDX4  FROM  1  BY  1
                       UNTIL    IDX4  >    100
-             IF    WRK-KENNAI-HKNJA(IDX4)  =  SPACE
-               ADD    1     TO    WRK-KENNAI-MAX
-               MOVE   WRK-HKNJANUM-G     TO    WRK-KENNAI-HKNJA(IDX4)
-               MOVE   100   TO           IDX4
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *       IF    WRK-KENNAI-HKNJA(IDX4)  =  SPACE
+      *         ADD    1     TO    WRK-KENNAI-MAX
+      *         MOVE   WRK-HKNJANUM-G     TO    WRK-KENNAI-HKNJA(IDX4)
+      *         MOVE   100   TO           IDX4
+      *       ELSE
+      *         IF    WRK-HKNJANUM-G  =    WRK-KENNAI-HKNJA(IDX4)
+      *           MOVE     100            TO    IDX4
+      *         END-IF
+      *       END-IF
+             IF    SKT0700TMP-KENNAI-HKNJA(IDX4)  =  SPACE
+               ADD    1               TO  SKT0700TMP-KENNAI-MAX
+               MOVE   WRK-HKNJANUM-G  TO  SKT0700TMP-KENNAI-HKNJA(IDX4)
+               MOVE   100             TO  IDX4
              ELSE
-               IF    WRK-HKNJANUM-G  =    WRK-KENNAI-HKNJA(IDX4)
-                 MOVE     100            TO    IDX4
+               IF  WRK-HKNJANUM-G  =  SKT0700TMP-KENNAI-HKNJA(IDX4)
+                 MOVE     100         TO  IDX4
                END-IF
              END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
            END-PERFORM
       *
       *
@@ -843,15 +881,26 @@
       *
            PERFORM    VARYING  IDX4  FROM  1  BY  1
                       UNTIL    IDX4  >    100
-             IF    WRK-KENGAI-HKNJA(IDX4)  =  SPACE
-               ADD    1     TO    WRK-KENGAI-MAX
-               MOVE   WRK-HKNJANUM-G      TO    WRK-KENGAI-HKNJA(IDX4)
-               MOVE   100   TO           IDX4
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *       IF    WRK-KENGAI-HKNJA(IDX4)  =  SPACE
+      *         ADD    1     TO    WRK-KENGAI-MAX
+      *         MOVE   WRK-HKNJANUM-G      TO    WRK-KENGAI-HKNJA(IDX4)
+      *         MOVE   100   TO           IDX4
+      *       ELSE
+      *         IF    WRK-HKNJANUM-G   =    WRK-KENGAI-HKNJA(IDX4)
+      *           MOVE     100            TO    IDX4
+      *         END-IF
+      *       END-IF
+             IF    SKT0700TMP-KENGAI-HKNJA(IDX4)  =  SPACE
+               ADD    1               TO  SKT0700TMP-KENGAI-MAX
+               MOVE   WRK-HKNJANUM-G  TO  SKT0700TMP-KENGAI-HKNJA(IDX4)
+               MOVE   100             TO  IDX4
              ELSE
-               IF    WRK-HKNJANUM-G   =    WRK-KENGAI-HKNJA(IDX4)
-                 MOVE     100            TO    IDX4
+               IF  WRK-HKNJANUM-G  =  SKT0700TMP-KENGAI-HKNJA(IDX4)
+                 MOVE    100          TO  IDX4
                END-IF
              END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
            END-PERFORM
       *
            .
@@ -1082,8 +1131,12 @@
       *    °åÎÅµ¡´Ø¥³¡¼¥É
            MOVE    SYS-1001-HOSPCDN    TO  SKT0700-HOSPCD
       *
-           DISPLAY "¸©ÆâÊÝ¸±¼Ô¿ô="   WRK-KENNAI-MAX
-           DISPLAY "¸©³°ÊÝ¸±¼Ô¿ô="   WRK-KENGAI-MAX
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *     DISPLAY "¸©ÆâÊÝ¸±¼Ô¿ô="   WRK-KENNAI-MAX
+      *     DISPLAY "¸©³°ÊÝ¸±¼Ô¿ô="   WRK-KENGAI-MAX
+           DISPLAY "¸©ÆâÊÝ¸±¼Ô¿ô="   SKT0700TMP-KENNAI-MAX
+           DISPLAY "¸©³°ÊÝ¸±¼Ô¿ô="   SKT0700TMP-KENGAI-MAX
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
       *
            IF     WRK-SRYKANAME(2)    =  SPACE
              MOVE  WRK-SRYKANAME(1)   TO  SKT0700-SRYKANAME1
@@ -1093,11 +1146,17 @@
            END-IF
       *
       *    ÊÝ¸±¼Ô¿ô(¸©Æâ)
-           MOVE     WRK-KENNAI-MAX TO   WRK-Z9-11
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *     MOVE     WRK-KENNAI-MAX TO   WRK-Z9-11
+           MOVE     SKT0700TMP-KENNAI-MAX TO   WRK-Z9-11
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
            MOVE     WRK-Z9-11      TO   SKT0700-KENNAI-HKNJSU
       *
       *    ÊÝ¸±¼Ô¿ô(¸©³°)
-           MOVE     WRK-KENGAI-MAX TO   WRK-Z9-11
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) start
+      *     MOVE     WRK-KENGAI-MAX TO   WRK-Z9-11
+           MOVE     SKT0700TMP-KENGAI-MAX TO   WRK-Z9-11
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
            MOVE     WRK-Z9-11      TO   SKT0700-KENGAI-HKNJSU
       *
       *=== »ØÄê¶âÍ»µ¡´Ø¤ò°õ»ú by Yoshikawa(2009/11/04) start
