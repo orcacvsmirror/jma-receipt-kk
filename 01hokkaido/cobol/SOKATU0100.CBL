@@ -82,6 +82,7 @@
       *                                 公費の助成が無い場合は印字対象外
       *  01.00.30    吉川   11/02/09    特別療養費国保対応
       *  01.00.31    吉川   11/02/16    公費請求テーブルclose処理位置変更
+      *  01.00.32    吉川   11/04/13    特別療養費分は障・ひとり親は記載しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -727,11 +728,17 @@
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *---(01.00.14) LINE ADD END   ------------------------------------
       *    地方公費分集計
-           MOVE     ZERO    TO      FLG-END
-           PERFORM 900-KOHSKY-START-SEC
+      *=== 特別療養費分は公費欄記載なし by Yoshikawa(2011/04/13) start
+           IF  WRK-PARA-TOKUBETU  = "1"
+      *=== 特別療養費分は公費欄記載なし by Yoshikawa(2011/04/13) end
+             MOVE     ZERO    TO      FLG-END
+             PERFORM 900-KOHSKY-START-SEC
       *
-           PERFORM  2001-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
+             PERFORM  2001-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+      *=== 特別療養費分は公費欄記載なし by Yoshikawa(2011/04/13) start
+           END-IF
+      *=== 特別療養費分は公費欄記載なし by Yoshikawa(2011/04/13) end
       *
            CLOSE   UPD-FILE
            CLOSE   SKT0100TMP-FILE
