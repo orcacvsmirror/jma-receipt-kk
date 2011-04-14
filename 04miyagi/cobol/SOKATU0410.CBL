@@ -40,6 +40,7 @@
       *  01.00.07    吉川    11/01/14  公費再掲欄の6歳欄に3〜5歳が
       *                                集計されない不具合を修正
       *  01.00.08    吉川    11/03/15  東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.09    吉川    11/04/12  仙台市の代表保険者番号変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -627,7 +628,10 @@
            IF  SKT0410TMP-HKNJANUM (1:3) = "044"
       *---(01.00.02) LINE ADD START ------------------------------------
       *       MOVE  "044008"  TO  SKT0410TMP-HKNJANUM
-             MOVE  "040014"  TO  SKT0410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2011/04/12) start
+      *       MOVE  "040014"  TO  SKT0410TMP-HKNJANUM
+             MOVE  "044008"  TO  SKT0410TMP-HKNJANUM
+      *=== 代表保険者番号変更 by Yoshikawa(2011/04/12) end
       *---(01.00.02) LINE ADD END   ------------------------------------
            END-IF
       *
@@ -1040,7 +1044,10 @@
       *    保険者名
            PERFORM  920-HKNJAINF-SET-SEC
            IF    HKNJA-HKNJANAME       =    SPACE   AND 
-                 SKT0410TMP-HKNJANUM   =    "040014"
+      *=== 代表保険者番号変更 by Yoshikawa(2011/04/12) start
+      *           SKT0410TMP-HKNJANUM   =    "040014"
+                 SKT0410TMP-HKNJANUM   =    "044008"
+      *=== 代表保険者番号変更 by Yoshikawa(2011/04/12) end
              MOVE  "仙台市"                  TO   SKT0410-HKNJANAME
            END-IF
       *
