@@ -49,6 +49,7 @@
       *  01.00.12    吉川    2010/07/01  オンライン返戻対応
       *  01.00.13    吉川    2011/01/17  open-cobol1.0対応
       *  01.00.14    吉川    2011/03/15  東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.15    吉川    2011/04/11  東北地方太平洋沖地震対応（仕様変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -709,6 +710,13 @@
              MOVE  RECE10-HKNJANUM(3:6)  TO  SKT0310TMP-HKNJANUM(1:6)
            END-IF
       *
+      *=== 災害対応 by Yoshikawa(2011/04/11) start
+           IF  RECE10-HKNJANUM  =  ZERO
+           AND RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+             MOVE  "999999"             TO  SKT0310TMP-HKNJANUM
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/11) end
+      *
       *    出力順設定
            IF     YUSEN-HKNJANUM    =    SKT0310TMP-HKNJANUM
              MOVE        1          TO   SKT0310TMP-SYUTURYOKU
@@ -721,13 +729,15 @@
            END-IF
       *
       *---(01.00.07) LINE ADD START ------------------------------------
-      *    岩手宮城内陸地震の対象者は別帳票
-           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-      *=== 災害対応 by Yoshikawa(2011/03/15) start
-      *       MOVE  "1"                   TO  SKT0310TMP-GENMEN
-             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0310TMP-GENMEN
-      *=== 災害対応 by Yoshikawa(2011/03/15) end
-           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/11) start
+      **    岩手宮城内陸地震の対象者は別帳票
+      *     IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+      **=== 災害対応 by Yoshikawa(2011/03/15) start
+      **       MOVE  "1"                   TO  SKT0310TMP-GENMEN
+      *       MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0310TMP-GENMEN
+      **=== 災害対応 by Yoshikawa(2011/03/15) end
+      *     END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/11) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
            PERFORM  900-SKTTMP-READ-SEC

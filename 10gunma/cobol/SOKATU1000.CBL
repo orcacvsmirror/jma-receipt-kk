@@ -41,6 +41,7 @@
       * 01.00.10     吉川    2009/08/25    長期は別帳票とする
       * 01.00.11     吉川    2010/07/15    オンライン返戻対応
       * 01.00.12     吉川    2011/03/10    open-cobol1.0対応
+      * 01.00.13     吉川    2011/04/08    東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -128,6 +129,9 @@
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-KOH             PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  FLG-GYOSEI          PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -136,6 +140,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  IDY1                PIC 9(04).
+           03  IDY2                PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
        01  WRK-PARA.
            COPY    "CPORCSPRTLNK.INC".
@@ -169,6 +177,10 @@
       *
            03  WRK-CNT             PIC 9(02).
            03  WRK-RJNKYURATE      PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  WRK-CHARCNT         PIC 9(02).
+           03  WRK-SENTOU          PIC 9(02).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
            03  WRK-Z2              PIC ZZ.
            03  WRK-Z3              PIC ZZZ.
@@ -219,12 +231,18 @@
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
                05  KEY-N-TYOKI      PIC  X(01).
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               05  KEY-N-GENMEN     PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
            03  KEY-OLD.
                05  KEY-O-SRYYM      PIC  X(06).
                05  KEY-O-PREFKBN    PIC  9(01).
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
                05  KEY-O-TYOKI      PIC  X(01).
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               05  KEY-O-GENMEN     PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".
@@ -858,6 +876,19 @@
       *    入外区分
            MOVE  RECE10-NYUGAIKBN  TO  SKT1000TMP-NYUGAIKBN
       *
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+      *    災害対応
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE  "1"             TO  SKT1000TMP-GENMEN
+             MOVE  1               TO  SKT1000TMP-PREFKBN
+      *
+      *      保険者不明の場合は住所から市町村を取得
+             IF  RECE10-HKNJANUM  =  ZERO
+               PERFORM  20011-CITYGET-SEC
+             END-IF
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
+      *
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
@@ -884,6 +915,101 @@
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+      *****************************************************************
+      *    住所から市町村名取得処理
+      *****************************************************************
+       20011-CITYGET-SEC          SECTION.
+      *
+           MOVE    ZERO                    TO  FLG-GYOSEI
+                                               WRK-CHARCNT
+                                               WRK-SENTOU
+      *
+           PERFORM  VARYING  IDY1  FROM  1  BY  2
+                    UNTIL  IDY1  >  100
+      *      市か郡か
+             IF  PTINF-HOME-ADRS(IDY1:2)  =  "郡"
+      *        「郡」の後に「〜市」という文字が存在するかどうか
+               INSPECT  PTINF-HOME-ADRS  TALLYING  
+                 WRK-CHARCNT FOR ALL "市" AFTER "郡"
+               IF  WRK-CHARCNT  =  ZERO
+                 MOVE    2                 TO  FLG-GYOSEI
+                 MOVE    IDY1              TO  WRK-SENTOU
+                 MOVE    100               TO  IDY1
+               ELSE
+                 MOVE    100               TO  IDY1
+               END-IF
+             END-IF
+           END-PERFORM
+           IF  FLG-GYOSEI  =  ZERO
+             MOVE    1                     TO   FLG-GYOSEI
+           END-IF
+      *
+           DISPLAY  "FLG-GYOSEI =" FLG-GYOSEI
+           DISPLAY  "PTINF-HOME-ADRS =" PTINF-HOME-ADRS
+           MOVE  ZERO  TO  WRK-CHARCNT
+      *    「市」の場合
+           IF  FLG-GYOSEI  =  1
+      *      「市」という文字が他にいくつ存在するか数える
+             INSPECT  PTINF-HOME-ADRS  TALLYING  
+               WRK-CHARCNT FOR ALL "市" AFTER "市"
+      *
+             DISPLAY  "WRK-CHARCNT =" WRK-CHARCNT
+             PERFORM  VARYING  IDY2  FROM  1  BY  2
+                      UNTIL  IDY2  >  100
+      *        「市」の文字を先頭から検索
+               IF  PTINF-HOME-ADRS(IDY2:2)  =  "市"
+      *
+      *          WRK-CHARCNTが1以上の場合、その「市」は名前に含まれる市である
+      *          （例：四日市市や市川市などが該当する）
+                 IF  WRK-CHARCNT  >  ZERO
+                   MOVE    ZERO            TO  WRK-CHARCNT
+                 ELSE
+      *            都道府県名から市までを取得
+                   MOVE  PTINF-HOME-ADRS(1:IDY2 + 1)
+                                           TO  SKT1000TMP-ADRS
+                   MOVE  100               TO  IDY2
+                   DISPLAY  "SKT1000TMP-ADRS =" SKT1000TMP-ADRS
+                 END-IF
+               END-IF
+             END-PERFORM
+      *
+      *    「郡」の場合
+           ELSE
+             PERFORM  VARYING  IDY2  FROM  WRK-SENTOU  BY  2
+                      UNTIL  IDY2  >  100
+      *        「町」及び「村」を検索
+               IF  PTINF-HOME-ADRS(IDY2:2)  =  "町" OR "村"
+      *          他に「町」及び「村」という文字が使われているか検索
+                 EVALUATE  PTINF-HOME-ADRS(IDY2:2)
+                   WHEN  "町"
+                     MOVE    ZERO          TO  WRK-CHARCNT
+                   WHEN  "村"
+                     INSPECT  PTINF-HOME-ADRS  TALLYING  
+                       WRK-CHARCNT FOR ALL "町" AFTER "村"
+                 END-EVALUATE
+      *
+                  DISPLAY  "WRK-CHARCNT =" WRK-CHARCNT
+      *          WRK-CHARCNTが1以上の場合、その「村」は名前に含まれる町である
+      *          （例：村田町などが該当する）
+                 IF  WRK-CHARCNT  >  ZERO
+                   MOVE    ZERO            TO  WRK-CHARCNT
+                 ELSE
+      *            都道府県名から町、村までを取得
+                   MOVE    PTINF-HOME-ADRS(1:IDY2 + 1)
+                                           TO  SKT1000TMP-ADRS
+                   MOVE    100             TO  IDY2
+                   DISPLAY  "SKT1000TMP-ADRS =" SKT1000TMP-ADRS
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       20011-CITYGET-EXT.
+           EXIT.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *****************************************************************
       *    医療保険・集計処理
       *****************************************************************
@@ -1049,8 +1175,17 @@
                     OR       FLG-PRINT  =  1
       *
       *    保険者名
-             PERFORM  960-HKNJAINF-SET-SEC
-             MOVE  HKNJA-HKNJANAME      TO  SKT1000-HKNJANAME (IDX1)
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+             IF  SKT1000TMP-GENMEN  NOT =  SPACE
+             AND SKT1000TMP-ADRS  NOT =  SPACE
+               MOVE  SKT1000TMP-ADRS    TO  SKT1000-HKNJANAME (IDX1)
+             ELSE
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
+               PERFORM  960-HKNJAINF-SET-SEC
+               MOVE  HKNJA-HKNJANAME      TO  SKT1000-HKNJANAME (IDX1)
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    在医総
              IF  SKT1000TMP-ZAITAKU  =  1
@@ -1743,6 +1878,9 @@
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
                MOVE  SKT1000TMP-TYOKI    TO  KEY-N-TYOKI
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) end
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               MOVE  SKT1000TMP-GENMEN   TO  KEY-N-GENMEN
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
            END-READ
            .
        900-TMP-READ-EXT.

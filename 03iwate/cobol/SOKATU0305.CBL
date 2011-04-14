@@ -34,6 +34,7 @@
       *  01.00.03    µÈÀî    2010/02/17  ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ
       *  01.00.04    µÈÀî    2010/07/01  ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *  01.00.05    µÈÀî    2010/09/22  Æü¿ô¤Î·å¿ôÁý²Ã
+      *  01.00.06    µÈÀî    2011/04/11  ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -275,7 +276,10 @@
       *        µëÉÕ³ä¹ç
                05  SUM-KYURATE                 PIC  9(02).
       *        ¸©ÆâÊÝ¸±¼Ô
-               05  SUM-NHKNJA-TBL   OCCURS  35.
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) start
+      *         05  SUM-NHKNJA-TBL   OCCURS  35.
+               05  SUM-NHKNJA-TBL   OCCURS  36.
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) end
                    07  SUM-KENNAI-FLG          PIC  9(01).
       *        ¸©Ì¾
                05  SUM-KENMEI-TBL   OCCURS  50.
@@ -725,6 +729,15 @@
              MOVE  RECE10-HKNJANUM(3:6)  TO  WRK-HKNJANUM(1:6)
            END-IF
       *
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) start
+           IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+           AND RECE10-HKNJANUM  =  ZERO
+             MOVE  "999999"              TO  WRK-HKNJANUM
+      *      ÊÝ¸±¼ÔÉÔÌÀÊ¬¤Ï¸©Æâ¤Ø
+             MOVE  "1"                   TO  RECE10-PREFKBN
+           END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) end
+      *
       *    ÊÝ¸±¼Ô¿ô¡Ê´û¤Ë¥«¥¦¥ó¥È¤·¤¿ÊÝ¸±¼Ô¤«¡Ë
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >     300
@@ -799,7 +812,10 @@
                  IF  WRK-HKNJANUM  =  HKNJA03-HKNJANUM(IDX4)
                    MOVE  1            TO  SUM-KENNAI-FLG(IDX4)
                    ADD   1            TO  SUM-GOKEIHKNJA(1)
-                   MOVE  35           TO  IDX4
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) start
+      *             MOVE  35           TO  IDX4
+                   MOVE  36           TO  IDX4
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) end
                  END-IF
                END-PERFORM
              ELSE
@@ -1086,7 +1102,10 @@
       *
       *    ÀÁµáÀèÌ¾¡Ê¸©Æâ¡Ë
              PERFORM  VARYING  IDX1  FROM  1  BY  1
-                      UNTIL    IDX1  >     35
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) start
+      *                UNTIL    IDX1  >     35
+                      UNTIL    IDX1  >     36
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/11) end
                IF  SUM-KENNAI-FLG (IDX1)  =  1
                  MOVE  "¡û"       TO  SKT0305-NHKNJA(IDX1)
                END-IF

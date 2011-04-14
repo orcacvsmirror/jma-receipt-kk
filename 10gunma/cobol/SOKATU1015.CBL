@@ -35,6 +35,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.04    吉川    2010/03/01  広域連合の保険者番号指定対応
       *  01.00.05    吉川    2010/07/15  オンライン返戻対応
+      *  01.00.06    吉川    2011/04/08  東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -113,6 +114,9 @@
            03  IDXY                PIC 9(04).
       *
            03  IDY                 PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  IDY1                PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
            03  IDY2                PIC 9(04).
            03  IDY3                PIC 9(04).
            03  IDY4                PIC 9(04).
@@ -130,6 +134,9 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-SYOKBN1    PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  WRK-PARA-GENMENKBN  PIC X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -148,6 +155,9 @@
            03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
            03  WRK-HKNJANAME       PIC X(20).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  WRK-ADRS            PIC X(40).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
@@ -234,8 +244,14 @@
        01  KEY-AREA                    VALUE   LOW-VALUE.
            03  KEY-NEW.
                05  KEY-N-HKNJANUM      PIC X(08).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               05  KEY-N-ADRS          PIC X(40).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
            03  KEY-OLD.
                05  KEY-O-HKNJANUM      PIC X(08). 
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               05  KEY-O-ADRS          PIC X(40).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    固定項目
        01  WRK-CONS-AREA.
@@ -368,6 +384,9 @@
                                                WRK-PARA-HKNJANUM
                                                WRK-PARA-SYOKBN
                                                WRK-PARA-SYOKBN1
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+                                               WRK-PARA-GENMENKBN
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
                                                RECEERR
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -706,6 +725,14 @@
                WHEN    7
                    MOVE    2                   TO  IDX1
            END-EVALUATE
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           IF  WRK-PARA-GENMENKBN  =  "2"
+             IF  RECE10-HKNJANUM  =  ZERO
+               MOVE  KEY-O-ADRS                TO  WRK-HKNJANAME
+             END-IF
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
            PERFORM 20011-HKN-SYUKEI-SEC
       *
@@ -1658,6 +1685,20 @@
                END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/07/15) end
       *
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+      *        災害対象者判定
+               EVALUATE  WRK-PARA-GENMENKBN
+                 WHEN  "1"
+                   IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+                     GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+                 WHEN  "2"
+                   IF  RECE10-ETC-YKZFTN(1)  =  ZERO
+                     GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+               END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
+      *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
                INITIALIZE                      PTINF-REC
@@ -1671,6 +1712,22 @@
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+      *        災害で保険者不明の場合は、住所から県名を取得
+               IF  WRK-PARA-GENMENKBN  =  "2"
+                 IF  RECE10-HKNJANUM  =  ZERO
+                   PERFORM  VARYING  IDY1  FROM  1  BY  2
+                            UNTIL  IDY1  >  100
+      *              県名検索
+                     IF  PTINF-HOME-ADRS(IDY1:2)  =  "県"
+                       MOVE    PTINF-HOME-ADRS(1:IDY1 + 1)
+                                            TO  KEY-N-ADRS
+                       MOVE    100          TO  IDY1
+                     END-IF
+                   END-PERFORM
+                 END-IF
+               END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
                ADD     1                     TO  CNT-RECE10   
       *         
                DISPLAY "PTNUM=" RECE10-PTNUM 

@@ -23,6 +23,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/08/25  SKT1000TMP-TYOKI追加
       *  01.00.02    吉川    2011/03/10  KBNを数値から文字に変更
+      *  01.00.03    吉川    2011/04/08  東北地方太平洋沖地震対応
       ************************************************************
        01  SKT1000TMP-REC.
            03  SKT1000TMP-KEY.
@@ -32,6 +33,10 @@
                05  SKT1000TMP-KUMIAIKBN      PIC  X(01).
                05  SKT1000TMP-HKNJANUM       PIC  X(08).
                05  SKT1000TMP-ZAITAKU        PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               05  SKT1000TMP-GENMEN         PIC  X(01).
+               05  SKT1000TMP-ADRS           PIC  X(40).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
                05  SKT1000TMP-SYUBETU        PIC  9(01).
                05  SKT1000TMP-JYUNJO         PIC  9(02).
       *=== 数値から文字に変更 by Yoshikawa(2011/03/10) start

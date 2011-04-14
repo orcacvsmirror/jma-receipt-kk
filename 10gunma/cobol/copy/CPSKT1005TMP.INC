@@ -18,6 +18,10 @@
       ************************************************************
       *    総括表一時ファイル                                    *
       ************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2011/04/08  東北地方太平洋沖地震対応
+      ************************************************************
        01  SKT1005TMP-REC.
            03  SKT1005TMP-KEY.
                05  SKT1005TMP-SYUTURYOKU     PIC  X(01).
@@ -25,6 +29,9 @@
                05  SKT1005TMP-ZAITAKU        PIC  X(01).
                05  SKT1005TMP-RATEFLG        PIC  9(01).
                05  SKT1005TMP-KYURATE        PIC  9(02).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+               05  SKT1005TMP-ADRS           PIC  X(40).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
            03  SKT1005TMP-NYUGAI-TBL  OCCURS  2.
                05  SKT1005TMP-KENSU          PIC  9(06).
                05  SKT1005TMP-TENSU          PIC  9(10).

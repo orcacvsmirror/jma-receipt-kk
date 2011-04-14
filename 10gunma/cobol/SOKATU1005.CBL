@@ -34,6 +34,7 @@
       *  01.00.03    µÈÀî    10/03/01    ¹­°èÏ¢¹ç¤ÎÊÝ¸±¼ÔÈÖ¹æ»ØÄêÂÐ±þ
       *  01.00.04    µÈÀî    10/07/15    ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *  01.00.05    µÈÀî    11/03/10    open-cobol1.0ÂÐ±þ
+      *  01.00.06    µÈÀî    11/04/08    ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -119,6 +120,9 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+           03  IDY1                PIC 9(04).
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
       *
        01  WRK-PARA.
            COPY    "CPORCSPRTLNK.INC".
@@ -129,6 +133,9 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+           03  WRK-PARA-GENMENKBN  PIC X(01).
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
       *
       *    °ì»þÎÎ°è
        01  WRK-AREA.
@@ -310,6 +317,9 @@
                                                WRK-PARA-HKNJANUM
                                                WRK-PARA-SYOKBN
                                                WRK-PARA-TOKUBETU
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+                                               WRK-PARA-GENMENKBN
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
                                                RECEERR
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -574,6 +584,23 @@
       *    µëÉÕ³ä¹ç
            MOVE  RECE10-KYURATE         TO  SKT1005TMP-KYURATE
       *
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+      *    ºÒ³²¤ÇÊÝ¸±¼ÔÉÔÌÀ¤Î¾ì¹ç¤Ï¡¢½»½ê¤«¤é¸©Ì¾¤ò¼èÆÀ
+           IF  WRK-PARA-GENMENKBN  =  "2"
+             IF  RECE10-HKNJANUM  =  ZERO
+               PERFORM  VARYING  IDY1  FROM  1  BY  2
+                        UNTIL  IDY1  >  100
+      *          ¸©Ì¾¸¡º÷
+                 IF  PTINF-HOME-ADRS(IDY1:2)  =  "¸©"
+                   MOVE    PTINF-HOME-ADRS(1:IDY1 + 1)
+                                        TO  SKT1005TMP-ADRS
+                   MOVE    100          TO  IDY1
+                 END-IF
+               END-PERFORM
+             END-IF
+           END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
+      *
            PERFORM  900-SKTTMP-READ-SEC
       *
            PERFORM  210-HKN-SYUKEI-SEC
@@ -723,7 +750,16 @@
                MOVE  "ºß"        TO  SKT1005-ZAI (IDX1)
              END-IF
       *      ¸©Ì¾
-             PERFORM  400-KENNAME-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+             IF  WRK-PARA-GENMENKBN  =  "2"
+             AND SKT1005TMP-ADRS  NOT =  SPACE
+               MOVE  SKT1005TMP-ADRS   TO  SKT1005-HKNJANAME (IDX1)
+             ELSE
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
+               PERFORM  400-KENNAME-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+             END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
       *      µëÉÕ³ä¹ç
              MOVE  SKT1005TMP-KYURATE  TO  WRK-Z2
              MOVE  WRK-Z2              TO  SKT1005-KYURATE (IDX1)
@@ -1047,6 +1083,20 @@
                    GO  TO  950-SEIKYU-READ-SEC
                END-IF
       *=== ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ by Yoshikawa(2010/07/15) end
+      *
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) start
+      *        ºÒ³²ÂÐ¾Ý¼ÔÈ½Äê
+               EVALUATE  WRK-PARA-GENMENKBN
+                 WHEN  "1"
+                   IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+                     GO  TO  950-SEIKYU-READ-SEC
+                   END-IF
+                 WHEN  "2"
+                   IF  RECE10-ETC-YKZFTN(1)  =  ZERO
+                     GO  TO  950-SEIKYU-READ-SEC
+                   END-IF
+               END-EVALUATE
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/08) end
       *
       *        ¥Æ¥¹¥È´µ¼Ô¤Î¤È¤­¤ÏÆÉ¤ßÈô¤Ð¤¹
                MOVE    SPACE               TO  PTINF-REC

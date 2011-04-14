@@ -40,6 +40,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.06    吉川    2010/02/17  広域連合の保険者番号指定対応
       *  01.00.07    吉川    2010/07/01  オンライン返戻対応
+      *  01.00.08    吉川    2011/04/11  東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -702,6 +703,12 @@
            ELSE
              MOVE  RECE10-HKNJANUM(3:6)  TO  WRK-HKNJANUM(1:6)
            END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/11) start
+           IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+           AND RECE10-HKNJANUM  =  ZERO
+             MOVE  "999999"              TO  WRK-HKNJANUM
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/11) end
       *=== 保険者番号毎で集計 by Yoshikawa(2008/05/01) start
       **    代表番号セット
       *     PERFORM  200101-HKNJANUM-SET-SEC

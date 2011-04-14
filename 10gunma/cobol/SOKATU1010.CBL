@@ -47,6 +47,7 @@
       *  01.00.12    吉川    10/07/15    オンライン返戻対応
       *  01.00.13    吉川    11/03/10    open-cobol1.0対応
       *  01.00.14    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.15    吉川    11/04/08    東北地方太平洋沖地震対応（仕様変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -142,6 +143,9 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  FLG-GYOSEI          PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -150,6 +154,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  IDY1                PIC 9(04).
+           03  IDY2                PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
        01  WRK-PARA.
            COPY    "CPORCSPRTLNK.INC".
@@ -188,6 +196,9 @@
            03  WRK-PAYKBN          PIC 9(02).
            03  WRK-RATE            PIC 9(03).
            03  WRK-CNT             PIC 9(02).
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+           03  WRK-CHARCNT         PIC 9(02).
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
            03  WRK-Z2              PIC ZZ.
            03  WRK-Z3              PIC ZZZ.
@@ -677,7 +688,16 @@
       *=== 災害対応 by Yoshikawa(2011/03/24) start
       *    災害対象者は別帳票
            IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1010TMP-GENMEN
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+      *       MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1010TMP-GENMEN
+             MOVE  "00001"           TO  SKT1010TMP-GENMEN
+             MOVE  "1"               TO  SKT1010TMP-PREFKBN
+      *
+      *      保険者不明の場合は住所から市町村を取得
+             IF  RECE10-HKNJANUM  =  ZERO
+               PERFORM  20011-CITYGET-SEC
+             END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
            END-IF
       *=== 災害対応 by Yoshikawa(2011/03/24) end
       *
@@ -707,6 +727,95 @@
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+      *****************************************************************
+      *    住所から市町村名取得処理
+      *****************************************************************
+       20011-CITYGET-SEC          SECTION.
+      *
+           MOVE    ZERO                    TO  FLG-GYOSEI
+                                               WRK-CHARCNT
+      *
+           PERFORM  VARYING  IDY1  FROM  1  BY  2
+                    UNTIL  IDY1  >  100
+      *      市か郡か(FLG-GYOSEI: 1=「市」 2=「郡」)
+             IF  PTINF-HOME-ADRS(IDY1:2)  =  "郡"
+      *        「郡」の後ろに「〜市」という文字が存在するかどうか
+               INSPECT  PTINF-HOME-ADRS  TALLYING  
+                 WRK-CHARCNT FOR ALL "市" AFTER "郡"
+               IF  WRK-CHARCNT  =  ZERO
+                 MOVE    2                 TO  FLG-GYOSEI
+                 MOVE    100               TO  IDY1
+               ELSE
+                 MOVE    100               TO  IDY1
+               END-IF
+             END-IF
+           END-PERFORM
+           IF  FLG-GYOSEI  =  ZERO
+             MOVE    1                     TO   FLG-GYOSEI
+           END-IF
+      *
+           DISPLAY  "FLG-GYOSEI =" FLG-GYOSEI
+           DISPLAY  "PTINF-HOME-ADRS =" PTINF-HOME-ADRS
+           MOVE  ZERO  TO  WRK-CHARCNT
+      *    「市」の場合
+           IF  FLG-GYOSEI  =  1
+      *      「市」という文字が他にいくつ存在するか数える
+             INSPECT  PTINF-HOME-ADRS  TALLYING  
+               WRK-CHARCNT FOR ALL "市" AFTER "市"
+      *
+             DISPLAY  "WRK-CHARCNT =" WRK-CHARCNT
+             PERFORM  VARYING  IDY2  FROM  1  BY  2
+                      UNTIL  IDY2  >  100
+      *        「市」の文字を先頭から検索
+               IF  PTINF-HOME-ADRS(IDY2:2)  =  "市"
+      *
+      *          WRK-CHARCNTが1以上の場合、その「市」は名前に含まれる市である
+      *          （例：四日市市や市川市などが該当する）
+                 IF  WRK-CHARCNT  >  ZERO
+                   MOVE    ZERO            TO  WRK-CHARCNT
+                 ELSE
+      *            都道府県名から市までを取得
+                   MOVE  PTINF-HOME-ADRS(1:IDY2 + 1)
+                                           TO  SKT1010TMP-ADRS
+                   MOVE  100               TO  IDY2
+                   DISPLAY  "SKT1000TMP-ADRS =" SKT1010TMP-ADRS
+                 END-IF
+               END-IF
+             END-PERFORM
+      *
+      *    「郡」の場合
+           ELSE
+      *      「郡」から「〜町」の間に「村」はいくつ存在するか数える
+             INSPECT  PTINF-HOME-ADRS  TALLYING  
+               WRK-CHARCNT FOR ALL "村" AFTER "郡" BEFORE "町"
+             PERFORM  VARYING  IDY2  FROM  1  BY  2
+                      UNTIL  IDY2  >  100
+      *        「町」及び「村」を先頭から検索
+               IF  PTINF-HOME-ADRS(IDY2:2)  =  "町" OR "村"
+      *
+                  DISPLAY  "WRK-CHARCNT =" WRK-CHARCNT
+      *          WRK-CHARCNTが1以上の場合、その「村」は名前に含まれる町である
+      *          （例：村田町などが該当する）
+                 IF  WRK-CHARCNT  >  ZERO
+                   MOVE    ZERO            TO  WRK-CHARCNT
+                 ELSE
+      *            都道府県名から町、村までを取得
+                   MOVE    PTINF-HOME-ADRS(1:IDY2 + 1)
+                                           TO  SKT1010TMP-ADRS
+                   MOVE    100             TO  IDY2
+                   DISPLAY  "SKT1000TMP-ADRS =" SKT1010TMP-ADRS
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       20011-CITYGET-EXT.
+           EXIT.
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *****************************************************************
       *    医療保険・老人保健分集計処理
       *****************************************************************
@@ -1208,17 +1317,26 @@
            MOVE    WRK-OUT-INPUT         TO  SKT1010-HOSPCD
       *
       *    保険者名
-           PERFORM  920-HKNJAINF-SET-SEC
-           INITIALIZE    WRK-HKNJANAME
-           IF     SKT1010TMP-PREFKBN     =   "2"
-             PERFORM  400-KENNAME-SEC
-           ELSE 
-             STRING   HKNJA-HKNJANAME     DELIMITED BY SPACE
-                      "  様"              DELIMITED BY SIZE
-                      INTO                WRK-HKNJANAME
-             END-STRING
-           END-IF
-           MOVE    WRK-HKNJANAME        TO  SKT1010-HKNJANAME
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+             IF  SKT1010TMP-GENMEN  NOT =  SPACE
+             AND SKT1010TMP-ADRS  NOT =  SPACE
+               MOVE    SKT1010TMP-ADRS   TO  SKT1010-HKNJANAME
+             ELSE
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
+               PERFORM  920-HKNJAINF-SET-SEC
+               INITIALIZE    WRK-HKNJANAME
+               IF     SKT1010TMP-PREFKBN     =   "2"
+                 PERFORM  400-KENNAME-SEC
+               ELSE 
+                 STRING   HKNJA-HKNJANAME     DELIMITED BY SPACE
+                          "  様"              DELIMITED BY SIZE
+                          INTO                WRK-HKNJANAME
+                 END-STRING
+               END-IF
+               MOVE    WRK-HKNJANAME        TO  SKT1010-HKNJANAME
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+             END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    保険者番号
            MOVE    SKT1010TMP-HKNJANUM   TO  WRK-MAE-INPUT
@@ -1423,17 +1541,26 @@
            MOVE    WRK-OUT-INPUT         TO  SKT1020-HOSPCD
       *
       *    保険者名
-           PERFORM  920-HKNJAINF-SET-SEC
-           INITIALIZE    WRK-HKNJANAME
-           IF     SKT1010TMP-PREFKBN     =   "2"
-             PERFORM  400-KENNAME-SEC
-           ELSE
-             STRING   HKNJA-HKNJANAME     DELIMITED BY SPACE
-                      "  様"              DELIMITED BY SIZE
-                      INTO                WRK-HKNJANAME
-             END-STRING
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
+             IF  SKT1010TMP-GENMEN  NOT =  SPACE
+             AND SKT1010TMP-ADRS  NOT =  SPACE
+               MOVE    SKT1010TMP-ADRS   TO  SKT1020-HKNJANAME
+             ELSE
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
+             PERFORM  920-HKNJAINF-SET-SEC
+             INITIALIZE    WRK-HKNJANAME
+             IF     SKT1010TMP-PREFKBN     =   "2"
+               PERFORM  400-KENNAME-SEC
+             ELSE
+               STRING   HKNJA-HKNJANAME     DELIMITED BY SPACE
+                        "  様"              DELIMITED BY SIZE
+                        INTO                WRK-HKNJANAME
+               END-STRING
+             END-IF
+             MOVE    WRK-HKNJANAME        TO  SKT1020-HKNJANAME
+      *=== 災害対応 by Yoshikawa(2011/04/08) start
            END-IF
-           MOVE    WRK-HKNJANAME        TO  SKT1020-HKNJANAME
+      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    保険者番号
            MOVE    SKT1010TMP-HKNJANUM   TO  WRK-MAE-INPUT
