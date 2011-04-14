@@ -198,6 +198,7 @@
            03  WRK-CNT             PIC 9(02).
       *=== 災害対応 by Yoshikawa(2011/04/08) start
            03  WRK-CHARCNT         PIC 9(02).
+           03  WRK-SENTOU          PIC 9(02).
       *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
            03  WRK-Z2              PIC ZZ.
@@ -735,6 +736,7 @@
       *
            MOVE    ZERO                    TO  FLG-GYOSEI
                                                WRK-CHARCNT
+                                               WRK-SENTOU
       *
            PERFORM  VARYING  IDY1  FROM  1  BY  2
                     UNTIL  IDY1  >  100
@@ -745,6 +747,7 @@
                  WRK-CHARCNT FOR ALL "市" AFTER "郡"
                IF  WRK-CHARCNT  =  ZERO
                  MOVE    2                 TO  FLG-GYOSEI
+                 MOVE    IDY1              TO  WRK-SENTOU
                  MOVE    100               TO  IDY1
                ELSE
                  MOVE    100               TO  IDY1
@@ -786,13 +789,18 @@
       *
       *    「郡」の場合
            ELSE
-      *      「郡」から「〜町」の間に「村」はいくつ存在するか数える
-             INSPECT  PTINF-HOME-ADRS  TALLYING  
-               WRK-CHARCNT FOR ALL "村" AFTER "郡" BEFORE "町"
-             PERFORM  VARYING  IDY2  FROM  1  BY  2
+             PERFORM  VARYING  IDY2  FROM  WRK-SENTOU  BY  2
                       UNTIL  IDY2  >  100
-      *        「町」及び「村」を先頭から検索
+      *        「町」及び「村」を検索
                IF  PTINF-HOME-ADRS(IDY2:2)  =  "町" OR "村"
+      *          他に「町」及び「村」という文字が使われているか検索
+                 EVALUATE  PTINF-HOME-ADRS(IDY2:2)
+                   WHEN  "町"
+                     MOVE    ZERO          TO  WRK-CHARCNT
+                   WHEN  "村"
+                     INSPECT  PTINF-HOME-ADRS  TALLYING  
+                       WRK-CHARCNT FOR ALL "町" AFTER "村"
+                 END-EVALUATE
       *
                   DISPLAY  "WRK-CHARCNT =" WRK-CHARCNT
       *          WRK-CHARCNTが1以上の場合、その「村」は名前に含まれる町である
@@ -804,7 +812,7 @@
                    MOVE    PTINF-HOME-ADRS(1:IDY2 + 1)
                                            TO  SKT1010TMP-ADRS
                    MOVE    100             TO  IDY2
-                   DISPLAY  "SKT1000TMP-ADRS =" SKT1010TMP-ADRS
+                   DISPLAY  "SKT1010TMP-ADRS =" SKT1010TMP-ADRS
                  END-IF
                END-IF
              END-PERFORM
