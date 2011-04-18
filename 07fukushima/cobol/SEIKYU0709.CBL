@@ -37,6 +37,8 @@
       *                                  処理をする
       *  01.00.03    内田    08/04/06    SPA-AREA初期化
       *  01.00.04    吉川    11/02/09    open-cobol1.0対応
+      *  01.00.05    吉川    11/04/14    長期（972,974）を持っていても
+      *                                  長期欄に値が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -688,7 +690,10 @@
       *
       *    長期
            IF    FLG-TYOKI    =    1  AND
-                 WRK-SEIKYUGK-G    >  10000
+      *=== 長期欄の不具合修正 by Yoshikawa(2011/04/14) start
+      *           WRK-SEIKYUGK-G    >  10000
+                 WRK-SEIKYUGK-G    >=  10000
+      *=== 長期欄の不具合修正 by Yoshikawa(2011/04/14) end
                MOVE    10000          TO    WRK-SEIKYUGK-G
       *=== open-cobol1.0対応 by Yoshikawa(2011/02/09) start
       *         MOVE    1              TO    MF100-TYOKI
@@ -699,7 +704,10 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *    長期上位
            IF    FLG-TYOKI    =    2  AND
-                 WRK-SEIKYUGK-G    >  20000
+      *=== 長期欄の不具合修正 by Yoshikawa(2011/04/14) start
+      *           WRK-SEIKYUGK-G    >  20000
+                 WRK-SEIKYUGK-G    >=  20000
+      *=== 長期欄の不具合修正 by Yoshikawa(2011/04/14) end
                MOVE    20000          TO    WRK-SEIKYUGK-G
       *=== open-cobol1.0対応 by Yoshikawa(2011/02/09) start
       *         MOVE    1              TO    MF100-TYOKI
