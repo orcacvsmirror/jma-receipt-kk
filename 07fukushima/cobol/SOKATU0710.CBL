@@ -50,6 +50,7 @@
       *  01.00.12    吉川    11/02/09    特別療養費国保対応
       *                                  open-cobol1.0対応
       *  01.00.13    吉川    11/03/15    東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.14    吉川    11/04/14    東北地方太平洋沖地震対応（仕様変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -838,9 +839,24 @@
       *
       *=== 災害対応 by Yoshikawa(2011/03/15) start
       *    災害対象者は別集計
-           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0710TMP-GENMEN
-           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/14) start
+      *     IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+      *       MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0710TMP-GENMEN
+      *     END-IF
+           EVALUATE  RECE10-ETC-YKZFTN (1)
+             WHEN  ZERO
+             WHEN  1
+             WHEN  3
+               CONTINUE
+             WHEN  2
+             WHEN  4
+               MOVE    "00001"            TO  SKT0710TMP-GENMEN
+             WHEN  OTHER
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE    "00001"          TO  SKT0710TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/14) end
       *=== 災害対応 by Yoshikawa(2011/03/15) end
       *
            PERFORM  900-SKTTMP-READ-SEC
@@ -1267,7 +1283,9 @@
            MOVE    SYS-1001-HOSPCD       TO  SKT0710-HOSPCD
       *
       *    保険者番号
-           MOVE  SKT0710TMP-HKNJANUM     TO  SKT0710-HKNJANUM
+      *=== 災害対応 by Yoshikawa(2011/04/14) start
+      *     MOVE  SKT0710TMP-HKNJANUM     TO  SKT0710-HKNJANUM
+      *=== 災害対応 by Yoshikawa(2011/04/14) end
       *
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD       TO  WRK-MAE-INPUT
@@ -1275,17 +1293,23 @@
            MOVE    WRK-OUT-INPUT         TO  SKT0710-HOSPCD
       *
       *    保険者番号
-           MOVE    SKT0710TMP-HKNJANUM   TO  WRK-MAE-INPUT
-           PERFORM 2009-HENKAN-SEC
-           MOVE    WRK-OUT-INPUT         TO  SKT0710-HKNJANUM
+      *=== 災害対応 by Yoshikawa(2011/04/14) start
+           IF  SKT0710TMP-HKNJANUM  NOT =  ZERO
+      *=== 災害対応 by Yoshikawa(2011/04/14) end
+             MOVE    SKT0710TMP-HKNJANUM TO  WRK-MAE-INPUT
+             PERFORM 2009-HENKAN-SEC
+             MOVE    WRK-OUT-INPUT       TO  SKT0710-HKNJANUM
       *
       *    保険者名
-           IF    SKT0710TMP-HKNJANAME  =  SPACE
-             PERFORM  920-HKNJAINF-SET-SEC
-             MOVE  HKNJA-HKNJANAME         TO  SKT0710-HKNJANAME
-           ELSE
-             MOVE  SKT0710TMP-HKNJANAME    TO  SKT0710-HKNJANAME
+             IF    SKT0710TMP-HKNJANAME  =  SPACE
+               PERFORM  920-HKNJAINF-SET-SEC
+               MOVE  HKNJA-HKNJANAME       TO  SKT0710-HKNJANAME
+             ELSE
+               MOVE  SKT0710TMP-HKNJANAME  TO  SKT0710-HKNJANAME
+             END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/14) start
            END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/14) end
       *
       *    在総診
            IF      SKT0710TMP-ZAITAKU     =    "1"
