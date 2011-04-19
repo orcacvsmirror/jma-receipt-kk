@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku,Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/04/15  帳票様式の変更に伴う修正
+      ********************************************************************
        01  SC03.
       *印刷日付
            03  SC03-PRTYM             PIC  X(16).
@@ -29,7 +33,10 @@
       *医療機関コード
            03  SC03-HOSPCDN           PIC  X(20).
       *請求テーブル
-           03  SC03-SEIKYU-TBL   OCCURS  12.
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/15) start
+      *     03  SC03-SEIKYU-TBL   OCCURS  12.
+           03  SC03-SEIKYU-TBL   OCCURS  16.
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/15) end
       *保険者名
                05  SC03-HKNJANAME1         PIC  X(20).
       *入外テーブル（国保）

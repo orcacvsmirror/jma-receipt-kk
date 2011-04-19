@@ -37,6 +37,7 @@
       *  01.00.06    門間    08/11/20    SPA-AREA初期化
       *  01.00.07    吉川    10/04/01    月途中で負担者番号を変更しても
       *                                  変更前の市町村が取得されるのを修正
+      *  01.00.08    吉川    11/04/15    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -620,7 +621,9 @@
       *
            MOVE     ZERO    TO      FLG-END
       *
-           PERFORM  2001-SYUKEI-SEC
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) start
+      *     PERFORM  2001-SYUKEI-SEC
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) end
            PERFORM  2002-SYUKEI-SEC
       *
            CLOSE   MF100-FILE
@@ -995,27 +998,29 @@
       *    開設者名
            MOVE  SYS-1001-KAISETUNAME   TO  SC03-KAISETUNAME
       *
-      *    国保合計設定
-           IF      MF100-KBN   =   1
-               PERFORM VARYING IDX2    FROM    1   BY  1
-                       UNTIL   IDX2    >   2
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) start
+      **    国保合計設定
+      *     IF      MF100-KBN   =   1
+      *         PERFORM VARYING IDX2    FROM    1   BY  1
+      *                 UNTIL   IDX2    >   2
+      **
+      *             MOVE    MF100-KENSU(IDX2)   TO  WRK-Z6
+      *             MOVE    WRK-Z6              TO  SC03-GKENSU1(IDX2)
+      **
+      *             MOVE    MF100-NISSU(IDX2)   TO  WRK-Z6
+      *             MOVE    WRK-Z6              TO  SC03-GNISSU1(IDX2)
+      **
+      *             MOVE    MF100-TENSU(IDX2)   TO  WRK-Z11
+      *             MOVE    WRK-Z11             TO  SC03-GTENSU1(IDX2)
+      **
+      *             MOVE    MF100-ITBFTN(IDX2)  TO  WRK-Z11
+      *             MOVE    WRK-Z11             TO  SC03-GITBFTN1(IDX2)
       *
-                   MOVE    MF100-KENSU(IDX2)   TO  WRK-Z6
-                   MOVE    WRK-Z6              TO  SC03-GKENSU1(IDX2)
-      *
-                   MOVE    MF100-NISSU(IDX2)   TO  WRK-Z6
-                   MOVE    WRK-Z6              TO  SC03-GNISSU1(IDX2)
-      *
-                   MOVE    MF100-TENSU(IDX2)   TO  WRK-Z11
-                   MOVE    WRK-Z11             TO  SC03-GTENSU1(IDX2)
-      *
-                   MOVE    MF100-ITBFTN(IDX2)  TO  WRK-Z11
-                   MOVE    WRK-Z11             TO  SC03-GITBFTN1(IDX2)
-  
-               END-PERFORM
-      *    一時ファイル読込(国保)
-               PERFORM  900-TMP-READ-SEC
-           END-IF
+      *         END-PERFORM
+      **    一時ファイル読込(国保)
+      *         PERFORM  900-TMP-READ-SEC
+      *     END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) end
       *
       *    社保合計設定
            IF      MF101-KBN   =   1
@@ -1049,41 +1054,46 @@
        320-BODY-HEN-SEC      SECTION.
       *
            PERFORM VARYING IDX1    FROM    1   BY  1
-                   UNTIL   IDX1    >       12
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) start
+      *             UNTIL   IDX1    >       12
+                   UNTIL   IDX1    >       16
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) end
                    OR      FLG-PRINT       =   1
       *
-      *    国保データ設定
-               IF      FLG-END1     =   ZERO
-      *    市町村名
-                   MOVE    MF100-HKNJANUM  TO  WRK-HKNJANUM
-                   PERFORM 920-HKNJAINF-SET-SEC
-                   MOVE    WRK-HKNJANAME   TO  SC03-HKNJANAME1(IDX1)
-                   DISPLAY "保険者番号=" WRK-HKNJANUM
-                           "保険者名=" WRK-HKNJANAME
-      *
-                   PERFORM VARYING IDX2    FROM    1   BY  1
-                           UNTIL   IDX2    >       2
-      *
-      *            件数
-                       MOVE    MF100-KENSU(IDX2)   TO  WRK-Z5
-                       MOVE    WRK-Z5      TO  SC03-KENSU1(IDX1 IDX2)
-      *
-      *            日数
-                       MOVE    MF100-NISSU(IDX2)   TO  WRK-Z5
-                       MOVE    WRK-Z5      TO  SC03-NISSU1(IDX1 IDX2)
-      *
-      *            点数
-                       MOVE    MF100-TENSU(IDX2)   TO  WRK-Z10
-                       MOVE    WRK-Z10     TO  SC03-TENSU1(IDX1 IDX2)
-      *
-      *            患者負担額
-                       MOVE    MF100-ITBFTN(IDX2)  TO  WRK-Z9
-                       MOVE    WRK-Z9      TO  SC03-ITBFTN1(IDX1 IDX2)
-                   END-PERFORM
-      *
-      *    一時ファイル読込(国保)
-                   PERFORM  900-TMP-READ-SEC
-               END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) start
+      **    国保データ設定
+      *         IF      FLG-END1     =   ZERO
+      **    市町村名
+      *             MOVE    MF100-HKNJANUM  TO  WRK-HKNJANUM
+      *             PERFORM 920-HKNJAINF-SET-SEC
+      *             MOVE    WRK-HKNJANAME   TO  SC03-HKNJANAME1(IDX1)
+      *             DISPLAY "保険者番号=" WRK-HKNJANUM
+      *                     "保険者名=" WRK-HKNJANAME
+      **
+      *             PERFORM VARYING IDX2    FROM    1   BY  1
+      *                     UNTIL   IDX2    >       2
+      **
+      **            件数
+      *                 MOVE    MF100-KENSU(IDX2)   TO  WRK-Z5
+      *                 MOVE    WRK-Z5      TO  SC03-KENSU1(IDX1 IDX2)
+      **
+      **            日数
+      *                 MOVE    MF100-NISSU(IDX2)   TO  WRK-Z5
+      *                 MOVE    WRK-Z5      TO  SC03-NISSU1(IDX1 IDX2)
+      **
+      **            点数
+      *                 MOVE    MF100-TENSU(IDX2)   TO  WRK-Z10
+      *                 MOVE    WRK-Z10     TO  SC03-TENSU1(IDX1 IDX2)
+      **
+      **            患者負担額
+      *                 MOVE    MF100-ITBFTN(IDX2)  TO  WRK-Z9
+      *                 MOVE    WRK-Z9      TO  SC03-ITBFTN1(IDX1 IDX2)
+      *             END-PERFORM
+      **
+      **    一時ファイル読込(国保)
+      *             PERFORM  900-TMP-READ-SEC
+      *         END-IF
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2011/04/15) end
       *
       *    社保データ設定
                IF      FLG-END2     =   ZERO
