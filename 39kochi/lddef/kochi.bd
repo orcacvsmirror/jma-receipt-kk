@@ -13,6 +13,7 @@ bind	"SEIKYU3915"	"OpenCOBOL";
 bind	"SEIKYU3917"	"OpenCOBOL";
 bind	"SEIKYU3919"	"OpenCOBOL";
 bind	"SEIKYU3921"	"OpenCOBOL";
+bind	"SEIKYU3923"	"OpenCOBOL";
 bind	"SOKATU3900"	"OpenCOBOL";
 bind	"SOKATU3905"	"OpenCOBOL";
 bind	"SOKATU3920"	"OpenCOBOL";
