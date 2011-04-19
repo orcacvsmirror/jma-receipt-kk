@@ -42,6 +42,7 @@
       *  01.00.09       吉川    10/11/24   open-cobol1.0対応
       *  01.00.10       吉川    11/03/18   レセ電時は件数を印字しない
       *                                    （特別療養費除く）
+      *  01.00.11       吉川    11/04/19   レセ電時も件数を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -786,21 +787,28 @@
       *       ELSE
       *         PERFORM  210-KOUKI-SYUKEI-SEC
       *       END-IF
+      *=== レセ電時も件数を印字する by Yoshikawa(2011/04/19) start
+      *       IF  FLG-KOUKI  =  ZERO
+      *         IF  FLG-RECEDEN      =  ZERO
+      *         OR  WRK-PARA-SYOKBN  =  "2"
+      *           PERFORM  210-HKN-SYUKEI-SEC
+      *         ELSE
+      *           MOVE    1        TO  FLG-UPD
+      *         END-IF
+      *       ELSE
+      *         IF  FLG-KOURECEDEN   =  ZERO
+      *         OR  WRK-PARA-SYOKBN  =  "2"
+      *           PERFORM  210-KOUKI-SYUKEI-SEC
+      *         ELSE
+      *           MOVE    1        TO  FLG-UPD
+      *         END-IF
+      *       END-IF
              IF  FLG-KOUKI  =  ZERO
-               IF  FLG-RECEDEN      =  ZERO
-               OR  WRK-PARA-SYOKBN  =  "2"
-                 PERFORM  210-HKN-SYUKEI-SEC
-               ELSE
-                 MOVE    1        TO  FLG-UPD
-               END-IF
+               PERFORM  210-HKN-SYUKEI-SEC
              ELSE
-               IF  FLG-KOURECEDEN   =  ZERO
-               OR  WRK-PARA-SYOKBN  =  "2"
-                 PERFORM  210-KOUKI-SYUKEI-SEC
-               ELSE
-                 MOVE    1        TO  FLG-UPD
-               END-IF
+               PERFORM  210-KOUKI-SYUKEI-SEC
              END-IF
+      *=== レセ電時も件数を印字する by Yoshikawa(2011/04/19) end
       *=== レセ電時は件数を印字しない by Yoshikawa(2011/03/18) end
            ELSE
              PERFORM  210-TOKU-SYUKEI-SEC
