@@ -38,6 +38,7 @@
       *  01.00.05    門間    09/02/20    国組3〜6歳を分けないように修正
       *  01.00.06    吉川    10/05/14    オンライン返戻対応
       *  01.00.07    吉川    11/01/12    特別療養費国保対応
+      *  01.00.08    吉川    11/04/18    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -351,7 +352,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU3920"    TO  JOB-PGID
-           MOVE    "県外用・国保請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *     MOVE    "県外用・国保請求書"
+           MOVE    "国保請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -740,7 +744,13 @@
                RECE10-KOHNUM (2)   NOT =   SPACE  OR
                RECE10-KOHNUM (3)   NOT =   SPACE  OR
                RECE10-KOHNUM (4)   NOT =   SPACE
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *         PERFORM 220-KOH-SYUKEI-SEC
+      *      県外分のみ印字
+             IF  RECE10-PREFKBN  NOT =  "1"
                PERFORM 220-KOH-SYUKEI-SEC
+             END-iF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
            END-IF
       *
       **   老人・原爆件数集計
@@ -811,7 +821,9 @@
       *
       *    公費判別
       **   全国共通公費のみ対象
-            IF    RECE10-KOHNUM(IDX3)(1:1)  =  "0"
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *      IF    RECE10-KOHNUM(IDX3)(1:1)  =  "0"
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
              MOVE    1    TO   SKT3920TMP-PAGE-FLG2
       *
              PERFORM  VARYING  IDX4  FROM  1  BY  1
@@ -856,7 +868,9 @@
       *    食事療養：標準負担額
              ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
                                SKT3920TMP-S-KFTNGK(CNT-KOH)
-            END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *      END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
            END-PERFORM
       *
       *
@@ -1666,9 +1680,11 @@
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF   
       *    県外データ以外は読み飛ばす
-               IF    RECE10-PREFKBN  NOT  =  "2"
-                 GO    TO    900-SEIKYU-READ-SEC
-               END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *         IF    RECE10-PREFKBN  NOT  =  "2"
+      *           GO    TO    900-SEIKYU-READ-SEC
+      *         END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
       *         
                ADD     1                   TO  CNT-RECE10   
            ELSE

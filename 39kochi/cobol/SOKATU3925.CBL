@@ -34,6 +34,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/05/14  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
+      *  01.00.04    吉川    2011/04/18  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -716,7 +717,13 @@
                    RECE10-KOHNUM (2)   NOT =   SPACE  OR
                    RECE10-KOHNUM (3)   NOT =   SPACE  OR
                    RECE10-KOHNUM (4)   NOT =   SPACE
-               PERFORM 20012-KOH-SYUKEI-SEC
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *         PERFORM 20012-KOH-SYUKEI-SEC
+      *       県外分のみ集計
+              IF  RECE10-PREFKBN  NOT =  "1"
+                PERFORM 20012-KOH-SYUKEI-SEC
+              END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
            END-IF
       *
       *    集計の対象にならなかったとき
@@ -1620,9 +1627,11 @@
                    PERFORM  900-SEIKYU-READ-SEC
                END-IF   
       *        県外データ以外は読み飛ばす
-               IF    RECE10-PREFKBN  NOT  =  "2"
-                 PERFORM    900-SEIKYU-READ-SEC
-               END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) start
+      *         IF    RECE10-PREFKBN  NOT  =  "2"
+      *           PERFORM    900-SEIKYU-READ-SEC
+      *         END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2011/04/18) end
       *        キーに県番号を格納
       *===保険者番号毎に集計する by Yoshikawa(2008/05/14) start
       *         MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
