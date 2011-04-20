@@ -41,6 +41,7 @@
       *                                集計されない不具合を修正
       *  01.00.08    吉川    11/03/15  東北地方太平洋沖地震対応（対象者別集計）
       *  01.00.09    吉川    11/04/12  仙台市の代表保険者番号変更
+      *  01.00.10    吉川    11/04/20  東北地方太平洋沖地震対応（仕様変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -647,13 +648,29 @@
            END-IF
       *
       *---(01.00.05) LINE ADD START ------------------------------------
-      *    岩手宮城内陸地震の対象者は別帳票
-           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-      *=== 災害対応 by Yoshikawa(2011/03/15) start
-      *       MOVE  "1"              TO  SKT0410TMP-GENMEN
-             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0410TMP-GENMEN
-      *=== 災害対応 by Yoshikawa(2011/03/15) end
-           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/20) start
+      **    岩手宮城内陸地震の対象者は別帳票
+      *     IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+      **=== 災害対応 by Yoshikawa(2011/03/15) start
+      **       MOVE  "1"              TO  SKT0410TMP-GENMEN
+      *       MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT0410TMP-GENMEN
+      **=== 災害対応 by Yoshikawa(2011/03/15) end
+      *     END-IF
+      *    災害対象者（災１、災２、不詳・災１）は別帳票
+           EVALUATE  RECE10-ETC-YKZFTN (1)
+             WHEN  ZERO
+             WHEN  1
+             WHEN  3
+               CONTINUE
+             WHEN  2
+             WHEN  4
+               MOVE    "00001"      TO  SKT0410TMP-GENMEN
+             WHEN  OTHER
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE    "00001"    TO  SKT0410TMP-GENMEN
+               END-IF
+           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/04/20) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *    在宅
            MOVE     RECE10-ZAITAKU  TO   SKT0410TMP-ZAITAKU
