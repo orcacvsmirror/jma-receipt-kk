@@ -38,6 +38,7 @@
       *  01.00.05    吉川    10/04/07    オンライン返戻対応
       *  01.00.06    吉川    10/12/09    特別療養費国保対応
       *                                  open-cobol1.0対応
+      *  01.00.07    吉川    11/04/19    東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -118,6 +119,9 @@
       *---(01.00.02) LINE ADD START ------------------------------------
            03  FLG-KOUKI           PIC 9(01).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 災害対応 by Yoshikawa(2011/04/19) start
+           03  FLG-SAIGAI          PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/04/19) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -556,10 +560,37 @@
              PERFORM  950-SEIKYU-SELECT-SEC
              PERFORM  2001-KOKUHO-SYUKEI-SEC
                       UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) start
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) end
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/19) start
+      *    災害分集計
+           IF  WRK-PARA-SYOKBN  =  "2"  AND  WRK-PARA-TOKUBETU  =  "1"
+             MOVE     1       TO        FLG-SAIGAI
+      *
+      *      国保
+             MOVE     ZERO    TO        FLG-END
+             MOVE     ZERO    TO        FLG-KOUKI
+             MOVE    "key38"  TO        WRK-PATH
+             PERFORM  900-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOKUHO-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  900-SEIKYU-CLOSE-SEC
+      *
+      *      後期高齢
+             MOVE     ZERO    TO        FLG-END
+             MOVE     1       TO        FLG-KOUKI
+             MOVE    "039"    TO        WRK-HKNNUM
+             MOVE    "key66"  TO        WRK-PATH2
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOKUHO-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/19) end
       *
            IF      FLG-UPD   =       1
                PERFORM 2002-PRINT-SEC
@@ -1108,6 +1139,20 @@
                     END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/04/07) end
       *
+      *=== 災害対応 by Yoshikawa(2011/04/19) start
+      *             返戻ではない場合、災害分は読み飛ばす
+                    IF  WRK-PARA-SYOKBN  =  "1"
+                      IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+                        GO  TO  900-SEIKYU-READ-SEC
+                      END-IF
+                    ELSE
+                      IF  FLG-SAIGAI  =  1
+                      AND  RECE10-ETC-YKZFTN (1)  =  ZERO
+                        GO  TO  900-SEIKYU-READ-SEC
+                      END-IF
+                    END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/19) end
+      *
       *        テスト患者のときは読み飛ばす
                     MOVE    SPACE               TO  PTINF-REC
                     INITIALIZE                      PTINF-REC
@@ -1195,6 +1240,20 @@
                    GO  TO  950-SEIKYU-READ-SEC
                END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/04/07) end
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/19) start
+      *        返戻ではない場合、災害分は読み飛ばす
+               IF  WRK-PARA-SYOKBN  =  "1"
+                 IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+                   GO  TO  950-SEIKYU-READ-SEC
+                 END-IF
+               ELSE
+                 IF  FLG-SAIGAI  =  1
+                 AND  RECE10-ETC-YKZFTN (1)  =  ZERO
+                   GO  TO  950-SEIKYU-READ-SEC
+                 END-IF
+               END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/19) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

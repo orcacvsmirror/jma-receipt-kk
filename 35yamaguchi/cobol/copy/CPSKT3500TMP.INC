@@ -20,11 +20,15 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/04/19  東北地方太平洋沖地震対応
       ************************************************************
        01  SKT3500TMP-REC.
            03      SKT3500TMP-KEY.
              05    SKT3500TMP-KBN                   PIC  9(01).
              05    SKT3500TMP-SRYKA                 PIC  X(02).
+      *=== 災害対応 by Yoshikawa(2011/04/19) start
+             05    SKT3500TMP-GENMEN                PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/04/19) end
            03      SKT3500TMP-DATA-TBL OCCURS 5.
              05    SKT3500TMP-KENSU                 PIC  9(05).
              05    SKT3500TMP-TENSU                 PIC  9(07).

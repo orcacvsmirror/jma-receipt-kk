@@ -36,6 +36,7 @@
       *  01.00.05    吉川     09/02/25    SPA-AREA初期化
       *  01.00.06    吉川     10/04/30    オンライン返戻対応
       *  01.00.07    吉川     10/12/09    特別療養費国保対応
+      *  01.00.08    吉川     11/04/19    東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -653,6 +654,12 @@
              MOVE    "00"             TO    SKT3500TMP-SRYKA
            END-IF
       *
+      *=== 災害対応 by Yoshikawa(2011/04/19) start
+      *    災害分は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+             MOVE    "1"              TO    SKT3500TMP-GENMEN
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/19) end
       *
       *    TMPファイル読み込み
            PERFORM  800-SKTTMP-READ-SEC
