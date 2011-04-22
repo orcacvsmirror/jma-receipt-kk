@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         10/11/02  特別療養費国保対応
+      *  01.00.02    吉川         11/04/22  東北地方太平洋沖地震対応
       ********************************************************************
         01  SKT2640.
             02  SKT2640-SRYYM   PIC X(16).
@@ -46,4 +47,10 @@
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
             02  SKT2640-T-KENSU PIC X(3).
             02  SKT2640-T-TENSU PIC X(9).
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+            02  SKT2640-SAIGAI-TBL      OCCURS  2 TIMES.
+              03  SKT2640-SAI-KBN   PIC X(4).
+              03  SKT2640-SAI-KENSU PIC X(6).
+              03  SKT2640-SAI-TENSU PIC X(9).
+      *=== 災害対応 by Yoshikawa(2011/04/22) end

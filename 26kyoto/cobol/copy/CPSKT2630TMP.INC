@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       * 01.00.01     門間         08/09/25  公費名称追加
+      * 01.00.02     吉川         11/04/22  東北地方太平洋沖地震対応
       ************************************************************
        01  SKT2630TMP-REC.
            03  SKT2630TMP-KEY.
@@ -51,3 +52,10 @@
                05  SKT2630TMP-S-KNISSU         PIC  9(06).
                05  SKT2630TMP-S-KKINGAKU       PIC  9(10).
                05  SKT2630TMP-S-KFTNGAKU       PIC  9(10).
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+           03  SKT2630TMP-SAIGAI               PIC  X(01).
+           03  SKT2630TMP-SAIGAI-TBL       OCCURS  2.
+               05  SKT2630TMP-SAI-NYUGAI-TBL  OCCURS  2.
+                   07  SKT2630TMP-SAI-KENSU    PIC  9(06).
+                   07  SKT2630TMP-SAI-TENSU    PIC  9(10).
+      *=== 災害対応 by Yoshikawa(2011/04/22) end

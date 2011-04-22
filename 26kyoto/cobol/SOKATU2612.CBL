@@ -43,6 +43,7 @@
       *  01.00.10       吉川    11/03/18   レセ電時は件数を印字しない
       *                                    （特別療養費除く）
       *  01.00.11       吉川    11/04/19   レセ電時も件数を印字する
+      *  01.00.12       吉川    11/04/22   東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -240,6 +241,11 @@
        01  SUM-AREA.
            03  SUM-T-KENSU           PIC 9(03).
            03  SUM-T-TENSU           PIC 9(10).
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+           03  SUM-SAI-TBL  OCCURS  2.
+               05  SUM-SAI-KENSU     PIC 9(06).
+               05  SUM-SAI-TENSU     PIC 9(10).
+      *=== 災害対応 by Yoshikawa(2011/04/22) end
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
       *    カウント領域
@@ -803,11 +809,24 @@
       *           MOVE    1        TO  FLG-UPD
       *         END-IF
       *       END-IF
-             IF  FLG-KOUKI  =  ZERO
-               PERFORM  210-HKN-SYUKEI-SEC
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+      *       IF  FLG-KOUKI  =  ZERO
+      *         PERFORM  210-HKN-SYUKEI-SEC
+      *       ELSE
+      *         PERFORM  210-KOUKI-SYUKEI-SEC
+      *       END-IF
+             IF  (RECE10-ETC-YKZFTN(1)  =  1 OR 2 OR 4 OR 5 OR 7)
+             OR  (RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+             AND  RECE10-HKNJANUM  =  ZERO)
+               PERFORM  210-SAI-SYUKEI-SEC
              ELSE
-               PERFORM  210-KOUKI-SYUKEI-SEC
+               IF  FLG-KOUKI  =  ZERO
+                 PERFORM  210-HKN-SYUKEI-SEC
+               ELSE
+                 PERFORM  210-KOUKI-SYUKEI-SEC
+               END-IF
              END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/22) end
       *=== レセ電時も件数を印字する by Yoshikawa(2011/04/19) end
       *=== レセ電時は件数を印字しない by Yoshikawa(2011/03/18) end
            ELSE
@@ -1128,6 +1147,50 @@
        210-TOKU-SYUKEI-EXT.
            EXIT.
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+      *****************************************************************
+      *   災害分集計処理
+      *****************************************************************
+       210-SAI-SYUKEI-SEC              SECTION.
+      *
+           MOVE  "1"                 TO  SKT2610TMP-SAIGAI
+      *
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+             WHEN  1
+      *        「不詳」
+               MOVE    2             TO  IDX1
+             WHEN  2
+             WHEN  4
+             WHEN  5
+             WHEN  7
+      *        「災１」「災２」「不詳・災１」
+               MOVE    1             TO  IDX1
+             WHEN  OTHER
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE    1           TO  IDX1
+               ELSE
+      *          「不詳」
+                 MOVE    2           TO  IDX1
+               END-IF
+           END-EVALUATE
+      *
+      *    療養の給付：件数
+           ADD   1                   TO  SKT2610TMP-SAI-KENSU(IDX1)
+      *    療養の給付：点数
+           ADD   RECE10-TOTALTEN(1)  TO  SKT2610TMP-SAI-TENSU(IDX1)
+      *
+           IF  FLG-SKT2610TMP  =  1
+               WRITE    SKT2610TMP-REC
+           ELSE
+               REWRITE  SKT2610TMP-REC
+           END-IF
+      *
+           MOVE  1                   TO  FLG-UPD
+      *
+           .
+       210-SAI-SYUKEI-EXT.
+           EXIT.
+      *=== 災害対応 by Yoshikawa(2011/04/22) end
 057400*
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
@@ -1284,6 +1347,22 @@
       *     MOVE  WRK-Z5                      TO  SKT2650-GENBAKU
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+      *    災害分
+           IF  SKT2610TMP-SAIGAI  =  "1"
+      *      災害区分
+             MOVE  "災"                    TO  SKT2650-SAI-KBN(1)
+             MOVE  "不詳"                  TO  SKT2650-SAI-KBN(2)
+      *
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL  IDX2  >  2
+      *        災害分集計
+               ADD  SKT2610TMP-SAI-KENSU(IDX2)   TO  SUM-SAI-KENSU(IDX2)
+               ADD  SKT2610TMP-SAI-TENSU(IDX2)   TO  SUM-SAI-TENSU(IDX2)
+             END-PERFORM
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/04/22) end
+      *
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
       *    特別療養費集計
            ADD   SKT2610TMP-T-KENSU          TO  SUM-T-KENSU
@@ -1304,6 +1383,19 @@
       *      特別療養費：点数
              MOVE  SUM-T-TENSU               TO  WRK-Z9
              MOVE  WRK-Z9                    TO  SKT2650-T-TENSU
+      *
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+             PERFORM  VARYING  IDX2  FROM  1  BY  1
+                      UNTIL  IDX2  >  2
+      *        災害−件数
+               MOVE  SUM-SAI-KENSU(IDX2)     TO  WRK-Z6
+               MOVE  WRK-Z6   TO  SKT2650-SAI-KENSU(IDX2)
+      *
+      *        災害−点数
+               MOVE  SUM-SAI-TENSU(IDX2)     TO  WRK-Z9
+               MOVE  WRK-Z9   TO  SKT2650-SAI-TENSU(IDX2)
+             END-PERFORM
+      *=== 災害対応 by Yoshikawa(2011/04/22) end
            END-IF
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *

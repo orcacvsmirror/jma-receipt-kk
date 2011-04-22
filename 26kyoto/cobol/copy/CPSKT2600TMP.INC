@@ -21,6 +21,7 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         10/11/02  特別療養費国保対応
       *  01.00.02    吉川         10/11/24  open-cobol1.0対応(多重定義修正)
+      *  01.00.03    吉川         11/04/22  東北地方太平洋沖地震対応
       ********************************************************************
        01  SKT2600TMP-REC.
            03  SKT2600TMP-KEY.
@@ -48,3 +49,9 @@
            03  SKT2600TMP-T-KENSU              PIC  9(03).
            03  SKT2600TMP-T-TENSU              PIC  9(10).
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 災害対応 by Yoshikawa(2011/04/22) start
+           03  SKT2600TMP-SAIGAI               PIC  X(01).
+           03  SKT2600TMP-SAIGAI-TBL       OCCURS  2.
+               05  SKT2600TMP-SAI-KENSU        PIC  9(06).
+               05  SKT2600TMP-SAI-TENSU        PIC  9(10).
+      *=== 災害対応 by Yoshikawa(2011/04/22) end

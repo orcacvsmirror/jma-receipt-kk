@@ -45,6 +45,7 @@
       *  01.00.11    µÈÀî    10/04/05    ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *  01.00.12    µÈÀî    10/11/02    ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
       *  01.00.13    µÈÀî    10/11/24    open-cobol1.0ÂÐ±þ
+      *  01.00.14    µÈÀî    11/04/22    ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -742,11 +743,24 @@
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     PERFORM  210-HKN-SYUKEI-SEC
-           IF  FLG-KOUKI  =  ZERO
-               PERFORM  210-HKN-SYUKEI-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/22) start
+      *     IF  FLG-KOUKI  =  ZERO
+      *         PERFORM  210-HKN-SYUKEI-SEC
+      *     ELSE
+      *         PERFORM  210-KOUKI-SYUKEI-SEC
+      *     END-IF
+           IF  (RECE10-ETC-YKZFTN(1)  =  1 OR 2 OR 4 OR 5 OR 7)
+           OR  (RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+           AND  RECE10-HKNJANUM  =  ZERO)
+             PERFORM  210-SAI-SYUKEI-SEC
            ELSE
-               PERFORM  210-KOUKI-SYUKEI-SEC
+             IF  FLG-KOUKI  =  ZERO
+                 PERFORM  210-HKN-SYUKEI-SEC
+             ELSE
+                 PERFORM  210-KOUKI-SYUKEI-SEC
+             END-IF
            END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/22) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    ½¸·×¤ÎÂÐ¾Ý¤Ë¤Ê¤é¤Ê¤«¤Ã¤¿¤È¤­
@@ -823,7 +837,7 @@
                        MOVE  1    TO  IDX1
                    END-IF
                ELSE
-  ¡¡¡¡             IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
                    AND  (RECE10-FLG (1)   =  1)
                        MOVE  4     TO  IDX1
                    ELSE
@@ -986,6 +1000,57 @@
        210-KOUKI-SYUKEI-EXT.
            EXIT.       
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/22) start
+      *****************************************************************
+      *   ºÒ³²Ê¬½¸·×½èÍý
+      *****************************************************************
+       210-SAI-SYUKEI-SEC              SECTION.
+      *
+           MOVE  "1"                 TO  SKT2630TMP-SAIGAI
+      *
+      *    Æþ±¡¡¿³°Íè
+           IF  RECE10-NYUGAIKBN  =  1
+             MOVE  1  TO  IDX2
+           ELSE
+             MOVE  2  TO  IDX2
+           END-IF
+      *
+           EVALUATE  RECE10-ETC-YKZFTN(1)
+             WHEN  1
+      *        ¡ÖÉÔ¾Ü¡×
+               MOVE    2             TO  IDX1
+             WHEN  2
+             WHEN  4
+             WHEN  5
+             WHEN  7
+      *        ¡ÖºÒ£±¡×¡ÖºÒ£²¡×¡ÖÉÔ¾Ü¡¦ºÒ£±¡×
+               MOVE    1             TO  IDX1
+             WHEN  OTHER
+               IF  RECE10-HKNJANUM  NOT =  ZERO
+                 MOVE    1           TO  IDX1
+               ELSE
+      *          ¡ÖÉÔ¾Ü¡×
+                 MOVE    2           TO  IDX1
+               END-IF
+           END-EVALUATE
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+           ADD   1                   TO  SKT2630TMP-SAI-KENSU(IDX1 IDX2)
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+           ADD   RECE10-TOTALTEN(1)  TO  SKT2630TMP-SAI-TENSU(IDX1 IDX2)
+      *
+           IF  FLG-SKT2630TMP  =  1
+               WRITE    SKT2630TMP-REC
+           ELSE
+               REWRITE  SKT2630TMP-REC
+           END-IF
+      *
+           MOVE  1                   TO  FLG-UPD
+      *
+           .
+       210-SAI-SYUKEI-EXT.
+           EXIT.
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/22) end
       *****************************************************************
       *    °åÎÅÊÝ¸±¡¦°ìÈÌ¹ñÊÝÊ¬½¸·×½èÍý
       *****************************************************************
@@ -1309,6 +1374,39 @@
                MOVE  WRK-Z9  TO  SKT2630-S-FTNGAKU (IDX1)
              END-PERFORM
            END-IF
+      *
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/22) start
+      *    ºÒ³²Ê¬¤¬¤¢¤ë¾ì¹ç¡¢£±¥Ú¡¼¥¸ÌÜ¤Î¸øÈñºÆ·ÇÍó¤Ë°õ»ú
+           IF  SKT2630TMP-SAIGAI  =  "1"
+           AND WRK-CNT  =  1
+           
+      *    ºÒ³²¶èÊ¬
+             MOVE  "ºÒ"         TO  SKT2630-KOHNAME(1)
+             MOVE  "ÉÔ¾Ü"       TO  SKT2630-KOHNAME(2)
+      *
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL  IDX1  >  2
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL  IDX2  >  2
+      *    ºÒ³²¡§·ï¿ô
+                 MOVE  SKT2630TMP-SAI-KENSU (IDX1 IDX2)   TO  WRK-Z5
+                 MOVE  WRK-Z5   TO  SKT2630-KKENSU(IDX1 IDX2)
+      *
+      *    ºÒ³²¡§ÅÀ¿ô
+                 MOVE  SKT2630TMP-SAI-TENSU (IDX1 IDX2)   TO  WRK-Z9
+                 MOVE  WRK-Z9   TO  SKT2630-KTENSU(IDX1 IDX2)
+               END-PERFORM
+             END-PERFORM
+      *
+      *      ¸øÈñ¤¬¤¢¤ë¾ì¹ç¤Ï²þ¥Ú¡¼¥¸¤¹¤ë
+             IF  SKT2630TMP-KOHNUM(WRK-CNT)  NOT =  SPACE
+      *        Ä¢É¼°õºþ½èÍý
+               PERFORM 330-PRINT-OUT-SEC
+      *        Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
+               PERFORM 310-HEAD-HEN-SEC
+             END-IF
+           END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/22) end
       *
       *    ¸øÈñ¤Î°õ»ú
            PERFORM  VARYING  IDX3  FROM  1  BY  1
