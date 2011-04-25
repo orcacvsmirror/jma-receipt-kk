@@ -42,6 +42,7 @@
       * 01.00.11     吉川    2010/07/15    オンライン返戻対応
       * 01.00.12     吉川    2011/03/10    open-cobol1.0対応
       * 01.00.13     吉川    2011/04/08    東北地方太平洋沖地震対応
+      * 01.00.14     吉川    2011/04/25    災害分は県外とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -880,7 +881,10 @@
       *    災害対応
            IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
              MOVE  "1"             TO  SKT1000TMP-GENMEN
-             MOVE  1               TO  SKT1000TMP-PREFKBN
+      *=== 災害分は県外 by Yoshikawa(2011/04/25) start
+      *       MOVE  1               TO  SKT1000TMP-PREFKBN
+             MOVE  2               TO  SKT1000TMP-PREFKBN
+      *=== 災害分は県外 by Yoshikawa(2011/04/25) end
       *
       *      保険者不明の場合は住所から市町村を取得
              IF  RECE10-HKNJANUM  =  ZERO

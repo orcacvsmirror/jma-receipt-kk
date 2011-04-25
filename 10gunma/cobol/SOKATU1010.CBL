@@ -48,6 +48,7 @@
       *  01.00.13    吉川    11/03/10    open-cobol1.0対応
       *  01.00.14    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *  01.00.15    吉川    11/04/08    東北地方太平洋沖地震対応（仕様変更）
+      *  01.00.16    吉川    11/04/25    災害分は県外とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -692,7 +693,10 @@
       *=== 災害対応 by Yoshikawa(2011/04/08) start
       *       MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1010TMP-GENMEN
              MOVE  "00001"           TO  SKT1010TMP-GENMEN
-             MOVE  "1"               TO  SKT1010TMP-PREFKBN
+      *=== 災害分は県外 by Yoshikawa(2011/04/25) start
+      *       MOVE  "1"               TO  SKT1010TMP-PREFKBN
+             MOVE  "2"               TO  SKT1010TMP-PREFKBN
+      *=== 災害分は県外 by Yoshikawa(2011/04/25) end
       *
       *      保険者不明の場合は住所から市町村を取得
              IF  RECE10-HKNJANUM  =  ZERO
@@ -822,7 +826,6 @@
        20011-CITYGET-EXT.
            EXIT.
       *
-      *=== 災害対応 by Yoshikawa(2011/04/08) end
       *=== 災害対応 by Yoshikawa(2011/04/08) end
       *****************************************************************
       *    医療保険・老人保健分集計処理
