@@ -39,6 +39,7 @@
       *  01.00.06    等李    10/05/14    オンライン手提滦炳
       *  01.00.07    等李    11/01/12    泼侍闻蛙锐柜瘦滦炳
       *  01.00.08    等李    11/04/18    蘑杉屯及の恃构に燃う饯赖
+      *  01.00.09    等李    11/04/25    俯嘲でも光梦俯帽迫给锐霹は磅机しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -824,6 +825,13 @@
       *=== 蘑杉屯及の恃构 by Yoshikawa(2011/04/18) start
       *      IF    RECE10-KOHNUM(IDX3)(1:1)  =  "0"
       *=== 蘑杉屯及の恃构 by Yoshikawa(2011/04/18) end
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) start
+             IF  RECE10-KOHNUM(IDX3)  NOT = "019" AND "066" 
+                                      AND   "143" AND "146" AND "147"
+                                      AND   "246" AND "721" AND "722"
+                                      AND   "723" AND "730" AND "740"
+                                      AND   "750" AND "760"
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) end
              MOVE    1    TO   SKT3920TMP-PAGE-FLG2
       *
              PERFORM  VARYING  IDX4  FROM  1  BY  1
@@ -871,6 +879,9 @@
       *=== 蘑杉屯及の恃构 by Yoshikawa(2011/04/18) start
       *      END-IF
       *=== 蘑杉屯及の恃构 by Yoshikawa(2011/04/18) end
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) start
+           END-IF
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) end
            END-PERFORM
       *
       *

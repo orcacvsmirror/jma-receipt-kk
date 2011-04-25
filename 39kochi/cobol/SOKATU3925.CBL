@@ -35,6 +35,7 @@
       *  01.00.03    等李    2010/05/14  オンライン手提滦炳
       *                                  弓拌息圭の瘦副荚戎规回年滦炳
       *  01.00.04    等李    2011/04/18  蘑杉屯及の恃构に燃う饯赖
+      *  01.00.05    等李    2011/04/25  俯嘲でも光梦俯帽迫给锐霹は磅机しない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -985,6 +986,14 @@
                END-PERFORM
              END-IF
       *
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) start
+             IF  RECE10-KOHNUM(IDZ)  NOT = "019" AND "066" 
+                                     AND   "143" AND "146" AND "147"
+                                     AND   "246" AND "721" AND "722"
+                                     AND   "723" AND "730" AND "740"
+                                     AND   "750" AND "760"
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) end
+      *
       *      给锐戎规呈羌
              PERFORM VARYING   IDX2    FROM    1   BY  1
                      UNTIL     IDX2 >          100
@@ -997,6 +1006,9 @@
                  MOVE    100             TO  IDX2
                END-IF
              END-PERFORM
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) start
+           END-IF
+      *=== 磅机滦据嘲给锐纳裁 by Yoshikawa(2011/04/25) end
            END-PERFORM
            .
        20012-KOH-SYUKEI-EXT.
