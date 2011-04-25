@@ -40,6 +40,8 @@
       *                                  open-cobol1.0対応
       *  01.00.08    吉川    11/04/04    東北地方太平洋沖地震対応
       *  01.00.09    吉川    11/04/14    東北地方太平洋沖地震対応（仕様変更）
+      *  01.00.10    吉川    11/04/22    オンライン請求の場合
+      *                                  災害分のみ印字するように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -79,6 +81,14 @@
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-KINYU.
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *    オンライン請求設定ファイル
+           SELECT  ONLINE-FILE   ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-ONLINE.
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -120,6 +130,13 @@
            03  FILLER              PIC X(01).
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
       *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+       FD  ONLINE-FILE.
+       01  ONLINE-REC.
+           03  ONLINE-ONLINEKBN    PIC X(01).
+           03  FILLER              PIC X(01).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *
        WORKING-STORAGE             SECTION.
       *
       *    請求書一時ファイル 名称領域 
@@ -159,6 +176,9 @@
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
            03  STS-KINYU           PIC X(02).
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+           03  STS-ONLINE          PIC X(02).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -236,6 +256,9 @@
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
            03  WRK-KINYUDATA    PIC X(20) OCCURS 2.
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+           03  WRK-ONLINEKBN    PIC X(01).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       *    政令指定都市代表番号退避エリア
            03  WRK-CITYNUM-TBL  OCCURS 20.
@@ -520,6 +543,10 @@
            PERFORM  113-INI-FILE-SEC
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
       *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+           PERFORM  114-INI-FILE-SEC
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *
            OPEN    OUTPUT  UPD-FILE
       *
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
@@ -674,6 +701,44 @@
            EXIT.
       *
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) end
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *****************************************************************
+      *    オンライン請求設定INIファイル読み込み処理  
+      *****************************************************************
+       114-INI-FILE-SEC                SECTION.
+      *
+      *    オンライン請求設定取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   ONLINE-REC
+      *
+           OPEN  INPUT  ONLINE-FILE
+      *
+           READ ONLINE-FILE
+             AT END
+               INITIALIZE        ONLINE-REC
+           END-READ
+      *
+           CLOSE ONLINE-FILE
+      *
+           DISPLAY "オンライン請求設定取得=" ONLINE-ONLINEKBN
+           IF    ONLINE-ONLINEKBN  =  "0" OR "1"
+             MOVE   ONLINE-ONLINEKBN  TO  WRK-ONLINEKBN
+           ELSE
+             MOVE   "0"               TO  WRK-ONLINEKBN
+           END-IF
+      *
+           DISPLAY "オンライン請求設定 =" WRK-ONLINEKBN
+      *
+           .
+       114-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -1485,6 +1550,19 @@
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/07/02) end
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *        オンライン請求の場合、災害該当者以外は読み飛ばす
+               IF  WRK-ONLINEKBN  =  "1"
+                 IF  (RECE10-ETC-YKZFTN(1)  =  2 OR 4 OR 5)
+                 OR  (RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+                 AND  RECE10-HKNJANUM  =  ZERO)
+                   CONTINUE
+                 ELSE
+                   GO  TO  900-SEIKYU-READ-SEC
+                 END-IF
+               END-IF
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC

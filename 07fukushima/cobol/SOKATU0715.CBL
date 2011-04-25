@@ -35,6 +35,8 @@
       *  01.00.03    吉川    2010/02/26  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/07/02  オンライン返戻対応
       *  01.00.05    吉川    2011/04/14  東北地方太平洋沖地震対応
+      *  01.00.06    吉川    2011/04/22  オンライン請求の場合
+      *                                  災害分のみ印字するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -61,6 +63,14 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *    オンライン請求設定ファイル
+           SELECT  ONLINE-FILE     ASSIGN FILE-NAME
+                                   ORGANIZATION    IS  LINE SEQUENTIAL
+                                   ACCESS MODE     IS  SEQUENTIAL
+                                   FILE   STATUS   IS  STS-ONLINE.
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
@@ -78,6 +88,13 @@
       *    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+       FD  ONLINE-FILE.
+       01  ONLINE-REC.
+           03  ONLINE-ONLINEKBN    PIC X(01).
+           03  FILLER              PIC X(01).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -110,6 +127,9 @@
       *=== 災害対応 by Yoshikawa(2011/04/14) end
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+           03  STS-ONLINE          PIC X(02).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -177,7 +197,6 @@
            03  WRK-HENYMDG         PIC X(22).
       *
            03  WRK-CNT             PIC 9(02).
-           03  WRK-KOHNUM          PIC X(03).
            03  WRK-HKNJANUM        PIC X(06).
            03  WRK-HKNJANAME       PIC X(20).
       *
@@ -206,6 +225,11 @@
                05  WRK-KOHNUM        PIC X(03).
                05  WRK-HKNNAME       PIC X(20). 
            03  WRK-MEISYO          PIC X(44).
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+           03  FILE-NAME           PIC X(512).
+           03  WRK-ONLINEKBN       PIC X(01).
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
@@ -344,6 +368,11 @@
       *
       *   半角チェックサブ
            COPY  "CPORCSKANACHK.INC".
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -583,6 +612,10 @@
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/02/26) end
       *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+           PERFORM  110-INI-FILE-SEC
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *
       *=== 災害対応 by Yoshikawa(2011/04/14) start
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
            EVALUATE    WRK-PARA-SYOKBN
@@ -603,6 +636,44 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *****************************************************************
+      *    オンライン請求設定INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *    オンライン請求設定取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   ONLINE-REC
+      *
+           OPEN  INPUT  ONLINE-FILE
+      *
+           READ ONLINE-FILE
+             AT END
+               INITIALIZE        ONLINE-REC
+           END-READ
+      *
+           CLOSE ONLINE-FILE
+      *
+           DISPLAY "オンライン請求設定取得=" ONLINE-ONLINEKBN
+           IF    ONLINE-ONLINEKBN  =  "0" OR "1"
+             MOVE   ONLINE-ONLINEKBN  TO  WRK-ONLINEKBN
+           ELSE
+             MOVE   "0"               TO  WRK-ONLINEKBN
+           END-IF
+      *
+           DISPLAY "オンライン請求設定 =" WRK-ONLINEKBN
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -1985,6 +2056,19 @@
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/07/02) end
+      *
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *        オンライン請求の場合、災害該当者以外は読み飛ばす
+               IF  WRK-ONLINEKBN  =  "1"
+                 IF  (RECE10-ETC-YKZFTN(1)  =  2 OR 4 OR 5)
+                 OR  (RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+                 AND  RECE10-HKNJANUM  =  ZERO)
+                   CONTINUE
+                 ELSE
+                   GO  TO  900-SEIKYU-READ-SEC
+                 END-IF
+               END-IF
+      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
