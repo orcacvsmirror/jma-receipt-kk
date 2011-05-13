@@ -34,6 +34,8 @@
       *  01.00.02    内田      08/07/04    後期高齢者も集計する
       *  01.00.03    吉川      10/04/06    オンライン返戻対応
       *  01.00.04    吉川      10/12/08    特別療養費国保対応
+      *  01.00.05    吉川      11/05/12    兵庫県広域連合のデータが他の県に
+      *                                    集計される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -977,6 +979,9 @@
            WHEN  "25"  MOVE  "滋賀県"    TO  WRK-KENNAME
            WHEN  "26"  MOVE  "京都府"    TO  WRK-KENNAME
            WHEN  "27"  MOVE  "大阪府"    TO  WRK-KENNAME
+      *=== 兵庫広域連合集計不具合対応 by Yoshikawa(2011/05/12) start
+           WHEN  "28"  MOVE  "兵庫県"    TO  WRK-KENNAME
+      *=== 兵庫広域連合集計不具合対応 by Yoshikawa(2011/05/12) end
            WHEN  "29"  MOVE  "奈良県"    TO  WRK-KENNAME
            WHEN  "30"  MOVE  "和歌山県"  TO  WRK-KENNAME
            WHEN  "31"  MOVE  "鳥取県"    TO  WRK-KENNAME
