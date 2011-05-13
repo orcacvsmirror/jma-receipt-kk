@@ -39,6 +39,7 @@
       *  01.00.05     吉川    08/12/02    印字対象番号の追加(583,683)
       *  01.00.06     吉川    09/02/18    公費の助成がない場合は印字しない
       *  01.00.07     吉川    10/12/03    帳票様式の変更に伴う修正
+      *  01.00.08     吉川    11/05/11    実日数が0の場合は0を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -154,6 +155,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR                PIC  X(200).
            03  WRK-Z3                     PIC ZZZ.
+      *=== 実日数が0の場合は0を印字 by Yoshikawa(2011/05/11) start
+           03  WRK-Z3-9                   PIC ZZ9.
+      *=== 実日数が0の場合は0を印字 by Yoshikawa(2011/05/11) end
            03  WRK-Z7                     PIC ZZZ,ZZZ.
            03  WRK-Z79                    PIC ZZZ,ZZ9.
            03  WRK-Z10                    PIC ZZ,ZZZ,ZZZ.
@@ -1074,8 +1078,12 @@
              MOVE    MF100-SEX        TO  SC09-SEX(IDX1)
       *
       *    診療日数
-             MOVE  MF100-JNISSU       TO  WRK-Z3
-             MOVE  WRK-Z3             TO  SC09-SRYNISSU(IDX1)
+      *=== 実日数が0の場合は0を印字 by Yoshikawa(2011/05/11) start
+      *       MOVE  MF100-JNISSU       TO  WRK-Z3
+      *       MOVE  WRK-Z3             TO  SC09-SRYNISSU(IDX1)
+             MOVE  MF100-JNISSU       TO  WRK-Z3-9
+             MOVE  WRK-Z3-9           TO  SC09-SRYNISSU(IDX1)
+      *=== 実日数が0の場合は0を印字 by Yoshikawa(2011/05/11) end
       *
       *    請求点数
              MOVE  MF100-TOTALTEN     TO  WRK-Z11
