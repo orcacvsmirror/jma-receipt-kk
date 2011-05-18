@@ -39,6 +39,7 @@
       *  01.00.04    吉川    11/02/09    open-cobol1.0対応
       *  01.00.05    吉川    11/04/14    長期（972,974）を持っていても
       *                                  長期欄に値が印字されないのを修正
+      *  01.00.06    吉川    11/05/13    整理番号を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -145,6 +146,9 @@
       *---(01.00.01) LINE ADD START ------------------------------------
            03  WRK-Z29               PIC 99.
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) start
+           03  WRK-Z4                PIC ZZZZ.
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) end
            03  WRK-Z5                PIC ZZZZZ.
            03  WRK-Z6                PIC ZZZZZZ.
            03  WRK-Z7                PIC ZZZZZZZ.
@@ -173,6 +177,9 @@
                05   WRK-SEIKYUGK-G        PIC 9(08).
                05   WRK-SEIKYUGK          PIC 9(08).
                05   WRK-KOHID             PIC 9(10).
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) start
+           03  WRK-CNT               PIC 9(04).
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -784,6 +791,9 @@
            OPEN     INPUT       MF100-FILE
       *
            MOVE     ZERO        TO       FLG-PRINT
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) start
+           MOVE     ZERO        TO       WRK-CNT
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) end
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
@@ -1228,6 +1238,13 @@
              MOVE    WRK-Z6              TO  WRK-MAE-INPUT
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT       TO  SC091-FTNGK(IDX1)
+      *
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) start
+      *    整理番号
+             ADD     1                   TO  WRK-CNT
+             MOVE    WRK-CNT             TO  WRK-Z4
+             MOVE    WRK-Z4              TO  SC091-SEIRINUM(IDX1)
+      *=== 整理番号追加 by Yoshikawa(2011/05/13) end
       *
       *    一時ファイル読み込み
              PERFORM  900-TMP-READ-SEC

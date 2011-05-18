@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/05/13  整理番号を追加
+      ********************************************************************
         01  SC091.
       *印刷年月日
             03  SC091-SEIYMD              PIC X(22).
@@ -64,3 +68,8 @@
       *備考
             03  SC091-BIKO-TBL                OCCURS  8 TIMES.
               05  SC091-BIKO              PIC X(40).
+      *=== 整理番号の追加 by Yoshikawa(2011/05/13) start
+      *整理番号
+            03  SC091-SEIRINUM-TBL            OCCURS  8 TIMES.
+              05  SC091-SEIRINUM          PIC X(4).
+      *=== 整理番号の追加 by Yoshikawa(2011/05/13) end
