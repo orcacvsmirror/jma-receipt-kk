@@ -44,6 +44,7 @@
       *                                    集計されないのを修正
       *                                    生保は集計対象外とするように修正
       *                                    open-cobol1.0対応
+      *  01.00.09    吉川    2011/05/19    生年月日は８桁で記録する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -734,6 +735,8 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *           AND  (RECE10-TOKKI(IDX)  =  "01" OR "02" OR "03")
       *---(01.00.01) LINE ADD END   ------------------------------------
+
+                   DISPLAY "RECE10-TOKKI(IDX) =" RECE10-TOKKI(IDX)
                    MOVE  RECE10-TOKKI(IDX)  TO  MF101-TOKKI(IDX)
                  END-IF
              END-PERFORM
@@ -1199,9 +1202,13 @@
            MOVE    1                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-      *    １７．生年
-           MOVE    MF101-BIRTHDAY(1:4)     TO  WRK-DATA
-           MOVE    4                       TO  WRK-NAGASA
+      *    １７．生年月日
+      *=== 生年月日は８桁で記録 by Yoshikawa(2011/05/19) start
+      *     MOVE    MF101-BIRTHDAY(1:4)     TO  WRK-DATA
+      *     MOVE    4                       TO  WRK-NAGASA
+           MOVE    MF101-BIRTHDAY          TO  WRK-DATA
+           MOVE    8                       TO  WRK-NAGASA
+      *=== 生年月日は８桁で記録 by Yoshikawa(2011/05/19) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    １８．特記事項１
