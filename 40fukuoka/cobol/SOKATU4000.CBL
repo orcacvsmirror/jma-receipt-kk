@@ -63,6 +63,8 @@
       *  01.00.23    µÈÀî    10/06/29    Æý¾ã¿ÆÍó¤ÏÅö·îÊ¬¤ÈÊÖÌáÊ¬¤ò¹ç»»¤¹¤ë
       *  01.00.24    µÈÀî    10/12/16    open-cobol1.0ÂÐ±þ
       *  01.00.25    µÈÀî    11/02/09    ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
+      *  01.00.26    µÈÀî    11/05/17    ÆÃÄê¼À´µ¡Ê091¡Ë¤ÈÆý¾ã¿Æ¤Î¾ì¹ç
+      *                                  Æý¾ã¿ÆÍó¤Ë½¸·×¤µ¤ì¤Ê¤¤¤è¤¦¤Ë½¤Àµ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -884,7 +886,13 @@
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
       *    ¾ã³²ÆýÍÄ»ùÊì»Ò°åÎÅÅÀ¿ô½¸·×
-           PERFORM  2001-KOHI-SYUKEI-SEC
+      *=== Æý¾ã¿Æ¡ÜÆÃ¼ÀÌµ¤ÏÆý¾ã¿Æ¤Ë½¸·×¤·¤Ê¤¤ by Yoshikawa(2011/05/17) start
+      *     PERFORM  2001-KOHI-SYUKEI-SEC
+           IF  WRK-PARA-SYOKBN    =  "1"
+           AND WRK-PARA-TOKUBETU  =  "1"
+              PERFORM  2001-KOHI-SYUKEI-SEC
+           END-IF
+      *=== Æý¾ã¿Æ¡ÜÆÃ¼ÀÌµ¤ÏÆý¾ã¿Æ¤Ë½¸·×¤·¤Ê¤¤ by Yoshikawa(2011/05/17) end
       *
       *
            CLOSE   UPD-FILE
@@ -2274,7 +2282,10 @@
                     SYU-KOH-HKNNUM(IDX4)  =  SPACE
       *    ·×»»ÉéÃ´¶â¤Ëº¹¤¬Í­¤ë¾ì¹ç¡¢ÃÏÊý¸øÈñ¤Î½õÀ®¤¬¤¢¤Ã¤¿¤ÈÈ½Äê¤¹¤ë
              IF   SYU-KOH-HKNNUM(IDX4)     =  WRK-KOHNUM
-               IF     IDX3                 =  1
+      *=== Æý¾ã¿Æ¡ÜÆÃ¼ÀÌµ¤ÏÆý¾ã¿Æ¤Ë½¸·×¤·¤Ê¤¤ by Yoshikawa(2011/05/17) start
+      *         IF     IDX3                 =  1
+               IF     IDX4                 =  1
+      *=== Æý¾ã¿Æ¡ÜÆÃ¼ÀÌµ¤ÏÆý¾ã¿Æ¤Ë½¸·×¤·¤Ê¤¤ by Yoshikawa(2011/05/17) end
                  IF  SYU-SYUCOMPFTN-ENTANI
                                        > SYU-KOH-COMPFTN-ENTANI(IDX4)
                    MOVE  ZERO          TO  FLG-ERR
