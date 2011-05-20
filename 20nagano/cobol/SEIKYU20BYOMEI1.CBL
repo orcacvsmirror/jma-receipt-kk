@@ -46,7 +46,8 @@
       *  01.00.13    内田         07/03/02  入院を印字対象とする
       *  01.00.14    内田         07/10/05  日レセver4.0対応
       *  01.00.15    吉川         08/09/10  SPA-AREA初期化
-      *  01.00.16    吉川         11/03/09  レセプト病名記載順対応
+      *  01.00.16    吉川         11/05/19  レセプト病名記載順対応
+      *                                     補足コメント対応
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -135,8 +136,12 @@
       *
            03  WRK-RECEERR         PIC X(200). 
       *    傷病名編集
-           03  WRK-BYOMEI          PIC X(150).
-           03  WRK-BYOMEIW         PIC X(150).
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) start
+      *     03  WRK-BYOMEI          PIC X(150).
+      *     03  WRK-BYOMEIW         PIC X(150).
+           03  WRK-BYOMEI          PIC X(240).
+           03  WRK-BYOMEIW         PIC X(240).
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) end
       *    傷病名編集フラグ（疑い）
            03  WRK-HENFLG1         PIC X(01).
       *    傷病名編集フラグ（急性）
@@ -144,15 +149,15 @@
       *    病名文字数         
            03  WRK-MOJISU          PIC 9(03).
       *
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
            03  WRK-MCP-TABLE       PIC X(64).
            03  WRK-MCP-PATHNAME    PIC X(64).
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
       *
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
       * 01  KEY-AREA                            VALUE   LOW-VALUE.
        01  KEY-AREA.
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
            03  KEY-NEW.
                05  KEY-N-SRYYMD    PIC 9(08).
            03  KEY-OLD.
@@ -194,9 +199,9 @@
            COPY    "CPSYSKANRI.INC".
       *     
            COPY    "CPSK2005.INC".
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
            COPY    "CPSK200501.INC".
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
       *
       *    患者病名
        01  PTBYOMEI-REC.
@@ -224,6 +229,11 @@
       *
       *   ジョブ管理ＤＢ制御サブ
            COPY    "CPORCSJOBKANRI.INC".
+      *
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) start
+      *    半角チェックサブ
+           COPY    "CPORCSKANACHK.INC".
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) end
       *
       *    ＤＢ検索
            COPY    "MCPDATA.INC".
@@ -269,14 +279,14 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/09/10) start
            INITIALIZE                  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/09/10) end
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
                                        FLG-AREA
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
       *
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
       *     MOVE    ZERO                TO  FLG-END
            MOVE    LOW-VALUE           TO  KEY-AREA
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
            MOVE    WRK-PARA-LINK       TO  WRK-PARA
       *---(01.00.14) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -338,7 +348,7 @@
                MOVE    ZERO             TO  SYS-2005-SYUBYOHENFLG
            END-IF
       *
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
            MOVE    SPACE            TO  SYSKANRI-REC
            INITIALIZE                   SYSKANRI-REC
            MOVE    "2005"           TO  SYS-KANRICD
@@ -363,7 +373,7 @@
                                     =   SPACE
                MOVE    ZERO             TO  SYS-200501-BYOMEI-PRTJYUN
            END-IF
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
            .
        100-INIT-EXT.
            EXIT.
@@ -391,7 +401,7 @@
       *                                        MCPAREA
       *                                        MCPDATA-REC
              MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
       *       MOVE    "key3"              TO  MCP-PATHNAME
              IF      SYS-200501-BYOMEI-PRTJYUN   =   "2"
                  MOVE    "key39"         TO  WRK-MCP-PATHNAME
@@ -399,7 +409,7 @@
                  MOVE    "key3"          TO  WRK-MCP-PATHNAME
              END-IF
              MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
              CALL    "ORCDBMAIN"         USING
                                          MCPAREA
                                          MCPDATA-REC
@@ -409,10 +419,10 @@
       *---(01.00.14) LINE ADD START ------------------------------------
       *           MOVE    PATH-TBL-PTBYOMEI-KEY3     TO  MCP-PATH 
                  MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
       *           MOVE    "key3"              TO  MCP-PATHNAME
                  MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
       *---(01.00.14) LINE ADD END   ------------------------------------
                  PERFORM 900-PTBYO-READ-SEC
              ELSE
@@ -431,10 +441,10 @@
       *                                        MCPAREA
       *                                        MCPDATA-REC
              MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
       *       MOVE    "key3"              TO  MCP-PATHNAME
              MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
              CALL    "ORCDBMAIN"         USING
                                          MCPAREA
                                          MCPDATA-REC
@@ -467,10 +477,10 @@
       *---(01.00.14) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-PTBYOMEI-KEY3         TO  MCP-PATH
                MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) start
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) start
       *         MOVE    "key3"              TO  MCP-PATHNAME
                MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-      *=== レセプト病名記載順対応 by Yoshikawa(2011/03/09) end
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/05/19) end
       *---(01.00.14) LINE ADD END   ------------------------------------
                PERFORM 900-PTBYO-READ-SEC
            END-PERFORM    
@@ -588,7 +598,17 @@
 070300*****************************************************************
 070400 20011-RECE03-WRITE-SEC              SECTION.
       *
-      *    疑いフラグより病名を編集
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) start
+           INITIALIZE                      ORCSKANACHKAREA
+           MOVE    "1"                 TO  KANACHK-SYORI 
+           MOVE    PTBYO-HOSOKU-COMMENT
+                                       TO  KANACHK-MAE-INPUT
+           MOVE    40                  TO  KANACHK-MAX-CNT
+           CALL    "ORCSKANACHK"       USING   ORCSKANACHKAREA
+           MOVE    KANACHK-OUT-INPUT   TO  PTBYO-HOSOKU-COMMENT
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) end
+      *
+      *    疑いフラグ、補足コメントより病名を編集
            MOVE    SPACE               TO  WRK-HENFLG1
                                            WRK-HENFLG2
       *       
@@ -670,6 +690,20 @@
                END-IF
            END-IF
       *
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) start
+           IF    PTBYO-HOSOKU-COMMENT  NOT =   SPACE
+               MOVE    SPACE               TO  WRK-BYOMEIW
+               STRING  WRK-BYOMEI          DELIMITED BY SPACE
+                       "（"                DELIMITED BY SIZE
+                       PTBYO-HOSOKU-COMMENT
+                                           DELIMITED BY SPACE
+                       "）"                DELIMITED BY SIZE
+               INTO    WRK-BYOMEIW
+               END-STRING
+               MOVE    WRK-BYOMEIW         TO  WRK-BYOMEI
+           END-IF
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) end
+      *
            ADD     1                   TO  WRK-RENNUM
            
            INITIALIZE                      RECE03-REC
@@ -713,6 +747,10 @@
            MOVE    WRK-BYOMEI          TO  RECE03-BYOMEI
            COMPUTE RECE03-BYOMEIMOJI    =   WRK-MOJISU    /   2
            MOVE    PTBYO-BYOMEIHENFLG  TO  RECE03-BYOMEIHENFLG   
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) start
+           MOVE    PTBYO-HOSOKU-COMMENT
+                                       TO  RECE03-HOSOKU-COMMENT
+      *=== 補足コメント対応 by Yoshikawa(2011/05/19) end
       *
            WRITE   RECE03-REC
            ADD     1                   TO  CNT-OUT   
