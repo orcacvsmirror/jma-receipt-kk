@@ -37,6 +37,8 @@
       *  01.00.03    吉川    2010/12/16  open-cobol1.0対応
       *  01.00.04    吉川    2011/02/08  負担者番号毎に改頁するように修正
       *                                  請求金額合計は頁毎に計算する
+      *  01.00.05    吉川    2011/05/17  月遅れ分は別帳票とする
+      *                                  公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -217,9 +219,15 @@
       *    キー領域
        01  KEY-AREA  VALUE  ZERO.
            03  KEY-NEW.
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) start
+               05  KEY-N-SRYYM       PIC X(06).
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) end
                05  KEY-N-KBN         PIC X(01).
                05  KEY-N-CITYNUM     PIC X(03).
            03  KEY-OLD.
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) start
+               05  KEY-O-SRYYM       PIC X(06).
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) end
                05  KEY-O-KBN         PIC X(01).
                05  KEY-O-CITYNUM     PIC X(03).
       *
@@ -714,6 +722,9 @@
            MOVE    MF100-KOHID         TO    WRK-KOHID
            MOVE    ZERO                TO    WRK-SEIKYUGK-G
                                              FLG-TYOKI
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/05/17) start
+           MOVE    1                   TO    FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/05/17) end
       *
            IF  RECE02-NYUGAIKBN    =   "1"
                MOVE    "key33"         TO  WRK-PATH
@@ -1241,6 +1252,23 @@
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
                    SYU-KOH-HKNNUM(IDX) =   SPACE
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/05/17) start
+      *      計算負担金に差が有る場合、地方公費の助成があったと判定する
+               IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                         > SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/05/17) end
+      *
                IF  SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
                    SYU-KOH-HKNNUM(IDX)     NOT =   "027"
                    MOVE    1       TO      FLG-HEIYOU
@@ -1446,6 +1474,9 @@
                AT  END
                    MOVE  1  TO  FLG-PRINT
                NOT AT  END
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) start
+                   MOVE  MF100-SRYYM    TO  KEY-N-SRYYM
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) end
       *=== 負担者番号毎に改頁 by Yoshikawa(2011/02/08) start
       **            後期高齢者は帳票を分ける
       *             IF  MF100-HKNNUM  =  "039" OR "040"
