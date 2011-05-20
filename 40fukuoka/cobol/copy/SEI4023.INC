@@ -21,12 +21,22 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/08/20  2回目の入退院日追加
       *                                  MF100-KEY変更
+      *  01.00.02    吉川    2011/02/08  区分追加(改ページ用)
+      *  01.00.03    吉川    2011/05/17  月遅れ分は別帳票とする
       ************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
       *医療機関ＩＤ
       *        05  MF100-HOSPID          PIC  X(24).
                05  MF100-HOSPNUM         PIC  9(02).
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) start
+      *診療年月
+               05  MF100-SRYYM           PIC  X(06).
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) end
+      *=== 区分追加 by Yoshikawa(2011/02/08) start
+      *区分
+               05  MF100-KBN             PIC  X(01).
+      *=== 区分追加 by Yoshikawa(2011/02/08) end
       *市町村番号
                05  MF100-CITYNUM         PIC  X(16).
       *公費受給者番号
@@ -37,8 +47,10 @@
                05  MF100-HKNJANUM-KEY    PIC  X(08).
       *適用開始年月日
                05  MF100-TEKSTYMD        PIC  X(08). 
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) start
       *診療年月
-               05  MF100-SRYYM           PIC  X(06).
+      *         05  MF100-SRYYM           PIC  X(06).
+      *=== 月遅れ分は別帳票 by Yoshikawa(2011/05/17) end
       *患者ＩＤ
            03  MF100-PTID                PIC  9(10).
       *入外区分
