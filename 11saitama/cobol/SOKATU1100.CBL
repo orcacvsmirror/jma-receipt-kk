@@ -59,6 +59,7 @@
       *  01.00.18    µÈÀî    10/08/03   ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *  01.00.19    µÈÀî    10/10/27   ÊÝ¸±ÈÖ¹æ543¤ÏÀÁµá³Û¤òµ­ºÜ¤·¤Ê¤¤
       *  01.00.20    µÈÀî    10/11/25   open-cobol1.0ÂÐ±þ
+      *  01.00.21    µÈÀî    11/05/24   ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -250,6 +251,9 @@
       *=== ¥·¥¹´É¡Ö2007¡×ÂÐ±þ by Yoshikawa(2008/10/08) start
            03  WRK-KOHNAME           PIC  X(10).
       *=== ¥·¥¹´É¡Ö2007¡×ÂÐ±þ by Yoshikawa(2008/10/08) end
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+           03  WRK-KENNAME           PIC  X(08).
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -892,6 +896,21 @@
                END-IF
            END-IF
       *
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *    ºÒ³²³ºÅöÊ¬
+           IF  RECE10-ETC-YKZFTN(1)  =  1 OR 2 OR 4 OR 5 OR 7 OR 8
+             INITIALIZE          SKT1100TMP-KEY
+             MOVE    7       TO  SKT1100TMP-KBN1
+      *
+      *      ¸©¤´¤È¤Ë½¸·×
+             IF  RECE10-HKNJANUM(7:2)  =  SPACE
+               MOVE  RECE10-HKNJANUM(1:2)  TO  SKT1100TMP-HKNJANUM
+             ELSE
+               MOVE  RECE10-HKNJANUM(3:2)  TO  SKT1100TMP-HKNJANUM
+             END-IF
+           END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
+      *
       *---(01.00.07) LINE ADD START ------------------------------------
       *     PERFORM 800-SKTTMP-READ-SEC
       *     PERFORM 220-HKN-SYUKEI-SEC
@@ -899,7 +918,12 @@
                PERFORM 800-SKTTMP-READ-SEC
                PERFORM  220-HKN-SYUKEI-SEC
            ELSE
-               MOVE    5      TO  SKT1100TMP-KBN1
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *         MOVE    5      TO  SKT1100TMP-KBN1
+               IF  SKT1100TMP-KBN1  NOT =  7
+                 MOVE    5    TO  SKT1100TMP-KBN1
+               END-IF
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
                PERFORM  800-SKTTMP-READ-SEC
                PERFORM  220-KOUKI-SYUKEI-SEC
            END-IF
@@ -1100,7 +1124,10 @@
       *     MOVE    5       TO  SKT1100TMP-KBN1
       *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD START ------------------------------------
-           MOVE    7       TO  SKT1100TMP-KBN1
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *     MOVE    7       TO  SKT1100TMP-KBN1
+           MOVE    8       TO  SKT1100TMP-KBN1
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
            IF      RECE10-KOHNUM(IDX3) =   "091"
@@ -1269,7 +1296,10 @@
       *     MOVE    5               TO  SKT1100TMP-KBN1
       *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD START ------------------------------------
-           MOVE    7               TO  SKT1100TMP-KBN1
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *     MOVE    7               TO  SKT1100TMP-KBN1
+           MOVE    8               TO  SKT1100TMP-KBN1
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
       *---(01.00.07) LINE ADD END   ------------------------------------
            MOVE    1               TO  SKT1100TMP-KBN2
       *
@@ -1604,6 +1634,12 @@
       *---(01.00.07) LINE ADD END   ------------------------------------
                        ADD     1       TO  CNT-LINE
                        PERFORM 3203-BODY-HEN-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *            ºÒ³²³ºÅöÊ¬
+                   WHEN    7
+                       ADD     1       TO  CNT-LINE
+                       PERFORM 3206-BODY-HEN-SEC
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
       *
       *            ¸øÈñ
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -1611,7 +1647,10 @@
       *             WHEN    5
       *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.07) LINE ADD START ------------------------------------
-                   WHEN    7
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *             WHEN    7
+                   WHEN    8
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
       *---(01.00.07) LINE ADD END   ------------------------------------
                        ADD     1       TO  CNT-LINE
                        PERFORM 3204-BODY-HEN-SEC
@@ -1905,6 +1944,103 @@
       *
        3204-BODY-HEN-EXT.
            EXIT.
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) start
+      *****************************************************************
+      *    Ä¢É¼ÊÔ½¸<ºÒ³²³ºÅöÊ¬>½èÍý
+      *****************************************************************
+       3206-BODY-HEN-SEC              SECTION.
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§·ï¿ô
+           MOVE    SKT1100TMP-KENSU    TO  WRK-Z5
+           MOVE    WRK-Z5              TO  SKT00-KENSU(CNT-LINE)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§Æü¿ô
+           MOVE    SKT1100TMP-NISSU    TO  WRK-Z5
+           MOVE    WRK-Z5              TO  SKT00-NISSU(CNT-LINE)
+      *
+      *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
+           MOVE    SKT1100TMP-TENSU    TO  WRK-Z9
+           MOVE    WRK-Z9              TO  SKT00-TENSU(CNT-LINE)
+      *
+      *    ¸©Ì¾¥»¥Ã¥È
+           PERFORM  32061-KENNAME-SET-SEC
+           STRING  WRK-KENNAME         DELIMITED BY SPACE
+                   "¡ÊÈïºÒÊ¬¡Ë"        DELIMITED BY SIZE
+           INTO    SKT00-NAME(CNT-LINE)
+           END-STRING
+      *
+      *    ¹ç·×²Ã»»
+           ADD     SKT1100TMP-KENSU    TO  SUM-KENSU
+      *
+           ADD     SKT1100TMP-NISSU    TO  SUM-NISSU
+      *
+           ADD     SKT1100TMP-TENSU    TO  SUM-TENSU
+      *
+           .
+      *
+       3206-BODY-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¸©Ì¾¥»¥Ã¥È
+      *****************************************************************
+       32061-KENNAME-SET-SEC                SECTION.
+      *
+           EVALUATE  SKT1100TMP-HKNJANUM(1:2)
+             WHEN  "01"  MOVE  "ËÌ³¤Æ»"    TO  WRK-KENNAME
+             WHEN  "02"  MOVE  "ÀÄ¿¹¸©"    TO  WRK-KENNAME
+             WHEN  "03"  MOVE  "´ä¼ê¸©"    TO  WRK-KENNAME
+             WHEN  "04"  MOVE  "µÜ¾ë¸©"    TO  WRK-KENNAME
+             WHEN  "05"  MOVE  "½©ÅÄ¸©"    TO  WRK-KENNAME
+             WHEN  "06"  MOVE  "»³·Á¸©"    TO  WRK-KENNAME
+             WHEN  "07"  MOVE  "Ê¡Åç¸©"    TO  WRK-KENNAME
+             WHEN  "08"  MOVE  "°ñ¾ë¸©"    TO  WRK-KENNAME
+             WHEN  "09"  MOVE  "ÆÊÌÚ¸©"    TO  WRK-KENNAME
+             WHEN  "10"  MOVE  "·²ÇÏ¸©"    TO  WRK-KENNAME
+             WHEN  "11"  MOVE  "ºë¶Ì¸©"    TO  WRK-KENNAME
+             WHEN  "12"  MOVE  "ÀéÍÕ¸©"    TO  WRK-KENNAME
+             WHEN  "13"  MOVE  "ÅìµþÅÔ"    TO  WRK-KENNAME
+             WHEN  "14"  MOVE  "¿ÀÆàÀî¸©"  TO  WRK-KENNAME
+             WHEN  "15"  MOVE  "¿·³ã¸©"    TO  WRK-KENNAME
+             WHEN  "16"  MOVE  "ÉÙ»³¸©"    TO  WRK-KENNAME
+             WHEN  "17"  MOVE  "ÀÐÀî¸©"    TO  WRK-KENNAME
+             WHEN  "18"  MOVE  "Ê¡°æ¸©"    TO  WRK-KENNAME
+             WHEN  "19"  MOVE  "»³Íü¸©"    TO  WRK-KENNAME
+             WHEN  "20"  MOVE  "Ä¹Ìî¸©"    TO  WRK-KENNAME
+             WHEN  "21"  MOVE  "´ôÉì¸©"    TO  WRK-KENNAME
+             WHEN  "22"  MOVE  "ÀÅ²¬¸©"    TO  WRK-KENNAME
+             WHEN  "23"  MOVE  "°¦ÃÎ¸©"    TO  WRK-KENNAME
+             WHEN  "24"  MOVE  "»°½Å¸©"    TO  WRK-KENNAME
+             WHEN  "25"  MOVE  "¼¢²ì¸©"    TO  WRK-KENNAME
+             WHEN  "26"  MOVE  "µþÅÔÉÜ"    TO  WRK-KENNAME
+             WHEN  "27"  MOVE  "ÂçºåÉÜ"    TO  WRK-KENNAME
+             WHEN  "28"  MOVE  "Ê¼¸Ë¸©"    TO  WRK-KENNAME
+             WHEN  "29"  MOVE  "ÆàÎÉ¸©"    TO  WRK-KENNAME
+             WHEN  "30"  MOVE  "ÏÂ²Î»³¸©"  TO  WRK-KENNAME
+             WHEN  "31"  MOVE  "Ä»¼è¸©"    TO  WRK-KENNAME
+             WHEN  "32"  MOVE  "Åçº¬¸©"    TO  WRK-KENNAME
+             WHEN  "33"  MOVE  "²¬»³¸©"    TO  WRK-KENNAME
+             WHEN  "34"  MOVE  "¹­Åç¸©"    TO  WRK-KENNAME
+             WHEN  "35"  MOVE  "»³¸ý¸©"    TO  WRK-KENNAME
+             WHEN  "36"  MOVE  "ÆÁÅç¸©"    TO  WRK-KENNAME
+             WHEN  "37"  MOVE  "¹áÀî¸©"    TO  WRK-KENNAME
+             WHEN  "38"  MOVE  "°¦É²¸©"    TO  WRK-KENNAME
+             WHEN  "39"  MOVE  "¹âÃÎ¸©"    TO  WRK-KENNAME
+             WHEN  "40"  MOVE  "Ê¡²¬¸©"    TO  WRK-KENNAME
+             WHEN  "41"  MOVE  "º´²ì¸©"    TO  WRK-KENNAME
+             WHEN  "42"  MOVE  "Ä¹ºê¸©"    TO  WRK-KENNAME
+             WHEN  "43"  MOVE  "·§ËÜ¸©"    TO  WRK-KENNAME
+             WHEN  "44"  MOVE  "ÂçÊ¬¸©"    TO  WRK-KENNAME
+             WHEN  "45"  MOVE  "µÜºê¸©"    TO  WRK-KENNAME
+             WHEN  "46"  MOVE  "¼¯»ùÅç¸©"  TO  WRK-KENNAME
+             WHEN  "47"  MOVE  "²­Æì¸©"    TO  WRK-KENNAME
+           END-EVALUATE
+      *
+           .
+       32061-KENNAME-SET-EXT.
+           EXIT.
+      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/05/24) end
+      *
       *****************************************************************
       *    Ä¢É¼°õºþ½èÍý
       *****************************************************************
