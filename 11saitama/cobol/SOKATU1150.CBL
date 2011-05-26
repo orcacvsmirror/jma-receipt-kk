@@ -65,6 +65,7 @@
       *                                   「表示名称２」を使用する
       *  01.02.14    吉川       10/08/03  オンライン返戻対応
       *  01.02.15    吉川       11/04/01  東北地方太平洋沖地震対応（対象者別集計）
+      *  01.02.16    吉川       11/05/24  未確定分のみ別集計とするように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1782,11 +1783,19 @@
       *        災害対象者判定
                EVALUATE  WRK-PARA-GENMENKBN
                  WHEN  "1"
-                   IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+      *=== 未確定分のみ別帳票とする by Yoshikawa(2011/05/24) start
+      *             IF  RECE10-ETC-YKZFTN(1)  NOT =  ZERO
+                   IF  RECE10-ETC-YKZFTN(1)  =  6  OR  7  OR  8
+      *=== 未確定分のみ別帳票とする by Yoshikawa(2011/05/24) end
                      GO  TO  900-SEIKYU-READ-SEC
                    END-IF
                  WHEN  "2"
-                   IF  RECE10-ETC-YKZFTN(1)  =  ZERO
+      *=== 未確定分のみ別帳票とする by Yoshikawa(2011/05/24) start
+      *             IF  RECE10-ETC-YKZFTN(1)  =  ZERO
+                   IF  RECE10-ETC-YKZFTN(1)  =  6  OR  7  OR  8
+                     CONTINUE
+                   ELSE
+      *=== 未確定分のみ別帳票とする by Yoshikawa(2011/05/24) end
                      GO  TO  900-SEIKYU-READ-SEC
                    END-IF
                END-EVALUATE
