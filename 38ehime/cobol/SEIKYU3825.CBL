@@ -28,6 +28,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    11/05/23    一部項目の文字数を増やす
+      *                                  文字コードはUTF-8で出力する
+      *                                  前期高齢者９割＋長期の請求金額の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -175,10 +178,16 @@
                05  WRK-RATE          PIC 9(02).
                05  WRK-MOJIHEN       PIC 9(10).
       *
-           03  WRK-REC               PIC X(500).
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     03  WRK-REC               PIC X(500).
+           03  WRK-REC               PIC X(1500).
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            03  WRK-REC-LENGTH        PIC 9(04).
            03  WRK-HENSYU-AREA.
-               05  WRK-DATA          PIC X(200).
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *         05  WRK-DATA          PIC X(200).
+               05  WRK-DATA          PIC X(400).
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
                05  WRK-NUM           PIC ZZZZZZZZZZ.999.
                05  WRK-NUM9          PIC ZZZZZZZZZ9.999.
                05  WRK-NAGASA        PIC 9(04).
@@ -650,6 +659,12 @@
       *
              IF  FLG-TYOKI       =   1
                  MOVE    1       TO  MF100-TYOKI
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
+                 IF  FLG-TOKUREI  =  1
+                   COMPUTE  WRK-SEIKYUGK-G2  =  
+                            RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
+                 END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) end
       *    長期を併用しており、患者負担月額が１万を越えている場合は１万を設定
                  IF  WRK-JIKOFTNGK-G2    >   10000
                      MOVE    10000       TO  WRK-JIKOFTNGK-G2
@@ -661,6 +676,12 @@
              END-IF
              IF  FLG-TYOKI       =   2
                  MOVE    2       TO  MF100-TYOKI
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
+                 IF  FLG-TOKUREI  =  1
+                   COMPUTE  WRK-SEIKYUGK-G2  =  
+                            RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
+                 END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) end
       *    長期上位を併用して、患者負担月額が２万を越えている場合は２万を設定
                  IF  WRK-JIKOFTNGK-G2    >   20000
                      MOVE    20000       TO  WRK-JIKOFTNGK-G2
@@ -952,12 +973,18 @@
       *
       *    ９．被保険者証記号
            MOVE    MF100-KIGO                TO  WRK-DATA
-           MOVE    20                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    20                        TO  WRK-NAGASA
+           MOVE    40                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    １０．被保険者証番号
            MOVE    MF100-NUM                 TO  WRK-DATA
-           MOVE    20                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    20                        TO  WRK-NAGASA
+           MOVE    40                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    １１．市町村番号
@@ -982,7 +1009,10 @@
       *
       *    １５．患者氏名
            MOVE    MF100-NAME                TO  WRK-DATA
-           MOVE    50                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    50                        TO  WRK-NAGASA
+           MOVE    100                       TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       * 
       *    １６．性別
@@ -1059,7 +1089,10 @@
       *    
       *    ２３．傷病名および期間
            MOVE    SPACE                     TO  WRK-DATA
-           MOVE    20                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    20                        TO  WRK-NAGASA
+           MOVE    40                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    ２４−１．特定疾病等(02)
@@ -1146,22 +1179,34 @@
       *    
       *    ３１．備考
            MOVE    MF100-BIKO                TO  WRK-DATA
-           MOVE    200                       TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    200                       TO  WRK-NAGASA
+           MOVE    400                       TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    ３２．医療機関等所在地
            MOVE    WRK-HOSPADRS              TO  WRK-DATA
-           MOVE    100                       TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    100                       TO  WRK-NAGASA
+           MOVE    200                       TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    ３３．医療機関等名称
            MOVE    WRK-HOSPNAME              TO  WRK-DATA
-           MOVE    30                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    30                        TO  WRK-NAGASA
+           MOVE    60                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    ３４．医療機関等氏名
            MOVE    SYS-1001-KAISETUNAME      TO  WRK-DATA
-           MOVE    30                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) start
+      *     MOVE    30                        TO  WRK-NAGASA
+           MOVE    60                        TO  WRK-NAGASA
+      *=== 文字数増加 by Yoshikawa(2011/05/23) end
            MOVE    1                         TO  WRK-END
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1362,7 +1407,10 @@
            IF      WRK-RECEERR NOT =   SPACE
                MOVE    "1"         TO  SFILESV-ERR-CODE (1)
            END-IF
-           MOVE    "1"             TO  SFILESV-CODE-TYPE (1)
+      *=== 文字コードをUTF-8に by Yoshikawa(2011/05/23) start
+      *     MOVE    "1"             TO  SFILESV-CODE-TYPE (1)
+           MOVE    "3"             TO  SFILESV-CODE-TYPE (1)
+      *=== 文字コードをUTF-8に by Yoshikawa(2011/05/23) end
       *
            CALL    "ORCSFILESV"        USING
                                        ORCSFILESVAREA
@@ -1653,11 +1701,13 @@
                END-IF
       *
       *    軽減特例措置は2割計算だが、主保険のCOMPFTNが1割計算なので
-      *    長期のCOMPFTNを請求金額に加えるようにする
+      *    後に計算を行う
                IF  (SYU-KOH-HKNNUM(IDX)  =  "972" OR "974")
                AND (RECE02-FLG(2)  =  1)
                  MOVE      1       TO      FLG-TOKUREI
-                 MOVE  SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-SEIKYUGK
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
+      *           MOVE  SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-SEIKYUGK
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) end
                END-IF
       *
            END-PERFORM
