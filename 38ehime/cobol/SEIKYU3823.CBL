@@ -47,6 +47,7 @@
       *  01.00.11    内田    10/11/26  前期高齢者９割該当者の
       *                                前期高齢者欄、給付割合欄の修正
       *  01.00.12    吉川    11/03/04  診療日数が無い場合は0を印字
+      *  01.00.13    吉川    11/05/23  前期高齢者９割＋長期の請求金額の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -713,6 +714,12 @@
       *
              IF  FLG-TYOKI       =   1
                  MOVE    1       TO  MF100-TYOKI
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
+                 IF  FLG-TOKUREI  =  1
+                   COMPUTE  WRK-SEIKYUGK-G2  =  
+                            RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
+                 END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) end
       *    長期を併用しており、患者負担月額が１万を越えている場合は１万を設定
                  IF  WRK-JIKOFTNGK-G2    >   10000
                      MOVE    10000       TO  WRK-JIKOFTNGK-G2
@@ -725,6 +732,12 @@
       *---(01.00.02) LINE ADD START ------------------------------------
              IF  FLG-TYOKI       =   2
                  MOVE    2       TO  MF100-TYOKI
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
+                 IF  FLG-TOKUREI  =  1
+                   COMPUTE  WRK-SEIKYUGK-G2  =  
+                            RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
+                 END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) end
       *    長期上位を併用して、患者負担月額が２万を越えている場合は２万を設定
                  IF  WRK-JIKOFTNGK-G2    >   20000
                      MOVE    20000       TO  WRK-JIKOFTNGK-G2
@@ -1691,11 +1704,13 @@
       *
       *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2010/09/28) start
       *    軽減特例措置は2割計算だが、主保険のCOMPFTNが1割計算なので
-      *    長期のCOMPFTNを請求金額に加えるようにする
+      *    計算は後に行う
                IF  (SYU-KOH-HKNNUM(IDX)  =  "972" OR "974")
                AND (RECE02-FLG(2)  =  1)
                  MOVE      1       TO      FLG-TOKUREI
-                 MOVE  SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-SEIKYUGK
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
+      *           MOVE  SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-SEIKYUGK
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) end
                END-IF
       *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2010/09/28) end
       *
