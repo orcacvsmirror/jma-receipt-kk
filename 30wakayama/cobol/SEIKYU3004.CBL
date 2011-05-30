@@ -53,6 +53,7 @@
       *                                         かつらぎ町は未就学で帳票を分ける
       *  02.00.02       吉川    10/06/24        和歌山市、橋本市以外の帳票廃止
       *  02.00.03       吉川    10/12/08        open-cobol1.0対応
+      *  02.00.04       吉川    11/05/30        ver4.6.0での印字不具合対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -503,8 +504,10 @@
       *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *
       *    口座名取得
-           CALL    "KOUZASUB"          USING
-                                       KOUZA-PARA
+      *=== ver4.6.0印字不具合対応 by Yoshikawa(2011/05/30) start
+      *     CALL    "KOUZASUB"          USING
+      *                                 KOUZA-PARA
+      *=== ver4.6.0印字不具合対応 by Yoshikawa(2011/05/30) end
            .
        100-INIT-EXT.
            EXIT.

@@ -41,6 +41,7 @@
       *                                         システム管理マスタ「1901」の
       *                                         医療機関情報を参照
       *  02.00.02       吉川    10/12/08        open-cobol1.0対応
+      *  02.00.03       吉川    11/05/30        ver4.6.0での印字不具合対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -399,8 +400,10 @@
       *=== シス管「1901」対応 by Yoshikawa(2010/06/02) end
       *
       *    口座名取得
-           CALL    "KOUZASUB"          USING
-                                       KOUZA-PARA
+      *=== ver4.6.0印字不具合対応 by Yoshikawa(2011/05/30) start
+      *     CALL    "KOUZASUB"          USING
+      *                                 KOUZA-PARA
+      *=== ver4.6.0印字不具合対応 by Yoshikawa(2011/05/30) end
            .
        100-INIT-EXT.
            EXIT.
