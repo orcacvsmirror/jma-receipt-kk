@@ -65,6 +65,7 @@
       *  01.00.25    吉川    11/02/09    特別療養費国保対応
       *  01.00.26    吉川    11/05/17    特定疾患（091）と乳障親の場合
       *                                  乳障親欄に集計されないように修正
+      *  01.00.27    吉川    11/06/07    乳障親分が別に作成されないのを修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -888,10 +889,14 @@
       *    障害乳幼児母子医療点数集計
       *=== 乳障親＋特疾無は乳障親に集計しない by Yoshikawa(2011/05/17) start
       *     PERFORM  2001-KOHI-SYUKEI-SEC
-           IF  WRK-PARA-SYOKBN    =  "1"
-           AND WRK-PARA-TOKUBETU  =  "1"
+      *=== 乳障親を別に作成 by Yoshikawa(2011/06/07) start
+      *     IF  WRK-PARA-SYOKBN    =  "1"
+      *     AND WRK-PARA-TOKUBETU  =  "1"
+      *=== 乳障親を別に作成 by Yoshikawa(2011/06/07) end
               PERFORM  2001-KOHI-SYUKEI-SEC
-           END-IF
+      *=== 乳障親を別に作成 by Yoshikawa(2011/06/07) start
+      *     END-IF
+      *=== 乳障親を別に作成 by Yoshikawa(2011/06/07) end
       *=== 乳障親＋特疾無は乳障親に集計しない by Yoshikawa(2011/05/17) end
       *
       *
