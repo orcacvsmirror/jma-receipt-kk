@@ -83,6 +83,8 @@
       *  01.00.30    吉川   11/02/09    特別療養費国保対応
       *  01.00.31    吉川   11/02/16    公費請求テーブルclose処理位置変更
       *  01.00.32    吉川   11/04/13    特別療養費分は障・ひとり親は記載しない
+      *  01.00.33    吉川   11/06/13    札幌市は区毎に集計するようになったので
+      *                                 請求書の枚数欄のカウントを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1556,14 +1558,17 @@
            ELSE
                MOVE   1  TO  IDX1
       *    札幌市の場合、代表番号セット
-               IF  RECE10-HKNJANUM-S (1:3) = "014"
-      *---(01.00.18) LINE ADD START ------------------------------------
-      *             MOVE  "014001"            TO  WRK-HKNJANUM
-                   MOVE  "010017"            TO  WRK-HKNJANUM
-      *---(01.00.18) LINE ADD END   ------------------------------------
-               ELSE
-                   MOVE  RECE10-HKNJANUM-S   TO  WRK-HKNJANUM
-               END-IF
+      *=== 札幌市は区毎に集計する by Yoshikawa(2011/06/13) start
+      *         IF  RECE10-HKNJANUM-S (1:3) = "014"
+      **---(01.00.18) LINE ADD START ------------------------------------
+      **             MOVE  "014001"            TO  WRK-HKNJANUM
+      *             MOVE  "010017"            TO  WRK-HKNJANUM
+      **---(01.00.18) LINE ADD END   ------------------------------------
+      *         ELSE
+      *             MOVE  RECE10-HKNJANUM-S   TO  WRK-HKNJANUM
+      *         END-IF
+               MOVE  RECE10-HKNJANUM-S       TO  WRK-HKNJANUM
+      *=== 札幌市は区毎に集計する by Yoshikawa(2011/06/13) end
            END-IF
       *
       *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
