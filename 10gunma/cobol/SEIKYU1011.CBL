@@ -37,6 +37,8 @@
       *                                    °åÎÅµ¡´Ø¾ðÊó¤ò»²¾È
       *  01.00.03     ÆâÅÄ     09/01/14    SPA-AREA½é´ü²½
       *  01.00.04     µÈÀî     09/03/03    ¶¨²ñ¤±¤ó¤ÝÂÐ±þ
+      *  01.00.05     µÈÀî     11/06/14    ¹â³ÛÎÅÍÜÈñ¤ò»ý¤Ã¤Æ¤¤¤ë¾ì¹ç¤Î
+      *                                    °åÎÅÈñÀÁµá³Û¤Î·×»»¤ò½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -633,6 +635,22 @@
            MOVE  RECE02-YKZFTN      (IDY)  TO  MF100-YKZFTN
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
       *
+      *=== ¹â³ÛÎÅÍÜÈñ»þ¤Î°åÎÅÈñÀÁµá³Û·×»» by Yoshikawa(2011/06/14) start
+           COMPUTE  WRK-SEIKYUGK  =  MF100-TOTALTEN  
+                                  *  (MF100-KYURATE / 10 )
+           IF  RECE02-FTNMONEY(1)  >  ZERO
+           AND RECE02-FTNMONEY(1)  <  WRK-SEIKYUGK
+             MOVE    RECE02-FTNMONEY(1)    TO  WRK-SEIKYUGK
+           END-IF
+           COMPUTE  WRK-COMPTENSU  =  WRK-SEIKYUGK  -  MF100-FTNMONEY
+      *    £±£°±ßÌ¤Ëþ»Í¼Î¸ÞÆþ
+           COMPUTE WRK-TMPTENSU  =  WRK-COMPTENSU  /  10 
+           COMPUTE WRK-COMPTENSU  ROUNDED =  WRK-TMPTENSU 
+           COMPUTE WRK-COMPTENSU  =  WRK-COMPTENSU  *  10
+      *
+           MOVE    WRK-COMPTENSU           TO  MF100-IRYOHI
+      *=== ¹â³ÛÎÅÍÜÈñ»þ¤Î°åÎÅÈñÀÁµá³Û·×»» by Yoshikawa(2011/06/14) end
+      *
            WRITE  MF100-REC
            ADD  1  TO  CNT-MF100
       *
@@ -787,16 +805,21 @@
              ADD   MF100-FTNMONEY   TO  SUM-ITBFTNKIN
       *
       *    °åÎÅÈñÀÁµá³Û
-             COMPUTE WRK-COMPTENSU   =  MF100-TOTALTEN
-                     *  (MF100-KYURATE / 10 ) - MF100-FTNMONEY
-      **** 2006.02.17. onuki £±£°±ßÌ¤Ëþ»Í¼Î¸ÞÆþ½èÍý
-             COMPUTE WRK-TMPTENSU = WRK-COMPTENSU / 10 
-             COMPUTE WRK-COMPTENSU ROUNDED = WRK-TMPTENSU 
-             COMPUTE WRK-COMPTENSU = WRK-COMPTENSU * 10 
-      ****
-             MOVE    WRK-COMPTENSU   TO WRK-Z11
-             MOVE    WRK-Z11         TO SC11-IRYOHI(IDX)
-             ADD     WRK-COMPTENSU   TO SUM-IRYOHI
+      *=== ¹â³ÛÎÅÍÜÈñ»þ¤Î°åÎÅÈñÀÁµá³Û·×»» by Yoshikawa(2011/06/14) start
+      *       COMPUTE WRK-COMPTENSU   =  MF100-TOTALTEN
+      *               *  (MF100-KYURATE / 10 ) - MF100-FTNMONEY
+      ***** 2006.02.17. onuki £±£°±ßÌ¤Ëþ»Í¼Î¸ÞÆþ½èÍý
+      *       COMPUTE WRK-TMPTENSU = WRK-COMPTENSU / 10 
+      *       COMPUTE WRK-COMPTENSU ROUNDED = WRK-TMPTENSU 
+      *       COMPUTE WRK-COMPTENSU = WRK-COMPTENSU * 10 
+      *****
+      *       MOVE    WRK-COMPTENSU   TO WRK-Z11
+      *       MOVE    WRK-Z11         TO SC11-IRYOHI(IDX)
+      *       ADD     WRK-COMPTENSU   TO SUM-IRYOHI
+             MOVE    MF100-IRYOHI   TO  WRK-Z11
+             MOVE    WRK-Z11        TO  SC11-IRYOHI(IDX)
+             ADD     MF100-IRYOHI   TO  SUM-IRYOHI
+      *=== ¹â³ÛÎÅÍÜÈñ»þ¤Î°åÎÅÈñÀÁµá³Û·×»» by Yoshikawa(2011/06/14) end
       *
       *    ¿ÇÎÅÆü¿ô
              MOVE    MF100-JNISSU   TO  WRK-Z3
