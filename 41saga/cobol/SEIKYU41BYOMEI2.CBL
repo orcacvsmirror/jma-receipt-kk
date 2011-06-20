@@ -41,6 +41,8 @@
       *  01.00.02    内田         07/09/30  日レセver4.0対応
       *  01.00.03    門間         08/11/20  SPA-AREA初期化
       *  01.00.04    吉川         11/01/12  open-cobol1.0対応
+      *  01.00.05    吉川         11/06/16  レセプト病名記載順対応
+      *                                     補足コメント対応
       *****************************************************************
 001200*
 001300 ENVIRONMENT             DIVISION.
@@ -194,6 +196,9 @@
            COPY    "CPSYSKANRI.INC".
       *
            COPY    "CPSK2005.INC".
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) start
+           COPY    "CPSK200501.INC".
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -318,6 +323,29 @@
                MOVE    ZERO             TO  SYS-2005-TENKIHENKBN
            END-IF
       *
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) start
+           MOVE    SPACE           TO  SYSKANRI-REC
+           INITIALIZE                  SYSKANRI-REC
+           MOVE    "2005"          TO  SYS-KANRICD
+           MOVE    "01"            TO  SYS-KBNCD
+           MOVE    WRK-PARA-SRYYM(1:6)
+                                   TO  SYS-STYUKYMD(1:6)
+                                       SYS-EDYUKYMD(1:6)
+           MOVE    "01"            TO  SYS-STYUKYMD(7:2)
+                                       SYS-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM     TO  SYS-HOSPNUM
+           PERFORM 960-KANRIMST-READ-SEC
+           IF      FLG-SYSKANRI    =   ZERO
+               MOVE    MCPDATA-REC      TO  SYS-200501-REC
+           ELSE    
+               INITIALIZE                   SYS-200501-REC
+           END-IF
+           IF      SYS-200501-BYOMEI-PRTJYUN
+                                    =   SPACE
+               MOVE    ZERO             TO  SYS-200501-BYOMEI-PRTJYUN
+           END-IF
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) end
+      *
       *        レセプト明細０３読み込み
            PERFORM 900-RECE03-READ-SEC
            .
@@ -366,6 +394,25 @@
            MOVE    RECE03-BYOMEI       TO  RECE031-BYOMEI
            MOVE    RECE03-BYOMEIMOJI   TO  RECE031-BYOMEIMOJI
            MOVE    RECE03-BYOMEIHENFLG TO  RECE031-BYOMEIHENFLG   
+      *=== 補足コメント対応 by Yoshikawa(2011/06/16) start
+           MOVE    RECE03-HOSOKU-COMMENT
+                                       TO  RECE031-HOSOKU-COMMENT
+      *=== 補足コメント対応 by Yoshikawa(2011/06/16) end
+      *
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) start
+      *    病名記載順対応
+           IF      SYS-200501-BYOMEI-PRTJYUN
+                                       =   "0"  OR  "1"
+               IF    ( SYS-200501-BYOMEI-PRTJYUN
+                                           =   "1"   )
+               AND   ( RECE031-TENKIKBN    =   SPACE )
+                   MOVE    "9"                 TO  RECE031-TENKIKBN-X
+               ELSE
+                   MOVE    RECE031-TENKIKBN    TO  RECE031-TENKIKBN-X
+               END-IF 
+               MOVE    RECE031-TENKIYMD    TO  RECE031-TENKIYMD-X
+           END-IF
+      *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) end
       *
            WRITE   RECE031-REC
            ADD     1                   TO  CNT-OUT
