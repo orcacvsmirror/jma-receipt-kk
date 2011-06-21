@@ -86,7 +86,7 @@
       </element>
       <element name="S-NISSU" occurs="1">
         <appinfo>
-          <embed object="string" length="5"/>
+          <embed object="string" length="6"/>
         </appinfo>
       </element>
       <element name="S-KINGK" occurs="1">
@@ -140,7 +140,7 @@
       </element>
       <element name="S-KNISSU" occurs="1">
         <appinfo>
-          <embed object="string" length="5"/>
+          <embed object="string" length="6"/>
         </appinfo>
       </element>
       <element name="S-KKINGK" occurs="1">
@@ -8058,7 +8058,7 @@
         <point val="15.1,14.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.191,14.1611;15.1,14.4611"/>
+        <rectangle val="14.0092,14.1611;15.1,14.4611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[0].S-KNISSU#</string>
@@ -8069,7 +8069,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8310,7 +8310,7 @@
         <point val="15.15,8.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.241,8.01111;15.15,8.31111"/>
+        <rectangle val="14.0592,8.01111;15.15,8.31111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].S-NISSU#</string>
@@ -8321,7 +8321,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8814,7 +8814,7 @@
         <point val="15.15,10.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.241,10.2111;15.15,10.5111"/>
+        <rectangle val="14.0592,10.2111;15.15,10.5111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].S-NISSU#</string>
@@ -8825,7 +8825,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9570,7 +9570,7 @@
         <point val="15.1,16.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.191,16.3611;15.1,16.6611"/>
+        <rectangle val="14.0092,16.3611;15.1,16.6611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[1].S-KNISSU#</string>
@@ -9581,7 +9581,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10298,7 +10298,7 @@
         <point val="15.1,18.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.191,18.5611;15.1,18.8611"/>
+        <rectangle val="14.0092,18.5611;15.1,18.8611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[2].S-KNISSU#</string>
@@ -10309,7 +10309,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10802,7 +10802,7 @@
         <point val="15.1,21"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.191,20.7611;15.1,21.0611"/>
+        <rectangle val="14.0092,20.7611;15.1,21.0611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[3].S-KNISSU#</string>
@@ -10813,7 +10813,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>

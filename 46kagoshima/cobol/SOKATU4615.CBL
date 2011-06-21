@@ -33,6 +33,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/06/01  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
+      *  01.00.04    吉川    2011/06/17  食事回数は1万の位まで表示する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -148,6 +149,9 @@
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
+      *=== 食事回数は1万の位まで表示 by Yoshikawa(2011/06/17) start
+           03  WRK-Z6              PIC ZZ,ZZZ.
+      *=== 食事回数は1万の位まで表示 by Yoshikawa(2011/06/17) end
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
            03  WRK-KOHNUM9         PIC Z9.
@@ -1183,8 +1187,12 @@
              MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT4615-S-KENSU(IDZ)
       *    食事療養：日数
-             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
-             MOVE  WRK-Z5                TO  SKT4615-S-NISSU(IDZ)
+      *=== 食事回数は1万の位まで表示 by Yoshikawa(2011/06/17) start
+      *       MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT4615-S-NISSU(IDZ)
+             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z6
+             MOVE  WRK-Z6                TO  SKT4615-S-NISSU(IDZ)
+      *=== 食事回数は1万の位まで表示 by Yoshikawa(2011/06/17) end
       *    食事療養：金額
              MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT4615-S-KINGK(IDZ)
@@ -1236,8 +1244,12 @@
                MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT4615-S-KKENSU(IDY)
       **    公費再掲欄：食事療養：日数
-               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
-               MOVE  WRK-Z5                TO  SKT4615-S-KNISSU(IDY)
+      *=== 食事回数は1万の位まで表示 by Yoshikawa(2011/06/17) start
+      *         MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
+      *         MOVE  WRK-Z5                TO  SKT4615-S-KNISSU(IDY)
+               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z6
+               MOVE  WRK-Z6                TO  SKT4615-S-KNISSU(IDY)
+      *=== 食事回数は1万の位まで表示 by Yoshikawa(2011/06/17) end
       **    公費再掲欄：食事療養：金額
                MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
                MOVE  WRK-Z9                TO  SKT4615-S-KKINGK(IDY)
