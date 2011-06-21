@@ -55,6 +55,7 @@
       *  01.00.12       吉川    2009/04/02   特定負無の法別と点数を記載する
       *  01.00.13       吉川    2011/02/17   open-cobol1.0対応
       *                                      公費請求テーブルclose処理位置変更
+      *  01.00.14       吉川    2011/06/20   実日数欄は総日数を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1103,11 +1104,15 @@
            MOVE   MF110-KOHID         TO   WRK-KOHID
       *
       *    主保険の点数を取得
-           IF     RECE10-HKNNUM       =    MF110-HKNNUM
-           AND    RECE10-HKNJANUM     =    MF110-HKNJANUM-KEY
-           AND    RECE10-NYUGAIKBN    =    MF110-NYUGAIKBN
-             MOVE RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
-           END-IF
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) start
+      *     IF     RECE10-HKNNUM       =    MF110-HKNNUM
+      *     AND    RECE10-HKNJANUM     =    MF110-HKNJANUM-KEY
+      *     AND    RECE10-NYUGAIKBN    =    MF110-NYUGAIKBN
+      *       MOVE RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
+      *     END-IF
+           MOVE RECE10-TOTALTEN(1)    TO   MF110-TOTALTENINF
+           MOVE RECE10-JNISSU(1)      TO   MF110-JNISSUINF
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
       *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
            PERFORM   800-SYUNOU-SET-SEC
            MOVE   WRK-KOHFTN          TO   MF110-ITBFTN
@@ -2254,13 +2259,16 @@
        910-SEIKYU-START-SEC            SECTION.
       *
            INITIALIZE                  RECE10-REC
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
-      *     MOVE    MF110-HOSPID        TO  RECE10-HOSPID
-           MOVE    SPA-HOSPNUM         TO  RECE10-HOSPNUM
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
-           MOVE    MF110-SRYYM         TO  RECE10-SRYYM
-           MOVE    MF110-PTID          TO  RECE10-PTID
-           MOVE    MF110-SRYKA         TO  RECE10-RECEKA
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) start
+      **=== Ver4.0対応 By Yoshikawa(2007/10/05) start
+      **     MOVE    MF110-HOSPID        TO  RECE10-HOSPID
+      *     MOVE    SPA-HOSPNUM         TO  RECE10-HOSPNUM
+      **=== Ver4.0対応 By Yoshikawa(2007/10/05) end
+      *     MOVE    MF110-SRYYM         TO  RECE10-SRYYM
+      *     MOVE    MF110-PTID          TO  RECE10-PTID
+      *     MOVE    MF110-SRYKA         TO  RECE10-RECEKA
+           MOVE    RECE01-KEY          TO  RECE10-KEY
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
@@ -2270,7 +2278,10 @@
       *                                  MCPAREA
       *                                  MCPDATA-REC
            MOVE    "tbl_seikyu"        TO  MCP-TABLE
-           MOVE    "key2"              TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) start
+      *     MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "key"               TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
            CALL    "ORCDBMAIN"         USING
                                        MCPAREA
                                        MCPDATA-REC
@@ -2281,7 +2292,10 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *         MOVE    PATH-TBL-SEIKYU-KEY2 TO MCP-PATH
                MOVE   "tbl_seikyu"        TO  MCP-TABLE
-               MOVE   "key2"              TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) start
+      *         MOVE   "key2"              TO  MCP-PATHNAME
+               MOVE   "key"               TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
                PERFORM 910-SEIKYU-READ-SEC
            ELSE
@@ -2295,7 +2309,10 @@
       *                                  MCPAREA
       *                                  MCPDATA-REC
            MOVE    "tbl_seikyu"        TO  MCP-TABLE
-           MOVE    "key2"              TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) start
+      *     MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "key"               TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
            CALL    "ORCDBMAIN"         USING
                                        MCPAREA
                                        MCPDATA-REC
@@ -2318,7 +2335,10 @@
       *                              MCPAREA
       *                              MCPDATA-REC
            MOVE    "tbl_seikyu"        TO  MCP-TABLE
-           MOVE    "key2"              TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) start
+      *     MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "key"               TO  MCP-PATHNAME
+      *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
            CALL    "ORCDBMAIN"         USING
                                        MCPAREA
                                        MCPDATA-REC
