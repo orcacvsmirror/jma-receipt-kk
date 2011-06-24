@@ -1284,11 +1284,11 @@
         <point val="20.85,14.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.09,14.79;20.86,14.81"/>
+        <rectangle val="17.0456,14.79;20.86,14.81"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="20.85,14.8"/>
-        <point val="17.1,14.8"/>
+        <point val="17.0556,14.8"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1296,6 +1296,9 @@
       <attribute name="line_width">
         <real val="0.02"/>
       </attribute>
+      <connections>
+        <connection handle="0" to="O91" connection="2"/>
+      </connections>
     </object>
     <object type="Standard - Line" version="0" id="O60">
       <attribute name="obj_pos">
@@ -8043,10 +8046,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O258">
       <attribute name="obj_pos">
-        <point val="7.7,3.3"/>
+        <point val="4.69647,3.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.67,2.90185;7.7,3.40185"/>
+        <rectangle val="4.69647,2.90185;7.72647,3.40185"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANUM#</string>
@@ -8066,13 +8069,13 @@
             <real val="0.5"/>
           </attribute>
           <attribute name="pos">
-            <point val="7.7,3.3"/>
+            <point val="4.69647,3.3"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
           </attribute>
           <attribute name="alignment">
-            <enum val="2"/>
+            <enum val="0"/>
           </attribute>
           <attribute name="single">
             <real val="0.303"/>
