@@ -42,6 +42,8 @@
       *                                診療した日数を記載する
       *  01.00.05    吉川    10/12/14  月途中で負担者番号が変更された場合
       *                                実日数欄は診療月の合計を記載する
+      *  01.00.06    吉川    11/06/22  公費の助成がない場合は印字しない
+      *                                後期高齢の場合、保険区分は国保とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -645,6 +647,9 @@
       *    請求金額集計・公費患者負担額集計
            INITIALIZE                 WRK-KASAN-TBL
            MOVE    ZERO               TO    FLG-TYOKI
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) start
+           MOVE    1                  TO    FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) end
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
            IF      RECE02-NYUGAIKBN    =   "1"
@@ -658,7 +663,9 @@
                MOVE    "key25"        TO  WRK-PATH
       *---(01.00.01) LINE ADD END   ------------------------------------
            END-IF
+           DISPLAY "BEFORE FLG-ERR =" FLG-ERR
            PERFORM  920-SYUNOU-SET-SEC
+           DISPLAY "AFTER FLG-ERR =" FLG-ERR
       *
       *    限度額
            IF    FLG-TYOKI    =    1
@@ -697,13 +704,19 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
-           MOVE    ZERO    TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) start
+      *     MOVE    ZERO    TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
+           DISPLAY ""
       *    国保／社保別に件数をカウント
       *    国保→社保の順に印刷する
            IF      FLG-ERR     =   ZERO    
                IF  RECE02-TEISYUTUSAKI  =  2
+      *=== 後期高齢の保険区分は国保とする by Yoshikawa(2011/06/22) start
+                                       OR  6
+      *=== 後期高齢の保険区分は国保とする by Yoshikawa(2011/06/22) end
                    MOVE  1                TO    MF100-HKNKBN
                    ADD   1                TO    WRK-KENSU(1)
                ELSE
@@ -1091,6 +1104,18 @@
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4 OR
                     SYU-KOH-HKNNUM(IDX)  =  SPACE
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) start
+      *      全国公費が全額助成の場合は、地方公費の助成が発生しない
+             IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+               IF  IDX   =   1
+                 MOVE      ZERO          TO  FLG-ERR
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX)  NOT =  ZERO
+                   MOVE    ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) end
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
                MOVE    1     TO    FLG-TYOKI
              END-IF
