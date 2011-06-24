@@ -20,12 +20,16 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         11/06/23  東北地方太平洋沖地震対応
       ************************************************************
        01  SKT1410TMP-REC.
            03  SKT1410TMP-KEY.
                05  SKT1410TMP-SYUTURYOKU           PIC  9(01).
                05  SKT1410TMP-HKNJANUM             PIC  X(06).
                05  SKT1410TMP-ZAITAKU              PIC  X(01).
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+               05  SKT1410TMP-GENMEN               PIC  X(05).
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            03  SKT1410TMP-SEIKYU-TBL     OCCURS  15.
                05  SKT1410TMP-NYUGAI-TBL    OCCURS  2.
                    07  SKT1410TMP-KENSU            PIC  9(06).

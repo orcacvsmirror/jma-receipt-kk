@@ -58,6 +58,7 @@
       *                                  ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛
       *                                  ¡ÍÃœ∏∂ª‘§Œ¬Â…Ω»÷πÊƒ…≤√
       *  01.00.17    µ»¿Ó    11/01/25    open-cobol1.0¬–±˛
+      *  01.00.18    µ»¿Ó    11/06/23    ≈ÏÀÃ√œ ˝¬¿ øÕŒ≤≠√œøÃ¬–±˛
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -279,6 +280,30 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.11) LINE ADD END   ------------------------------------
+      *
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) start
+      *    ∫“≥≤Õ—≈‘∆ª…‹∏©•∆°º•÷•Î
+       01  TBL-PREF-AREA.
+           03  FILLER          PIC X(02)   VALUE   "03".
+           03  FILLER          PIC X(08)   VALUE   "¥‰ºÍ∏©".
+           03  FILLER          PIC X(02)   VALUE   "04".
+           03  FILLER          PIC X(08)   VALUE   "µ‹æÎ∏©".
+           03  FILLER          PIC X(02)   VALUE   "07".
+           03  FILLER          PIC X(08)   VALUE   " °≈Á∏©".
+           03  FILLER          PIC X(02)   VALUE   "08".
+           03  FILLER          PIC X(08)   VALUE   "∞ÒæÎ∏©".
+           03  FILLER          PIC X(02)   VALUE   "09".
+           03  FILLER          PIC X(08)   VALUE   "∆ Ã⁄∏©".
+           03  FILLER          PIC X(02)   VALUE   "12".
+           03  FILLER          PIC X(08)   VALUE   "¿ÈÕ’∏©".
+           03  FILLER          PIC X(02)   VALUE   "20".
+           03  FILLER          PIC X(08)   VALUE   "ƒπÃÓ∏©".
+       01  TBL-PREF-R         REDEFINES   TBL-PREF-AREA.
+           03  TBL-PREF       OCCURS   7.
+               05  TBL-PREFNUM             PIC X(02).
+               05  TBL-PREFNAME            PIC X(08).
+       01  TBL-PREF-MAX                   PIC 9(02)   VALUE   7.
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) end
       *****************************************************************
       *    •’•°•§•Î•Ï•§•¢•¶•»
       *****************************************************************
@@ -768,10 +793,26 @@
                    MOVE    3   TO    SKT1410TMP-SYUTURYOKU
                  END-IF
              ELSE
-               MOVE        9   TO    SKT1410TMP-SYUTURYOKU
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) start
+      *         MOVE        9   TO    SKT1410TMP-SYUTURYOKU
+               MOVE        8   TO    SKT1410TMP-SYUTURYOKU
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) end
              END-IF
            END-IF
       *
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) start
+      *    ∫“£±°¢∫“£≤°¢…‘æ‹°¶∫“£±§œ Ãƒ¢…º
+           IF  RECE10-ETC-YKZFTN (1)  =  2 OR 4 OR 5
+           OR  RECE10-HKNJANUM  =  ZERO
+             MOVE    "00001"     TO  SKT1410TMP-GENMEN
+             MOVE    9           TO  SKT1410TMP-SYUTURYOKU
+      *
+      *       ›∏±º‘»÷πÊ§¨…‘Ã¿§ŒæÏπÁ°¢ΩªΩÍ§´§È∏©§ÚºË∆¿
+             IF  RECE10-HKNJANUM  =  ZERO
+               PERFORM  20011-CITYGET-SEC
+             END-IF
+           END-IF
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -799,6 +840,28 @@
        2001-KOKUHO-SYUKEI-EXT.
            EXIT.
       *
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) start
+      *****************************************************************
+      *    ΩªΩÍ§´§Èª‘ƒÆ¬ºÃæºË∆¿ΩËÕ˝
+      *****************************************************************
+       20011-CITYGET-SEC          SECTION.
+      *
+      *    ΩªΩÍ§´§È≈‘∆ª…‹∏©Ãæ§ÚºË∆¿
+           PERFORM  VARYING  IDX5  FROM  1  BY  1
+                    UNTIL  IDX5  >  TBL-PREF-MAX
+             IF  PTINF-HOME-ADRS(1:6)  =  TBL-PREFNAME(IDX5)(1:6)
+               DISPLAY  "≈‘∆ª…‹∏©»÷πÊ ="        TBL-PREFNUM(IDX5)
+               DISPLAY  "≈‘∆ª…‹∏©Ãæ ="          TBL-PREFNAME(IDX5)
+               MOVE  TBL-PREFNUM(IDX5)      TO  SKT1410TMP-HKNJANUM
+               MOVE  TBL-PREF-MAX           TO  IDX5
+             END-IF
+           END-PERFORM
+      *
+           .
+       20011-CITYGET-EXT.
+           EXIT.
+      *
+      *=== ∫“≥≤¬–±˛ by Yoshikawa(2011/06/23) end
       *****************************************************************
       *    ¬Â…Ω»÷πÊ•ª•√•»
       *****************************************************************
