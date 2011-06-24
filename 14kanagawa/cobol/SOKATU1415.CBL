@@ -34,12 +34,22 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.04    吉川    10/03/02    広域連合の保険者番号指定対応
       *  01.00.05    吉川    10/08/04    オンライン返戻対応
+      *  01.00.06    吉川    11/06/23    東北地方太平洋沖地震対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *    請求書一時ファイル
+           SELECT  SKT1415TMP-FILE ASSIGN    SKT1415TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT1415TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT1415.
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
       *    請求ＤＢ更新用ファイル
            SELECT  UPD-FILE        ASSIGN  RECEUPD
@@ -54,6 +64,12 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *    請求書一時ファイル
+       FD  SKT1415TMP-FILE.
+           COPY    "CPSKT1415TMP.INC".
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
+      *
       *    請求ＤＢ更新用ファイル
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
@@ -64,6 +80,13 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *    請求書一時ファイル 名称領域
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT1415TP//.
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
       *    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -82,6 +105,9 @@
       *
       *    スパ領域
        01  STS-AREA.
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           03  STS-SKT1415         PIC X(02).
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
       *
@@ -93,6 +119,10 @@
            03  FLG-UPD             PIC 9(01).
       *     
            03  FLG-RECE10          PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           03  FLG-SKT1415TMP      PIC 9(01).
+           03  FLG-PRINT           PIC 9(01).
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            03  FLG-SYSKANRI        PIC 9(01). 
            03  FLG-HKNNUM          PIC 9(01).
            03  FLG-HKNJAINF        PIC 9(01).
@@ -108,6 +138,10 @@
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           03  IDX4                PIC 9(04).
+           03  IDX5                PIC 9(05).
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            03  IDXX                PIC 9(04).
            03  IDXY                PIC 9(04).
       *
@@ -224,6 +258,30 @@
                05  KEY-N-HKNJANUM      PIC X(08).
            03  KEY-OLD.
                05  KEY-O-HKNJANUM      PIC X(08). 
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *    災害用都道府県テーブル
+       01  TBL-PREF-AREA.
+           03  FILLER          PIC X(02)   VALUE   "03".
+           03  FILLER          PIC X(08)   VALUE   "岩手県".
+           03  FILLER          PIC X(02)   VALUE   "04".
+           03  FILLER          PIC X(08)   VALUE   "宮城県".
+           03  FILLER          PIC X(02)   VALUE   "07".
+           03  FILLER          PIC X(08)   VALUE   "福島県".
+           03  FILLER          PIC X(02)   VALUE   "08".
+           03  FILLER          PIC X(08)   VALUE   "茨城県".
+           03  FILLER          PIC X(02)   VALUE   "09".
+           03  FILLER          PIC X(08)   VALUE   "栃木県".
+           03  FILLER          PIC X(02)   VALUE   "12".
+           03  FILLER          PIC X(08)   VALUE   "千葉県".
+           03  FILLER          PIC X(02)   VALUE   "20".
+           03  FILLER          PIC X(08)   VALUE   "長野県".
+       01  TBL-PREF-R         REDEFINES   TBL-PREF-AREA.
+           03  TBL-PREF       OCCURS   7.
+               05  TBL-PREFNUM             PIC X(02).
+               05  TBL-PREFNAME            PIC X(08).
+       01  TBL-PREF-MAX                   PIC 9(02)   VALUE   7.
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
       *    固定項目
        01  WRK-CONS-AREA.
@@ -375,6 +433,11 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           MOVE    "SKT1415"           TO  SKT1415TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT1415TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT1415TP-HOSPNUM
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
@@ -534,6 +597,22 @@
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/02) end
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "1"
+                   MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"
+                   MOVE    "key65"         TO  WRK-MCP-PATHNAME
+           END-EVALUATE
+      *
+           MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+           PERFORM 900-SEIKYU-SELECT-SEC
+           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
+      *
            .
        100-INIT-EXT.
            EXIT.
@@ -545,21 +624,38 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *
-      *    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "2"
-                   MOVE    "2"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "1"
-                   MOVE    "1"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      **    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "2"
+      *             MOVE    "2"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "1"
+      *             MOVE    "1"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      **
+      *     CLOSE   UPD-FILE
+           OPEN    OUTPUT  SKT1415TMP-FILE
+           CLOSE           SKT1415TMP-FILE
+           OPEN    I-O     SKT1415TMP-FILE
+           
+           MOVE    ZERO                TO  FLG-UPD
+      *
+           PERFORM 2001-KOUKI-SYUKEI-SEC
+                   UNTIL   FLG-END  =  1
       *
            CLOSE   UPD-FILE
+           CLOSE   SKT1415TMP-FILE
+      *
+           IF       FLG-UPD   =       1
+                    PERFORM   2002-PRINT-SEC
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
       *    請求ＤＢ更新
            IF      FLG-UPD        =   1
@@ -666,6 +762,9 @@
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+                                            SKT1415TMP-REC
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *    保険者番号
            IF  RECE10-HKNJANUM(7:2)  =  SPACE
              MOVE  RECE10-HKNJANUM(1:6)  TO  WRK-HKNJANUM(1:6)
@@ -674,6 +773,29 @@
            END-IF
       *    代表番号セット
            PERFORM  200101-HKNJANUM-SET-SEC
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *TMP-FILE キーセット
+      *
+      *    保険者番号（県番号）
+           MOVE  WRK-HKNJANUM            TO  SKT1415TMP-HKNJANUM
+      *
+      *    在宅
+           MOVE  RECE10-ZAITAKU          TO  SKT1415TMP-ZAITAKU
+      *
+      *    災１、災２、不詳・災１は別帳票
+           IF  RECE10-ETC-YKZFTN (1)  =  2 OR 4 OR 5
+           OR  RECE10-HKNJANUM  =  ZERO
+             MOVE    "00001"             TO  SKT1415TMP-GENMEN
+      *
+      *      保険者番号が不明の場合、住所から県を取得
+             IF  RECE10-HKNJANUM  =  ZERO
+               PERFORM  20011-CITYGET-SEC
+             END-IF
+           END-IF
+      *
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
       *    入外区分
            EVALUATE    RECE10-NYUGAIKBN
@@ -705,6 +827,14 @@
                PERFORM 20012-KOH-SYUKEI-SEC
            END-IF
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           IF      FLG-SKT1415TMP  =  1
+               WRITE   SKT1415TMP-REC
+           ELSE
+               REWRITE SKT1415TMP-REC
+           END-IF
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
+      *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 20013-UPD-FILE-HENSYU-SEC
@@ -724,11 +854,36 @@
                END-STRING
                PERFORM 500-ERR-HENSYU-SEC
                PERFORM 500-COBABORT-SEC
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+               MOVE    1                   TO  FLG-END
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            END-IF 
            .
        2001-KOUKI-SYUKEI-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *****************************************************************
+      *    住所から市町村名取得処理
+      *****************************************************************
+       20011-CITYGET-SEC          SECTION.
+      *
+      *    住所から都道府県名を取得
+           PERFORM  VARYING  IDX5  FROM  1  BY  1
+                    UNTIL  IDX5  >  TBL-PREF-MAX
+             IF  PTINF-HOME-ADRS(1:6)  =  TBL-PREFNAME(IDX5)(1:6)
+               DISPLAY  "都道府県番号 ="        TBL-PREFNUM(IDX5)
+               DISPLAY  "都道府県名 ="          TBL-PREFNAME(IDX5)
+               MOVE  TBL-PREFNUM(IDX5)      TO  SKT1415TMP-HKNJANUM
+               MOVE  TBL-PREF-MAX           TO  IDX5
+             END-IF
+           END-PERFORM
+      *
+           .
+       20011-CITYGET-EXT.
+           EXIT.
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *****************************************************************
       *    広域連合・代表番号セット
       *****************************************************************
@@ -892,27 +1047,50 @@
                PERFORM  20011-HKN-SYUKEI-EXT
            END-IF
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      **    療養の給付：件数
+      *     ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+      **    療養の給付：診療実日数
+      *     ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+      **    療養の給付：点数
+      *     ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+      **    療養の給付：一部負担金
+      *     ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+      **
+      *     IF      IDX3                   =   1 
+      *       IF      RECE10-SHOKUJINISSU(1)   >   ZERO
+      **    食事療養：件数
+      *         ADD     1                   TO  SUM-S-KENSU(IDX1)
+      *       END-IF
+      **    食事療養：日数
+      *       ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+      **    食事療養：金額
+      *       ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+      **    食事療養：標準負担額
+      *       ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+      *     END-IF    
       *    療養の給付：件数
-           ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+           ADD  1                  TO  SKT1415TMP-KENSU(IDX1 IDX3)
       *    療養の給付：診療実日数
-           ADD  RECE10-JNISSU(1)   TO  SUM-NISSU(IDX1 IDX3)
+           ADD  RECE10-JNISSU(1)   TO  SKT1415TMP-NISSU(IDX1 IDX3)
       *    療養の給付：点数
-           ADD  RECE10-TOTALTEN(1) TO  SUM-TENSU(IDX1 IDX3)
+           ADD  RECE10-TOTALTEN(1) TO  SKT1415TMP-TENSU(IDX1 IDX3)
       *    療養の給付：一部負担金
-           ADD  RECE10-FTNMONEY(1) TO  SUM-ITBFTN(IDX1 IDX3)
+           ADD  RECE10-FTNMONEY(1) TO  SKT1415TMP-ITBFTN(IDX1 IDX3)
       *
            IF      IDX3                   =   1 
              IF      RECE10-SHOKUJINISSU(1)   >   ZERO
       *    食事療養：件数
-               ADD     1                   TO  SUM-S-KENSU(IDX1)
+               ADD     1                   TO  SKT1415TMP-S-KENSU(IDX1)
              END-IF
       *    食事療養：日数
-             ADD  RECE10-SHOKUJINISSU(1)   TO  SUM-S-NISSU(IDX1)
+             ADD  RECE10-SHOKUJINISSU(1)   TO  SKT1415TMP-S-NISSU(IDX1)
       *    食事療養：金額
-             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SUM-S-KINGK(IDX1)
+             ADD  RECE10-SHOKUJIRYOYOHI(1) TO  SKT1415TMP-S-KINGK(IDX1)
       *    食事療養：標準負担額
-             ADD  RECE10-SHOKUJIFTN(1)     TO  SUM-S-FTNGK(IDX1)
+             ADD  RECE10-SHOKUJIFTN(1)     TO  SKT1415TMP-S-FTNGK(IDX1)
            END-IF    
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -1019,7 +1197,10 @@
       *
              IF  IDXX  NOT =  99
       *    療養の給付：件数
-                ADD   1                TO  SUM-KKENSU(IDXX)
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *          ADD   1                TO  SUM-KKENSU(IDXX)
+                ADD   1                TO  SKT1415TMP-K-KENSU(IDXX)
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
              END-IF
            END-PERFORM
       *
@@ -1028,14 +1209,20 @@
                RECE10-ETC-KOHNUM(2)  =  "972" OR
                RECE10-ETC-KOHNUM(3)  =  "972" OR
                RECE10-ETC-KOHNUM(4)  =  "972"
-             ADD   1                   TO  SUM-KKENSU(20)
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *       ADD   1                   TO  SUM-KKENSU(20)
+             ADD   1                   TO  SKT1415TMP-K-KENSU(20)
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            END-IF
       *    長期上位チェック
            IF  RECE10-ETC-KOHNUM(1)  =  "974" OR
                RECE10-ETC-KOHNUM(2)  =  "974" OR
                RECE10-ETC-KOHNUM(3)  =  "974" OR
                RECE10-ETC-KOHNUM(4)  =  "974"
-             ADD   1                   TO  SUM-KKENSU(24)
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *       ADD   1                   TO  SUM-KKENSU(24)
+             ADD   1                   TO  SKT1415TMP-K-KENSU(20)
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            END-IF
       *
            .
@@ -1078,12 +1265,29 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
-      *    帳票編集<見出し>処理
-           PERFORM 20021-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-           PERFORM 20023-BODY-HEN-SEC
-      *    帳票印刷処理
-           PERFORM 20024-PRINT-OUT-SEC
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           OPEN     INPUT       SKT1415TMP-FILE
+      *
+           MOVE     ZERO        TO       FLG-PRINT
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
+      *
+      *      帳票編集<見出し>処理
+             PERFORM 20021-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+             PERFORM 20023-BODY-HEN-SEC
+      *      帳票印刷処理
+             PERFORM 20024-PRINT-OUT-SEC
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *      一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+      *
+           END-PERFORM
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
            .
        2002-PRINT-EXT.
@@ -1111,11 +1315,19 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT1415-HOSPCD
       *    保険者番号
-           MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *     MOVE     WRK-HKNJANUM       TO  WRK-MAE-INPUT
+      *     PERFORM  2009-HENKAN-SEC
+      *     MOVE     WRK-OUT-INPUT      TO  SKT1415-HKNJANUM
+           MOVE     SKT1415TMP-HKNJANUM  TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT1415-HKNJANUM
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *    在総診・在医総
-           IF    WRK-INDEX  =  2
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *     IF    WRK-INDEX  =  2
+           IF    SKT1415TMP-ZAITAKU  =  "1"
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
              MOVE    "在"              TO  SKT1415-ZAI1
              MOVE    "◯"              TO  SKT1415-ZAI2
            END-IF
@@ -1137,39 +1349,70 @@
              ADD     1                   TO  IDZ    
              PERFORM VARYING IDY FROM    1   BY  1
                      UNTIL   IDY >       2
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      **    療養の給付：件数
+      *         MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT1415-KENSU(IDZ IDY)
+      **    療養の給付：診療実日数
+      *         MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
+      *         MOVE  WRK-Z5              TO  SKT1415-NISSU(IDZ IDY)
+      **    療養の給付：点数
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT1415-TENSU(IDZ IDY)
+      **    療養の給付：一部負担金
+      *         MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT1415-ITBFTN(IDZ IDY)
+      *       END-PERFORM
+      **
+      **    食事療養：件数
+      *       MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT1415-S-KENSU(IDZ)
+      **    食事療養：日数
+      *       MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT1415-S-NISSU(IDZ)
+      **    食事療養：金額
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT1415-S-KINGK(IDZ)
+      **    食事療養：標準負担額
+      *       MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT1415-S-FTNGK(IDZ)
       *    療養の給付：件数
-               MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+               MOVE  SKT1415TMP-KENSU(IDX IDY)  TO  WRK-Z5
                MOVE  WRK-Z5              TO  SKT1415-KENSU(IDZ IDY)
       *    療養の給付：診療実日数
-               MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
+               MOVE  SKT1415TMP-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT1415-NISSU(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+               MOVE  SKT1415TMP-TENSU(IDX IDY)  TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT1415-TENSU(IDZ IDY)
       *    療養の給付：一部負担金
-               MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
+               MOVE  SKT1415TMP-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT1415-ITBFTN(IDZ IDY)
              END-PERFORM
       *
       *    食事療養：件数
-             MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
+             MOVE  SKT1415TMP-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT1415-S-KENSU(IDZ)
       *    食事療養：日数
-             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+             MOVE  SKT1415TMP-S-NISSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT1415-S-NISSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+             MOVE  SKT1415TMP-S-KINGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT1415-S-KINGK(IDZ)
       *    食事療養：標準負担額
-             MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
+             MOVE  SKT1415TMP-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT1415-S-FTNGK(IDZ)
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            END-PERFORM
       *     
       *    公費件数
            PERFORM  VARYING  IDX3  FROM  1  BY  1
                     UNTIL    IDX3  >     24
       *    療養の給付：件数
-             MOVE  SUM-KKENSU(IDX3)      TO  WRK-Z5
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *       MOVE  SUM-KKENSU(IDX3)      TO  WRK-Z5
+             MOVE  SKT1415TMP-K-KENSU(IDX3)     TO  WRK-Z5
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
              MOVE  WRK-Z5                TO  SKT1415-KKENSU(IDX3)
            END-PERFORM
       *
@@ -1204,6 +1447,14 @@
            MOVE    WRK-PAGE            TO  SKT1415-NO
            MOVE    "SKT1415.red"         TO  SPRT-PRTID
            MOVE    SKT1415               TO  SPRT-PRTDATA
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+           IF  SKT1415TMP-ZAITAKU  =  "1"
+               MOVE  2  TO  WRK-INDEX
+           ELSE
+               MOVE  1  TO  WRK-INDEX
+           END-IF
+           MOVE  WRK-PARA-SYOKBN       TO  WRK-SYOKBN
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
@@ -1341,6 +1592,24 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT1415TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT1415TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT1415TMP
+           END-READ
+      *
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *****************************************************************
       *   請求管理ＤＢ更新処理
       *****************************************************************
@@ -1406,6 +1675,21 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT1415TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *      
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
       *****************************************************************
       *    請求管理読込
       *****************************************************************
@@ -1454,6 +1738,9 @@
                MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
                PERFORM 900-SEIKYU-READ-SEC
            ELSE
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+               MOVE    1                   TO  FLG-END
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
                MOVE    1                   TO  FLG-RECE10
                MOVE    HIGH-VALUE      TO  KEY-NEW
            END-IF
@@ -1499,6 +1786,9 @@
                DISPLAY "PTNUM=" RECE10-PTNUM 
       *         
            ELSE
+      *=== 災害対応 by Yoshikawa(2011/06/23) start
+               MOVE    1                   TO  FLG-END
+      *=== 災害対応 by Yoshikawa(2011/06/23) end
                MOVE    HIGH-VALUE      TO  KEY-NEW
                MOVE    1               TO  FLG-RECE10
            END-IF
