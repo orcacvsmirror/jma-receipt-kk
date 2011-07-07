@@ -65,6 +65,7 @@
       *  01.00.21    µ»¿Ó    10/10/27    ›∏±»÷πÊ543§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§
       *  01.00.22    µ»¿Ó    10/11/25   open-cobol1.0¬–±˛
       *  01.00.23    µ»¿Ó    11/05/24   ≈ÏÀÃ√œ ˝¬¿ øÕŒ≤≠√œøÃ¬–±˛
+      *  01.00.24    µ»¿Ó    11/07/07    ›∏±»÷πÊ383§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1285,6 +1286,9 @@
       *=== 543§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2010/10/27) start
            AND  RECE10-KOHNUM(IDX3)  NOT =  "543"
       *=== 543§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2010/10/27) end
+      *=== 383§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2011/07/07) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "383"
+      *=== 383§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2011/07/07) end
              ADD     WRK-SEIKYUGK-G        TO  SKT1105TMP-SEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1346,6 +1350,9 @@
       *=== 543§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2010/10/27) start
            AND  RECE10-KOHNUM(IDX3)  NOT =  "543"
       *=== 543§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2010/10/27) end
+      *=== 383§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2011/07/07) start
+           AND  RECE10-KOHNUM(IDX3)  NOT =  "383"
+      *=== 383§œ¿¡µ·≥€§Úµ≠∫‹§∑§ §§ by Yoshikawa(2011/07/07) end
              ADD     WRK-SEIKYUGK-G            TO  WRK-KOHSEIKYUGK
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
