@@ -48,6 +48,11 @@
       *                                Á°´ü¹âÎð¼ÔÍó¡¢µëÉÕ³ä¹çÍó¤Î½¤Àµ
       *  01.00.12    µÈÀî    11/03/04  ¿ÇÎÅÆü¿ô¤¬Ìµ¤¤¾ì¹ç¤Ï0¤ò°õ»ú
       *  01.00.13    µÈÀî    11/05/23  Á°´ü¹âÎð¼Ô£¹³ä¡ÜÄ¹´ü¤ÎÀÁµá¶â³Û¤Î½¤Àµ
+      *  01.00.14    µÈÀî    11/07/13  ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó¤ò°õ»ú¤¹¤ë
+      *                                ¸øÈñÉéÃ´³ÛÍó¤ò°õ»ú¤¹¤ë
+      *                                ºßÂð¤Ï70ºÐÌ¤Ëþ¤Î¾ì¹ç¤Ç¤â°õ»ú¤¹¤ë
+      *                                ÁíÅÀ¿ô¤ÈÁ´¹ñ¸øÈñÊ¬¤ÎÅÀ¿ô¤¬°Û¤Ê¤ë¾ì¹ç
+      *                                Á´¹ñ¸øÈñÂÐ¾ÝÅÀ¿ô¤òÈ÷¹ÍÍó¤Ë°õ»ú¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -124,6 +129,13 @@
       *=== Á°´ü9³ä¡ÜÄ¹´ü¤ÎÀÁµá¶â³Û½¤Àµ by Yoshikawa(2010/09/28) start
            03  FLG-TOKUREI    PIC 9(01).
       *=== Á°´ü9³ä¡ÜÄ¹´ü¤ÎÀÁµá¶â³Û½¤Àµ by Yoshikawa(2010/09/28) end
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+           03  FLG-PTBYOMEI   PIC 9(01).
+           03  FLG-CHK        PIC 9(01).
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+           03  FLG-SRYACT     PIC 9(01).
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -132,6 +144,9 @@
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
            03  IDX3           PIC 9(04).
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+           03  IDX4           PIC 9(04).
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
       *
@@ -189,6 +204,19 @@
                05  WRK-JIKOFTNGK     PIC 9(09)V9(01).
                05  WRK-JIKOFTNGK-G   PIC 9(09)V9(01).
                05  WRK-JIKOFTNGK-G2  PIC 9(09).
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+               05  WRK-KOHFTNGK      PIC 9(09)V9(01).
+               05  WRK-KOHFTNGK-G    PIC 9(09)V9(01).
+               05  WRK-KOHFTNGK-G2   PIC 9(09).
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+               05  WRK-TAHOTEN       PIC 9(09).
+               05  WRK-TAHOTEN-G     PIC 9(09).
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+           03  WRK-KEISAN            PIC 9(09).
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
       *         05  FILLER          PIC S9(09)  BINARY.
@@ -227,7 +255,27 @@
                05  TBL-PARA-HKNJANUM    PIC X(08).
                05  TBL-PARA-PTID        PIC 9(10).
       *
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+       01  KEY-AREA                        VALUE   LOW-VALUE.
+           03  KEY-NEW.
+               05  KEY-N-SRYYMD         PIC 9(08).
+           03  KEY-OLD.
+               05  KEY-O-SRYYMD         PIC 9(08).
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+      *    ºßÂðÁí¹ç¡¦ºßÂðËö´ü¡Êºß°åÁí¡Ë
+           03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+           03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+           03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+           03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+           03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+           03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -281,6 +329,18 @@
       *    ´µ¼Ô¾ðÊó
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
+      *
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+      *    ´µ¼ÔÉÂÌ¾
+       01  PTBYOMEI-REC.
+           COPY    "CPPTBYOMEI.INC".
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+      *    ¿ÇÎÅ¹Ô°Ù
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
       *
       *    ¸øÈñÀÁµá½ñ
            COPY    "CPKOHSKY.INC"
@@ -683,6 +743,12 @@
            MOVE    ZERO            TO  FLG-TYOKI
                                        WRK-SEIKYUGK-G
                                        WRK-JIKOFTNGK-G
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+                                       WRK-KOHFTNGK-G
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+                                       WRK-TAHOTEN-G
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.04) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -705,6 +771,9 @@
       *
              COMPUTE WRK-SEIKYUGK-G2     =   WRK-SEIKYUGK-G  +   0.5
              COMPUTE WRK-JIKOFTNGK-G2    =   WRK-JIKOFTNGK-G +   0.5
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+             COMPUTE WRK-KOHFTNGK-G2     =   WRK-KOHFTNGK-G  +   0.5
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
       *
       *    ÊÝ¸±¸ÂÅÙ³ÛÀßÄê
              IF  RECE02-FTNMONEY(1)  NOT =   ZERO    AND
@@ -761,6 +830,9 @@
       *    ÀÁµá¶â³Û¡§¼«¸ÊÉéÃ´·î³ÛÀßÄê
              MOVE    WRK-SEIKYUGK-G2     TO  MF100-SEIKYUGK
              MOVE    WRK-JIKOFTNGK-G2    TO  MF100-JIKOFTNGK
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+             MOVE    WRK-KOHFTNGK-G2     TO  MF100-KOHFTNGK
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
       *
       *    ¥½¡¼¥ÈKEYÀßÄê
              PERFORM  20012-SORT-SEC
@@ -789,6 +861,32 @@
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/29) start
            END-IF
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/29) end
+      *
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+      *      ÊÝ¸±½õÀ®³Û¸å¤Î´µ¼ÔÉéÃ´¤¬21000±ß°Ê¾å¤Î¾ì¹ç
+      *      ½ýÉÂÌ¾µÚ¤Ó´ü´Ö¤ò°õ»ú
+             COMPUTE  WRK-KEISAN  =  RECE02-TOTALTEN(1) 
+                                  *  (RECE02-KYURATE  /  10)
+             IF  WRK-KEISAN  >=  21000
+               PERFORM  900-PTBYOMEI-READ-SEC
+             END-IF
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+             DISPLAY "¸øÈñÅÀ¿ô = " WRK-TAHOTEN-G
+             DISPLAY "Ê¡»ãÅÀ¿ô = " MF100-TOTALTEN
+             IF  WRK-TAHOTEN-G  NOT =  ZERO
+             AND MF100-TOTALTEN  NOT =  WRK-TAHOTEN-G
+               MOVE    WRK-TAHOTEN-G     TO  MF100-TAHOTEN
+             END-IF
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
+      *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+      *      ºßÁí¿Ç¡¦ºß°åÁí¤«
+             IF  RECE02-ZAITAKU  NOT =  1
+               PERFORM  960-SRYACT-SET-SEC
+             END-IF
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
       *
              WRITE   MF100-REC
              ADD     1                   TO  CNT-MF100
@@ -1168,6 +1266,24 @@
       *=== ¿ÇÎÅÆü¿ô¤¬Ìµ¤¤¾ì¹ç¤Ï0¤ò°õ»ú by Yoshikawa(2011/03/04) end
            END-IF
       *
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+      *    ½ýÉÂÌ¾µÚ¤Ó´ü´Ö
+           IF  MF100-BYOMEI  NOT =  SPACE
+             MOVE    MF100-BYOYMD          TO  WRK-SYMD
+             PERFORM   31011-SEIWA-HEN-SEC
+             STRING  LNK-DAY1-GENKIGO      DELIMITED  BY  SIZE
+                     LNK-DAY1-WYMD(2:2)    DELIMITED  BY  SIZE
+                     "."                   DELIMITED  BY  SIZE
+                     LNK-DAY1-WYMD(4:2)    DELIMITED  BY  SIZE
+                     "."                   DELIMITED  BY  SIZE
+                     LNK-DAY1-WYMD(6:2)    DELIMITED  BY  SIZE
+                     " "                   DELIMITED  BY  SIZE
+                     MF100-BYOMEI          DELIMITED  BY  SPACE
+                     INTO                  SC23-BYOMEI
+             END-STRING
+           END-IF
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *
       *    ÅÀ¿ô
            MOVE    MF100-TOTALTEN          TO  WRK-Z7
            MOVE    WRK-Z7                  TO  SC23-TOTALTEN
@@ -1175,6 +1291,12 @@
       *    ¼«¸ÊÉéÃ´·î³Û
            MOVE    MF100-JIKOFTNGK         TO  WRK-Z7
            MOVE    WRK-Z7                  TO  SC23-JIKOFTNGK
+      *
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+      *    ¸øÈñÉéÃ´³Û
+           MOVE    MF100-KOHFTNGK          TO  WRK-Z7
+           MOVE    WRK-Z7                  TO  SC23-KOHFTN
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
       *
       *    ÀÁµá¶â³Û
            MOVE    MF100-SEIKYUGK          TO  WRK-Z10
@@ -1217,10 +1339,26 @@
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/26) end
       *
       *    ºßÂð¥Á¥§¥Ã¥¯
-           IF    MF100-ZAITAKU =   1
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+      *     IF    MF100-ZAITAKU =   1
+           IF    MF100-ZAITAKU  =  "1"
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
                MOVE    "ºß"    TO  SC23-ZAI1
                MOVE    "¢þ"    TO  SC23-ZAI2
            END-IF
+      *
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+      *    ¸øÈñÂÐ¾ÝÅÀ¿ô
+           DISPLAY "MF100-TAHOTEN =" MF100-TAHOTEN
+           IF  MF100-TAHOTEN  NOT =  ZERO
+             MOVE    MF100-TAHOTEN         TO  WRK-Z7
+             STRING  "¸øÈñÂÐ¾ÝÅÀ¿ô¡¡"      DELIMITED  BY  SIZE
+                     WRK-Z7                DELIMITED  BY  SIZE
+                     "ÅÀ"                  DELIMITED  BY  SIZE
+                     INTO                  SC23-TAHOTEN
+             END-STRING
+           END-IF
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1642,6 +1780,12 @@
       *=== Á°´ü9³ä¡ÜÄ¹´ü¤ÎÀÁµá¶â³Û½¤Àµ by Yoshikawa(2010/09/28) start
                                    FLG-TOKUREI
       *=== Á°´ü9³ä¡ÜÄ¹´ü¤ÎÀÁµá¶â³Û½¤Àµ by Yoshikawa(2010/09/28) end
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+                                   WRK-KOHFTNGK
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+                                   WRK-TAHOTEN
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -1682,6 +1826,16 @@
                                            TO  WRK-SEIKYUGK
                                                WRK-JIKOFTNGK
                    END-IF
+      *
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+                   COMPUTE  WRK-KOHFTNGK  =  SYU-SYUCOMPFTN-ENTANI
+                                          -  WRK-SEIKYUGK 
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
+      *
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+                   MOVE   SYU-TOTAL-HKNTEN   TO  WRK-TAHOTEN
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
+      *
                END-IF
       *
                IF  SYU-KOH-HKNNUM(IDX)         =   "972"
@@ -1751,6 +1905,12 @@
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
            ADD     WRK-JIKOFTNGK       TO  WRK-JIKOFTNGK-G
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) start
+           ADD     WRK-KOHFTNGK        TO  WRK-KOHFTNGK-G
+      *=== ¸øÈñÉéÃ´³Û¤ò°õ»ú by Yoshikawa(2011/07/13) end
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) start
+           ADD     WRK-TAHOTEN         TO  WRK-TAHOTEN-G
+      *=== Á´¹ñ¸øÈñÅÀ¿ô¤ÎÊ¬ÅÀ¤òÈ÷¹Í¤Ë°õ»ú by Yoshikawa(2011/07/13) end
       *
       *    ³°Íè¤Î¾ì¹ç¡¢¿ÇÎÅÆü¤ò¼èÆÀ¤¹¤ë
            IF  RECE02-NYUGAIKBN    =   "2"
@@ -1956,6 +2116,285 @@
            .
        930-PTNYUINRRK-CLOSE-EXT.
            EXIT.
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+      *****************************************************************
+      *    ´µ¼ÔÉÂÌ¾¾ðÊóÆÉ¤ß¹þ¤ß
+      *****************************************************************
+       900-PTBYOMEI-READ-SEC         SECTION.
+      *
+      *    ´µ¼ÔÉÂÌ¾ÆÉ¤ß¹þ¤ß¡Ê´µ¼Ô£É£Ä¡¢¿ÇÎÅÇ¯·îÆü¡¢¿ÇÎÅ²Ê½ç¡Ë
+           INITIALIZE                  PTBYOMEI-REC
+           MOVE    SPA-HOSPNUM         TO  PTBYO-HOSPNUM
+           MOVE    RECE02-PTID         TO  PTBYO-PTID
+           MOVE    PTBYOMEI-REC        TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF  MCP-RC  =  ZERO
+               PERFORM 900-PTBYO-FETCH-SEC
+           ELSE
+               INITIALIZE                  PTBYOMEI-REC
+               MOVE    1                   TO  FLG-PTBYOMEI
+           END-IF
+      *
+           PERFORM 910-PTBYO-HENSYU-SEC 
+                   UNTIL  FLG-PTBYOMEI  =  1
+      *    ¥«¡¼¥½¥ë¥¯¥í¡¼¥¹
+           INITIALIZE                  MCPAREA
+           MOVE    "DBCLOSECURSOR"           TO  MCP-FUNC
+           MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-PTBYOMEI-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    ´µ¼ÔÉÂÌ¾¥Þ¥¹¥¿¡¡£Ò£Å£Á£Ä
+      *****************************************************************
+       900-PTBYO-FETCH-SEC         SECTION.
+      *
+           MOVE    "tbl_ptbyomei"      TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO            TO  FLG-PTBYOMEI
+               MOVE    MCPDATA-REC     TO  PTBYOMEI-REC 
+           ELSE
+               MOVE    1               TO  FLG-PTBYOMEI
+           END-IF
+           .
+       900-PTBYO-FETCH-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ´µ¼ÔÉÂÌ¾¿ÇÎÅÇ¯·îÆüÊÌ½èÍý
+      *****************************************************************
+       910-PTBYO-HENSYU-SEC                SECTION.
+      *
+           MOVE    PTBYO-SRYYMD            TO  KEY-N-SRYYMD
+      *
+           MOVE    KEY-NEW                 TO  KEY-OLD   
+           DISPLAY "´µ¼ÔÉÂÌ¾¥Õ¥é¥°=" FLG-PTBYOMEI
+                   "´µ¼ÔÈÖ¹æ=" RECE02-PTNUM
+           PERFORM  UNTIL  FLG-PTBYOMEI  =  1
+                    OR     KEY-NEW  NOT =  KEY-OLD
+               DISPLAY "ÉÂÌ¾¥Á¥§¥Ã¥¯³«»Ï"
+               PERFORM 910-PTBYO-CHK-SEC
+      *
+               IF  FLG-PTBYOMEI  =  ZERO
+                 PERFORM 900-PTBYO-FETCH-SEC
+               END-IF
+           END-PERFORM
+      *
+           .
+       910-PTBYO-HENSYU-EXT.
+           EXIT. 
+      *            
+      *****************************************************************
+      *    ´µ¼ÔÉÂÌ¾¥Á¥§¥Ã¥¯½èÍý
+      *****************************************************************
+       910-PTBYO-CHK-SEC         SECTION.
+      *
+      **    ¿ÇÎÅ²Ê
+      *     MOVE    ZERO                TO  FLG-CHK 
+      *     IF  SYS-2005-BYOMEIHENKBN1  =  ZERO     
+      *         PERFORM VARYING IDX FROM    1   BY  1
+      *                 UNTIL   IDX >       20
+      *                 OR      RECE02-SRYKA(IDX)   =   SPACE
+      *             IF  PTBYO-SRYKA  =  RECE02-SRYKA (IDX)
+      *                 MOVE    1                    TO  FLG-CHK
+      *                 MOVE    20                   TO  IDX
+      *             END-IF
+      *         END-PERFORM
+      *         IF  FLG-CHK  =  ZERO
+      *              DISPLAY "¿ÇÎÅ²Ê GO TO" 
+      *             GO  TO  910-PTBYO-CHK-EXT
+      *         END-IF
+      *     END-IF
+      *
+      *    ¿ÇÎÅ³«»ÏÆü
+           IF  PTBYO-SRYYMD(1:6)  =  RECE02-SRYYM
+               CONTINUE
+           ELSE
+               IF  PTBYO-SRYYMD(1:6)  <  RECE02-SRYYM 
+                   IF  PTBYO-TENKIKBN  =  SPACE
+                       CONTINUE
+                   ELSE
+                       IF  PTBYO-TENKIYMD(1:6)  >=  RECE02-SRYYM
+                           CONTINUE
+                       ELSE
+                            DISPLAY "¿ÇÎÅ³«»ÏÆü1 GO TO" 
+                           GO  TO  910-PTBYO-CHK-EXT
+                       END-IF
+                   END-IF       
+               ELSE
+                   DISPLAY "¿ÇÎÅ³«»ÏÆü2 GO TO" 
+                   GO  TO  910-PTBYO-CHK-EXT
+               END-IF
+           END-IF
+      *
+      *    Æþ³°¶èÊ¬
+           IF  PTBYO-NYUGAIKBN  =  SPACE
+               CONTINUE
+           ELSE
+               IF  PTBYO-NYUGAIKBN  NOT =   RECE02-NYUGAIKBN
+                   DISPLAY "Æþ³°¶èÊ¬ GO TO" 
+                   GO  TO  910-PTBYO-CHK-EXT
+               END-IF
+           END-IF
+      *
+      *    ÊÝ¸±ÁÈ¹ç¤»
+           IF  PTBYO-HKNCOMBI  =  ZERO
+               CONTINUE
+           ELSE 
+               MOVE    ZERO            TO  IDX1  
+               PERFORM VARYING IDX     FROM    1   BY  1
+                       UNTIL   IDX     >       10
+                       OR      RECE02-HKNCOMBI (IDX)   =   ZERO 
+                   IF  PTBYO-HKNCOMBI  =  RECE02-HKNCOMBI (IDX)
+                       MOVE    IDX             TO  IDX1
+                       MOVE    10              TO  IDX
+                   END-IF
+               END-PERFORM
+               IF  IDX1  >  ZERO
+                   CONTINUE
+               ELSE
+                   DISPLAY "ÊÝ¸±ÁÈ¹ç¤» GO TO" 
+                   GO  TO  910-PTBYO-CHK-EXT
+               END-IF
+           END-IF
+      *
+           MOVE    PTBYO-BYOMEI                TO  MF100-BYOMEI
+           MOVE    PTBYO-SRYYMD                TO  MF100-BYOYMD
+           MOVE    1                           TO  FLG-PTBYOMEI
+      *
+           .
+       910-PTBYO-CHK-EXT.
+           EXIT. 
+      *            
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) start
+      *****************************************************************
+      *  ¿ÇÎÅ¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       960-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE  SRYACT-REC
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key4"              TO  MCP-PATHNAME
+               PERFORM  965-SRYACT-READ-SEC
+      *    ºßÁí¿Ç¤Î´µ¼Ô¼èÆÀ
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  965-ZAISOU-CHK-SEC
+      *
+                 MOVE  "tbl_sryact"      TO  MCP-TABLE
+                 MOVE  "key4"            TO  MCP-PATHNAME
+                 PERFORM  965-SRYACT-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       960-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊóÆÉ¹þ
+      *****************************************************************
+       965-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       965-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ºßÁí¿Ç¥Á¥§¥Ã¥¯
+      *****************************************************************
+       965-ZAISOU-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL   (IDX4  >     5) OR
+                            (SRY-SRYCD(IDX4)  =  SPACE)
+             IF  SRY-SRYKBN  =  "14"
+               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
+                                       WRK-CONS-ZAITAKU2  OR
+                                       WRK-CONS-ZAITAKU3  OR
+                                       WRK-CONS-ZAITAKU4  OR
+                                       WRK-CONS-ZAITAKU5  OR
+                                       WRK-CONS-ZAITAKU6
+                 MOVE  "1"  TO  MF100-ZAITAKU
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       965-ZAISOU-CHK-EXT.
+           EXIT.
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
+      *****************************************************************
+      *    À¾Îñ¡¦ÏÂÎñÊÑ´¹½èÍý
+      *****************************************************************
+       31011-SEIWA-HEN-SEC        SECTION.
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY1-AREA
+           MOVE    "11"                TO  LNK-DAY1-IRAI
+           MOVE    WRK-SYMD            TO  LNK-DAY1-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY1-AREA
+           .
+       31011-SEIWA-HEN-EXT.
+           EXIT.
+      *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
       *****************************************************************
       *    ·îËöÆü»»½Ð½èÍý
       *****************************************************************
