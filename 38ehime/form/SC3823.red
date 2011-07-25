@@ -291,6 +291,16 @@
           </appinfo>
         </element>
       </element>
+      <element name="BYOMEI" occurs="1">
+        <appinfo>
+          <embed object="string" length="40"/>
+        </appinfo>
+      </element>
+      <element name="TAHOTEN" occurs="1">
+        <appinfo>
+          <embed object="string" length="30"/>
+        </appinfo>
+      </element>
     </element>
   </dictionarydata>
   <diagramdata>
@@ -10450,6 +10460,90 @@
           </attribute>
           <attribute name="pos">
             <point val="2.4,23.9"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O291">
+      <attribute name="obj_pos">
+        <point val="3.90459,12.0145"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="3.90459,11.696;11.5806,12.096"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KANJA-TBL.BYOMEI#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="3.90459,12.0145"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O292">
+      <attribute name="obj_pos">
+        <point val="2.41503,24.4496"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="2.41503,24.1311;7.18223,24.5311"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KANJA-TBL.TAHOTEN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#184;&#248;&#200;&#241;&#194;&#208;&#190;&#221;&#197;&#192;&#191;&#244; 999,999&#197;&#192;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="2.41503,24.4496"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>

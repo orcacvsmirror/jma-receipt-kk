@@ -15,6 +15,11 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      * 01.00.01     吉川       11/07/13  傷病名追加
+      *                                   備考欄に公費対象点数追加
+      ********************************************************************
        01  SC23.
       *表示年月
               03  SC23-PRTYM		PIC  X(16).
@@ -119,3 +124,11 @@
                       07  SC23-YAKUZAI1 PIC X(20).
                       07  SC23-YAKUZAI2 PIC X(07).
                       07  SC23-YAKUZAI3 PIC X(02).
+      *=== 傷病名追加 by Yoshikawa(2011/07/13) start
+      *傷病名及び期間
+                  05  SC23-BYOMEI       PIC X(40).
+      *=== 傷病名追加 by Yoshikawa(2011/07/13) end
+      *=== 公費対象点数追加 by Yoshikawa(2011/07/13) start
+      *公費対象点数
+                  05  SC23-TAHOTEN      PIC X(30).
+      *=== 公費対象点数追加 by Yoshikawa(2011/07/13) end
