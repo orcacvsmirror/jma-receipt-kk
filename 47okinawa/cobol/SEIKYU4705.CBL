@@ -37,6 +37,8 @@
       *  01.00.05    吉川    2010/11/22  差引請求額欄が０円の場合は
       *                                  ０と記載するように修正
       *  01.00.06    吉川    2010/11/25  open-cobol1.0対応
+      *  01.00.07    吉川    2011/07/25  所得者情報は診療月時点での情報を
+      *                                  参照するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1078,12 +1080,14 @@
       *
       *    公費上限額取得
            PERFORM  920-PTKOHFTN-READ-SEC
-           DISPLAY "PTKOHFTN-GAIJGNGAK ="  PTKOHFTN-GAIJGNGAK
-           IF  MF100-NYUGAIKBN  =  "1"
-             MOVE  PTKOHFTN-NYUJGNGAK    TO  MF100-JGNGAK
-           ELSE
-             MOVE  PTKOHFTN-GAIJGNGAK    TO  MF100-JGNGAK
-           END-IF
+      *=== 所得者情報の参照方法修正 by Yoshikawa(2011/07/25) start
+      *     DISPLAY "PTKOHFTN-GAIJGNGAK ="  PTKOHFTN-GAIJGNGAK
+      *     IF  MF100-NYUGAIKBN  =  "1"
+      *       MOVE  PTKOHFTN-NYUJGNGAK    TO  MF100-JGNGAK
+      *     ELSE
+      *       MOVE  PTKOHFTN-GAIJGNGAK    TO  MF100-JGNGAK
+      *     END-IF
+      *=== 所得者情報の参照方法修正 by Yoshikawa(2011/07/25) end
       *
       *    ＜出力順設定＞
       *    保険者番号順
@@ -2964,20 +2968,37 @@
                                            MCPDATA-REC
                                            SPA-AREA
            IF      MCP-RC              =   ZERO
-               MOVE    "DBFETCH"           TO  MCP-FUNC
-               MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
-               MOVE    "key2"              TO  MCP-PATHNAME
-               CALL    "ORCDBMAIN"         USING
-                                           MCPAREA
-                                           MCPDATA-REC
-                                           SPA-AREA
-               IF      MCP-RC              =   ZERO
-                   MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
-                   MOVE    ZERO                TO  FLG-PTKOHFTN
-               ELSE
-                   MOVE    1                   TO  FLG-PTKOHFTN
-                   INITIALIZE                  PTKOHFTN-REC
-               END-IF
+      *=== 所得者情報の参照方法修正 by Yoshikawa(2011/07/25) start
+      *         MOVE    "DBFETCH"           TO  MCP-FUNC
+      *         MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+      *         MOVE    "key2"              TO  MCP-PATHNAME
+      *         CALL    "ORCDBMAIN"         USING
+      *                                     MCPAREA
+      *                                     MCPDATA-REC
+      *                                     SPA-AREA
+      *         IF      MCP-RC              =   ZERO
+      *             MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+      *             MOVE    ZERO                TO  FLG-PTKOHFTN
+      *         ELSE
+      *             MOVE    1                   TO  FLG-PTKOHFTN
+      *             INITIALIZE                  PTKOHFTN-REC
+      *         END-IF
+               PERFORM  920-PTKOHFTN-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-PTKOHFTN  =  1
+                 IF  PTKOHFTN-TEKSTYMD(1:6) <= RECE10-SRYYM(1:6)  AND 
+                     PTKOHFTN-TEKEDYMD(1:6) >= RECE10-SRYYM(1:6)
+                   IF  MF100-NYUGAIKBN  =  "1"
+                     MOVE  PTKOHFTN-NYUJGNGAK    TO  MF100-JGNGAK
+                   ELSE
+                     MOVE  PTKOHFTN-GAIJGNGAK    TO  MF100-JGNGAK
+                   END-IF
+                 END-IF
+                 DISPLAY "MF100-JGNGAK ="  MF100-JGNGAK
+                 PERFORM  920-PTKOHFTN-FETCH-SEC
+               END-PERFORM
+      *=== 所得者情報の参照方法修正 by Yoshikawa(2011/07/25) end
+      *
            ELSE
                MOVE    1                   TO  FLG-PTKOHFTN
                INITIALIZE                  PTKOHFTN-REC
@@ -2995,6 +3016,32 @@
        920-PTKOHFTN-READ-EXT.
            EXIT.
       *
+      *=== 所得者情報の参照方法修正 by Yoshikawa(2011/07/25) start
+      *****************************************************************
+      *    患者公費負担情報ＦＥＴＣＨ処理
+      *****************************************************************
+       920-PTKOHFTN-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+               MOVE    ZERO                TO  FLG-PTKOHFTN
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHFTN
+               INITIALIZE                  PTKOHFTN-REC
+           END-IF
+      *
+           .
+       920-PTKOHFTN-FETCH-EXT.
+           EXIT.
+      *
+      *=== 所得者情報の参照方法修正 by Yoshikawa(2011/07/25) end
       *****************************************************************
       *    レセプト明細読み込み
       *****************************************************************
