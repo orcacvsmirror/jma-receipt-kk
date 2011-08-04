@@ -36,6 +36,7 @@
       *                                  在宅は70歳未満の場合でも印字する
       *                                  総点数と全国公費分の点数が異なる場合
       *                                  全国公費対象点数を備考欄に印字する
+      *  01.00.03    吉川    11/08/04    公費対象点数のカンマは表示しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1315,12 +1316,20 @@
            END-IF
       *    公費対象点数
            IF  MF100-TAHOTEN  NOT =  ZERO
-             MOVE    MF100-TAHOTEN           TO  WRK-Z7
+      *=== 公費対象点数のカンマ不要 by Yoshikawa(2011/08/04) start
+      *       MOVE    MF100-TAHOTEN           TO  WRK-Z7
+      *       STRING  "公費対象点数"          DELIMITED  BY  SIZE
+      *               WRK-Z7                  DELIMITED  BY  SIZE
+      *               "点"                    DELIMITED  BY  SIZE
+      *               INTO                    WRK-BIKO3
+      *       END-STRING
+             MOVE    MF100-TAHOTEN           TO  WRK-Z8
              STRING  "公費対象点数"          DELIMITED  BY  SIZE
-                     WRK-Z7                  DELIMITED  BY  SIZE
+                     WRK-Z8                  DELIMITED  BY  SIZE
                      "点"                    DELIMITED  BY  SIZE
                      INTO                    WRK-BIKO3
              END-STRING
+      *=== 公費対象点数のカンマ不要 by Yoshikawa(2011/08/04) end
            END-IF
            STRING    WRK-BIKO1               DELIMITED  BY  SPACE
                      WRK-BIKO2               DELIMITED  BY  SPACE
