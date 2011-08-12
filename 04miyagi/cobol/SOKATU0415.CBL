@@ -30,6 +30,8 @@
       *  01.00.01    等李    2010/02/18  弓拌息圭の瘦副荚戎规回年滦炳
       *  01.00.02    等李    2010/07/01  オンライン手提滦炳
       *  01.00.03    等李    2011/04/20  澎颂孟数吕士臀箔孟刻滦炳
+      *  01.00.04    等李    2011/08/10  给锐浩非腕が磅机されない眷圭が
+      *                                  ある稍恶圭を饯赖
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1376,7 +1378,10 @@
                  MOVE  SKT0415TMP-KTENSU(IDX IDY)   TO WRK-Z9
                  MOVE  WRK-Z9                TO SKT0415-KTENSU(IDZ IDY)
       *    给锐浩非腕¨闻蛙の惦烧¨办婶砷么垛
-                 MOVE  SUM-KITBFTN(IDX IDY)  TO WRK-Z9
+      *=== 给锐浩非腕の磅机稍恶圭滦炳 by Yoshikawa(2011/08/10) start
+      *           MOVE  SUM-KITBFTN(IDX IDY)  TO WRK-Z9
+                 MOVE  SKT0415TMP-KITBFTN(IDX IDY)  TO WRK-Z9
+      *=== 给锐浩非腕の磅机稍恶圭滦炳 by Yoshikawa(2011/08/10) end
                  MOVE  WRK-Z9                TO SKT0415-KITBFTN(IDZ IDY)
              END-PERFORM
       *
