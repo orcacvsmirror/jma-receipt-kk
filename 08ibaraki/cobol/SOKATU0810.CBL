@@ -50,6 +50,8 @@
       *                                 地方公費記載設定対応
       *  01.00.15    吉川   11/01/11    特別療養費国保対応
       *  01.00.16    吉川   11/03/24    東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.17    吉川   11/08/11    シス管「2007」を使用せずに
+      *                                 公費をまとめて記載するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1121,34 +1123,46 @@
       **=== 保険番号283等はまとめる by Uchida(2009/06/09) end
       *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/10/15) end
       *
-      *=== シス管「2007」対応 by Yoshikawa(2008/09/19) start
-      *        公費番号まとめ情報があるとき
-               IF  WRK-2007-MAX  >  ZERO
-                 MOVE  SPACE     TO  WRK-KOHNAME
-                 PERFORM VARYING IDZ1    FROM    1   BY  1
-                         UNTIL   IDZ1    >       WRK-2007-MAX
-                   PERFORM VARYING IDZ2  FROM    1   BY  1
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *                     UNTIL   IDZ2  >       5
-                           UNTIL   IDZ2  >       10
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                           OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
-                     IF  RECE10-KOHNUM(IDX3)  
-                                   =   WRK-2007-KOHNUM(IDZ1 IDZ2)
-                       MOVE  WRK-2007-KOHNUM(IDZ1 1)
-                                   TO  RECE10-KOHNUM (IDX3)
-                       MOVE  WRK-2007-MEISYO (IDZ1)
-                                   TO  WRK-KOHNAME
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
-      *                 MOVE  5             TO  IDZ2
-                       MOVE  10            TO  IDZ2
-      *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
-                       MOVE  WRK-2007-MAX  TO  IDZ1
-                     END-IF
-                   END-PERFORM
-                 END-PERFORM
-               END-IF
-      *=== シス管「2007」対応 by Yoshikawa(2008/09/19) end
+      *=== 公費はシス管を使わずにまとめる by Yoshikawa(2011/08/11) start
+      **=== シス管「2007」対応 by Yoshikawa(2008/09/19) start
+      **        公費番号まとめ情報があるとき
+      *         IF  WRK-2007-MAX  >  ZERO
+      *           MOVE  SPACE     TO  WRK-KOHNAME
+      *           PERFORM VARYING IDZ1    FROM    1   BY  1
+      *                   UNTIL   IDZ1    >       WRK-2007-MAX
+      *             PERFORM VARYING IDZ2  FROM    1   BY  1
+      **=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
+      **                     UNTIL   IDZ2  >       5
+      *                     UNTIL   IDZ2  >       10
+      **=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
+      *                     OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+      *               IF  RECE10-KOHNUM(IDX3)  
+      *                             =   WRK-2007-KOHNUM(IDZ1 IDZ2)
+      *                 MOVE  WRK-2007-KOHNUM(IDZ1 1)
+      *                             TO  RECE10-KOHNUM (IDX3)
+      *                 MOVE  WRK-2007-MEISYO (IDZ1)
+      *                             TO  WRK-KOHNAME
+      **=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
+      **                 MOVE  5             TO  IDZ2
+      *                 MOVE  10            TO  IDZ2
+      **=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
+      *                 MOVE  WRK-2007-MAX  TO  IDZ1
+      *               END-IF
+      *             END-PERFORM
+      *           END-PERFORM
+      *         END-IF
+      **=== シス管「2007」対応 by Yoshikawa(2008/09/19) end
+             IF  RECE10-KOHNUM(IDX3)  =  "181" OR "182" OR "183"
+                                     OR  "185" OR "186" OR "187"
+                                     OR  "188" OR "189" 
+                                     OR  "143" OR "145" OR "146"
+               MOVE    "180"    TO    RECE10-KOHNUM(IDX3)
+             END-IF
+      *
+             IF  RECE10-KOHNUM(IDX3)  =  "283" OR "285" OR "289"
+               MOVE    "190"    TO    RECE10-KOHNUM(IDX3)
+             END-IF
+      *=== 公費はシス管を使わずにまとめる by Yoshikawa(2011/08/11) end
       *
       *    公費判別
                PERFORM  VARYING  IDX4  FROM  1  BY  1
