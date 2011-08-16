@@ -1159,7 +1159,8 @@
                MOVE    "180"    TO    RECE10-KOHNUM(IDX3)
              END-IF
       *
-             IF  RECE10-KOHNUM(IDX3)  =  "283" OR "285" OR "289"
+             IF  RECE10-KOHNUM(IDX3)  =  "190" OR "192" OR "195"
+                                     OR  "283" OR "285" OR "289"
                MOVE    "190"    TO    RECE10-KOHNUM(IDX3)
              END-IF
       *=== 公費はシス管を使わずにまとめる by Yoshikawa(2011/08/11) end
