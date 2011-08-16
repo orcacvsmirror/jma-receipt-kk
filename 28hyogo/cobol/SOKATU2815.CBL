@@ -41,6 +41,9 @@
       *  01.00.06    吉川    2010/03/31  広域連合の保険者番号指定対応
       *  01.00.07    吉川    2010/04/06  オンライン返戻対応
       *  01.00.08    吉川    2010/11/24  open-cobol1.0対応
+      *  01.00.09    吉川    2011/08/10  返戻分の診療年月欄は当月を印字
+      *                                  月途中で負担者番号が変更になった場合
+      *                                  公費再掲欄の集計が合わないのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -194,6 +197,9 @@
       *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) start
            03  WRK-SRYYM-MIN       PIC X(06).
       *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+           03  WRK-KOHID           PIC 9(10).
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
@@ -1149,6 +1155,9 @@
       *       END-PERFORM
       *      負担者番号取得
              MOVE  RECE10-KOHNUM(IDZ)  TO  WRK-KOHNUM
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+             MOVE  RECE10-KOHID(IDZ)   TO  WRK-KOHID
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
              PERFORM  900-PTKOHINF-SET-SEC
       *      公費判別
              PERFORM VARYING  IDX4    FROM    1   BY  1
@@ -1313,16 +1322,19 @@
       *     MOVE    WRK-SRYYMWH         TO  SKT2815-SRYYM
       *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) start
       *     MOVE    SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
-           IF  WRK-PARA-SYOKBN  =  "2"
-             MOVE  WRK-SRYYM-MIN       TO  WRK-SYMD (1:6)
-           ELSE
-             MOVE  SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
-           END-IF
-      *=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
-           MOVE    "01"                TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)   TO  SKT2815-SRYYM
-      *=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
+      *=== 返戻分は当月を印字 by Yoshikawa(2011/08/10) start
+      *     IF  WRK-PARA-SYOKBN  =  "2"
+      *       MOVE  WRK-SRYYM-MIN       TO  WRK-SYMD (1:6)
+      *     ELSE
+      *       MOVE  SKT2815TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *     END-IF
+      **=== 返戻分は1枚にまとめる by Yoshikawa(2010/03/09) end
+      *     MOVE    "01"                TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      *     MOVE    WRK-HENYMDG(1:16)   TO  SKT2815-SRYYM
+      **=== 返戻分は診療月毎に集計 by Yoshikawa(2008/07/15) end
+           MOVE    WRK-SRYYMWH         TO  SKT2815-SRYYM
+      *=== 返戻分は当月を印字 by Yoshikawa(2011/08/10) end
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT2815-ADRS
       *    医療機関名
@@ -2066,30 +2078,45 @@
            INITIALIZE  PTKOHINF-REC
            MOVE  SPA-HOSPNUM               TO  PTKOH-HOSPNUM
            MOVE  RECE10-PTID               TO  PTKOH-PTID
-           MOVE  WRK-KOHNUM                TO  PTKOH-KOHNUM
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+      *     MOVE  WRK-KOHNUM                TO  PTKOH-KOHNUM
+           MOVE  WRK-KOHID                 TO  PTKOH-KOHID
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
       *
            MOVE  PTKOHINF-REC              TO  MCPDATA-REC
            MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
-           MOVE  "key4"                    TO  MCP-PATHNAME
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+      *     MOVE  "key4"                    TO  MCP-PATHNAME
+           MOVE  "key"                     TO  MCP-PATHNAME
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
            PERFORM 900-DBSELECT-SEC
            IF  MCP-RC  =  ZERO
              MOVE    "tbl_ptkohinf"        TO  MCP-TABLE
-             MOVE    "key4"                TO  MCP-PATHNAME
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+      *       MOVE    "key4"                TO  MCP-PATHNAME
+             MOVE    "key"                 TO  MCP-PATHNAME
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
              PERFORM  900-PTKOHINF-READ-SEC
-             PERFORM  UNTIL  FLG-PTKOHINF = 1
-               IF  PTKOH-SAKJOKBN  NOT = "1"
-                 IF  PTKOH-TEKSTYMD(1:6) <= RECE10-SRYYM(1:6)  AND 
-                     PTKOH-TEKEDYMD(1:6) >= RECE10-SRYYM(1:6)
-                     MOVE  PTKOH-FTNJANUM  TO  WRK-FTNJANUM
-                 END-IF
-               END-IF
-                 PERFORM  900-PTKOHINF-READ-SEC
-             END-PERFORM
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+      *       PERFORM  UNTIL  FLG-PTKOHINF = 1
+      *         IF  PTKOH-SAKJOKBN  NOT = "1"
+      *           IF  PTKOH-TEKSTYMD(1:6) <= RECE10-SRYYM(1:6)  AND 
+      *               PTKOH-TEKEDYMD(1:6) >= RECE10-SRYYM(1:6)
+      *               MOVE  PTKOH-FTNJANUM  TO  WRK-FTNJANUM
+      *           END-IF
+      *         END-IF
+      *           PERFORM  900-PTKOHINF-READ-SEC
+      *       END-PERFORM
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
+             MOVE  PTKOH-FTNJANUM          TO  WRK-FTNJANUM
            END-IF
       *
            INITIALIZE  MCPAREA
            MOVE  "tbl_ptkohinf"            TO  MCP-TABLE
-           MOVE  "key4"                    TO  MCP-PATHNAME
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) start
+      *     MOVE  "key4"                    TO  MCP-PATHNAME
+           MOVE  "key"                     TO  MCP-PATHNAME
+      *=== 月途中の負担者番号変更対応 by Yoshikawa(2011/08/10) end
            PERFORM 900-CLOSE-SEC
       *
            .
