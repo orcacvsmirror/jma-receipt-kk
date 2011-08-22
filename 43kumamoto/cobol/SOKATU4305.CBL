@@ -36,6 +36,8 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.06    吉川    2010/06/01  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
+      *  01.00.07    吉川    2011/08/18  印字する都道府県数が8つ以上の場合
+      *                                  帳票が印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1214,7 +1216,9 @@
            PERFORM  VARYING  IDX1  FROM    1   BY  1
                     UNTIL    IDX1  >       8
                     OR       FLG-PRINT   =  1
-                    OR       FLG-KOH-END =  1
+      *=== 保険者8つ以上の印字不具合修正 by Yoshikawa(2011/08/18) start
+      *              OR       FLG-KOH-END =  1
+      *=== 保険者8つ以上の印字不具合修正 by Yoshikawa(2011/08/18) end
       *
              IF  SUM-HKNJANAME(IDX)  =  SPACE
                MOVE    1                    TO   FLG-PRINT
@@ -1249,6 +1253,12 @@
       *
              END-IF
            END-PERFORM
+      *
+      *=== 保険者8つ以上の印字不具合修正 by Yoshikawa(2011/08/18) start
+           IF  SUM-HKNJANAME(IDX)  =  SPACE
+             MOVE    1                      TO   FLG-PRINT
+           END-IF
+      *=== 保険者8つ以上の印字不具合修正 by Yoshikawa(2011/08/18) end
       *
       *    公費負担分編集処理
            PERFORM 200231-KOH-HENSYU-SEC
@@ -1292,6 +1302,12 @@
                ADD     1                     TO  IDX4   
              END-IF        
            END-PERFORM
+      *
+      *=== 保険者8つ以上の印字不具合修正 by Yoshikawa(2011/08/18) start
+           IF  SUM-KOHNUM (IDX4)   =   SPACE
+             MOVE    1                       TO  FLG-KOH-END
+           END-IF
+      *=== 保険者8つ以上の印字不具合修正 by Yoshikawa(2011/08/18) end
       *
            .
        200231-KOH-HENSYU-EXT.
