@@ -59,6 +59,7 @@
       *                                  ÁêÌÏ¸¶»Ô¤ÎÂåÉ½ÈÖ¹æÄÉ²Ã
       *  01.00.17    µÈÀî    11/01/25    open-cobol1.0ÂÐ±þ
       *  01.00.18    µÈÀî    11/06/23    ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
+      *  01.00.19    µÈÀî    11/08/17    ¾ã³²Ê¬¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -965,23 +966,25 @@
       *---(01.00.11) LINE ADD END   ------------------------------------
       *     ¾ã³²¤ò½ê»ý¤·¤Æ¤¤¤ë´µ¼Ô¤ÏÇ¯Îð¤òÌä¤ï¤º¡Ö¾ã³²¡×Íó¤Ë½¸·×¤¹¤ë
       *     Ã¢¤·¡¢Á´¹ñÅÚÌÚ¡¢Á´¹ñ·úÀß¹©»ö¶È¤Ï½ü¤¯
-             IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
-               IF   RECE10-KOHNUM(1) = "180" OR "280"
-                 OR RECE10-KOHNUM(2) = "180" OR "280"
-                 OR RECE10-KOHNUM(3) = "180" OR "280"
-                 OR RECE10-KOHNUM(4) = "180" OR "280"
-      ***** 05/05/27 INS
-                 OR RECE10-ETC-KOHNUM(1) = "180" OR "280"
-                 OR RECE10-ETC-KOHNUM(2) = "180" OR "280"
-                 OR RECE10-ETC-KOHNUM(3) = "180" OR "280"
-                 OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
-      *****
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE     5  TO  IDX1
-                 MOVE     3  TO  IDX1
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               END-IF
-             END-IF
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) start
+      *       IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
+      *         IF   RECE10-KOHNUM(1) = "180" OR "280"
+      *           OR RECE10-KOHNUM(2) = "180" OR "280"
+      *           OR RECE10-KOHNUM(3) = "180" OR "280"
+      *           OR RECE10-KOHNUM(4) = "180" OR "280"
+      ****** 05/05/27 INS
+      *           OR RECE10-ETC-KOHNUM(1) = "180" OR "280"
+      *           OR RECE10-ETC-KOHNUM(2) = "180" OR "280"
+      *           OR RECE10-ETC-KOHNUM(3) = "180" OR "280"
+      *           OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
+      ******
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE     5  TO  IDX1
+      *           MOVE     3  TO  IDX1
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      *       END-IF
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) end
       *
       *    Âà¿¦¼Ô
            ELSE
@@ -1022,23 +1025,25 @@
                END-EVALUATE
       *        ¾ã³²¤ò½ê»ý¤·¤Æ¤¤¤ë´µ¼Ô¤ÏÇ¯Îð¤òÌä¤ï¤º¡ÖËÜ¿Í¾ã³²¡×Íó¤Ë½¸·×¤¹¤ë
       *        Ã¢¤·¡¢Á´¹ñÅÚÌÚ¡¢Á´¹ñ·úÀß¹©»ö¶È¤Ï½ü¤¯
-               IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
-                 IF   RECE10-KOHNUM(1) = "180" OR "280"
-                   OR RECE10-KOHNUM(2) = "180" OR "280"
-                   OR RECE10-KOHNUM(3) = "180" OR "280"
-                   OR RECE10-KOHNUM(4) = "180" OR "280"
-      ***** 05/05/27 INS
-                   OR RECE10-ETC-KOHNUM(1) = "180" OR "280"
-                   OR RECE10-ETC-KOHNUM(2) = "180" OR "280"
-                   OR RECE10-ETC-KOHNUM(3) = "180" OR "280"
-                   OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
-      *****
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *             MOVE      12  TO  IDX1
-                   MOVE      8  TO  IDX1
-      *---(01.00.05) LINE ADD END   ------------------------------------
-                 END-IF
-               END-IF
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) start
+      *         IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
+      *           IF   RECE10-KOHNUM(1) = "180" OR "280"
+      *             OR RECE10-KOHNUM(2) = "180" OR "280"
+      *             OR RECE10-KOHNUM(3) = "180" OR "280"
+      *             OR RECE10-KOHNUM(4) = "180" OR "280"
+      ****** 05/05/27 INS
+      *             OR RECE10-ETC-KOHNUM(1) = "180" OR "280"
+      *             OR RECE10-ETC-KOHNUM(2) = "180" OR "280"
+      *             OR RECE10-ETC-KOHNUM(3) = "180" OR "280"
+      *             OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
+      ******
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **             MOVE      12  TO  IDX1
+      *             MOVE      8  TO  IDX1
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *           END-IF
+      *         END-IF
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) end
       *      ²ÈÂ²
              ELSE
                IF  RECE10-AGE  >  2
@@ -1086,41 +1091,43 @@
                END-IF
       *       ¾ã³²¤ò½ê»ý¤·¤Æ¤¤¤ë´µ¼Ô¤ÏÇ¯Îð¤òÌä¤ï¤º¡Ö²ÈÂ²¾ã³²¡×Íó¤Ë½¸·×¤¹¤ë
       *       Ã¢¤·¡¢Á´¹ñÅÚÌÚ¡¢Á´¹ñ·úÀß¹©»ö¶È¤Ï½ü¤¯
-               IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
-                 IF   RECE10-KOHNUM(1) = "180" OR "280"
-                   OR RECE10-KOHNUM(2) = "180" OR "280"
-                   OR RECE10-KOHNUM(3) = "180" OR "280"
-                   OR RECE10-KOHNUM(4) = "180" OR "280"
-      ***** 05/05/27 INS
-                   OR RECE10-ETC-KOHNUM(1) = "180" OR "280"
-                   OR RECE10-ETC-KOHNUM(2) = "180" OR "280"
-                   OR RECE10-ETC-KOHNUM(3) = "180" OR "280"
-                   OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
-      *****
-      *            £³ºÐÌ¤Ëþ¡¢Á°´ü¹âÎð¼Ô¤Ï²ÈÂ²¤Ç¤âËÜ¿ÍÍó¤Ë½¸·×¤¹¤ë
-      *---(01.00.11) LINE ADD START ------------------------------------
-                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
-                   AND  (RECE10-FLG (1)   =  1)
-                       MOVE  8       TO  IDX1
-                   ELSE
-      *---(01.00.11) LINE ADD ENF   ------------------------------------
-                     IF  RECE10-AGE     <   3  OR
-                         RECE10-AGE     >   69
-      *---(01.00.05) LINE ADD START ------------------------------------
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) start
+      *         IF     SKT1410TMP-HKNJANUM NOT = "133033" AND "133298"
+      *           IF   RECE10-KOHNUM(1) = "180" OR "280"
+      *             OR RECE10-KOHNUM(2) = "180" OR "280"
+      *             OR RECE10-KOHNUM(3) = "180" OR "280"
+      *             OR RECE10-KOHNUM(4) = "180" OR "280"
+      ****** 05/05/27 INS
+      *             OR RECE10-ETC-KOHNUM(1) = "180" OR "280"
+      *             OR RECE10-ETC-KOHNUM(2) = "180" OR "280"
+      *             OR RECE10-ETC-KOHNUM(3) = "180" OR "280"
+      *             OR RECE10-ETC-KOHNUM(4) = "180" OR "280"
+      ******
+      **            £³ºÐÌ¤Ëþ¡¢Á°´ü¹âÎð¼Ô¤Ï²ÈÂ²¤Ç¤âËÜ¿ÍÍó¤Ë½¸·×¤¹¤ë
+      **---(01.00.11) LINE ADD START ------------------------------------
+      *             IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
+      *             AND  (RECE10-FLG (1)   =  1)
+      *                 MOVE  8       TO  IDX1
+      *             ELSE
+      **---(01.00.11) LINE ADD ENF   ------------------------------------
+      *               IF  RECE10-AGE     <   3  OR
+      *                   RECE10-AGE     >   69
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **                 MOVE     12     TO   IDX1
+      *                 MOVE     8      TO   IDX1
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *               ELSE
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **                 MOVE     18     TO   IDX1
       *                 MOVE     12     TO   IDX1
-                       MOVE     8      TO   IDX1
-      *---(01.00.05) LINE ADD END   ------------------------------------
-                     ELSE
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *                 MOVE     18     TO   IDX1
-                       MOVE     12     TO   IDX1
-      *---(01.00.05) LINE ADD END   ------------------------------------
-                     END-IF
-      *---(01.00.11) LINE ADD START ------------------------------------
-                   END-IF
-      *---(01.00.11) LINE ADD END   ------------------------------------
-                 END-IF
-               END-IF
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *               END-IF
+      **---(01.00.11) LINE ADD START ------------------------------------
+      *             END-IF
+      **---(01.00.11) LINE ADD END   ------------------------------------
+      *           END-IF
+      *         END-IF
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) end
              END-IF
            END-IF
       *
@@ -1442,14 +1449,17 @@
                WHEN  079   MOVE  20  TO  IDX4
                WHEN  180
                WHEN  280
-                 IF  RECE10-RJNHKNNUM  NOT =  SPACE
-      *    Ï·¿Í¡¢Ëô¤Ï£²¤Ä¤Î¹ñÊÝÁÈ¹ç¤Î¾ì¹ç¾ãÏ··ò¤ËÊ¬Îà
-                   OR  RECE10-HKNJANUM  =  "133033"
-                   OR  RECE10-HKNJANUM  =  "133298"
-                   MOVE  21  TO  IDX4
-                 ELSE
-                   MOVE  99  TO  IDX4
-                 END-IF
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) start
+      *           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      **    Ï·¿Í¡¢Ëô¤Ï£²¤Ä¤Î¹ñÊÝÁÈ¹ç¤Î¾ì¹ç¾ãÏ··ò¤ËÊ¬Îà
+      *             OR  RECE10-HKNJANUM  =  "133033"
+      *             OR  RECE10-HKNJANUM  =  "133298"
+      *             MOVE  21  TO  IDX4
+      *           ELSE
+      *             MOVE  99  TO  IDX4
+      *           END-IF
+                 MOVE  21  TO  IDX4
+      *=== ¾ã³²¤Ï¸øÈñºÆ·ÇÍó¤Ëµ­ºÜ¤¹¤ë by Yoshikawa(2011/08/17) end
       *=== °õ»úÂÐ¾ÝÈÖ¹æÄÉ²Ã by yoshikawa(2009/07/13) start
                WHEN  381
       *=== °õ»úÂÐ¾ÝÈÖ¹æÄÉ²Ã by yoshikawa(2009/07/13) end
