@@ -23,7 +23,7 @@
     </element>
     <element name="KAISETU" occurs="1">
       <appinfo>
-        <embed object="string" length="40"/>
+        <embed object="string" length="60"/>
       </appinfo>
     </element>
     <element name="HOSPCD" occurs="1">
@@ -6698,13 +6698,16 @@
     </object>
     <object type="Embed - Text" version="0" id="O201">
       <attribute name="obj_pos">
-        <point val="12.95,22.85"/>
+        <point val="12.95,22.5496"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.95,22.6111;19.01,22.9111"/>
+        <rectangle val="12.95,22.3346;19.7675,22.8746"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETU#</string>
+      </attribute>
+      <attribute name="embed_text_column">
+        <int val="50"/>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -6712,16 +6715,17 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;
+&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
           </attribute>
           <attribute name="height">
-            <real val="0.3"/>
+            <real val="0.27"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.95,22.85"/>
+            <point val="12.95,22.5496"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6730,10 +6734,10 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.1818"/>
+            <real val="0.16362"/>
           </attribute>
           <attribute name="multi">
-            <real val="0.1515"/>
+            <real val="0.13635"/>
           </attribute>
         </composite>
       </attribute>
