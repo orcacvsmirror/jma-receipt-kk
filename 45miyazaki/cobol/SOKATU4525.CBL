@@ -36,6 +36,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.04    吉川    2010/06/01  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
+      *  01.00.05    吉川    2011/08/23  帳票が印刷されない場合があるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1850,7 +1851,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== 帳票印刷不具合修正 by Yoshikawa(2011/08/23) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== 帳票印刷不具合修正 by Yoshikawa(2011/08/23) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1879,12 +1883,18 @@
       *        通常処理は他県公費所持者を飛ばす
                IF      FLG-SYORIKBN        =   1
                AND     FLG-TAKOH           =   1
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== 帳票印刷不具合修正 by Yoshikawa(2011/08/23) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== 帳票印刷不具合修正 by Yoshikawa(2011/08/23) end
                ELSE
       *          他県公費処理は県内患者を飛ばす
                  IF    FLG-SYORIKBN        =   2
                  AND   FLG-TAKOH           =   ZERO
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== 帳票印刷不具合修正 by Yoshikawa(2011/08/23) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== 帳票印刷不具合修正 by Yoshikawa(2011/08/23) end
                  END-IF
                END-IF
       *=== 公費が県外の場合は県外処理 by Yoshikawa(2008/11/20) end
