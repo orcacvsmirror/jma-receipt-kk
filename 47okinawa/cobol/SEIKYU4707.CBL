@@ -30,6 +30,7 @@
       * Maj/Min/Rev  修正者    日付      内容
       *  01.00.01    吉川      10/10/25  金額は１０円未満を四捨五入する
       *  01.00.02    吉川      10/11/25  open-cobol1.0対応
+      *  01.00.03    吉川      11/09/02  診療月は当月分を印字するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -750,13 +751,16 @@
            MOVE  "平成　　年　　月　　日"  TO  SC07-SEIYMD
       *
       *    診療月
-           MOVE  MF100-SRYYM               TO  WRK-SYMD (1:6)
-           MOVE  "01"                      TO  WRK-SYMD (7:2)
-           PERFORM 31012-SEIWA-HEN-SEC
-      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
-      *     MOVE  WRK-HENYMDG(11:16)        TO  SC07-SRYMM
-           MOVE  WRK-HENYMDG(11:6)         TO  SC07-SRYMM
-      *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
+      *=== 診療月は当月を印字 by Yoshikawa(2011/09/02) start
+      *     MOVE  MF100-SRYYM               TO  WRK-SYMD (1:6)
+      *     MOVE  "01"                      TO  WRK-SYMD (7:2)
+      *     PERFORM 31012-SEIWA-HEN-SEC
+      **=== open-cobol1.0対応 by Yoshikawa(2010/11/25) start
+      **     MOVE  WRK-HENYMDG(11:16)        TO  SC07-SRYMM
+      *     MOVE  WRK-HENYMDG(11:6)         TO  SC07-SRYMM
+      **=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
+           MOVE  WRK-SRYYMWH(11:6)         TO  SC07-SRYMM
+      *=== 診療月は当月を印字 by Yoshikawa(2011/09/02) end
       *
       *    住所
            MOVE  WRK-HOSPADRS              TO  SC07-ADRS
