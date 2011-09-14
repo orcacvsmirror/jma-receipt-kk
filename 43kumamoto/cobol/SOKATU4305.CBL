@@ -38,6 +38,9 @@
       *                                  広域連合の保険者番号指定対応
       *  01.00.07    吉川    2011/08/18  印字する都道府県数が8つ以上の場合
       *                                  帳票が印字されない不具合を修正
+      *  01.00.14    吉川    2011/09/05  SRYKA.INIがある他県のプログラムを
+      *                                  インストールすると標榜科欄の
+      *                                  表示がおかしくなるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -76,7 +79,10 @@
       *    標榜科名ファイル
        FD  SRYKA-FILE.
        01  SRYKA-REC.
-           03  SRYKA-SRYKANAME           PIC X(16).
+      *=== 標榜科名のバイト数変更 by Yoshikawa(2011/09/05) start
+      *     03  SRYKA-SRYKANAME           PIC X(16).
+           03  SRYKA-SRYKANAME           PIC X(20).
+      *=== 標榜科名のバイト数変更 by Yoshikawa(2011/09/05) start
            03  FILLER                    PIC X(01).
       *
        WORKING-STORAGE             SECTION.
