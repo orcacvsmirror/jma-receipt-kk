@@ -34,6 +34,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    門間    08/12/17    SPA-AREA初期化
+      *  01.00.03    吉川    11/09/14    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -379,7 +380,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU3725"    TO  JOB-PGID
-           MOVE    "母子家庭等医療費請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2011/09/14) start
+      *     MOVE    "母子家庭等医療費請求書"
+           MOVE    "ひとり親家庭等医療費請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2011/09/14) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -917,7 +921,10 @@
            INITIALIZE                    SUM-AREA
       *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >    13
+      *=== 帳票様式の変更 by Yoshikawa(2011/09/14) start
+      *              UNTIL    IDX1  >    13
+                    UNTIL    IDX1  >    12
+      *=== 帳票様式の変更 by Yoshikawa(2011/09/14) end
                     OR    FLG-PRINT       =   1
       *
       *      受給者番号
@@ -1035,7 +1042,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC3725.red"             TO  SPRT-PRTID
-           MOVE    "母子家庭等医療費請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2011/09/14) start
+      *     MOVE    "母子家庭等医療費請求書"
+           MOVE    "ひとり親家庭等医療費請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2011/09/14) end
                                        TO  SPRT-TITLE
            MOVE    SC25                TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
