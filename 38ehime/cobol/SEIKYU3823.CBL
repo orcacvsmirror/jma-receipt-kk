@@ -53,6 +53,8 @@
       *                                在宅は70歳未満の場合でも印字する
       *                                総点数と全国公費分の点数が異なる場合
       *                                全国公費対象点数を備考欄に印字する
+      *  01.00.15    吉川    11/09/22  診療日数が０の場合、INIファイルから
+      *                                備考欄に理由を記載するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -71,6 +73,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *    備考欄コメントファイル
+           SELECT  COMMENT-FILE  ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-COMMENT.
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -82,6 +92,13 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+       FD  COMMENT-FILE.
+       01  COMMENT-REC.
+           03  COMMENT-COMMENTCD   PIC X(09).
+           03  FILLER              PIC X(01).
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -107,6 +124,9 @@
            03  STS-MF100   PIC X(02).
            03  STS-RECE02  PIC X(02).
            03  STS-RECEERR  PIC X(02).
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+           03  STS-COMMENT PIC X(02).
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -136,6 +156,9 @@
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) start
            03  FLG-SRYACT     PIC 9(01).
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+           03  FLG-TENSU      PIC 9(01).
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -239,6 +262,11 @@
       *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/29) start
            03  WRK-TOKUTEI           PIC 9(01).
       *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/29) end
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+           03  FILE-NAME             PIC X(512).
+           03  WRK-COMMENTCD         PIC X(09).
+           03  WRK-COMMENT           PIC X(40).
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -342,6 +370,11 @@
            COPY    "CPSRYACT.INC".
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
       *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *    点数
+           COPY    "CPTENSU.INC".
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *
       *    公費請求書
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
@@ -371,6 +404,10 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
       ****************************************************************
        LINKAGE  SECTION.
@@ -556,6 +593,10 @@
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+           PERFORM 110-INI-FILE-SEC
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *
            PERFORM 900-KOHSKY-START-SEC
            .
        100-INIT-EXT.
@@ -654,6 +695,44 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *****************************************************************
+      *    INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *    備考欄コメント設定取得
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/COMMENT.INI"    TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   COMMENT-REC
+      *
+           OPEN  INPUT  COMMENT-FILE
+      *
+           READ COMMENT-FILE
+             AT END
+               INITIALIZE        COMMENT-REC
+           END-READ
+      *
+           DISPLAY "備考欄コメント設定取得=" COMMENT-COMMENTCD
+           IF    COMMENT-COMMENTCD(1:2)  =  "※"
+             MOVE   SPACE              TO  WRK-COMMENTCD
+           ELSE
+             MOVE   COMMENT-COMMENTCD  TO  WRK-COMMENTCD
+           END-IF
+      *
+           DISPLAY "備考欄コメントコード =" WRK-COMMENTCD
+      *
+           CLOSE COMMENT-FILE
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -887,6 +966,15 @@
                PERFORM  960-SRYACT-SET-SEC
              END-IF
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
+      *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *      診療日数が０の場合、INIファイルのコードを元にコメント取得
+             IF  MF100-JNISSU  =  ZERO
+               PERFORM  900-TENSU-READ-SEC
+               DISPLAY "コメント名 = " TNS-NAME
+               MOVE  TNS-NAME            TO  MF100-BIKO2
+             END-IF
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
              WRITE   MF100-REC
              ADD     1                   TO  CNT-MF100
@@ -1359,6 +1447,11 @@
              END-STRING
            END-IF
       *=== 全国公費点数の分点を備考に印字 by Yoshikawa(2011/07/13) end
+      *
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *    備考２
+           MOVE  MF100-BIKO2   TO  SC23-BIKO2
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
            .
        320-BODY-HEN-EXT.
@@ -2379,6 +2472,63 @@
        965-ZAISOU-CHK-EXT.
            EXIT.
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
+      *****************************************************************
+      *    点数マスタ読み込み
+      *****************************************************************
+       900-TENSU-READ-SEC         SECTION.
+      *
+      *    点数マスタ読み込み
+           INITIALIZE                  TNS-TENSU-REC
+           MOVE    SPA-HOSPNUM         TO  TNS-HOSPNUM
+           MOVE    WRK-COMMENTCD       TO  TNS-SRYCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  TNS-YUKOSTYMD(1:6)
+                                           TNS-YUKOEDYMD(1:6)
+           MOVE    "01"                TO  TNS-YUKOSTYMD(7:2)
+                                           TNS-YUKOEDYMD(7:2)
+           MOVE    TNS-TENSU-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_tensu"         TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_tensu"       TO  MCP-TABLE
+             MOVE    "key"             TO  MCP-PATHNAME
+             MOVE    "DBFETCH"         TO  MCP-FUNC
+             CALL    "ORCDBMAIN"       USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+             IF      MCP-RC            =   ZERO
+                 MOVE    ZERO          TO  FLG-TENSU
+                 MOVE    MCPDATA-REC   TO  TNS-TENSU-REC 
+             ELSE
+                 MOVE    1             TO  FLG-TENSU
+             END-IF
+           ELSE
+               INITIALIZE                  TNS-TENSU-REC
+               MOVE    1               TO  FLG-TENSU
+           END-IF
+      *
+      *    カーソルクロース
+           INITIALIZE                  MCPAREA
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_tensu"         TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-TENSU-READ-EXT.
+           EXIT.
+      *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) start
       *****************************************************************
       *    西暦・和暦変換処理
