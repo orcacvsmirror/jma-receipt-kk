@@ -37,6 +37,7 @@
       *  01.00.03     吉川     08/09/12    SPA-AREA初期化
       *  01.00.04     吉川     10/01/19    長期が助成する分まで請求金額欄に
       *                                    加算されてしまう不具合を修正
+      *  01.00.05     吉川     11/09/22    前期高齢者９割＋長期の請求金額の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -110,6 +111,9 @@
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
            03  FLG-TYOKIFTN   PIC 9(01).
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
+           03  FLG-TOKUREI    PIC 9(01).
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -663,14 +667,32 @@
                  MOVE    RECE02-FTNMONEY(1)  TO    WRK-SEIKYUGK-G
              END-IF
       *
-             IF  FLG-TYOKI       =   1   AND
-                 WRK-SEIKYUGK-G  >   10000
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
+      *       IF  FLG-TYOKI       =   1   AND
+      *           WRK-SEIKYUGK-G  >   10000
+             IF  FLG-TYOKI       =   1
+                 IF  FLG-TOKUREI  =  1
+                   COMPUTE  WRK-SEIKYUGK-G  =  
+                            RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
+                 END-IF
+             END-IF
+             IF  WRK-SEIKYUGK-G  >   10000
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
                  MOVE    10000   TO  WRK-SEIKYUGK-G
              END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
       *      長期上位
-             IF  FLG-TYOKI       =   2   AND
-                 WRK-SEIKYUGK-G  >   20000
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
+      *       IF  FLG-TYOKI       =   2   AND
+      *           WRK-SEIKYUGK-G  >   20000
+             IF  FLG-TYOKI       =   2
+                 IF  FLG-TOKUREI  =  1
+                   COMPUTE  WRK-SEIKYUGK-G  =  
+                            RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
+                 END-IF
+             END-IF
+             IF  WRK-SEIKYUGK-G  >   20000
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
                  MOVE    20000   TO  WRK-SEIKYUGK-G
              END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
@@ -1384,6 +1406,9 @@
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
                                    FLG-TYOKIFTN
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2010/09/28) start
+                                   FLG-TOKUREI
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2010/09/28) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -1419,6 +1444,15 @@
                END-IF
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
       *
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
+      *    軽減特例措置は2割計算だが、主保険のCOMPFTNが1割計算なので
+      *    計算は後に行う
+               IF  (SYU-KOH-HKNNUM(IDX)  =  "972" OR "974")
+               AND (RECE02-FLG(2)  =  1)
+                 MOVE      1       TO      FLG-TOKUREI
+               END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
+      *
            END-PERFORM
       *
            IF  FLG-HEIYOU      =   ZERO
@@ -1426,6 +1460,9 @@
       *      長期助成有りの場合、請求金額に加算しない
              IF  FLG-TYOKIFTN  =   ZERO
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) end
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
+              IF  FLG-TOKUREI  =  ZERO
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
                IF  RECE02-FTNMONEY(1)  =   ZERO
                    IF  RECE02-RJNHKNNUM    NOT =   SPACE
                        MOVE    SYU-KOH-COMPFTN-ENTANI(1)
@@ -1441,6 +1478,9 @@
                        MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
                    END-IF
                END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
+              END-IF
+      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
       *=== 長期助成分は請求金額に加えない by Yoshikawa(2010/01/19) start
              ELSE
                 MOVE    ZERO                       TO  WRK-SEIKYUGK
