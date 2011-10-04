@@ -38,6 +38,8 @@
       *  01.00.04     吉川     10/01/19    長期が助成する分まで請求金額欄に
       *                                    加算されてしまう不具合を修正
       *  01.00.05     吉川     11/09/22    前期高齢者９割＋長期の請求金額の修正
+      *  01.00.06     吉川     11/10/04    長期を持っていなくても上限額で
+      *                                    止まってしまう不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -675,11 +677,16 @@
                    COMPUTE  WRK-SEIKYUGK-G  =  
                             RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
                  END-IF
+      *=== 請求金額不具合修正 by Yoshikawa(2011/10/04) start
+                 IF  WRK-SEIKYUGK-G  >   10000
+                     MOVE    10000   TO  WRK-SEIKYUGK-G
+                 END-IF
              END-IF
-             IF  WRK-SEIKYUGK-G  >   10000
+      *       IF  WRK-SEIKYUGK-G  >   10000
       *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
-                 MOVE    10000   TO  WRK-SEIKYUGK-G
-             END-IF
+      *           MOVE    10000   TO  WRK-SEIKYUGK-G
+      *       END-IF
+      *=== 請求金額不具合修正 by Yoshikawa(2011/10/04) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *      長期上位
       *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) start
@@ -690,12 +697,17 @@
                    COMPUTE  WRK-SEIKYUGK-G  =  
                             RECE02-TOTALTEN(1) * RECE02-KYURATE / 10
                  END-IF
+      *=== 請求金額不具合修正 by Yoshikawa(2011/10/04) start
+                 IF  WRK-SEIKYUGK-G  >   20000
+                     MOVE    20000   TO  WRK-SEIKYUGK-G
+                 END-IF
              END-IF
-             IF  WRK-SEIKYUGK-G  >   20000
-      *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
-                 MOVE    20000   TO  WRK-SEIKYUGK-G
-             END-IF
+      *       IF  WRK-SEIKYUGK-G  >   20000
+      **=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/09/22) end
+      *           MOVE    20000   TO  WRK-SEIKYUGK-G
+      *       END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 請求金額不具合修正 by Yoshikawa(2011/10/04) end
              COMPUTE WRK-SEIKYUGK-G2 =   WRK-SEIKYUGK-G  +   0.5 
       *
              INITIALIZE      MF100-REC
