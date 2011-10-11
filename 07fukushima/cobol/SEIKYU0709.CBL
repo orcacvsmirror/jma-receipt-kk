@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 福島・乳幼児医療費連記式明細書
+      *  コンポーネント名  : 福島・子ども医療費連記式明細書
       *                      (245)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -40,6 +40,7 @@
       *  01.00.05    吉川    11/04/14    長期（972,974）を持っていても
       *                                  長期欄に値が印字されないのを修正
       *  01.00.06    吉川    11/05/13    整理番号を印字する
+      *  01.00.07    吉川    11/10/07    帳票名の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -390,8 +391,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU0709"    TO  JOB-PGID
-           MOVE    "福島・乳幼児医療費連記式明細書" 
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) start
+      *     MOVE    "福島・乳幼児医療費連記式明細書" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    "福島・子ども医療費連記式明細書" 
                                    TO  JOB-SHELLMSG
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -1085,8 +1090,12 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC0709.red"         TO  SPRT-PRTID
-           MOVE    "乳幼児医療費連記式明細書"
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) start
+      *     MOVE    "乳幼児医療費連記式明細書"
+      *                              TO  SPRT-TITLE
+           MOVE    "子ども医療費連記式明細書"
                                     TO  SPRT-TITLE
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) end
            MOVE    SC09             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

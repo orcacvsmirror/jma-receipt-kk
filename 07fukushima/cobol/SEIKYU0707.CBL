@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 福島・乳幼児医療費請求書
+      *  コンポーネント名  : 福島・子ども医療費請求書
       *                      (245)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -35,6 +35,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    内田    08/04/06    SPA-AREA初期化
+      *  01.00.03    吉川    11/10/07    帳票名の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -358,8 +359,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU0707"    TO  JOB-PGID
-           MOVE    "福島・乳幼児医療費請求書" 
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) start
+      *     MOVE    "福島・乳幼児医療費請求書" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    "福島・子ども医療費請求書" 
                                    TO  JOB-SHELLMSG
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -906,8 +911,12 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC0707.red"         TO  SPRT-PRTID
-           MOVE    "乳幼児医療費請求書"
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) start
+      *     MOVE    "乳幼児医療費請求書"
+      *                              TO  SPRT-TITLE
+           MOVE    "子ども医療費請求書"
                                     TO  SPRT-TITLE
+      *=== 帳票名の変更 by Yoshikawa(2011/10/07) end
            MOVE    SC07             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
