@@ -31,6 +31,7 @@
       *  01.00.01    吉川    2008/10/07  和暦は頭ゼロ付きで表す
       *  01.00.02    吉川    2008/10/28  ファイル名に県番号と点数表追加
       *  01.00.03    吉川    2011/02/17  open-cobol1.0対応
+      *  01.00.04    吉川    2011/10/07  Lucid4.6で出力されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -991,6 +992,9 @@
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
+      *=== Lucid4.6出力対応 by Yoshikawa(2011/10/07) start
+                                   SPA-AREA
+      *=== Lucid4.6出力対応 by Yoshikawa(2011/10/07) end
       *
            PERFORM 900-DBDISCONNECT-SEC
            .
