@@ -7,7 +7,7 @@ PROGRAMID=SEIKYU0707
 LOG_FILE="/var/log/jma-receipt/${14}seikyu0707"
 RENNUM=0
 #-------------------------------------------#
-#    ÃÏÊý¸øÈñºîÀ®¡ÊÊ¡Åç¡¦ÆýÍÄ»ù°åÎÅÈñÀÁµá½ñ¡Ë
+#    ÃÏÊý¸øÈñºîÀ®¡ÊÊ¡Åç¡¦»Ò¤É¤â°åÎÅÈñÀÁµá½ñ¡Ë
 #        $1-${11}
 #              °õºþ£Ä£ÂÍÑÄê¸ÇÄê°ú¿ô(CPORCSRTLNK.INC)
 #        ${12} ¥¸¥ç¥Ö£É£Ä
@@ -25,11 +25,11 @@ RENNUM=0
         fi
 
         RENNUM=$(expr ${RENNUM} + 1) 
-       	${DBSTUB} -record ${RECORDDIR} -dir ${LDDEFDIR}/directory -db orca -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
+        $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
         if  [ -e ${15} ]; then
             exit
         fi
 
-        ${DBSTUB} -record ${RECORDDIR} -dir ${LDDEFDIR}/directory -db orca -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
+        $DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit
