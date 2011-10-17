@@ -62,6 +62,8 @@
       *  01.00.21    吉川    11/05/24   東北地方太平洋沖地震対応
       *  01.00.22    吉川    11/07/07   保険番号383は請求額を記載しない
       *  01.00.23    吉川    11/08/11   保険番号372,373は請求額を記載しない
+      *  01.00.24    吉川    11/10/11   請求額を記載しない公費番号を
+      *                                 INIファイルから取得するように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -84,6 +86,14 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *    印字対象公費番号ファイル
+           SELECT  KOHI-FILE       ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-KOHI.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
@@ -96,12 +106,24 @@
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
                                    BY         //RECE10X//.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *    印字対象公費番号ファイル
+       FD  KOHI-FILE.
+       01  KOHI-REC.
+           03  KOHI-DAT-KOHNUM     PIC X(03). 
+           03  KOHI-DAT-KAIGYO     PIC X(01). 
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *    請求額欄に印字しない公費番号データ
+           COPY    "KOHI1100.INC".
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *
       *    印刷用データ 名称領域 
            COPY    "CPCOMMONPRT.INC".
@@ -139,6 +161,9 @@
            03  STS-SKT1100         PIC X(02).
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+           03  STS-KOHI            PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -163,6 +188,10 @@
       *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) start
            03  FLG-2010            PIC 9(01).
       *=== シス管「2010」地方公費記載対応 by Yoshikawa(2010/02/04) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+           03  FLG-KOHI            PIC 9(01).
+           03  FLG-TAISYOGAI       PIC 9(01).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -172,6 +201,9 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX-O               PIC 9(04).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+           03  IDXX                PIC 9(04).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) start
            03  IDZ1                PIC 9(04).
            03  IDZ2                PIC 9(04).
@@ -256,6 +288,11 @@
       *=== 災害対応 by Yoshikawa(2011/05/24) start
            03  WRK-KENNAME           PIC  X(08).
       *=== 災害対応 by Yoshikawa(2011/05/24) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *    パラメータファイル名
+           03  FILE-NAME             PIC X(512).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
+      *
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -430,6 +467,11 @@
       *
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -727,6 +769,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *    INIファイル読み込み
+           PERFORM  110-INI-FILE-SEC
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
+      *
            OPEN     OUTPUT  UPD-FILE
       ***** 05/08/17 INS
            EVALUATE    WRK-PARA-SYOKBN 
@@ -755,6 +802,48 @@
       *
        100-INIT-EXT.
            EXIT.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      *****************************************************************
+      *    INIファイル読み込み
+      *****************************************************************
+       110-INI-FILE-SEC         SECTION.
+      *
+      *    請求額印字対象外公費番号ファイル読み込み
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/KOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   KOHI-REC
+      *
+           OPEN  INPUT  KOHI-FILE
+      *
+           MOVE  ZERO                    TO  IDX
+                                             FLG-KOHI
+      *
+           PERFORM UNTIL    FLG-KOHI = 1
+             READ KOHI-FILE NEXT
+               AT END
+                 MOVE  1                 TO  FLG-KOHI
+               NOT AT END
+                 IF  KOHI-DAT-KOHNUM(1:1)  =  "*" OR SPACE
+                   MOVE  1               TO  FLG-KOHI
+                 ELSE
+                   ADD   1               TO  IDX
+                   MOVE  KOHI-REC  TO  KOHI-TBL(IDX)
+                   DISPLAY "読み込みレコード=" KOHI-REC
+                 END-IF
+             END-READ
+           END-PERFORM
+      *
+           CLOSE KOHI-FILE
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *****************************************************************
       *    主    処理
       *****************************************************************
@@ -1182,46 +1271,58 @@
                                        -   WRK-KEISAN2-G
            END-IF
       *
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *    181,182,183,281は請求額を記載しない
-      *     ADD     WRK-SEIKYUGK-G      TO  SKT1100TMP-SEIKYUGK
-           IF   RECE10-KOHNUM(IDX3)  NOT =  "181"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "182"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "183"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "281"
-      *---(01.00.09) LINE ADD START ------------------------------------
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "481"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "482"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "483"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "583"
-      *---(01.00.09) LINE ADD END   ------------------------------------
-      *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "581"
-      *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
-      *=== 印字対象番号追加 by Uchida(2009/06/17) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "381"
-      *=== 印字対象番号追加 by Uchida(2009/06/17) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "352"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
-      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
-      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "782"
-      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) end
-      *=== 543は請求額を記載しない by Yoshikawa(2010/10/27) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "543"
-      *=== 543は請求額を記載しない by Yoshikawa(2010/10/27) end
-      *=== 383は請求額を記載しない by Yoshikawa(2011/07/07) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "383"
-      *=== 383は請求額を記載しない by Yoshikawa(2011/07/07) end
-      *=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "372"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "373"
-      *=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **    181,182,183,281は請求額を記載しない
+      **     ADD     WRK-SEIKYUGK-G      TO  SKT1100TMP-SEIKYUGK
+      *     IF   RECE10-KOHNUM(IDX3)  NOT =  "181"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "182"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "183"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "281"
+      **---(01.00.09) LINE ADD START ------------------------------------
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "481"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "482"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "483"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "583"
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      **=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "581"
+      **=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      **=== 印字対象番号追加 by Uchida(2009/06/17) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "381"
+      **=== 印字対象番号追加 by Uchida(2009/06/17) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "352"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
+      **=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
+      **=== 782は請求額を記載しない by Yoshikawa(2010/02/18) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "782"
+      **=== 782は請求額を記載しない by Yoshikawa(2010/02/18) end
+      **=== 543は請求額を記載しない by Yoshikawa(2010/10/27) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "543"
+      **=== 543は請求額を記載しない by Yoshikawa(2010/10/27) end
+      **=== 383は請求額を記載しない by Yoshikawa(2011/07/07) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "383"
+      **=== 383は請求額を記載しない by Yoshikawa(2011/07/07) end
+      **=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "372"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "373"
+      **=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) end
+           MOVE    ZERO                TO  FLG-TAISYOGAI
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       KOHI-KOHNUM(IDXX)  =  SPACE
+             IF  RECE10-KOHNUM(IDX3)  =  KOHI-KOHNUM(IDXX)
+               MOVE    1               TO  FLG-TAISYOGAI
+               MOVE    100             TO  IDXX
+             END-IF
+           END-PERFORM
+           IF  FLG-TAISYOGAI  =  ZERO
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
              ADD     WRK-SEIKYUGK-G    TO  SKT1100TMP-SEIKYUGK
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
@@ -1230,46 +1331,49 @@
            ADD     RECE10-JNISSU(IDX3 + 1)     TO  WRK-KOHNISSU
            ADD     RECE10-TOTALTEN(IDX3 + 1)   TO  WRK-KOHTENSU
            ADD     1                           TO  WRK-KOHKENSU
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *    181,182,183,281は請求額を記載しない
-      *     ADD     WRK-SEIKYUGK-G              TO  WRK-KOHSEIKYUGK
-           IF   RECE10-KOHNUM(IDX3)  NOT =  "181"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "182"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "183"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "281"
-      *---(01.00.09) LINE ADD START ------------------------------------
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "481"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "482"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "483"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "583"
-      *---(01.00.09) LINE ADD END   ------------------------------------
-      *=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "581"
-      *=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
-      *=== 印字対象番号追加 by Uchida(2009/06/17) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "381"
-      *=== 印字対象番号追加 by Uchida(2009/06/17) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "352"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
-      *=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
-      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "782"
-      *=== 782は請求額を記載しない by Yoshikawa(2010/02/18) end
-      *=== 543は請求額を記載しない by Yoshikawa(2010/10/27) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "543"
-      *=== 543は請求額を記載しない by Yoshikawa(2010/10/27) end
-      *=== 383は請求額を記載しない by Yoshikawa(2011/07/07) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "383"
-      *=== 383は請求額を記載しない by Yoshikawa(2011/07/07) end
-      *=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) start
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "372"
-           AND  RECE10-KOHNUM(IDX3)  NOT =  "373"
-      *=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **    181,182,183,281は請求額を記載しない
+      **     ADD     WRK-SEIKYUGK-G              TO  WRK-KOHSEIKYUGK
+      *     IF   RECE10-KOHNUM(IDX3)  NOT =  "181"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "182"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "183"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "281"
+      **---(01.00.09) LINE ADD START ------------------------------------
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "481"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "482"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "483"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "583"
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      **=== 印字対象番号追加 by Yoshikawa(2008/10/08) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "581"
+      **=== 印字対象番号追加 by Yoshikawa(2008/10/08) end
+      **=== 印字対象番号追加 by Uchida(2009/06/17) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "381"
+      **=== 印字対象番号追加 by Uchida(2009/06/17) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/08/21) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "352"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "353"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "354"
+      **=== 印字対象番号追加 by Yoshikawa(2009/08/21) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/16) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "382"
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/16) end
+      **=== 782は請求額を記載しない by Yoshikawa(2010/02/18) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "782"
+      **=== 782は請求額を記載しない by Yoshikawa(2010/02/18) end
+      **=== 543は請求額を記載しない by Yoshikawa(2010/10/27) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "543"
+      **=== 543は請求額を記載しない by Yoshikawa(2010/10/27) end
+      **=== 383は請求額を記載しない by Yoshikawa(2011/07/07) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "383"
+      **=== 383は請求額を記載しない by Yoshikawa(2011/07/07) end
+      **=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) start
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "372"
+      *     AND  RECE10-KOHNUM(IDX3)  NOT =  "373"
+      **=== 372,373は請求額を記載しない by Yoshikawa(2011/08/11) end
+           IF  FLG-TAISYOGAI  =  ZERO
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
              ADD     WRK-SEIKYUGK-G            TO  WRK-KOHSEIKYUGK
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
