@@ -50,6 +50,8 @@
       *                                    ∞Ï…Ù…È√¥∂‚ÕÛ§œ0§»µ≠∫‹§π§Î
       *  01.00.10     µ»¿Ó     11/06/21    ∫¥«Ïª‘°¢…È√¥º‘»÷πÊ83448050§«
       *                                    ≥∞ÕË§ŒæÏπÁ§Œ§ﬂ…È√¥∂‚Î¶§œµ≠∫‹§∑§ §§
+      *  01.00.11     µ»¿Ó     11/10/12    ∫¥«Ïª‘§»…±≈Á¬º§ŒæÏπÁ§Œ∆¸øÙ§»
+      *                                    ∞Ï…Ù…È√¥∂‚ÕÛ§Œµ≠∫‹§ÚΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -738,6 +740,9 @@
            MOVE  RECE02-HKN          TO  MF100-HKN
            MOVE  RECE02-RJNHKN       TO  MF100-RJNHKN
            MOVE  RECE02-SEX          TO  MF100-SEX
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
+           MOVE  RECE02-FLG(1)       TO  MF100-MISYUGAKU
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
       *
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
@@ -945,7 +950,13 @@
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) start
       *     IF  MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM
       *                             OR  CONS-HIMESHIMA-CITYNUM
-           IF  MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
+      *     IF  MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM
+           IF ((MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM)
+                OR (MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM))
+           AND (MF100-NYUGAIKBN  =  "2")
+           AND (MF100-MISYUGAKU NOT =  "1")
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) end
              MOVE    ZERO                      TO  MF100-FTNMONEY
            END-IF
@@ -1173,9 +1184,16 @@
       *         MOVE    MF100-SEIKYUGK      TO  WRK-Z7
       *         MOVE    WRK-Z7              TO  SC01-SEIKYUGK(IDX)
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) start
-      *        ∫¥«Ïª‘§«…È√¥º‘»÷πÊ83448050§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
-               IF   MF100-FTNJANUM  =  CONS-SAIKI-SYOGAKU
-               AND  MF100-NYUGAIKBN  =  "2"
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
+      **        ∫¥«Ïª‘§«…È√¥º‘»÷πÊ83448050§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
+      *         IF   MF100-FTNJANUM  =  CONS-SAIKI-SYOGAKU
+      *         AND  MF100-NYUGAIKBN  =  "2"
+      *        ∫¥«Ïª‘§»…±≈Á¬º§«æÆ√Ê≥ÿ§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
+               IF ((MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM)
+                    OR (MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM))
+               AND (MF100-NYUGAIKBN  =  "2")
+               AND (MF100-MISYUGAKU  NOT =  "1")
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
                  MOVE    ZERO                TO  MF100-FTNMONEY
                ELSE
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) end
@@ -1188,17 +1206,21 @@
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) start
       *           IF  (MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM
       *                                    OR  CONS-HIMESHIMA-CITYNUM)
-                 IF  (MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM)
-      *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) end
-                 AND (MF100-FTNMONEY  =  ZERO)
-                   MOVE    MF100-FTNMONEY    TO  WRK-Z6-9
-                   MOVE    WRK-Z6-9          TO  SC01-NYUFTNGK(IDX)
-                 ELSE
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
+      *           IF  (MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM)
+      **=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) end
+      *           AND (MF100-FTNMONEY  =  ZERO)
+      *             MOVE    MF100-FTNMONEY    TO  WRK-Z6-9
+      *             MOVE    WRK-Z6-9          TO  SC01-NYUFTNGK(IDX)
+      *           ELSE
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
       *=== ∫¥«Ïª‘≈˘§œ∞Ï…Ù…È√¥∂‚§œ0 by Yoshikawa(2011/03/14) end
                    MOVE    MF100-FTNMONEY    TO  WRK-Z6
                    MOVE    WRK-Z6            TO  SC01-NYUFTNGK(IDX)
       *=== ∫¥«Ïª‘≈˘§œ∞Ï…Ù…È√¥∂‚§œ0 by Yoshikawa(2011/03/14) start
-                 END-IF
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
+      *           END-IF
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
       *=== ∫¥«Ïª‘≈˘§œ∞Ï…Ù…È√¥∂‚§œ0 by Yoshikawa(2011/03/14) end
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) start
                END-IF
@@ -1261,10 +1283,17 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *         ADD     MF100-SHOKUJINISSU      TO  SUM-SSNISSU
       *         ADD     MF100-SHOKUJIFTN        TO  SUM-SSKJFTNGK
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) start
-      *        ∫¥«Ïª‘§«…È√¥º‘»÷πÊ83448050§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
-               IF   MF100-FTNJANUM  =  CONS-SAIKI-SYOGAKU
-               AND  MF100-NYUGAIKBN  =  "2"
+      **        ∫¥«Ïª‘§«…È√¥º‘»÷πÊ83448050§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
+      *         IF   MF100-FTNJANUM  =  CONS-SAIKI-SYOGAKU
+      *         AND  MF100-NYUGAIKBN  =  "2"
+      *        ∫¥«Ïª‘§»…±≈Á¬º§«æÆ√Ê≥ÿ§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
+               IF ((MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM)
+                    OR (MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM))
+               AND (MF100-NYUGAIKBN  =  "2")
+               AND (MF100-MISYUGAKU  NOT =  "1")
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
                  CONTINUE
                ELSE
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) end
@@ -1284,10 +1313,17 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *         ADD     MF100-SHOKUJINISSU      TO  SUM-GSNISSU
       *         ADD     MF100-SHOKUJIFTN        TO  SUM-GSKJFTNGK
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) start
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) start
-      *        ∫¥«Ïª‘§«…È√¥º‘»÷πÊ83448050§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
-               IF   MF100-FTNJANUM  =  CONS-SAIKI-SYOGAKU
-               AND  MF100-NYUGAIKBN  =  "2"
+      **        ∫¥«Ïª‘§«…È√¥º‘»÷πÊ83448050§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
+      *         IF   MF100-FTNJANUM  =  CONS-SAIKI-SYOGAKU
+      *         AND  MF100-NYUGAIKBN  =  "2"
+      *        ∫¥«Ïª‘§»…±≈Á¬º§«æÆ√Ê≥ÿ§Œ≥∞ÕË§œµ≠∫‹§∑§ §§
+               IF ((MF100-FTNJANUM(6:2)  =  CONS-HIMESHIMA-CITYNUM)
+                    OR (MF100-FTNJANUM(6:2)  =  CONS-SAIKI-CITYNUM))
+               AND (MF100-NYUGAIKBN  =  "2")
+               AND (MF100-MISYUGAKU  NOT =  "1")
+      *=== ∫¥«Ïª‘°¢…±≈Á¬º§Œµ≠∫‹æÚ∑Ô§Œ —ππ by Yoshikawa(2011/10/12) end
                  CONTINUE
                ELSE
       *=== ∫¥«Ïª‘§Œ…È√¥∂‚µ≠∫‹æÚ∑Ô —ππ by Yoshikawa(2011/06/21) end
