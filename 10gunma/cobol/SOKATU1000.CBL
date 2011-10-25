@@ -43,6 +43,7 @@
       * 01.00.12     吉川    2011/03/10    open-cobol1.0対応
       * 01.00.13     吉川    2011/04/08    東北地方太平洋沖地震対応
       * 01.00.14     吉川    2011/04/25    災害分は県外とする
+      * 01.00.15     吉川    2011/10/17    県内災害分は県内とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -883,7 +884,9 @@
              MOVE  "1"             TO  SKT1000TMP-GENMEN
       *=== 災害分は県外 by Yoshikawa(2011/04/25) start
       *       MOVE  1               TO  SKT1000TMP-PREFKBN
-             MOVE  2               TO  SKT1000TMP-PREFKBN
+      *=== 県内災害分は県内 by Yoshikawa(2011/10/17) start
+      *       MOVE  2               TO  SKT1000TMP-PREFKBN
+      *=== 県内災害分は県内 by Yoshikawa(2011/10/17) end
       *=== 災害分は県外 by Yoshikawa(2011/04/25) end
       *
       *      保険者不明の場合は住所から市町村を取得
