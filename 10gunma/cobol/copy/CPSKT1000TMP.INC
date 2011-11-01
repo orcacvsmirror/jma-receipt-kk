@@ -24,6 +24,7 @@
       *  01.00.01    等李    2009/08/25  SKT1000TMP-TYOKI纳裁
       *  01.00.02    等李    2011/03/10  KBNを眶猛から矢机に恃构
       *  01.00.03    等李    2011/04/08  澎颂孟数吕士臀箔孟刻滦炳
+      *  01.00.04    等李    2011/10/28  辉漠录髓で猖是されないように饯赖
       ************************************************************
        01  SKT1000TMP-REC.
            03  SKT1000TMP-KEY.
@@ -31,13 +32,18 @@
                05  SKT1000TMP-PREFKBN        PIC  9(01).
                05  SKT1000TMP-TYOKI          PIC  X(01).
                05  SKT1000TMP-KUMIAIKBN      PIC  X(01).
-               05  SKT1000TMP-HKNJANUM       PIC  X(08).
+      *=== KEY界恃构 by Yoshikawa(2011/10/28) start
+      *         05  SKT1000TMP-HKNJANUM       PIC  X(08).
+      *=== KEY界恃构 by Yoshikawa(2011/10/28) end
                05  SKT1000TMP-ZAITAKU        PIC  X(01).
       *=== 阂巢滦炳 by Yoshikawa(2011/04/08) start
                05  SKT1000TMP-GENMEN         PIC  X(01).
                05  SKT1000TMP-ADRS           PIC  X(40).
       *=== 阂巢滦炳 by Yoshikawa(2011/04/08) end
                05  SKT1000TMP-SYUBETU        PIC  9(01).
+      *=== KEY界恃构 by Yoshikawa(2011/10/28) start
+               05  SKT1000TMP-HKNJANUM       PIC  X(08).
+      *=== KEY界恃构 by Yoshikawa(2011/10/28) end
                05  SKT1000TMP-JYUNJO         PIC  9(02).
       *=== 眶猛から矢机に恃构 by Yoshikawa(2011/03/10) start
       *         05  SKT1000TMP-KBN            PIC  9(01).
