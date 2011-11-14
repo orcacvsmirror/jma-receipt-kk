@@ -42,6 +42,7 @@
       *  01.00.08    µÈÀî    10/10/01    ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *                                  ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
       *  01.00.09    µÈÀî    11/03/07    open-cobol1.0ÂÐ±þ
+      *  01.00.10    µÈÀî    11/11/10    ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú¤Ç¤­¤ë¤è¤¦¤Ë½¤Àµ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -219,7 +220,10 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    ¥Õ¥¡¥¤¥ëÌ¾¾ÎÍÑ¥¨¥ê¥¢
            03  FILE-NAME        PIC X(512).
-           03  WRK-SRYKANAME    PIC X(20) OCCURS 3.
+      *=== ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú by Yoshikawa(2011/11/10) start
+      *     03  WRK-SRYKANAME    PIC X(20) OCCURS 3.
+           03  WRK-SRYKANAME    PIC X(20) OCCURS 5.
+      *=== ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú by Yoshikawa(2011/11/10) end
       *
            03  WRK-HKNJANUM        PIC X(06).
       *
@@ -648,7 +652,10 @@
            OPEN    INPUT   SRYKA-FILE
       *
            PERFORM VARYING IDX1    FROM    1   BY  1
-                   UNTIL   IDX1    >       3
+      *=== ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú by Yoshikawa(2011/11/10) start
+      *             UNTIL   IDX1    >       3
+                   UNTIL   IDX1    >       5
+      *=== ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú by Yoshikawa(2011/11/10) end
                READ    SRYKA-FILE
                    AT  END
                        INITIALIZE  SRYKA-REC
@@ -1159,6 +1166,10 @@
            MOVE    WRK-SRYKANAME(1)        TO  SKT2000-SRYKA(1)
            MOVE    WRK-SRYKANAME(2)        TO  SKT2000-SRYKA(2)
            MOVE    WRK-SRYKANAME(3)        TO  SKT2000-SRYKA(3)
+      *=== ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú by Yoshikawa(2011/11/10) start
+           MOVE    WRK-SRYKANAME(4)        TO  SKT2000-SRYKA(4)
+           MOVE    WRK-SRYKANAME(5)        TO  SKT2000-SRYKA(5)
+      *=== ¿ÇÎÅ²Ê¤ò£µ¹Ô¤Þ¤Ç°õ»ú by Yoshikawa(2011/11/10) end
       *
       *    ¹ç·×¥Õ¥¡¥¤¥ë¤Î¾ì¹ç¡¢¹ç·×¤ò°õ»ú¤¹¤ë
            IF      SKT2000TMP-GOKEIKBN     =   "1"
