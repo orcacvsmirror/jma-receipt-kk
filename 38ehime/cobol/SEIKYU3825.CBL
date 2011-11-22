@@ -39,6 +39,7 @@
       *  01.00.03    吉川    11/08/04    公費対象点数のカンマは表示しない
       *  01.00.04    吉川    11/09/22    診療日数が０の場合、INIファイルから
       *                                  備考欄に理由を記載するように修正
+      *  01.00.05    吉川    11/11/18    備考欄に記載するコメントを増やす
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -134,6 +135,10 @@
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
            03  FLG-TENSU             PIC 9(01).
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+           03  FLG-COMMENT           PIC 9(01).
+           03  FLG-PROC              PIC 9(01).
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -288,6 +293,12 @@
            03  TBL-PARA-OCC    OCCURS  100.
                05  TBL-PARA-HKNJANUM PIC X(08).
                05  TBL-PARA-PTID     PIC 9(10).
+      *
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+      *    コメントテーブル領域
+       01  TBL-COMMENT-REC.
+           03  TBL-COMMENTCD            PIC X(09)  OCCURS  10.
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
       *
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) start
        01  KEY-AREA                        VALUE   LOW-VALUE.
@@ -670,19 +681,31 @@
       *
            OPEN  INPUT  COMMENT-FILE
       *
-           READ COMMENT-FILE
-             AT END
-               INITIALIZE        COMMENT-REC
-           END-READ
-      *
-           DISPLAY "備考欄コメント設定取得=" COMMENT-COMMENTCD
-           IF    COMMENT-COMMENTCD(1:2)  =  "※"
-             MOVE   SPACE              TO  WRK-COMMENTCD
-           ELSE
-             MOVE   COMMENT-COMMENTCD  TO  WRK-COMMENTCD
-           END-IF
-      *
-           DISPLAY "備考欄コメントコード =" WRK-COMMENTCD
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+      *     READ COMMENT-FILE
+      *       AT END
+      *         INITIALIZE        COMMENT-REC
+      *     END-READ
+      **
+      *     DISPLAY "備考欄コメント設定取得=" COMMENT-COMMENTCD
+      *     IF    COMMENT-COMMENTCD(1:2)  =  "※"
+      *       MOVE   SPACE              TO  WRK-COMMENTCD
+      *     ELSE
+      *       MOVE   COMMENT-COMMENTCD  TO  WRK-COMMENTCD
+      *     END-IF
+      **
+      *     DISPLAY "備考欄コメントコード =" WRK-COMMENTCD
+           PERFORM VARYING  IDX  FROM  1  BY  1
+                   UNTIL    IDX  >  10
+             READ COMMENT-FILE NEXT
+               AT END
+                 MOVE  1                 TO  FLG-COMMENT
+               NOT AT END
+                 MOVE  COMMENT-COMMENTCD TO  TBL-COMMENTCD(IDX)
+                 DISPLAY "読み込みレコード=" COMMENT-REC
+             END-READ
+           END-PERFORM
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
       *
            CLOSE COMMENT-FILE
       *
@@ -791,6 +814,9 @@
            PERFORM 920-SYUNOU-SET-SEC
       *
            MOVE  ZERO                          TO  FLG-ERR
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+                                                   FLG-PROC
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
       *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -901,6 +927,9 @@
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) start
       *      在総診・在医総か
              IF  RECE02-ZAITAKU  NOT =  1
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+               MOVE  1                   TO  FLG-PROC
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
                PERFORM  960-SRYACT-SET-SEC
              END-IF
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
@@ -908,6 +937,10 @@
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
       *      診療日数が０の場合、INIファイルのコードを元にコメント取得
              IF  MF100-JNISSU  =  ZERO
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+               MOVE  2                   TO  FLG-PROC
+               PERFORM  960-SRYACT-SET-SEC
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
                PERFORM  900-TENSU-READ-SEC
                DISPLAY "コメント名 = " TNS-NAME
                MOVE  TNS-NAME            TO  MF100-BIKO2
@@ -2374,7 +2407,15 @@
                PERFORM  965-SRYACT-READ-SEC
       *    在総診の患者取得
                PERFORM  UNTIL  FLG-SRYACT  =  1
-                 PERFORM  965-ZAISOU-CHK-SEC
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+      *           PERFORM  965-ZAISOU-CHK-SEC
+                 EVALUATE  FLG-PROC
+                   WHEN  1
+                     PERFORM  965-ZAISOU-CHK-SEC
+                   WHEN  2
+                     PERFORM  965-COMMENT-CHK-SEC
+                 END-EVALUATE
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
       *
                  MOVE  "tbl_sryact"      TO  MCP-TABLE
                  MOVE  "key4"            TO  MCP-PATHNAME
@@ -2443,6 +2484,33 @@
        965-ZAISOU-CHK-EXT.
            EXIT.
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
+      *****************************************************************
+      *    コメントチェック
+      *****************************************************************
+       965-COMMENT-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL   (IDX4  >     5) OR
+                            (SRY-SRYCD(IDX4)  =  SPACE)
+             IF  SRY-SRYCD(IDX4)  =  TBL-COMMENTCD(1)  OR
+                                     TBL-COMMENTCD(2)  OR
+                                     TBL-COMMENTCD(3)  OR
+                                     TBL-COMMENTCD(4)  OR
+                                     TBL-COMMENTCD(5)  OR
+                                     TBL-COMMENTCD(6)  OR
+                                     TBL-COMMENTCD(7)  OR
+                                     TBL-COMMENTCD(8)  OR
+                                     TBL-COMMENTCD(9)  OR
+                                     TBL-COMMENTCD(10)
+               MOVE  SRY-SRYCD(IDX4)     TO  WRK-COMMENTCD
+             END-IF
+           END-PERFORM
+      *
+           .
+       965-COMMENT-CHK-EXT.
+           EXIT.
+      *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
       *****************************************************************
       *    点数マスタ読み込み
