@@ -39,6 +39,8 @@
       *                                  印字対象外とするように修正
       *  01.00.06    吉川    10/08/12    保険番号241は上限額未満ではなく
       *                                  上限額以下で印字対象外とする
+      *  01.00.07    吉川    11/11/18    3割負担で250点の場合
+      *                                  印字されないの修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -618,6 +620,9 @@
            MOVE  RECE02-NAME          TO  MF100-NAME
            MOVE  RECE02-HKN           TO  MF100-HKN
            MOVE  RECE02-RJNHKN        TO  MF100-RJNHKN
+      *=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) start
+           MOVE  RECE02-KYURATE       TO  MF100-KYURATE
+      *=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) end
       *
            MOVE  RECE02-KOHFTNJANUM (IDZ)  TO  MF100-FTNJANUM
            MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF100-JKYSNUM
@@ -646,8 +651,13 @@
            IF  (MF100-KOHNUM  =  "241")  AND
       *=== 上限額以下で印字対象外 by Yoshikawa(2010/08/12) start
       *         (WRK-CHK-FTNMONEY  <  500)
-               (WRK-CHK-FTNMONEY  <  500  OR
-                MF100-TOTALTEN    <= 250)
+      *=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) start
+      *         (WRK-CHK-FTNMONEY  <  500  OR
+      *          MF100-TOTALTEN    <= 250)
+               ( (WRK-CHK-FTNMONEY  <  500)  OR
+                 (MF100-TOTALTEN <= 250  AND  MF100-KYURATE  =  20) OR
+                 (MF100-TOTALTEN <= 166  AND  MF100-KYURATE  =  30) )
+      *=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) end
       *=== 上限額以下で印字対象外 by Yoshikawa(2010/08/12) end
              DISPLAY "対象外患者番号=" RECE02-PTNUM
                      "点数="           MF100-TOTALTEN
