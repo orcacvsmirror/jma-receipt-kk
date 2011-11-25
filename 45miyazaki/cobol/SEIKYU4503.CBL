@@ -50,6 +50,8 @@
       *  01.00.13    吉川    10/02/23    特記事項を印字する
       *  01.00.14    吉川    10/06/15    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.15    吉川    11/11/21    保険＋全国公費＋地方公費の場合
+      *                                  保険と公費２の点数は同じにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1014,21 +1016,33 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
              PERFORM  930-PTKOHINF-SET-SEC
       *    公費点数=保険点数(地方公費点数)の場合は記載しない
-      *    異なる場合は保険点数から公費点数を差し引く
              IF  MF100-TOTALTEN  =  MF100-T-TOTALTEN
                MOVE     ZERO              TO  MF100-T-TOTALTEN
              ELSE
-               IF  MF100-TOTALTEN  >  MF100-T-TOTALTEN
-                 COMPUTE  MF100-TOTALTEN  =  MF100-TOTALTEN
-                                          -  MF100-T-TOTALTEN
-               END-IF
+      *=== 公費２が保険点数が同じでも印字 by Yoshikawa(2011/11/21) start
+      *         IF  MF100-TOTALTEN  >  MF100-T-TOTALTEN
+      *           COMPUTE  MF100-TOTALTEN  =  MF100-TOTALTEN
+      *                                    -  MF100-T-TOTALTEN
+      *         END-IF
+               CONTINUE
+      *=== 公費２が保険点数が同じでも印字 by Yoshikawa(2011/11/21) end
              END-IF
            END-IF
       *
+      *=== 公費２が保険点数が同じでも印字 by Yoshikawa(2011/11/21) start
+      *    総点数と公費２が同じでも、全国公費との分点がある場合は記載
+           IF  (RECE10-KOHNUM(1)  NOT =  SPACE)
+           AND (MF100-T-TOTALTEN  NOT =  ZERO)
+             CONTINUE
+           ELSE
+      *=== 公費２が保険点数が同じでも印字 by Yoshikawa(2011/11/21) end
       *    総点数と同じ場合は記載しない
-           IF  MF100-TOTALTEN  =  MF100-TOTALTEN-G
-             MOVE    ZERO               TO  MF100-TOTALTEN
+             IF  MF100-TOTALTEN  =  MF100-TOTALTEN-G
+               MOVE    ZERO               TO  MF100-TOTALTEN
+             END-IF
+      *=== 公費２が保険点数が同じでも印字 by Yoshikawa(2011/11/21) start
            END-IF
+      *=== 公費２が保険点数が同じでも印字 by Yoshikawa(2011/11/21) end
       *
       *    保険者番号チェック処理
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/16) start
