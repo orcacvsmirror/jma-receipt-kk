@@ -37,6 +37,7 @@
       *                                  印字対象外とする
       *  01.00.04    吉川    10/04/16    印字対象番号の追加（340）
       *  01.00.05    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.06    吉川    11/12/09    長期は上限額を超えた時に記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -206,6 +207,9 @@
                05  WRK-KOHFTNGK-G  PIC 9(08).
                05  WRK-KOHFTNGK    PIC 9(08).
                05  WRK-SYUCOMPFTN  PIC 9(08).
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
+               05  WRK-TYOKIFTNGK  PIC 9(08).
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
@@ -711,12 +715,20 @@
       *
       *    長期
            IF      FLG-TYOKI       =   1
-           AND     WRK-KOHFTNGK-G  >   10000
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
+      *     AND     WRK-KOHFTNGK-G  >   10000
+           AND     WRK-TYOKIFTNGK  >=   10000
+               MOVE    1           TO  MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                MOVE    10000       TO  WRK-KOHFTNGK-G
            END-IF
       *    長期上位
            IF      FLG-TYOKI       =   2
-           AND     WRK-KOHFTNGK-G  >   20000
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
+      *     AND     WRK-KOHFTNGK-G  >   20000
+           AND     WRK-TYOKIFTNGK  >=   20000
+               MOVE    1           TO  MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                MOVE    20000       TO  WRK-KOHFTNGK-G
            END-IF
       *
@@ -1913,6 +1925,9 @@
        800-SEIKYU-SEC  SECTION.
       *
            MOVE    ZERO    TO      WRK-KOHFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
+                                   WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -1963,13 +1978,19 @@
       *
                IF      SYU-KOH-HKNNUM(IDX)     =   "972"
                    MOVE    1       TO  FLG-TYOKI
-                                       MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
+      *                                 MF100-TYOKI
+                   MOVE    SYU-KOH-COMPFTN(IDX)  TO  WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                END-IF
       *
       *        長期上位
                IF      SYU-KOH-HKNNUM(IDX)     =   "974"
                    MOVE    2       TO  FLG-TYOKI
-                   MOVE    1       TO  MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
+      *             MOVE    1       TO  MF100-TYOKI
+                   MOVE    SYU-KOH-COMPFTN(IDX)  TO  WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                END-IF
            END-PERFORM
       *
