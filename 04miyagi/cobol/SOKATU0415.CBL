@@ -32,6 +32,8 @@
       *  01.00.03    吉川    2011/04/20  東北地方太平洋沖地震対応
       *  01.00.04    吉川    2011/08/10  公費再掲欄が印字されない場合が
       *                                  ある不具合を修正
+      *  01.00.05    吉川    2011/12/02  在宅を算定していない場合でも
+      *                                  マル在が印字される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1242,7 +1244,10 @@
            MOVE     SKT0415TMP-HKNJANAME   TO  SKT0415-HKNJANAME
       *=== 災害対応 by Yoshikawa(2011/04/20) end
       *    在総診・在医総
-           IF    WRK-INDEX  =  2
+      *=== マル在の印字不具合修正 by Yoshikawa(2011/12/02) start
+      *     IF    WRK-INDEX  =  2
+           IF    SKT0415TMP-ZAITAKU  =  "1"
+      *=== マル在の印字不具合修正 by Yoshikawa(2011/12/02) end
              MOVE    "在"              TO  SKT0415-ZAI1
              MOVE    "◯"              TO  SKT0415-ZAI2
            END-IF
