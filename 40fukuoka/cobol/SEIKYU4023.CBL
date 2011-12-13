@@ -22,7 +22,7 @@
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 福岡・特定疾病療養受領証保持者の
       *                      自己負担分相当額申請書
-      *                      (580,680)
+      *                      (580,680,250)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  09/02/12    吉川          新規作成
@@ -39,6 +39,7 @@
       *                                  請求金額合計は頁毎に計算する
       *  01.00.05    吉川    2011/05/17  月遅れ分は別帳票とする
       *                                  公費の助成がない場合は印字しない
+      *  01.00.06    吉川    2011/12/07  印字対象番号の追加（250）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -645,6 +646,9 @@
       *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) start
                OR      RECE02-KOHNUM (IDZ) =  "680"
       *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) end
+      *=== 印字対象番号の追加 by Yoshikawa(2011/12/07) start
+               OR      RECE02-KOHNUM (IDZ) =  "250"
+      *=== 印字対象番号の追加 by Yoshikawa(2011/12/07) end
                        PERFORM 20011-SYUKEI-SEC
                END-IF
            END-PERFORM
@@ -1539,10 +1543,16 @@
       *         OR      RECE02-KOHNUM (2)  =  "580"
       *         OR      RECE02-KOHNUM (3)  =  "580"
       *         OR      RECE02-KOHNUM (4)  =  "580"
-               IF      RECE02-KOHNUM (1)  =  "580" OR "680"
-               OR      RECE02-KOHNUM (2)  =  "580" OR "680"
-               OR      RECE02-KOHNUM (3)  =  "580" OR "680"
-               OR      RECE02-KOHNUM (4)  =  "580" OR "680"
+      *=== 印字対象番号の追加 by Yoshikawa(2011/12/07) start
+      *         IF      RECE02-KOHNUM (1)  =  "580" OR "680"
+      *         OR      RECE02-KOHNUM (2)  =  "580" OR "680"
+      *         OR      RECE02-KOHNUM (3)  =  "580" OR "680"
+      *         OR      RECE02-KOHNUM (4)  =  "580" OR "680"
+               IF      RECE02-KOHNUM (1)  =  "580" OR "680" OR "250"
+               OR      RECE02-KOHNUM (2)  =  "580" OR "680" OR "250"
+               OR      RECE02-KOHNUM (3)  =  "580" OR "680" OR "250"
+               OR      RECE02-KOHNUM (4)  =  "580" OR "680" OR "250"
+      *=== 印字対象番号の追加 by Yoshikawa(2011/12/07) end
       *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
@@ -1561,6 +1571,9 @@
       *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) start
                  OR  RECE02-KOHNUM (IDX1)  =  "680"
       *=== 印字対象番号の追加 by Yoshikawa(2009/08/20) end
+      *=== 印字対象番号の追加 by Yoshikawa(2011/12/07) start
+                 OR  RECE02-KOHNUM (IDX1)  =  "250"
+      *=== 印字対象番号の追加 by Yoshikawa(2011/12/07) end
                      MOVE  RECE02-KOHFTNJANUM (IDX1)(1:5)
                                      TO  WRK-FTNJANUM2
                      MOVE  4         TO  IDX1
