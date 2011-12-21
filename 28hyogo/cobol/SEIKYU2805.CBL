@@ -49,6 +49,8 @@
       *                                  ゼロで印字される不具合を修正
       *  01.00.09    吉川    11/10/19    対象公費番号をINIファイルから
       *                                  取得するように修正
+      *  01.00.10    吉川    11/12/19    生年月欄の印字対象にする公費番号を
+      *                                  INIファイルから取得するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -71,6 +73,14 @@
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
       *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *    印字対象公費番号ファイル
+           SELECT  SEINENGETU-FILE ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-SEINENGETU.
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
+      *
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
@@ -92,6 +102,14 @@
            03  TAISYO-DAT-KAIGYO   PIC X(01). 
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
       *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *    印字対象公費番号ファイル
+       FD  SEINENGETU-FILE.
+       01  SEINENGETU-REC.
+           03  SEINENGETU-DAT-KOHNUM   PIC X(03). 
+           03  SEINENGETU-DAT-KAIGYO   PIC X(01). 
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
+      *
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
@@ -102,6 +120,11 @@
       *    対象公費番号データ
            COPY  "TAISYO2805.INC".
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
+      *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *    対象公費番号データ
+           COPY  "SEINENGETU2805.INC".
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
       *
            COPY  "CPCOMMONDAT2.INC"
                    REPLACING  //RECE01//
@@ -127,6 +150,9 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) start
            03  STS-TAISYOKOHI PIC X(02).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+           03  STS-SEINENGETU PIC X(02).
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -147,6 +173,10 @@
            03  FLG-TAISYOKOHI PIC 9(01).
            03  FLG-TAISYO     PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+           03  FLG-SEINENGETU PIC 9(01).
+           03  FLG-TAISYO2    PIC 9(01).
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -266,6 +296,12 @@
        01  TBL-HIKAKU-KOHI.
            03  TBL-HKOHNUM              PIC X(03)  OCCURS  4.
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
+      *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI2.
+           03  TBL-HKOHNUM2             PIC X(03)  OCCURS  4.
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
@@ -663,6 +699,39 @@
       *
            CLOSE TAISYOKOHI-FILE
       *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *    生年月欄印字対象公費番号ファイル読み込み
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/SEINENGETU.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   SEINENGETU-REC
+      *
+           OPEN  INPUT  SEINENGETU-FILE
+      *
+           MOVE  ZERO  TO  IDX
+                           FLG-SEINENGETU
+      *
+           PERFORM UNTIL    FLG-SEINENGETU = 1
+             READ SEINENGETU-FILE NEXT
+               AT END
+                 MOVE  1                 TO  FLG-SEINENGETU
+               NOT AT END
+                 IF  SEINENGETU-DAT-KOHNUM(1:1) = "*" OR SPACE
+                   MOVE  1               TO  FLG-SEINENGETU
+                 ELSE
+                   ADD   1               TO  IDX
+                   MOVE  SEINENGETU-REC  TO  SEINENGETU-TBL(IDX)
+                 END-IF
+             END-READ
+           END-PERFORM
+      *
+           CLOSE SEINENGETU-FILE
+      *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
+      *
            .
        110-INI-FILE-EXT.
            EXIT.
@@ -903,6 +972,31 @@
            EXIT.
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/19) end
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *****************************************************************
+      *    生年月欄対象公費番号チェック処理
+      *****************************************************************
+       200113-TAISYOKOHI2-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO2
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       SEINENGETU-KOHNUM(IDXX)  =  SPACE
+             IF  SEINENGETU-KOHNUM(IDXX)  =  TBL-HKOHNUM2(1)
+                                         OR  TBL-HKOHNUM2(2)
+                                         OR  TBL-HKOHNUM2(3)
+                                         OR  TBL-HKOHNUM2(4)
+               MOVE     1                   TO  FLG-TAISYO2
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       200113-TAISYOKOHI2-CHK-EXT.
+           EXIT.
+      *
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
       *****************************************************************
       *    帳票ファイル出力処理
       *****************************************************************
@@ -1034,9 +1128,16 @@
       *       IF    MF100-KOHNUM    =   "180" OR "280" OR "380"
       **---(01.00.04) LINE ADD END   ------------------------------------
       ******
-             IF    MF100-KOHNUM    =   "180" OR "280" OR "380" OR "480"
-                                    OR "580" OR "680" OR "780"
-      *=== 印字対象番号の追加 by Yoshikawa(2009/07/09) end
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) start
+      *       IF    MF100-KOHNUM    =   "180" OR "280" OR "380" OR "480"
+      *                              OR "580" OR "680" OR "780"
+      **=== 印字対象番号の追加 by Yoshikawa(2009/07/09) end
+             INITIALIZE                           TBL-HIKAKU-KOHI2
+             MOVE    MF100-KOHNUM             TO  TBL-HKOHNUM2(1)
+      *      対象公費番号チェック処理
+             PERFORM  200113-TAISYOKOHI2-CHK-SEC
+             IF  FLG-TAISYO2  =  1
+      *=== 生年月欄に印字する公費はINIで by Yoshikawa(2011/12/19) end
                MOVE    MF100-BIRTHDAY        TO  WRK-SYMD
                PERFORM 31012-SEIWA-HEN-SEC
                INSPECT LNK-DAY2-EDTYMD1  REPLACING  ALL " "  BY  "0"
