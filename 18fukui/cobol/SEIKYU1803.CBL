@@ -40,6 +40,8 @@
       *  01.00.05       吉川    2009/03/18   退院していない入院患者が
       *                                      取得されない不具合を修正
       *  01.00.06       吉川    2011/02/17   open-cobol1.0対応
+      *  01.00.07       吉川    2011/12/16   同月内で受給者番号が変わっても
+      *                                      帳票に反映されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -713,6 +715,9 @@
       *
            MOVE  RECE02-KOHFTNJANUM (IDX)  TO  MF100-FTNJANUM
            MOVE  RECE02-KOHJKYSNUM  (IDX)  TO  MF100-KOHJKYSNUM
+      *=== 同月内の受給者番号変更対応 by Yoshikawa(2011/12/16) start
+           MOVE  RECE02-KOHJKYSNUM  (IDX)  TO  MF100-JKYSNUM
+      *=== 同月内の受給者番号変更対応 by Yoshikawa(2011/12/16) end
            MOVE  RECE02-KOHID       (IDX)  TO  MF100-KOHID
            MOVE  RECE02-KOHINF      (IDX)  TO  MF100-KOHINF
            COMPUTE IDY     =       IDX     +   1
@@ -722,7 +727,9 @@
            MOVE  RECE02-YKZFTNINF   (IDY)  TO  MF100-YKZFTNINF
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
       *
-           MOVE    4                           TO  IDX
+      *=== 同月内の受給者番号変更対応 by Yoshikawa(2011/12/16) start
+      *     MOVE    4                           TO  IDX
+      *=== 同月内の受給者番号変更対応 by Yoshikawa(2011/12/16) end
       *
       *=== 収納テーブル使用key変更 by Yoshikawa(2009/03/18) start
            IF      RECE02-NYUGAIKBN   =    "1"
