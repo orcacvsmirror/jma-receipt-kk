@@ -56,6 +56,8 @@
       *  01.00.15    等李    11/09/22  壳闻泣眶が０の眷圭、INIファイルから
       *                                洒雇腕に妄统を淡很するように饯赖
       *  01.00.16    等李    11/11/18  洒雇腕に淡很するコメントを笼やす
+      *  01.00.17    等李    11/12/21  链柜给锐と墓袋を驶脱した眷圭の
+      *                                给锐砷么驰の纷换を饯赖
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -198,6 +200,9 @@
            03  WRK-Z2-9              PIC Z9.
       *=== 壳闻泣眶が痰い眷圭は0を磅机 by Yoshikawa(2011/03/04) end
            03  WRK-Z7                PIC ZZZ,ZZZ.
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) start
+           03  WRK-Z7-9              PIC ZZZ,ZZ9.
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) end
            03  WRK-Z10               PIC ZZ,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
@@ -899,9 +904,19 @@
                      MOVE    10000       TO  WRK-JIKOFTNGK-G2
                  END-IF 
       *    墓袋を驶脱しており、懒滇垛驰が１它を臂えている眷圭は１它を肋年
-                 IF  WRK-SEIKYUGK-G2     >   10000
+                 IF  WRK-SEIKYUGK-G2     >  10000
                      MOVE    10000       TO  WRK-SEIKYUGK-G2
                  END-IF 
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) start
+                 IF  WRK-KOHFTNGK-G2     >=  10000
+                   IF  WRK-SEIKYUGK-G2     >=  10000
+                       MOVE    ZERO      TO  WRK-KOHFTNGK-G2
+                   ELSE
+                       COMPUTE  WRK-KOHFTNGK-G2  =
+                                10000  -  WRK-SEIKYUGK-G2
+                   END-IF
+                 END-IF
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) end
              END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
              IF  FLG-TYOKI       =   2
@@ -920,6 +935,16 @@
                  IF  WRK-SEIKYUGK-G2     >   20000
                      MOVE    20000       TO  WRK-SEIKYUGK-G2
                  END-IF 
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) start
+                 IF  WRK-KOHFTNGK-G2     >=  20000
+                   IF  WRK-SEIKYUGK-G2     >=  20000
+                       MOVE    ZERO      TO  WRK-KOHFTNGK-G2
+                   ELSE
+                       COMPUTE  WRK-KOHFTNGK-G2  =
+                                20000  -  WRK-SEIKYUGK-G2
+                   END-IF
+                 END-IF
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) end
              END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -1415,8 +1440,17 @@
       *
       *=== 给锐砷么驰を磅机 by Yoshikawa(2011/07/13) start
       *    给锐砷么驰
-           MOVE    MF100-KOHFTNGK          TO  WRK-Z7
-           MOVE    WRK-Z7                  TO  SC23-KOHFTN
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) start
+      *     MOVE    MF100-KOHFTNGK          TO  WRK-Z7
+      *     MOVE    WRK-Z7                  TO  SC23-KOHFTN
+           IF  MF100-JIKOFTNGK  NOT =  ZERO
+             MOVE    MF100-KOHFTNGK        TO  WRK-Z7-9
+             MOVE    WRK-Z7-9              TO  SC23-KOHFTN
+           ELSE
+             MOVE    MF100-KOHFTNGK        TO  WRK-Z7
+             MOVE    WRK-Z7                TO  SC23-KOHFTN
+           END-IF
+      *=== 给锐砷么驰の纷换恃构 by Yoshikawa(2011/12/21) end
       *=== 给锐砷么驰を磅机 by Yoshikawa(2011/07/13) end
       *
       *    懒滇垛驰

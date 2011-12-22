@@ -40,6 +40,8 @@
       *  01.00.04    µ»¿Ó    11/09/22    ø«Œ≈∆¸øÙ§¨£∞§ŒæÏπÁ°¢INI•’•°•§•Î§´§È
       *                                  »˜πÕÕÛ§ÀÕ˝Õ≥§Úµ≠∫‹§π§Î§Ë§¶§ÀΩ§¿µ
       *  01.00.05    µ»¿Ó    11/11/18    »˜πÕÕÛ§Àµ≠∫‹§π§Î•≥•·•Û•»§Ú¡˝§‰§π
+      *  01.00.06    µ»¿Ó    11/12/21    ¡¥πÒ∏¯»Ò§»ƒπ¥¸§Ú ªÕ—§∑§øæÏπÁ§Œ
+      *                                  ∏¯»Ò…È√¥≥€§Œ∑◊ªª§ÚΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -851,6 +853,16 @@
                  IF  WRK-SEIKYUGK-G2     >   10000
                      MOVE    10000       TO  WRK-SEIKYUGK-G2
                  END-IF 
+      *=== ∏¯»Ò…È√¥≥€§Œ∑◊ªª —ππ by Yoshikawa(2011/12/21) start
+                 IF  WRK-KOHFTNGK-G2     >=  10000
+                   IF  WRK-SEIKYUGK-G2     >=  10000
+                       MOVE    ZERO      TO  WRK-KOHFTNGK-G2
+                   ELSE
+                       COMPUTE  WRK-KOHFTNGK-G2  =
+                                10000  -  WRK-SEIKYUGK-G2
+                   END-IF
+                 END-IF
+      *=== ∏¯»Ò…È√¥≥€§Œ∑◊ªª —ππ by Yoshikawa(2011/12/21) end
              END-IF
              IF  FLG-TYOKI       =   2
                  MOVE    2       TO  MF100-TYOKI
@@ -868,6 +880,16 @@
                  IF  WRK-SEIKYUGK-G2     >   20000
                      MOVE    20000       TO  WRK-SEIKYUGK-G2
                  END-IF 
+      *=== ∏¯»Ò…È√¥≥€§Œ∑◊ªª —ππ by Yoshikawa(2011/12/21) start
+                 IF  WRK-KOHFTNGK-G2     >=  20000
+                   IF  WRK-SEIKYUGK-G2     >=  20000
+                       MOVE    ZERO      TO  WRK-KOHFTNGK-G2
+                   ELSE
+                       COMPUTE  WRK-KOHFTNGK-G2  =
+                                20000  -  WRK-SEIKYUGK-G2
+                   END-IF
+                 END-IF
+      *=== ∏¯»Ò…È√¥≥€§Œ∑◊ªª —ππ by Yoshikawa(2011/12/21) end
              END-IF
       *
       *    π‚≥€Œ≈Õ‹»Ò•¡•ß•√•Ø
