@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    田中      2008/04/26   新規作成(後期高齢者対応)
+      *  01.00.02    吉川      2012/01/10   点数のバイト数増加
       ************************************************************
        01  SKT4415.
            03  SKT4415-SRYYM           PIC X(16).
@@ -34,7 +35,10 @@
              05  SKT4415-NYUGAI-TBL    OCCURS  2 TIMES.
                07  SKT4415-KENSU       PIC X(5).
                07  SKT4415-NISSU       PIC X(5).
-               07  SKT4415-TENSU       PIC X(9).
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) start
+      *         07  SKT4415-TENSU       PIC X(9).
+               07  SKT4415-TENSU       PIC X(10).
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) end
                07  SKT4415-ITBFTN      PIC X(9).
              05  SKT4415-S-KENSU       PIC X(5).
              05  SKT4415-S-NISSU       PIC X(5).
@@ -46,7 +50,10 @@
              05  SKT4415-KNYUGAIKBN    OCCURS  2 TIMES.
                07  SKT4415-KKENSU      PIC X(5).
                07  SKT4415-KNISSU      PIC X(5).
-               07  SKT4415-KTENSU      PIC X(9).
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) start
+      *         07  SKT4415-KTENSU      PIC X(9).
+               07  SKT4415-KTENSU      PIC X(10).
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) end
                07  SKT4415-KITBFTN     PIC X(9).
              05  SKT4415-S-KKENSU      PIC X(5).
              05  SKT4415-S-KNISSU      PIC X(5).

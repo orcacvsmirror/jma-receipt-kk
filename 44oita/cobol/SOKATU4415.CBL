@@ -33,6 +33,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/06/01  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
+      *  01.00.04    吉川    2012/01/10  点数のバイト数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -150,6 +151,9 @@
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) start
+           03  WRK-Z10             PIC ZZ,ZZZ,ZZZ.
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) end
            03  WRK-KOHNUM9         PIC Z9.
            03  WRK-PAGE            PIC ZZZ9.
       *
@@ -1120,8 +1124,12 @@
                MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT4415-NISSU(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
-               MOVE  WRK-Z9              TO  SKT4415-TENSU(IDZ IDY)
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) start
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT4415-TENSU(IDZ IDY)
+               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z10
+               MOVE  WRK-Z10             TO  SKT4415-TENSU(IDZ IDY)
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) end
       *    療養の給付：一部負担金
                MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT4415-ITBFTN(IDZ IDY)
@@ -1173,8 +1181,12 @@
                  MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
                  MOVE  WRK-Z5                TO SKT4415-KNISSU(IDY IDZ)
       *    公費再掲欄：療養の給付：点数
-                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT4415-KTENSU(IDY IDZ)
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) start
+      *           MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+      *           MOVE  WRK-Z9                TO SKT4415-KTENSU(IDY IDZ)
+                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z10
+                 MOVE  WRK-Z10               TO SKT4415-KTENSU(IDY IDZ)
+      *=== 点数のバイト数増加 by Yoshikawa(2012/01/10) end
       *    公費再掲欄：療養の給付：一部負担金
                  MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
                  MOVE  WRK-Z9                TO SKT4415-KITBFTN(IDY IDZ)
