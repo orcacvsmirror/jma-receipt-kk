@@ -85,6 +85,8 @@
       *  01.00.32    吉川   11/04/13    特別療養費分は障・ひとり親は記載しない
       *  01.00.33    吉川   11/06/13    札幌市は区毎に集計するようになったので
       *                                 請求書の枚数欄のカウントを修正
+      *  01.00.34    吉川   12/01/12    70歳未満で長期を持っている場合
+      *                                 前期高齢者欄に集計される不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1406,15 +1408,24 @@
       *            WRK-SEIKYUGK-G        >  10000
       *       MOVE    10000             TO  WRK-TYOKI
       *                                     WRK-SEIKYUGK-G
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *     IF     FLG-TYOKI             =      1
+      *       IF   WRK-SEIKYUGK-G        >  10000
+      *         MOVE    10000           TO  WRK-TYOKI
+      *                                     WRK-SEIKYUGK-G
+      *       END-IF
+      **=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
+      *       MOVE    ZERO              TO  WRK-T-TOTALTEN
+      *                                     WRK-T-KESE
+      *     END-IF
            IF     FLG-TYOKI             =      1
-             IF   WRK-SEIKYUGK-G        >  10000
-               MOVE    10000           TO  WRK-TYOKI
-                                           WRK-SEIKYUGK-G
-             END-IF
-      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
-             MOVE    ZERO              TO  WRK-T-TOTALTEN
-                                           WRK-T-KESE
+           AND    WRK-SEIKYUGK-G       >=  10000
+             MOVE    10000           TO  WRK-TYOKI
+                                         WRK-SEIKYUGK-G
+             MOVE    ZERO            TO  WRK-T-TOTALTEN
+                                         WRK-T-KESE
            END-IF
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
       *
       *---(01.00.10) LINE ADD START ------------------------------------
       *    長期上位
@@ -1423,15 +1434,24 @@
       *            WRK-SEIKYUGK-G        >  20000
       *       MOVE    20000             TO  WRK-TYOKI
       *                                     WRK-SEIKYUGK-G
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *     IF     FLG-TYOKI             =      2
+      *       IF   WRK-SEIKYUGK-G        >  20000
+      *         MOVE    20000           TO  WRK-TYOKI
+      *                                     WRK-SEIKYUGK-G
+      *       END-IF
+      **=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
+      *       MOVE    ZERO              TO  WRK-T-TOTALTEN
+      *                                     WRK-T-KESE
+      *     END-IF
            IF     FLG-TYOKI             =      2
-             IF   WRK-SEIKYUGK-G        >  20000
-               MOVE    20000           TO  WRK-TYOKI
-                                           WRK-SEIKYUGK-G
-             END-IF
-      *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
-             MOVE    ZERO              TO  WRK-T-TOTALTEN
-                                           WRK-T-KESE
+           AND    WRK-SEIKYUGK-G       >=  20000
+             MOVE    20000           TO  WRK-TYOKI
+                                         WRK-SEIKYUGK-G
+             MOVE    ZERO            TO  WRK-T-TOTALTEN
+                                         WRK-T-KESE
            END-IF
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
       *    結核・精神編集
@@ -1446,6 +1466,25 @@
              MOVE  RECE02-FTNMONEY(1)  TO  WRK-SEIKYUGK-G
            END-IF
       *
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *    高額療養費チェック（入院のみ）
+           IF  RECE02-NYUGAIKBN  =  "1"
+             IF   RECE02-ZAITAKU  NOT =  SPACE
+             AND  RECE02-ZAITAKU  NOT =  "1"
+               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
+                 MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
+               ELSE
+                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
+                 COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
+                                          *  RECE02-KYURATE  /  10
+               END-IF
+             END-IF
+           END-IF
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
+      *
       *    件数加算場所を判定
            IF    WRK-T-TOTALTEN         =  ZERO  OR
                  RECE02-RJNHKNNUM   NOT =  SPACE OR
@@ -1459,54 +1498,71 @@
              OR  RECE02-HKNNUM          =  "039"
              OR  RECE02-HKNNUM          =  "040"
       *---(01.00.15) LINE ADD START ------------------------------------
-               MOVE     3              TO  IDX1
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *         MOVE     3              TO  IDX1
+               MOVE     4              TO  IDX1
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
              ELSE
-               MOVE     2              TO  IDX1
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *         MOVE     2              TO  IDX1
+               MOVE     3              TO  IDX1
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
              END-IF
              MOVE    ZERO              TO  WRK-T-TOTALTEN
            ELSE
-             MOVE       1              TO  IDX1
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *       MOVE       1              TO  IDX1
+             IF  WRK-T-KOUGAKU  NOT =  ZERO
+               MOVE     2              TO  IDX1
+             ELSE
+               MOVE     1              TO  IDX1
+             END-IF
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
              MOVE      WRK-T-KESE      TO  WRK-SEIKYUGK-G
            END-IF
       *
-      *---(01.00.12) LINE ADD START ------------------------------------
-      *    高額療養費チェック（入院のみ）
-           IF  RECE02-NYUGAIKBN  =  "1"
-             IF   RECE02-ZAITAKU  NOT =  SPACE
-             AND  RECE02-ZAITAKU  NOT =  "1"
-               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
-                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
-      *---(01.00.16) LINE ADD START ------------------------------------
-                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
-      *---(01.00.16) LINE ADD END   ------------------------------------
-      *---(01.00.14) LINE ADD START ------------------------------------
-      *           MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-TOTALTEN
-                 MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
-      *---(01.00.14) LINE ADD END   ------------------------------------
-               ELSE
-                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
-      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) start
-      *           COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      **---(01.00.12) LINE ADD START ------------------------------------
+      **    高額療養費チェック（入院のみ）
+      *     IF  RECE02-NYUGAIKBN  =  "1"
+      *       IF   RECE02-ZAITAKU  NOT =  SPACE
+      *       AND  RECE02-ZAITAKU  NOT =  "1"
+      *         IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+      *           MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+      **---(01.00.16) LINE ADD START ------------------------------------
+      *           MOVE  ZERO                 TO  WRK-T-TOTALTEN
+      **---(01.00.16) LINE ADD END   ------------------------------------
+      **---(01.00.14) LINE ADD START ------------------------------------
+      **           MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-TOTALTEN
+      *           MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
+      **---(01.00.14) LINE ADD END   ------------------------------------
+      *         ELSE
+      *           MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+      **=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) start
+      **           COMPUTE  WRK-T-TOTALTEN  =  RECE02-TOTALTEN (1)
+      **                                    *  RECE02-KYURATE  /  10
+      *           MOVE  ZERO                 TO  WRK-T-TOTALTEN
+      *           COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
       *                                    *  RECE02-KYURATE  /  10
-                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
-                 COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
-                                          *  RECE02-KYURATE  /  10
-      *=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) end
-               END-IF
-      *---(01.00.16) LINE ADD START ------------------------------------
-               MOVE  2  TO  IDX1
-      *---(01.00.16) LINE ADD END   ------------------------------------
-             END-IF
-           END-IF
-      *---(01.00.12) LINE ADD END   ------------------------------------
+      **=== 高額時、割欄への点数加算防止 by Yoshikawa(2008/11/18) end
+      *         END-IF
+      **---(01.00.16) LINE ADD START ------------------------------------
+      *         MOVE  2  TO  IDX1
+      **---(01.00.16) LINE ADD END   ------------------------------------
+      *       END-IF
+      *     END-IF
+      **---(01.00.12) LINE ADD END   ------------------------------------
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
       *    データ加算
       *    件数
       ****2006/05/18 @@@@ START     
       *---(01.00.14) LINE ADD START ------------------------------------
-           IF  IDX1  >  1
-               AND   WRK-T-KOUGAKU  =  ZERO
-               ADD   1  TO  IDX1
-           END-IF
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
+      *     IF  IDX1  >  1
+      *         AND   WRK-T-KOUGAKU  =  ZERO
+      *         ADD   1  TO  IDX1
+      *     END-IF
+      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
       *---(01.00.14) LINE ADD END   ------------------------------------
            IF  RECE02-HENREIYM = "000000"
              ADD     1               TO  SKT0100TMP-F-KENSU(1 1 IDX1)
