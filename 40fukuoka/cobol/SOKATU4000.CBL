@@ -67,6 +67,7 @@
       *                                  乳障親欄に集計されないように修正
       *  01.00.27    吉川    11/06/07    乳障親分が別に作成されないのを修正
       *  01.00.28    吉川    11/07/07    特療費分が余分に作成されるのを修正
+      *  01.00.29    吉川    12/01/13    特別療養費は専用の請求書に集計
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -542,7 +543,9 @@
                                                WRK-PARA-SYOKBN
       *---(01.00.11) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
-                                               WRK-PARA-TOKUBETU
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *                                         WRK-PARA-TOKUBETU
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
                                                RECEERR
       *---(01.00.09) LINE ADD END   ------------------------------------
@@ -550,6 +553,10 @@
       *---(01.00.09) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *    特別療養費は集計しない
+           MOVE    "1"             TO  WRK-PARA-TOKUBETU
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *
       *    ステップ管理開始処理
            MOVE    "STS"           TO  SJOBKANRI-MODE
@@ -849,7 +856,9 @@
       *    後期高齢
            PERFORM  900-SEIKYU-CLOSE-SEC
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
-           IF  WRK-PARA-TOKUBETU  =  "1"
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *     IF  WRK-PARA-TOKUBETU  =  "1"
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
              MOVE     ZERO    TO        FLG-END
              MOVE    "039"    TO        WRK-HKNNUM
@@ -858,7 +867,9 @@
                       UNTIL   FLG-END   =   1
              PERFORM  950-SEIKYU-CLOSE-SEC
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
-           ELSE
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *     ELSE
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
              MOVE     ZERO    TO        FLG-END
              MOVE    "040"    TO        WRK-HKNNUM
@@ -867,7 +878,9 @@
                       UNTIL   FLG-END   =   1
              PERFORM  950-SEIKYU-CLOSE-SEC
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
-           END-IF
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *     END-IF
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *---(01.00.12) LINE ADD START ------------------------------------
       *    返戻分

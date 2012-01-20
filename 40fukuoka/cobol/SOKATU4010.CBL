@@ -60,6 +60,7 @@
       *                                   印字されない場合があるのを修正
       *  01.00.22    吉川     11/12/07    まとめ公費を281で登録した場合
       *                                   まとめた公費が印字されないのを修正
+      *  01.00.23    吉川     12/01/13    特別療養費は専用の請求書に集計
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -436,7 +437,9 @@
                                                WRK-PARA-HKNJANUM
                                                WRK-PARA-SYOKBN
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
-                                               WRK-PARA-TOKUBETU
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *                                         WRK-PARA-TOKUBETU
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *---(01.00.08) LINE ADD START ------------------------------------
                                                RECEERR
@@ -445,6 +448,10 @@
       *---(01.00.08) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
       *---(01.00.08) LINE ADD END   ------------------------------------
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) start
+      *    特別療養費は集計しない
+           MOVE    "1"             TO  WRK-PARA-TOKUBETU
+      *=== 特療費は専用の請求書へ by Yoshikawa(2012/01/13) end
       *
       *    ステップ管理開始処理
            MOVE    "STS"           TO  SJOBKANRI-MODE
