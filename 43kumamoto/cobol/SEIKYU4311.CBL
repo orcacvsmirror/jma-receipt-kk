@@ -41,6 +41,7 @@
       *                                  上限額以下で印字対象外とする
       *  01.00.07    吉川    11/11/18    3割負担で250点の場合
       *                                  印字されないの修正
+      *  01.00.08    吉川    12/01/17    公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -645,46 +646,72 @@
                MOVE    "key25"                 TO  WRK-PATH
       *---(01.00.01) LINE ADD END   ------------------------------------
            END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) start
+           MOVE  1                 TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) end
            PERFORM  920-SYUNOU-SET-SEC
       *
-      *    ２４１使用者で一部負担金が５００円未満の場合は対象外とする
-           IF  (MF100-KOHNUM  =  "241")  AND
-      *=== 上限額以下で印字対象外 by Yoshikawa(2010/08/12) start
-      *         (WRK-CHK-FTNMONEY  <  500)
-      *=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) start
-      *         (WRK-CHK-FTNMONEY  <  500  OR
-      *          MF100-TOTALTEN    <= 250)
-               ( (WRK-CHK-FTNMONEY  <  500)  OR
-                 (MF100-TOTALTEN <= 250  AND  MF100-KYURATE  =  20) OR
-                 (MF100-TOTALTEN <= 166  AND  MF100-KYURATE  =  30) )
-      *=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) end
-      *=== 上限額以下で印字対象外 by Yoshikawa(2010/08/12) end
-             DISPLAY "対象外患者番号=" RECE02-PTNUM
-                     "点数="           MF100-TOTALTEN
-                     "一部負担金="     WRK-CHK-FTNMONEY
-           ELSE
-      *=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) start
+      **    ２４１使用者で一部負担金が５００円未満の場合は対象外とする
+      *     IF  (MF100-KOHNUM  =  "241")  AND
+      **=== 上限額以下で印字対象外 by Yoshikawa(2010/08/12) start
+      **         (WRK-CHK-FTNMONEY  <  500)
+      **=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) start
+      **         (WRK-CHK-FTNMONEY  <  500  OR
+      **          MF100-TOTALTEN    <= 250)
+      *         ( (WRK-CHK-FTNMONEY  <  500)  OR
+      *           (MF100-TOTALTEN <= 250  AND  MF100-KYURATE  =  20) OR
+      *           (MF100-TOTALTEN <= 166  AND  MF100-KYURATE  =  30) )
+      **=== 3割で250点の場合も印字する by Yoshikawa(2011/11/18) end
+      **=== 上限額以下で印字対象外 by Yoshikawa(2010/08/12) end
+      *       DISPLAY "対象外患者番号=" RECE02-PTNUM
+      *               "点数="           MF100-TOTALTEN
+      *               "一部負担金="     WRK-CHK-FTNMONEY
+      *     ELSE
+      **=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+      **    341使用者で一部負担金が21000円以上の場合は対象外とする
+      *       IF  (MF100-KOHNUM  =  "341")  AND
+      *           (WRK-CHK-FTNMONEY  >=  21000)
+      *         DISPLAY "対象外患者番号=" RECE02-PTNUM
+      *                 "公費番号="       MF100-KOHNUM
+      *                 "点数="           MF100-TOTALTEN
+      *                 "一部負担金="     WRK-CHK-FTNMONEY
+      *       ELSE
+      **=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
+      **    総合計加算
+      *         ADD    1                   TO    SUM-GKENSU
+      *         ADD    MF100-TOTALTEN      TO    SUM-GTENSU
+      *         ADD    MF100-KESETEN       TO    SUM-GKESETEN
+      *         WRITE  MF100-REC
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *         ADD    1                   TO    CNT-RECE02
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      **=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
+      *       END-IF
+      **=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
+      *     END-IF
       *    341使用者で一部負担金が21000円以上の場合は対象外とする
-             IF  (MF100-KOHNUM  =  "341")  AND
-                 (WRK-CHK-FTNMONEY  >=  21000)
-               DISPLAY "対象外患者番号=" RECE02-PTNUM
-                       "公費番号="       MF100-KOHNUM
-                       "点数="           MF100-TOTALTEN
-                       "一部負担金="     WRK-CHK-FTNMONEY
+           IF  MF100-KOHNUM  =  "341"
+             IF  WRK-CHK-FTNMONEY  >=  21000
+               MOVE    1                  TO    FLG-ERR
              ELSE
-      *=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
-      *    総合計加算
+               MOVE    ZERO               TO    FLG-ERR
+             END-IF
+           END-IF
+      *
+           IF      FLG-ERR            =     ZERO
                ADD    1                   TO    SUM-GKENSU
                ADD    MF100-TOTALTEN      TO    SUM-GTENSU
                ADD    MF100-KESETEN       TO    SUM-GKESETEN
-               WRITE  MF100-REC
-      *---(01.00.02) LINE ADD START ------------------------------------
+               WRITE    MF100-REC
                ADD    1                   TO    CNT-RECE02
-      *---(01.00.02) LINE ADD END   ------------------------------------
-      *=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) start
-             END-IF
-      *=== 341は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
+           ELSE
+               DISPLAY "助成対象外="        MF100-PTNUM
+                       "負担者番号="        MF100-KOHFTNJANUM
+                       "公費番号="          MF100-KOHNUM
+                       "一部負担金="        WRK-CHK-FTNMONEY
            END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) end
       *
            .
        20011-SYUKEI-EXT.
@@ -988,12 +1015,33 @@
              WHEN "010"
                MOVE    1                  TO  MF100-KESEKBN
                ADD     SYU-TOTAL-HKNTEN   TO  MF100-KESETEN
-               MOVE    4                  TO  IDX
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) start
+      *         MOVE    4                  TO  IDX
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) end
              WHEN "021"
                MOVE    2                  TO  MF100-KESEKBN
                ADD     SYU-TOTAL-HKNTEN   TO  MF100-KESETEN
-               MOVE    4                  TO  IDX
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) start
+      *         MOVE    4                  TO  IDX
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) end
              END-EVALUATE
+      *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+               IF     IDX                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2012/01/17) end
       *
            END-PERFORM
       *
