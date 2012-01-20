@@ -105,7 +105,7 @@
         </element>
         <element name="TENSU" occurs="1">
           <appinfo>
-            <embed object="string" length="9"/>
+            <embed object="string" length="10"/>
           </appinfo>
         </element>
         <element name="ITBFTN" occurs="1">
@@ -8806,7 +8806,7 @@
         <point val="9.725,10.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,10.3315;9.725,10.7315"/>
+        <rectangle val="7.301,10.3315;9.725,10.7315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[0].TENSU#</string>
@@ -8817,7 +8817,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9058,7 +9058,7 @@
         <point val="9.725,11.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,11.0315;9.725,11.4315"/>
+        <rectangle val="7.301,11.0315;9.725,11.4315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[1].TENSU#</string>
@@ -9069,7 +9069,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9184,7 +9184,7 @@
         <point val="9.725,12.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,11.7315;9.725,12.1315"/>
+        <rectangle val="7.301,11.7315;9.725,12.1315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[0].TENSU#</string>
@@ -9195,7 +9195,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9310,7 +9310,7 @@
         <point val="9.725,12.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,12.4315;9.725,12.8315"/>
+        <rectangle val="7.301,12.4315;9.725,12.8315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[1].TENSU#</string>
@@ -9321,7 +9321,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9436,7 +9436,7 @@
         <point val="9.725,13.5"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,13.1815;9.725,13.5815"/>
+        <rectangle val="7.301,13.1815;9.725,13.5815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].NYUGAI-TBL[0].TENSU#</string>
@@ -9447,7 +9447,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9562,7 +9562,7 @@
         <point val="9.725,14.2"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,13.8815;9.725,14.2815"/>
+        <rectangle val="7.301,13.8815;9.725,14.2815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[2].NYUGAI-TBL[1].TENSU#</string>
@@ -9573,7 +9573,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9688,7 +9688,7 @@
         <point val="9.725,14.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,14.5815;9.725,14.9815"/>
+        <rectangle val="7.301,14.5815;9.725,14.9815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].NYUGAI-TBL[0].TENSU#</string>
@@ -9699,7 +9699,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9814,7 +9814,7 @@
         <point val="9.725,15.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,15.3315;9.725,15.7315"/>
+        <rectangle val="7.301,15.3315;9.725,15.7315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[3].NYUGAI-TBL[1].TENSU#</string>
@@ -9825,7 +9825,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9940,7 +9940,7 @@
         <point val="9.725,16.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,16.0815;9.725,16.4815"/>
+        <rectangle val="7.301,16.0815;9.725,16.4815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].NYUGAI-TBL[0].TENSU#</string>
@@ -9951,7 +9951,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10066,7 +10066,7 @@
         <point val="9.725,17.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,16.7815;9.725,17.1815"/>
+        <rectangle val="7.301,16.7815;9.725,17.1815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[4].NYUGAI-TBL[1].TENSU#</string>
@@ -10077,7 +10077,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10192,7 +10192,7 @@
         <point val="9.725,17.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,17.4815;9.725,17.8815"/>
+        <rectangle val="7.301,17.4815;9.725,17.8815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[5].NYUGAI-TBL[0].TENSU#</string>
@@ -10203,7 +10203,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10318,7 +10318,7 @@
         <point val="9.725,18.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,18.2315;9.725,18.6315"/>
+        <rectangle val="7.301,18.2315;9.725,18.6315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[5].NYUGAI-TBL[1].TENSU#</string>
@@ -10329,7 +10329,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10444,7 +10444,7 @@
         <point val="9.725,19.3"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,18.9815;9.725,19.3815"/>
+        <rectangle val="7.301,18.9815;9.725,19.3815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[6].NYUGAI-TBL[0].TENSU#</string>
@@ -10455,7 +10455,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10570,7 +10570,7 @@
         <point val="9.725,19.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,19.6315;9.725,20.0315"/>
+        <rectangle val="7.301,19.6315;9.725,20.0315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[6].NYUGAI-TBL[1].TENSU#</string>
@@ -10581,7 +10581,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10696,7 +10696,7 @@
         <point val="9.725,20.7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,20.3815;9.725,20.7815"/>
+        <rectangle val="7.301,20.3815;9.725,20.7815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[7].NYUGAI-TBL[0].TENSU#</string>
@@ -10707,7 +10707,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10822,7 +10822,7 @@
         <point val="9.725,21.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,21.0815;9.725,21.4815"/>
+        <rectangle val="7.301,21.0815;9.725,21.4815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[7].NYUGAI-TBL[1].TENSU#</string>
@@ -10833,7 +10833,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10948,7 +10948,7 @@
         <point val="9.725,22.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,21.8315;9.725,22.2315"/>
+        <rectangle val="7.301,21.8315;9.725,22.2315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[8].NYUGAI-TBL[0].TENSU#</string>
@@ -10959,7 +10959,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11074,7 +11074,7 @@
         <point val="9.725,22.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,22.4815;9.725,22.8815"/>
+        <rectangle val="7.301,22.4815;9.725,22.8815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[8].NYUGAI-TBL[1].TENSU#</string>
@@ -11085,7 +11085,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11200,7 +11200,7 @@
         <point val="9.725,23.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,23.2815;9.725,23.6815"/>
+        <rectangle val="7.301,23.2815;9.725,23.6815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[9].NYUGAI-TBL[0].TENSU#</string>
@@ -11211,7 +11211,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11326,7 +11326,7 @@
         <point val="9.725,24.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,23.9315;9.725,24.3315"/>
+        <rectangle val="7.301,23.9315;9.725,24.3315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[9].NYUGAI-TBL[1].TENSU#</string>
@@ -11337,7 +11337,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11452,7 +11452,7 @@
         <point val="9.725,25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,24.6815;9.725,25.0815"/>
+        <rectangle val="7.301,24.6815;9.725,25.0815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[10].NYUGAI-TBL[0].TENSU#</string>
@@ -11463,7 +11463,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11578,7 +11578,7 @@
         <point val="9.725,25.7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,25.3815;9.725,25.7815"/>
+        <rectangle val="7.301,25.3815;9.725,25.7815"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[10].NYUGAI-TBL[1].TENSU#</string>
@@ -11589,7 +11589,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11704,7 +11704,7 @@
         <point val="9.725,26.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,26.1315;9.725,26.5315"/>
+        <rectangle val="7.301,26.1315;9.725,26.5315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[11].NYUGAI-TBL[0].TENSU#</string>
@@ -11715,7 +11715,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -13048,7 +13048,7 @@
         <point val="9.725,27.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,26.8315;9.725,27.2315"/>
+        <rectangle val="7.301,26.8315;9.725,27.2315"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[11].NYUGAI-TBL[1].TENSU#</string>
@@ -13059,7 +13059,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -13300,7 +13300,7 @@
         <point val="9.725,27.8382"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,27.5197;9.725,27.9197"/>
+        <rectangle val="7.301,27.5197;9.725,27.9197"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[12].NYUGAI-TBL[0].TENSU#</string>
@@ -13311,7 +13311,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -13342,7 +13342,7 @@
         <point val="9.725,28.4882"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.5434,28.1697;9.725,28.5697"/>
+        <rectangle val="7.301,28.1697;9.725,28.5697"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[12].NYUGAI-TBL[1].TENSU#</string>
@@ -13353,7 +13353,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999,999#</string>
+            <string>#99,999,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>

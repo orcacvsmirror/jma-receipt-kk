@@ -48,6 +48,7 @@
       *  01.00.13    吉川    10/06/01    オンライン返戻対応
       *  01.00.14    吉川    10/12/07    open-cobol1.0対応
       *  01.00.15    吉川    11/03/04    特別療養費国保対応
+      *  01.00.16    吉川    12/01/16    点数欄は一千万の位まで印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1714,8 +1715,12 @@
                    MOVE    WRK-Z5   TO  SKT4600-KENSU(IDX1 IDX2)
       *
       *            療養の給付：点数
-                   MOVE    SKT4600TMP-TENSU(IDX1 IDX2)     TO  WRK-Z9
-                   MOVE    WRK-Z9   TO  SKT4600-TENSU(IDX1 IDX2)
+      *=== 点数の桁数増加 by Yoshikawa(2012/01/16) start
+      *             MOVE    SKT4600TMP-TENSU(IDX1 IDX2)     TO  WRK-Z9
+      *             MOVE    WRK-Z9   TO  SKT4600-TENSU(IDX1 IDX2)
+                   MOVE    SKT4600TMP-TENSU(IDX1 IDX2)     TO  WRK-Z10
+                   MOVE    WRK-Z10  TO  SKT4600-TENSU(IDX1 IDX2)
+      *=== 点数の桁数増加 by Yoshikawa(2012/01/16) end
       *
       *---(01.00.02) LINE ADD START ------------------------------------
       *            療養の給付：薬剤一部負担金
@@ -1849,8 +1854,12 @@
                    MOVE  WRK-Z5   TO  SKT4601-Z-KENSU(IDX1)
       *
       *            療養の給付：点数
-                   MOVE  SKT4600TMP-Z-TENSU(IDX1)  TO  WRK-Z9
-                   MOVE  WRK-Z9   TO  SKT4601-Z-TENSU(IDX1)
+      *=== 点数の桁数増加 by Yoshikawa(2012/01/16) start
+      *             MOVE  SKT4600TMP-Z-TENSU(IDX1)  TO  WRK-Z9
+      *             MOVE  WRK-Z9   TO  SKT4601-Z-TENSU(IDX1)
+                   MOVE  SKT4600TMP-Z-TENSU(IDX1)  TO  WRK-Z10
+                   MOVE  WRK-Z10  TO  SKT4601-Z-TENSU(IDX1)
+      *=== 点数の桁数増加 by Yoshikawa(2012/01/16) end
       *
       *            療養の給付：一部負担金
                    MOVE  SKT4600TMP-Z-ITBFTN(IDX1)  TO  WRK-Z9

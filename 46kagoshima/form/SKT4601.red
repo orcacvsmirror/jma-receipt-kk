@@ -60,7 +60,7 @@
       </element>
       <element name="Z-TENSU" occurs="1">
         <appinfo>
-          <embed object="string" length="9"/>
+          <embed object="string" length="10"/>
         </appinfo>
       </element>
       <element name="Z-ITBFTN" occurs="1">
@@ -9976,1142 +9976,1140 @@
         </composite>
       </attribute>
     </object>
-    <group>
-      <object type="Embed - Text" version="0" id="O314">
-        <attribute name="obj_pos">
-          <point val="7.65,20.6"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,20.3213;7.65,20.6713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[0].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,20.6"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O315">
-        <attribute name="obj_pos">
-          <point val="11.5,20.6"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,20.3213;11.5,20.6713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[0].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,20.6"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O316">
-        <attribute name="obj_pos">
-          <point val="14.75,20.6"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,20.3213;14.75,20.6713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[0].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,20.6"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O317">
-        <attribute name="obj_pos">
-          <point val="7.66582,29.6733"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.60532,29.3946;7.66582,29.7446"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU-KOHI[2].ZK-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.66582,29.6733"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O318">
-        <attribute name="obj_pos">
-          <point val="7.66582,28.9733"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.60532,28.6946;7.66582,29.0446"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU-KOHI[1].ZK-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.66582,28.9733"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O319">
-        <attribute name="obj_pos">
-          <point val="7.67532,28.2272"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.61482,27.9485;7.67532,28.2985"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU-KOHI[0].ZK-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.67532,28.2272"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O320">
-        <attribute name="obj_pos">
-          <point val="11.4937,29.6279"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5848,29.3492;11.4937,29.6992"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU-KOHI[2].ZK-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.4937,29.6279"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O321">
-        <attribute name="obj_pos">
-          <point val="11.4937,28.9529"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5848,28.6742;11.4937,29.0242"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU-KOHI[1].ZK-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.4937,28.9529"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O322">
-        <attribute name="obj_pos">
-          <point val="11.5003,28.2022"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5914,27.9235;11.5003,28.2735"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU-KOHI[0].ZK-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5003,28.2022"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O323">
-        <attribute name="obj_pos">
-          <point val="7.65,21.4"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,21.1213;7.65,21.4713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[1].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,21.4"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O324">
-        <attribute name="obj_pos">
-          <point val="11.5,21.4"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,21.1213;11.5,21.4713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[1].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,21.4"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O325">
-        <attribute name="obj_pos">
-          <point val="14.75,21.4"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,21.1213;14.75,21.4713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[1].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,21.4"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O326">
-        <attribute name="obj_pos">
-          <point val="7.65,22.3"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,22.0213;7.65,22.3713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[2].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,22.3"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O327">
-        <attribute name="obj_pos">
-          <point val="11.5,22.3"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,22.0213;11.5,22.3713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[2].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,22.3"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O328">
-        <attribute name="obj_pos">
-          <point val="14.75,22.3"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,22.0213;14.75,22.3713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[2].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,22.3"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O329">
-        <attribute name="obj_pos">
-          <point val="7.65,23.3"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,23.0213;7.65,23.3713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[3].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,23.3"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O330">
-        <attribute name="obj_pos">
-          <point val="11.5,23.3"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,23.0213;11.5,23.3713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[3].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,23.3"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O331">
-        <attribute name="obj_pos">
-          <point val="14.75,23.3"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,23.0213;14.75,23.3713"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[3].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,23.3"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O332">
-        <attribute name="obj_pos">
-          <point val="7.65,24.25"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,23.9713;7.65,24.3213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[4].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,24.25"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O333">
-        <attribute name="obj_pos">
-          <point val="11.5,24.25"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,23.9713;11.5,24.3213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[4].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,24.25"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O334">
-        <attribute name="obj_pos">
-          <point val="14.75,24.25"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,23.9713;14.75,24.3213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[4].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,24.25"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O335">
-        <attribute name="obj_pos">
-          <point val="7.65,25.25"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,24.9713;7.65,25.3213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[5].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,25.25"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O336">
-        <attribute name="obj_pos">
-          <point val="11.5,25.25"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,24.9713;11.5,25.3213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[5].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,25.25"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O337">
-        <attribute name="obj_pos">
-          <point val="14.75,25.25"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,24.9713;14.75,25.3213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[5].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,25.25"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O338">
-        <attribute name="obj_pos">
-          <point val="7.65,26.15"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="6.5895,25.8713;7.65,26.2213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[6].Z-KENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="7.65,26.15"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O339">
-        <attribute name="obj_pos">
-          <point val="11.5,26.15"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="9.5911,25.8713;11.5,26.2213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[6].Z-TENSU#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="11.5,26.15"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-      <object type="Embed - Text" version="0" id="O340">
-        <attribute name="obj_pos">
-          <point val="14.75,26.15"/>
-        </attribute>
-        <attribute name="obj_bb">
-          <rectangle val="12.8411,25.8713;14.75,26.2213"/>
-        </attribute>
-        <attribute name="dnode_path">
-          <string>#ZAITAKU[6].Z-ITBFTN#</string>
-        </attribute>
-        <attribute name="embed_text_string">
-          <enum val="1"/>
-        </attribute>
-        <attribute name="text">
-          <composite type="text">
-            <attribute name="string">
-              <string>#9,999,999#</string>
-            </attribute>
-            <attribute name="font">
-              <font name="Courier"/>
-            </attribute>
-            <attribute name="height">
-              <real val="0.35"/>
-            </attribute>
-            <attribute name="pos">
-              <point val="14.75,26.15"/>
-            </attribute>
-            <attribute name="color">
-              <color val="#000000"/>
-            </attribute>
-            <attribute name="alignment">
-              <enum val="2"/>
-            </attribute>
-            <attribute name="single">
-              <real val="0.2121"/>
-            </attribute>
-            <attribute name="multi">
-              <real val="0.17675"/>
-            </attribute>
-          </composite>
-        </attribute>
-      </object>
-    </group>
+    <object type="Embed - Text" version="0" id="O314">
+      <attribute name="obj_pos">
+        <point val="7.65,20.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,20.3213;7.65,20.6713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[0].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,20.6"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O315">
+      <attribute name="obj_pos">
+        <point val="11.5,20.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,20.3213;11.5,20.6713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[0].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,20.6"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O316">
+      <attribute name="obj_pos">
+        <point val="14.75,20.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,20.3213;14.75,20.6713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[0].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,20.6"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O317">
+      <attribute name="obj_pos">
+        <point val="7.66582,29.6733"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.60532,29.3946;7.66582,29.7446"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU-KOHI[2].ZK-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.66582,29.6733"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O318">
+      <attribute name="obj_pos">
+        <point val="7.66582,28.9733"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.60532,28.6946;7.66582,29.0446"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU-KOHI[1].ZK-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.66582,28.9733"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O319">
+      <attribute name="obj_pos">
+        <point val="7.67532,28.2272"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.61482,27.9485;7.67532,28.2985"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU-KOHI[0].ZK-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.67532,28.2272"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O320">
+      <attribute name="obj_pos">
+        <point val="11.4937,29.6279"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.5848,29.3492;11.4937,29.6992"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU-KOHI[2].ZK-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.4937,29.6279"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O321">
+      <attribute name="obj_pos">
+        <point val="11.4937,28.9529"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.5848,28.6742;11.4937,29.0242"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU-KOHI[1].ZK-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.4937,28.9529"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O322">
+      <attribute name="obj_pos">
+        <point val="11.5003,28.2022"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.5914,27.9235;11.5003,28.2735"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU-KOHI[0].ZK-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5003,28.2022"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O323">
+      <attribute name="obj_pos">
+        <point val="7.65,21.4"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,21.1213;7.65,21.4713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[1].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,21.4"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O324">
+      <attribute name="obj_pos">
+        <point val="11.5,21.4"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,21.1213;11.5,21.4713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[1].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,21.4"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O325">
+      <attribute name="obj_pos">
+        <point val="14.75,21.4"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,21.1213;14.75,21.4713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[1].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,21.4"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O326">
+      <attribute name="obj_pos">
+        <point val="7.65,22.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,22.0213;7.65,22.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[2].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,22.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O327">
+      <attribute name="obj_pos">
+        <point val="11.5,22.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,22.0213;11.5,22.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[2].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,22.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O328">
+      <attribute name="obj_pos">
+        <point val="14.75,22.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,22.0213;14.75,22.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[2].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,22.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O329">
+      <attribute name="obj_pos">
+        <point val="7.65,23.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,23.0213;7.65,23.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[3].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,23.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O330">
+      <attribute name="obj_pos">
+        <point val="11.5,23.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,23.0213;11.5,23.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[3].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,23.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O331">
+      <attribute name="obj_pos">
+        <point val="14.75,23.3"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,23.0213;14.75,23.3713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[3].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,23.3"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O332">
+      <attribute name="obj_pos">
+        <point val="7.65,24.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,23.9713;7.65,24.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[4].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,24.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O333">
+      <attribute name="obj_pos">
+        <point val="11.5,24.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,23.9713;11.5,24.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[4].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,24.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O334">
+      <attribute name="obj_pos">
+        <point val="14.75,24.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,23.9713;14.75,24.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[4].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,24.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O335">
+      <attribute name="obj_pos">
+        <point val="7.65,25.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,24.9713;7.65,25.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[5].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,25.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O336">
+      <attribute name="obj_pos">
+        <point val="11.5,25.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,24.9713;11.5,25.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[5].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,25.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O337">
+      <attribute name="obj_pos">
+        <point val="14.75,25.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,24.9713;14.75,25.3213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[5].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,25.25"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O338">
+      <attribute name="obj_pos">
+        <point val="7.65,26.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.5895,25.8713;7.65,26.2213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[6].Z-KENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="7.65,26.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O339">
+      <attribute name="obj_pos">
+        <point val="11.5,26.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.379,25.8713;11.5,26.2213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[6].Z-TENSU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#99,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.5,26.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O340">
+      <attribute name="obj_pos">
+        <point val="14.75,26.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.8411,25.8713;14.75,26.2213"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#ZAITAKU[6].Z-ITBFTN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="14.75,26.15"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
     <object type="Embed - Text" version="0" id="O341">
       <attribute name="obj_pos">
         <point val="1.8,3.7"/>
