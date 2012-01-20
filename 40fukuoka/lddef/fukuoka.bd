@@ -17,6 +17,7 @@ bind	"SOKATU4000"	"OpenCOBOL";
 bind	"SOKATU4010"	"OpenCOBOL";
 bind	"SOKATU4020"	"OpenCOBOL";
 bind	"SOKATU4025"	"OpenCOBOL";
+bind	"SOKATU4030"	"OpenCOBOL";
 
 
 #include "orcadb.inc"
