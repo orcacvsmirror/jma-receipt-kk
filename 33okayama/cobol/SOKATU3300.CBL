@@ -39,6 +39,8 @@
       *  01.00.06    吉川    10/12/09    特別療養費国保対応
       *                                  open-cobol1.0対応
       *  01.00.07    吉川    11/04/19    東北地方太平洋沖地震対応
+      *  01.00.08    吉川    12/01/18    レセ電の場合、災害分は通常分に
+      *                                  含めて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -122,6 +124,10 @@
       *=== 災害対応 by Yoshikawa(2011/04/19) start
            03  FLG-SAIGAI          PIC 9(01).
       *=== 災害対応 by Yoshikawa(2011/04/19) end
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+           03  FLG-RECEDEN         PIC 9(01).
+           03  FLG-KOURECEDEN      PIC 9(01).
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -250,6 +256,14 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+      *    レセプト・総括印刷情報
+           COPY    "CPSK2005.INC".
+      *
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           COPY    "CPSK200501.INC".
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
       *
       *    請求管理情報
            COPY    "CPRCF010.INC".
@@ -446,6 +460,46 @@
                     MOVE      1           TO    FLG-END
            END-IF 
       *
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+      *    レセプト・総括印刷情報 レセ電か
+           INITIALIZE                      SYS-2005-REC
+           MOVE    "2005"              TO  SYS-2005-KANRICD
+           MOVE    "*"                 TO  SYS-2005-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2005-STYUKYMD(1:6)
+                                           SYS-2005-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2005-STYUKYMD(7:2)
+                                           SYS-2005-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2005-HOSPNUM
+           MOVE    SYS-2005-REC        TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2005-REC
+               MOVE    SYS-2005-KKHRECEKBN TO  FLG-RECEDEN
+           ELSE
+               MOVE    ZERO                TO  FLG-RECEDEN
+           END-IF 
+      *
+      *    医療機関情報−レセプト・総括印刷情報（後期高齢）
+           INITIALIZE                     SYS-200501-REC
+           MOVE     "2005"        TO      SYS-200501-KANRICD
+           MOVE     "01"          TO      SYS-200501-KBNCD
+           MOVE     LNK-PRTKANRI-SRYYM(1:6)
+                                  TO      SYS-200501-STYUKYMD(1:6)
+                                          SYS-200501-EDYUKYMD(1:6)
+           MOVE     "01"          TO      SYS-200501-STYUKYMD(7:2)
+                                          SYS-200501-EDYUKYMD(7:2)
+           MOVE     SPA-HOSPNUM   TO      SYS-200501-HOSPNUM
+           MOVE     SYS-200501-REC  TO      MCPDATA-REC
+           PERFORM  900-SYSKANRI-INV-SEC
+           IF       FLG-SYSKANRI       =  ZERO
+               MOVE    MCPDATA-REC   TO    SYS-200501-REC
+               MOVE    SYS-200501-KOUIKIRECEKBN TO  FLG-KOURECEDEN
+           ELSE
+               MOVE    ZERO                     TO  FLG-KOURECEDEN
+           END-IF 
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
+      *
       *---(01.00.01) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
@@ -568,29 +622,44 @@
       *
       *=== 災害対応 by Yoshikawa(2011/04/19) start
       *    災害分集計
-           IF  WRK-PARA-SYOKBN  =  "2"  AND  WRK-PARA-TOKUBETU  =  "1"
-             MOVE     1       TO        FLG-SAIGAI
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+           IF  FLG-RECEDEN  =  ZERO
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
+             IF  WRK-PARA-SYOKBN  =  "2"  AND  WRK-PARA-TOKUBETU  =  "1"
+               MOVE     1       TO        FLG-SAIGAI
       *
-      *      国保
-             MOVE     ZERO    TO        FLG-END
-             MOVE     ZERO    TO        FLG-KOUKI
-             MOVE    "key38"  TO        WRK-PATH
-             PERFORM  900-SEIKYU-SELECT-SEC
-             PERFORM  2001-KOKUHO-SYUKEI-SEC
-                      UNTIL   FLG-END   =   1
-             PERFORM  900-SEIKYU-CLOSE-SEC
-      *
-      *      後期高齢
-             MOVE     ZERO    TO        FLG-END
-             MOVE     1       TO        FLG-KOUKI
-             MOVE    "039"    TO        WRK-HKNNUM
-             MOVE    "key66"  TO        WRK-PATH2
-             PERFORM  950-SEIKYU-SELECT-SEC
-             PERFORM  2001-KOKUHO-SYUKEI-SEC
-                      UNTIL   FLG-END   =   1
-             PERFORM  950-SEIKYU-CLOSE-SEC
+      *        国保
+               MOVE     ZERO    TO        FLG-END
+               MOVE     ZERO    TO        FLG-KOUKI
+               MOVE    "key38"  TO        WRK-PATH
+               PERFORM  900-SEIKYU-SELECT-SEC
+               PERFORM  2001-KOKUHO-SYUKEI-SEC
+                        UNTIL   FLG-END   =   1
+               PERFORM  900-SEIKYU-CLOSE-SEC
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+             END-IF
            END-IF
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
+      *
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+           IF  FLG-KOURECEDEN  =  ZERO
+             IF  WRK-PARA-SYOKBN  =  "2"  AND  WRK-PARA-TOKUBETU  =  "1"
+               MOVE     1       TO        FLG-SAIGAI
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
+      *        後期高齢
+               MOVE     ZERO    TO        FLG-END
+               MOVE     1       TO        FLG-KOUKI
+               MOVE    "039"    TO        WRK-HKNNUM
+               MOVE    "key66"  TO        WRK-PATH2
+               PERFORM  950-SEIKYU-SELECT-SEC
+               PERFORM  2001-KOKUHO-SYUKEI-SEC
+                        UNTIL   FLG-END   =   1
+               PERFORM  950-SEIKYU-CLOSE-SEC
+             END-IF
       *=== 災害対応 by Yoshikawa(2011/04/19) end
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+           END-IF
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
       *
            IF      FLG-UPD   =       1
                PERFORM 2002-PRINT-SEC
@@ -1141,16 +1210,22 @@
       *
       *=== 災害対応 by Yoshikawa(2011/04/19) start
       *             返戻ではない場合、災害分は読み飛ばす
-                    IF  WRK-PARA-SYOKBN  =  "1"
-                      IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-                        GO  TO  900-SEIKYU-READ-SEC
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+                    IF  FLG-RECEDEN  =  ZERO
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
+                      IF  WRK-PARA-SYOKBN  =  "1"
+                        IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+                          GO  TO  900-SEIKYU-READ-SEC
+                        END-IF
+                      ELSE
+                        IF  FLG-SAIGAI  =  1
+                        AND  RECE10-ETC-YKZFTN (1)  =  ZERO
+                          GO  TO  900-SEIKYU-READ-SEC
+                        END-IF
                       END-IF
-                    ELSE
-                      IF  FLG-SAIGAI  =  1
-                      AND  RECE10-ETC-YKZFTN (1)  =  ZERO
-                        GO  TO  900-SEIKYU-READ-SEC
-                      END-IF
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
                     END-IF
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
       *=== 災害対応 by Yoshikawa(2011/04/19) end
       *
       *        テスト患者のときは読み飛ばす
@@ -1243,16 +1318,22 @@
       *
       *=== 災害対応 by Yoshikawa(2011/04/19) start
       *        返戻ではない場合、災害分は読み飛ばす
-               IF  WRK-PARA-SYOKBN  =  "1"
-                 IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-                   GO  TO  950-SEIKYU-READ-SEC
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
+               IF  FLG-KOURECEDEN  =  ZERO
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
+                 IF  WRK-PARA-SYOKBN  =  "1"
+                   IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+                     GO  TO  950-SEIKYU-READ-SEC
+                   END-IF
+                 ELSE
+                   IF  FLG-SAIGAI  =  1
+                   AND  RECE10-ETC-YKZFTN (1)  =  ZERO
+                     GO  TO  950-SEIKYU-READ-SEC
+                   END-IF
                  END-IF
-               ELSE
-                 IF  FLG-SAIGAI  =  1
-                 AND  RECE10-ETC-YKZFTN (1)  =  ZERO
-                   GO  TO  950-SEIKYU-READ-SEC
-                 END-IF
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) start
                END-IF
+      *=== レセ電の場合災害分は通常分へ by Yoshikawa(2012/01/18) end
       *=== 災害対応 by Yoshikawa(2011/04/19) end
       *
       *        テスト患者のときは読み飛ばす
