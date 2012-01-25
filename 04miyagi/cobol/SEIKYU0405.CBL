@@ -42,6 +42,7 @@
       *                                  ¿©»öÎÅÍÜÈñ¤òÈ¾³Û½õÀ®¤È¤¹¤ë
       *  01.00.06    µÈÀî    10/12/13    ÂÐ¾ÝÊÝ¸±ÈÖ¹æ¤ÎÄÉ²Ã¡Ê583,683,783¡Ë
       *                                  open-cobol1.0ÂÐ±þ
+      *  01.00.07    µÈÀî    12/01/24    ÀçÂæ»Ô¤Î»ÔÄ®Â¼Ì¾¤ò°õ»ú¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -240,6 +241,16 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== ÀçÂæ»Ô¤Î»ÔÄ®Â¼Ì¾¤ò°õ»ú¤¹¤ë by Yoshikawa(2012/01/24) start
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-AOBA         PIC X(08)   VALUE   "83040956".
+           03  WRK-CONS-MIYAGINO     PIC X(08)   VALUE   "83040964".
+           03  WRK-CONS-WAKABAYASHI  PIC X(08)   VALUE   "83040972".
+           03  WRK-CONS-TAIHAKU      PIC X(08)   VALUE   "83040980".
+           03  WRK-CONS-IZUMI        PIC X(08)   VALUE   "83040998".
+      *=== ÀçÂæ»Ô¤Î»ÔÄ®Â¼Ì¾¤ò°õ»ú¤¹¤ë by Yoshikawa(2012/01/24) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -1032,6 +1043,21 @@
       *
       *    »ÔÄ®Â¼Ì¾
            MOVE     MF100-FTNJANUM(3:5)     TO  WRK-HKNJANUM(1:5)
+      *=== ÀçÂæ»Ô¤Î»ÔÄ®Â¼Ì¾¤ò°õ»ú¤¹¤ë by Yoshikawa(2012/01/24) start
+      *    ÀçÂæ»Ô¤ÎÉéÃ´¼ÔÈÖ¹æÊÑ´¹
+           EVALUATE  MF100-FTNJANUM
+             WHEN  WRK-CONS-AOBA
+               MOVE    "04401"              TO  WRK-HKNJANUM(1:5)
+             WHEN  WRK-CONS-MIYAGINO
+               MOVE    "04402"              TO  WRK-HKNJANUM(1:5)
+             WHEN  WRK-CONS-WAKABAYASHI
+               MOVE    "04403"              TO  WRK-HKNJANUM(1:5)
+             WHEN  WRK-CONS-TAIHAKU
+               MOVE    "04404"              TO  WRK-HKNJANUM(1:5)
+             WHEN  WRK-CONS-IZUMI
+               MOVE    "04405"              TO  WRK-HKNJANUM(1:5)
+           END-EVALUATE
+      *=== ÀçÂæ»Ô¤Î»ÔÄ®Â¼Ì¾¤ò°õ»ú¤¹¤ë by Yoshikawa(2012/01/24) end
            PERFORM  920-HKNJAINF-SET-SEC
            IF       HKNJA-HKNJANAME       =   SPACE
              MOVE   "Ä¹ÅÂ"                  TO  SC05-CITYNAME(13:10)
