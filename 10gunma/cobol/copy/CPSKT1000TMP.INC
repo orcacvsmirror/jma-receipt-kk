@@ -26,23 +26,36 @@
       *  01.00.03    吉川    2011/04/08  東北地方太平洋沖地震対応
       *  01.00.04    吉川    2011/10/28  市町村毎で改頁されないように修正
       *  01.00.05    吉川    2011/11/04  印字順の修正
+      *  01.00.06    吉川    2012/01/20  災害がある場合、県外の国保と
+      *                                  組合国保が別帳票になるのを修正
       ************************************************************
        01  SKT1000TMP-REC.
            03  SKT1000TMP-KEY.
                05  SKT1000TMP-SRYYM          PIC  X(06).
                05  SKT1000TMP-PREFKBN        PIC  9(01).
                05  SKT1000TMP-TYOKI          PIC  X(01).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) start
+               05  SKT1000TMP-GENMEN         PIC  X(01).
+               05  SKT1000TMP-ADRS           PIC  X(40).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) end
                05  SKT1000TMP-KUMIAIKBN      PIC  X(01).
       *=== KEY順変更 by Yoshikawa(2011/10/28) start
       *         05  SKT1000TMP-HKNJANUM       PIC  X(08).
       *=== KEY順変更 by Yoshikawa(2011/10/28) end
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) start
+               05  SKT1000TMP-HKNJANUM       PIC  X(08).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) end
                05  SKT1000TMP-ZAITAKU        PIC  X(01).
       *=== 災害対応 by Yoshikawa(2011/04/08) start
-               05  SKT1000TMP-GENMEN         PIC  X(01).
-               05  SKT1000TMP-ADRS           PIC  X(40).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) start
+      *         05  SKT1000TMP-GENMEN         PIC  X(01).
+      *         05  SKT1000TMP-ADRS           PIC  X(40).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) end
       *=== 災害対応 by Yoshikawa(2011/04/08) end
       *=== KEY順変更 by Yoshikawa(2011/11/04) start
-               05  SKT1000TMP-HKNJANUM       PIC  X(08).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) start
+      *         05  SKT1000TMP-HKNJANUM       PIC  X(08).
+      *=== 国保と国組で分かれる不具合修正 by Yoshikawa(2012/01/20) end
       *=== KEY順変更 by Yoshikawa(2011/11/04) end
                05  SKT1000TMP-SYUBETU        PIC  9(01).
       *=== KEY順変更 by Yoshikawa(2011/10/28) start
