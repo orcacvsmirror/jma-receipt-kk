@@ -34,6 +34,9 @@
       *                                  ある不具合を修正
       *  01.00.05    吉川    2011/12/02  在宅を算定していない場合でも
       *                                  マル在が印字される不具合を修正
+      *  01.00.06    吉川    2012/02/13  シス管「2010」の公費再掲欄への
+      *                                  地方公費記載設定対応
+      *                                  TMPファイルCLOSE漏れ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -130,6 +133,9 @@
            03  FLG-PTINF           PIC 9(01).
       *     
            03  FLG-PRTKBN          PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+           03  FLG-2010            PIC 9(01).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -224,6 +230,14 @@
                    07  WRK-2007-KOHNUM
                                    PIC X(03)   OCCURS  10.
            03  WRK-2007-MAX        PIC 9(03).
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+       01  WRK-2010-AREA.
+           03  WRK-2010-TBL          OCCURS  100.
+               05  WRK-2010-KOHNUM   PIC X(03).
+           03  WRK-2010-MAX          PIC 9(03).
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-PAGE            PIC 9(03).
@@ -313,6 +327,11 @@
       *
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+      *    地方公費保険番号付加情報
+           COPY    "CPSK2010.INC".
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
       *
            COPY    "CPRCF010.INC".
       *
@@ -532,6 +551,53 @@
            DISPLAY "SYS-200501-KOUIKIPRTKBN=" SYS-200501-KOUIKIPRTKBN
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/02/18) end
+      *
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+      *    請求書公費再掲欄記載情報
+           INITIALIZE                      WRK-2010-AREA
+      *
+           INITIALIZE                      SYS-2010-REC
+           MOVE    "2010"              TO  SYS-2010-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2010-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-2010-STYUKYMD (7:2)
+           MOVE    SYS-2010-STYUKYMD   TO  SYS-2010-EDYUKYMD
+           MOVE    WRK-PARA-HOSPNUM    TO  SYS-2010-HOSPNUM
+           MOVE    SYS-2010-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           MOVE    ZERO            TO  IDX
+           PERFORM         UNTIL   FLG-SYSKANRI   =   1
+                           OR      IDX            >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2010-REC
+               IF    ( SYS-2010-SAIKEIKBN  =   "1"         )
+               AND   ( SYS-2010-SAIKEI-TAIKBN
+                                           =   "0" OR  "1" )
+                   ADD     1                   TO  IDX
+                   MOVE    SYS-2010-KBNCD(1:3) TO WRK-2010-KOHNUM (IDX)
+               END-IF
+      *
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           MOVE    IDX                 TO  WRK-2010-MAX
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
       *
       *=== 災害対応 by Yoshikawa(2011/04/20) start
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
@@ -1069,14 +1135,26 @@
                    UNTIL   IDZ     >       4
                    OR  RECE10-KOHNUM (IDZ) =   SPACE
       *
-      *       IF    RECE10-KOHNUM(IDZ)      =  "141" OR "241" OR
-      *                                        "183" OR "383" OR
-      *                                        "483" OR
-      *             RECE10-KOHNUM(IDZ)(1:1) =  "0"
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+             MOVE    ZERO                  TO  FLG-2010
       *
+      *      請求書公費再掲欄記載情報があるとき
+             IF  WRK-2010-MAX  >  ZERO
+               PERFORM VARYING IDZ1    FROM    1   BY  1
+                       UNTIL   IDZ1    >       WRK-2010-MAX
+                 IF  RECE10-KOHNUM(IDZ)   =  WRK-2010-KOHNUM(IDZ1)
+                   MOVE    1               TO  FLG-2010
+                   MOVE    WRK-2010-MAX    TO  IDZ1
+                 END-IF
+               END-PERFORM
+             END-IF
+      *
+             IF  FLG-2010  =  ZERO
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
                PERFORM 200121-KOH-SYUKEI-01-SEC
-      *
-      *       END-IF
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+             END-IF
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
       *
            END-PERFORM
            .
@@ -1202,6 +1280,10 @@
       *
            END-PERFORM
       *=== 災害対応 by Yoshikawa(2011/04/20) end
+      *
+      *=== TMPファイルCLOSE漏れ by Yoshikawa(2012/02/13) start
+           CLOSE    SKT0415TMP-FILE
+      *=== TMPファイルCLOSE漏れ by Yoshikawa(2012/02/13) end
       *
            .
        2002-PRINT-EXT.
@@ -1964,8 +2046,10 @@
       *****************************************************************
        900-SYSKANRI-READ-N-SEC         SECTION.
       *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) end
            PERFORM 900-DBFETCH-SEC
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-SYSKANRI
