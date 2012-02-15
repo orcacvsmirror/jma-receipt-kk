@@ -37,6 +37,8 @@
       *  01.00.05    吉川    08/09/11    SPA-AREA初期化
       *  01.00.06    吉川    09/09/07    診療科名を印字する
       *  01.00.07    吉川    11/02/16    公費請求テーブルclose処理位置変更
+      *  01.00.08    吉川    12/02/13    142以外でも公費の助成が無い場合は
+      *                                  印字対象外とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -726,24 +728,32 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    公費の助成対象か判定
-           MOVE     ZERO                       TO  FLG-ERR
-           IF  RECE02-KOHNUM(IDZ)  =  "142"
-             MOVE    ZERO                      TO  CNT-SYOSIN
-             MOVE    "142"                     TO  WRK-KOHNUM
-             MOVE    MF100-KOHID               TO  WRK-KOHID
-             MOVE      1                       TO  FLG-ERR
-             IF      RECE02-NYUGAIKBN    =   "1"
+      *=== 142以外も公費の助成判定をする by Yoshikawa(2012/02/13) start
+      *     MOVE     ZERO                       TO  FLG-ERR
+      *     IF  RECE02-KOHNUM(IDZ)  =  "142"
+      *=== 142以外も公費の助成判定をする by Yoshikawa(2012/02/13) end
+           MOVE    ZERO                      TO  CNT-SYOSIN
+      *=== 142以外も公費の助成判定をする by Yoshikawa(2012/02/13) start
+      *       MOVE    "142"                     TO  WRK-KOHNUM
+           MOVE    MF100-KOHNUM              TO  WRK-KOHNUM
+      *=== 142以外も公費の助成判定をする by Yoshikawa(2012/02/13) end
+           MOVE    MF100-KOHID               TO  WRK-KOHID
+           MOVE      1                       TO  FLG-ERR
+           IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.04) LINE ADD START ------------------------------------
       *           MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
-                 MOVE    "key33"             TO  WRK-PATH
+               MOVE    "key33"             TO  WRK-PATH
       *---(01.00.04) LINE ADD END   ------------------------------------
-             ELSE
+           ELSE
       *---(01.00.04) LINE ADD START ------------------------------------
       *           MOVE    PATH-TBL-SYUNOU-KEY25   TO  WRK-PATH
-                 MOVE    "key25"             TO  WRK-PATH
+               MOVE    "key25"             TO  WRK-PATH
       *---(01.00.04) LINE ADD END   ------------------------------------
-             END-IF
-             PERFORM   920-SYUNOU-SET-SEC
+           END-IF
+           PERFORM   920-SYUNOU-SET-SEC
+      *=== 142以外も公費の助成判定をする by Yoshikawa(2012/02/13) start
+           IF  RECE02-KOHNUM(IDZ)  =  "142"
+      *=== 142以外も公費の助成判定をする by Yoshikawa(2012/02/13) end
       *     初診回数
              MOVE     CNT-SYOSIN                 TO  MF100-SYOSIN
            END-IF
