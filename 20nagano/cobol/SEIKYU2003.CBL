@@ -50,6 +50,7 @@
       *  02.05.10    吉川    11/03/07    主保険＋全国公費の組合せのデータが
       *                                  集計されないのを修正
       *                                  生保は集計対象外とするように修正
+      *  02.05.11    吉川    12/02/17    シス管「2005」の主病名編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -386,6 +387,21 @@
            03  WRK-BYOMEI1-MAX     PIC 9(02)   VALUE   48.
       *    傷病名欄最大行数
            03  WRK-BYOMEI-LINE     PIC 9(02)   VALUE   5.
+      *
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) start
+      *    区切り線
+       01  WRK-LINE-AREA.
+           03  WRK-KUGIRI1         PIC X(52)   VALUE
+               ALL "−".
+           03  WRK-KUGIRI2.
+               05  FILLER          PIC X(22)   VALUE
+                                   "＝＝＝＝＝＝＝　以下　".
+               05  WRK-KUGIRI2-KOHNAME         PIC X(10).
+               05  FILLER          PIC X(20)   VALUE
+                                   "　適用分　＝＝＝＝＝".
+           03  WRK-KUGIRI3         PIC X(52)   VALUE
+               ALL "−".
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -1736,6 +1752,32 @@
       *         END-IF
            END-IF
       *
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) start
+      *    主病名との区切り線編集処理     
+           DISPLAY "SYS2005-SYUBYOHENFLG =" SYS-2005-SYUBYOHENFLG
+                   "主病名フラグ=" WRK-BO-SYUBYOFLG
+           IF    ( SYS-2005-SYUBYOHENFLG   =   "3" )
+           AND   ( WRK-BO-SYUBYOFLG        =   "1" )
+               IF      WRK-LINEBYO     <   WRK-BYOMEI-LINE
+                   ADD     1           TO  WRK-LINEBYO
+                   IF  MF101-NYUGAIKBN  =  "2"
+                       MOVE    WRK-KUGIRI3 
+                            TO SC03-BYOMEI(WRK-LINEBYO)(2:52)
+                   ELSE
+                       MOVE    WRK-KUGIRI3 
+                            TO SC04-BYOMEI(WRK-LINEBYO)(2:52)
+                   END-IF
+      *         ELSE
+      *             IF      WRK-LINETEK >=   WRK-TEKIYOU-LINE
+      *                 PERFORM 34120-PAGE-SEC
+      *             END-IF 
+      *             MOVE    1           TO  FLG-KUGIRI
+      *             PERFORM 34110-KUGIRI-LINE-SEC
+      *             MOVE    ZERO        TO  FLG-KUGIRI   
+               END-IF
+           END-IF
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) end
+      *
       *    ３番までは番号、年月日を印字する
            MOVE  WRK-LINE       TO    IDX2
            ADD   1              TO    IDX2
@@ -1873,8 +1915,10 @@
                 END-IF
            END-IF
       *
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) start
       *    主病名との区切り線編集処理     
-      *     PERFORM 3211-SYUBYOFLG-HENSYU-SEC
+           PERFORM 3211-SYUBYOFLG-HENSYU-SEC
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) end
       *
       *    対象病名を編集
            COMPUTE     WRK-STCLM         =   WRK-CLM   +   1
@@ -1942,6 +1986,47 @@
            .
        3210-BYOMEI-SET-EXT.
            EXIT.
+      *
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) start
+      ****************************************************************
+      *      主病名と副病名の区切り線の編集
+      ****************************************************************
+       3211-SYUBYOFLG-HENSYU-SEC         SECTION.
+      *
+      *    主病名編集フラグが区切り有のときのみ処理を行う
+           IF      SYS-2005-SYUBYOHENFLG   =   "1" OR  "3"
+      *        主病名との区切り線（副傷病名があるときのみ）     
+               IF      WRK-BYO-OLD             =   LOW-VALUE
+                   CONTINUE
+               ELSE
+                   IF    ( FLG-RECE031             =   ZERO            )
+                   AND   ( RECE031-SYUBYOFLG   NOT =   WRK-BO-SYUBYOFLG)
+                   AND   ( WRK-BO-SYUBYOFLG        =   "1"             )
+                       IF      WRK-LINEBYO     <   WRK-BYOMEI-LINE
+                           ADD     1           TO  WRK-LINEBYO
+                           IF  MF101-NYUGAIKBN  =  "2"
+                               MOVE    WRK-KUGIRI3 TO
+                                  SC03-BYOMEI(WRK-LINEBYO)(2:52)
+                           ELSE
+                               MOVE    WRK-KUGIRI3 TO
+                                  SC04-BYOMEI(WRK-LINEBYO)(2:52)
+                           END-IF
+      *                 ELSE
+      *                     IF      WRK-LINETEK >=   WRK-TEKIYOU-LINE
+      *                         PERFORM 34120-PAGE-SEC
+      *                     END-IF    
+      *                     MOVE    1           TO  FLG-KUGIRI
+      *                     PERFORM 34110-KUGIRI-LINE-SEC
+      *                     MOVE    ZERO        TO  FLG-KUGIRI   
+                       END-IF
+                   END-IF
+               END-IF
+           END-IF        
+      *
+           .
+       3211-SYUBYOFLG-HENSYU-EXT.
+           EXIT.
+      *=== シス管「2005」主病名編集対応 by Yoshikawa(2012/02/17) end
       *
       ****************************************************************
       *     傷病名１出力処理
