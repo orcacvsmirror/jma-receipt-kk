@@ -45,6 +45,8 @@
       *  01.00.08    吉川    10/04/13    外来様式で摘要欄の下部にゼロが
       *                                  印字されるのを修正
       *  01.00.09    吉川    10/08/18    受給者番号の全角入力対応
+      *  01.00.10    吉川    12/02/15    主病名が一つのみの場合
+      *                                  区切り線の次の番号を正しくする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1554,10 +1556,16 @@
            END-IF
       *
       *    ３番までは番号、年月日を印字する
-           MOVE  WRK-LINEBYO    TO    IDX2
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) start
+      *     MOVE  WRK-LINEBYO    TO    IDX2
+           MOVE  WRK-LINE       TO    IDX2
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) end
            ADD   1              TO    IDX2
            PERFORM  VARYING  IDX1  FROM  IDX2  BY  1
                     UNTIL    IDX1  >    3
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) start
+             ADD     1               TO  WRK-LINEBYO
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) end
              MOVE  IDX1              TO  WRK-Z1
              INITIALIZE              ORCSKANACHKAREA
              MOVE    "2"             TO  KANACHK-SYORI 
@@ -1566,11 +1574,20 @@
              MOVE    ")"             TO  KANACHK-MAE-INPUT (3:1)
              CALL    "ORCSKANACHK"   USING   ORCSKANACHKAREA
              IF      KANACHK-RC      =   ZERO
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) start
+      *           MOVE    KANACHK-OUT-INPUT(1:KANACHK-MAX)
+      *                                   TO  WRK-TAIHI-BYOMEI(IDX1)
+      *                                       WRK-TAIHI-SRYYMD(IDX1)
                  MOVE    KANACHK-OUT-INPUT(1:KANACHK-MAX)
-                                         TO  WRK-TAIHI-BYOMEI(IDX1)
-                                             WRK-TAIHI-SRYYMD(IDX1)
+                                       TO  WRK-TAIHI-BYOMEI(WRK-LINEBYO)
+                                           WRK-TAIHI-SRYYMD(WRK-LINEBYO)
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) end
              END-IF
-             MOVE  "　　年　　月　　日"  TO  WRK-TAIHI-SRYYMD(IDX1)(7:)
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) start
+      *       MOVE  "　　年　　月　　日"  TO  WRK-TAIHI-SRYYMD(IDX1)(7:)
+             MOVE  "　　年　　月　　日"  
+                                   TO  WRK-TAIHI-SRYYMD(WRK-LINEBYO)(7:)
+      *=== 主病名のみの場合の番号修正 by Yoshikawa(2012/02/15) end
            END-PERFORM
       *
       *
