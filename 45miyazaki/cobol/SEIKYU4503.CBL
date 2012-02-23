@@ -52,6 +52,9 @@
       *                                  取得するようにする
       *  01.00.15    吉川    11/11/21    保険＋全国公費＋地方公費の場合
       *                                  保険と公費２の点数は同じにする
+      *  01.00.16    吉川    12/02/10    月途中に公費を変更した場合
+      *                                  変更前に診療を登録した公費が
+      *                                  公費１に印字されるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -233,6 +236,14 @@
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/16) start
            03  WRK-KOHID             PIC 9(10).
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2009/02/16) end
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+           03  WRK-PTID              PIC 9(10).
+           03  WRK-PTKOHNUM          PIC X(03).
+           03  WRK-SRYYM             PIC X(06).
+           03  WRK-FTNJANUM          PIC X(20).
+           03  WRK-JKYSNUM           PIC X(20).
+           03  WRK-TEKSTYMD          PIC X(08).
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
            03  WRK-SRYKA-TBL  OCCURS 50.
                05  WRK-SRYKACD       PIC X(02).
                05  WRK-RECEKA        PIC X(02).
@@ -914,6 +925,13 @@
       *---(01.00.04) LINE ADD START ------------------------------------
                  MOVE  RECE02-SHOKUJIINF (IDY)   TO  MF100-SHOKUJIINF
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+                 MOVE  RECE02-PTID               TO  WRK-PTID
+                 MOVE  RECE02-KOHNUM(IDX)        TO  WRK-PTKOHNUM
+                 MOVE  RECE02-SRYYM(1:6)         TO  WRK-SRYYM
+                 PERFORM  930-PTKOHINF-SET-SEC
+                 MOVE  WRK-TEKSTYMD              TO  MF100-KOHTEKSTYMD
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
                ELSE
       *    月の途中で市町村が切り替わった場合の対応
                  MOVE  RECE02-KOHNUM(IDX)        TO  MF100-T-KOHNUM
@@ -932,6 +950,13 @@
       *---(01.00.04) LINE ADD START ------------------------------------
                  MOVE  RECE02-SHOKUJIINF(IDY)  TO  MF100-T-SHOKUJIINF
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+                 MOVE  RECE02-PTID               TO  WRK-PTID
+                 MOVE  RECE02-KOHNUM(IDX)        TO  WRK-PTKOHNUM
+                 MOVE  RECE02-SRYYM(1:6)         TO  WRK-SRYYM
+                 PERFORM  930-PTKOHINF-SET-SEC
+                 MOVE  WRK-TEKSTYMD              TO  MF100-T-KOHTEKSTYMD
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
                END-IF
       *=== 190は助成の有無に関わらず記載 by Yoshikawa(2009/06/09) start
                IF  RECE02-KOHNUM (IDX)  = "190"
@@ -1014,6 +1039,11 @@
       *    食事取得
              MOVE    RECE10-SHOKUJIINF(2)     TO  MF100-T-SHOKUJIINF
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+             MOVE  RECE10-PTID            TO  WRK-PTID
+             MOVE  RECE10-KOHNUM(1)       TO  WRK-PTKOHNUM
+             MOVE  RECE10-SRYYM(1:6)      TO  WRK-SRYYM
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
              PERFORM  930-PTKOHINF-SET-SEC
       *    公費点数=保険点数(地方公費点数)の場合は記載しない
              IF  MF100-TOTALTEN  =  MF100-T-TOTALTEN
@@ -1407,41 +1437,121 @@
       *
            ELSE
       *
-      *        負担者番号１(地方公費１つ目)
-               MOVE    MF100-FTNJANUM      TO  SC03-KOHFTNJANUM1
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+      **        負担者番号１(地方公費１つ目)
+      *         MOVE    MF100-FTNJANUM      TO  SC03-KOHFTNJANUM1
+      **
+      **        受給者番号１(地方公費１つ目)
+      *         MOVE    MF100-JKYSNUM       TO  SC03-KOHJKYSNUM1
+      **
+      **        点数２(地方公費１つ目)
+      *         MOVE    MF100-TOTALTEN      TO  WRK-Z7
+      *         MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
+      **
+      **        一部負担金２(地方公費１つ目)
+      *         MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+      **
+      **        実日数２(地方公費１つ目)
+      *         MOVE    MF100-JNISSU        TO  WRK-Z2
+      *         MOVE    WRK-Z2              TO  SC03-JINISSU1
+      **
+      **        負担者番号２(地方公費２つ目)
+      *         MOVE    MF100-T-FTNJANUM    TO  SC03-KOHFTNJANUM2
+      **
+      **        受給者番号２(地方公費２つ目)
+      *         MOVE    MF100-T-JKYSNUM     TO  SC03-KOHJKYSNUM2
+      **
+      **        点数３(地方公費２つ目)
+      *         MOVE    MF100-T-TOTALTEN    TO  WRK-Z7
+      *         MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
+      **
+      **        一部負担金３(地方公費２つ目)
+      *         MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+      **
+      **        実日数３(地方公費２つ目)
+      *         MOVE    MF100-T-JNISSU      TO  WRK-Z2
+      *         MOVE    WRK-Z2              TO  SC03-JINISSU2
+      *        公費適用期間の若い順に記載
+               IF  (MF100-T-KOHTEKSTYMD  =  SPACE)
+               OR  (MF100-KOHTEKSTYMD  <=  MF100-T-KOHTEKSTYMD)
+      *          負担者番号１(地方公費１つ目)
+                 MOVE    MF100-FTNJANUM      TO  SC03-KOHFTNJANUM1
       *
-      *        受給者番号１(地方公費１つ目)
-               MOVE    MF100-JKYSNUM       TO  SC03-KOHJKYSNUM1
+      *          受給者番号１(地方公費１つ目)
+                 MOVE    MF100-JKYSNUM       TO  SC03-KOHJKYSNUM1
       *
-      *        点数２(地方公費１つ目)
-               MOVE    MF100-TOTALTEN      TO  WRK-Z7
-               MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
+      *          点数２(地方公費１つ目)
+                 MOVE    MF100-TOTALTEN      TO  WRK-Z7
+                 MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
       *
-      *        一部負担金２(地方公費１つ目)
-               MOVE    MF100-FTNMONEY      TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+      *          一部負担金２(地方公費１つ目)
+                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
+                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
       *
-      *        実日数２(地方公費１つ目)
-               MOVE    MF100-JNISSU        TO  WRK-Z2
-               MOVE    WRK-Z2              TO  SC03-JINISSU1
+      *          実日数２(地方公費１つ目)
+                 MOVE    MF100-JNISSU        TO  WRK-Z2
+                 MOVE    WRK-Z2              TO  SC03-JINISSU1
       *
-      *        負担者番号２(地方公費２つ目)
-               MOVE    MF100-T-FTNJANUM    TO  SC03-KOHFTNJANUM2
+      *          負担者番号２(地方公費２つ目)
+                 MOVE    MF100-T-FTNJANUM    TO  SC03-KOHFTNJANUM2
       *
-      *        受給者番号２(地方公費２つ目)
-               MOVE    MF100-T-JKYSNUM     TO  SC03-KOHJKYSNUM2
+      *          受給者番号２(地方公費２つ目)
+                 MOVE    MF100-T-JKYSNUM     TO  SC03-KOHJKYSNUM2
       *
-      *        点数３(地方公費２つ目)
-               MOVE    MF100-T-TOTALTEN    TO  WRK-Z7
-               MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
+      *          点数３(地方公費２つ目)
+                 MOVE    MF100-T-TOTALTEN    TO  WRK-Z7
+                 MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
       *
-      *        一部負担金３(地方公費２つ目)
-               MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+      *          一部負担金３(地方公費２つ目)
+                 MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
       *
-      *        実日数３(地方公費２つ目)
-               MOVE    MF100-T-JNISSU      TO  WRK-Z2
-               MOVE    WRK-Z2              TO  SC03-JINISSU2
+      *          実日数３(地方公費２つ目)
+                 MOVE    MF100-T-JNISSU      TO  WRK-Z2
+                 MOVE    WRK-Z2              TO  SC03-JINISSU2
+      *
+               ELSE
+      *
+      *          負担者番号１(地方公費２つ目)
+                 MOVE    MF100-T-FTNJANUM    TO  SC03-KOHFTNJANUM1
+      *
+      *          受給者番号１(地方公費２つ目)
+                 MOVE    MF100-T-JKYSNUM     TO  SC03-KOHJKYSNUM1
+      *
+      *          点数２(地方公費２つ目)
+                 MOVE    MF100-T-TOTALTEN    TO  WRK-Z7
+                 MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
+      *
+      *          一部負担金２(地方公費２つ目)
+                 MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+      *
+      *          実日数２(地方公費２つ目)
+                 MOVE    MF100-T-JNISSU      TO  WRK-Z2
+                 MOVE    WRK-Z2              TO  SC03-JINISSU1
+      *
+      *          負担者番号２(地方公費１つ目)
+                 MOVE    MF100-FTNJANUM      TO  SC03-KOHFTNJANUM2
+      *
+      *          受給者番号２(地方公費１つ目)
+                 MOVE    MF100-JKYSNUM       TO  SC03-KOHJKYSNUM2
+      *
+      *          点数３(地方公費１つ目)
+                 MOVE    MF100-TOTALTEN      TO  WRK-Z7
+                 MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
+      *
+      *          一部負担金３(地方公費１つ目)
+                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
+                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+      *
+      *          実日数３(地方公費１つ目)
+                 MOVE    MF100-JNISSU        TO  WRK-Z2
+                 MOVE    WRK-Z2              TO  SC03-JINISSU2
+      *
+               END-IF
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
            END-IF
       *
       *
@@ -1780,101 +1890,245 @@
       *
            ELSE
       *
-      *        負担者番号１(地方公費１つ目)
-               MOVE    MF100-FTNJANUM      TO  SC04-KOHFTNJANUM1
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+      **        負担者番号１(地方公費１つ目)
+      *         MOVE    MF100-FTNJANUM      TO  SC04-KOHFTNJANUM1
+      **
+      **        受給者番号１(地方公費１つ目)
+      *         MOVE    MF100-JKYSNUM       TO  SC04-KOHJKYSNUM1
+      **
+      **        点数２(地方公費１つ目)
+      *         MOVE    MF100-TOTALTEN      TO  WRK-Z7
+      *         MOVE    WRK-Z7              TO  SC04-TOTALTEN(2)
+      **
+      **        一部負担金２(地方公費１つ目)
+      *         MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
+      **  
+      **        実日数２(地方公費１つ目)
+      *         MOVE    MF100-JNISSU        TO  WRK-Z2
+      *         MOVE    WRK-Z2              TO  SC04-JINISSU1
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **
+      **        食事日数（地方公費１つ目）
+      *         IF  MF100-SHOKUJINISSU-G  NOT =  MF100-SHOKUJINISSU
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  MF100-SHOKUJINISSU  TO  WRK-Z2
+      **           MOVE  WRK-Z2              TO  SC04-SYONISSU (2)
+      *           MOVE  MF100-SHOKUJINISSU  TO  WRK-Z29
+      *           MOVE  WRK-Z29             TO  SC04-SYONISSU (2)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      **        食事療養費（地方公費１つ目）
+      *         IF  MF100-SHOKUJIRYOYOHI-G  NOT =  MF100-SHOKUJIRYOYOHI
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  MF100-SHOKUJIRYOYOHI    TO  WRK-Z7
+      **           MOVE  WRK-Z7              TO  SC04-SYOTOTALTEN (2)
+      *           MOVE  MF100-SHOKUJIRYOYOHI    TO  WRK-Z79
+      *           MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (2)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      **        標準負担額（地方公費１つ目）
+      *         IF  MF100-SHOKUJIFTN-G  NOT =  MF100-SHOKUJIFTN
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  MF100-SHOKUJIFTN    TO  WRK-Z8
+      **           MOVE  WRK-Z8              TO  SC04-SYOFTNMONEY (2)
+      *           MOVE  MF100-SHOKUJIFTN    TO  WRK-Z89
+      *           MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (2)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      **
+      **        負担者番号２(地方公費２つ目)
+      *         MOVE    MF100-T-FTNJANUM     TO  SC04-KOHFTNJANUM2
+      **
+      **        受給者番号２(地方公費２つ目)
+      *         MOVE    MF100-T-JKYSNUM         TO  SC04-KOHJKYSNUM2
+      **
+      **        点数３(地方公費２つ目)
+      *         MOVE    MF100-T-TOTALTEN        TO  WRK-Z7
+      *         MOVE    WRK-Z7                  TO  SC04-TOTALTEN(3)
+      **
+      **        一部負担金３(地方公費２つ目)
+      *         MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
+      *         MOVE    WRK-Z8                  TO  SC04-FTNMONEY(3)
+      **
+      **        実日数３(地方公費２つ目)
+      *         MOVE    MF100-T-JNISSU          TO  WRK-Z2
+      *         MOVE    WRK-Z2                  TO  SC04-JINISSU2
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **
+      **        食事日数（地方公費２つ目）
+      *         IF  MF100-T-SHOKUJINISSU  NOT =  MF100-SHOKUJINISSU
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  MF100-T-SHOKUJINISSU    TO  WRK-Z2
+      **           MOVE  WRK-Z2              TO  SC04-SYONISSU (3)
+      *           MOVE  MF100-T-SHOKUJINISSU    TO  WRK-Z29
+      *           MOVE  WRK-Z29             TO  SC04-SYONISSU (3)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      **        食事療養費（地方公費２つ目）
+      *         IF  MF100-T-SHOKUJIRYOYOHI  NOT =  MF100-SHOKUJIRYOYOHI
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  MF100-T-SHOKUJIRYOYOHI  TO  WRK-Z7
+      **           MOVE  WRK-Z7              TO  SC04-SYOTOTALTEN (3)
+      *           MOVE  MF100-T-SHOKUJIRYOYOHI  TO  WRK-Z79
+      *           MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (3)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      **        標準負担額（地方公費２つ目）
+      *         IF  MF100-T-SHOKUJIFTN  NOT =  MF100-SHOKUJIFTN
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **           MOVE  MF100-T-SHOKUJIFTN      TO  WRK-Z8
+      **           MOVE  WRK-Z8              TO  SC04-SYOFTNMONEY (3)
+      *           MOVE  MF100-T-SHOKUJIFTN      TO  WRK-Z89
+      *           MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (3)
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *         END-IF
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *        公費適用期間の若い順に記載
+               IF  (MF100-T-KOHTEKSTYMD  =  SPACE)
+               OR  (MF100-KOHTEKSTYMD  <=  MF100-T-KOHTEKSTYMD)
+      *          負担者番号１(地方公費１つ目)
+                 MOVE    MF100-FTNJANUM      TO  SC04-KOHFTNJANUM1
       *
-      *        受給者番号１(地方公費１つ目)
-               MOVE    MF100-JKYSNUM       TO  SC04-KOHJKYSNUM1
+      *          受給者番号１(地方公費１つ目)
+                 MOVE    MF100-JKYSNUM       TO  SC04-KOHJKYSNUM1
       *
-      *        点数２(地方公費１つ目)
-               MOVE    MF100-TOTALTEN      TO  WRK-Z7
-               MOVE    WRK-Z7              TO  SC04-TOTALTEN(2)
+      *          点数２(地方公費１つ目)
+                 MOVE    MF100-TOTALTEN      TO  WRK-Z7
+                 MOVE    WRK-Z7              TO  SC04-TOTALTEN(2)
       *
-      *        一部負担金２(地方公費１つ目)
-               MOVE    MF100-FTNMONEY      TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
-      *  
-      *        実日数２(地方公費１つ目)
-               MOVE    MF100-JNISSU        TO  WRK-Z2
-               MOVE    WRK-Z2              TO  SC04-JINISSU1
-      *---(01.00.04) LINE ADD START ------------------------------------
+      *          一部負担金２(地方公費１つ目)
+                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
+                 MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
       *
-      *        食事日数（地方公費１つ目）
-               IF  MF100-SHOKUJINISSU-G  NOT =  MF100-SHOKUJINISSU
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  MF100-SHOKUJINISSU  TO  WRK-Z2
-      *           MOVE  WRK-Z2              TO  SC04-SYONISSU (2)
-                 MOVE  MF100-SHOKUJINISSU  TO  WRK-Z29
-                 MOVE  WRK-Z29             TO  SC04-SYONISSU (2)
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *          実日数２(地方公費１つ目)
+                 MOVE    MF100-JNISSU        TO  WRK-Z2
+                 MOVE    WRK-Z2              TO  SC04-JINISSU1
+      *
+      *          食事日数（地方公費１つ目）
+                 IF  MF100-SHOKUJINISSU-G  NOT =  MF100-SHOKUJINISSU
+                   MOVE  MF100-SHOKUJINISSU  TO  WRK-Z29
+                   MOVE  WRK-Z29             TO  SC04-SYONISSU (2)
+                 END-IF
+      *          食事療養費（地方公費１つ目）
+                 IF  MF100-SHOKUJIRYOYOHI-G  NOT =  MF100-SHOKUJIRYOYOHI
+                   MOVE  MF100-SHOKUJIRYOYOHI    TO  WRK-Z79
+                   MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (2)
+                 END-IF
+      *          標準負担額（地方公費１つ目）
+                 IF  MF100-SHOKUJIFTN-G  NOT =  MF100-SHOKUJIFTN
+                   MOVE  MF100-SHOKUJIFTN    TO  WRK-Z89
+                   MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (2)
+                 END-IF
+      *
+      *          負担者番号２(地方公費２つ目)
+                 MOVE    MF100-T-FTNJANUM     TO  SC04-KOHFTNJANUM2
+      *
+      *          受給者番号２(地方公費２つ目)
+                 MOVE    MF100-T-JKYSNUM         TO  SC04-KOHJKYSNUM2
+      *
+      *          点数３(地方公費２つ目)
+                 MOVE    MF100-T-TOTALTEN        TO  WRK-Z7
+                 MOVE    WRK-Z7                  TO  SC04-TOTALTEN(3)
+      *
+      *          一部負担金３(地方公費２つ目)
+                 MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
+                 MOVE    WRK-Z8                  TO  SC04-FTNMONEY(3)
+      *
+      *          実日数３(地方公費２つ目)
+                 MOVE    MF100-T-JNISSU          TO  WRK-Z2
+                 MOVE    WRK-Z2                  TO  SC04-JINISSU2
+      *
+      *          食事日数（地方公費２つ目）
+                 IF  MF100-T-SHOKUJINISSU  NOT =  MF100-SHOKUJINISSU
+                   MOVE  MF100-T-SHOKUJINISSU    TO  WRK-Z29
+                   MOVE  WRK-Z29             TO  SC04-SYONISSU (3)
+                 END-IF
+      *          食事療養費（地方公費２つ目）
+                 IF  MF100-T-SHOKUJIRYOYOHI  NOT =  MF100-SHOKUJIRYOYOHI
+                   MOVE  MF100-T-SHOKUJIRYOYOHI  TO  WRK-Z79
+                   MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (3)
+                 END-IF
+      *          標準負担額（地方公費２つ目）
+                 IF  MF100-T-SHOKUJIFTN  NOT =  MF100-SHOKUJIFTN
+                   MOVE  MF100-T-SHOKUJIFTN      TO  WRK-Z89
+                   MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (3)
+                 END-IF
+      *
+               ELSE
+      *
+      *          負担者番号１(地方公費２つ目)
+                 MOVE    MF100-T-FTNJANUM     TO  SC04-KOHFTNJANUM1
+      *
+      *          受給者番号１(地方公費２つ目)
+                 MOVE    MF100-T-JKYSNUM         TO  SC04-KOHJKYSNUM1
+      *
+      *          点数２(地方公費２つ目)
+                 MOVE    MF100-T-TOTALTEN        TO  WRK-Z7
+                 MOVE    WRK-Z7                  TO  SC04-TOTALTEN(2)
+      *
+      *          一部負担金２(地方公費２つ目)
+                 MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
+                 MOVE    WRK-Z8                  TO  SC04-FTNMONEY(2)
+      *
+      *          実日数２(地方公費２つ目)
+                 MOVE    MF100-T-JNISSU          TO  WRK-Z2
+                 MOVE    WRK-Z2                  TO  SC04-JINISSU1
+      *
+      *          食事日数（地方公費２つ目）
+                 IF  MF100-SHOKUJINISSU-G  NOT =  MF100-T-SHOKUJINISSU
+                   MOVE  MF100-T-SHOKUJINISSU    TO  WRK-Z29
+                   MOVE  WRK-Z29             TO  SC04-SYONISSU (2)
+                 END-IF
+      *          食事療養費（地方公費２つ目）
+                 IF  MF100-SHOKUJIRYOYOHI-G  NOT =  
+                                                  MF100-T-SHOKUJIRYOYOHI
+                   MOVE  MF100-T-SHOKUJIRYOYOHI  TO  WRK-Z79
+                   MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (2)
+                 END-IF
+      *          標準負担額（地方公費２つ目）
+                 IF  MF100-SHOKUJIFTN-G  NOT =  MF100-T-SHOKUJIFTN
+                   MOVE  MF100-T-SHOKUJIFTN      TO  WRK-Z89
+                   MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (2)
+                 END-IF
+      *
+      *          負担者番号２(地方公費１つ目)
+                 MOVE    MF100-FTNJANUM      TO  SC04-KOHFTNJANUM2
+      *
+      *          受給者番号２(地方公費１つ目)
+                 MOVE    MF100-JKYSNUM       TO  SC04-KOHJKYSNUM2
+      *
+      *          点数３(地方公費１つ目)
+                 MOVE    MF100-TOTALTEN      TO  WRK-Z7
+                 MOVE    WRK-Z7              TO  SC04-TOTALTEN(3)
+      *
+      *          一部負担金３(地方公費１つ目)
+                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
+                 MOVE    WRK-Z8              TO  SC04-FTNMONEY(3)
+      *
+      *          実日数３(地方公費１つ目)
+                 MOVE    MF100-JNISSU        TO  WRK-Z2
+                 MOVE    WRK-Z2              TO  SC04-JINISSU2
+      *
+      *          食事日数（地方公費１つ目）
+                 IF  MF100-T-SHOKUJINISSU  NOT =  MF100-SHOKUJINISSU
+                   MOVE  MF100-SHOKUJINISSU  TO  WRK-Z29
+                   MOVE  WRK-Z29             TO  SC04-SYONISSU (3)
+                 END-IF
+      *          食事療養費（地方公費１つ目）
+                 IF  MF100-T-SHOKUJIRYOYOHI  NOT =  MF100-SHOKUJIRYOYOHI
+                   MOVE  MF100-SHOKUJIRYOYOHI    TO  WRK-Z79
+                   MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (3)
+                 END-IF
+      *          標準負担額（地方公費１つ目）
+                 IF  MF100-T-SHOKUJIFTN  NOT =  MF100-SHOKUJIFTN
+                   MOVE  MF100-SHOKUJIFTN    TO  WRK-Z89
+                   MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (3)
+                 END-IF
                END-IF
-      *        食事療養費（地方公費１つ目）
-               IF  MF100-SHOKUJIRYOYOHI-G  NOT =  MF100-SHOKUJIRYOYOHI
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  MF100-SHOKUJIRYOYOHI    TO  WRK-Z7
-      *           MOVE  WRK-Z7              TO  SC04-SYOTOTALTEN (2)
-                 MOVE  MF100-SHOKUJIRYOYOHI    TO  WRK-Z79
-                 MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (2)
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               END-IF
-      *        標準負担額（地方公費１つ目）
-               IF  MF100-SHOKUJIFTN-G  NOT =  MF100-SHOKUJIFTN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  MF100-SHOKUJIFTN    TO  WRK-Z8
-      *           MOVE  WRK-Z8              TO  SC04-SYOFTNMONEY (2)
-                 MOVE  MF100-SHOKUJIFTN    TO  WRK-Z89
-                 MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (2)
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               END-IF
-      *---(01.00.04) LINE ADD END   ------------------------------------
-      *
-      *        負担者番号２(地方公費２つ目)
-               MOVE    MF100-T-FTNJANUM     TO  SC04-KOHFTNJANUM2
-      *
-      *        受給者番号２(地方公費２つ目)
-               MOVE    MF100-T-JKYSNUM         TO  SC04-KOHJKYSNUM2
-      *
-      *        点数３(地方公費２つ目)
-               MOVE    MF100-T-TOTALTEN        TO  WRK-Z7
-               MOVE    WRK-Z7                  TO  SC04-TOTALTEN(3)
-      *
-      *        一部負担金３(地方公費２つ目)
-               MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
-               MOVE    WRK-Z8                  TO  SC04-FTNMONEY(3)
-      *
-      *        実日数３(地方公費２つ目)
-               MOVE    MF100-T-JNISSU          TO  WRK-Z2
-               MOVE    WRK-Z2                  TO  SC04-JINISSU2
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *
-      *        食事日数（地方公費２つ目）
-               IF  MF100-T-SHOKUJINISSU  NOT =  MF100-SHOKUJINISSU
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  MF100-T-SHOKUJINISSU    TO  WRK-Z2
-      *           MOVE  WRK-Z2              TO  SC04-SYONISSU (3)
-                 MOVE  MF100-T-SHOKUJINISSU    TO  WRK-Z29
-                 MOVE  WRK-Z29             TO  SC04-SYONISSU (3)
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               END-IF
-      *        食事療養費（地方公費２つ目）
-               IF  MF100-T-SHOKUJIRYOYOHI  NOT =  MF100-SHOKUJIRYOYOHI
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  MF100-T-SHOKUJIRYOYOHI  TO  WRK-Z7
-      *           MOVE  WRK-Z7              TO  SC04-SYOTOTALTEN (3)
-                 MOVE  MF100-T-SHOKUJIRYOYOHI  TO  WRK-Z79
-                 MOVE  WRK-Z79             TO  SC04-SYOTOTALTEN (3)
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               END-IF
-      *        標準負担額（地方公費２つ目）
-               IF  MF100-T-SHOKUJIFTN  NOT =  MF100-SHOKUJIFTN
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *           MOVE  MF100-T-SHOKUJIFTN      TO  WRK-Z8
-      *           MOVE  WRK-Z8              TO  SC04-SYOFTNMONEY (3)
-                 MOVE  MF100-T-SHOKUJIFTN      TO  WRK-Z89
-                 MOVE  WRK-Z89             TO  SC04-SYOFTNMONEY (3)
-      *---(01.00.05) LINE ADD END   ------------------------------------
-               END-IF
-      *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
            END-IF
       *
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -2514,16 +2768,30 @@
        930-PTKOHINF-SET-SEC  SECTION.
       *
            INITIALIZE  PTKOHINF-REC
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+                       WRK-FTNJANUM
+                       WRK-JKYSNUM
+                       WRK-TEKSTYMD
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
+      *
       *---(01.00.06) LINE ADD START ------------------------------------
       *     MOVE    RECE10-HOSPID           TO  PTKOH-HOSPID
            MOVE    SPA-HOSPNUM             TO  PTKOH-HOSPNUM
       *---(01.00.06) LINE ADD END   ------------------------------------
-           MOVE    RECE10-PTID             TO  PTKOH-PTID
-           MOVE    MF100-T-KOHNUM          TO  PTKOH-KOHNUM
-           MOVE    RECE10-SRYYM(1:6)       TO  PTKOH-TEKSTYMD(1:6)
-                                               PTKOH-TEKSTYMD(1:6)
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+      *     MOVE    RECE10-PTID             TO  PTKOH-PTID
+      *     MOVE    MF100-T-KOHNUM          TO  PTKOH-KOHNUM
+      *     MOVE    RECE10-SRYYM(1:6)       TO  PTKOH-TEKSTYMD(1:6)
+      *                                         PTKOH-TEKSTYMD(1:6)
+      *     MOVE    "01"                    TO  PTKOH-TEKSTYMD(7:2)
+      *                                         PTKOH-TEKSTYMD(7:2)
+           MOVE    WRK-PTID                TO  PTKOH-PTID
+           MOVE    WRK-PTKOHNUM            TO  PTKOH-KOHNUM
+           MOVE    WRK-SRYYM               TO  PTKOH-TEKSTYMD(1:6)
+                                               PTKOH-TEKEDYMD(1:6)
            MOVE    "01"                    TO  PTKOH-TEKSTYMD(7:2)
-                                               PTKOH-TEKSTYMD(7:2)
+           MOVE    "31"                    TO  PTKOH-TEKSTYMD(7:2)
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
       *
            MOVE    PTKOHINF-REC            TO  MCPDATA-REC
            MOVE    "DBSELECT"              TO  MCP-FUNC
@@ -2546,8 +2814,13 @@
                MOVE    "key6"                TO  MCP-PATHNAME
       *---(01.00.06) LINE ADD END   ------------------------------------
                PERFORM 935-PTKOHINF-READ-SEC
-               MOVE    PTKOH-FTNJANUM  TO  MF100-T-FTNJANUM
-               MOVE    PTKOH-JKYSNUM   TO  MF100-T-JKYSNUM
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) start
+      *         MOVE    PTKOH-FTNJANUM  TO  MF100-T-FTNJANUM
+      *         MOVE    PTKOH-JKYSNUM   TO  MF100-T-JKYSNUM
+               MOVE    PTKOH-FTNJANUM  TO  WRK-FTNJANUM
+               MOVE    PTKOH-JKYSNUM   TO  WRK-JKYSNUM
+               MOVE    PTKOH-TEKSTYMD  TO  WRK-TEKSTYMD
+      *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
            END-IF
       *
            INITIALIZE  MCPAREA
