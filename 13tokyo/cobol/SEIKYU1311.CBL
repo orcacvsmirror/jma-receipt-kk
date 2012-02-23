@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 東京・東京都負担医療費請求書
-      *                      (300)
+      *                      (300,382,482,285,286,287)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/05/16    有村          再作成(2.5.0対応)
@@ -34,6 +34,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    内田    08/04/06    SPA-AREA初期化
+      *  01.00.03    吉川    12/02/22    印字対象番号の追加（382,482,285,286,287)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -582,6 +583,10 @@
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
                IF  RECE02-KOHNUM (IDZ) = "300"
+      *=== 印字対象番号の追加 by Yoshikawa(2012/02/22) start
+                                      OR "285" OR "286" OR "287"
+                                      OR "382" OR "482"
+      *=== 印字対象番号の追加 by Yoshikawa(2012/02/22) end
                    PERFORM 20011-SYUKEI-SEC
                END-IF
            END-PERFORM
@@ -1135,10 +1140,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "300"
-               OR  RECE02-KOHNUM(2) = "300"
-               OR  RECE02-KOHNUM(3) = "300"
-               OR  RECE02-KOHNUM(4) = "300"
+      *=== 印字対象番号の追加 by Yoshikawa(2012/02/22) start
+      *         IF  RECE02-KOHNUM(1) = "300"
+      *         OR  RECE02-KOHNUM(2) = "300"
+      *         OR  RECE02-KOHNUM(3) = "300"
+      *         OR  RECE02-KOHNUM(4) = "300"
+               IF  RECE02-KOHNUM(1) = "300" OR "382" OR "482" 
+                                   OR "285" OR "286" OR "287"
+               OR  RECE02-KOHNUM(2) = "300" OR "382" OR "482"
+                                   OR "285" OR "286" OR "287"
+               OR  RECE02-KOHNUM(3) = "300" OR "382" OR "482"
+                                   OR "285" OR "286" OR "287"
+               OR  RECE02-KOHNUM(4) = "300" OR "382" OR "482"
+                                   OR "285" OR "286" OR "287"
+      *=== 印字対象番号の追加 by Yoshikawa(2012/02/22) end
       *            テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
