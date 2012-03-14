@@ -38,6 +38,8 @@
       *  01.00.04    吉川    10/04/16    印字対象番号の追加（340）
       *  01.00.05    吉川    10/11/24    open-cobol1.0対応
       *  01.00.06    吉川    11/12/09    長期は上限額を超えた時に記載する
+      *  01.00.07    吉川    12/03/05    実日数が２日以上の場合、
+      *                                  長期が記載されなくなる不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -210,6 +212,10 @@
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
                05  WRK-TYOKIFTNGK  PIC 9(08).
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) start
+               05  WRK-TYOKIFTNGK-G PIC 9(08).
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
+      *
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
@@ -717,7 +723,10 @@
            IF      FLG-TYOKI       =   1
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
       *     AND     WRK-KOHFTNGK-G  >   10000
-           AND     WRK-TYOKIFTNGK  >=   10000
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) start
+      *     AND     WRK-TYOKIFTNGK  >=   10000
+           AND     WRK-TYOKIFTNGK-G  >=  10000
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
                MOVE    1           TO  MF100-TYOKI
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                MOVE    10000       TO  WRK-KOHFTNGK-G
@@ -726,7 +735,10 @@
            IF      FLG-TYOKI       =   2
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) start
       *     AND     WRK-KOHFTNGK-G  >   20000
-           AND     WRK-TYOKIFTNGK  >=   20000
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) start
+      *     AND     WRK-TYOKIFTNGK  >=   20000
+           AND     WRK-TYOKIFTNGK-G  >=  20000
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
                MOVE    1           TO  MF100-TYOKI
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                MOVE    20000       TO  WRK-KOHFTNGK-G
@@ -2004,6 +2016,9 @@
            END-IF   
       *
            ADD     WRK-KOHFTNGK        TO  WRK-KOHFTNGK-G
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) start
+           ADD     WRK-TYOKIFTNGK      TO  WRK-TYOKIFTNGK-G
+      *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
       *
            .
        800-SEIKYU-SEC-EXT.
