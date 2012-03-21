@@ -68,6 +68,8 @@
       *  01.00.27    吉川    11/06/07    乳障親分が別に作成されないのを修正
       *  01.00.28    吉川    11/07/07    特療費分が余分に作成されるのを修正
       *  01.00.29    吉川    12/01/13    特別療養費は専用の請求書に集計
+      *  01.00.30    吉川    12/03/12    対象公費番号をINIファイルから
+      *                                  取得するようにする
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -112,6 +114,14 @@
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-SRYKA.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *    印字対象公費番号ファイル
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-TAISYOKOHI.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
@@ -141,6 +151,16 @@
        01  SRYKA-REC.
            03  SRYKA-SRYKANAME           PIC X(20).
            03  FILLER                    PIC X(01).
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *    印字対象公費番号ファイル
+       FD  TAISYOKOHI-FILE.
+       01  TAISYOKOHI-REC.
+           03  TAISYO-DAT-CHOHYO   PIC X(01).
+           03  FILLER              PIC X(01).
+           03  TAISYO-DAT-KOHNUM   PIC X(03). 
+           03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -172,6 +192,11 @@
                                     BY         //RECEERR//.
       *---(01.00.09) LINE ADD END   ------------------------------------
       *     
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *    対象公費番号データ
+           COPY  "TAISYO4001.INC".
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
       *
@@ -188,6 +213,10 @@
            03  STS-RECEUPD         PIC X(02).
            03  STS-YUSEN           PIC X(02).
            03  STS-SRYKA           PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+           03  STS-TAISYOKOHI      PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *
       *    フラグ領域
        01  FLG-AREA.
            03  FLG-END             PIC 9(01).
@@ -210,9 +239,17 @@
            03  FLG-SYUNOU          PIC 9(01).
            03  FLG-HKNCOMBI        PIC 9(01).
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+           03  FLG-TAISYOKOHI      PIC 9(01).
+           03  FLG-TAISYO          PIC 9(01).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *
       *    添字領域
        01  IDX-AREA.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+           03  IDX                 PIC 9(04).
+           03  IDXX                PIC 9(04).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
@@ -377,6 +414,12 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI.
+           03  TBL-HKOHNUM              PIC X(03)  OCCURS  4.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *
       *---(01.00.10) LINE ADD START ------------------------------------
       *    固定項目
@@ -715,6 +758,11 @@
       *
            PERFORM  111-INI-FILE-SEC
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *    INIファイル読み込み
+           PERFORM  112-INI-FILE-SEC
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *
       *
            OPEN    OUTPUT  UPD-FILE
       *
@@ -830,6 +878,51 @@
        110-INI-FILE-EXT.
            EXIT.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *****************************************************************
+      *    INIファイル読み込み
+      *****************************************************************
+       112-INI-FILE-SEC         SECTION.
+      *
+      *    印字対象公費番号ファイル読み込み
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   TAISYOKOHI-REC
+      *
+           OPEN  INPUT  TAISYOKOHI-FILE
+      *
+           MOVE  ZERO  TO  IDX
+                           FLG-TAISYOKOHI
+      *
+           PERFORM UNTIL    FLG-TAISYOKOHI = 1
+             READ TAISYOKOHI-FILE NEXT
+               AT END
+                 MOVE  1                 TO  FLG-TAISYOKOHI
+               NOT AT END
+                 IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+                   CONTINUE
+                 ELSE
+      *            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
+                   IF  TAISYO-DAT-CHOHYO  =  "1"
+                     ADD   1               TO  IDX
+                     MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+                   END-IF
+                   DISPLAY "読み込みレコード=" TAISYOKOHI-REC
+                 END-IF
+             END-READ
+           END-PERFORM
+      *
+           CLOSE TAISYOKOHI-FILE
+      *
+           .
+       112-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -1011,24 +1104,31 @@
       *
              PERFORM VARYING IDX3 FROM    1   BY  1
                      UNTIL   IDX3 >       4
-      *---(01.00.06) LINE ADD START ------------------------------------
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **---(01.00.06) LINE ADD START ------------------------------------
+      **         IF  RECE02-KOHNUM (IDX3) = "180" OR "181" OR "190"
       *         IF  RECE02-KOHNUM (IDX3) = "180" OR "181" OR "190"
-               IF  RECE02-KOHNUM (IDX3) = "180" OR "181" OR "190"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *                                 OR "281"
-      *---(01.00.15) LINE ADD START ------------------------------------
-      *                                 OR "281" OR "290"
-                              OR "281" OR "290" OR "280" OR "380"
-                              OR "381" OR "390" OR "490"
-      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) start
-                              OR "480" OR "481" OR "590"
-      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/30) start
-                              OR "690" OR "780"
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/30) end
-      *---(01.00.15) LINE ADD END   ------------------------------------
-      *---(01.00.08) LINE ADD END   ------------------------------------
-      *---(01.00.06) LINE ADD END   ------------------------------------
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **                                 OR "281"
+      **---(01.00.15) LINE ADD START ------------------------------------
+      **                                 OR "281" OR "290"
+      *                        OR "281" OR "290" OR "280" OR "380"
+      *                        OR "381" OR "390" OR "490"
+      **=== 印字対象番号追加 by Yoshikawa(2008/12/11) start
+      *                        OR "480" OR "481" OR "590"
+      **=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/30) start
+      *                        OR "690" OR "780"
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/30) end
+      **---(01.00.15) LINE ADD END   ------------------------------------
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      **---(01.00.06) LINE ADD END   ------------------------------------
+               INITIALIZE                            TBL-HIKAKU-KOHI
+               MOVE    RECE02-KOHNUM(IDX3)       TO  TBL-HKOHNUM(1)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) start
                  MOVE    1                       TO  FLG-ERR
@@ -1293,23 +1393,31 @@
            PERFORM  VARYING  IDX3  FROM  1  BY  1
                     UNTIL    IDX3  >     4
                     OR       RECE10-KOHNUM(IDX3)  =  SPACE
-               IF  RECE10-KOHNUM(IDX3)(1:1) = "0" OR
-                   RECE10-KOHNUM(IDX3)      = "141" OR "241" OR "341" OR
-                                  "180" OR "181" OR "190" OR "281" OR
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *                            "145"
-      *---(01.00.15) LINE ADD START ------------------------------------
-      *                            "145" OR "290"
-                                  "145" OR "290" OR "280" OR "380" OR
-                                  "381" OR "390" OR "490"
-      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) start
-                               OR "480" OR "481" OR "590"
-      *=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/30) start
-                               OR "690" OR "780"
-      *=== 印字対象番号追加 by Yoshikawa(2009/10/30) end
-      *---(01.00.15) LINE ADD END   ------------------------------------
-      *---(01.00.08) LINE ADD END   ------------------------------------
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *         IF  RECE10-KOHNUM(IDX3)(1:1) = "0" OR
+      *             RECE10-KOHNUM(IDX3)      = "141" OR "241" OR "341" OR
+      *                            "180" OR "181" OR "190" OR "281" OR
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **                            "145"
+      **---(01.00.15) LINE ADD START ------------------------------------
+      **                            "145" OR "290"
+      *                            "145" OR "290" OR "280" OR "380" OR
+      *                            "381" OR "390" OR "490"
+      **=== 印字対象番号追加 by Yoshikawa(2008/12/11) start
+      *                         OR "480" OR "481" OR "590"
+      **=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/30) start
+      *                         OR "690" OR "780"
+      **=== 印字対象番号追加 by Yoshikawa(2009/10/30) end
+      **---(01.00.15) LINE ADD END   ------------------------------------
+      **---(01.00.08) LINE ADD END   ------------------------------------
+               INITIALIZE                            TBL-HIKAKU-KOHI
+               MOVE    RECE10-KOHNUM(IDX3)       TO  TBL-HKOHNUM(1)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+               OR  RECE10-KOHNUM(IDX3)(1:1)
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) start
       *           ADD  1                      TO  WRK-KOH-GKENSU(1)
                  ADD  1                      TO  WRK-KOH-GKENSU(IDX5 1)
@@ -2030,6 +2138,31 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       TAISYO-KOHNUM(IDXX)  =  SPACE
+             IF  TAISYO-KOHNUM(IDXX)  =  TBL-HKOHNUM(1)
+                                     OR  TBL-HKOHNUM(2)
+                                     OR  TBL-HKOHNUM(3)
+                                     OR  TBL-HKOHNUM(4)
+               MOVE     1                   TO  FLG-TAISYO
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *****************************************************************
       *    請求管理読込
       *****************************************************************
@@ -2590,22 +2723,32 @@
       *                              OR "290" OR "280" OR "380" OR "381"
       *                              OR "390" OR "490" OR "480" OR "481"
       *                              OR "590"
-               IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490" OR "480" OR "481"
-                                    OR "590" OR "690" OR "780"
-               OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490" OR "480" OR "481"
-                                    OR "590" OR "690" OR "780"
-               OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490" OR "480" OR "481"
-                                    OR "590" OR "690" OR "780"
-               OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
-                                    OR "290" OR "280" OR "380" OR "381"
-                                    OR "390" OR "490" OR "480" OR "481"
-                                    OR "590" OR "690" OR "780"
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *         IF  RECE02-KOHNUM(1)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490" OR "480" OR "481"
+      *                              OR "590" OR "690" OR "780"
+      *         OR  RECE02-KOHNUM(2)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490" OR "480" OR "481"
+      *                              OR "590" OR "690" OR "780"
+      *         OR  RECE02-KOHNUM(3)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490" OR "480" OR "481"
+      *                              OR "590" OR "690" OR "780"
+      *         OR  RECE02-KOHNUM(4)  = "180" OR "181" OR "190" OR "281"
+      *                              OR "290" OR "280" OR "380" OR "381"
+      *                              OR "390" OR "490" OR "480" OR "481"
+      *                              OR "590" OR "690" OR "780"
+               INITIALIZE                          TBL-HIKAKU-KOHI
+               MOVE    RECE02-KOHNUM(1)        TO  TBL-HKOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  TBL-HKOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  TBL-HKOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  TBL-HKOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *=== 印字対象番号追加 by Yoshikawa(2009/10/30) end
       *=== 印字対象番号追加 by Yoshikawa(2008/12/11) end
       *---(01.00.15) LINE ADD END   ------------------------------------
