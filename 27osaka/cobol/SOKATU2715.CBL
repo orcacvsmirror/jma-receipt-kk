@@ -33,6 +33,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/03/30  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/04/06  オンライン返戻対応
+      *  01.00.06    吉川    2012/03/16  PERFORMをGOTO命令に修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1631,7 +1632,10 @@
       *
       *        大阪府は読み飛ばす
                IF      RECE10-PREFKBN      =  "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/03/16) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/03/16) end
                END-IF
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
@@ -1651,7 +1655,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/03/16) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/03/16) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
