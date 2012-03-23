@@ -42,6 +42,9 @@
       *  01.00.07    吉川    11/11/18    3割負担で250点の場合
       *                                  印字されないの修正
       *  01.00.08    吉川    12/01/17    公費の助成がない場合は印字しない
+      *  01.00.09    吉川    12/03/14    月途中で保険を変更し、変更後で
+      *                                  上限額を超えた場合、変更前と変更後
+      *                                  どちらも印字するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -153,6 +156,9 @@
            03  WRK-KOHID             PIC 9(10).
            03  WRK-AMARI             PIC 9(02).
            03  WRK-CHK-FTNMONEY      PIC 9(09).
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) start
+           03  WRK-COMPFTN-G         PIC 9(09)V9(01).
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) end
       *
            03  WRK-MAE-INPUT       PIC X(200).
            03  WRK-OUT-INPUT       PIC X(200).
@@ -1056,6 +1062,10 @@
        920-SYUNOU-SET-SEC  SECTION.
       *
              INITIALIZE  SYUNOU-REC
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) start
+             INITIALIZE  WRK-COMPFTN-G
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) end
+      *
       *---(01.00.01) LINE ADD START ------------------------------------
       *       MOVE  RECE02-HOSPID      TO  SYU-HOSPID
              MOVE  SPA-HOSPNUM        TO  SYU-HOSPNUM
@@ -1110,6 +1120,17 @@
                        PERFORM  800-SEIKYU-SEC
                      END-IF
                    END-IF
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) start
+      *            同患者で同公費使用時の全診療の負担金集計
+                   PERFORM  VARYING  IDX  FROM  1  BY  1
+                            UNTIL    IDX  >    4 
+                            OR       SYU-KOH-HKNNUM(IDX)  =  SPACE
+                     IF  SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
+                       ADD  SYU-KOH-COMPFTN-ENTANI(IDX)  
+                                        TO  WRK-COMPFTN-G
+                     END-IF
+                   END-PERFORM
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) end
                  END-IF
       *
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -1119,6 +1140,19 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
                  PERFORM   925-SYUNOU-READ-SEC
                END-PERFORM
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) start
+      *        負担金合計が上限を超えたら、上限未達成の診療も印字
+               DISPLAY "WRK-COMPFTN-G =" WRK-COMPFTN-G
+               EVALUATE  WRK-KOHNUM
+                 WHEN  "241"
+                   IF  WRK-COMPFTN-G  <  500
+                     MOVE    1          TO  FLG-ERR
+                   ELSE
+                     MOVE    ZERO       TO  FLG-ERR
+                   END-IF
+               END-EVALUATE
+      *=== 月途中の保険変更時の処理修正 by Yoshikawa(2012/03/14) end
+      *
              ELSE
                DISPLAY  "SYUNOU SELECT ERR"
              END-IF
