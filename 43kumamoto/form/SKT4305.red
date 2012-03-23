@@ -63,7 +63,7 @@
           </element>
           <element name="TENSU" occurs="1">
             <appinfo>
-              <embed object="string" length="7"/>
+              <embed object="string" length="8"/>
             </appinfo>
           </element>
         </element>
@@ -75,7 +75,7 @@
       </element>
       <element name="S-KINGK" occurs="1">
         <appinfo>
-          <embed object="string" length="7"/>
+          <embed object="string" length="8"/>
         </appinfo>
       </element>
       <element name="S-FTNGK" occurs="1">
@@ -94,7 +94,7 @@
           </element>
           <element name="GTENSU" occurs="1">
             <appinfo>
-              <embed object="string" length="7"/>
+              <embed object="string" length="8"/>
             </appinfo>
           </element>
         </element>
@@ -106,7 +106,7 @@
       </element>
       <element name="S-GKINGK" occurs="1">
         <appinfo>
-          <embed object="string" length="7"/>
+          <embed object="string" length="8"/>
         </appinfo>
       </element>
       <element name="S-GFTNGK" occurs="1">
@@ -129,7 +129,7 @@
         </element>
         <element name="KTENSU" occurs="1">
           <appinfo>
-            <embed object="string" length="7"/>
+            <embed object="string" length="8"/>
           </appinfo>
         </element>
       </element>
@@ -140,7 +140,7 @@
       </element>
       <element name="S-KKINGK" occurs="1">
         <appinfo>
-          <embed object="string" length="7"/>
+          <embed object="string" length="8"/>
         </appinfo>
       </element>
       <element name="S-KFTNGK" occurs="1">
@@ -812,13 +812,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O31">
       <attribute name="obj_pos">
-        <point val="7.31947,3.88693"/>
+        <point val="7.33216,3.88693"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.31447,3.88193;28.2565,3.89193"/>
+        <rectangle val="7.32716,3.88193;28.2565,3.89193"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="7.31947,3.88693"/>
+        <point val="7.33216,3.88693"/>
         <point val="28.2515,3.88693"/>
       </attribute>
       <attribute name="numcp">
@@ -830,14 +830,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O32">
       <attribute name="obj_pos">
-        <point val="7.33474,3.328"/>
+        <point val="7.33216,3.35689"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.3185,3.323;7.33974,15.605"/>
+        <rectangle val="7.3185,3.35189;7.33716,15.6227"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="7.33474,3.328"/>
-        <point val="7.3235,15.6"/>
+        <point val="7.33216,3.35689"/>
+        <point val="7.3235,15.6177"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -938,13 +938,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O38">
       <attribute name="obj_pos">
-        <point val="7.3215,4.34629"/>
+        <point val="7.33216,4.32862"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.3165,4.34129;28.255,4.355"/>
+        <rectangle val="7.32716,4.32362;28.255,4.355"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="7.3215,4.34629"/>
+        <point val="7.33216,4.32862"/>
         <point val="28.25,4.35"/>
       </attribute>
       <attribute name="numcp">
@@ -1352,13 +1352,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O61">
       <attribute name="obj_pos">
-        <point val="10.9011,16.2473"/>
+        <point val="10.9124,16.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="2.09023,16.2423;10.9061,16.255"/>
+        <rectangle val="2.09023,16.245;10.9174,16.255"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="10.9011,16.2473"/>
+        <point val="10.9124,16.25"/>
         <point val="2.09523,16.25"/>
       </attribute>
       <attribute name="numcp">
@@ -1376,11 +1376,11 @@
         <point val="20.45,16.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.6321,16.2423;20.455,16.255"/>
+        <rectangle val="11.6484,16.245;20.455,16.255"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="20.45,16.25"/>
-        <point val="11.6371,16.2473"/>
+        <point val="11.6534,16.25"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1487,11 +1487,11 @@
         <point val="1.25,3.35689"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.245,3.35189;6.47143,4.81065"/>
+        <rectangle val="1.245,3.35189;6.4891,4.81065"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="1.25,3.35689"/>
-        <point val="6.46643,4.80565"/>
+        <point val="6.4841,4.80565"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1508,7 +1508,7 @@
         <point val="28.2521,5.40636"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,5.40636;28.2521,6"/>
+        <rectangle val="21.4083,5.40136;28.2571,6.005"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.2521,5.40636"/>
@@ -1518,18 +1518,18 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O70">
       <attribute name="obj_pos">
-        <point val="23.3228,7.19081"/>
+        <point val="23.3261,7.20148"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.3178,7.18581;23.3278,7.81419"/>
+        <rectangle val="23.3178,7.19648;23.3311,7.81419"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="23.3228,7.19081"/>
+        <point val="23.3261,7.20148"/>
         <point val="23.3228,7.80919"/>
       </attribute>
       <attribute name="numcp">
@@ -1562,7 +1562,7 @@
         <point val="28.2383,7.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.414,7.8;28.2383,8.39223"/>
+        <rectangle val="21.409,7.795;28.2433,8.39723"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.2383,7.8"/>
@@ -1572,7 +1572,7 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O73">
@@ -1616,7 +1616,7 @@
         <point val="28.2508,9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.414,9;28.2508,9.59364"/>
+        <rectangle val="21.409,8.995;28.2558,9.59864"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.2508,9"/>
@@ -1626,7 +1626,7 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O76">
@@ -1634,7 +1634,7 @@
         <point val="28.2508,6.6"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,6.6;28.2508,7.2"/>
+        <rectangle val="21.4083,6.595;28.2558,7.205"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.2508,6.6"/>
@@ -1644,7 +1644,7 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O77">
@@ -1685,14 +1685,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O79">
       <attribute name="obj_pos">
-        <point val="23.3228,9.59511"/>
+        <point val="23.3228,9.60761"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.3178,9.59011;23.3278,10.1905"/>
+        <rectangle val="23.3178,9.60261;23.3311,10.2127"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="23.3228,9.59511"/>
-        <point val="23.3228,10.1855"/>
+        <point val="23.3228,9.60761"/>
+        <point val="23.3261,10.2077"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1703,14 +1703,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O80">
       <attribute name="obj_pos">
-        <point val="25.6726,9.61277"/>
+        <point val="25.6636,9.60773"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="25.6588,9.60777;25.6776,10.2162"/>
+        <rectangle val="25.6586,9.60273;25.6686,10.2065"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="25.6726,9.61277"/>
-        <point val="25.6638,10.2112"/>
+        <point val="25.6636,9.60773"/>
+        <point val="25.6636,10.2015"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1724,7 +1724,7 @@
         <point val="28.2536,10.2061"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,10.2061;28.2536,10.8"/>
+        <rectangle val="21.4083,10.2011;28.2586,10.805"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.2536,10.2061"/>
@@ -1734,19 +1734,19 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O82">
       <attribute name="obj_pos">
-        <point val="23.3228,10.7789"/>
+        <point val="23.3228,10.8039"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.3178,10.7739;23.3278,11.3743"/>
+        <rectangle val="23.3178,10.7989;23.3311,11.4127"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="23.3228,10.7789"/>
-        <point val="23.3228,11.3693"/>
+        <point val="23.3228,10.8039"/>
+        <point val="23.3261,11.4077"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1757,14 +1757,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O83">
       <attribute name="obj_pos">
-        <point val="25.6726,10.8142"/>
+        <point val="25.6761,10.8077"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="25.6588,10.8092;25.6776,11.4177"/>
+        <rectangle val="25.6711,10.8027;25.6811,11.4127"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="25.6726,10.8142"/>
-        <point val="25.6638,11.4127"/>
+        <point val="25.6761,10.8077"/>
+        <point val="25.6761,11.4077"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1775,20 +1775,20 @@
     </object>
     <object type="Standard - Line" version="0" id="O84">
       <attribute name="obj_pos">
-        <point val="28.2536,11.395"/>
+        <point val="28.2386,11.4015"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,11.395;28.2536,12"/>
+        <rectangle val="21.4083,11.3965;28.2436,12.005"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="28.2536,11.395"/>
+        <point val="28.2386,11.4015"/>
         <point val="21.4133,12"/>
       </attribute>
       <attribute name="numcp">
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O85">
@@ -1832,7 +1832,7 @@
         <point val="28.236,12.5964"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,12.5964;28.236,13.2"/>
+        <rectangle val="21.4083,12.5914;28.241,13.205"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.236,12.5964"/>
@@ -1842,7 +1842,7 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O88">
@@ -1865,14 +1865,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O89">
       <attribute name="obj_pos">
-        <point val="25.672,13.1802"/>
+        <point val="25.672,13.2052"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="25.6588,13.1752;25.677,13.8381"/>
+        <rectangle val="25.667,13.2002;25.6811,13.8065"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="25.672,13.1802"/>
-        <point val="25.6638,13.8331"/>
+        <point val="25.672,13.2052"/>
+        <point val="25.6761,13.8015"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1886,7 +1886,7 @@
         <point val="28.261,13.7978"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,13.7978;28.261,14.4"/>
+        <rectangle val="21.4083,13.7928;28.266,14.405"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.261,13.7978"/>
@@ -1896,19 +1896,19 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O91">
       <attribute name="obj_pos">
-        <point val="23.3228,14.4081"/>
+        <point val="23.3228,14.3956"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.3178,14.4031;23.3278,14.9962"/>
+        <rectangle val="23.3178,14.3906;23.3311,15.0065"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="23.3228,14.4081"/>
-        <point val="23.3228,14.9912"/>
+        <point val="23.3228,14.3956"/>
+        <point val="23.3261,15.0015"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1922,11 +1922,11 @@
         <point val="25.6726,14.4008"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="25.6588,14.3958;25.6776,15.0042"/>
+        <rectangle val="25.6676,14.3958;25.6811,15.0065"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="25.6726,14.4008"/>
-        <point val="25.6638,14.9992"/>
+        <point val="25.6761,15.0015"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1940,7 +1940,7 @@
         <point val="28.2448,14.9985"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="21.4133,14.9985;28.2448,15.6"/>
+        <rectangle val="21.4083,14.9935;28.2498,15.605"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="28.2448,14.9985"/>
@@ -1950,7 +1950,7 @@
         <int val="0"/>
       </attribute>
       <attribute name="line_width">
-        <real val="0"/>
+        <real val="0.01"/>
       </attribute>
     </object>
     <object type="Standard - Line" version="0" id="O94">
@@ -1991,14 +1991,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O96">
       <attribute name="obj_pos">
-        <point val="10.9059,15.7806"/>
+        <point val="10.9059,15.7931"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.9009,15.7756;10.9109,19.3856"/>
+        <rectangle val="10.9009,15.7881;10.9109,19.3981"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="10.9059,15.7806"/>
-        <point val="10.9059,19.3806"/>
+        <point val="10.9059,15.7931"/>
+        <point val="10.9059,19.3931"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -5238,7 +5238,7 @@
         <point val="16.6194,17.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.3468,17.0168;16.6194,17.3168"/>
+        <rectangle val="15.165,17.0168;16.6194,17.3168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[3].KNYUGAI-TBL[1].KTENSU#</string>
@@ -5249,7 +5249,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5280,7 +5280,7 @@
         <point val="16.5841,18.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.3115,17.9111;16.5841,18.2111"/>
+        <rectangle val="15.1297,17.9111;16.5841,18.2111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[4].KNYUGAI-TBL[1].KTENSU#</string>
@@ -5291,7 +5291,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5322,7 +5322,7 @@
         <point val="16.5841,19.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.3115,18.8111;16.5841,19.1111"/>
+        <rectangle val="15.1297,18.8111;16.5841,19.1111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[5].KNYUGAI-TBL[1].KTENSU#</string>
@@ -5333,7 +5333,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5616,7 +5616,7 @@
         <point val="14.1076,17.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.835,17.0168;14.1076,17.3168"/>
+        <rectangle val="12.6532,17.0168;14.1076,17.3168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[3].KNYUGAI-TBL[0].KTENSU#</string>
@@ -5627,7 +5627,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5658,7 +5658,7 @@
         <point val="14.0899,18.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8173,17.9111;14.0899,18.2111"/>
+        <rectangle val="12.6355,17.9111;14.0899,18.2111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[4].KNYUGAI-TBL[0].KTENSU#</string>
@@ -5669,7 +5669,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5700,7 +5700,7 @@
         <point val="14.0899,19.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.8173,18.8111;14.0899,19.1111"/>
+        <rectangle val="12.6355,18.8111;14.0899,19.1111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[5].KNYUGAI-TBL[0].KTENSU#</string>
@@ -5711,7 +5711,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5739,10 +5739,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O196">
       <attribute name="obj_pos">
-        <point val="18.9465,17.2557"/>
+        <point val="19.0172,17.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.6739,17.0168;18.9465,17.3168"/>
+        <rectangle val="17.5628,17.0168;19.0172,17.3168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[3].S-KKINGK#</string>
@@ -5753,7 +5753,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5762,7 +5762,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.9465,17.2557"/>
+            <point val="19.0172,17.2557"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5823,10 +5823,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O198">
       <attribute name="obj_pos">
-        <point val="18.9641,18.15"/>
+        <point val="19.0348,18.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.6915,17.9111;18.9641,18.2111"/>
+        <rectangle val="17.5804,17.9111;19.0348,18.2111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[4].S-KKINGK#</string>
@@ -5837,7 +5837,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5846,7 +5846,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.9641,18.15"/>
+            <point val="19.0348,18.15"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5907,10 +5907,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O200">
       <attribute name="obj_pos">
-        <point val="18.9465,19.05"/>
+        <point val="19.0172,19.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.6739,18.8111;18.9465,19.1111"/>
+        <rectangle val="17.5628,18.8111;19.0172,19.1111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[5].S-KKINGK#</string>
@@ -5921,7 +5921,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -5930,7 +5930,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="18.9465,19.05"/>
+            <point val="19.0172,19.05"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6414,7 +6414,7 @@
         <point val="4.49788,17.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.22528,17.0168;4.49788,17.3168"/>
+        <rectangle val="3.04348,17.0168;4.49788,17.3168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[0].KNYUGAI-TBL[0].KTENSU#</string>
@@ -6425,7 +6425,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6453,10 +6453,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O213">
       <attribute name="obj_pos">
-        <point val="6.99205,17.2557"/>
+        <point val="7.04505,17.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.71945,17.0168;6.99205,17.3168"/>
+        <rectangle val="5.59065,17.0168;7.04505,17.3168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[0].KNYUGAI-TBL[1].KTENSU#</string>
@@ -6467,7 +6467,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6476,7 +6476,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.99205,17.2557"/>
+            <point val="7.04505,17.2557"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6498,7 +6498,7 @@
         <point val="4.49788,18.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.22528,17.9111;4.49788,18.2111"/>
+        <rectangle val="3.04348,17.9111;4.49788,18.2111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[1].KNYUGAI-TBL[0].KTENSU#</string>
@@ -6509,7 +6509,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6537,10 +6537,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O215">
       <attribute name="obj_pos">
-        <point val="6.99205,18.15"/>
+        <point val="7.04505,18.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.71945,17.9111;6.99205,18.2111"/>
+        <rectangle val="5.59065,17.9111;7.04505,18.2111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[1].KNYUGAI-TBL[1].KTENSU#</string>
@@ -6551,7 +6551,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6560,7 +6560,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.99205,18.15"/>
+            <point val="7.04505,18.15"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6582,7 +6582,7 @@
         <point val="4.49788,19.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.22528,18.8111;4.49788,19.1111"/>
+        <rectangle val="3.04348,18.8111;4.49788,19.1111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[2].KNYUGAI-TBL[0].KTENSU#</string>
@@ -6593,7 +6593,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6621,10 +6621,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O217">
       <attribute name="obj_pos">
-        <point val="7.00972,19.05"/>
+        <point val="7.06272,19.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.73712,18.8111;7.00972,19.1111"/>
+        <rectangle val="5.60832,18.8111;7.06272,19.1111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[2].KNYUGAI-TBL[1].KTENSU#</string>
@@ -6635,7 +6635,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6644,7 +6644,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="7.00972,19.05"/>
+            <point val="7.06272,19.05"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6663,10 +6663,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O218">
       <attribute name="obj_pos">
-        <point val="9.42509,17.2557"/>
+        <point val="9.47809,17.2557"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.15249,17.0168;9.42509,17.3168"/>
+        <rectangle val="8.02369,17.0168;9.47809,17.3168"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[0].S-KKINGK#</string>
@@ -6677,7 +6677,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6686,7 +6686,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.42509,17.2557"/>
+            <point val="9.47809,17.2557"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6747,10 +6747,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O220">
       <attribute name="obj_pos">
-        <point val="9.40742,18.15"/>
+        <point val="9.46042,18.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.13482,17.9111;9.40742,18.2111"/>
+        <rectangle val="8.00602,17.9111;9.46042,18.2111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[1].S-KKINGK#</string>
@@ -6761,7 +6761,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6770,7 +6770,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.40742,18.15"/>
+            <point val="9.46042,18.15"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6831,10 +6831,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O222">
       <attribute name="obj_pos">
-        <point val="9.42509,19.05"/>
+        <point val="9.47809,19.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.15249,18.8111;9.42509,19.1111"/>
+        <rectangle val="8.02369,18.8111;9.47809,19.1111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOUHI-TBL[2].S-KKINGK#</string>
@@ -6845,7 +6845,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6854,7 +6854,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.42509,19.05"/>
+            <point val="9.47809,19.05"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7254,7 +7254,7 @@
         <point val="25.3589,5.25159"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,4.97289;25.3589,5.32289"/>
+        <rectangle val="23.6621,4.97289;25.3589,5.32289"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].S-KINGK#</string>
@@ -7265,7 +7265,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7380,7 +7380,7 @@
         <point val="25.3589,6.46781"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,6.18911;25.3589,6.53911"/>
+        <rectangle val="23.6621,6.18911;25.3589,6.53911"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].S-KINGK#</string>
@@ -7391,7 +7391,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7506,7 +7506,7 @@
         <point val="25.3589,7.65156"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,7.37286;25.3589,7.72286"/>
+        <rectangle val="23.6621,7.37286;25.3589,7.72286"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[2].S-KINGK#</string>
@@ -7517,7 +7517,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7632,7 +7632,7 @@
         <point val="25.3589,8.85297"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,8.57427;25.3589,8.92427"/>
+        <rectangle val="23.6621,8.57427;25.3589,8.92427"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[3].S-KINGK#</string>
@@ -7643,7 +7643,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7758,7 +7758,7 @@
         <point val="25.3589,10.0588"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,9.7801;25.3589,10.1301"/>
+        <rectangle val="23.6621,9.7801;25.3589,10.1301"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[4].S-KINGK#</string>
@@ -7769,7 +7769,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7884,7 +7884,7 @@
         <point val="25.3589,11.2603"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,10.9816;25.3589,11.3316"/>
+        <rectangle val="23.6621,10.9816;25.3589,11.3316"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[5].S-KINGK#</string>
@@ -7895,7 +7895,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8010,7 +8010,7 @@
         <point val="25.3589,12.4617"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,12.183;25.3589,12.533"/>
+        <rectangle val="23.6621,12.183;25.3589,12.533"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[6].S-KINGK#</string>
@@ -8021,7 +8021,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8136,7 +8136,7 @@
         <point val="25.3589,13.6587"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8742,13.38;25.3589,13.73"/>
+        <rectangle val="23.6621,13.38;25.3589,13.73"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[7].S-KINGK#</string>
@@ -8147,7 +8147,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8640,7 +8640,7 @@
         <point val="20.7291,14.8346"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,14.5559;20.7291,14.9059"/>
+        <rectangle val="19.0323,14.5559;20.7291,14.9059"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL.GNYUGAI-TBL[0].GKYURATE-TBL[1].GTENSU#</string>
@@ -8651,7 +8651,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8682,7 +8682,7 @@
         <point val="25.3491,14.809"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="23.8644,14.5303;25.3491,14.8803"/>
+        <rectangle val="23.6523,14.5303;25.3491,14.8803"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL.S-GKINGK#</string>
@@ -8693,7 +8693,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8808,7 +8808,7 @@
         <point val="20.763,15.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2783,15.1213;20.763,15.4713"/>
+        <rectangle val="19.0662,15.1213;20.763,15.4713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL.GNYUGAI-TBL[1].GKYURATE-TBL[1].GTENSU#</string>
@@ -8819,7 +8819,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9018,7 +9018,7 @@
         <point val="13.767,14.8432"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,14.5645;13.767,14.9145"/>
+        <rectangle val="12.0702,14.5645;13.767,14.9145"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL.GNYUGAI-TBL[0].GKYURATE-TBL[0].GTENSU#</string>
@@ -9029,7 +9029,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9102,7 +9102,7 @@
         <point val="13.7905,15.4262"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.3058,15.1475;13.7905,15.4975"/>
+        <rectangle val="12.0937,15.1475;13.7905,15.4975"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GOKEI-TBL.GNYUGAI-TBL[1].GKYURATE-TBL[0].GTENSU#</string>
@@ -9113,7 +9113,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9144,7 +9144,7 @@
         <point val="13.767,5.24647"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,4.96777;13.767,5.31777"/>
+        <rectangle val="12.0702,4.96777;13.767,5.31777"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -9155,7 +9155,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9228,7 +9228,7 @@
         <point val="20.7291,5.26687"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,4.98817;20.7291,5.33817"/>
+        <rectangle val="19.0323,4.98817;20.7291,5.33817"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -9239,7 +9239,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9312,7 +9312,7 @@
         <point val="13.767,5.83224"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,5.55354;13.767,5.90354"/>
+        <rectangle val="12.0702,5.55354;13.767,5.90354"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -9323,7 +9323,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9396,7 +9396,7 @@
         <point val="20.7291,5.8499"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,5.5712;20.7291,5.9212"/>
+        <rectangle val="19.0323,5.5712;20.7291,5.9212"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[0].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -9407,7 +9407,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9480,7 +9480,7 @@
         <point val="13.767,6.46555"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,6.18685;13.767,6.53685"/>
+        <rectangle val="12.0702,6.18685;13.767,6.53685"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -9491,7 +9491,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9564,7 +9564,7 @@
         <point val="20.7291,6.48595"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,6.20725;20.7291,6.55725"/>
+        <rectangle val="19.0323,6.20725;20.7291,6.55725"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -9575,7 +9575,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9648,7 +9648,7 @@
         <point val="13.767,7.05132"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,6.77262;13.767,7.12262"/>
+        <rectangle val="12.0702,6.77262;13.767,7.12262"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -9659,7 +9659,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9732,7 +9732,7 @@
         <point val="20.7291,7.06899"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,6.79029;20.7291,7.14029"/>
+        <rectangle val="19.0323,6.79029;20.7291,7.14029"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[1].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -9743,7 +9743,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9816,7 +9816,7 @@
         <point val="13.767,7.64929"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,7.37059;13.767,7.72059"/>
+        <rectangle val="12.0702,7.37059;13.767,7.72059"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[2].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -9827,7 +9827,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9900,7 +9900,7 @@
         <point val="20.7291,7.66969"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,7.39099;20.7291,7.74099"/>
+        <rectangle val="19.0323,7.39099;20.7291,7.74099"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[2].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -9911,7 +9911,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9984,7 +9984,7 @@
         <point val="13.767,8.23506"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,7.95636;13.767,8.30636"/>
+        <rectangle val="12.0702,7.95636;13.767,8.30636"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[2].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -9995,7 +9995,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10068,7 +10068,7 @@
         <point val="20.7291,8.25273"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,7.97403;20.7291,8.32403"/>
+        <rectangle val="19.0323,7.97403;20.7291,8.32403"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[2].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -10079,7 +10079,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10152,7 +10152,7 @@
         <point val="13.767,8.86837"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,8.58967;13.767,8.93967"/>
+        <rectangle val="12.0702,8.58967;13.767,8.93967"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[3].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -10163,7 +10163,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10236,7 +10236,7 @@
         <point val="20.7291,8.88877"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,8.61007;20.7291,8.96007"/>
+        <rectangle val="19.0323,8.61007;20.7291,8.96007"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[3].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -10247,7 +10247,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10320,7 +10320,7 @@
         <point val="13.767,9.45415"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,9.17545;13.767,9.52545"/>
+        <rectangle val="12.0702,9.17545;13.767,9.52545"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[3].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -10331,7 +10331,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10404,7 +10404,7 @@
         <point val="20.7291,9.47181"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,9.19311;20.7291,9.54311"/>
+        <rectangle val="19.0323,9.19311;20.7291,9.54311"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[3].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -10415,7 +10415,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10488,7 +10488,7 @@
         <point val="13.767,10.0521"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,9.7734;13.767,10.1234"/>
+        <rectangle val="12.0702,9.7734;13.767,10.1234"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[4].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -10499,7 +10499,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10572,7 +10572,7 @@
         <point val="20.7291,10.0725"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,9.7938;20.7291,10.1438"/>
+        <rectangle val="19.0323,9.7938;20.7291,10.1438"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[4].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -10583,7 +10583,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10656,7 +10656,7 @@
         <point val="13.767,10.6379"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,10.3592;13.767,10.7092"/>
+        <rectangle val="12.0702,10.3592;13.767,10.7092"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[4].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -10667,7 +10667,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10740,7 +10740,7 @@
         <point val="20.7291,10.6556"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,10.3769;20.7291,10.7269"/>
+        <rectangle val="19.0323,10.3769;20.7291,10.7269"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[4].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -10751,7 +10751,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10824,7 +10824,7 @@
         <point val="13.767,11.2535"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,10.9748;13.767,11.3248"/>
+        <rectangle val="12.0702,10.9748;13.767,11.3248"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[5].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -10835,7 +10835,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10908,7 +10908,7 @@
         <point val="20.7291,11.2739"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,10.9952;20.7291,11.3452"/>
+        <rectangle val="19.0323,10.9952;20.7291,11.3452"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[5].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -10919,7 +10919,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -10992,7 +10992,7 @@
         <point val="13.767,11.8393"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,11.5606;13.767,11.9106"/>
+        <rectangle val="12.0702,11.5606;13.767,11.9106"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[5].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -11003,7 +11003,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11076,7 +11076,7 @@
         <point val="20.7291,11.857"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,11.5783;20.7291,11.9283"/>
+        <rectangle val="19.0323,11.5783;20.7291,11.9283"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[5].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -11087,7 +11087,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11160,7 +11160,7 @@
         <point val="13.767,12.4549"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,12.1762;13.767,12.5262"/>
+        <rectangle val="12.0702,12.1762;13.767,12.5262"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[6].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -11171,7 +11171,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11244,7 +11244,7 @@
         <point val="20.7291,12.4753"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,12.1966;20.7291,12.5466"/>
+        <rectangle val="19.0323,12.1966;20.7291,12.5466"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[6].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -11255,7 +11255,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11328,7 +11328,7 @@
         <point val="13.767,13.0407"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,12.762;13.767,13.112"/>
+        <rectangle val="12.0702,12.762;13.767,13.112"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[6].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -11339,7 +11339,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11412,7 +11412,7 @@
         <point val="20.7291,13.0584"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,12.7797;20.7291,13.1297"/>
+        <rectangle val="19.0323,12.7797;20.7291,13.1297"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[6].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -11423,7 +11423,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11496,7 +11496,7 @@
         <point val="13.767,13.6387"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,13.36;13.767,13.71"/>
+        <rectangle val="12.0702,13.36;13.767,13.71"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[7].NYUGAI-TBL[0].KYURATE-TBL[0].TENSU#</string>
@@ -11507,7 +11507,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11580,7 +11580,7 @@
         <point val="20.7291,13.6591"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,13.3804;20.7291,13.7304"/>
+        <rectangle val="19.0323,13.3804;20.7291,13.7304"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[7].NYUGAI-TBL[0].KYURATE-TBL[1].TENSU#</string>
@@ -11591,7 +11591,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11664,7 +11664,7 @@
         <point val="13.767,14.2245"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2823,13.9458;13.767,14.2958"/>
+        <rectangle val="12.0702,13.9458;13.767,14.2958"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[7].NYUGAI-TBL[1].KYURATE-TBL[0].TENSU#</string>
@@ -11675,7 +11675,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11748,7 +11748,7 @@
         <point val="20.7291,14.2421"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.2444,13.9634;20.7291,14.3134"/>
+        <rectangle val="19.0323,13.9634;20.7291,14.3134"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU-TBL[7].NYUGAI-TBL[1].KYURATE-TBL[1].TENSU#</string>
@@ -11759,7 +11759,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9999999#</string>
+            <string>#99999999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>

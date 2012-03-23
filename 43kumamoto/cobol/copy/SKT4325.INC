@@ -23,6 +23,7 @@
       ********************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         12/03/14  点数と金額の桁数増加
       ********************************************************************
        01  SKT4325.
       *    ページ番号
@@ -53,7 +54,10 @@
       *    日数
                    07 SKT4325-NISSU        PIC  X(05).
       *    点数
-                   07 SKT4325-TENSU        PIC  X(09).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *             07 SKT4325-TENSU        PIC  X(09).
+                   07 SKT4325-TENSU        PIC  X(10).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    一部負担金
                    07 SKT4325-ITBFTN       PIC  X(09).
       *    食事件数
@@ -61,7 +65,10 @@
       *    食事日数
                05  SKT4325-S-NISSU         PIC  X(05).
       *    食事療養費
-               05  SKT4325-S-KINGK         PIC  X(09).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *         05  SKT4325-S-KINGK         PIC  X(09).
+               05  SKT4325-S-KINGK         PIC  X(10).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    標準負担額
                05  SKT4325-S-FTNGK         PIC  X(09).
       *    公費テーブル
@@ -75,7 +82,10 @@
       *    日数
                    07 SKT4325-KNISSU       PIC  X(05).
       *    点数
-                   07 SKT4325-KTENSU       PIC  X(09).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *             07 SKT4325-KTENSU       PIC  X(09).
+                   07 SKT4325-KTENSU       PIC  X(10).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    一部負担金
                    07 SKT4325-KITBFTN      PIC  X(09).
       *    食事件数
@@ -83,6 +93,9 @@
       *    食事日数
                05  SKT4325-S-KNISSU        PIC  X(05).
       *    食事療養費
-               05  SKT4325-S-KKINGK        PIC  X(09).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *         05  SKT4325-S-KKINGK        PIC  X(09).
+               05  SKT4325-S-KKINGK        PIC  X(10).
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    標準負担額
                05  SKT4325-S-KFTNGK        PIC  X(09).

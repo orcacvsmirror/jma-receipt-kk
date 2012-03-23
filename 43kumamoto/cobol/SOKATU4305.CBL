@@ -41,6 +41,7 @@
       *  01.00.14    µÈÀî    2011/09/05  SRYKA.INI¤¬¤¢¤ëÂ¾¸©¤Î¥×¥í¥°¥é¥à¤ò
       *                                  ¥¤¥ó¥¹¥È¡¼¥ë¤¹¤ë¤ÈÉ¸ÜÖ²ÊÍó¤Î
       *                                  É½¼¨¤¬¤ª¤«¤·¤¯¤Ê¤ë¤Î¤ò½¤Àµ
+      *  01.00.15    µÈÀî    2012/03/14  ÅÀ¿ô¤È¿©»öÎÅÍÜÈñ¤Î·å¿ôÁý²Ã
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -181,7 +182,10 @@
       *=== ·å¿ô½¤Àµ by Yoshikawa(2008/06/16) start
       *     03  WRK-Z7              PIC ZZZZZZ.
            03  WRK-Z7              PIC ZZZZZZZ.
-      *=== ·å¿ô½¤Àµ by Yoshikawa(2008/06/16) start
+      *=== ·å¿ô½¤Àµ by Yoshikawa(2008/06/16) end
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+           03  WRK-Z8              PIC ZZZZZZZZ.
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
            03  WRK-KOHNUM9         PIC Z9.
            03  WRK-PAGE            PIC ZZZ9.
@@ -1240,8 +1244,12 @@
                    MOVE  SUM-KENSU(IDX IDX2 IDX3)  TO  WRK-Z4
                    MOVE  WRK-Z4    TO  SKT4305-KENSU(IDX1 IDX2 IDX3)
       *    ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
-                   MOVE  SUM-TENSU(IDX IDX2 IDX3)  TO  WRK-Z7
-                   MOVE  WRK-Z7    TO  SKT4305-TENSU(IDX1 IDX2 IDX3)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *             MOVE  SUM-TENSU(IDX IDX2 IDX3)  TO  WRK-Z7
+      *             MOVE  WRK-Z7    TO  SKT4305-TENSU(IDX1 IDX2 IDX3)
+                   MOVE  SUM-TENSU(IDX IDX2 IDX3)  TO  WRK-Z8
+                   MOVE  WRK-Z8    TO  SKT4305-TENSU(IDX1 IDX2 IDX3)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
                  END-PERFORM
                END-PERFORM
       *
@@ -1249,8 +1257,12 @@
                MOVE  SUM-S-KENSU(IDX)       TO  WRK-Z4
                MOVE  WRK-Z4                 TO  SKT4305-S-KENSU(IDX1)
       *    ¿©»öÎÅÍÜ¡§¶â³Û
-               MOVE  SUM-S-KINGK(IDX)       TO  WRK-Z7
-               MOVE  WRK-Z7                 TO  SKT4305-S-KINGK(IDX1)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *         MOVE  SUM-S-KINGK(IDX)       TO  WRK-Z7
+      *         MOVE  WRK-Z7                 TO  SKT4305-S-KINGK(IDX1)
+               MOVE  SUM-S-KINGK(IDX)       TO  WRK-Z8
+               MOVE  WRK-Z8                 TO  SKT4305-S-KINGK(IDX1)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
                MOVE  SUM-S-FTNGK(IDX)       TO  WRK-Z7
                MOVE  WRK-Z7                 TO  SKT4305-S-FTNGK(IDX1)
@@ -1291,16 +1303,24 @@
                  MOVE  SUM-KKENSU(IDX4 IDZ)  TO WRK-Z4
                  MOVE  WRK-Z4                TO SKT4305-KKENSU(IDY IDZ)
       *    ¸øÈñºÆ·ÇÍó¡§ÎÅÍÜ¤ÎµëÉÕ¡§ÅÀ¿ô
-                 MOVE  SUM-KTENSU(IDX4 IDZ)  TO WRK-Z7
-                 MOVE  WRK-Z7                TO SKT4305-KTENSU(IDY IDZ)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *           MOVE  SUM-KTENSU(IDX4 IDZ)  TO WRK-Z7
+      *           MOVE  WRK-Z7                TO SKT4305-KTENSU(IDY IDZ)
+                 MOVE  SUM-KTENSU(IDX4 IDZ)  TO WRK-Z8
+                 MOVE  WRK-Z8                TO SKT4305-KTENSU(IDY IDZ)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
                END-PERFORM
       *
       *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§·ï¿ô
                MOVE  SUM-S-KKENSU(IDX4)      TO  WRK-Z4
                MOVE  WRK-Z4                  TO  SKT4305-S-KKENSU(IDY)
       *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§¶â³Û
-               MOVE  SUM-S-KKINGK(IDX4)      TO  WRK-Z7
-               MOVE  WRK-Z7                  TO  SKT4305-S-KKINGK(IDY)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *         MOVE  SUM-S-KKINGK(IDX4)      TO  WRK-Z7
+      *         MOVE  WRK-Z7                  TO  SKT4305-S-KKINGK(IDY)
+               MOVE  SUM-S-KKINGK(IDX4)      TO  WRK-Z8
+               MOVE  WRK-Z8                  TO  SKT4305-S-KKINGK(IDY)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¸øÈñºÆ·ÇÍó¡§¿©»öÎÅÍÜ¡§É¸½àÉéÃ´³Û
                MOVE  SUM-S-KFTNGK(IDX4)      TO  WRK-Z7
                MOVE  WRK-Z7                  TO  SKT4305-S-KFTNGK(IDY)
@@ -1391,16 +1411,24 @@
                MOVE  SUM-GKENSU(IDX1 IDX2)  TO  WRK-Z4
                MOVE  WRK-Z4             TO  SKT4305-GKENSU(IDX1 IDX2)
       *    ¹ç·×¡§ÅÀ¿ô
-               MOVE  SUM-GTENSU(IDX1 IDX2)  TO  WRK-Z7
-               MOVE  WRK-Z7             TO  SKT4305-GTENSU(IDX1 IDX2)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *         MOVE  SUM-GTENSU(IDX1 IDX2)  TO  WRK-Z7
+      *         MOVE  WRK-Z7             TO  SKT4305-GTENSU(IDX1 IDX2)
+               MOVE  SUM-GTENSU(IDX1 IDX2)  TO  WRK-Z8
+               MOVE  WRK-Z8             TO  SKT4305-GTENSU(IDX1 IDX2)
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
              END-PERFORM
            END-PERFORM
       *    ¹ç·×¡§¿©»ö·ï¿ô
            MOVE  SUM-S-GKENSU           TO  WRK-Z4
            MOVE  WRK-Z4                 TO  SKT4305-S-GKENSU
       *    ¹ç·×¡§¿©»ö¶â³Û
-           MOVE  SUM-S-GKINGK           TO  WRK-Z7
-           MOVE  WRK-Z7                 TO  SKT4305-S-GKINGK
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *     MOVE  SUM-S-GKINGK           TO  WRK-Z7
+      *     MOVE  WRK-Z7                 TO  SKT4305-S-GKINGK
+           MOVE  SUM-S-GKINGK           TO  WRK-Z8
+           MOVE  WRK-Z8                 TO  SKT4305-S-GKINGK
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¹ç·×¡§É¸½àÉéÃ´³Û
            MOVE  SUM-S-GFTNGK           TO  WRK-Z7
            MOVE  WRK-Z7                 TO  SKT4305-S-GFTNGK

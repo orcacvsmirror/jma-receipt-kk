@@ -23,6 +23,7 @@
       ********************************************************************
       *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô       ÆüÉÕ      ÆâÍÆ
+      *  01.00.01    µÈÀî         12/03/14  ÅÀ¿ô¤È¿©»öÎÅÍÜÈñ¤Î·å¿ôÁý²Ã
       ********************************************************************
        01  SKT4305.
       *    ¿ÇÎÅÇ¯·î
@@ -55,11 +56,17 @@
       *    ·ï¿ô
                        09  SKT4305-KENSU   PIC  X(04).
       *    ÅÀ¿ô
-                       09  SKT4305-TENSU   PIC  X(07).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *                 09  SKT4305-TENSU   PIC  X(07).
+                       09  SKT4305-TENSU   PIC  X(08).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¿©»ö·ï¿ô
                05  SKT4305-S-KENSU         PIC  X(04).
       *    ¿©»öÎÅÍÜÈñ
-               05  SKT4305-S-KINGK         PIC  X(07).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *         05  SKT4305-S-KINGK         PIC  X(07).
+               05  SKT4305-S-KINGK         PIC  X(08).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    É¸½àÉéÃ´³Û
                05  SKT4305-S-FTNGK         PIC  X(07).
       *    ¹ç·×¥¨¥ê¥¢
@@ -70,11 +77,17 @@
       *    ·ï¿ô
                        09  SKT4305-GKENSU  PIC  X(04).
       *    ÅÀ¿ô
-                       09  SKT4305-GTENSU  PIC  X(07).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *                 09  SKT4305-GTENSU  PIC  X(07).
+                       09  SKT4305-GTENSU  PIC  X(08).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¿©»ö·ï¿ô
                05  SKT4305-S-GKENSU        PIC  X(04).
       *    ¿©»öÎÅÍÜÈñ
-               05  SKT4305-S-GKINGK        PIC  X(07).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *         05  SKT4305-S-GKINGK        PIC  X(07).
+               05  SKT4305-S-GKINGK        PIC  X(08).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    É¸½àÉéÃ´³Û
                05  SKT4305-S-GFTNGK        PIC  X(07).
       *    ¸øÈñ¥¨¥ê¥¢
@@ -86,11 +99,17 @@
       *    ¸øÈñ¡§·ï¿ô
                    07  SKT4305-KKENSU      PIC X(04).
       *    ¸øÈñ¡§ÅÀ¿ô
-                   07  SKT4305-KTENSU      PIC X(07).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *             07  SKT4305-KTENSU      PIC X(07).
+                   07  SKT4305-KTENSU      PIC X(08).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¸øÈñ¡§¿©»ö·ï¿ô
                05  SKT4305-S-KKENSU        PIC X(04).
       *    ¸øÈñ¡§¿©»öÎÅÍÜÈñ
-               05  SKT4305-S-KKINGK        PIC X(07).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) start
+      *         05  SKT4305-S-KKINGK        PIC X(07).
+               05  SKT4305-S-KKINGK        PIC X(08).
+      *=== ·å¿ôÁý²Ã by Yoshikawa(2012/03/14) end
       *    ¸øÈñ¡§É¸½àÉéÃ´³Û
                05  SKT4305-S-KFTNGK        PIC X(07).
       *    Áí·ï¿ô

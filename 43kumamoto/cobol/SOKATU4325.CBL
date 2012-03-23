@@ -34,6 +34,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.04    吉川    2010/06/01  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
+      *  01.00.05    吉川    2012/03/14  点数と食事療養費の桁数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -152,6 +153,9 @@
            03  WRK-Z5              PIC Z,ZZZ.
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+           03  WRK-Z10             PIC ZZ,ZZZ,ZZZ.
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
            03  WRK-KOHNUM9         PIC Z9.
            03  WRK-PAGE            PIC ZZZ9.
       *
@@ -1087,8 +1091,12 @@
                MOVE  SUM-NISSU(IDX IDY)  TO  WRK-Z5 
                MOVE  WRK-Z5              TO  SKT4325-NISSU(IDZ IDY)
       *    療養の給付：点数
-               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
-               MOVE  WRK-Z9              TO  SKT4325-TENSU(IDZ IDY)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *         MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT4325-TENSU(IDZ IDY)
+               MOVE  SUM-TENSU(IDX IDY)  TO  WRK-Z10
+               MOVE  WRK-Z10             TO  SKT4325-TENSU(IDZ IDY)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    療養の給付：一部負担金
                MOVE  SUM-ITBFTN(IDX IDY) TO  WRK-Z9
                MOVE  WRK-Z9              TO  SKT4325-ITBFTN(IDZ IDY)
@@ -1101,8 +1109,12 @@
              MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT4325-S-NISSU(IDZ)
       *    食事療養：金額
-             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
-             MOVE  WRK-Z9                TO  SKT4325-S-KINGK(IDZ)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SKT4325-S-KINGK(IDZ)
+             MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z10
+             MOVE  WRK-Z10               TO  SKT4325-S-KINGK(IDZ)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    食事療養：標準負担額
              MOVE  SUM-S-FTNGK(IDX)      TO  WRK-Z9
              MOVE  WRK-Z9                TO  SKT4325-S-FTNGK(IDZ)
@@ -1140,8 +1152,12 @@
                  MOVE  SUM-KNISSU(IDX2 IDZ)  TO WRK-Z5
                  MOVE  WRK-Z5                TO SKT4325-KNISSU(IDY IDZ)
       *    公費再掲欄：療養の給付：点数
-                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
-                 MOVE  WRK-Z9                TO SKT4325-KTENSU(IDY IDZ)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *           MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z9
+      *           MOVE  WRK-Z9                TO SKT4325-KTENSU(IDY IDZ)
+                 MOVE  SUM-KTENSU(IDX2 IDZ)  TO WRK-Z10
+                 MOVE  WRK-Z10               TO SKT4325-KTENSU(IDY IDZ)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    公費再掲欄：療養の給付：一部負担金
                  MOVE  SUM-KITBFTN(IDX2 IDZ) TO WRK-Z9
                  MOVE  WRK-Z9                TO SKT4325-KITBFTN(IDY IDZ)
@@ -1154,8 +1170,12 @@
                MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT4325-S-KNISSU(IDY)
       *    公費再掲欄：食事療養：金額
-               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
-               MOVE  WRK-Z9                TO  SKT4325-S-KKINGK(IDY)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) start
+      *         MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9
+      *         MOVE  WRK-Z9                TO  SKT4325-S-KKINGK(IDY)
+               MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z10
+               MOVE  WRK-Z10               TO  SKT4325-S-KKINGK(IDY)
+      *=== 桁数増加 by Yoshikawa(2012/03/14) end
       *    公費再掲欄：食事療養：標準負担額
                MOVE  SUM-S-KFTNGK(IDX2)    TO  WRK-Z9
                MOVE  WRK-Z9                TO  SKT4325-S-KFTNGK(IDY)
