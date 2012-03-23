@@ -72,6 +72,8 @@
       *  01.00.18    吉川    10/10/04    請求額の計算方法変更
       *  01.00.19    吉川    11/03/10    open-cobol1.0対応
       *  01.00.20    吉川    11/08/16    点数欄は福祉点数を印字する
+      *  01.00.21    吉川    12/03/19    限度額認定証の有無に関わらず
+      *                                  高額療養費対象は「特」欄に記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -177,6 +179,9 @@
       *=== 請求額計算方法変更 by Yoshikawa(2010/07/26) start
            03  FLG-KOH091     PIC 9(01).
       *=== 請求額計算方法変更 by Yoshikawa(2010/07/26) end
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+           03  FLG-KOGAKU     PIC 9(01).
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -883,6 +888,10 @@
       *=== 請求額計算方法変更 by Yoshikawa(2010/07/26) start
                                             FLG-KOH091
       *=== 請求額計算方法変更 by Yoshikawa(2010/07/26) end
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+                                            FLG-KOGAKU
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.04) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -1126,6 +1135,24 @@
                MOVE  1  TO  MF100-KOUHAN
            END-IF
       *---(01.00.11) LINE ADD END   ------------------------------------
+      *
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+      *    高額該当者で限度額認定証無しの請求額計算
+           IF  FLG-KOGAKU  =  1
+             IF  MF100-SEIKYUGK  =  83400
+             OR  MF100-SEIKYUGK  =  44400
+             OR  MF100-SEIKYUGK  =  24600
+               MOVE    1               TO  MF100-KOGAKU4
+             ELSE
+               IF   RECE02-NYUGAIKBN  =  "2"
+               AND  MF100-SEIKYUGK  NOT =  35400
+                   PERFORM  900-SEIKYU-SELECT-SEC
+                   COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
+                            ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
+               END-IF
+             END-IF
+           END-IF
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
       *
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
@@ -2967,6 +2994,16 @@
                MOVE   1                        TO  FLG-KOH091
              END-IF
       *=== 特疾負無(091)は「51」と印字 by Yoshikawa(2010/07/26) end
+      *
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+      *      限度額認定証を持っていない場合でも、
+      *      高額療養費計算されていれば高額該当とする
+             IF  SYU-KOH-FTN-ENTANI  NOT =  ZERO
+               MOVE   "98"                     TO  MF100-COMBIKBN
+               MOVE    1                       TO  FLG-KOGAKU
+             END-IF
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
            END-PERFORM
       *
            IF    FLG-HEIYOU    =    ZERO
