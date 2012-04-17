@@ -35,6 +35,8 @@
       *  01.00.04    吉川    2010/04/06  オンライン返戻対応
       *  01.00.05    吉川    2010/11/24  open-cobol1.0対応
       *  01.00.06    吉川    2012/03/16  PERFORMをGOTO命令に修正
+      *  01.00.07    吉川    2012/04/09  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1613,7 +1615,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/09) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/09) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -1681,6 +1686,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/09) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/09) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
