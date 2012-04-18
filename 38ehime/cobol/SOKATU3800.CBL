@@ -49,6 +49,7 @@
       *  01.00.15    内田      10/11/26    open-cobol1.0対応
       *  01.00.16    吉川      11/01/12    特別療養費分を出力時
       *                                    印刷画面の帳票タイトル名修正
+      *  01.00.17    吉川      12/04/11    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -104,7 +105,10 @@
       *    愛媛県内保険者データ
        FD  HKNJA-FILE.
            01  HKNJA-REC.
-               03  HKNJA-DAT-CITY-TBL OCCURS 25.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/11) start
+      *         03  HKNJA-DAT-CITY-TBL OCCURS 25.
+               03  HKNJA-DAT-CITY-TBL OCCURS 22.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/11) end
                    05  HKNJA-DAT-NUM        PIC 9(02).
                    05  HKNJA-DAT-SP1        PIC 9(01).
                    05  HKNJA-DAT-HKNJANUM   PIC X(05).
@@ -1184,7 +1188,10 @@
            PERFORM  VARYING  IDX1    FROM  1  BY  1
       *---(01.00.04) LINE ADD START ------------------------------------
       *              UNTIL    IDX1    >    28
-                    UNTIL    IDX1    >    25
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/11) start
+      *              UNTIL    IDX1    >    25
+                    UNTIL    IDX1    >    22
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/11) end
       *---(01.00.04) LINE ADD END   ------------------------------------
                     OR       FLG-TOWN     =      1
              IF     WRK-HKNJANUM(1:5)     =  HKNJA-DAT-HKNJANUM(IDX1)
@@ -1578,7 +1585,10 @@
       *---(01.00.04) LINE UPD START ------------------------------------
       *                UNTIL    IDX1  >    75
       *                UNTIL    IDX1  >    28
-                      UNTIL    IDX1  >    25
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/11) start
+      *                UNTIL    IDX1  >    25
+                      UNTIL    IDX1  >    22
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/11) end
       *---(01.00.04) LINE UPD END   ------------------------------------
       *---(01.00.03) LINE UPD START ------------------------------------
                IF     SKT3800TMP-KENNAI-FLG(IDX1)  =  1
