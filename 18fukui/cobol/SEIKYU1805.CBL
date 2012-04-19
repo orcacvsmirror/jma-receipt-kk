@@ -58,6 +58,9 @@
       *  01.00.14       吉川    2011/06/20   実日数欄は総日数を印字する
       *  01.00.15       吉川    2011/12/16   同月内で受給者番号が変わっても
       *                                      帳票に反映されないのを修正
+      *  01.00.16       吉川    2012/04/13   同月内に公費を変更した場合
+      *                                      請求点数と実日数はそれぞれの
+      *                                      公費で診療した値を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1114,8 +1117,23 @@
       *     AND    RECE10-NYUGAIKBN    =    MF110-NYUGAIKBN
       *       MOVE RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
       *     END-IF
-           MOVE RECE10-TOTALTEN(1)    TO   MF110-TOTALTENINF
-           MOVE RECE10-JNISSU(1)      TO   MF110-JNISSUINF
+      *=== 月途中の公費変更の印字修正 by Yoshikawa(2012/04/13) start
+      *     MOVE RECE10-TOTALTEN(1)    TO   MF110-TOTALTENINF
+      *     MOVE RECE10-JNISSU(1)      TO   MF110-JNISSUINF
+      *    公費２以降に値がある、及びIDZが２以降の場合、
+      *    月途中に公費の変更があったとみなす
+           IF  (RECE01-KOHNUM(IDZ + 1)  NOT =  SPACE)
+           OR  (IDZ  >  1)
+             MOVE   RECE01-TOTALTENINF(IDZ + 1)
+                                      TO  MF110-TOTALTENINF
+             MOVE   RECE01-JNISSUINF(IDZ + 1)
+                                      TO  MF110-JNISSUINF
+           ELSE
+      *      保険単独と絡んでいる場合は主保険の値
+             MOVE RECE10-TOTALTEN(1)  TO   MF110-TOTALTENINF
+             MOVE RECE10-JNISSU(1)    TO   MF110-JNISSUINF
+           END-IF
+      *=== 月途中の公費変更の印字修正 by Yoshikawa(2012/04/13) end
       *=== 日数は総日数を印字 by Yoshikawa(2011/06/20) end
       *=== 月途中の保険切替時の対応 by Yoshikawa(2008/11/17) end
            PERFORM   800-SYUNOU-SET-SEC
