@@ -41,6 +41,10 @@
       *  01.00.06    吉川    2010/02/17  広域連合の保険者番号指定対応
       *  01.00.07    吉川    2010/07/01  オンライン返戻対応
       *  01.00.08    吉川    2011/04/11  東北地方太平洋沖地震対応
+      *  01.00.09    吉川    2012/04/19  帳票様式の変更に伴う修正
+      *                                  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -784,11 +788,13 @@
                  MOVE      4                   TO  IDX4
                  PERFORM 20013-KITEI-SYUKEI-SEC
              END-IF
-      *      小児慢性
-             IF  RECE10-KOHNUM(IDXX)      =  "052"
-                 MOVE      5                   TO  IDX4
-                 PERFORM 20013-KITEI-SYUKEI-SEC
-             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **      小児慢性
+      *       IF  RECE10-KOHNUM(IDXX)      =  "052"
+      *           MOVE      5                   TO  IDX4
+      *           PERFORM 20013-KITEI-SYUKEI-SEC
+      *       END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
            END-PERFORM
       *
       *    公費負担分
@@ -1254,7 +1260,10 @@
                      UNTIL     IDX2 >          100
       *        表示位置固定の公費は対象外
                IF  RECE10-KOHNUM(IDZ) = "010" OR "011" OR "020" OR
-                                        "021" OR "051" OR "052"
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *                                  "021" OR "051" OR "052"
+                                        "021" OR "051"
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *=== 091は051と同じ所に集計 by Yoshikawa(2008/05/15) start
                                         OR "091"
       *=== 091は051と同じ所に集計 by Yoshikawa(2008/05/15) end
@@ -1550,7 +1559,10 @@
       *
       *    既定公費
            PERFORM VARYING IDY1     FROM    1   BY  1
-                   UNTIL   IDY1     >       5
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *             UNTIL   IDY1     >       5
+                   UNTIL   IDY1     >       4
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
              PERFORM VARYING IDY2   FROM    1   BY  1
                      UNTIL   IDY2   >       2
       *    公費再掲欄：療養の給付：件数
@@ -1583,7 +1595,10 @@
       *
       *    公費再掲
            PERFORM VARYING IDY     FROM    1   BY  1
-                   UNTIL   IDY     >       3         
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *             UNTIL   IDY     >       3         
+                   UNTIL   IDY     >       4         
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                    OR      FLG-KOH-END     =   1
              IF      SUM-KOHNUM (IDX2)   =   SPACE
                MOVE    1                     TO  FLG-KOH-END
@@ -2088,7 +2103,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/19) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/19) end
                END-IF
       *=== 保険者番号毎で集計 by Yoshikawa(2008/05/01) start
       **        キーに県番号を格納
@@ -2176,7 +2194,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -2244,6 +2265,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
