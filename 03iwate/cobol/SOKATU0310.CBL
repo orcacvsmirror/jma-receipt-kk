@@ -51,6 +51,7 @@
       *  01.00.14    吉川    2011/03/15  東北地方太平洋沖地震対応（対象者別集計）
       *  01.00.15    吉川    2011/04/11  東北地方太平洋沖地震対応（仕様変更）
       *  01.00.16    吉川    2011/06/15  特別療養費国保対応
+      *  01.00.17     吉川   2012/04/19  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -802,14 +803,16 @@
            ELSE
              MOVE  2  TO  IDX2
            END-IF
-      *    老人保健か
-           IF  RECE10-RJNHKNNUM  NOT  =  SPACE
-             IF  RECE10-KYURATE  =  9
-               MOVE  12    TO    IDX1
-             ELSE
-               MOVE  13    TO    IDX1
-             END-IF
-           ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    老人保健か
+      *     IF  RECE10-RJNHKNNUM  NOT  =  SPACE
+      *       IF  RECE10-KYURATE  =  9
+      *         MOVE  12    TO    IDX1
+      *       ELSE
+      *         MOVE  13    TO    IDX1
+      *       END-IF
+      *     ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) start
       *       IF  RECE10-HKNNUM  =  "060"
              IF  RECE10-HKNNUM  =  "060" OR "068"
@@ -869,17 +872,29 @@
                      IF  RECE10-KYURATE  =  7
                        MOVE  3  TO  IDX1
                      ELSE
-                       IF  SKT0310TMP-KYURATE1  =  ZERO
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *                 IF  SKT0310TMP-KYURATE1  =  ZERO
+      *                   MOVE  5  TO  IDX1
+      *                   MOVE  RECE10-KYURATE  TO  SKT0310TMP-KYURATE1
+      *                 ELSE
+      *                   IF  SKT0310TMP-KYURATE1  =  RECE10-KYURATE
+      *                     MOVE  5  TO  IDX1
+      *                   ELSE
+      *                     MOVE  6  TO  IDX1
+      *                     MOVE  RECE10-KYURATE TO SKT0310TMP-KYURATE2
+      *                   END-IF
+      *                 END-IF
+                       IF  SKT0310TMP-KYURATE2  =  ZERO
                          MOVE  5  TO  IDX1
-                         MOVE  RECE10-KYURATE  TO  SKT0310TMP-KYURATE1
+                         MOVE  RECE10-KYURATE  TO  SKT0310TMP-KYURATE2
                        ELSE
-                         IF  SKT0310TMP-KYURATE1  =  RECE10-KYURATE
+                         IF  SKT0310TMP-KYURATE2  =  RECE10-KYURATE
                            MOVE  5  TO  IDX1
                          ELSE
-                           MOVE  6  TO  IDX1
-                           MOVE  RECE10-KYURATE TO SKT0310TMP-KYURATE2
+                           MOVE  3  TO  IDX1
                          END-IF
                        END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                      END-IF
                    END-IF
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -917,65 +932,92 @@
                END-IF
              ELSE
                IF  RECE10-HONKZKKBN  =  "1"
-      *    年齢チェック
-                 IF  RECE10-AGE  >=  70
-                   IF  RECE10-KYURATE  =  9
-                     MOVE  8   TO  IDX1
-                   ELSE
-                     MOVE  9   TO  IDX1
-                   END-IF
-                 ELSE
-                   MOVE   7    TO  IDX1
-                 END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    年齢チェック
+      *           IF  RECE10-AGE  >=  70
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE  8   TO  IDX1
+      *             ELSE
+      *               MOVE  9   TO  IDX1
+      *             END-IF
+      *           ELSE
+      *             MOVE   7    TO  IDX1
+      *           END-IF
+                 MOVE  6         TO  IDX1
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                ELSE
       *---(01.00.06) LINE ADD START ------------------------------------
                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
                 AND  (RECE10-FLG (1)   =  1)
-                    MOVE  11     TO  IDX1
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *              MOVE  11     TO  IDX1
+                    MOVE  8      TO  IDX1
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                 ELSE
       *---(01.00.06) LINE ADD END   ------------------------------------
                  IF  RECE10-AGE  >  2
-      *    退職・家族に前期高齢者判定追加
-                   IF  RECE10-AGE  >= 70
-                     IF  RECE10-KYURATE  =  9
-                       MOVE  8   TO  IDX1
-                     ELSE
-                       MOVE  9   TO  IDX1
-                     END-IF
-                   ELSE
-                     MOVE  10    TO  IDX1
-                   END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    退職・家族に前期高齢者判定追加
+      *             IF  RECE10-AGE  >= 70
+      *               IF  RECE10-KYURATE  =  9
+      *                 MOVE  8   TO  IDX1
+      *               ELSE
+      *                 MOVE  9   TO  IDX1
+      *               END-IF
+      *             ELSE
+      *               MOVE  10    TO  IDX1
+      *             END-IF
+      *           ELSE
+      *             MOVE   11   TO  IDX1
+      *           END-IF
+                   MOVE   7    TO  IDX1
                  ELSE
-                   MOVE   11   TO  IDX1
+                   MOVE   8    TO  IDX1
                  END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *---(01.00.06) LINE ADD START ------------------------------------
                 END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
                END-IF
              END-IF
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *
       *    在総診・在医総か
            IF  RECE10-ZAITAKU  NOT = SPACE
              PERFORM  960-SRYACT-SET-SEC
       *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) start
              IF  FLG-ZAIISO2 NOT = ZERO
-      *在医総 １、一般在宅 ３、退職在宅 ５、老人在宅
-               EVALUATE  TRUE
-                 WHEN  IDX1  <  7       MOVE  1  TO  WRK-CNT
-                 WHEN  IDX1  <  12      MOVE  3  TO  WRK-CNT
-                 WHEN  OTHER            MOVE  5  TO  WRK-CNT
-               END-EVALUATE
+      *在医総 １、一般在宅 ３、退職在宅
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *         EVALUATE  TRUE
+      *           WHEN  IDX1  <  7       MOVE  1  TO  WRK-CNT
+      *           WHEN  IDX1  <  12      MOVE  3  TO  WRK-CNT
+      *           WHEN  OTHER            MOVE  5  TO  WRK-CNT
+      *         END-EVALUATE
+               IF  IDX1  <  6
+                 MOVE    1     TO  WRK-CNT
+               ELSE
+                 MOVE    3     TO  WRK-CNT
+               END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
              END-IF
       *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) end
              IF  FLG-ZAIISO  NOT = ZERO
-      *在総診 ２、一般在宅 ４、退職在宅  ６、老人在宅
-               EVALUATE  TRUE
-                 WHEN  IDX1  <  7       MOVE  2  TO  WRK-CNT
-                 WHEN  IDX1  <  12      MOVE  4  TO  WRK-CNT
-                 WHEN  OTHER            MOVE  6  TO  WRK-CNT
-               END-EVALUATE
-             END-IF
+      *在総診 ２、一般在宅 ４、退職在宅
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *         EVALUATE  TRUE
+      *           WHEN  IDX1  <  7       MOVE  2  TO  WRK-CNT
+      *           WHEN  IDX1  <  12      MOVE  4  TO  WRK-CNT
+      *           WHEN  OTHER            MOVE  6  TO  WRK-CNT
+      *         END-EVALUATE
+               IF  IDX1  <  6
+                 MOVE    2     TO  WRK-CNT
+               ELSE
+                 MOVE    4     TO  WRK-CNT
+               END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) start
       *       IF  FLG-ZAIISO2 NOT = ZERO
       **在医総 １、一般在宅 ３、退職在宅 ５、老人在宅
@@ -984,8 +1026,8 @@
       *           WHEN  IDX1  <  12      MOVE  3  TO  WRK-CNT
       *           WHEN  OTHER            MOVE  5  TO  WRK-CNT
       *         END-EVALUATE
-      *       END-IF
       *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) end
+             END-IF
              PERFORM  2103-ZAI-SEC
            ELSE
              PERFORM  2102-SYUKEI-SEC
@@ -1334,10 +1376,12 @@
            MOVE    SYS-1001-HOSPCDN      TO  SKT0310-HOSPCDN
       *
       *    給付割合
-           IF  SKT0310TMP-KYURATE1  NOT =  ZERO
-             MOVE  SKT0310TMP-KYURATE1   TO  WRK-Z2
-             MOVE  WRK-Z2                TO  SKT0310-KYURATE
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     IF  SKT0310TMP-KYURATE1  NOT =  ZERO
+      *       MOVE  SKT0310TMP-KYURATE1   TO  WRK-Z2
+      *       MOVE  WRK-Z2                TO  SKT0310-KYURATE
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
            IF  SKT0310TMP-KYURATE2  NOT =  ZERO
              MOVE  "00"                  TO  SKT0310-KUMIAI1
              MOVE  "組合"                TO  SKT0310-KUMIAI2
@@ -1379,7 +1423,10 @@
       *
       *    編集処理
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     11
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *              UNTIL    IDX1  >     11
+                    UNTIL    IDX1  >     8
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
       *    療養の給付：件数
@@ -1530,71 +1577,73 @@
       *
       *    公費２枚目以上か
            IF  WRK-CNT  =  1
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     2
-             PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     2
-      *    療養の給付：件数
-               MOVE  SKT0310TMP-KENSU (IDX1 + 11 IDX2)  TO  WRK-Z5
-               MOVE  WRK-Z5   TO  SKT0320-RKENSU(IDX1 IDX2)
-      *
-      *    療養の給付：日数
-               MOVE  SKT0310TMP-NISSU (IDX1 + 11 IDX2)  TO  WRK-Z5
-               MOVE  WRK-Z5   TO  SKT0320-RNISSU(IDX1 IDX2)
-      *
-      *    療養の給付：点数
-               MOVE  SKT0310TMP-TENSU (IDX1 + 11 IDX2)  TO  WRK-Z9
-               MOVE  WRK-Z9   TO  SKT0320-RTENSU(IDX1 IDX2)
-      *
-      *    療養の給付：一部負担金
-               MOVE  SKT0310TMP-ITBFTN (IDX1 + 11 IDX2) TO  WRK-Z9
-               MOVE  WRK-Z9   TO  SKT0320-RITBFTN(IDX1 IDX2)
-      *
-      *    長期件数
-               MOVE  SKT0310TMP-TYOKI (IDX1 + 11 IDX2)  TO  WRK-Z2
-               MOVE  WRK-Z2   TO  SKT0320-RTYOKI(IDX1 IDX2)
-             END-PERFORM
-      *
-      *    食事療養：件数
-             MOVE  SKT0310TMP-S-KENSU (IDX1 + 11)     TO  WRK-Z5
-             MOVE  WRK-Z5   TO  SKT0320-S-RKENSU(IDX1)
-      *
-      *    食事療養：日数
-             MOVE  SKT0310TMP-S-NISSU (IDX1 + 11)     TO  WRK-Z5
-             MOVE  WRK-Z5   TO  SKT0320-S-RNISSU(IDX1)
-      *
-      *    食事療養：金額
-             MOVE  SKT0310TMP-S-KINGAKU (IDX1 + 11)   TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT0320-S-RKINGAKU(IDX1)
-      *
-      *    食事療養：標準負担額
-             MOVE  SKT0310TMP-S-FTNGAKU (IDX1 + 11)   TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT0320-S-RFTNGAKU(IDX1)
-           END-PERFORM
-      *
-      *    在宅
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     2
-      *    件数
-             MOVE  SKT0310TMP-ZKENSU (IDX1 + 4)   TO  WRK-Z5
-             MOVE  WRK-Z5   TO  SKT0320-ZKENSU (IDX1)
-      *
-      *    日数
-             MOVE  SKT0310TMP-ZNISSU (IDX1 + 4)   TO  WRK-Z5
-             MOVE  WRK-Z5   TO  SKT0320-ZNISSU(IDX1)
-      *
-      *    点数
-             MOVE  SKT0310TMP-ZTENSU (IDX1 + 4)   TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT0320-ZTENSU(IDX1)
-      *
-      *    一部負担金
-             MOVE  SKT0310TMP-ZITBFTN (IDX1 + 4)  TO  WRK-Z9
-             MOVE  WRK-Z9   TO  SKT0320-ZITBFTN(IDX1)
-      *
-      *    長期件数
-               MOVE  SKT0310TMP-ZTYOKI (IDX1 + 4) TO  WRK-Z2
-               MOVE  WRK-Z2   TO  SKT0320-ZTYOKI(IDX1)
-           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     2
+      *       PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                UNTIL    IDX2  >     2
+      **    療養の給付：件数
+      *         MOVE  SKT0310TMP-KENSU (IDX1 + 11 IDX2)  TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0320-RKENSU(IDX1 IDX2)
+      **
+      **    療養の給付：日数
+      *         MOVE  SKT0310TMP-NISSU (IDX1 + 11 IDX2)  TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0320-RNISSU(IDX1 IDX2)
+      **
+      **    療養の給付：点数
+      *         MOVE  SKT0310TMP-TENSU (IDX1 + 11 IDX2)  TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT0320-RTENSU(IDX1 IDX2)
+      **
+      **    療養の給付：一部負担金
+      *         MOVE  SKT0310TMP-ITBFTN (IDX1 + 11 IDX2) TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT0320-RITBFTN(IDX1 IDX2)
+      **
+      **    長期件数
+      *         MOVE  SKT0310TMP-TYOKI (IDX1 + 11 IDX2)  TO  WRK-Z2
+      *         MOVE  WRK-Z2   TO  SKT0320-RTYOKI(IDX1 IDX2)
+      *       END-PERFORM
+      **
+      **    食事療養：件数
+      *       MOVE  SKT0310TMP-S-KENSU (IDX1 + 11)     TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0320-S-RKENSU(IDX1)
+      **
+      **    食事療養：日数
+      *       MOVE  SKT0310TMP-S-NISSU (IDX1 + 11)     TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0320-S-RNISSU(IDX1)
+      **
+      **    食事療養：金額
+      *       MOVE  SKT0310TMP-S-KINGAKU (IDX1 + 11)   TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0320-S-RKINGAKU(IDX1)
+      **
+      **    食事療養：標準負担額
+      *       MOVE  SKT0310TMP-S-FTNGAKU (IDX1 + 11)   TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0320-S-RFTNGAKU(IDX1)
+      *     END-PERFORM
+      **
+      **    在宅
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     2
+      **    件数
+      *       MOVE  SKT0310TMP-ZKENSU (IDX1 + 4)   TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0320-ZKENSU (IDX1)
+      **
+      **    日数
+      *       MOVE  SKT0310TMP-ZNISSU (IDX1 + 4)   TO  WRK-Z5
+      *       MOVE  WRK-Z5   TO  SKT0320-ZNISSU(IDX1)
+      **
+      **    点数
+      *       MOVE  SKT0310TMP-ZTENSU (IDX1 + 4)   TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0320-ZTENSU(IDX1)
+      **
+      **    一部負担金
+      *       MOVE  SKT0310TMP-ZITBFTN (IDX1 + 4)  TO  WRK-Z9
+      *       MOVE  WRK-Z9   TO  SKT0320-ZITBFTN(IDX1)
+      **
+      **    長期件数
+      *         MOVE  SKT0310TMP-ZTYOKI (IDX1 + 4) TO  WRK-Z2
+      *         MOVE  WRK-Z2   TO  SKT0320-ZTYOKI(IDX1)
+      *     END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *
       *    既定公費処理
              PERFORM  VARYING  IDX1  FROM  1  BY  1
