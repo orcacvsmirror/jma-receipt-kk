@@ -25,6 +25,7 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         10/09/22  日数のバイト数増加
       *  01.00.02    吉川         11/04/11  東北地方太平洋沖地震対応
+      *  01.00.03    吉川         12/04/19  帳票様式の変更
       ********************************************************************
        01  SKT0305.
       *    印刷年月
@@ -69,19 +70,21 @@
       *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) end
       *    点数
                    07  SKT0305-ZTENSU      PIC X(9).
-      *    食事療養・生活療養テーブル
-           03  SKT0305-SKJ-TBL.
-      *    県別テーブル
-               05  SKT0305-SPREF-TBL    OCCURS  2 TIMES.
-      *    件数
-                   07  SKT0305-SKENSU      PIC X(5).
-      *    日数
-      *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) start
-      *             07  SKT0305-SNISSU      PIC X(5).
-                   07  SKT0305-SNISSU      PIC X(6).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    食事療養・生活療養テーブル
+      *     03  SKT0305-SKJ-TBL.
+      **    県別テーブル
+      *         05  SKT0305-SPREF-TBL    OCCURS  2 TIMES.
+      **    件数
+      *             07  SKT0305-SKENSU      PIC X(5).
+      **    日数
+      **=== 日数のバイト数増加 by Yoshikawa(2010/09/22) start
+      **             07  SKT0305-SNISSU      PIC X(5).
+      *             07  SKT0305-SNISSU      PIC X(6).
       *=== 日数のバイト数増加 by Yoshikawa(2010/09/22) end
-      *    点数
-                   07  SKT0305-STENSU      PIC X(9).
+      **    点数
+      *             07  SKT0305-STENSU      PIC X(9).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    合計テーブル
            03  SKT0305-GOKEI-TBL    OCCURS  2 TIMES.
       *    県別テーブル
@@ -103,15 +106,24 @@
       *    保険者
                05  SKT0305-NHKNJA          PIC X(2).
       *    請求先県名テーブル（県外）
-           03  SKT0305-KENMEI-TBL   OCCURS  14 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0305-KENMEI-TBL   OCCURS  14 TIMES.
+           03  SKT0305-KENMEI-TBL   OCCURS  19 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    県名
                05  SKT0305-KENMEI          PIC X(6).
       *    請求先件数テーブル（指定県）
-           03  SKT0305-GHKNJA-TBL   OCCURS  8 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0305-GHKNJA-TBL   OCCURS  8 TIMES.
+           03  SKT0305-GHKNJA-TBL   OCCURS  9 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    件数
                05  SKT0305-GHKNJA          PIC X(2).
       *    請求先件数テーブル
-           03  SKT0305-GHKNJA-TBL2   OCCURS  14 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0305-GHKNJA-TBL2   OCCURS  14 TIMES.
+           03  SKT0305-GHKNJA-TBL2   OCCURS  19 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    件数
                05  SKT0305-GHKNJA2         PIC X(2).
       *    請求先件数合計テーブル

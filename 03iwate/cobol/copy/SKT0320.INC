@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2011/06/15  特別療養費国保対応
+      *  01.00.02    吉川    2012/04/19  帳票様式の変更
       ********************************************************************
        01  SKT0320.
       *    ページ番号
@@ -26,40 +27,42 @@
       *    特別療養費
            03  SKT0320-TOKUBETU          PIC  X(10).
       *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) end
-      *    老人テーブル
-           03  SKT0320-RJN-TBL     OCCURS  2.
-      *    入外テーブル
-               05  SKT0320-RNYUGAI-TBL     OCCURS  2.
-      *    件数
-                   07  SKT0320-RKENSU    PIC  X(05).
-      *    実日数
-                   07  SKT0320-RNISSU    PIC  X(05).
-      *    点数
-                   07  SKT0320-RTENSU    PIC  X(09).
-      *    一部負担金
-                   07  SKT0320-RITBFTN   PIC  X(09).
-      *    長期
-                   07  SKT0320-RTYOKI    PIC  X(02).
-      *    食事療養：件数
-               05  SKT0320-S-RKENSU      PIC  X(05).
-      *    食事療養：日数
-               05  SKT0320-S-RNISSU      PIC  X(05).
-      *    食事療養：金額
-               05  SKT0320-S-RKINGAKU    PIC  X(09).
-      *    食事療養：標準負担額
-               05  SKT0320-S-RFTNGAKU    PIC  X(09).
-      *    在宅テーブル
-           03  SKT0320-RJN-TBL     OCCURS  2.
-      *    件数
-               07  SKT0320-ZKENSU        PIC  X(05).
-      *    実日数
-               07  SKT0320-ZNISSU        PIC  X(05).
-      *    点数
-               07  SKT0320-ZTENSU        PIC  X(09).
-      *    一部負担金
-               07  SKT0320-ZITBFTN       PIC  X(09).
-      *    長期
-               07  SKT0320-ZTYOKI        PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    老人テーブル
+      *     03  SKT0320-RJN-TBL     OCCURS  2.
+      **    入外テーブル
+      *         05  SKT0320-RNYUGAI-TBL     OCCURS  2.
+      **    件数
+      *             07  SKT0320-RKENSU    PIC  X(05).
+      **    実日数
+      *             07  SKT0320-RNISSU    PIC  X(05).
+      **    点数
+      *             07  SKT0320-RTENSU    PIC  X(09).
+      **    一部負担金
+      *             07  SKT0320-RITBFTN   PIC  X(09).
+      **    長期
+      *             07  SKT0320-RTYOKI    PIC  X(02).
+      **    食事療養：件数
+      *         05  SKT0320-S-RKENSU      PIC  X(05).
+      **    食事療養：日数
+      *         05  SKT0320-S-RNISSU      PIC  X(05).
+      **    食事療養：金額
+      *         05  SKT0320-S-RKINGAKU    PIC  X(09).
+      **    食事療養：標準負担額
+      *         05  SKT0320-S-RFTNGAKU    PIC  X(09).
+      **    在宅テーブル
+      *     03  SKT0320-RJN-TBL     OCCURS  2.
+      **    件数
+      *         07  SKT0320-ZKENSU        PIC  X(05).
+      **    実日数
+      *         07  SKT0320-ZNISSU        PIC  X(05).
+      **    点数
+      *         07  SKT0320-ZTENSU        PIC  X(09).
+      **    一部負担金
+      *         07  SKT0320-ZITBFTN       PIC  X(09).
+      **    長期
+      *         07  SKT0320-ZTYOKI        PIC  X(02).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    公費テーブル
            03  SKT0320-KOH-TBL     OCCURS  9.
       *    入外テーブル

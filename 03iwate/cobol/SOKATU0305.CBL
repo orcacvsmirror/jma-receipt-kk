@@ -35,6 +35,10 @@
       *  01.00.04    吉川    2010/07/01  オンライン返戻対応
       *  01.00.05    吉川    2010/09/22  日数の桁数増加
       *  01.00.06    吉川    2011/04/11  東北地方太平洋沖地震対応
+      *  01.00.07    吉川    2012/04/19  帳票様式の変更に伴う修正
+      *                                  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -285,7 +289,10 @@
                05  SUM-KENMEI-TBL   OCCURS  50.
                    07  SUM-KENMEI              PIC  9(02).
       *        県外保険者
-               05  SUM-GHKNJA-TBL   OCCURS  8.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *         05  SUM-GHKNJA-TBL   OCCURS  8.
+               05  SUM-GHKNJA-TBL   OCCURS  9.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                    07  SUM-KENGAI-KENSU        PIC  9(02).
       *        県外保険者２
                05  SUM-GHKNJA-TBL2  OCCURS  50.
@@ -829,6 +836,9 @@
                  WHEN  "12"   ADD  1  TO  SUM-KENGAI-KENSU (6)
                  WHEN  "13"   ADD  1  TO  SUM-KENGAI-KENSU (7)
                  WHEN  "23"   ADD  1  TO  SUM-KENGAI-KENSU (8)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+                 WHEN  "09"   ADD  1  TO  SUM-KENGAI-KENSU (9)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                  WHEN  OTHER
                    PERFORM  VARYING  IDX4  FROM  1  BY  1
                             UNTIL    IDX4  >     50
@@ -1061,23 +1071,25 @@
                END-PERFORM
              END-PERFORM
       *
-      *    食事療養処理
-             PERFORM      VARYING  IDX1  FROM  1  BY  1
-                          UNTIL    IDX1  >     2
-      *    食事療養：件数
-               MOVE  SUM-SKENSU(IDX1)           TO  WRK-Z5
-               MOVE  WRK-Z5   TO  SKT0305-SKENSU(IDX1)
-      *    食事療養：日数
-      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
-      *         MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z5
-      *         MOVE  WRK-Z5   TO  SKT0305-SNISSU(IDX1)
-               MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z6
-               MOVE  WRK-Z6   TO  SKT0305-SNISSU(IDX1)
-      *=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
-      *    食事療養：金額
-               MOVE  SUM-STENSU(IDX1)           TO  WRK-Z9
-               MOVE  WRK-Z9   TO  SKT0305-STENSU(IDX1)
-             END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    食事療養処理
+      *       PERFORM      VARYING  IDX1  FROM  1  BY  1
+      *                    UNTIL    IDX1  >     2
+      **    食事療養：件数
+      *         MOVE  SUM-SKENSU(IDX1)           TO  WRK-Z5
+      *         MOVE  WRK-Z5   TO  SKT0305-SKENSU(IDX1)
+      **    食事療養：日数
+      **=== 日数の桁数増加 by Yoshikawa(2010/09/22) start
+      **         MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z5
+      **         MOVE  WRK-Z5   TO  SKT0305-SNISSU(IDX1)
+      *         MOVE  SUM-SNISSU(IDX1)           TO  WRK-Z6
+      *         MOVE  WRK-Z6   TO  SKT0305-SNISSU(IDX1)
+      **=== 日数の桁数増加 by Yoshikawa(2010/09/22) end
+      **    食事療養：金額
+      *         MOVE  SUM-STENSU(IDX1)           TO  WRK-Z9
+      *         MOVE  WRK-Z9   TO  SKT0305-STENSU(IDX1)
+      *       END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *
       *    合計処理
              PERFORM      VARYING  IDX1  FROM  1  BY  1
@@ -1119,7 +1131,10 @@
              END-PERFORM
       *    請求先名（県外）
              PERFORM  VARYING  IDX1  FROM  1  BY  1
-                      UNTIL    IDX1  >     8
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *                UNTIL    IDX1  >     8
+                      UNTIL    IDX1  >     9
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                MOVE  SUM-KENGAI-KENSU (IDX1)  TO  WRK-Z2
                MOVE  WRK-Z2               TO  SKT0305-GHKNJA (IDX1)
              END-PERFORM
@@ -1133,7 +1148,9 @@
              EVALUATE  SUM-KENMEI (WRK-CNT)
                WHEN  "01"  MOVE  "北海道"  TO  SKT0305-KENMEI (IDX1)
                WHEN  "08"  MOVE  "茨城"    TO  SKT0305-KENMEI (IDX1)
-               WHEN  "09"  MOVE  "栃木"    TO  SKT0305-KENMEI (IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *         WHEN  "09"  MOVE  "栃木"    TO  SKT0305-KENMEI (IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                WHEN  "10"  MOVE  "群馬"    TO  SKT0305-KENMEI (IDX1)
                WHEN  "11"  MOVE  "埼玉"    TO  SKT0305-KENMEI (IDX1)
                WHEN  "14"  MOVE  "神奈川"  TO  SKT0305-KENMEI (IDX1)
@@ -1578,7 +1595,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/19) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/19) end
                END-IF   
                ADD     1                     TO  CNT-RECE10   
       *         
@@ -1660,7 +1680,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -1728,6 +1751,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/19) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF

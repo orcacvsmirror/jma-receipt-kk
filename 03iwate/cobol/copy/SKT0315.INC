@@ -24,6 +24,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者   日付         内容
       * 01.00.01     吉川     2008/05/03   医療機関コードバイト数増加
+      * 01.00.02     吉川     2012/04/19   帳票様式の変更
       ********************************************************************
        01  SKT0315.
       *    印刷年月
@@ -84,7 +85,10 @@
       *    長期件数
                05  SKT0315-ZTYOKI  PIC X(2).
       *    既定公費請求テーブル
-           03  SKT0315-KITEI-TBL  OCCURS  5.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0315-KITEI-TBL  OCCURS  5.
+           03  SKT0315-KITEI-TBL  OCCURS  4.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    既定公費入外テーブル
                05  SKT0315-KINYUGAI-TBL OCCURS  2.
       *    既定公費件数
@@ -104,7 +108,10 @@
       *    既定公費標準負担金
                05  SKT0315-S-KIFTNGK       PIC X(09).
       *    公費請求テーブル
-           03   SKT0315-KOUHI-TBL  OCCURS  3.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03   SKT0315-KOUHI-TBL  OCCURS  3.
+           03   SKT0315-KOUHI-TBL  OCCURS  4.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    法別番号
                05  SKT0315-HBTNUM          PIC X(02).
       *    公費名

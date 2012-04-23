@@ -21,6 +21,7 @@
       *  01.00.01     中川     2006/08/29   請求先名(県内)追加63→64
       *  01.00.02     吉川     2010/03/11   請求先名(県外)追加8→9
       *  01.00.03     吉川     2011/06/15   特別療養費国保対応
+      *  01.00.04     吉川     2012/04/19   帳票様式の変更
       ************************************************************
        01  SKT0300.
       *    診療年月
@@ -42,7 +43,10 @@
            03  SKT0300-TOKUBETU             PIC  X(10).
       *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) end
       *    請求テーブル
-           03  SKT0300-SEIKYU-TBL     OCCURS  12.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0300-SEIKYU-TBL     OCCURS  12.
+           03  SKT0300-SEIKYU-TBL     OCCURS  8.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    入外テーブル
                05  SKT0300-NYUGAI-TBL     OCCURS  2.
       *    県内県外テーブル
@@ -54,7 +58,10 @@
       *    点数
                        09  SKT0300-TENSU    PIC  X(09).
       *    在総診テーブル
-           03  SKT0300-ZAI-TBL     OCCURS  6.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0300-ZAI-TBL     OCCURS  6.
+           03  SKT0300-ZAI-TBL     OCCURS  4.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    県内県外テーブル
                05  SKT0300-ZPREF-TBL    OCCURS  2.
       *    件数
@@ -63,18 +70,23 @@
                    07  SKT0300-ZNISSU       PIC  X(05).
       *    点数
                    07  SKT0300-ZTENSU       PIC  X(09).
-      *    食事療養テーブル
-           03  SKT0300-SKJ-TBL     OCCURS  3.
-      *    県内県外テーブル
-               05  SKT0300-SPREF-TBL    OCCURS  2.
-      *    件数
-                   07  SKT0300-SKENSU       PIC  X(05).
-      *    実日数
-                   07  SKT0300-SNISSU       PIC  X(05).
-      *    点数
-                   07  SKT0300-STENSU       PIC  X(09).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      **    食事療養テーブル
+      *     03  SKT0300-SKJ-TBL     OCCURS  3.
+      **    県内県外テーブル
+      *         05  SKT0300-SPREF-TBL    OCCURS  2.
+      **    件数
+      *             07  SKT0300-SKENSU       PIC  X(05).
+      **    実日数
+      *             07  SKT0300-SNISSU       PIC  X(05).
+      **    点数
+      *             07  SKT0300-STENSU       PIC  X(09).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    合計テーブル
-           03  SKT0300-GOKEI-TBL     OCCURS  5.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0300-GOKEI-TBL     OCCURS  5.
+           03  SKT0300-GOKEI-TBL     OCCURS  3.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *    県内県外テーブル
                05  SKT0300-GPREF-TBL    OCCURS  2.
       *    件数
@@ -93,7 +105,10 @@
       *    県名
       *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) start
       *     03  SKT0300-KENMEI-TBL  OCCURS  14.
-           03  SKT0300-KENMEI-TBL  OCCURS  13.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0300-KENMEI-TBL  OCCURS  13.
+           03  SKT0300-KENMEI-TBL  OCCURS  5.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) end
                05  SKT0300-KENMEI           PIC  X(06).
       *    県外保険者数
@@ -104,7 +119,10 @@
                05  SKT0300-GHKNJA           PIC  X(02).
       *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) start
       *     03  SKT0300-GHKNJA-TBL2  OCCURS  14.
-           03  SKT0300-GHKNJA-TBL2  OCCURS  13.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
+      *     03  SKT0300-GHKNJA-TBL2  OCCURS  13.
+           03  SKT0300-GHKNJA-TBL2  OCCURS  5.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
       *=== 請求先名(県外)追加8→9 by Yoshikawa(2010/03/11) end
                05  SKT0300-GHKNJA2           PIC  X(02).
       *    保険者合計数
