@@ -69,6 +69,9 @@
       *  01.00.25    吉川    11/08/11   保険番号372,373は請求額を記載しない
       *  01.00.26    吉川    11/10/11   請求額を記載しない公費番号を
       *                                 INIファイルから取得するように修正
+      *  01.00.27    吉川    12/04/17   「全国土木」「全国建設」は
+      *                                 東京都に含めて集計する
+      *                                 県外分は都道府県ごとに集計する
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -970,13 +973,40 @@
       *TMP-FILE キーセット
       *
            INITIALIZE       SKT1105TMP-REC
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
+                            WRK-KENNAME
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) end
       *
-           MOVE    RECE10-HKNJANUM-S   TO  SKT1105TMP-HKNJANUM  
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
+      *    県内は保険番号ごと、県外は都道府県ごとに集計
+           IF  RECE10-PREFKBN  =  "1"
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) end
+               MOVE    RECE10-HKNJANUM-S   TO  SKT1105TMP-HKNJANUM  
       *
-      *区の場合代表番号セット
-           IF      SKT1105TMP-HKNJANUM(1:3)    =   "114"
-               MOVE    "114009"    TO  SKT1105TMP-HKNJANUM
+      *        区の場合代表番号セット
+               IF      SKT1105TMP-HKNJANUM(1:3)    =   "114"
+                   MOVE    "114009"    TO  SKT1105TMP-HKNJANUM
+               END-IF
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
+           ELSE
+      *        保険者番号から県番号を取得
+               IF  RECE10-HKNJANUM(7:2)  =  SPACE
+                   MOVE  RECE10-HKNJANUM(1:2)  TO  SKT1105TMP-HKNJANUM
+               ELSE
+                   MOVE  RECE10-HKNJANUM(3:2)  TO  SKT1105TMP-HKNJANUM
+               END-IF
+      *        県名セット
+               PERFORM  32061-KENNAME-SET-SEC
+               MOVE    WRK-KENNAME             TO  SKT1105TMP-HKNJANAME
            END-IF
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) end
+      *
+      *=== 全国建設、全国土木は東京都 by Yoshikawa(2012/04/17) start
+           IF  RECE10-HKNJANUM  =  "133033" OR "133298"
+               MOVE    "13"                    TO  SKT1105TMP-HKNJANUM
+               MOVE    "東京都"                TO  SKT1105TMP-HKNJANAME
+           END-IF
+      *=== 全国建設、全国土木は東京都 by Yoshikawa(2012/04/17) end
       *
       *    老人保険・退職者医療の場合
            IF      RECE10-RJNHKNNUM    NOT =   SPACE
@@ -2206,6 +2236,12 @@
            ELSE
       *
       *        保険者名
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
+             IF  SKT1105TMP-HKNJANAME  NOT =  SPACE
+               MOVE    SKT1105TMP-HKNJANAME
+                                           TO  SKT05-NAME(CNT-LINE)
+             ELSE
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
                INITIALIZE  HKNJAINF-REC
                MOVE    SKT1105TMP-HKNJANUM     TO  HKNJA-HKNJANUM
                PERFORM 900-HKNJAINF-INV-SEC
@@ -2216,6 +2252,9 @@
                ELSE
                    MOVE    HKNJA-HKNJANAME TO  SKT05-NAME(CNT-LINE)
                END-IF
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
+             END-IF
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) end
       *
       *        給付割合
                IF      SKT1105TMP-KYURATE  NOT =   ZERO
