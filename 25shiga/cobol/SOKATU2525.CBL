@@ -40,6 +40,9 @@
       *  01.00.07    吉川    2010/03/30  広域連合の保険者番号指定対応
       *  01.00.08    吉川    2010/04/05  オンライン返戻対応
       *  01.00.09    吉川    2010/11/24  open-cobol1.0対応
+      *  01.00.10    吉川    2012/04/20  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1742,7 +1745,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/20) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/20) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1882,7 +1888,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/20) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/20) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -1950,6 +1959,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/20) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/20) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
