@@ -42,6 +42,8 @@
       *                                    帳票様式の変更に伴う修正
       *  01.00.10    吉川    2010/05/11    滋賀県医師国保（253013）が
       *                                    印字されない不具合を修正
+      *  01.00.11    吉川    2012/04/20    帳票様式の変更に伴う修正
+      *                                    （県内・県外を同一様式へ）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -118,6 +120,11 @@
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
            03  FLG-KOURECEDEN      PIC 9(01).
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+           03  FLG-ERR             PIC 9(01).
+           03  FLG-SYUNOU          PIC 9(01).
+           03  FLG-HKNCOMBI        PIC 9(01).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -126,6 +133,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+           03  IDX                 PIC 9(04).
+           03  IDZ                 PIC 9(04).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
        01  WRK-PARA.
            COPY    "CPORCSPRTLNK.INC".
@@ -186,7 +197,10 @@
            03  WRK-RECEERR         PIC X(200).
       *---(01.00.02) LINE ADD START ------------------------------------
       *    他保険者テーブル
-           03  WRK-EHKNJA-TBL  OCCURS 6.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *     03  WRK-EHKNJA-TBL  OCCURS 6.
+           03  WRK-EHKNJA-TBL  OCCURS 7.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
                05  WRK-EHKNJANUM   PIC 9(06).
                05  WRK-EKENSU      PIC 9(05).
       *---(01.00.02) LINE ADD END   ------------------------------------
@@ -196,14 +210,33 @@
            03  WRK-TODOUHUKEN          PIC X(100).
            03  WRK-RETSU               PIC 9(02).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+           03  WRK-KOHNUM          PIC X(03).
+           03  WRK-KOHID           PIC 9(10).
+           03  WRK-FKENSU1         PIC 9(04).
+           03  WRK-FKENSU2         PIC 9(04).
+           03  WRK-FMAISU1         PIC 9(04).
+           03  WRK-FMAISU2         PIC 9(04).
+           03  WRK-FMAISUG         PIC 9(04).
+           03  WRK-AMARI           PIC 9(01).
+           03  WRK-KENNAME         PIC X(10).
+           03  WRK-KOUKI-TBL OCCURS 5.
+               05  WRK-PREFNUM     PIC X(02).
+               05  WRK-KOUKENSU    PIC 9(05).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
       *    集計エリア
        01  SUM-AREA.
            03  SUM-HKNJA-TBL OCCURS 61.
                05  SUM-KENSU       PIC 9(05).
-           03  SUM-GKENSU          PIC 9(05).
-      *---(01.00.04) LINE ADD START ------------------------------------
-           03  SUM-GKENSUK         PIC 9(05).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *     03  SUM-GKENSU          PIC 9(05).
+      **---(01.00.04) LINE ADD START ------------------------------------
+      *     03  SUM-GKENSUK         PIC 9(05).
+           03  SUM-GKENSU-TBL OCCURS 2.
+               05  SUM-GKENSU      PIC 9(05).
+               05  SUM-GKENSUK     PIC 9(05).
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
            03  SUM-TOKGKENSU       PIC 9(05).
            03  SUM-TOKGKENSUK      PIC 9(05).
       *---(01.00.04) LINE ADD END   ------------------------------------
@@ -269,6 +302,21 @@
        01  HKNJAINF-REC.
            COPY    "CPHKNJAINF.INC".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *    保険組合せ
+       01  HKNCOMBI-REC.
+           COPY    "CPHKNCOMBI.INC".
+      *
+      *    公費請求書
+           COPY    "CPKOHSKY.INC"
+                   REPLACING  //KOHSKY//
+                   BY         //RECE02//.
+      *
+      *    収納情報
+       01  SYUNOU-REC.
+           COPY    "CPSYUNOU.INC".
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -379,7 +427,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SOKATU2500"    TO  JOB-PGID
-           MOVE    "県内・国保総括票"    TO  JOB-SHELLMSG
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *     MOVE    "県内・国保総括票"    TO  JOB-SHELLMSG
+           MOVE    "国保総括票"    TO  JOB-SHELLMSG
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA  
                                    JOBKANRI-REC
@@ -581,6 +632,10 @@
            MOVE     ZERO    TO        FLG-END
            PERFORM  2001-KOKUHO-TOKU-SYUKEI-SEC
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *    福祉医療費請求書件数集計
+           PERFORM  2001-FUKUSI-SYUKEI-SEC
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
            CLOSE   UPD-FILE
       *
@@ -640,6 +695,105 @@
       *TMP-FILE キーセット
       *
            MOVE    RECE10-HKNJANUM-S(1:6) TO    WRK-HKNJANUM(1:6)
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *    札幌市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "014"
+               MOVE    "010017"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    仙台市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "044"
+               MOVE    "044008"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    さいたま市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "114"
+               MOVE    "114009"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    千葉市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "124"
+               MOVE    "124008"           TO  WRK-HKNJANUM
+           END-IF 
+      *
+      *    横浜市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "144"
+               MOVE    "144006"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    川崎市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "145"
+               MOVE    "145003"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    相模原市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "146"
+               MOVE    "146001"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    新潟市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "154"
+               MOVE    "154005"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    静岡市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "224"
+               MOVE    "224006"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    浜松市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "225"
+               MOVE    "225003"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    名古屋市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "234"
+               MOVE    "234005"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    京都市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "264"
+               MOVE    "264002"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    大阪市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "274"
+               MOVE    "274001"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    堺市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "275"
+               MOVE    "275008"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    神戸市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "284"
+               MOVE    "284000"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    広島市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "344"
+               MOVE    "344002"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    北九州市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "404"
+               MOVE    "404004"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    福岡市の場合、代表番号セット
+           IF  WRK-HKNJANUM(1:3)  =  "405"
+               MOVE    "405001"           TO  WRK-HKNJANUM
+           END-IF
+      *
+      *    県内／県外
+           IF  RECE10-PREFKBN  =  "1"
+               MOVE    1                  TO  IDX2
+           ELSE
+               MOVE    2                  TO  IDX2
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     PERFORM  210-HKN-SYUKEI-SEC
@@ -785,51 +939,92 @@
       *             END-IF
       **---(01.00.04) LINE ADD END   ------------------------------------
       *=== 滋賀国組の印字不具合修正 by Yoshikawa(2010/05/11) end
-               WHEN    "133033"    MOVE    4   TO  IDX1
-               WHEN    "133264"    MOVE    5   TO  IDX1
-               WHEN    "133298"    MOVE    6   TO  IDX1
-               WHEN    "250019"    MOVE    7   TO  IDX1
-               WHEN    "250027"    MOVE    8   TO  IDX1
-               WHEN    "250035"    MOVE    9   TO  IDX1
-               WHEN    "250043"    MOVE    10  TO  IDX1
-               WHEN    "250050"    MOVE    11  TO  IDX1
-               WHEN    "250068"    MOVE    12  TO  IDX1
-               WHEN    "250076"    MOVE    13  TO  IDX1
-               WHEN    "250092"    MOVE    14  TO  IDX1
-               WHEN    "250100"    MOVE    15  TO  IDX1
-               WHEN    "250118"    MOVE    16  TO  IDX1
-               WHEN    "250126"    MOVE    17  TO  IDX1
-               WHEN    "250134"    MOVE    18  TO  IDX1
-               WHEN    "250522"    MOVE    19  TO  IDX1
-               WHEN    "250621"    MOVE    20  TO  IDX1
-               WHEN    "250647"    MOVE    21  TO  IDX1
-               WHEN    "250654"    MOVE    22  TO  IDX1
-      *=== 「愛荘町」の保険者番号修正 by Yoshikawa(2009/06/10) start
-      *         WHEN    "250721"    MOVE    23  TO  IDX1
-               WHEN    "250712"    MOVE    23  TO  IDX1
-      *=== 「愛荘町」の保険者番号修正 by Yoshikawa(2009/06/10) end
-               WHEN    "250738"    MOVE    24  TO  IDX1
-               WHEN    "250746"    MOVE    25  TO  IDX1
-               WHEN    "250753"    MOVE    26  TO  IDX1
-               WHEN    "250811"    MOVE    27  TO  IDX1
-               WHEN    "250829"    MOVE    28  TO  IDX1
-               WHEN    "250845"    MOVE    29  TO  IDX1
-               WHEN    "250852"    MOVE    30  TO  IDX1
-               WHEN    "250860"    MOVE    31  TO  IDX1
-               WHEN    "250878"    MOVE    32  TO  IDX1
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *         WHEN    "133033"    MOVE    4   TO  IDX1
+      *         WHEN    "133264"    MOVE    5   TO  IDX1
+      *         WHEN    "133298"    MOVE    6   TO  IDX1
+      *         WHEN    "250019"    MOVE    7   TO  IDX1
+      *         WHEN    "250027"    MOVE    8   TO  IDX1
+      *         WHEN    "250035"    MOVE    9   TO  IDX1
+      *         WHEN    "250043"    MOVE    10  TO  IDX1
+      *         WHEN    "250050"    MOVE    11  TO  IDX1
+      *         WHEN    "250068"    MOVE    12  TO  IDX1
+      *         WHEN    "250076"    MOVE    13  TO  IDX1
+      *         WHEN    "250092"    MOVE    14  TO  IDX1
+      *         WHEN    "250100"    MOVE    15  TO  IDX1
+      *         WHEN    "250118"    MOVE    16  TO  IDX1
+      *         WHEN    "250126"    MOVE    17  TO  IDX1
+      *         WHEN    "250134"    MOVE    18  TO  IDX1
+      *         WHEN    "250522"    MOVE    19  TO  IDX1
+      *         WHEN    "250621"    MOVE    20  TO  IDX1
+      *         WHEN    "250647"    MOVE    21  TO  IDX1
+      *         WHEN    "250654"    MOVE    22  TO  IDX1
+      **=== 「愛荘町」の保険者番号修正 by Yoshikawa(2009/06/10) start
+      **         WHEN    "250721"    MOVE    23  TO  IDX1
+      *         WHEN    "250712"    MOVE    23  TO  IDX1
+      **=== 「愛荘町」の保険者番号修正 by Yoshikawa(2009/06/10) end
+      *         WHEN    "250738"    MOVE    24  TO  IDX1
+      *         WHEN    "250746"    MOVE    25  TO  IDX1
+      *         WHEN    "250753"    MOVE    26  TO  IDX1
+      *         WHEN    "250811"    MOVE    27  TO  IDX1
+      *         WHEN    "250829"    MOVE    28  TO  IDX1
+      *         WHEN    "250845"    MOVE    29  TO  IDX1
+      *         WHEN    "250852"    MOVE    30  TO  IDX1
+      *         WHEN    "250860"    MOVE    31  TO  IDX1
+      *         WHEN    "250878"    MOVE    32  TO  IDX1
+      *         WHEN    OTHER
+      **    旧市町村名の場合
+      *             PERFORM  VARYING  IDX2  FROM  1  BY  1
+      *                      UNTIL    IDX2  >     6
+      *               IF  WRK-EHKNJANUM (IDX2)  =  WRK-HKNJANUM
+      *               OR  WRK-EHKNJANUM (IDX2)  =  ZERO
+      *                 MOVE  WRK-HKNJANUM  TO  WRK-EHKNJANUM(IDX2)
+      *                 ADD   1             TO  WRK-EKENSU (IDX2)
+      *                                         SUM-GKENSU
+      *                 MOVE  6             TO  IDX2
+      *                 MOVE  ZERO          TO  IDX1
+      *               END-IF
+      *             END-PERFORM
+               WHEN    "250019"    MOVE    2   TO  IDX1
+               WHEN    "250027"    MOVE    3   TO  IDX1
+               WHEN    "250035"    MOVE    4   TO  IDX1
+               WHEN    "250043"    MOVE    5   TO  IDX1
+               WHEN    "250050"    MOVE    6   TO  IDX1
+               WHEN    "250068"    MOVE    7   TO  IDX1
+               WHEN    "250076"    MOVE    8   TO  IDX1
+               WHEN    "250092"    MOVE    9   TO  IDX1
+               WHEN    "250100"    MOVE    10  TO  IDX1
+               WHEN    "250118"    MOVE    11  TO  IDX1
+               WHEN    "250126"    MOVE    12  TO  IDX1
+               WHEN    "250134"    MOVE    13  TO  IDX1
+               WHEN    "250522"    MOVE    14  TO  IDX1
+               WHEN    "250647"    MOVE    15  TO  IDX1
+               WHEN    "250654"    MOVE    16  TO  IDX1
+               WHEN    "250712"    MOVE    17  TO  IDX1
+               WHEN    "250738"    MOVE    18  TO  IDX1
+               WHEN    "250746"    MOVE    19  TO  IDX1
+               WHEN    "250753"    MOVE    20  TO  IDX1
+               WHEN    "133033"    MOVE    21  TO  IDX1
+               WHEN    "133264"    MOVE    22  TO  IDX1
+               WHEN    "133298"    MOVE    23  TO  IDX1
+               WHEN    "233064"    MOVE    24  TO  IDX1
+               WHEN    "261329"    MOVE    25  TO  IDX1
+               WHEN    "273102"    MOVE    26  TO  IDX1
                WHEN    OTHER
-      *    旧市町村名の場合
-                   PERFORM  VARYING  IDX2  FROM  1  BY  1
-                            UNTIL    IDX2  >     6
-                     IF  WRK-EHKNJANUM (IDX2)  =  WRK-HKNJANUM
-                     OR  WRK-EHKNJANUM (IDX2)  =  ZERO
-                       MOVE  WRK-HKNJANUM  TO  WRK-EHKNJANUM(IDX2)
-                       ADD   1             TO  WRK-EKENSU (IDX2)
-                                               SUM-GKENSU
-                       MOVE  6             TO  IDX2
-                       MOVE  ZERO          TO  IDX1
+      *    他市町村名の場合
+                   PERFORM  VARYING  IDX  FROM  1  BY  1
+                            UNTIL    IDX  >     7
+                     IF  WRK-EHKNJANUM (IDX)  =  WRK-HKNJANUM
+                     OR  WRK-EHKNJANUM (IDX)  =  ZERO
+                       MOVE  WRK-HKNJANUM  TO  WRK-EHKNJANUM(IDX)
+                       IF  FLG-RECEDEN      =  ZERO
+                       OR  WRK-PARA-SYOKBN  =  "2"
+                         ADD   1           TO  WRK-EKENSU (IDX)
+                       END-IF
+                       MOVE  7             TO  IDX
                      END-IF
                    END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
            END-EVALUATE
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -839,8 +1034,12 @@
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
              IF      IDX1    >   ZERO
                  ADD     1   TO  SUM-KENSU(IDX1)
-                                 SUM-GKENSU
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *                           SUM-GKENSU
+      *       END-IF
              END-IF
+             ADD     1       TO  SUM-GKENSU(IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
            END-IF
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
@@ -861,20 +1060,50 @@
            IF  FLG-KOURECEDEN      =  ZERO
            OR  WRK-PARA-SYOKBN  =  "2"
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
-      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
-      *       IF      RECE10-HKNJANUM(3:2) = "25"
-             IF      RECE10-PREFKBN = "1"
-      *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) end
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      **=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
+      **       IF      RECE10-HKNJANUM(3:2) = "25"
+      *       IF      RECE10-PREFKBN = "1"
+      **=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) end
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
                  IF  RECE10-HKNNUM  =  "039"
-                     ADD  1  TO  SUM-GKENSUK
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *               ADD  1  TO  SUM-GKENSUK
+                     ADD  1  TO  SUM-GKENSUK(IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
                  END-IF
                  IF  RECE10-HKNNUM  =  "040"
                      ADD  1  TO  SUM-TOKGKENSUK
                  END-IF
-             END-IF
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) start
            END-IF
       *=== レセ電時は件数を印字しない by Yoshikawa(2009/06/01) end
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *       END-IF
+      *    県外後期高齢の集計
+           IF  IDX2  =  2  AND  RECE10-HKNNUM  =  "039"
+      *        県番号セット
+               IF  RECE10-HKNJANUM(7:2)  =  SPACE
+                 MOVE  RECE10-HKNJANUM(1:2)  TO  WRK-HKNJANUM
+               ELSE
+                 MOVE  RECE10-HKNJANUM(3:2)  TO  WRK-HKNJANUM
+               END-IF
+      *
+               PERFORM  VARYING  IDX3  FROM  1  BY  1
+                        UNTIL    IDX3  >     5
+                 IF  WRK-PREFNUM(IDX3)  =  WRK-HKNJANUM
+                 OR  WRK-PREFNUM(IDX3)  =  SPACE
+                   MOVE  WRK-HKNJANUM  TO  WRK-PREFNUM(IDX3)
+                   IF  FLG-KOURECEDEN      =  ZERO
+                   OR  WRK-PARA-SYOKBN  =  "2"
+                     ADD   1           TO  WRK-KOUKENSU(IDX3)
+                   END-IF
+                   MOVE  5             TO  IDX3
+                 END-IF
+               END-PERFORM
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
            MOVE    1    TO  FLG-UPD 
       *
@@ -895,11 +1124,11 @@
                    UNTIL       FLG-END     =   1
                EVALUATE    WRK-PARA-SYOKBN
                    WHEN    "2"
-                       IF    RECE10-HENREIYM  NOT =  '000000'
+                       IF    RECE10-HENREIYM  NOT =  "000000"
                            ADD  1  TO  SUM-TOKGKENSU
                        END-IF
                    WHEN    "1"
-                       IF    RECE10-HENREIYM    =  '000000'
+                       IF    RECE10-HENREIYM    =  "000000"
                            ADD  1  TO  SUM-TOKGKENSU
                        END-IF
                END-EVALUATE
@@ -913,7 +1142,103 @@
            EXIT.
       *
       *---(01.00.04) LINE ADD END   ------------------------------------
-057400*
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *****************************************************************
+      *    連名簿枚数合計取得処理
+      *****************************************************************
+       2001-FUKUSI-SYUKEI-SEC                SECTION.
+      *
+           MOVE    ZERO    TO  FLG-END
+           PERFORM 900-KOHSKY-START-SEC
+      *
+           PERFORM UNTIL   FLG-END =   1
+      *
+               PERFORM VARYING IDZ     FROM    1   BY  1
+                       UNTIL   IDZ     >       4
+                   IF  RECE02-KOHNUM(IDZ)  =  "142" OR "242" OR "140"
+                                           OR "141" OR "241" OR "341"
+                                           OR "143" OR "243" OR "343"
+                                           OR "144" OR "244" OR "344"
+                                           OR "145" OR "245" OR "345"
+                                           OR "146" OR "246" OR "170"
+                                           OR "441" OR "541" OR "340"
+                       PERFORM 20011-KOH-CHK-SEC
+      *
+                   END-IF
+               END-PERFORM
+      *
+               PERFORM 900-KOHSKY-READ-SEC
+           END-PERFORM
+      *
+      *    連名簿枚数取得
+      *    入院枚数計算
+           DIVIDE  WRK-FKENSU1    BY  6
+                   GIVING      WRK-FMAISU1
+                   REMAINDER   WRK-AMARI
+           IF      WRK-AMARI   NOT =   0
+               ADD     1   TO  WRK-FMAISU1
+           END-IF
+      *    外来枚数計算
+           DIVIDE  WRK-FKENSU2    BY  6
+                   GIVING      WRK-FMAISU2
+                   REMAINDER   WRK-AMARI
+           IF      WRK-AMARI   NOT =   0
+               ADD     1   TO  WRK-FMAISU2
+           END-IF
+      *
+           DISPLAY "入院福祉件数=" WRK-FKENSU1
+                   "外来福祉件数=" WRK-FKENSU2
+      *
+           COMPUTE  WRK-FMAISUG  =  WRK-FMAISU1  +  WRK-FMAISU2
+      *
+           .
+       2001-FUKUSI-SYUKEI-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    福祉医療費請求書枚数計算
+      *****************************************************************
+       20011-KOH-CHK-SEC            SECTION.
+      *
+           MOVE    1       TO  FLG-ERR
+           MOVE    RECE02-KOHNUM(IDZ)  TO  WRK-KOHNUM
+           MOVE    RECE02-KOHID(IDZ)   TO  WRK-KOHID
+      *
+           IF      RECE02-NYUGAIKBN    =   "1"
+               MOVE    "key33"         TO  WRK-PATH
+           ELSE
+               MOVE    "key25"         TO  WRK-PATH
+           END-IF
+      *
+      *    助成判定
+           PERFORM 920-SYUNOU-SET-SEC
+      *
+      *  当月・月遅れ分の処理の時だけ福祉医療費請求書枚数を記載する
+           IF      FLG-ERR     =   ZERO
+             IF   WRK-PARA-SYOKBN      =    "1"
+               IF   RECE02-NYUGAIKBN     =     "1"
+                 ADD     1       TO  WRK-FKENSU1
+               ELSE
+                 ADD     1       TO  WRK-FKENSU2
+               END-IF
+               MOVE    1       TO  FLG-UPD
+             END-IF
+           ELSE
+               DISPLAY "助成対象外=" RECE02-PTNUM
+                       "入外区分="   RECE02-NYUGAIKBN
+                       "公費番号="   RECE02-KOHNUM(IDZ)
+                       "点数="       RECE02-TOTALTEN(IDZ + 1)
+                       "負担金="     RECE02-FTNMONEY(IDZ + 1)
+                       "負担者番号=" RECE02-KOHFTNJANUM(IDZ)
+           END-IF
+      *
+      *
+           .
+       20011-KOH-CHK-EXT.
+           EXIT.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
+      *
       *****************************************************************
 006900*    請求ＤＢ更新用ファイル出力処理
       *****************************************************************
@@ -1006,7 +1331,10 @@
            PERFORM VARYING IDX1    FROM    1   BY  1
       *---(01.00.02) LINE ADD START ------------------------------------
       *             UNTIL     IDX1    >     61
-                   UNTIL     IDX1    >     32
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *             UNTIL     IDX1    >     32
+                   UNTIL     IDX1    >     26
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *---(01.00.02) LINE ADD END   ------------------------------------
                MOVE    SUM-KENSU(IDX1)     TO  WRK-Z5
                MOVE    WRK-Z5              TO  SKT2500-KENSU(IDX1)
@@ -1015,25 +1343,60 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *    他保険者
            PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     6
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *              UNTIL    IDX1  >     6
+                    UNTIL    IDX1  >     7
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
                     OR       WRK-EHKNJANUM (IDX1)  =  ZERO
                MOVE  WRK-EHKNJANUM (IDX1)  TO  WRK-HKNJANUM
                PERFORM  900-HKNJAINF-SET-SEC
-               MOVE  HKNJA-HKNJANAME       TO  SKT2500-EHKNJANAME(IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *         MOVE  HKNJA-HKNJANAME     TO  SKT2500-EHKNJANAME(IDX1)
+               IF  HKNJA-HKNJANAME(15:1)  =  SPACE
+                 MOVE  HKNJA-HKNJANAME     TO  SKT2500-EHKNJANAME1(IDX1)
+               ELSE
+                 MOVE  HKNJA-HKNJANAME     TO  SKT2500-EHKNJANAME2(IDX1)
+               END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
                MOVE  WRK-EHKNJANUM (IDX1)  TO  SKT2500-EHKNJANUM(IDX1)
                MOVE  WRK-EKENSU (IDX1)     TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT2500-EKENSU(IDX1)
            END-PERFORM
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-      *    合計処理
-           MOVE    SUM-GKENSU  TO  WRK-Z6
-           MOVE    WRK-Z6      TO  SKT2500-GKENSU
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *    県外保険者
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     5
+                    OR       WRK-PREFNUM (IDX1)  =  SPACE
+               MOVE  WRK-PREFNUM (IDX1)  TO  WRK-HKNJANUM
+               PERFORM  800-KENNAME-SET-SEC
+               MOVE  WRK-KENNAME           TO  SKT2500-KENNAME(IDX1)
+               MOVE  WRK-KOUKENSU (IDX1)   TO  WRK-Z5
+               MOVE  WRK-Z5                TO  SKT2500-KOUKENSU(IDX1)
+           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *    合計処理（県内後期高齢者）
-           MOVE    SUM-GKENSUK  TO  WRK-Z6
-           MOVE    WRK-Z6      TO  SKT2500-GKENSUK
+      *    合計処理
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *     MOVE    SUM-GKENSU  TO  WRK-Z6
+      *     MOVE    WRK-Z6      TO  SKT2500-GKENSU
+      **
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **    合計処理（県内後期高齢者）
+      *     MOVE    SUM-GKENSUK  TO  WRK-Z6
+      *     MOVE    WRK-Z6      TO  SKT2500-GKENSUK
+           PERFORM  VARYING  IDX2  FROM  1  BY  1
+                    UNTIL    IDX2  >     2
+      *        国保分
+               MOVE    SUM-GKENSU(IDX2)    TO  WRK-Z6
+               MOVE    WRK-Z6              TO  SKT2500-GKENSU(IDX2)
+      *        後期高齢者分
+               MOVE    SUM-GKENSUK(IDX2)   TO  WRK-Z6
+               MOVE    WRK-Z6              TO  SKT2500-GKENSUK(IDX2)
+           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
+      *
       *    合計処理（特別療養費国保）
            MOVE    SUM-TOKGKENSU  TO  WRK-Z3
            MOVE    WRK-Z3      TO  SKT2500-TOKURYO
@@ -1041,6 +1404,12 @@
            MOVE    SUM-TOKGKENSUK  TO  WRK-Z3
            MOVE    WRK-Z3      TO  SKT2500-TOKURYOK
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *    福祉医療費請求書紙合計
+           MOVE    WRK-FMAISUG             TO  WRK-Z3
+           MOVE    WRK-Z3                  TO  SKT2500-FKENSUK
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1074,7 +1443,10 @@
                MOVE   "SKT2500o.red"   TO  SPRT-PRTID
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
-           MOVE    "県内・国保総括票"  TO  SPRT-TITLE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *     MOVE    "県内・国保総括票"  TO  SPRT-TITLE
+           MOVE    "国保総括票"        TO  SPRT-TITLE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
            MOVE    SKT2500             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1212,6 +1584,67 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *****************************************************************
+      *    都道府県名セット
+      *****************************************************************
+        800-KENNAME-SET-SEC                SECTION.
+      *
+           EVALUATE  WRK-HKNJANUM(1:2)
+             WHEN  "01"  MOVE  "北海道"    TO  WRK-KENNAME
+             WHEN  "02"  MOVE  "青森県"    TO  WRK-KENNAME
+             WHEN  "03"  MOVE  "岩手県"    TO  WRK-KENNAME
+             WHEN  "04"  MOVE  "宮城県"    TO  WRK-KENNAME
+             WHEN  "05"  MOVE  "秋田県"    TO  WRK-KENNAME
+             WHEN  "06"  MOVE  "山形県"    TO  WRK-KENNAME
+             WHEN  "07"  MOVE  "福島県"    TO  WRK-KENNAME
+             WHEN  "08"  MOVE  "茨城県"    TO  WRK-KENNAME
+             WHEN  "09"  MOVE  "栃木県"    TO  WRK-KENNAME
+             WHEN  "10"  MOVE  "群馬県"    TO  WRK-KENNAME
+             WHEN  "11"  MOVE  "埼玉県"    TO  WRK-KENNAME
+             WHEN  "12"  MOVE  "千葉県"    TO  WRK-KENNAME
+             WHEN  "13"  MOVE  "東京都"    TO  WRK-KENNAME
+             WHEN  "14"  MOVE  "神奈川県"  TO  WRK-KENNAME
+             WHEN  "15"  MOVE  "新潟県"    TO  WRK-KENNAME
+             WHEN  "16"  MOVE  "富山県"    TO  WRK-KENNAME
+             WHEN  "17"  MOVE  "石川県"    TO  WRK-KENNAME
+             WHEN  "18"  MOVE  "福井県"    TO  WRK-KENNAME
+             WHEN  "19"  MOVE  "山梨県"    TO  WRK-KENNAME
+             WHEN  "20"  MOVE  "長野県"    TO  WRK-KENNAME
+             WHEN  "21"  MOVE  "岐阜県"    TO  WRK-KENNAME
+             WHEN  "22"  MOVE  "静岡県"    TO  WRK-KENNAME
+             WHEN  "23"  MOVE  "愛知県"    TO  WRK-KENNAME
+             WHEN  "24"  MOVE  "三重県"    TO  WRK-KENNAME
+      *       WHEN  "25"  MOVE  "滋賀県"    TO  WRK-KENNAME
+             WHEN  "26"  MOVE  "京都府"    TO  WRK-KENNAME
+             WHEN  "27"  MOVE  "大阪府"    TO  WRK-KENNAME
+             WHEN  "28"  MOVE  "兵庫県"    TO  WRK-KENNAME
+             WHEN  "29"  MOVE  "奈良県"    TO  WRK-KENNAME
+             WHEN  "30"  MOVE  "和歌山県"  TO  WRK-KENNAME
+             WHEN  "31"  MOVE  "鳥取県"    TO  WRK-KENNAME
+             WHEN  "32"  MOVE  "島根県"    TO  WRK-KENNAME
+             WHEN  "33"  MOVE  "岡山県"    TO  WRK-KENNAME
+             WHEN  "34"  MOVE  "広島県"    TO  WRK-KENNAME
+             WHEN  "35"  MOVE  "山口県"    TO  WRK-KENNAME
+             WHEN  "36"  MOVE  "徳島県"    TO  WRK-KENNAME
+             WHEN  "37"  MOVE  "香川県"    TO  WRK-KENNAME
+             WHEN  "38"  MOVE  "愛媛県"    TO  WRK-KENNAME
+             WHEN  "39"  MOVE  "高知県"    TO  WRK-KENNAME
+             WHEN  "40"  MOVE  "福岡県"    TO  WRK-KENNAME
+             WHEN  "41"  MOVE  "佐賀県"    TO  WRK-KENNAME
+             WHEN  "42"  MOVE  "長崎県"    TO  WRK-KENNAME
+             WHEN  "43"  MOVE  "熊本県"    TO  WRK-KENNAME
+             WHEN  "44"  MOVE  "大分県"    TO  WRK-KENNAME
+             WHEN  "45"  MOVE  "宮崎県"    TO  WRK-KENNAME
+             WHEN  "46"  MOVE  "鹿児島県"  TO  WRK-KENNAME
+             WHEN  "47"  MOVE  "沖縄県"    TO  WRK-KENNAME
+           END-EVALUATE
+      *
+           .
+       800-KENNAME-SET-EXT.
+           EXIT.
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *****************************************************************
       *    請求管理読込
       *****************************************************************
@@ -1297,10 +1730,12 @@
       *                 GO  TO  900-SEIKYU-READ-SEC
       *             END-IF
       *         END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
       *        県内かどうか
-               IF  RECE10-PREFKBN  =  "2"
-                   GO  TO  900-SEIKYU-READ-SEC
-               END-IF
+      *         IF  RECE10-PREFKBN  =  "2"
+      *             GO  TO  900-SEIKYU-READ-SEC
+      *         END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *=== 県内・県外判定の変更 by Yoshikawa(2010/04/14) start
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
@@ -1335,6 +1770,289 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      *****************************************************************
+      *    保険組合せマスター読み込み
+      *****************************************************************
+       910-HKNCOMBI-READ-SEC         SECTION.
+      *
+           INITIALIZE                      HKNCOMBI-REC
+           MOVE    SPA-HOSPNUM                TO  COMB-HOSPNUM
+           MOVE    SYU-PTID                   TO  COMB-PTID
+           MOVE    SYU-HKNCOMBINUM            TO  COMB-HKNCOMBINUM
+           MOVE    HKNCOMBI-REC               TO  MCPDATA-REC
+           MOVE    "DBSELECT"                 TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"             TO  MCP-TABLE
+           MOVE    "key"                      TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"                  TO  MCP-FUNC
+               MOVE    "tbl_hkncombi"        TO  MCP-TABLE
+               MOVE    "key"                 TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"           USING
+                                             MCPAREA
+                                             MCPDATA-REC
+                                             SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  HKNCOMBI-REC
+                   MOVE    ZERO            TO  FLG-HKNCOMBI
+               ELSE
+                   INITIALIZE                  HKNCOMBI-REC
+                   MOVE    1               TO  FLG-HKNCOMBI
+               END-IF
+           ELSE
+               INITIALIZE                  HKNCOMBI-REC
+               MOVE    1               TO  FLG-HKNCOMBI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"             TO  MCP-TABLE
+           MOVE    "key"                      TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+      *
+           .
+       910-HKNCOMBI-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    請求額集計処理
+      *****************************************************************
+       800-SEIKYU-SEC  SECTION.
+      *
+      *
+           PERFORM VARYING IDX FROM    1   BY  1
+                   UNTIL   IDX >       4   OR
+                   SYU-KOH-HKNNUM(IDX) =   SPACE
+      *
+      *        計算負担金に差が有る場合、地方公費の助成があったと判定する
+               IF      FLG-ERR                 =   1
+               AND     SYU-KOH-HKNNUM(IDX)     =   WRK-KOHNUM
+                   IF      IDX                 =   1
+                       IF      SYU-SYUCOMPFTN-ENTANI
+                                       >   SYU-KOH-COMPFTN-ENTANI(IDX)
+                           MOVE    ZERO        TO  FLG-ERR
+                       END-IF
+                   ELSE
+                       IF      SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                       >   SYU-KOH-COMPFTN-ENTANI(IDX)
+                           MOVE    ZERO        TO  FLG-ERR
+                       END-IF
+                   END-IF
+               END-IF
+      *
+           END-PERFORM
+      *
+           .
+       800-SEIKYU-SEC-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *  収納情報セット
+      *****************************************************************
+       920-SYUNOU-SET-SEC  SECTION.
+      *
+             INITIALIZE  SYUNOU-REC
+             MOVE  SPA-HOSPNUM        TO  SYU-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN   TO  SYU-NYUGAIKBN
+             MOVE  RECE02-PTID        TO  SYU-PTID
+             MOVE  RECE02-SRYYM(1:6)  TO  SYU-SRYYMD(1:6)
+             MOVE  "__"               TO  SYU-SRYYMD(7:2)
+             MOVE  WRK-KOHNUM         TO  SYU-KOH-HKNNUM(1)
+                                          SYU-KOH-HKNNUM(2)
+                                          SYU-KOH-HKNNUM(3)
+                                          SYU-KOH-HKNNUM(4)
+             MOVE  SYUNOU-REC         TO  MCPDATA-REC
+             MOVE  "DBSELECT"         TO  MCP-FUNC
+             MOVE    "tbl_syunou"     TO  MCP-TABLE
+             MOVE    WRK-PATH         TO  MCP-PATHNAME
+             CALL    "ORCDBMAIN"      USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE    "tbl_syunou"     TO  MCP-TABLE
+               MOVE    WRK-PATH         TO  MCP-PATHNAME
+               PERFORM  925-SYUNOU-READ-SEC
+      *
+               PERFORM  UNTIL  FLG-SYUNOU  =  1
+                 IF  SYU-DENPJTIKBN   NOT = "3"
+                   IF    SYU-HKNCOMBINUM  =  RECE02-HKNCOMBI(1) OR
+                                             RECE02-HKNCOMBI(2) OR
+                                             RECE02-HKNCOMBI(3) OR
+                                             RECE02-HKNCOMBI(4) OR
+                                             RECE02-HKNCOMBI(5) OR
+                                             RECE02-HKNCOMBI(6) OR
+                                             RECE02-HKNCOMBI(7) OR
+                                             RECE02-HKNCOMBI(8) OR
+                                             RECE02-HKNCOMBI(9) OR
+                                             RECE02-HKNCOMBI(10) 
+                     PERFORM  910-HKNCOMBI-READ-SEC
+                     IF  COMB-KOHID(1)    =  WRK-KOHID   OR
+                         COMB-KOHID(2)    =  WRK-KOHID   OR
+                         COMB-KOHID(3)    =  WRK-KOHID   OR
+                         COMB-KOHID(4)    =  WRK-KOHID
+                       PERFORM  800-SEIKYU-SEC
+                     END-IF
+                   END-IF
+                 END-IF
+      *
+                 MOVE    "tbl_syunou"     TO  MCP-TABLE
+                 MOVE    WRK-PATH         TO  MCP-PATHNAME
+                 PERFORM   925-SYUNOU-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SYUNOU SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+             MOVE    "tbl_syunou"     TO  MCP-TABLE
+             MOVE    WRK-PATH         TO  MCP-PATHNAME
+             CALL    "ORCDBMAIN"      USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       920-SYUNOU-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    収納読込
+      *****************************************************************
+       925-SYUNOU-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL    "ORCDBMAIN"      USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SYUNOU-REC
+             MOVE  ZERO         TO  FLG-SYUNOU
+           ELSE
+             INITIALIZE  SYUNOU-REC
+             MOVE  1  TO  FLG-SYUNOU
+           END-IF
+      *
+           .
+       925-SYUNOU-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費請求書マスタ読込
+      *****************************************************************
+       900-KOHSKY-START-SEC            SECTION.
+      *
+           INITIALIZE                  RECE02-REC
+           MOVE    SPA-HOSPNUM         TO  RECE02-HOSPNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  RECE02-SKYYM
+           MOVE    RECE02-REC          TO  MCPDATA-REC
+      *
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_kohsky"        TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 900-KOHSKY-READ-SEC
+           ELSE
+               MOVE    1               TO  FLG-END
+           END-IF
+           .
+       900-KOHSKY-START-EXT.
+           EXIT.
+      *      
+      *****************************************************************
+      *    公費請求書マスタＲＥＡＤ
+      *****************************************************************
+       900-KOHSKY-READ-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_kohsky"            TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO            TO  FLG-END
+               MOVE    MCPDATA-REC     TO  RECE02-REC
+               IF  RECE02-KOHNUM(1) = "142" OR "242" OR "140"
+                                   OR "141" OR "241" OR "341"
+                                   OR "143" OR "243" OR "343"
+                                   OR "144" OR "244" OR "344"
+                                   OR "145" OR "245" OR "345"
+                                   OR "146" OR "246" OR "170"
+                                   OR "441" OR "541" OR "340"
+               OR  RECE02-KOHNUM(2) = "142" OR "242" OR "140"
+                                   OR "141" OR "241" OR "341"
+                                   OR "143" OR "243" OR "343"
+                                   OR "144" OR "244" OR "344"
+                                   OR "145" OR "245" OR "345"
+                                   OR "146" OR "246" OR "170"
+                                   OR "441" OR "541" OR "340"
+               OR  RECE02-KOHNUM(3) = "142" OR "242" OR "140"
+                                   OR "141" OR "241" OR "341"
+                                   OR "143" OR "243" OR "343"
+                                   OR "144" OR "244" OR "344"
+                                   OR "145" OR "245" OR "345"
+                                   OR "146" OR "246" OR "170"
+                                   OR "441" OR "541" OR "340"
+               OR  RECE02-KOHNUM(4) = "142" OR "242" OR "140"
+                                   OR "141" OR "241" OR "341"
+                                   OR "143" OR "243" OR "343"
+                                   OR "144" OR "244" OR "344"
+                                   OR "145" OR "245" OR "345"
+                                   OR "146" OR "246" OR "170"
+                                   OR "441" OR "541" OR "340"
+      *
+      *            テスト患者のときは読み飛ばす
+                   MOVE    SPACE               TO  PTINF-REC
+                   INITIALIZE                      PTINF-REC
+                   MOVE    SPA-HOSPNUM         TO  PTINF-HOSPNUM
+                   MOVE    RECE02-PTID         TO  PTINF-PTID
+                   MOVE    PTINF-REC           TO  MCPDATA-REC
+                   PERFORM 800-PTINF-READ-SEC
+                   IF      FLG-PTINF           =   ZERO
+                   AND     PTINF-TSTPTNUMKBN   =   "1"
+                       GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *
+               ELSE
+                   GO  TO  900-KOHSKY-READ-SEC
+               END-IF
+           ELSE
+               MOVE    1               TO  FLG-END
+               PERFORM 900-KOHSKY-CLOSE-SEC
+           END-IF
+           .
+       900-KOHSKY-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    公費請求書マスタクローズ
+      *****************************************************************
+       900-KOHSKY-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_kohsky"            TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           .
+       900-KOHSKY-CLOSE-EXT.
+           EXIT.
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
@@ -1673,10 +2391,12 @@
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
       *---(01.00.05) LINE ADD START ------------------------------------
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
       *        県内かどうか
-               IF  RECE10-PREFKBN  =  "2"
-                   GO  TO  950-SEIKYU-READ-SEC
-               END-IF
+      *         IF  RECE10-PREFKBN  =  "2"
+      *             GO  TO  950-SEIKYU-READ-SEC
+      *         END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
