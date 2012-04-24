@@ -50,6 +50,7 @@
       *                                  備考欄の印字修正
       *                                  全国公費の自己負担分がある場合
       *                                  点数欄はゼロを印字する
+      *  01.00.11    吉川    12/04/16    高額該当の場合、点数はゼロを印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1010,6 +1011,12 @@
       *    高額
            IF  MF100-KOGAKU  =  1
              MOVE    "高額該当分"            TO   SC03-BIKO2
+      *=== 高額該当は点数にゼロを印字 by Yoshikawa(2012/04/16) start
+             MOVE    ZERO                    TO   WRK-Z9
+             MOVE    WRK-Z9                  TO   WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             MOVE     WRK-OUT-INPUT          TO   SC03-TENSU(IDX)
+      *=== 高額該当は点数にゼロを印字 by Yoshikawa(2012/04/16) end
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
