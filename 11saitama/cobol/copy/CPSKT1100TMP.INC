@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付      内容
       *  01.00.01    吉川    08/10/08  シス管「2007」公費まとめ対応
+      *  01.00.02    吉川    12/04/17  県外分は都道府県ごとに集計する
       ************************************************************
        01  SKT1100TMP-REC.
            03      SKT1100TMP-KEY.
@@ -32,6 +33,9 @@
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) start
            03      SKT1100TMP-KOHNAME               PIC  X(10).
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) end
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) start
+           03      SKT1100TMP-HKNJANAME             PIC  X(20).
+      *=== 県外は都道府県ごとに集計 by Yoshikawa(2012/04/17) end
            03      SKT1100TMP-DATA.
              05    SKT1100TMP-GAIRAI.
                07  SKT1100TMP-KENSU               PIC  9(05).
