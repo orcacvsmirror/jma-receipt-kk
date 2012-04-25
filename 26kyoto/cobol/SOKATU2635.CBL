@@ -36,6 +36,10 @@
       *  01.00.03    吉川    2010/03/30  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/04/05  オンライン返戻対応
       *  01.00.05    吉川    2010/11/24  open-cobol1.0対応
+      *  01.00.06    吉川    2012/04/23  帳票様式の変更に伴う修正
+      *                                  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -761,13 +765,15 @@
                RECE10-ETC-KOHNUM (4)  =  "972"  OR  "974"
              ADD  1                TO  SUM-TYOKI (IDX1 IDX3)
            END-IF
-      *    原爆
-           IF  RECE10-KOHNUM(1)      =  "019"  OR
-               RECE10-KOHNUM(2)      =  "019"  OR
-               RECE10-KOHNUM(3)      =  "019"  OR
-               RECE10-KOHNUM(4)      =  "019"
-             ADD  1                TO  SUM-GENBAKU (IDX1 IDX3)
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      **    原爆
+      *     IF  RECE10-KOHNUM(1)      =  "019"  OR
+      *         RECE10-KOHNUM(2)      =  "019"  OR
+      *         RECE10-KOHNUM(3)      =  "019"  OR
+      *         RECE10-KOHNUM(4)      =  "019"
+      *       ADD  1                TO  SUM-GENBAKU (IDX1 IDX3)
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *
            MOVE    1               TO  FLG-UPD 
            .
@@ -911,9 +917,11 @@
       *    長期
                MOVE  SUM-TYOKI(IDX IDY)  TO  WRK-Z2
                MOVE  WRK-Z2              TO  SKT2635-TYOKI(IDX IDY)
-      *    原爆
-               MOVE  SUM-GENBAKU(IDX IDY) TO  WRK-Z2
-               MOVE  WRK-Z2              TO  SKT2635-GENBAKU(IDX IDY)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      **    原爆
+      *         MOVE  SUM-GENBAKU(IDX IDY) TO  WRK-Z2
+      *         MOVE  WRK-Z2              TO  SKT2635-GENBAKU(IDX IDY)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *=== 公費件数欄印字不具合修正 by Yoshikawa(2008/05/12) end
       *    食事療養：件数
                MOVE  SUM-S-KENSU(IDX IDY) TO  WRK-Z6
@@ -1242,7 +1250,10 @@
       *
       *        府内かどうか
                IF  RECE10-PREFKBN  NOT =  "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/23) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/23) end
                END-IF
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/04/05) start
@@ -1262,7 +1273,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/23) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/04/23) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(3:2)  TO  KEY-N-HKNJANUM
@@ -1424,7 +1438,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/23) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/23) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -1492,6 +1509,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/20) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/04/20) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
