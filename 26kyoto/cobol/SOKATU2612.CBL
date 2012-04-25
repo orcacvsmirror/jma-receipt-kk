@@ -44,6 +44,7 @@
       *                                    （特別療養費除く）
       *  01.00.11       吉川    11/04/19   レセ電時も件数を印字する
       *  01.00.12       吉川    11/04/22   東北地方太平洋沖地震対応
+      *  01.00.13       吉川    12/04/23   帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -902,9 +903,11 @@
       *       END-IF
       *     END-IF
       *    老人保健か
-           IF  RECE10-RJNHKNNUM  NOT  =  SPACE
-               MOVE    7     TO  IDX1
-           ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     IF  RECE10-RJNHKNNUM  NOT  =  SPACE
+      *         MOVE    7     TO  IDX1
+      *     ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *    一般／退職
              IF  RECE10-HKNNUM  =  "060"
       *    前期高齢者か
@@ -915,13 +918,19 @@
                END-IF
              ELSE
       *    前期高齢者か
-               IF  RECE10-AGE  >=  70
-                 MOVE  4     TO  IDX1
-               ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *         IF  RECE10-AGE  >=  70
+      *           MOVE  4     TO  IDX1
+      *         ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
                  MOVE  5     TO  IDX1
-               END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *         END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
              END-IF
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            PERFORM  2101-SYUKEI-SEC
@@ -1109,14 +1118,16 @@
              ADD  1                TO  SKT2610TMP-TYOKI (IDX1 IDX2)
            END-IF
       *    原爆
-           IF  RECE10-RJNHKNNUM  NOT =  SPACE
-              IF  RECE10-KOHNUM(1)      =  "019"  OR
-                  RECE10-KOHNUM(2)      =  "019"  OR
-                  RECE10-KOHNUM(3)      =  "019"  OR
-                  RECE10-KOHNUM(4)      =  "019"
-                ADD    1           TO  SKT2610TMP-GENBAKU (IDX1 IDX2)
-              END-IF
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      *        IF  RECE10-KOHNUM(1)      =  "019"  OR
+      *            RECE10-KOHNUM(2)      =  "019"  OR
+      *            RECE10-KOHNUM(3)      =  "019"  OR
+      *            RECE10-KOHNUM(4)      =  "019"
+      *          ADD    1           TO  SKT2610TMP-GENBAKU (IDX1 IDX2)
+      *        END-IF
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            MOVE    1               TO  FLG-UPD
@@ -1320,9 +1331,11 @@
       *    長期
              MOVE  SKT2610TMP-TYOKI (IDX1 IDX6)    TO  WRK-Z2
              MOVE  WRK-Z2   TO  SKT2650-TYOKI (IDX1 IDX6)
-      *    原爆
-             MOVE  SKT2610TMP-GENBAKU (IDX1 IDX6)  TO  WRK-Z2
-             MOVE  WRK-Z2   TO  SKT2650-GENBAKU (IDX1 IDX6)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      **    原爆
+      *       MOVE  SKT2610TMP-GENBAKU (IDX1 IDX6)  TO  WRK-Z2
+      *       MOVE  WRK-Z2   TO  SKT2650-GENBAKU (IDX1 IDX6)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *    療養の給付：一部負担金
              MOVE  SKT2610TMP-ITBFTN (IDX1 IDX6)  TO  WRK-Z9

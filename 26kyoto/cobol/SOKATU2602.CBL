@@ -47,6 +47,7 @@
       *                                    （特別療養費除く）
       *  01.00.14       吉川     11/04/19  レセ電時も件数を印字する
       *  01.00.15       吉川     11/04/22  東北地方太平洋沖地震対応
+      *  01.00.16       吉川     12/04/23  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -858,16 +859,20 @@
       *       END-IF
       *     END-IF
       *    老人保健か
-           IF  RECE10-RJNHKNNUM  NOT  =  SPACE
-               MOVE    3     TO  IDX1
-           ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     IF  RECE10-RJNHKNNUM  NOT  =  SPACE
+      *         MOVE    3     TO  IDX1
+      *     ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *    前期高齢者か
              IF  RECE10-AGE  >=  70
                  MOVE  1     TO  IDX1
              ELSE
                  MOVE  2     TO  IDX1
              END-IF
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -986,15 +991,17 @@
       *---(01.00.02) LINE ADD START ------------------------------------
       *    他公費
            MOVE  ZERO                TO  FLG-TAKOH
-           IF  RECE10-RJNHKNNUM  NOT =  SPACE
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *       IF  RECE10-RJNHKNNUM (1:2)  NOT =  "26"
-      *         ADD  1              TO  SKT2600TMP-TAKOH (IDX1 IDX2)
-      *       END-IF
-             MOVE  RECE10-RJNHKNNUM       TO  WRK-KOHNUM
-             PERFORM  900-PTKOHINF-SELECT-SEC
-      *---(01.00.03) LINE ADD END   ------------------------------------
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **       IF  RECE10-RJNHKNNUM (1:2)  NOT =  "26"
+      **         ADD  1              TO  SKT2600TMP-TAKOH (IDX1 IDX2)
+      **       END-IF
+      *       MOVE  RECE10-RJNHKNNUM       TO  WRK-KOHNUM
+      *       PERFORM  900-PTKOHINF-SELECT-SEC
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
                     OR       RECE10-KOHNUM (IDZ)  =  SPACE
@@ -1018,14 +1025,16 @@
              ADD  1                TO  SKT2600TMP-TYOKI (IDX1 IDX2)
            END-IF
       *    原爆
-           IF  RECE10-RJNHKNNUM  NOT =  SPACE
-              IF  RECE10-KOHNUM(1)      =  "019"  OR
-                  RECE10-KOHNUM(2)      =  "019"  OR
-                  RECE10-KOHNUM(3)      =  "019"  OR
-                  RECE10-KOHNUM(4)      =  "019"
-                ADD    1           TO  SKT2600TMP-GENBAKU (IDX1 IDX2)
-              END-IF
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      *     IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      *        IF  RECE10-KOHNUM(1)      =  "019"  OR
+      *            RECE10-KOHNUM(2)      =  "019"  OR
+      *            RECE10-KOHNUM(3)      =  "019"  OR
+      *            RECE10-KOHNUM(4)      =  "019"
+      *          ADD    1           TO  SKT2600TMP-GENBAKU (IDX1 IDX2)
+      *        END-IF
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            MOVE    1               TO  FLG-UPD
@@ -1233,9 +1242,11 @@
       *    長期
              MOVE  SKT2600TMP-TYOKI (IDX1 IDX6)    TO  WRK-Z2
              MOVE  WRK-Z2   TO  SKT2640-TYOKI (IDX1 IDX6)
-      *    原爆
-             MOVE  SKT2600TMP-GENBAKU (IDX1 IDX6)  TO  WRK-Z2
-             MOVE  WRK-Z2   TO  SKT2640-GENBAKU (IDX1 IDX6)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) start
+      **    原爆
+      *       MOVE  SKT2600TMP-GENBAKU (IDX1 IDX6)  TO  WRK-Z2
+      *       MOVE  WRK-Z2   TO  SKT2640-GENBAKU (IDX1 IDX6)
+      *=== 帳票様式の変更 by Yoshikawa(2012/04/23) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *
       *    療養の給付：一部負担金
