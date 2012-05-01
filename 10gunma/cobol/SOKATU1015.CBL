@@ -36,6 +36,7 @@
       *  01.00.04    吉川    2010/03/01  広域連合の保険者番号指定対応
       *  01.00.05    吉川    2010/07/15  オンライン返戻対応
       *  01.00.06    吉川    2011/04/08  東北地方太平洋沖地震対応
+      *  01.00.07    吉川    2012/04/27  在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -618,16 +619,26 @@
            MOVE    1                   TO  WRK-INDEX
       *
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "1"
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE  
            EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
                WHEN    "1"             ALSO    "1"
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "1"
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
                WHEN    "1"             ALSO    "2"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"             ALSO    "1"
                WHEN    "2"             ALSO    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -638,29 +649,31 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *    入院外集計（在総診または在医総を算定したレセ）
-      *    特別療養費の場合は在総診はなし
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
-                                       OR      FLG-ERR      =  1
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      **    入院外集計（在総診または在医総を算定したレセ）
+      **    特別療養費の場合は在総診はなし
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+      *                                 OR      FLG-ERR      =  1
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *     
            MOVE    1                   TO  FLG-END
       *
@@ -1176,10 +1189,12 @@
       *    保険者名（都道府県名）
            MOVE    WRK-HKNJANAME       TO  SKT1015-HKNJANAME
       *    在総診・在医総
-           IF    WRK-INDEX  =  2
-             MOVE    "在"              TO  SKT1015-ZAI1
-             MOVE    "◯"              TO  SKT1015-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    WRK-INDEX  =  2
+      *       MOVE    "在"              TO  SKT1015-ZAI1
+      *       MOVE    "◯"              TO  SKT1015-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
            .
        20021-HEAD-HEN-EXT.

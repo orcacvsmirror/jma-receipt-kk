@@ -47,6 +47,7 @@
       *  01.00.13    吉川    08/09/12    SPA-AREA初期化
       *  01.00.14    吉川    10/05/13    オンライン返戻対応
       *  01.00.15    吉川    11/01/12    特別療養費国保対応
+      *  01.00.16    吉川    12/04/27    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -777,7 +778,9 @@
              MOVE  RECE10-HKNJANUM(3:6)  TO  SKT3810TMP-HKNJANUM(1:6)
            END-IF
       *    在総診
-           MOVE    RECE10-ZAITAKU        TO  SKT3810TMP-ZAISOU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     MOVE    RECE10-ZAITAKU        TO  SKT3810TMP-ZAISOU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *---(01.00.09) LINE ADD START ------------------------------------
       *    平成２０年３月以前老人保健判定
            IF (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
@@ -1276,8 +1279,10 @@
       *              WRK-TMP-KYURATE        =  SPACE             AND
       *              FLG-PRINT              =  ZERO              
              IF     SKT3810TMP-HKNJANUM    =  WRK-TMP-HKNJANUM  AND
-                    SKT3810TMP-ZAISOU      =  WRK-TMP-ZAISOU    AND
-                    WRK-TMP-ZAISOU         =  SPACE             AND
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *              SKT3810TMP-ZAISOU      =  WRK-TMP-ZAISOU    AND
+      *              WRK-TMP-ZAISOU         =  SPACE             AND
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
                     WRK-TMP-KENSU(3 1)     =  ZERO              AND
                     WRK-TMP-KENSU(3 2)     =  ZERO              AND
                     WRK-TMP-KYURATE        =  SPACE             AND
@@ -1449,10 +1454,12 @@
            END-STRING
       *
       *    在宅
-           IF    SKT3810TMP-ZAISOU    =    "1"
-             MOVE    "在"             TO   SKT3820-ZAI(1)
-             MOVE    "◯"             TO   SKT3820-ZAI(2)
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    SKT3810TMP-ZAISOU    =    "1"
+      *       MOVE    "在"             TO   SKT3820-ZAI(1)
+      *       MOVE    "◯"             TO   SKT3820-ZAI(2)
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
       *    特別療養費
@@ -1632,10 +1639,12 @@
                    INTO                SKT3830-HKNJANAME
            END-STRING
       *
-           IF    SKT3810TMP-ZAISOU    =    "1"
-             MOVE    "在"             TO   SKT3830-ZAI(1)
-             MOVE    "◯"             TO   SKT3830-ZAI(2)
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    SKT3810TMP-ZAISOU    =    "1"
+      *       MOVE    "在"             TO   SKT3830-ZAI(1)
+      *       MOVE    "◯"             TO   SKT3830-ZAI(2)
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
       *    特別療養費
@@ -1871,10 +1880,12 @@
                    INTO                SKT3825-HKNJANAME
            END-STRING
       *
-           IF    SKT3810TMP-ZAISOU    =    "1"
-             MOVE    "在"             TO   SKT3825-ZAI1
-             MOVE    "◯"             TO   SKT3825-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    SKT3810TMP-ZAISOU    =    "1"
+      *       MOVE    "在"             TO   SKT3825-ZAI1
+      *       MOVE    "◯"             TO   SKT3825-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
            .
        313-HEAD-HEN-EXT.

@@ -43,6 +43,7 @@
       *  01.00.10    吉川    10/04/05    オンライン返戻対応
       *  01.00.11    吉川    10/10/13    特別療養費国保対応
       *  01.00.12    吉川    10/11/25    open-cobol1.0対応
+      *  01.00.13    吉川    12/04/27    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -782,7 +783,9 @@
            END-IF
       *
       *    在宅・在医総
-           MOVE    RECE10-ZAITAKU        TO  SKT2210TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     MOVE    RECE10-ZAITAKU        TO  SKT2210TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
@@ -1432,10 +1435,12 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD       TO  SKT2210-HOSPCD
       *    在総診・在医総
-           IF    SKT2210TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT2210-ZAIMOJI
-             MOVE    "◯"                TO  SKT2210-ZAIMARU
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    SKT2210TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT2210-ZAIMOJI
+      *       MOVE    "◯"                TO  SKT2210-ZAIMARU
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *    ページ番号の追加
            MOVE    CNT-PAGE              TO  WRK-Z4
@@ -1695,10 +1700,12 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD       TO  SKT2220-HOSPCD
       *    在総診・在医総
-           IF    SKT2210TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT2220-ZAIMOJI
-             MOVE    "◯"                TO  SKT2220-ZAIMARU
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    SKT2210TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT2220-ZAIMOJI
+      *       MOVE    "◯"                TO  SKT2220-ZAIMARU
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *    ページ番号の追加
            MOVE    CNT-PAGE              TO  WRK-Z4

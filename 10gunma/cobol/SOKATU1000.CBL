@@ -44,6 +44,7 @@
       * 01.00.13     吉川    2011/04/08    東北地方太平洋沖地震対応
       * 01.00.14     吉川    2011/04/25    災害分は県外とする
       * 01.00.15     吉川    2011/10/17    県内災害分は県内とする
+      * 01.00.16     吉川    2012/04/27    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -619,7 +620,9 @@
            END-IF
       *
       *    在医総
-           MOVE  RECE10-ZAITAKU  TO  SKT1000TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     MOVE  RECE10-ZAITAKU  TO  SKT1000TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
       *    長期
@@ -1195,13 +1198,15 @@
       *=== 災害対応 by Yoshikawa(2011/04/08) end
       *
       *    在医総
-             IF  SKT1000TMP-ZAITAKU  =  1
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *         MOVE  "在"               TO  SKT1000-ZAI1 (IDX1)
-      *         MOVE  "○"               TO  SKT1000-ZAI2 (IDX1)
-               MOVE  "在"               TO  SKT1000-ZAI (IDX1)
-      *---(01.00.03) LINE ADD END   ------------------------------------
-             END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *       IF  SKT1000TMP-ZAITAKU  =  1
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **         MOVE  "在"               TO  SKT1000-ZAI1 (IDX1)
+      **         MOVE  "○"               TO  SKT1000-ZAI2 (IDX1)
+      *         MOVE  "在"               TO  SKT1000-ZAI (IDX1)
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *       END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *    保険者番号
              MOVE    SKT1000TMP-HKNJANUM  TO  WRK-MAE-INPUT

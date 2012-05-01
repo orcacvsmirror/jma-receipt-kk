@@ -46,6 +46,7 @@
       *  01.00.12    吉川    10/11/02    特別療養費国保対応
       *  01.00.13    吉川    10/11/24    open-cobol1.0対応
       *  01.00.14    吉川    11/04/22    東北地方太平洋沖地震対応
+      *  01.00.15    吉川    12/04/27    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -737,7 +738,9 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    在宅
-           MOVE    RECE10-ZAITAKU    TO    SKT2630TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     MOVE    RECE10-ZAITAKU    TO    SKT2630TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -1302,10 +1305,12 @@
       *---(01.00.01) LINE ADD START ------------------------------------
       *
       *    在宅
-           IF    SKT2630TMP-ZAITAKU   =  1
-             MOVE    "在"                TO  SKT2630-ZAI1
-             MOVE    "◯"                TO  SKT2630-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF    SKT2630TMP-ZAITAKU   =  1
+      *       MOVE    "在"                TO  SKT2630-ZAI1
+      *       MOVE    "◯"                TO  SKT2630-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
       *    特別療養費

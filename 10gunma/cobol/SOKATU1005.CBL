@@ -35,6 +35,7 @@
       *  01.00.04    吉川    10/07/15    オンライン返戻対応
       *  01.00.05    吉川    11/03/10    open-cobol1.0対応
       *  01.00.06    吉川    11/04/08    東北地方太平洋沖地震対応
+      *  01.00.07    吉川    12/04/27    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -569,7 +570,9 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    在医総
-           MOVE  RECE10-ZAITAKU         TO  SKT1005TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     MOVE  RECE10-ZAITAKU         TO  SKT1005TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *    県毎
            MOVE  RECE10-HKNJANUM (1:4)  TO  SKT1005TMP-HKNJANUM
@@ -746,9 +749,11 @@
                     UNTIL    IDX1  >     20
                     OR       FLG-PRINT  =  1
       *      在宅
-             IF  SKT1005TMP-ZAITAKU  =  "1"
-               MOVE  "在"        TO  SKT1005-ZAI (IDX1)
-             END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *       IF  SKT1005TMP-ZAITAKU  =  "1"
+      *         MOVE  "在"        TO  SKT1005-ZAI (IDX1)
+      *       END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *      県名
       *=== 災害対応 by Yoshikawa(2011/04/08) start
              IF  WRK-PARA-GENMENKBN  =  "2"

@@ -50,6 +50,7 @@
       *  01.00.15    吉川    11/04/08    東北地方太平洋沖地震対応（仕様変更）
       *  01.00.16    吉川    11/04/25    災害分は県外とする
       *  01.00.17    吉川    11/10/17    県内災害分は県内とする
+      *  01.00.18    吉川    12/04/27    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -651,7 +652,9 @@
            END-IF
       *
       *    在医総
-           MOVE  RECE10-ZAITAKU  TO  SKT1010TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     MOVE  RECE10-ZAITAKU  TO  SKT1010TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *=== 長期は別帳票とする by Yoshikawa(2009/08/25) start
       *    長期
@@ -1361,13 +1364,15 @@
            MOVE    WRK-SEIYMDWH          TO  SKT1010-SEIYMD
       *
       *    在医総
-           IF  SKT1010TMP-ZAITAKU  =  1
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *       MOVE  "在"                  TO  SKT1010-ZAI1
-      *       MOVE  "○"                  TO  SKT1010-ZAI2
-             MOVE  "在"                  TO  SKT1010-ZAI
-      *---(01.00.03) LINE ADD END   ------------------------------------
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF  SKT1010TMP-ZAITAKU  =  1
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **       MOVE  "在"                  TO  SKT1010-ZAI1
+      **       MOVE  "○"                  TO  SKT1010-ZAI2
+      *       MOVE  "在"                  TO  SKT1010-ZAI
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    医療機関住所
@@ -1585,13 +1590,15 @@
            MOVE    WRK-SEIYMDWH          TO  SKT1020-SEIYMD
       *
       *    在医総
-           IF  SKT1010TMP-ZAITAKU  =  1
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *       MOVE  "在"                  TO  SKT1020-ZAI1
-      *       MOVE  "○"                  TO  SKT1020-ZAI2
-             MOVE  "在"                  TO  SKT1020-ZAI
-      *---(01.00.03) LINE ADD END   ------------------------------------
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF  SKT1010TMP-ZAITAKU  =  1
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **       MOVE  "在"                  TO  SKT1020-ZAI1
+      **       MOVE  "○"                  TO  SKT1020-ZAI2
+      *       MOVE  "在"                  TO  SKT1020-ZAI
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    医療機関住所
@@ -1786,13 +1793,15 @@
            MOVE    WRK-SEIYMDWH          TO  SKT1030-SEIYMD
       *
       *    在医総
-           IF  SKT1010TMP-ZAITAKU  =  1
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *       MOVE  "在"                  TO  SKT1030-ZAI1
-      *       MOVE  "○"                  TO  SKT1030-ZAI2
-             MOVE  "在"                  TO  SKT1030-ZAI
-      *---(01.00.03) LINE ADD END   ------------------------------------
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) start
+      *     IF  SKT1010TMP-ZAITAKU  =  1
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **       MOVE  "在"                  TO  SKT1030-ZAI1
+      **       MOVE  "○"                  TO  SKT1030-ZAI2
+      *       MOVE  "在"                  TO  SKT1030-ZAI
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/04/27) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    医療機関住所
