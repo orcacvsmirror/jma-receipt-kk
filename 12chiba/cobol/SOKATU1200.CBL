@@ -41,6 +41,7 @@
       *  01.00.09    吉川     10/12/03    open-cobol1.0対応
       *  01.00.10    吉川     11/04/04    東北地方太平洋沖地震対応
       *  01.00.11    吉川     11/04/20    東北地方太平洋沖地震対応（仕様変更）
+      *  01.00.12    吉川     12/05/14    レセ電の場合災害分は帳票を分けない
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -129,6 +130,9 @@
       *---(01.00.05) LINE ADD START ------------------------------------
            03  FLG-KOUKI           PIC 9(01).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) start
+           03  FLG-RECEDEN         PIC 9(01).
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -261,6 +265,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) start
+      *    レセプト・総括印刷情報
+           COPY    "CPSK2005.INC".
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) end
       *
       *    請求管理情報
            COPY    "CPRCF010.INC".
@@ -487,6 +496,28 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) start
+      *    レセプト・総括印刷情報　レセ電か
+           INITIALIZE                  SYS-2005-REC
+           MOVE    "2005"              TO  SYS-2005-KANRICD
+           MOVE    "*"                 TO  SYS-2005-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2005-STYUKYMD(1:6)
+                                           SYS-2005-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2005-STYUKYMD(7:2)
+                                           SYS-2005-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2005-HOSPNUM
+           MOVE    SYS-2005-REC        TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2005-REC
+               MOVE    SYS-2005-KKHRECEKBN TO  FLG-RECEDEN
+           ELSE
+               MOVE    ZERO                TO  FLG-RECEDEN
+           END-IF 
+      *
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) end
+      *
       *    主科設定情報
            INITIALIZE                  SYS-2009-REC
            MOVE    "2009"              TO  SYS-2009-KANRICD
@@ -674,9 +705,16 @@
       *           MOVE  "2"             TO  SKT1200TMP-GENMEN
       *         END-IF
       *     END-EVALUATE
-           IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
-             MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1200TMP-GENMEN
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) start
+      *    レセ電の場合は災害分を分けない
+           IF  FLG-RECEDEN      =  ZERO
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) end
+             IF  RECE10-ETC-YKZFTN (1)  NOT =  ZERO
+               MOVE  RECE10-ETC-YKZFTN (1)  TO  SKT1200TMP-GENMEN
+             END-IF
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) start
            END-IF
+      *=== レセ電の場合、災害は合算 by Yoshikawa(2012/05/14) end
       *=== 災害対応(仕様変更) by Yoshikawa(2011/04/20) end
       *=== 災害対応 by Yoshikawa(2011/04/04) end
       *
