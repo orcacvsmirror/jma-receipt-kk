@@ -37,6 +37,10 @@
       *  01.00.06    吉川    2012/02/13  シス管「2010」の公費再掲欄への
       *                                  地方公費記載設定対応
       *                                  TMPファイルCLOSE漏れ
+      *  01.00.07    吉川    2012/05/10  在宅はまとめて集計するように修正
+      *                                  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -785,7 +789,9 @@
            MOVE  WRK-HKNJANAME           TO  SKT0415TMP-HKNJANAME
       *
       *    在宅
-           MOVE  RECE10-ZAITAKU          TO  SKT0415TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) start
+      *     MOVE  RECE10-ZAITAKU          TO  SKT0415TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) end
       *
       *    災害対象者（災１、災２、不詳・災１）は別帳票
            EVALUATE  RECE10-ETC-YKZFTN (1)
@@ -1326,13 +1332,15 @@
            MOVE     SKT0415TMP-HKNJANAME   TO  SKT0415-HKNJANAME
       *=== 災害対応 by Yoshikawa(2011/04/20) end
       *    在総診・在医総
-      *=== マル在の印字不具合修正 by Yoshikawa(2011/12/02) start
-      *     IF    WRK-INDEX  =  2
-           IF    SKT0415TMP-ZAITAKU  =  "1"
-      *=== マル在の印字不具合修正 by Yoshikawa(2011/12/02) end
-             MOVE    "在"              TO  SKT0415-ZAI1
-             MOVE    "◯"              TO  SKT0415-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) start
+      **=== マル在の印字不具合修正 by Yoshikawa(2011/12/02) start
+      **     IF    WRK-INDEX  =  2
+      *     IF    SKT0415TMP-ZAITAKU  =  "1"
+      **=== マル在の印字不具合修正 by Yoshikawa(2011/12/02) end
+      *       MOVE    "在"              TO  SKT0415-ZAI1
+      *       MOVE    "◯"              TO  SKT0415-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) end
       *
            .
        20021-HEAD-HEN-EXT.
@@ -1849,7 +1857,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/10) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/10) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1936,7 +1947,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/05/10) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/05/10) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -2004,6 +2018,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/05/10) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/05/10) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
