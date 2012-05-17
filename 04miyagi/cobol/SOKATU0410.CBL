@@ -45,6 +45,7 @@
       *  01.00.11    吉川    11/06/15  特別療養費国保対応
       *  01.00.12    吉川    12/02/13  シス管「2010」の公費再掲欄への
       *                                地方公費記載設定対応
+      *  01.00.13    吉川    12/05/10  在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -767,7 +768,9 @@
       *=== 災害対応 by Yoshikawa(2011/04/20) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *    在宅
-           MOVE     RECE10-ZAITAKU  TO   SKT0410TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) start
+      *     MOVE     RECE10-ZAITAKU  TO   SKT0410TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) end
       *
            PERFORM  800-SKTTMP-READ-SEC
       *
@@ -1195,10 +1198,12 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT            TO   SKT0410-HKNJANUM
       *
-           IF       SKT0410TMP-ZAITAKU       =    "1"
-             MOVE   "在"                     TO   SKT0410-ZAI1
-             MOVE   "◯"                     TO   SKT0410-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) start
+      *     IF       SKT0410TMP-ZAITAKU       =    "1"
+      *       MOVE   "在"                     TO   SKT0410-ZAI1
+      *       MOVE   "◯"                     TO   SKT0410-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/10) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) start
       *    特別療養費
            IF  WRK-PARA-TOKUBETU  =  "2"
