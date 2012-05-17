@@ -31,6 +31,8 @@
       *  01.00.02    吉川    2009/03/12  点数表区分追加
       *  01.00.03    吉川    2010/02/26  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/07/02  オンライン返戻対応
+      *  01.00.05    吉川    2012/05/10  帳票様式の変更に伴う修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1007,7 +1009,10 @@
       *
       *    編集処理
            PERFORM  VARYING  IDX2  FROM    1   BY  1
-                    UNTIL    IDX2  >       19
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) start
+      *              UNTIL    IDX2  >       19
+                    UNTIL    IDX2  >       26
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) end
                     OR       FLG-PRINT   =  1
       *
       *
@@ -1052,15 +1057,26 @@
       *
            PERFORM  VARYING  IDY  FROM  1  BY  1
                     UNTIL    IDY  >     2
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) start
+      **        合計：件数
+      *         MOVE  SUM-GKENSU(IDX IDY)  TO  WRK-Z7
+      *         MOVE  WRK-Z7  TO  SKT0605-KENSU(20 IDY)
+      **        合計：日数
+      *         MOVE  SUM-GNISSU(IDX IDY)  TO  WRK-Z7
+      *         MOVE  WRK-Z7  TO  SKT0605-NISSU(20 IDY)
+      **        合計：点数
+      *         MOVE  SUM-GTENSU(IDX IDY)  TO  WRK-Z14
+      *         MOVE  WRK-Z14 TO  SKT0605-TENSU(20 IDY)
       *        合計：件数
                MOVE  SUM-GKENSU(IDX IDY)  TO  WRK-Z7
-               MOVE  WRK-Z7  TO  SKT0605-KENSU(20 IDY)
+               MOVE  WRK-Z7  TO  SKT0605-KENSU(27 IDY)
       *        合計：日数
                MOVE  SUM-GNISSU(IDX IDY)  TO  WRK-Z7
-               MOVE  WRK-Z7  TO  SKT0605-NISSU(20 IDY)
+               MOVE  WRK-Z7  TO  SKT0605-NISSU(27 IDY)
       *        合計：点数
                MOVE  SUM-GTENSU(IDX IDY)  TO  WRK-Z14
-               MOVE  WRK-Z14 TO  SKT0605-TENSU(20 IDY)
+               MOVE  WRK-Z14 TO  SKT0605-TENSU(27 IDY)
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) end
            END-PERFORM
       *
            .
@@ -1357,7 +1373,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/10) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/10) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1441,7 +1460,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管参照区分修正 by Yoshikawa(2012/05/10) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管参照区分修正 by Yoshikawa(2012/05/10) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
