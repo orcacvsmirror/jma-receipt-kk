@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/11/05  特別療養費国保対応
+      *  01.00.02    吉川    2012/05/10  帳票様式の変更
       ********************************************************************
         01  SKT0610.
             03  SKT0610-SRYYM           PIC X(16).
@@ -41,3 +42,11 @@
                 05  SKT0610-NISSU       PIC X(05).
                 05  SKT0610-TENSU       PIC X(09).
                 05  SKT0610-ITBFTN      PIC X(09).
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/10) start
+            03  SKT0610-KOHI-TBL      OCCURS  12 TIMES.
+                05  SKT0610-HBTNUM      PIC X(02).
+                05  SKT0610-KKENSU      PIC X(05).
+                05  SKT0610-KNISSU      PIC X(05).
+                05  SKT0610-KTENSU      PIC X(09).
+                05  SKT0610-KITBFTN     PIC X(09).
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/10) end

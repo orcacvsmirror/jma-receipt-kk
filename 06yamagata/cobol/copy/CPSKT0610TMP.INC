@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者   日付       内容
       *  01.00.01    吉川     11/03/24   東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.02    吉川     12/05/10   帳票様式の変更に伴う修正
       ************************************************************
        01  SKT0610TMP-REC.
            03      SKT0610TMP-KEY.
@@ -40,7 +41,11 @@
                07  SKT0610TMP-SNISSU                PIC  9(06).
                07  SKT0610TMP-SKINGK                PIC  9(10).
                07  SKT0610TMP-SFTNGK                PIC  9(10).
-             05    SKT0610TMP-FUKUSI-TBL.
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) start
+      *       05    SKT0610TMP-FUKUSI-TBL.
+             05    SKT0610TMP-KOH-TBL  OCCURS 20.
+               07  SKT0610TMP-KOHNUM                PIC  X(03).
+      *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) end
                07  SKT0610TMP-F-KENSU               PIC  9(06).
                07  SKT0610TMP-F-NISSU               PIC  9(06).
                07  SKT0610TMP-F-TENSU               PIC  9(10).
