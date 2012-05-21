@@ -36,6 +36,7 @@
       *  01.00.05    吉川    2010/03/29  広域連合の保険者番号指定対応
       *  01.00.06    吉川    2010/04/05  オンライン返戻対応
       *  01.00.07    吉川    2012/04/27  在宅はまとめて集計するように修正
+      *  01.00.08    吉川    2012/05/14  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1703,7 +1704,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/14) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/14) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1787,7 +1791,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管1901の参照先区分変更 by Yoshikawa(2012/05/14) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管1901の参照先区分変更 by Yoshikawa(2012/05/14) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
