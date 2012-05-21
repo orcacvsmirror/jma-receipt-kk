@@ -54,6 +54,8 @@
       *  01.00.12    吉川    2010/04/05   オンライン返戻対応
       *  01.00.13    吉川    2010/10/13   特別療養費国保対応
       *  01.00.14    吉川    2010/11/25   open-cobol1.0対応
+      *  01.00.15    吉川    2012/05/14   全国土木、全国建設、中央建設は
+      *                                   県外とするように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -755,12 +757,14 @@
              ELSE
                MOVE    2    TO    SKT2200TMP-KBN
              END-IF
-             IF    SKT2200TMP-HKNJANUM  =  "133033" OR
-                                           "133264" OR
-                                           "133298" 
-               MOVE    1    TO    SKT2200TMP-KBN
-               MOVE    1    TO    SKT2200TMP-KUMIAI
-             END-IF
+      *=== 全国土木等は県外とする by Yoshikawa(2012/05/14) start
+      *       IF    SKT2200TMP-HKNJANUM  =  "133033" OR
+      *                                     "133264" OR
+      *                                     "133298" 
+      *         MOVE    1    TO    SKT2200TMP-KBN
+      *         MOVE    1    TO    SKT2200TMP-KUMIAI
+      *       END-IF
+      *=== 全国土木等は県外とする by Yoshikawa(2012/05/14) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
