@@ -35,6 +35,8 @@
       *  01.00.04    吉川    10/03/02    広域連合の保険者番号指定対応
       *  01.00.05    吉川    10/08/04    オンライン返戻対応
       *  01.00.06    吉川    11/06/23    東北地方太平洋沖地震対応
+      *  01.00.07    吉川    12/05/16    在宅はまとめて集計するように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -781,7 +783,9 @@
            MOVE  WRK-HKNJANUM            TO  SKT1415TMP-HKNJANUM
       *
       *    在宅
-           MOVE  RECE10-ZAITAKU          TO  SKT1415TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) start
+      *     MOVE  RECE10-ZAITAKU          TO  SKT1415TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) end
       *
       *    災１、災２、不詳・災１は別帳票
            IF  RECE10-ETC-YKZFTN (1)  =  2 OR 4 OR 5
@@ -1326,11 +1330,13 @@
       *    在総診・在医総
       *=== 災害対応 by Yoshikawa(2011/06/23) start
       *     IF    WRK-INDEX  =  2
-           IF    SKT1415TMP-ZAITAKU  =  "1"
-      *=== 災害対応 by Yoshikawa(2011/06/23) end
-             MOVE    "在"              TO  SKT1415-ZAI1
-             MOVE    "◯"              TO  SKT1415-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) start
+      *     IF    SKT1415TMP-ZAITAKU  =  "1"
+      **=== 災害対応 by Yoshikawa(2011/06/23) end
+      *       MOVE    "在"              TO  SKT1415-ZAI1
+      *       MOVE    "◯"              TO  SKT1415-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) end
       *
            .
        20021-HEAD-HEN-EXT.
@@ -1777,7 +1783,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/16) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/16) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1864,7 +1873,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」参照区分修正 by Yoshikawa(2012/05/16) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」参照区分修正 by Yoshikawa(2012/05/16) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
