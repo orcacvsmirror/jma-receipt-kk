@@ -49,6 +49,8 @@
       *  01.00.11    等李    12/04/18    滦据给锐戎规をINIファイルから
       *                                  艰评するようにする
       *                                  辉漠录砷么驰の纷换饯赖
+      *  01.00.12    等李    12/05/17    办弟辉で吹荚砷么が痰い眷圭
+      *                                  辉漠录砷么驰腕は淡很しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -296,6 +298,13 @@
       *=== 滦据给锐をINIファイルから艰评 by Yoshikawa(2012/04/18) end
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== 办弟辉の辉漠录砷么驰腕淡很饯赖 by Yoshikawa(2012/05/17) start
+      *    盖年灌誊
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-ICHINOMIYA1    PIC X(03)  VALUE  "304".
+           03  WRK-CONS-ICHINOMIYA2    PIC X(03)  VALUE  "404".
+      *=== 办弟辉の辉漠录砷么驰腕淡很饯赖 by Yoshikawa(2012/05/17) end
       *
       *    DB徊救脱
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -879,7 +888,17 @@
            END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-           MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
+      *=== 办弟辉の辉漠录砷么驰腕淡很饯赖 by Yoshikawa(2012/05/17) start
+      *     MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
+      *    办弟辉で吹荚砷么がない眷圭は辉漠录砷么驰腕に淡很しない
+           IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
+                                   OR  WRK-CONS-ICHINOMIYA2)
+           AND (MF100-FTNMONEY  =  ZERO)
+             MOVE    ZERO             TO    MF100-SEIKYUGK
+           ELSE
+             MOVE    WRK-SEIKYUGK-G2  TO    MF100-SEIKYUGK
+           END-IF
+      *=== 办弟辉の辉漠录砷么驰腕淡很饯赖 by Yoshikawa(2012/05/17) end
       *
            MOVE     MF100-CITYHKNJANUM TO    WRK-KEY-CITYHKNJANUM
       *
