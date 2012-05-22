@@ -26,7 +26,8 @@
       *  12/01/13    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev	修正者	日付		内容
+      * Maj/Min/Rev  修正者   日付        内容
+      *  01.00.01    吉川     12/05/17    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -575,7 +576,9 @@
            END-IF
       *
       *    在宅・在医総
-           MOVE    RECE10-ZAITAKU        TO  SKT4030TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) start
+      *     MOVE    RECE10-ZAITAKU        TO  SKT4030TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) end
       *
       *    印字順設定
            IF    YUSEN-HKNJANUM   =  SKT4030TMP-HKNJANUM
@@ -771,10 +774,12 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4060-HOSPCD
       *    在総診・在医総
-           IF    SKT4030TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT4060-ZAISOU1
-             MOVE    "◯"                TO  SKT4060-ZAISOU2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) start
+      *     IF    SKT4030TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT4060-ZAISOU1
+      *       MOVE    "◯"                TO  SKT4060-ZAISOU2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) end
       *
       *    ページ番号
            MOVE    CNT-PAGE              TO  WRK-Z4
