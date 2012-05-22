@@ -60,6 +60,7 @@
       *  01.00.17    吉川    11/01/25    open-cobol1.0対応
       *  01.00.18    吉川    11/06/23    東北地方太平洋沖地震対応
       *  01.00.19    吉川    11/08/17    障害分は公費再掲欄に記載する
+      *  01.00.20    吉川    12/05/16    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -781,7 +782,9 @@
            MOVE  WRK-HKNJANUM    TO  SKT1410TMP-HKNJANUM
       *
       *    在宅フラグ
-           MOVE  RECE10-ZAITAKU  TO  SKT1410TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) start
+      *     MOVE  RECE10-ZAITAKU  TO  SKT1410TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) end
       *
       *    印字順設定
            IF    YUSEN-HKNJANUM   =  SKT1410TMP-HKNJANUM
@@ -1618,10 +1621,12 @@
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT         TO  SKT1410-HKNJANUM
       *    在総診
-           IF  SKT1410TMP-ZAITAKU  =  1
-             MOVE  "在"                  TO  SKT1410-ZAI
-             MOVE  "○"                  TO  SKT1410-ZAIMARU
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) start
+      *     IF  SKT1410TMP-ZAITAKU  =  1
+      *       MOVE  "在"                  TO  SKT1410-ZAI
+      *       MOVE  "○"                  TO  SKT1410-ZAIMARU
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) end
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT1410-SEIYMD
       *---(01.00.10) LINE ADD START ------------------------------------

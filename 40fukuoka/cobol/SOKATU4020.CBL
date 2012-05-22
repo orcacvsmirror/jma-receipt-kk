@@ -62,6 +62,7 @@
       *  01.00.21    吉川    11/12/07    まとめ公費を281で登録した場合
       *                                  まとめた公費が印字されないのを修正
       *  01.00.22    吉川    12/01/13    特別療養費は専用の請求書に集計
+      *  01.00.23    吉川    12/05/17    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -785,7 +786,9 @@
            END-IF
       *
       *    在宅・在医総
-           MOVE    RECE10-ZAITAKU        TO  SKT4020TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) start
+      *     MOVE    RECE10-ZAITAKU        TO  SKT4020TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) end
       *
       *    印字順設定
            IF    YUSEN-HKNJANUM   =  SKT4020TMP-HKNJANUM
@@ -1320,10 +1323,12 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4030-HOSPCD
       *    在総診・在医総
-           IF    SKT4020TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT4030-ZAISOU1
-             MOVE    "◯"                TO  SKT4030-ZAISOU2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) start
+      *     IF    SKT4020TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT4030-ZAISOU1
+      *       MOVE    "◯"                TO  SKT4030-ZAISOU2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) end
       *
       *---(01.00.03) LINE ADD START ------------------------------------
       *    給付割合設定
@@ -1572,10 +1577,12 @@
            MOVE    WRK-HOSPTEL           TO  SKT4050-TEL
       *---(01.00.08) LINE ADD END   ------------------------------------
       *    在総診・在医総
-           IF    SKT4020TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT4050-ZAISOU1
-             MOVE    "◯"                TO  SKT4050-ZAISOU2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) start
+      *     IF    SKT4020TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT4050-ZAISOU1
+      *       MOVE    "◯"                TO  SKT4050-ZAISOU2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) end
            INITIALIZE                    IDX4
       *
       *    ページ番号
@@ -1954,10 +1961,12 @@
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT4040-HOSPCD
       *    在総診・在医総
-           IF    SKT4020TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT4040-ZAISOU1
-             MOVE    "◯"                TO  SKT4040-ZAISOU2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) start
+      *     IF    SKT4020TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT4040-ZAISOU1
+      *       MOVE    "◯"                TO  SKT4040-ZAISOU2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/17) end
       *
       *    ページ番号
            MOVE      CNT-PAGE            TO  WRK-Z4
