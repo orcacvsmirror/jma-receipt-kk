@@ -54,6 +54,8 @@
       *  01.00.15    吉川    11/04/22    オンライン請求の場合
       *                                  災害分のみ印字するように修正
       *  01.00.16    吉川    11/05/13    保険番号345は10割に印字する
+      *  01.00.17    吉川    12/05/17    災害該当で免除の場合は、
+      *                                  年齢問わず各給付割合欄に印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -187,6 +189,10 @@
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-RECE02          PIC 9(01).
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) start
+           03  FLG-PTKOHINF        PIC 9(01).
+           03  FLG-MENJO           PIC 9(01).
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -360,6 +366,13 @@
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) start
+      *    患者公費情報
+       01  PTKOHINF-REC.
+           COPY    "CPPTKOHINF.INC".
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) end
+      *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
            COPY    "CPJOBKANRI.INC".
@@ -963,6 +976,7 @@
            ELSE
              MOVE  2  TO  IDX2
            END-IF
+      *
       *    老人保健か
            IF  RECE10-RJNHKNNUM  NOT  =  SPACE
              IF    RECE10-KYURATE    =   9
@@ -1051,6 +1065,22 @@
                  END-IF
       *=== 保険番号345は10割 by Yoshikawa(2011/05/13) end
                END-IF
+      *
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) start
+               IF  SKT0710TMP-GENMEN  NOT =  SPACE
+                 PERFORM  940-PTKOHINF-SELECT-SEC
+      *          災害で免除の場合、各給付割合へ
+                 IF  FLG-MENJO  =  1
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  7       MOVE  3  TO  IDX1
+                     WHEN  8       MOVE  4  TO  IDX1
+                     WHEN  9       MOVE  5  TO  IDX1
+                     WHEN  OTHER   MOVE  6  TO  IDX1
+                   END-EVALUATE
+                 END-IF
+               END-IF
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) end
+      *
              ELSE
       *    年齢チェック
                IF  RECE10-AGE  >=  70
@@ -1949,6 +1979,89 @@
            .
        925-HKNJAINF-READ-EXT.
            EXIT.
+      *
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) start
+      *****************************************************************
+      *    患者公費情報SELECT
+      *****************************************************************
+       940-PTKOHINF-SELECT-SEC         SECTION.
+      *
+           INITIALIZE                             PTKOHINF-REC
+                                                  FLG-MENJO
+      *
+           MOVE    SPA-HOSPNUM                TO  PTKOH-HOSPNUM
+           MOVE    RECE10-PTID                TO  PTKOH-PTID
+           MOVE    PTKOHINF-REC               TO  MCPDATA-REC
+           MOVE    "DBSELECT"                 TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"             TO  MCP-TABLE
+           MOVE    "key2"                     TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                USING
+                                              MCPAREA
+                                              MCPDATA-REC
+                                              SPA-AREA
+           IF      MCP-RC           =   ZERO
+                   PERFORM 940-PTKOHINF-FETCH-SEC
+      *
+                   PERFORM  UNTIL  FLG-PTKOHINF  =  1
+      *    災害免除の公費があるか
+                     IF   PTKOH-KOHNUM  =  "962"
+                     AND  PTKOH-TEKSTYMD(1:6)  <=  RECE10-SRYYM
+                     AND  PTKOH-TEKEDYMD(1:6)  >=  RECE10-SRYYM
+                     AND  PTKOH-SAKJOKBN  NOT =  "1"
+                       MOVE    1          TO  FLG-MENJO
+                       MOVE    1          TO  FLG-PTKOHINF
+                     ELSE
+                       PERFORM  940-PTKOHINF-FETCH-SEC
+                     END-IF
+                   END-PERFORM
+           ELSE
+                   MOVE   1               TO  FLG-PTKOHINF
+           END-IF
+      *
+           PERFORM  940-PTKOHINF-CLOSE-SEC
+      *
+           .
+       940-PTKOHINF-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    患者公費情報ＦＥＴＣＨ
+      *****************************************************************
+       940-PTKOHINF-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  PTKOHINF-REC
+                   MOVE    ZERO            TO  FLG-PTKOHINF
+           ELSE
+                   MOVE    1               TO  FLG-PTKOHINF
+           END-IF
+      *
+           .
+       940-PTKOHINF-FETCH-EXT.
+           EXIT.
+      *****************************************************************
+      *    患者公費情報クローズ
+      *****************************************************************
+       940-PTKOHINF-CLOSE-SEC         SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"                 USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       940-PTKOHINF-CLOSE-EXT.
+           EXIT.
+      *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) end
       *
       *****************************************************************
       *   保険番号情報セット
