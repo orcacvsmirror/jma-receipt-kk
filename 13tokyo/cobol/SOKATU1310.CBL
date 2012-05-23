@@ -43,6 +43,7 @@
       *  01.00.07    吉川    10/10/08    再印刷時の帳票タイトル修正
       *  01.00.08    吉川    10/12/15    open-cobol1.0対応
       *  01.00.09    吉川    11/03/15    東北地方太平洋沖地震対応（対象者別集計）
+      *  00.00.10    吉川    12/05/16    H24年4月に新設された在総診対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -294,6 +295,16 @@
            03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
            03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
            03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) start
+           03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114018710".
+           03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114018810".
+           03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114018910".
+           03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114019010".
+           03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114019510".
+           03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114019610".
+           03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114019710".
+           03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019810".
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -1972,12 +1983,28 @@
                     UNTIL   (IDX4  >     5) OR
                             (SRY-SRYCD(IDX4)  =  SPACE)
              IF  SRY-SRYKBN  =  "14"
-               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
-                                       WRK-CONS-ZAITAKU2  OR
-                                       WRK-CONS-ZAITAKU3  OR
-                                       WRK-CONS-ZAITAKU4  OR
-                                       WRK-CONS-ZAITAKU5  OR
-                                       WRK-CONS-ZAITAKU6
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) start
+      *         IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
+      *                                 WRK-CONS-ZAITAKU2  OR
+      *                                 WRK-CONS-ZAITAKU3  OR
+      *                                 WRK-CONS-ZAITAKU4  OR
+      *                                 WRK-CONS-ZAITAKU5  OR
+      *                                 WRK-CONS-ZAITAKU6
+               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
+                                   OR  WRK-CONS-ZAITAKU2
+                                   OR  WRK-CONS-ZAITAKU3
+                                   OR  WRK-CONS-ZAITAKU4
+                                   OR  WRK-CONS-ZAITAKU5
+                                   OR  WRK-CONS-ZAITAKU6
+                                   OR  WRK-CONS-ZAITAKU7
+                                   OR  WRK-CONS-ZAITAKU8
+                                   OR  WRK-CONS-ZAITAKU9
+                                   OR  WRK-CONS-ZAITAKU10
+                                   OR  WRK-CONS-ZAITAKU11
+                                   OR  WRK-CONS-ZAITAKU12
+                                   OR  WRK-CONS-ZAITAKU13
+                                   OR  WRK-CONS-ZAITAKU14
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) end
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
       *           MOVE  1  TO  SKT1310TMP-ZAITAKU
                  MOVE  "1"  TO  SKT1310TMP-ZAITAKU

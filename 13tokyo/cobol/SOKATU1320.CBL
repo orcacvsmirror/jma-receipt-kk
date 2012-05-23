@@ -42,6 +42,7 @@
       *  01.00.07    吉川    2010/12/15  特別療養費国保(068)が退職者に
       *                                  記載される不具合を修正
       *                                  open-cobol1.0対応
+      *  00.00.08    吉川    2012/05/16  H24年4月に新設された在総診対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -219,6 +220,16 @@
            03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
            03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
            03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) start
+           03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114018710".
+           03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114018810".
+           03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114018910".
+           03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114019010".
+           03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114019510".
+           03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114019610".
+           03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114019710".
+           03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019810".
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
@@ -1531,12 +1542,28 @@
                     UNTIL   (IDX3  >     5) OR
                             (SRY-SRYCD(IDX3)  =  SPACE)
              IF  SRY-SRYKBN  =  "14"
-               IF  SRY-SRYCD(IDX3)  =  WRK-CONS-ZAITAKU1  OR
-                                       WRK-CONS-ZAITAKU2  OR
-                                       WRK-CONS-ZAITAKU3  OR
-                                       WRK-CONS-ZAITAKU4  OR
-                                       WRK-CONS-ZAITAKU5  OR
-                                       WRK-CONS-ZAITAKU6
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) start
+      *         IF  SRY-SRYCD(IDX3)  =  WRK-CONS-ZAITAKU1  OR
+      *                                 WRK-CONS-ZAITAKU2  OR
+      *                                 WRK-CONS-ZAITAKU3  OR
+      *                                 WRK-CONS-ZAITAKU4  OR
+      *                                 WRK-CONS-ZAITAKU5  OR
+      *                                 WRK-CONS-ZAITAKU6
+               IF  SRY-SRYCD(IDX3)  =  WRK-CONS-ZAITAKU1
+                                   OR  WRK-CONS-ZAITAKU2
+                                   OR  WRK-CONS-ZAITAKU3
+                                   OR  WRK-CONS-ZAITAKU4
+                                   OR  WRK-CONS-ZAITAKU5
+                                   OR  WRK-CONS-ZAITAKU6
+                                   OR  WRK-CONS-ZAITAKU7
+                                   OR  WRK-CONS-ZAITAKU8
+                                   OR  WRK-CONS-ZAITAKU9
+                                   OR  WRK-CONS-ZAITAKU10
+                                   OR  WRK-CONS-ZAITAKU11
+                                   OR  WRK-CONS-ZAITAKU12
+                                   OR  WRK-CONS-ZAITAKU13
+                                   OR  WRK-CONS-ZAITAKU14
+      *=== 新設された在総診対応 by Yoshikawa(2012/05/16) end
       *=== 在宅判定修正 by Yoshikawa(2009/03/27) start
                  MOVE  1  TO  SKT1320TMP-SYUTURYOKU
       *=== 在宅判定修正 by Yoshikawa(2009/03/27) end
