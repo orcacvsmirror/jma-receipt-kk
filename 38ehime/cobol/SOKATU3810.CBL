@@ -48,6 +48,8 @@
       *  01.00.14    等李    10/05/13    オンライン手提滦炳
       *  01.00.15    等李    11/01/12    泼侍闻蛙锐柜瘦滦炳
       *  01.00.16    等李    12/04/27    哼吗はまとめて礁纷するように饯赖
+      *  01.00.17    等李    12/05/21    办忍霹の７０盒踏塔の
+      *                                  办婶砷么垛腕は磅机する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1499,10 +1501,14 @@
       *         MOVE  SKT3810TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
       *         MOVE  WRK-Z9   TO  SKT3820-ITBFTN(IDX1 IDX2)
       *        ７０盒踏塔は磅机しない
-               IF  IDX1  =  1  OR  2  OR  6  OR  7
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) start
+      *         IF  IDX1  =  1  OR  2  OR  6  OR  7
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) end
                  MOVE  SKT3810TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z9
                  MOVE  WRK-Z9   TO  SKT3820-ITBFTN(IDX1 IDX2)
-               END-IF
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) start
+      *         END-IF
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) end
       *---(01.00.08) LINE ADD END   ------------------------------------
              END-PERFORM
       *    咯祸闻蛙¨凤眶

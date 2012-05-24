@@ -50,6 +50,8 @@
       *  01.00.16    等李      11/01/12    泼侍闻蛙锐尸を叫蜗箕
       *                                    磅湖茶烫の蘑杉タイトル叹饯赖
       *  01.00.17    等李      12/04/11    蘑杉屯及の恃构に燃う饯赖
+      *  01.00.18    等李      12/05/21    办忍霹の７０盒踏塔の
+      *                                    办婶砷么垛腕は磅机する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1373,10 +1375,14 @@
       *         MOVE  SKT3800TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z10
       *         MOVE  WRK-Z10   TO  SKT3800-ITBFTN(IDX1 IDX2)
       *        ７０盒踏塔は磅机しない
-               IF  IDX1  =  1  OR  2  OR  6  OR  7
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) start
+      *         IF  IDX1  =  1  OR  2  OR  6  OR  7
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) end
                  MOVE  SKT3800TMP-ITBFTN (IDX1 IDX2)  TO  WRK-Z10
                  MOVE  WRK-Z10   TO  SKT3800-ITBFTN(IDX1 IDX2)
-               END-IF
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) start
+      *         END-IF
+      *=== 办婶砷么垛は70盒踏塔も磅机する by Yoshikawa(2012/05/21) end
       *---(01.00.08) LINE ADD END   ------------------------------------
              END-PERFORM
       *    咯祸闻蛙¨凤眶
