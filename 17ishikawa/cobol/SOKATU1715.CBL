@@ -34,6 +34,9 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.04    吉川    2010/03/10  広域連合の保険者番号指定対応
       *  01.00.05    吉川    2010/08/19  オンライン返戻対応
+      *  01.00.06    吉川    2012/05/23  帳票様式の変更に伴う修正
+      *                                  在宅はまとめて集計するように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -635,22 +638,32 @@
            MOVE    1                   TO  WRK-INDEX
       *
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/23) start
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      **=== 在宅は分けて印字する by Yoshikawa(2008/05/03) start
+      **             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      **=== 在宅は分けて印字する by Yoshikawa(2008/05/03) end
+      *         WHEN    "2"             ALSO    "1"
+      **=== 在宅は分けて印字する by Yoshikawa(2008/05/03) start
+      **             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      **=== 在宅は分けて印字する by Yoshikawa(2008/05/03) end
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE  
            EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
                WHEN    "1"             ALSO    "1"
-      *=== 在宅は分けて印字する by Yoshikawa(2008/05/03) start
-      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-      *=== 在宅は分けて印字する by Yoshikawa(2008/05/03) end
-               WHEN    "2"             ALSO    "1"
-      *=== 在宅は分けて印字する by Yoshikawa(2008/05/03) start
-      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
-      *=== 在宅は分けて印字する by Yoshikawa(2008/05/03) end
                WHEN    "1"             ALSO    "2"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"             ALSO    "1"
                WHEN    "2"             ALSO    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/23) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -661,31 +674,33 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *=== 在宅は分けて印字する by Yoshikawa(2008/05/03) start
-      *    入院外集計（在総診または在医総を算定したレセ）
-      *    特別療養費の場合は在総診はなし
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
-                                       OR      FLG-ERR      =  1
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
-      *=== 在宅は分けて印字する by Yoshikawa(2008/05/03) end
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/23) start
+      **=== 在宅は分けて印字する by Yoshikawa(2008/05/03) start
+      **    入院外集計（在総診または在医総を算定したレセ）
+      **    特別療養費の場合は在総診はなし
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+      *                                 OR      FLG-ERR      =  1
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      **=== 在宅は分けて印字する by Yoshikawa(2008/05/03) end
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/23) end
       *     
            MOVE    1                   TO  FLG-END
       *
@@ -741,12 +756,14 @@
                WHEN    "2"
                    MOVE    2                   TO  IDX3
                    MOVE    2                   TO  IDX4
-      *+
-                   IF RECE10-ZAITAKU  = 1
-                       MOVE    3                   TO  IDX3
-                       MOVE    2                   TO  IDX4
-                   END-IF
-      *+
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) start
+      *             IF RECE10-ZAITAKU  = 1
+      *                 MOVE    3                   TO  IDX3
+      *                 MOVE    2                   TO  IDX4
+      *             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) end
+      *
            END-EVALUATE
            
       *
@@ -1318,10 +1335,12 @@
       *    保険者名(都道府県名)
       *-     MOVE     WRK-HKNJANAME      TO  SKT1715-HKNJANAME
       *    在総診・在医総
-           IF    WRK-INDEX  =  2
-             MOVE    "在"              TO  SKT1715-ZAI1
-             MOVE    "◯"              TO  SKT1715-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/23) start
+      *     IF    WRK-INDEX  =  2
+      *       MOVE    "在"              TO  SKT1715-ZAI1
+      *       MOVE    "◯"              TO  SKT1715-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/05/23) end
       *
            .
        20021-HEAD-HEN-EXT.
@@ -1339,7 +1358,10 @@
                    UNTIL   IDX >       2
              ADD     1                   TO  IDZ
              PERFORM VARYING IDY FROM    1   BY  1
-                     UNTIL   IDY >       3
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) start
+      *               UNTIL   IDY >       3
+                     UNTIL   IDY >       2
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) end
       *    療養の給付：件数
                MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
                MOVE  WRK-Z5              TO  SKT1715-KENSU(IDZ IDY)
@@ -1372,8 +1394,6 @@
            END-PERFORM
            
       *     
-      
-      
       *    結核分
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       2
@@ -1915,7 +1935,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/23) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/05/23) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1997,7 +2020,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管1901参照区分修正 by Yoshikawa(2012/05/23) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管1901参照区分修正 by Yoshikawa(2012/05/23) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
