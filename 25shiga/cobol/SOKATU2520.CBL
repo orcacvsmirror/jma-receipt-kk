@@ -48,6 +48,7 @@
       *                                  政令指定都市対応（相模原市）
       *  01.00.13    吉川    10/11/01    特別療養費国保対応
       *  01.00.14    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.15    吉川    12/05/25    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -877,9 +878,11 @@
            END-EVALUATE
       *
       *    在総診・在医総チェック
-           IF      RECE10-ZAITAKU  NOT =   SPACE
-               MOVE    "1"         TO  SKT2520TMP-ZAITAKU
-           ELSE
+      *=== 在宅はまとめる by Yoshikawa(2012/05/25) start
+      *     IF      RECE10-ZAITAKU  NOT =   SPACE
+      *         MOVE    "1"         TO  SKT2520TMP-ZAITAKU
+      *     ELSE
+      *=== 在宅はまとめる by Yoshikawa(2012/05/25) end
       *        法定外給付チェック(滋賀県医師国保は除く)
                EVALUATE    TRUE
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -911,7 +914,9 @@
                        END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
                END-EVALUATE
-           END-IF
+      *=== 在宅はまとめる by Yoshikawa(2012/05/25) start
+      *     END-IF
+      *=== 在宅はまとめる by Yoshikawa(2012/05/25) end
       *
       *    指定された保険者は、最後に印刷する
            IF      YUSEN-HKNJANUM  =   SKT2520TMP-HKNJANUM
@@ -1519,10 +1524,12 @@
            END-IF
       *
       *    在総診・在医総
-           EVALUATE    SKT2520TMP-ZAITAKU
-               WHEN    "1"
-                   MOVE    "◯"    TO  SKT2520-ZAISOU1
-           END-EVALUATE
+      *=== 在宅はまとめる by Yoshikawa(2012/05/25) start
+      *     EVALUATE    SKT2520TMP-ZAITAKU
+      *         WHEN    "1"
+      *             MOVE    "◯"    TO  SKT2520-ZAISOU1
+      *     END-EVALUATE
+      *=== 在宅はまとめる by Yoshikawa(2012/05/25) end
       *
            EVALUATE    SKT2520TMP-KYURATE
                WHEN 7
