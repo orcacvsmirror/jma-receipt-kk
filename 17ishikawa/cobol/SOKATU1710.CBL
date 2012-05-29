@@ -41,6 +41,7 @@
       *  01.00.07      吉川     11/02/17    open-cobol1.0対応
       *                                     特別療養費印刷時の再印刷画面の
       *                                     帳票タイトル変更
+      *  01.00.08      吉川     12/05/23    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -767,11 +768,15 @@
            END-IF
       *
       *    保険分集計
-           IF  RECE10-ZAITAKU     =    SPACE
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) start
+      *     IF  RECE10-ZAITAKU     =    SPACE
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) end
              PERFORM  2101-SYUKEI-SEC
-           ELSE
-             PERFORM  2101-Z-SYUKEI-SEC
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) start
+      *     ELSE
+      *       PERFORM  2101-Z-SYUKEI-SEC
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) end
       *
       *    公費分集計
            IF  RECE10-KOHNUM(1)  NOT  =  SPACE
@@ -1114,24 +1119,26 @@
            END-PERFORM
       *
       *    在宅分
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     6
-      *    件数
-             MOVE     SKT1710TMP-Z-KENSU (IDX1)  TO   WRK-Z5
-             MOVE     WRK-Z5       TO   SKT1710-Z-KENSU (IDX1)
-      *    日数
-             MOVE     SKT1710TMP-Z-NISSU (IDX1)  TO   WRK-Z5
-             MOVE     WRK-Z5       TO   SKT1710-Z-NISSU (IDX1)
-      *    点数
-             MOVE     SKT1710TMP-Z-TENSU (IDX1)  TO   WRK-Z9
-             MOVE     WRK-Z9       TO   SKT1710-Z-TENSU (IDX1)
-      *    一部負担金
-             MOVE     SKT1710TMP-Z-ITBFTN (IDX1)  TO   WRK-Z9
-             MOVE     WRK-Z9       TO   SKT1710-Z-ITBFTN (IDX1)
-      *    長期
-             MOVE     SKT1710TMP-Z-TYOKI  (IDX1)  TO   WRK-Z3
-             MOVE     WRK-Z3       TO   SKT1710-Z-TYOKI (IDX1)
-           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) start
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     6
+      **    件数
+      *       MOVE     SKT1710TMP-Z-KENSU (IDX1)  TO   WRK-Z5
+      *       MOVE     WRK-Z5       TO   SKT1710-Z-KENSU (IDX1)
+      **    日数
+      *       MOVE     SKT1710TMP-Z-NISSU (IDX1)  TO   WRK-Z5
+      *       MOVE     WRK-Z5       TO   SKT1710-Z-NISSU (IDX1)
+      **    点数
+      *       MOVE     SKT1710TMP-Z-TENSU (IDX1)  TO   WRK-Z9
+      *       MOVE     WRK-Z9       TO   SKT1710-Z-TENSU (IDX1)
+      **    一部負担金
+      *       MOVE     SKT1710TMP-Z-ITBFTN (IDX1)  TO   WRK-Z9
+      *       MOVE     WRK-Z9       TO   SKT1710-Z-ITBFTN (IDX1)
+      **    長期
+      *       MOVE     SKT1710TMP-Z-TYOKI  (IDX1)  TO   WRK-Z3
+      *       MOVE     WRK-Z3       TO   SKT1710-Z-TYOKI (IDX1)
+      *     END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/05/23) end
       *
       *    公費分
            PERFORM  VARYING  IDX1  FROM  1  BY  1
