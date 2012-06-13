@@ -36,6 +36,11 @@
         <embed object="string" length="100"/>
       </appinfo>
     </element>
+    <element name="HOSPTEL" occurs="1">
+      <appinfo>
+        <embed object="string" length="15"/>
+      </appinfo>
+    </element>
     <element name="KAISETUNAME" occurs="1">
       <appinfo>
         <embed object="string" length="40"/>
@@ -187,19 +192,19 @@
   <layer name="&#199;&#216;&#183;&#202;" visible="true">
     <object type="Standard - Box" version="0" id="O0">
       <attribute name="obj_pos">
-        <point val="19.6577,2.59686"/>
+        <point val="19.6577,2.38516"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.6527,2.59186;20.305,4.90186"/>
+        <rectangle val="19.6527,2.38016;20.305,4.90186"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="19.6577,2.59686"/>
+        <point val="19.6577,2.38516"/>
       </attribute>
       <attribute name="elem_width">
         <real val="0.642259"/>
       </attribute>
       <attribute name="elem_height">
-        <real val="2.3"/>
+        <real val="2.5117"/>
       </attribute>
       <attribute name="border_width">
         <real val="0.01"/>
@@ -398,11 +403,11 @@
         <point val="4.15,4.9"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.145,4.895;4.17461,17.7792"/>
+        <rectangle val="4.1373,4.895;4.155,17.7789"/>
       </attribute>
       <attribute name="conn_endpoints">
         <point val="4.15,4.9"/>
-        <point val="4.16961,17.7742"/>
+        <point val="4.1423,17.7739"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -431,14 +436,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O13">
       <attribute name="obj_pos">
-        <point val="5.55,5.35"/>
+        <point val="5.79735,5.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.5427,5.345;5.555,17.7792"/>
+        <rectangle val="5.79005,5.345;5.80235,17.7792"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="5.55,5.35"/>
-        <point val="5.5477,17.7742"/>
+        <point val="5.79735,5.35"/>
+        <point val="5.79505,17.7742"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -449,14 +454,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O14">
       <attribute name="obj_pos">
-        <point val="6.975,5.35"/>
+        <point val="7.43436,5.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.97,5.345;6.9838,17.7748"/>
+        <rectangle val="7.42936,5.345;7.44316,17.7748"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="6.975,5.35"/>
-        <point val="6.9788,17.7698"/>
+        <point val="7.43436,5.35"/>
+        <point val="7.43816,17.7698"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -467,14 +472,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O15">
       <attribute name="obj_pos">
-        <point val="10.9822,5.35"/>
+        <point val="10.6791,5.35336"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.9772,5.345;10.9944,17.7704"/>
+        <rectangle val="10.67,5.34836;10.6841,17.7792"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="10.9822,5.35"/>
-        <point val="10.9894,17.7654"/>
+        <point val="10.6791,5.35336"/>
+        <point val="10.675,17.7742"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -482,6 +487,9 @@
       <attribute name="line_width">
         <real val="0.01"/>
       </attribute>
+      <connections>
+        <connection handle="1" to="O1" connection="6"/>
+      </connections>
     </object>
     <object type="Standard - Line" version="0" id="O16">
       <attribute name="obj_pos">
@@ -593,19 +601,19 @@
     </object>
     <object type="Standard - Box" version="0" id="O22">
       <attribute name="obj_pos">
-        <point val="1.05,2.6"/>
+        <point val="1.05,2.38516"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.04,2.59;19.6676,4.91"/>
+        <rectangle val="1.04,2.37516;19.6676,4.91"/>
       </attribute>
       <attribute name="elem_corner">
-        <point val="1.05,2.6"/>
+        <point val="1.05,2.38516"/>
       </attribute>
       <attribute name="elem_width">
         <real val="18.6076"/>
       </attribute>
       <attribute name="elem_height">
-        <real val="2.3"/>
+        <real val="2.51484"/>
       </attribute>
       <attribute name="border_width">
         <real val="0.02"/>
@@ -616,14 +624,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O23">
       <attribute name="obj_pos">
-        <point val="1.03766,4.29765"/>
+        <point val="1.03766,4.08564"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.02766,4.28765;9.35886,4.31"/>
+        <rectangle val="1.02766,4.07564;9.35886,4.09799"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="1.03766,4.29765"/>
-        <point val="9.34886,4.3"/>
+        <point val="1.03766,4.08564"/>
+        <point val="9.34886,4.08799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -634,14 +642,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O24">
       <attribute name="obj_pos">
-        <point val="3.97668,2.6"/>
+        <point val="3.97668,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.96668,2.59;3.98668,3.36"/>
+        <rectangle val="3.96668,2.37799;3.98668,3.14799"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="3.97668,2.6"/>
-        <point val="3.97668,3.35"/>
+        <point val="3.97668,2.38799"/>
+        <point val="3.97668,3.13799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -658,14 +666,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O25">
       <attribute name="obj_pos">
-        <point val="4.72933,2.6"/>
+        <point val="4.72933,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.71933,2.59;4.73933,3.36"/>
+        <rectangle val="4.71933,2.37799;4.73933,3.14799"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="4.72933,2.6"/>
-        <point val="4.72933,3.35"/>
+        <point val="4.72933,2.38799"/>
+        <point val="4.72933,3.13799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -682,14 +690,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O26">
       <attribute name="obj_pos">
-        <point val="5.49965,2.6"/>
+        <point val="5.49965,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.48965,2.59;5.50965,3.36"/>
+        <rectangle val="5.48965,2.37799;5.50965,3.14799"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="5.49965,2.6"/>
-        <point val="5.49965,3.35"/>
+        <point val="5.49965,2.38799"/>
+        <point val="5.49965,3.13799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -706,14 +714,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O27">
       <attribute name="obj_pos">
-        <point val="6.2523,2.6"/>
+        <point val="6.2523,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.2423,2.59;6.2623,3.36"/>
+        <rectangle val="6.2423,2.37799;6.2623,3.14799"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="6.2523,2.6"/>
-        <point val="6.2523,3.35"/>
+        <point val="6.2523,2.38799"/>
+        <point val="6.2523,3.13799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -730,14 +738,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O28">
       <attribute name="obj_pos">
-        <point val="11.364,2.6"/>
+        <point val="11.3428,2.38516"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.354,2.59;11.374,4.91"/>
+        <rectangle val="11.327,2.37516;11.3528,4.90399"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="11.364,2.6"/>
-        <point val="11.364,4.9"/>
+        <point val="11.3428,2.38516"/>
+        <point val="11.337,4.89399"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -748,13 +756,13 @@
     </object>
     <object type="Standard - Line" version="0" id="O29">
       <attribute name="obj_pos">
-        <point val="9.3477,2.6"/>
+        <point val="9.34629,2.38516"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.3377,2.59;9.3577,4.91"/>
+        <rectangle val="9.33629,2.37516;9.3577,4.91"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="9.3477,2.6"/>
+        <point val="9.34629,2.38516"/>
         <point val="9.3477,4.9"/>
       </attribute>
       <attribute name="numcp">
@@ -766,14 +774,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O30">
       <attribute name="obj_pos">
-        <point val="7.05,2.6"/>
+        <point val="7.05,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.03028,2.59;7.06,3.34233"/>
+        <rectangle val="7.03028,2.37799;7.06,3.13032"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="7.05,2.6"/>
-        <point val="7.04028,3.33233"/>
+        <point val="7.05,2.38799"/>
+        <point val="7.04028,3.12032"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -830,14 +838,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O33">
       <attribute name="obj_pos">
-        <point val="1.05055,3.34686"/>
+        <point val="1.05055,3.13485"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.04555,3.34186;20.3052,3.355"/>
+        <rectangle val="1.04555,3.12985;20.3052,3.14299"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="1.05055,3.34686"/>
-        <point val="20.3002,3.35"/>
+        <point val="1.05055,3.13485"/>
+        <point val="20.3002,3.13799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -848,14 +856,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O34">
       <attribute name="obj_pos">
-        <point val="19.6514,4.15"/>
+        <point val="19.6514,3.93799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.6464,4.145;20.3064,4.155"/>
+        <rectangle val="19.6464,3.93299;20.3064,3.94299"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="19.6514,4.15"/>
-        <point val="20.3014,4.15"/>
+        <point val="19.6514,3.93799"/>
+        <point val="20.3014,3.93799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -956,14 +964,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O40">
       <attribute name="obj_pos">
-        <point val="3.22157,2.59686"/>
+        <point val="3.22157,2.38485"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.21102,2.58686;3.23157,3.36"/>
+        <rectangle val="3.21102,2.37485;3.23157,3.14799"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="3.22157,2.59686"/>
-        <point val="3.22102,3.35"/>
+        <point val="3.22157,2.38485"/>
+        <point val="3.22102,3.13799"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -997,14 +1005,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O42">
       <attribute name="obj_pos">
-        <point val="8.55,2.6"/>
+        <point val="8.55,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.52297,2.59;8.56,3.35127"/>
+        <rectangle val="8.52297,2.37799;8.56,3.13926"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="8.55,2.6"/>
-        <point val="8.53297,3.34127"/>
+        <point val="8.55,2.38799"/>
+        <point val="8.53297,3.12926"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1021,14 +1029,14 @@
     </object>
     <object type="Standard - Line" version="0" id="O43">
       <attribute name="obj_pos">
-        <point val="7.77666,2.6"/>
+        <point val="7.77666,2.38799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.76325,2.59;7.78666,3.35127"/>
+        <rectangle val="7.76325,2.37799;7.78666,3.13926"/>
       </attribute>
       <attribute name="conn_endpoints">
-        <point val="7.77666,2.6"/>
-        <point val="7.77325,3.34127"/>
+        <point val="7.77666,2.38799"/>
+        <point val="7.77325,3.12926"/>
       </attribute>
       <attribute name="numcp">
         <int val="1"/>
@@ -1178,10 +1186,10 @@
   <layer name="&#202;&#184;&#187;&#250;" visible="true">
     <object type="Standard - Text" version="0" id="O51">
       <attribute name="obj_pos">
-        <point val="9.45065,2.44686"/>
+        <point val="9.45065,2.27018"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.45065,2.08853;12.6321,2.53853"/>
+        <rectangle val="9.45065,1.91185;12.6321,2.36185"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1195,7 +1203,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.45065,2.44686"/>
+            <point val="9.45065,2.27018"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1214,10 +1222,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O52">
       <attribute name="obj_pos">
-        <point val="5.07864,2.45702"/>
+        <point val="5.07864,2.28034"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.07864,2.09869;5.53314,2.54869"/>
+        <rectangle val="5.07864,1.92201;5.53314,2.37201"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1231,7 +1239,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.07864,2.45702"/>
+            <point val="5.07864,2.28034"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1250,10 +1258,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O53">
       <attribute name="obj_pos">
-        <point val="1.24913,3.67302"/>
+        <point val="1.24913,3.70836"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.24913,3.43413;2.46113,3.73413"/>
+        <rectangle val="1.24913,3.46947;2.46113,3.76947"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1267,7 +1275,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.24913,3.67302"/>
+            <point val="1.24913,3.70836"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1286,10 +1294,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O54">
       <attribute name="obj_pos">
-        <point val="5.198,4.79686"/>
+        <point val="7.05312,4.79686"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.198,4.61371;7.521,4.84371"/>
+        <rectangle val="7.05312,4.61371;9.37612,4.84371"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1303,7 +1311,7 @@
             <real val="0.23"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.198,4.79686"/>
+            <point val="7.05312,4.79686"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1430,10 +1438,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O58">
       <attribute name="obj_pos">
-        <point val="4.48775,5.69686"/>
+        <point val="4.6821,5.6822"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.48775,5.49779;5.14425,5.74779"/>
+        <rectangle val="4.6821,5.48313;5.3386,5.73313"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1447,7 +1455,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.48775,5.69686"/>
+            <point val="4.6821,5.6822"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1466,15 +1474,15 @@
     </object>
     <object type="Standard - Text" version="0" id="O59">
       <attribute name="obj_pos">
-        <point val="8.61275,5.67186"/>
+        <point val="8.87777,5.6822"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.61275,5.47279;9.26925,5.72279"/>
+        <rectangle val="8.87777,5.48313;9.38277,5.73313"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#197;&#192; &#191;&#244;#</string>
+            <string>#&#197;&#192;&#191;&#244;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -1483,7 +1491,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.61275,5.67186"/>
+            <point val="8.87777,5.6822"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1726,10 +1734,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O66">
       <attribute name="obj_pos">
-        <point val="5.68775,5.64686"/>
+        <point val="6.04111,5.6822"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.68775,5.4876;6.69775,5.6876"/>
+        <rectangle val="6.04111,5.48313;7.30361,5.73313"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1740,10 +1748,10 @@
             <font name="Courier"/>
           </attribute>
           <attribute name="height">
-            <real val="0.2"/>
+            <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.68775,5.64686"/>
+            <point val="6.04111,5.6822"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1752,20 +1760,20 @@
             <enum val="0"/>
           </attribute>
           <attribute name="single">
-            <real val="0.1212"/>
+            <real val="0.1515"/>
           </attribute>
           <attribute name="multi">
-            <real val="0.101"/>
+            <real val="0.12625"/>
           </attribute>
         </composite>
       </attribute>
     </object>
     <object type="Standard - Text" version="0" id="O67">
       <attribute name="obj_pos">
-        <point val="11.5628,5.69686"/>
+        <point val="11.4391,5.6822"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5628,5.49779;12.8253,5.74779"/>
+        <rectangle val="11.4391,5.48313;12.7016,5.73313"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1779,7 +1787,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.5628,5.69686"/>
+            <point val="11.4391,5.6822"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1942,10 +1950,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O72">
       <attribute name="obj_pos">
-        <point val="9.47197,3.77047"/>
+        <point val="9.47197,3.6468"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.47197,3.58732;11.0981,3.81732"/>
+        <rectangle val="9.47197,3.46365;11.0981,3.69365"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1959,7 +1967,7 @@
             <real val="0.23"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.47197,3.77047"/>
+            <point val="9.47197,3.6468"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -1978,10 +1986,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O73">
       <attribute name="obj_pos">
-        <point val="9.49697,4.19553"/>
+        <point val="9.49697,4.03652"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.49697,4.01238;11.1231,4.24238"/>
+        <rectangle val="9.49697,3.85337;11.1231,4.08337"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -1995,7 +2003,7 @@
             <real val="0.23"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.49697,4.19553"/>
+            <point val="9.49697,4.03652"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2014,10 +2022,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O74">
       <attribute name="obj_pos">
-        <point val="9.50947,4.63316"/>
+        <point val="9.50947,4.43881"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.50947,4.45001;11.2285,4.68001"/>
+        <rectangle val="9.50947,4.25567;11.2285,4.48567"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2031,7 +2039,7 @@
             <real val="0.23"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.50947,4.63316"/>
+            <point val="9.50947,4.43881"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2050,10 +2058,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O75">
       <attribute name="obj_pos">
-        <point val="1.25,3.1"/>
+        <point val="1.25,2.87032"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.25,2.86111;3.068,3.16111"/>
+        <rectangle val="1.25,2.63143;3.068,2.93143"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2067,7 +2075,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.25,3.1"/>
+            <point val="1.25,2.87032"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2086,10 +2094,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O76">
       <attribute name="obj_pos">
-        <point val="9.48107,3.07265"/>
+        <point val="9.48107,2.89597"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.48107,2.87358;11.2486,3.12358"/>
+        <rectangle val="9.48107,2.6969;11.2486,2.9469"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2103,7 +2111,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.48107,3.07265"/>
+            <point val="9.48107,2.89597"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2158,10 +2166,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O78">
       <attribute name="obj_pos">
-        <point val="17.8,6.05"/>
+        <point val="17.8707,6.05"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.8,5.89074;18.002,6.09074"/>
+        <rectangle val="17.8707,5.89074;18.0727,6.09074"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2175,7 +2183,7 @@
             <real val="0.2"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.8,6.05"/>
+            <point val="17.8707,6.05"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2272,10 +2280,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O81">
       <attribute name="obj_pos">
-        <point val="19.7495,3.09686"/>
+        <point val="19.7495,2.88485"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.7495,2.89779;20.2545,3.14779"/>
+        <rectangle val="19.7495,2.68577;20.2545,2.93577"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2289,7 +2297,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.7495,3.09686"/>
+            <point val="19.7495,2.88485"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2308,10 +2316,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O82">
       <attribute name="obj_pos">
-        <point val="19.7465,3.84686"/>
+        <point val="19.7465,3.63485"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.7465,3.64779;20.2515,3.89779"/>
+        <rectangle val="19.7465,3.43577;20.2515,3.68577"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2325,7 +2333,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.7465,3.84686"/>
+            <point val="19.7465,3.63485"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2344,10 +2352,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O83">
       <attribute name="obj_pos">
-        <point val="19.8715,4.62186"/>
+        <point val="19.8715,4.48052"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.8715,4.38297;20.1745,4.68297"/>
+        <rectangle val="19.8715,4.24163;20.1745,4.54163"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2361,7 +2369,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.8715,4.62186"/>
+            <point val="19.8715,4.48052"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -2673,10 +2681,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O92">
       <attribute name="obj_pos">
-        <point val="17.8,7.75"/>
+        <point val="17.8707,7.75"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.8,7.59074;18.002,7.79074"/>
+        <rectangle val="17.8707,7.59074;18.0727,7.79074"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -2690,7 +2698,7 @@
             <real val="0.2"/>
           </attribute>
           <attribute name="pos">
-            <point val="17.8,7.75"/>
+            <point val="17.8707,7.75"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3035,10 +3043,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O102">
       <attribute name="obj_pos">
-        <point val="8.99313,4.19825"/>
+        <point val="8.99313,3.9509"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.99313,3.95936;9.29613,4.25936"/>
+        <rectangle val="8.99313,3.71201;9.29613,4.01201"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3052,7 +3060,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.99313,4.19825"/>
+            <point val="8.99313,3.9509"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3611,10 +3619,10 @@
     </object>
     <object type="Standard - Text" version="0" id="O118">
       <attribute name="obj_pos">
-        <point val="3.25,3.3"/>
+        <point val="3.25,3.07032"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.25,2.69481;4.7852,3.45481"/>
+        <rectangle val="3.25,2.46513;4.7852,3.22513"/>
       </attribute>
       <attribute name="text">
         <composite type="text">
@@ -3628,7 +3636,7 @@
             <real val="0.76"/>
           </attribute>
           <attribute name="pos">
-            <point val="3.25,3.3"/>
+            <point val="3.25,3.07032"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3649,10 +3657,10 @@
   <layer name="&#186;&#185;&#164;&#183;&#185;&#254;&#164;&#223;" visible="true">
     <object type="Embed - Text" version="0" id="O119">
       <attribute name="obj_pos">
-        <point val="11.4818,3.82432"/>
+        <point val="1.0401,1.6335"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.4818,3.34654;12.0878,3.94654"/>
+        <rectangle val="1.0401,1.15573;1.6461,1.75573"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI2#</string>
@@ -3672,7 +3680,7 @@
             <real val="0.6"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.4818,3.82432"/>
+            <point val="1.0401,1.6335"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3691,10 +3699,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O120">
       <attribute name="obj_pos">
-        <point val="1.05597,2.47188"/>
+        <point val="1.05597,2.27753"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.05597,2.11355;4.69197,2.56355"/>
+        <rectangle val="1.05597,1.9192;4.69197,2.3692"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SRYYM#</string>
@@ -3714,7 +3722,7 @@
             <real val="0.45"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.05597,2.47188"/>
+            <point val="1.05597,2.27753"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3733,10 +3741,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O121">
       <attribute name="obj_pos">
-        <point val="4.8,3.3"/>
+        <point val="4.8,3.07032"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.8,2.69481;9.4056,3.45481"/>
+        <rectangle val="4.8,2.46513;9.4056,3.22513"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANUM#</string>
@@ -3756,7 +3764,7 @@
             <real val="0.76"/>
           </attribute>
           <attribute name="pos">
-            <point val="4.8,3.3"/>
+            <point val="4.8,3.07032"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3775,10 +3783,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O122">
       <attribute name="obj_pos">
-        <point val="1.26858,4.69765"/>
+        <point val="1.26858,4.62698"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="1.26858,4.41895;5.15708,4.76895"/>
+        <rectangle val="1.26858,4.34827;5.15708,4.69827"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIYMD#</string>
@@ -3798,7 +3806,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="1.26858,4.69765"/>
+            <point val="1.26858,4.62698"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3817,10 +3825,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O123">
       <attribute name="obj_pos">
-        <point val="12.1597,3.2"/>
+        <point val="12.1597,2.97032"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.1597,2.74611;17.9167,3.31611"/>
+        <rectangle val="12.1597,2.51643;17.9167,3.08643"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPCDN#</string>
@@ -3840,7 +3848,7 @@
             <real val="0.57"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.1597,3.2"/>
+            <point val="12.1597,2.97032"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3859,10 +3867,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O124">
       <attribute name="obj_pos">
-        <point val="12.2597,3.6"/>
+        <point val="11.4646,3.42332"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2597,3.40093;18.5722,3.90093"/>
+        <rectangle val="11.4646,3.22425;17.7771,3.72425"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ADRS#</string>
@@ -3886,7 +3894,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.2597,3.6"/>
+            <point val="11.4646,3.42332"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3905,10 +3913,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O125">
       <attribute name="obj_pos">
-        <point val="12.2597,4.15"/>
+        <point val="11.4646,3.93799"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2597,3.95093;17.3097,4.45093"/>
+        <rectangle val="11.4646,3.73891;16.5146,4.23891"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HOSPNAME#</string>
@@ -3932,7 +3940,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.2597,4.15"/>
+            <point val="11.4646,3.93799"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3951,10 +3959,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O126">
       <attribute name="obj_pos">
-        <point val="12.2597,4.7"/>
+        <point val="11.4646,4.47032"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="12.2597,4.50093;17.3097,4.75093"/>
+        <rectangle val="11.4646,4.27124;16.5146,4.52124"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETUNAME#</string>
@@ -3974,7 +3982,7 @@
             <real val="0.25"/>
           </attribute>
           <attribute name="pos">
-            <point val="12.2597,4.7"/>
+            <point val="11.4646,4.47032"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -3993,10 +4001,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O127">
       <attribute name="obj_pos">
-        <point val="19.7058,4.72432"/>
+        <point val="19.7058,4.58298"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.7058,4.32617;20.2108,4.82617"/>
+        <rectangle val="19.7058,4.18483;20.2108,4.68483"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TENHYOKBN#</string>
@@ -4016,7 +4024,7 @@
             <real val="0.5"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.7058,4.72432"/>
+            <point val="19.7058,4.58298"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4035,10 +4043,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O128">
       <attribute name="obj_pos">
-        <point val="11.5818,3.72432"/>
+        <point val="1.1401,1.5335"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="11.5818,3.4058;11.9858,3.8058"/>
+        <rectangle val="1.1401,1.21499;1.5441,1.61499"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAI1#</string>
@@ -4058,7 +4066,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="11.5818,3.72432"/>
+            <point val="1.1401,1.5335"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4175,10 +4183,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O131">
       <attribute name="obj_pos">
-        <point val="5.83781,4.05268"/>
+        <point val="5.83781,3.823"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.31281,3.65453;8.36281,4.15453"/>
+        <rectangle val="3.31281,3.42485;8.36281,3.92485"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKNJANAME#</string>
@@ -4198,7 +4206,7 @@
             <real val="0.5"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.83781,4.05268"/>
+            <point val="5.83781,3.823"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4217,10 +4225,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O132">
       <attribute name="obj_pos">
-        <point val="19.75,2.35"/>
+        <point val="19.75,2.15565"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="19.0228,2.11111;19.75,2.41111"/>
+        <rectangle val="19.0228,1.91676;19.75,2.21676"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NO#</string>
@@ -4240,7 +4248,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="19.75,2.35"/>
+            <point val="19.75,2.15565"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4259,10 +4267,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O133">
       <attribute name="obj_pos">
-        <point val="5.4,6.4"/>
+        <point val="5.64735,6.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,6.09741;5.4,6.47741"/>
+        <rectangle val="4.49595,6.09741;5.64735,6.47741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[0].KENSU#</string>
@@ -4282,7 +4290,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,6.4"/>
+            <point val="5.64735,6.4"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4301,10 +4309,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O134">
       <attribute name="obj_pos">
-        <point val="5.4,7.25"/>
+        <point val="5.64735,7.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,6.94741;5.4,7.32741"/>
+        <rectangle val="4.49595,6.94741;5.64735,7.32741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[1].KENSU#</string>
@@ -4324,7 +4332,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,7.25"/>
+            <point val="5.64735,7.25"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4343,10 +4351,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O135">
       <attribute name="obj_pos">
-        <point val="6.875,6.4"/>
+        <point val="7.28136,6.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,6.09741;6.875,6.47741"/>
+        <rectangle val="6.12996,6.09741;7.28136,6.47741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[0].NISSU#</string>
@@ -4366,7 +4374,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,6.4"/>
+            <point val="7.28136,6.4"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4385,10 +4393,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O136">
       <attribute name="obj_pos">
-        <point val="6.875,7.25"/>
+        <point val="7.28136,7.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,6.94741;6.875,7.32741"/>
+        <rectangle val="6.12996,6.94741;7.28136,7.32741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[1].NISSU#</string>
@@ -4408,7 +4416,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,7.25"/>
+            <point val="7.28136,7.25"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4427,10 +4435,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O137">
       <attribute name="obj_pos">
-        <point val="10.725,6.4"/>
+        <point val="10.3716,6.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,6.09741;10.725,6.47741"/>
+        <rectangle val="8.29908,6.09741;10.3716,6.47741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[0].TENSU#</string>
@@ -4450,7 +4458,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,6.4"/>
+            <point val="10.3716,6.4"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4469,10 +4477,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O138">
       <attribute name="obj_pos">
-        <point val="10.725,7.25"/>
+        <point val="10.3716,7.25"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,6.94741;10.725,7.32741"/>
+        <rectangle val="8.29908,6.94741;10.3716,7.32741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[0].NYUGAI-TBL[1].TENSU#</string>
@@ -4492,7 +4500,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,7.25"/>
+            <point val="10.3716,7.25"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4763,10 +4771,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O145">
       <attribute name="obj_pos">
-        <point val="5.4,8.1"/>
+        <point val="5.64735,8.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,7.79741;5.4,8.17741"/>
+        <rectangle val="4.49595,7.79741;5.64735,8.17741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[0].KENSU#</string>
@@ -4786,7 +4794,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,8.1"/>
+            <point val="5.64735,8.1"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4805,10 +4813,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O146">
       <attribute name="obj_pos">
-        <point val="5.4,8.95"/>
+        <point val="5.64735,8.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,8.64741;5.4,9.02741"/>
+        <rectangle val="4.49595,8.64741;5.64735,9.02741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[1].KENSU#</string>
@@ -4828,7 +4836,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,8.95"/>
+            <point val="5.64735,8.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4847,10 +4855,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O147">
       <attribute name="obj_pos">
-        <point val="6.875,8.1"/>
+        <point val="7.28136,8.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,7.79741;6.875,8.17741"/>
+        <rectangle val="6.12996,7.79741;7.28136,8.17741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[0].NISSU#</string>
@@ -4870,7 +4878,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,8.1"/>
+            <point val="7.28136,8.1"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4889,10 +4897,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O148">
       <attribute name="obj_pos">
-        <point val="6.875,8.95"/>
+        <point val="7.28136,8.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,8.64741;6.875,9.02741"/>
+        <rectangle val="6.12996,8.64741;7.28136,9.02741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[1].NISSU#</string>
@@ -4912,7 +4920,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,8.95"/>
+            <point val="7.28136,8.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4931,10 +4939,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O149">
       <attribute name="obj_pos">
-        <point val="10.725,8.1"/>
+        <point val="10.3716,8.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,7.79741;10.725,8.17741"/>
+        <rectangle val="8.29908,7.79741;10.3716,8.17741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[0].TENSU#</string>
@@ -4954,7 +4962,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,8.1"/>
+            <point val="10.3716,8.1"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -4973,10 +4981,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O150">
       <attribute name="obj_pos">
-        <point val="10.725,8.95"/>
+        <point val="10.3716,8.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,8.64741;10.725,9.02741"/>
+        <rectangle val="8.29908,8.64741;10.3716,9.02741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#SEIKYU[1].NYUGAI-TBL[1].TENSU#</string>
@@ -4996,7 +5004,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,8.95"/>
+            <point val="10.3716,8.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5267,10 +5275,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O157">
       <attribute name="obj_pos">
-        <point val="5.4,9.8"/>
+        <point val="5.64735,9.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,9.49741;5.4,9.87741"/>
+        <rectangle val="4.49595,9.49741;5.64735,9.87741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KNYUGAI-TBL[0].KKENSU#</string>
@@ -5290,7 +5298,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,9.8"/>
+            <point val="5.64735,9.8"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5309,10 +5317,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O158">
       <attribute name="obj_pos">
-        <point val="5.4,10.65"/>
+        <point val="5.64735,10.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,10.3474;5.4,10.7274"/>
+        <rectangle val="4.49595,10.3474;5.64735,10.7274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KNYUGAI-TBL[1].KKENSU#</string>
@@ -5332,7 +5340,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,10.65"/>
+            <point val="5.64735,10.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5351,10 +5359,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O159">
       <attribute name="obj_pos">
-        <point val="5.4,11.55"/>
+        <point val="5.64735,11.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,11.2474;5.4,11.6274"/>
+        <rectangle val="4.49595,11.2474;5.64735,11.6274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KNYUGAI-TBL[0].KKENSU#</string>
@@ -5374,7 +5382,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,11.55"/>
+            <point val="5.64735,11.55"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5393,10 +5401,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O160">
       <attribute name="obj_pos">
-        <point val="5.4,12.35"/>
+        <point val="5.64735,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,12.0474;5.4,12.4274"/>
+        <rectangle val="4.49595,12.0474;5.64735,12.4274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KNYUGAI-TBL[1].KKENSU#</string>
@@ -5416,7 +5424,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,12.35"/>
+            <point val="5.64735,12.35"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5435,10 +5443,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O161">
       <attribute name="obj_pos">
-        <point val="6.875,9.8"/>
+        <point val="7.28136,9.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,9.49741;6.875,9.87741"/>
+        <rectangle val="6.12996,9.49741;7.28136,9.87741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KNYUGAI-TBL[0].KNISSU#</string>
@@ -5458,7 +5466,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,9.8"/>
+            <point val="7.28136,9.8"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5477,10 +5485,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O162">
       <attribute name="obj_pos">
-        <point val="6.875,10.65"/>
+        <point val="7.28136,10.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,10.3474;6.875,10.7274"/>
+        <rectangle val="6.12996,10.3474;7.28136,10.7274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KNYUGAI-TBL[1].KNISSU#</string>
@@ -5500,7 +5508,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,10.65"/>
+            <point val="7.28136,10.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5519,10 +5527,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O163">
       <attribute name="obj_pos">
-        <point val="6.875,11.55"/>
+        <point val="7.28136,11.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,11.2474;6.875,11.6274"/>
+        <rectangle val="6.12996,11.2474;7.28136,11.6274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KNYUGAI-TBL[0].KNISSU#</string>
@@ -5542,7 +5550,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,11.55"/>
+            <point val="7.28136,11.55"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5561,10 +5569,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O164">
       <attribute name="obj_pos">
-        <point val="6.875,12.35"/>
+        <point val="7.28136,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,12.0474;6.875,12.4274"/>
+        <rectangle val="6.12996,12.0474;7.28136,12.4274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KNYUGAI-TBL[1].KNISSU#</string>
@@ -5584,7 +5592,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,12.35"/>
+            <point val="7.28136,12.35"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5603,10 +5611,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O165">
       <attribute name="obj_pos">
-        <point val="10.725,9.8"/>
+        <point val="10.3716,9.8"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,9.49741;10.725,9.87741"/>
+        <rectangle val="8.29908,9.49741;10.3716,9.87741"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KNYUGAI-TBL[0].KTENSU#</string>
@@ -5626,7 +5634,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,9.8"/>
+            <point val="10.3716,9.8"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5645,10 +5653,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O166">
       <attribute name="obj_pos">
-        <point val="10.725,10.65"/>
+        <point val="10.3716,10.65"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,10.3474;10.725,10.7274"/>
+        <rectangle val="8.29908,10.3474;10.3716,10.7274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[0].KNYUGAI-TBL[1].KTENSU#</string>
@@ -5668,7 +5676,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,10.65"/>
+            <point val="10.3716,10.65"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5687,10 +5695,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O167">
       <attribute name="obj_pos">
-        <point val="10.725,11.55"/>
+        <point val="10.3716,11.55"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,11.2474;10.725,11.6274"/>
+        <rectangle val="8.29908,11.2474;10.3716,11.6274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KNYUGAI-TBL[0].KTENSU#</string>
@@ -5710,7 +5718,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,11.55"/>
+            <point val="10.3716,11.55"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5729,10 +5737,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O168">
       <attribute name="obj_pos">
-        <point val="10.725,12.35"/>
+        <point val="10.3716,12.35"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,12.0474;10.725,12.4274"/>
+        <rectangle val="8.29908,12.0474;10.3716,12.4274"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[1].KNYUGAI-TBL[1].KTENSU#</string>
@@ -5752,7 +5760,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,12.35"/>
+            <point val="10.3716,12.35"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5939,10 +5947,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O173">
       <attribute name="obj_pos">
-        <point val="5.4,13.2685"/>
+        <point val="5.64735,13.2685"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,12.9659;5.4,13.3459"/>
+        <rectangle val="4.49595,12.9659;5.64735,13.3459"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KNYUGAI-TBL[0].KKENSU#</string>
@@ -5962,7 +5970,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,13.2685"/>
+            <point val="5.64735,13.2685"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -5981,10 +5989,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O174">
       <attribute name="obj_pos">
-        <point val="5.4,14.0685"/>
+        <point val="5.64735,14.0685"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,13.7659;5.4,14.1459"/>
+        <rectangle val="4.49595,13.7659;5.64735,14.1459"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KNYUGAI-TBL[1].KKENSU#</string>
@@ -6004,7 +6012,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,14.0685"/>
+            <point val="5.64735,14.0685"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6023,10 +6031,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O175">
       <attribute name="obj_pos">
-        <point val="6.875,13.2685"/>
+        <point val="7.28136,13.2685"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,12.9659;6.875,13.3459"/>
+        <rectangle val="6.12996,12.9659;7.28136,13.3459"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KNYUGAI-TBL[0].KNISSU#</string>
@@ -6046,7 +6054,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,13.2685"/>
+            <point val="7.28136,13.2685"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6065,10 +6073,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O176">
       <attribute name="obj_pos">
-        <point val="6.875,14.0685"/>
+        <point val="7.28136,14.0685"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,13.7659;6.875,14.1459"/>
+        <rectangle val="6.12996,13.7659;7.28136,14.1459"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KNYUGAI-TBL[1].KNISSU#</string>
@@ -6088,7 +6096,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,14.0685"/>
+            <point val="7.28136,14.0685"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6107,10 +6115,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O177">
       <attribute name="obj_pos">
-        <point val="10.725,13.2685"/>
+        <point val="10.3716,13.2685"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,12.9659;10.725,13.3459"/>
+        <rectangle val="8.29908,12.9659;10.3716,13.3459"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KNYUGAI-TBL[0].KTENSU#</string>
@@ -6130,7 +6138,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,13.2685"/>
+            <point val="10.3716,13.2685"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6149,10 +6157,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O178">
       <attribute name="obj_pos">
-        <point val="10.725,14.0685"/>
+        <point val="10.3716,14.0685"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,13.7659;10.725,14.1459"/>
+        <rectangle val="8.29908,13.7659;10.3716,14.1459"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[2].KNYUGAI-TBL[1].KTENSU#</string>
@@ -6172,7 +6180,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,14.0685"/>
+            <point val="10.3716,14.0685"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6275,10 +6283,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O181">
       <attribute name="obj_pos">
-        <point val="5.4,14.9293"/>
+        <point val="5.64735,14.9293"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,14.6267;5.4,15.0067"/>
+        <rectangle val="4.49595,14.6267;5.64735,15.0067"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KNYUGAI-TBL[0].KKENSU#</string>
@@ -6298,7 +6306,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,14.9293"/>
+            <point val="5.64735,14.9293"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6317,10 +6325,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O182">
       <attribute name="obj_pos">
-        <point val="5.4,15.7293"/>
+        <point val="5.64735,15.7293"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,15.4267;5.4,15.8067"/>
+        <rectangle val="4.49595,15.4267;5.64735,15.8067"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KNYUGAI-TBL[1].KKENSU#</string>
@@ -6340,7 +6348,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,15.7293"/>
+            <point val="5.64735,15.7293"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6359,10 +6367,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O183">
       <attribute name="obj_pos">
-        <point val="6.875,14.9293"/>
+        <point val="7.28136,14.9293"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,14.6267;6.875,15.0067"/>
+        <rectangle val="6.12996,14.6267;7.28136,15.0067"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KNYUGAI-TBL[0].KNISSU#</string>
@@ -6382,7 +6390,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,14.9293"/>
+            <point val="7.28136,14.9293"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6401,10 +6409,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O184">
       <attribute name="obj_pos">
-        <point val="6.875,15.7293"/>
+        <point val="7.28136,15.7293"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,15.4267;6.875,15.8067"/>
+        <rectangle val="6.12996,15.4267;7.28136,15.8067"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KNYUGAI-TBL[1].KNISSU#</string>
@@ -6424,7 +6432,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,15.7293"/>
+            <point val="7.28136,15.7293"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6443,10 +6451,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O185">
       <attribute name="obj_pos">
-        <point val="10.725,14.9293"/>
+        <point val="10.3716,14.9293"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,14.6267;10.725,15.0067"/>
+        <rectangle val="8.29908,14.6267;10.3716,15.0067"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KNYUGAI-TBL[0].KTENSU#</string>
@@ -6466,7 +6474,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,14.9293"/>
+            <point val="10.3716,14.9293"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6485,10 +6493,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O186">
       <attribute name="obj_pos">
-        <point val="10.725,15.7293"/>
+        <point val="10.3716,15.7293"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,15.4267;10.725,15.8067"/>
+        <rectangle val="8.29908,15.4267;10.3716,15.8067"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[3].KNYUGAI-TBL[1].KTENSU#</string>
@@ -6508,7 +6516,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,15.7293"/>
+            <point val="10.3716,15.7293"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6611,10 +6619,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O189">
       <attribute name="obj_pos">
-        <point val="5.4,16.6563"/>
+        <point val="5.64735,16.6563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,16.3537;5.4,16.7337"/>
+        <rectangle val="4.49595,16.3537;5.64735,16.7337"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KNYUGAI-TBL[0].KKENSU#</string>
@@ -6634,7 +6642,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,16.6563"/>
+            <point val="5.64735,16.6563"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6653,10 +6661,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O190">
       <attribute name="obj_pos">
-        <point val="5.4,17.4563"/>
+        <point val="5.64735,17.4563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="4.2486,17.1537;5.4,17.5337"/>
+        <rectangle val="4.49595,17.1537;5.64735,17.5337"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KNYUGAI-TBL[1].KKENSU#</string>
@@ -6676,7 +6684,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="5.4,17.4563"/>
+            <point val="5.64735,17.4563"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6695,10 +6703,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O191">
       <attribute name="obj_pos">
-        <point val="6.875,16.6563"/>
+        <point val="7.28136,16.6563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,16.3537;6.875,16.7337"/>
+        <rectangle val="6.12996,16.3537;7.28136,16.7337"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KNYUGAI-TBL[0].KNISSU#</string>
@@ -6718,7 +6726,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,16.6563"/>
+            <point val="7.28136,16.6563"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6737,10 +6745,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O192">
       <attribute name="obj_pos">
-        <point val="6.875,17.4563"/>
+        <point val="7.28136,17.4563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.7236,17.1537;6.875,17.5337"/>
+        <rectangle val="6.12996,17.1537;7.28136,17.5337"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KNYUGAI-TBL[1].KNISSU#</string>
@@ -6760,7 +6768,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.875,17.4563"/>
+            <point val="7.28136,17.4563"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6779,10 +6787,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O193">
       <attribute name="obj_pos">
-        <point val="10.725,16.6563"/>
+        <point val="10.3716,16.6563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,16.3537;10.725,16.7337"/>
+        <rectangle val="8.29908,16.3537;10.3716,16.7337"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KNYUGAI-TBL[0].KTENSU#</string>
@@ -6802,7 +6810,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,16.6563"/>
+            <point val="10.3716,16.6563"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6821,10 +6829,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O194">
       <attribute name="obj_pos">
-        <point val="10.725,17.4563"/>
+        <point val="10.3716,17.4563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.65248,17.1537;10.725,17.5337"/>
+        <rectangle val="8.29908,17.1537;10.3716,17.5337"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KOHI[4].KNYUGAI-TBL[1].KTENSU#</string>
@@ -6844,7 +6852,7 @@
             <real val="0.38"/>
           </attribute>
           <attribute name="pos">
-            <point val="10.725,17.4563"/>
+            <point val="10.3716,17.4563"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7328,6 +7336,48 @@
           </attribute>
           <attribute name="pos">
             <point val="2.4523,17.6451"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O206">
+      <attribute name="obj_pos">
+        <point val="11.8484,4.80565"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="11.8484,4.56676;13.3028,4.86676"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#HOSPTEL#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#999-9999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.8484,4.80565"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>

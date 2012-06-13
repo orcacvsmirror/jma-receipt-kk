@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川      2010/12/09   特別療養費国保対応
+      *  01.00.02    吉川      2012/06/06   帳票様式の変更
       ********************************************************************
         01  SKT3200.
             02  SKT3200-PRTYM   PIC X(16).
@@ -35,7 +36,10 @@
             02  SKT3200-FRKENSU PIC X(7).
             02  SKT3200-NYKENSU PIC X(7).
             02  SKT3200-HKNJANAME
-                    PIC X(10)   OCCURS  10 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *              PIC X(10)   OCCURS  10 TIMES.
+                    PIC X(10)   OCCURS  14 TIMES.
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
             02  SKT3200-KOUKI           OCCURS  13 TIMES.
               03  SKT3200-KOU-KEN PIC X(10).
               03  SKT3200-KOU-KENSU   PIC X(5).

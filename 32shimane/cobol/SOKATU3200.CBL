@@ -39,6 +39,7 @@
       *  01.00.08    吉川      10/11/09    電子請求の場合、県単独医療分は記載不要
       *  01.00.09    吉川      10/11/25    open-cobol1.0対応
       *  01.00.10    吉川      10/12/09    特別療養費候補対応
+      *  01.00.11    吉川      12/06/06    帳票様式の変更に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -598,13 +599,22 @@
            END-EVALUATE
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) end
       *  
-      *  県外共通保険者の設定
-      *  左官タイル
+      *    県外共通保険者の設定
+      *    左官タイル
            MOVE   "133231" TO  SUM-KG-HKNJANUM(1)
-      *  
-      *  全国板金
+      *    全国板金
            MOVE   "133280" TO  SUM-KG-HKNJANUM(2)
-      *  
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *    全国歯科
+           MOVE   "093013" TO  SUM-KG-HKNJANUM(3)
+      *    全国土木
+           MOVE   "133033" TO  SUM-KG-HKNJANUM(4)
+      *    中央建設
+           MOVE   "133264" TO  SUM-KG-HKNJANUM(5)
+      *    全国工事
+           MOVE   "133298" TO  SUM-KG-HKNJANUM(6)
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
+      *
            .
        100-INIT-EXT.
            EXIT.
@@ -777,7 +787,6 @@
       *    集計処理
                INITIALIZE      IDX2
                INITIALIZE      IDX4
-
       *
       * 保険者番号
            IF       RECE10-HKNJANUM(7:2)  =     SPACE
@@ -849,36 +858,51 @@
       *         WHEN  "32099"   MOVE  57  TO  IDX2
       *         WHEN  "32100"   MOVE  58  TO  IDX2
       *         WHEN  "32101"   MOVE  59  TO  IDX2
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *          WHEN  "32009"   MOVE  8   TO  IDX2
+      *          WHEN  "32054"   MOVE  9   TO  IDX2
+      *          WHEN  "32071"   MOVE  10  TO  IDX2
+      *          WHEN  "32078"   MOVE  11  TO  IDX2
+      *          WHEN  "32091"   MOVE  12  TO  IDX2
+      *          WHEN  "32099"   MOVE  13  TO  IDX2
+      *          WHEN  "32100"   MOVE  14  TO  IDX2
+      *          WHEN  "32101"   MOVE  15  TO  IDX2
+      *          WHEN  "32102"   MOVE  16  TO  IDX2
+      *          WHEN  "32103"   MOVE  17  TO  IDX2
+      *          WHEN  "32104"   MOVE  18  TO  IDX2
+      *          WHEN  "32105"   MOVE  19  TO  IDX2
+      *          WHEN  "32106"   MOVE  20  TO  IDX2
+      *          WHEN  "32107"   MOVE  21  TO  IDX2
+      *****2006/03/21 @@@@-BRAND END
+      *     END-EVALUATE
+      **県内その他
+      *     EVALUATE  WRK-HKNJANUM
+      *****2006/03/21 @@@@-BRAND START
+      **        WHEN  "323014"  MOVE  60  TO  IDX2
+      **        WHEN  "093013"  MOVE  61  TO  IDX2
+      **        WHEN  "133033"  MOVE  62  TO  IDX2
+      **        WHEN  "133264"  MOVE  63  TO  IDX2
+      **        WHEN  "133298"  MOVE  64  TO  IDX2
+      *         WHEN  "323014"  MOVE  22  TO  IDX2
+      *         WHEN  "093013"  MOVE  23  TO  IDX2
+      *         WHEN  "133033"  MOVE  24  TO  IDX2
+      *         WHEN  "133264"  MOVE  25  TO  IDX2
+      *         WHEN  "133298"  MOVE  26  TO  IDX2
+      *****2006/03/21 @@@@-BRAND END
                 WHEN  "32009"   MOVE  8   TO  IDX2
-                WHEN  "32054"   MOVE  9   TO  IDX2
-                WHEN  "32071"   MOVE  10  TO  IDX2
-                WHEN  "32078"   MOVE  11  TO  IDX2
-                WHEN  "32091"   MOVE  12  TO  IDX2
-                WHEN  "32099"   MOVE  13  TO  IDX2
-                WHEN  "32100"   MOVE  14  TO  IDX2
-                WHEN  "32101"   MOVE  15  TO  IDX2
-                WHEN  "32102"   MOVE  16  TO  IDX2
-                WHEN  "32103"   MOVE  17  TO  IDX2
-                WHEN  "32104"   MOVE  18  TO  IDX2
-                WHEN  "32105"   MOVE  19  TO  IDX2
-                WHEN  "32106"   MOVE  20  TO  IDX2
-                WHEN  "32107"   MOVE  21  TO  IDX2
-      ****2006/03/21 @@@@-BRAND END
-           END-EVALUATE
-      *県内その他
-           EVALUATE  WRK-HKNJANUM
-      ****2006/03/21 @@@@-BRAND START
-      *        WHEN  "323014"  MOVE  60  TO  IDX2
-      *        WHEN  "093013"  MOVE  61  TO  IDX2
-      *        WHEN  "133033"  MOVE  62  TO  IDX2
-      *        WHEN  "133264"  MOVE  63  TO  IDX2
-      *        WHEN  "133298"  MOVE  64  TO  IDX2
-               WHEN  "323014"  MOVE  22  TO  IDX2
-               WHEN  "093013"  MOVE  23  TO  IDX2
-               WHEN  "133033"  MOVE  24  TO  IDX2
-               WHEN  "133264"  MOVE  25  TO  IDX2
-               WHEN  "133298"  MOVE  26  TO  IDX2
-      ****2006/03/21 @@@@-BRAND END
+                WHEN  "32078"   MOVE  9   TO  IDX2
+                WHEN  "32091"   MOVE  10  TO  IDX2
+                WHEN  "32099"   MOVE  11  TO  IDX2
+                WHEN  "32100"   MOVE  12  TO  IDX2
+                WHEN  "32101"   MOVE  13  TO  IDX2
+                WHEN  "32102"   MOVE  14  TO  IDX2
+                WHEN  "32103"   MOVE  15  TO  IDX2
+                WHEN  "32104"   MOVE  16  TO  IDX2
+                WHEN  "32105"   MOVE  17  TO  IDX2
+                WHEN  "32106"   MOVE  18  TO  IDX2
+                WHEN  "32107"   MOVE  19  TO  IDX2
+                WHEN  "32301"   MOVE  20  TO  IDX2
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
            END-EVALUATE
       *
            IF  IDX2  >  ZERO
@@ -1222,7 +1246,10 @@
       *     PERFORM  VARYING    IDX2   FROM    1   BY  1 
       *              UNTIL      IDX2   >       64
             PERFORM  VARYING    IDX2   FROM    1   BY  1
-                     UNTIL      IDX2   >       26
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *               UNTIL      IDX2   >       26
+                     UNTIL      IDX2   >       20
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
       ****2006/03/21 @@@@-BRAND END      
       *    県内一般件数
                    MOVE   SUM-KN-IKENSU(IDX2)  TO  WRK-Z5
@@ -1247,14 +1274,23 @@
       *      PERFORM  VARYING IDX2  FROM  1   BY  1
       *               UNTIL   IDX2  >     12
             PERFORM  VARYING IDX2  FROM  1   BY  1
-                     UNTIL   IDX2  >     10
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *               UNTIL   IDX2  >     10
+                     UNTIL   IDX2  >     14
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
                      OR  SUM-KG-HKNJANUM(IDX2)  =  SPACE
       *---(01.00.04) LINE ADD END   ------------------------------------
-                     COMPUTE IDX3  =     IDX2    +     26
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *               COMPUTE IDX3  =     IDX2    +     26
+                     COMPUTE IDX3  =     IDX2    +     22
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
       ****2006/03/21 @@@@-BRAND END
       *    保険者名称
              DISPLAY "県外保険者"  SUM-KG-HKNJANUM(IDX2) 
-               IF  IDX2      >     2
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *         IF  IDX2      >     2
+               IF  IDX2      >     6
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
                    INITIALIZE      HKNJAINF-REC
       *---(01.00.03) LINE ADD START ------------------------------------
       *             MOVE   SYS-1001-HOSPID
@@ -1309,7 +1345,10 @@
       *---(01.00.04) LINE ADD START ------------------------------------
       *    後期高齢者分
              PERFORM  VARYING  IDX2  FROM  1  BY  1
-                      UNTIL    IDX2  >     13
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) start
+      *                UNTIL    IDX2  >     13
+                      UNTIL    IDX2  >     5
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/06) end
                       OR       SUM-KOUKI-PREFNUM (IDX2)  =  SPACE
       *    県名
                  PERFORM  400-KENNAME-SEC
