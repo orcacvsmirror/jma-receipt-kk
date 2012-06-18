@@ -21,6 +21,11 @@
         <embed object="string" length="100"/>
       </appinfo>
     </element>
+    <element name="HOSPTEL" occurs="1">
+      <appinfo>
+        <embed object="string" length="15"/>
+      </appinfo>
+    </element>
     <element name="KAISETU" occurs="1">
       <appinfo>
         <embed object="string" length="40"/>
@@ -7436,10 +7441,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O279">
       <attribute name="obj_pos">
-        <point val="6.74057,4.96838"/>
+        <point val="6.74057,5.32174"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="6.74057,4.72949;12.8006,5.02949"/>
+        <rectangle val="6.74057,5.08285;12.8006,5.38285"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETU#</string>
@@ -7459,7 +7464,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="6.74057,4.96838"/>
+            <point val="6.74057,5.32174"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -15545,7 +15550,7 @@
         <point val="9.5167,1.11908"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.5167,0.800563;11.5367,1.20056"/>
+        <rectangle val="9.5167,0.800561;11.5367,1.20056"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKUBETU#</string>
@@ -15566,6 +15571,48 @@
           </attribute>
           <attribute name="pos">
             <point val="9.5167,1.11908"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2424"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.202"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O473">
+      <attribute name="obj_pos">
+        <point val="6.74057,5"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.74057,4.68148;9.89177,5.08148"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#HOSPTEL#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#123-4567-8900#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.4"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="6.74057,5"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
