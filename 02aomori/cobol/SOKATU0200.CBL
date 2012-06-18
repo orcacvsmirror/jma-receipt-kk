@@ -48,6 +48,8 @@
       *  01.00.12    µÈÀî     10/09/14   ÊÖÌá¤Î¾ì¹çµìÄ¢É¼¤¬°õ»ú¤µ¤ì¤ë¤Î¤ò½¤Àµ
       *  01.00.13    µÈÀî     11/04/04   ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ
       *  01.00.14    µÈÀî     11/06/15   ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
+      *  01.00.15    µÈÀî     12/06/12   Ç¥»ºÉØ(144)¤ò»ÈÍÑ¤·¤Æ¤¤¤ë¾ì¹ç¤Ï
+      *                                  £±£°³äÍó¤Ë°õ»ú¤¹¤ë¤è¤¦¤Ë½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -141,6 +143,9 @@
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) start
+           03  FLG-RECE02          PIC 9(01).
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -316,6 +321,13 @@
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
            COPY    "CPRCF010.INC".
+      *
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) start
+      *    ¸øÈñÀÁµá½ñ
+           COPY    "CPKOHSKY.INC"
+                   REPLACING  //KOHSKY//
+                   BY         //RECE02//.
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) end
       *
       *    ¥¸¥ç¥Ö´ÉÍý¥Þ¥¹¥¿
        01  JOBKANRI-REC.
@@ -772,6 +784,9 @@
              MOVE  2  TO  IDX2
            END-IF
       *
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) start
+           PERFORM  900-KOHSKY-READ-SEC
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) end
       *    Ï·¿ÍÊÝ·ò¤«
            IF  RECE10-RJNHKNNUM  NOT  =  SPACE
              IF  RECE10-KYURATE  =  9
@@ -837,10 +852,16 @@
                  MOVE    6    TO    IDX1
                END-IF
       *    Ç¥»ºÉØ¤ÏÌµ¾ò·ï¤Ç£±£°³ä¤ËÊ¬Îà
-               IF    RECE10-KOHNUM(1)  =  "144" OR
-                     RECE10-KOHNUM(2)  =  "144" OR
-                     RECE10-KOHNUM(3)  =  "144" OR
-                     RECE10-KOHNUM(4)  =  "144"
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) start
+      *         IF    RECE10-KOHNUM(1)  =  "144" OR
+      *               RECE10-KOHNUM(2)  =  "144" OR
+      *               RECE10-KOHNUM(3)  =  "144" OR
+      *               RECE10-KOHNUM(4)  =  "144"
+               IF    RECE02-KOHNUM(1)  =  "144" OR
+                     RECE02-KOHNUM(2)  =  "144" OR
+                     RECE02-KOHNUM(3)  =  "144" OR
+                     RECE02-KOHNUM(4)  =  "144"
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) end
                  MOVE    6    TO    IDX1
                END-IF
              ELSE
@@ -903,10 +924,16 @@
                  MOVE    12    TO    IDX1
                END-IF
       *    Ç¥»ºÉØ¤ÏÌµ¾ò·ï¤Ç£±£°³ä¤ËÊ¬Îà
-               IF    RECE10-KOHNUM(1)  =  "144" OR
-                     RECE10-KOHNUM(2)  =  "144" OR
-                     RECE10-KOHNUM(3)  =  "144" OR
-                     RECE10-KOHNUM(4)  =  "144"
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) start
+      *         IF    RECE10-KOHNUM(1)  =  "144" OR
+      *               RECE10-KOHNUM(2)  =  "144" OR
+      *               RECE10-KOHNUM(3)  =  "144" OR
+      *               RECE10-KOHNUM(4)  =  "144"
+               IF    RECE02-KOHNUM(1)  =  "144" OR
+                     RECE02-KOHNUM(2)  =  "144" OR
+                     RECE02-KOHNUM(3)  =  "144" OR
+                     RECE02-KOHNUM(4)  =  "144"
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) end
                  MOVE    12    TO    IDX1
                END-IF
              END-IF
@@ -2127,8 +2154,58 @@
            .
        800-SKTTMP-READ-EXT.
            EXIT.
-      *
       *=== ºÒ³²ÂÐ±þ by Yoshikawa(2011/04/04) end
+      *
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) start
+      *****************************************************************
+      *    ¸øÈñÀÁµá¾ðÊóÆÉ¤ß¹þ¤ß
+      *****************************************************************
+       900-KOHSKY-READ-SEC         SECTION.
+      *
+           INITIALIZE                       RECE02-REC
+           MOVE    RECE10-KEY           TO  RECE02-KEY
+           MOVE    RECE02-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"           TO  MCP-FUNC
+           MOVE    "tbl_kohsky"         TO  MCP-TABLE
+           MOVE    "key"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"              USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+      *
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"        TO  MCP-FUNC
+               MOVE    "tbl_kohsky"     TO  MCP-TABLE
+               MOVE    "key"            TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO         TO  FLG-RECE02
+                   MOVE    MCPDATA-REC  TO  RECE02-REC
+               ELSE
+                   MOVE    1            TO  FLG-RECE02
+                   INITIALIZE               RECE02-REC
+               END-IF
+           ELSE
+               MOVE    1                TO  FLG-RECE02
+               INITIALIZE                   RECE02-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_kohsky"         TO  MCP-TABLE
+           MOVE    "key"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"              USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+      *
+           .
+       900-KOHSKY-READ-EXT.
+           EXIT.
+      *=== Ç¥»ºÉØ¤Ï£±£°³äÍó¤Ë°õ»ú by Yoshikawa(2012/06/12) end
+      *
       *****************************************************************
       *    ÀÁµá´ÉÍý£Ä£Â¹¹¿·ÍÑ¥Õ¥¡¥¤¥ëÆÉ¹þ
       *****************************************************************

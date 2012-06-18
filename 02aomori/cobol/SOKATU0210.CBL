@@ -49,6 +49,8 @@
       *  01.00.12    µ»¿Ó    2010/09/14    ÷Ã·§ŒæÏπÁµÏƒ¢…º§¨∞ıª˙§µ§Ï§Î§Œ§ÚΩ§¿µ
       *  01.00.13    µ»¿Ó    2011/03/24   ≈ÏÀÃ√œ ˝¬¿ øÕŒ≤≠√œøÃ¬–±˛° ¬–æ›º‘ ÃΩ∏∑◊°À
       *  01.00.14    µ»¿Ó    2011/06/15   ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛
+      *  01.00.15    µ»¿Ó    2012/06/12   «•ª∫…ÿ(144)§Úª»Õ—§∑§∆§§§ÎæÏπÁ§œ
+      *                                   £±£∞≥‰ÕÛ§À∞ıª˙§π§Î§Ë§¶§ÀΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -148,6 +150,9 @@
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) start
+           03  FLG-RECE02          PIC 9(01).
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) end
       *
       *    ≈∫ª˙ŒŒ∞Ë
        01  IDX-AREA.
@@ -298,6 +303,13 @@
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
            COPY    "CPRCF010.INC".
+      *
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) start
+      *    ∏¯»Ò¿¡µ·ΩÒ
+           COPY    "CPKOHSKY.INC"
+                   REPLACING  //KOHSKY//
+                   BY         //RECE02//.
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) end
       *
       *    •∏•Á•÷¥…Õ˝•ﬁ•π•ø
        01  JOBKANRI-REC.
@@ -781,6 +793,9 @@
              MOVE  2  TO  IDX2
            END-IF
       *
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) start
+           PERFORM  900-KOHSKY-READ-SEC
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) end
       *    œ∑øÕ ›∑Ú§´
            IF  RECE10-RJNHKNNUM  NOT  =  SPACE
              IF  RECE10-KYURATE  =  9
@@ -848,10 +863,16 @@
                  MOVE    5    TO    IDX1
                END-IF
       *    «•ª∫…ÿ§œÃµæÚ∑Ô§«£±£∞≥‰§À ¨Œ‡
-               IF    RECE10-KOHNUM(1)  =  "144" OR
-                     RECE10-KOHNUM(2)  =  "144" OR
-                     RECE10-KOHNUM(3)  =  "144" OR
-                     RECE10-KOHNUM(4)  =  "144"
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) start
+      *         IF    RECE10-KOHNUM(1)  =  "144" OR
+      *               RECE10-KOHNUM(2)  =  "144" OR
+      *               RECE10-KOHNUM(3)  =  "144" OR
+      *               RECE10-KOHNUM(4)  =  "144"
+               IF    RECE02-KOHNUM(1)  =  "144" OR
+                     RECE02-KOHNUM(2)  =  "144" OR
+                     RECE02-KOHNUM(3)  =  "144" OR
+                     RECE02-KOHNUM(4)  =  "144"
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) end
                  MOVE    5    TO    IDX1
                END-IF
              ELSE
@@ -912,10 +933,16 @@
                  MOVE    11    TO    IDX1
                END-IF
       *    «•ª∫…ÿ§œÃµæÚ∑Ô§«£±£∞≥‰§À ¨Œ‡
-               IF    RECE10-KOHNUM(1)  =  "144" OR
-                     RECE10-KOHNUM(2)  =  "144" OR
-                     RECE10-KOHNUM(3)  =  "144" OR
-                     RECE10-KOHNUM(4)  =  "144"
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) start
+      *         IF    RECE10-KOHNUM(1)  =  "144" OR
+      *               RECE10-KOHNUM(2)  =  "144" OR
+      *               RECE10-KOHNUM(3)  =  "144" OR
+      *               RECE10-KOHNUM(4)  =  "144"
+               IF    RECE02-KOHNUM(1)  =  "144" OR
+                     RECE02-KOHNUM(2)  =  "144" OR
+                     RECE02-KOHNUM(3)  =  "144" OR
+                     RECE02-KOHNUM(4)  =  "144"
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) end
                  MOVE    11    TO    IDX1
                END-IF
              END-IF
@@ -2067,6 +2094,56 @@
            .
        900-SKTTMP-READ-EXT.
            EXIT.
+      *
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) start
+      *****************************************************************
+      *    ∏¯»Ò¿¡µ·æ Û∆…§ﬂπ˛§ﬂ
+      *****************************************************************
+       900-KOHSKY-READ-SEC         SECTION.
+      *
+           INITIALIZE                       RECE02-REC
+           MOVE    RECE10-KEY           TO  RECE02-KEY
+           MOVE    RECE02-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"           TO  MCP-FUNC
+           MOVE    "tbl_kohsky"         TO  MCP-TABLE
+           MOVE    "key"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"              USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+      *
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"        TO  MCP-FUNC
+               MOVE    "tbl_kohsky"     TO  MCP-TABLE
+               MOVE    "key"            TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO         TO  FLG-RECE02
+                   MOVE    MCPDATA-REC  TO  RECE02-REC
+               ELSE
+                   MOVE    1            TO  FLG-RECE02
+                   INITIALIZE               RECE02-REC
+               END-IF
+           ELSE
+               MOVE    1                TO  FLG-RECE02
+               INITIALIZE                   RECE02-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_kohsky"         TO  MCP-TABLE
+           MOVE    "key"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"              USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+      *
+           .
+       900-KOHSKY-READ-EXT.
+           EXIT.
+      *=== «•ª∫…ÿ§œ£±£∞≥‰ÕÛ§À∞ıª˙ by Yoshikawa(2012/06/12) end
       *
       *****************************************************************
       *    ¿¡µ·¥…Õ˝£ƒ£¬ππø∑Õ—•’•°•§•Î∆…π˛
