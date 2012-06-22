@@ -58,6 +58,8 @@
       *  01.00.16    µÈÀî    10/11/24    open-cobol1.0ÂÐ±þ
       *  01.00.17    µÈÀî    11/03/18    75ºÐÅþÃ£·î¤Ç¸øÈñÊ¬´µ¼ÔÉéÃ´³Û¤¬
       *                                  °õ»ú¤µ¤ì¤Ê¤¤ÉÔ¶ñ¹ç¤ò½¤Àµ
+      *  01.00.18    µÈÀî    12/06/14    ¼«¸ÊÉéÃ´¤¬¾å¸Â³ÛÌ¤Ëþ¤Î¾ì¹ç
+      *                                  £±±ßÃ±°Ì¤Çµ­ºÜ¤¹¤ë¤è¤¦¤Ë½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -231,6 +233,10 @@
            03  WRK-KOBETUCITYNUM     PIC X(03).
            03  WRK-KEISAN            PIC 9(08).
            03  WRK-AMARI             PIC 9(08).
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) start
+           03  WRK-SEIKYUGK-G        PIC 9(08)V9(01).
+           03  WRK-SEIKYUGK          PIC 9(08)V9(01).
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) end
       *    Ê¸»úÊÑ´¹
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
@@ -817,6 +823,9 @@
       *
       *    Á´¹ñ¸øÈñ¤ÎÅÀ¿ô¡¢°ìÉôÉéÃ´¶â½¸·×
            INITIALIZE                    WRK-SYUKEI-TBL
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) start
+                                         WRK-SEIKYUGK-G
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) end
            MOVE    MF100-KOHNUM    TO    WRK-KOHNUM
            MOVE    MF100-KOHID     TO    WRK-KOHID
            IF      RECE02-NYUGAIKBN    =   "1"
@@ -879,6 +888,10 @@
              END-IF
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) start
+      *    ¼«¸ÊÉéÃ´³Û
+           MOVE    WRK-SEIKYUGK-G          TO  MF100-FTNMONEY
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) end
       *
       *    ¸øÈñ¤òÊ»ÍÑ¤·¤Æ¤¤¤ë¾ì¹ç¡¢¸øÈñÍÑ¥Õ¥¡¥¤¥ë¤ò½ñ¤­½Ð¤¹
            IF      WRK-KOHTENSU-G          >   ZERO
@@ -1680,12 +1693,21 @@
       *             MOVE    1   TO  MF100-TYOKI
       *         END-IF
       *---(01.00.04) LINE ADD END  ------------------------------------
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) start
+               IF   SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
+                   MOVE    SYU-KOH-COMPFTN-ENTANI(IDX)
+                                               TO  WRK-SEIKYUGK
+               END-IF
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) end
+      *
            END-PERFORM
       *
       *
            ADD     WRK-ETCKOHFTN   TO  WRK-ETCKOHFTN-G1
            ADD     WRK-KOHTENSU    TO  WRK-KOHTENSU-G
-      *
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) start
+           ADD     WRK-SEIKYUGK    TO  WRK-SEIKYUGK-G
+      *=== ¾å¸Â³ÛÌ¤Ëþ¤Ï£±±ßÃ±°Ì by Yoshikawa(2012/06/14) end
       *
            .
        800-SEIKYU-SEC-EXT.
