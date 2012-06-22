@@ -47,6 +47,7 @@
       *  01.00.12    吉川    10/04/07  オンライン返戻対応
       *  01.00.13    吉川    10/12/09  特別療養費国保対応
       *                                open-cobol1.0対応
+      *  01.00.14    吉川    12/06/13  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -958,6 +959,7 @@
            ELSE
                PERFORM 2101-SYUKEI-SEC
            END-IF
+      *
            .
        2101-KUMIAI-SET-EXT.
            EXIT.
@@ -1033,25 +1035,29 @@
                END-IF
            END-IF
       *
-      *    在宅判定
-           IF      RECE10-ZAITAKU  =   "1"
-               EVALUATE    IDX1
-                   WHEN    1
-                   WHEN    2
-                       DISPLAY "在宅・集計場所そのまま"
-                   WHEN    6
-                       MOVE    3       TO  IDX1
-                   WHEN    7
-                       MOVE    4       TO  IDX1
-                   WHEN    10
-                       MOVE    5       TO  IDX1
-                   WHEN    OTHER
-                       MOVE    6       TO  IDX1
-               END-EVALUATE
-               PERFORM 2101-ZAI-SYUKEI-SEC
-           ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      **    在宅判定
+      *     IF      RECE10-ZAITAKU  =   "1"
+      *         EVALUATE    IDX1
+      *             WHEN    1
+      *             WHEN    2
+      *                 DISPLAY "在宅・集計場所そのまま"
+      *             WHEN    6
+      *                 MOVE    3       TO  IDX1
+      *             WHEN    7
+      *                 MOVE    4       TO  IDX1
+      *             WHEN    10
+      *                 MOVE    5       TO  IDX1
+      *             WHEN    OTHER
+      *                 MOVE    6       TO  IDX1
+      *         END-EVALUATE
+      *         PERFORM 2101-ZAI-SYUKEI-SEC
+      *     ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
                PERFORM 2101-SYUKEI-SEC
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
       *
            .
        2101-IPPAN-SET-EXT.
@@ -1801,27 +1807,29 @@
                MOVE    WRK-Z9      TO  SKT3310-SFTNGK(IDX1)
            END-PERFORM
       *
-      *    在宅分
-           PERFORM VARYING     IDX1    FROM    1   BY  1
-                   UNTIL       IDX1    >       4
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      **    在宅分
+      *     PERFORM VARYING     IDX1    FROM    1   BY  1
+      *             UNTIL       IDX1    >       4
+      **
+      **        件数
+      *         MOVE    SKT3310TMP-ZKENSU(IDX1)     TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3310-ZKENSU(IDX1)
+      **      
+      **        日数
+      *         MOVE    SKT3310TMP-ZNISSU(IDX1)     TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT3310-ZNISSU(IDX1)
+      **
+      **        点数
+      *         MOVE    SKT3310TMP-ZTENSU(IDX1)     TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3310-ZTENSU(IDX1)
+      **
+      **        一部負担金
+      *         MOVE    SKT3310TMP-ZITBFTN(IDX1)    TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3310-ZITBFTN(IDX1)
       *
-      *        件数
-               MOVE    SKT3310TMP-ZKENSU(IDX1)     TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3310-ZKENSU(IDX1)
-      *      
-      *        日数
-               MOVE    SKT3310TMP-ZNISSU(IDX1)     TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT3310-ZNISSU(IDX1)
-      *
-      *        点数
-               MOVE    SKT3310TMP-ZTENSU(IDX1)     TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3310-ZTENSU(IDX1)
-      *
-      *        一部負担金
-               MOVE    SKT3310TMP-ZITBFTN(IDX1)    TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3310-ZITBFTN(IDX1)
-      *
-           END-PERFORM
+      *     END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1966,35 +1974,37 @@
                MOVE    WRK-Z9      TO  SKT3320-SFTNGK(IDX3)
            END-PERFORM
       *
-      *    在宅分
-           PERFORM VARYING IDX1    FROM    5   BY  1
-                   UNTIL   IDX1    >       6
-               COMPUTE IDX3    =   IDX1    -   4
-      *
-      *        件数
-               MOVE    SKT3310TMP-ZKENSU(IDX1)     TO  WRK-Z3
-               MOVE    WRK-Z3      TO    SKT3320-ZKENSU(IDX3)
-      *
-      *        日数
-               MOVE    SKT3310TMP-ZNISSU(IDX1)     TO  WRK-Z3
-               MOVE    WRK-Z3      TO    SKT3320-ZNISSU(IDX3)
-      *
-      *        点数
-      *---(01.00.06) LINE ADD START ------------------------------------
-      *         MOVE    SKT3310TMP-ZTENSU(IDX1)     TO  WRK-Z7
-      *         MOVE    WRK-Z7      TO    SKT3320-ZTENSU(IDX3)
-               MOVE    SKT3310TMP-ZTENSU(IDX1)     TO  WRK-Z9
-               MOVE    WRK-Z9      TO    SKT3320-ZTENSU(IDX3)
-      *---(01.00.06) LINE ADD END   ------------------------------------
-      *
-      *        一部負担金
-      *---(01.00.06) LINE ADD START ------------------------------------
-      *         MOVE    SKT3310TMP-ZITBFTN(IDX1)    TO  WRK-Z7
-      *         MOVE    WRK-Z7      TO  SKT3320-ZITBFTN(IDX3)
-               MOVE    SKT3310TMP-ZITBFTN(IDX1)    TO  WRK-Z9
-               MOVE    WRK-Z9      TO  SKT3320-ZITBFTN(IDX3)
-      *---(01.00.06) LINE ADD END   ------------------------------------
-           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      **    在宅分
+      *     PERFORM VARYING IDX1    FROM    5   BY  1
+      *             UNTIL   IDX1    >       6
+      *         COMPUTE IDX3    =   IDX1    -   4
+      **
+      **        件数
+      *         MOVE    SKT3310TMP-ZKENSU(IDX1)     TO  WRK-Z3
+      *         MOVE    WRK-Z3      TO    SKT3320-ZKENSU(IDX3)
+      **
+      **        日数
+      *         MOVE    SKT3310TMP-ZNISSU(IDX1)     TO  WRK-Z3
+      *         MOVE    WRK-Z3      TO    SKT3320-ZNISSU(IDX3)
+      **
+      **        点数
+      **---(01.00.06) LINE ADD START ------------------------------------
+      **         MOVE    SKT3310TMP-ZTENSU(IDX1)     TO  WRK-Z7
+      **         MOVE    WRK-Z7      TO    SKT3320-ZTENSU(IDX3)
+      *         MOVE    SKT3310TMP-ZTENSU(IDX1)     TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO    SKT3320-ZTENSU(IDX3)
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      **
+      **        一部負担金
+      **---(01.00.06) LINE ADD START ------------------------------------
+      **         MOVE    SKT3310TMP-ZITBFTN(IDX1)    TO  WRK-Z7
+      **         MOVE    WRK-Z7      TO  SKT3320-ZITBFTN(IDX3)
+      *         MOVE    SKT3310TMP-ZITBFTN(IDX1)    TO  WRK-Z9
+      *         MOVE    WRK-Z9      TO  SKT3320-ZITBFTN(IDX3)
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      *     END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
       *
       *    ４１老人
            IF      SKT3310TMP-41-KOHNUM    NOT =   SPACE
