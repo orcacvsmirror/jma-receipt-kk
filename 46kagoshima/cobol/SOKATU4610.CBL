@@ -49,6 +49,7 @@
       *  01.00.13    吉川    10/12/07    鹿児島県奄美市等豪雨対応
       *                                  open-cobol1.0対応
       *  01.00.14    吉川    11/03/04    特別療養費国保対応
+      *  01.00.15    吉川    12/06/15    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -757,7 +758,9 @@
            END-IF
       *
       *    在宅
-           MOVE    RECE10-ZAITAKU  TO  SKT4610TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
+      *     MOVE    RECE10-ZAITAKU  TO  SKT4610TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *    平成２０年３月以前は旧様式
@@ -1235,10 +1238,12 @@
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  SKT4610-HOSPCD
       *
-           IF      SKT4610TMP-ZAITAKU      =   "1"
-               MOVE    "在"    TO  SKT4610-ZAI1
-               MOVE    "◯"    TO  SKT4610-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
+      *     IF      SKT4610TMP-ZAITAKU      =   "1"
+      *         MOVE    "在"    TO  SKT4610-ZAI1
+      *         MOVE    "◯"    TO  SKT4610-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) end
       *
       *=== 特別療養費国保対応 by Yoshikawa(2011/03/04) start
       *    特別療養費
@@ -1384,10 +1389,12 @@
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  SKT4611-HOSPCD
       *
-           IF      SKT4610TMP-ZAITAKU      =   "1"
-               MOVE    "在"        TO  SKT4611-ZAI1
-               MOVE    "◯"        TO  SKT4611-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
+      *     IF      SKT4610TMP-ZAITAKU      =   "1"
+      *         MOVE    "在"        TO  SKT4611-ZAI1
+      *         MOVE    "◯"        TO  SKT4611-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) end
       *
       *=== 特別療養費国保対応 by Yoshikawa(2011/03/04) start
       *    特別療養費

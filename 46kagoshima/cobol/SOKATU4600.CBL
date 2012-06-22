@@ -49,6 +49,7 @@
       *  01.00.14    吉川    10/12/07    open-cobol1.0対応
       *  01.00.15    吉川    11/03/04    特別療養費国保対応
       *  01.00.16    吉川    12/01/16    点数欄は一千万の位まで印字する
+      *  01.00.17    吉川    12/06/15    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1013,30 +1014,32 @@
                END-IF
            END-IF
       *
-           IF      RECE10-ZAITAKU  =   "1"
-               EVALUATE  IDX1
-                   WHEN 1
-                       MOVE    1       TO  IDX1
-                   WHEN 2
-                       MOVE    2       TO  IDX1
-                   WHEN 6
-                       MOVE    3       TO  IDX1
-                   WHEN 7
-                       MOVE    4       TO  IDX1
-                   WHEN 10
-                       MOVE    5       TO  IDX1
-                   WHEN OTHER
-                       MOVE    6       TO  IDX1
-               END-EVALUATE
-      *
-      *        保険分集計(在宅)
-               PERFORM  2101-ZSYUKEI-SEC
-      *
-      *        公費負担分(在宅)
-               IF      RECE10-KOHNUM(1)    NOT =   SPACE
-                   PERFORM 220-ZKOH-SYUKEI-SEC
-               END-IF
-           ELSE
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
+      *     IF      RECE10-ZAITAKU  =   "1"
+      *         EVALUATE  IDX1
+      *             WHEN 1
+      *                 MOVE    1       TO  IDX1
+      *             WHEN 2
+      *                 MOVE    2       TO  IDX1
+      *             WHEN 6
+      *                 MOVE    3       TO  IDX1
+      *             WHEN 7
+      *                 MOVE    4       TO  IDX1
+      *             WHEN 10
+      *                 MOVE    5       TO  IDX1
+      *             WHEN OTHER
+      *                 MOVE    6       TO  IDX1
+      *         END-EVALUATE
+      **
+      **        保険分集計(在宅)
+      *         PERFORM  2101-ZSYUKEI-SEC
+      **
+      **        公費負担分(在宅)
+      *         IF      RECE10-KOHNUM(1)    NOT =   SPACE
+      *             PERFORM 220-ZKOH-SYUKEI-SEC
+      *         END-IF
+      *     ELSE
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
       *
       *        保険分集計
                PERFORM  2101-SYUKEI-SEC
@@ -1045,7 +1048,9 @@
                IF      RECE10-KOHNUM(1)    NOT =   SPACE
                    PERFORM 220-KOH-SYUKEI-SEC
                END-IF
-           END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
+      *     END-IF
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) end
       *
       *    長期判定
            IF      RECE10-ETC-KOHNUM(1)    =   "972"
@@ -2160,7 +2165,9 @@
                MOVE  RECE10-HKNJANUM (1:4)  TO  SKT4610TMP-HKNJANUM
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
-           MOVE    RECE10-ZAITAKU  TO  SKT4610TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) start
+      *     MOVE    RECE10-ZAITAKU  TO  SKT4610TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by Yoshikawa(2012/06/15) end
       *
       *    返戻区分
            IF      RECE10-HENREIYM NOT =   "000000"
