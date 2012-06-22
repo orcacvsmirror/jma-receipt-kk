@@ -33,6 +33,10 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    2010/03/31  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/04/07  オンライン返戻対応
+      *  01.00.05    吉川    2012/06/13  帳票様式の変更に伴う修正
+      *                                  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
+      *                                  PERFORM→GOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -680,11 +684,15 @@
                    MOVE    2                   TO  IDX1
            END-EVALUATE
       *    在宅
-           IF  RECE10-ZAITAKU  NOT  =  SPACE
-               PERFORM 20011-ZAI-SYUKEI-SEC
-           ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      *     IF  RECE10-ZAITAKU  NOT  =  SPACE
+      *         PERFORM 20011-ZAI-SYUKEI-SEC
+      *     ELSE
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
                PERFORM 20011-HKN-SYUKEI-SEC
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
       *
       *    公費負担分
            IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
@@ -1098,22 +1106,24 @@
              MOVE  WRK-Z9                TO  SKT3315-S-FTNGK(IDZ)
            END-PERFORM
       *
-      *    在宅編集
-           PERFORM VARYING IDX FROM    1   BY  1
-                   UNTIL   IDX >       2
-      *    在宅：件数
-               MOVE  SUM-ZKENSU(IDX)     TO  WRK-Z3
-               MOVE  WRK-Z3              TO  SKT3315-ZKENSU(IDX)
-      *    在宅：診療実日数
-               MOVE  SUM-ZNISSU(IDX)     TO  WRK-Z3 
-               MOVE  WRK-Z3              TO  SKT3315-ZNISSU(IDX)
-      *    在宅：点数
-               MOVE  SUM-ZTENSU(IDX)     TO  WRK-Z9
-               MOVE  WRK-Z9              TO  SKT3315-ZTENSU(IDX)
-      *    在宅：一部負担金
-               MOVE  SUM-ZITBFTN(IDX)    TO  WRK-Z9
-               MOVE  WRK-Z9              TO  SKT3315-ZITBFTN(IDX)
-           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) start
+      **    在宅編集
+      *     PERFORM VARYING IDX FROM    1   BY  1
+      *             UNTIL   IDX >       2
+      **    在宅：件数
+      *         MOVE  SUM-ZKENSU(IDX)     TO  WRK-Z3
+      *         MOVE  WRK-Z3              TO  SKT3315-ZKENSU(IDX)
+      **    在宅：診療実日数
+      *         MOVE  SUM-ZNISSU(IDX)     TO  WRK-Z3 
+      *         MOVE  WRK-Z3              TO  SKT3315-ZNISSU(IDX)
+      **    在宅：点数
+      *         MOVE  SUM-ZTENSU(IDX)     TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT3315-ZTENSU(IDX)
+      **    在宅：一部負担金
+      *         MOVE  SUM-ZITBFTN(IDX)    TO  WRK-Z9
+      *         MOVE  WRK-Z9              TO  SKT3315-ZITBFTN(IDX)
+      *     END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2012/06/13) end
       *
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
@@ -1563,7 +1573,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/06/13) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2012/06/13) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1647,7 +1660,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/06/13) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/06/13) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -1715,6 +1731,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/06/12) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/06/12) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
