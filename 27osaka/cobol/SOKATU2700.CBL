@@ -45,6 +45,7 @@
       *  01.00.07    吉川     10/04/06    オンライン返戻対応
       *  01.00.08    吉川     10/11/02    特別療養費国保対応
       *  01.00.09    吉川     10/11/24    open-cobol1.0対応
+      *  01.00.10    吉川     12/06/18    在宅は一般分にまとめて集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -846,32 +847,34 @@
                WHEN  OTHER         ADD  17  TO  IDX1
              END-EVALUATE
       *    在医総・在総診（公費併用者以外）
-             IF  RECE10-KOHNUM(1)  =  SPACE
-               IF  RECE10-ZAITAKU  =  1
-                 IF  RECE10-RJNHKNNUM  NOT =  SPACE
-                   MOVE  15  TO  IDX1
-                 ELSE
-      *    在医総チェック
-      *             PERFORM  960-SRYACT-SET-SEC
-      *             IF  FLG-ZAIISO  NOT = ZERO
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
-      *               IF  RECE10-HKNNUM  =  "060"
-                     IF  RECE10-HKNNUM  =  "060" OR "068"
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
-                       MOVE  27  TO  IDX1
-                     ELSE
-                       MOVE  20  TO  IDX1
-                     END-IF
-      *             END-IF
-                 END-IF
-               END-IF
-      *     ２７老人＋在宅は公費を併用していても在宅欄に集計する
-             ELSE
-               IF  RECE10-RJNHKNNUM  NOT  =   SPACE  AND
-                   RECE10-ZAITAKU         =   "1"
-                 MOVE  15  TO  IDX1
-               END-IF
-             END-IF
+      *=== 在宅は一般分にまとめる by Yoshikawa(2012/06/18) start
+      *       IF  RECE10-KOHNUM(1)  =  SPACE
+      *         IF  RECE10-ZAITAKU  =  1
+      *           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      *             MOVE  15  TO  IDX1
+      *           ELSE
+      **    在医総チェック
+      **             PERFORM  960-SRYACT-SET-SEC
+      **             IF  FLG-ZAIISO  NOT = ZERO
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      **               IF  RECE10-HKNNUM  =  "060"
+      *               IF  RECE10-HKNNUM  =  "060" OR "068"
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *                 MOVE  27  TO  IDX1
+      *               ELSE
+      *                 MOVE  20  TO  IDX1
+      *               END-IF
+      **             END-IF
+      *           END-IF
+      *         END-IF
+      **     ２７老人＋在宅は公費を併用していても在宅欄に集計する
+      *       ELSE
+      *         IF  RECE10-RJNHKNNUM  NOT  =   SPACE  AND
+      *             RECE10-ZAITAKU         =   "1"
+      *           MOVE  15  TO  IDX1
+      *         END-IF
+      *       END-IF
+      *=== 在宅は一般分にまとめる by Yoshikawa(2012/06/18) end
            END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
       *    給付割合を入れる
