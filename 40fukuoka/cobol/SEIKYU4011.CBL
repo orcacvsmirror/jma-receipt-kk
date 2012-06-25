@@ -53,7 +53,9 @@
       *  01.00.16    吉川     09/10/30    印字対象番号の追加（690,780）
       *  01.00.17    吉川     12/03/12    対象公費番号をINIファイルから
       *                                   取得するようにする
-      *****************************************************************
+      *  01.00.18    吉川     12/06/20    保険＋障害＋ひとり親の組合せで
+      *                                   ひとり親の助成がない場合でも
+      *                                   集計される不具合を修正      *****************************************************************
       *
        ENVIRONMENT   DIVISION.
        CONFIGURATION SECTION.
@@ -1439,7 +1441,9 @@
                     SYU-KOH-HKNNUM(IDX3)  =  SPACE
       *    計算負担金に差が有る場合、地方公費の助成があったと判定する
              IF   SYU-KOH-HKNNUM(IDX3)     =  WRK-KOHNUM
-             OR   SYU-KOH-HKNNUM(IDX3)(1:1) NOT = "0"
+      *=== 公費の助成判定修正 by Yoshikawa(2012/06/20) start
+      *       OR   SYU-KOH-HKNNUM(IDX3)(1:1) NOT = "0"
+      *=== 公費の助成判定修正 by Yoshikawa(2012/06/20) end
                IF     IDX3                 =  1
                  IF  SYU-SYUCOMPFTN-ENTANI
                                        > SYU-KOH-COMPFTN-ENTANI(IDX3)
