@@ -41,6 +41,8 @@
       *  01.00.07    等李    09/07/28    省汇板闻锐懒滇驰腕は
       *                                  给锐の锦喇尸を磅机する
       *  01.00.08    等李    10/04/30    磅机滦据戎规の纳裁(781)
+      *  01.00.09    等李    12/06/21    吹荚砷么がある给锐で光驰の眷圭
+      *                                  办婶砷么垛と省汇板闻锐懒滇驰の纷换を饯赖
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -720,8 +722,23 @@
       **     ADD    WRK-YKZFTN     TO     MF100-YKZFTN
       *     ADD    WRK-SEIKYUGK-G2  TO   MF100-YKZFTN
       **---(01.00.01) LINE ADD END   -----------------------------------
-           COMPUTE  WRK-SEIKYUGK-G2  =  WRK-SEIKYUGK-G2  -
-                                        WRK-KESEYKZFTN
+      *=== 吹荚砷么がある给锐の纷换饯赖 by Yoshikawa(2012/06/21) start
+      *     COMPUTE  WRK-SEIKYUGK-G2  =  WRK-SEIKYUGK-G2  -
+      *                                  WRK-KESEYKZFTN
+      *    吹荚砷么がある给锐で光驰の眷圭、纷换されてきた光驰闻蛙锐で
+      *    それぞれ省汇板闻锐懒滇驰と办婶砷么垛を换叫する
+           IF  (RECE02-ZAITAKU  NOT =  SPACE AND "1")
+           AND (RECE02-FTNMONEY(IDY)  NOT =  ZERO)
+             COMPUTE  WRK-YKZFTN  ROUNDED =  WRK-SEIKYUGK-G2  /  
+                                            (RECE02-KYURATE / 10)
+             COMPUTE  WRK-KESEYKZFTN      =  WRK-SEIKYUGK-G2  -
+                                             WRK-YKZFTN
+             MOVE    WRK-YKZFTN    TO   WRK-SEIKYUGK-G2
+           ELSE
+             COMPUTE  WRK-SEIKYUGK-G2  =  WRK-SEIKYUGK-G2  -
+                                          WRK-KESEYKZFTN
+           END-IF
+      *=== 吹荚砷么がある给锐の纷换饯赖 by Yoshikawa(2012/06/21) end
            ADD    WRK-SEIKYUGK-G2  TO   MF100-YKZFTN
       *=== 给锐の锦喇尸を磅机 by Yoshikawa(2009/07/28) end
            ADD    WRK-KESEYKZFTN TO     MF100-KESEYKZFTN
@@ -729,6 +746,7 @@
              COMPUTE  MF100-JOSEIGK  =  MF100-JOSEIGK +
                  (HKN-HON-NYUSKJJYOGAK *    WRK-NISSU)
            END-IF
+      *
       *
       *    瘦副荚戎规チェック借妄
            MOVE    ZERO               TO   FLG-ERR
