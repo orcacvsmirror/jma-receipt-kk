@@ -33,6 +33,7 @@
       *                                  助成種別毎に印字する
       *  01.00.02    吉川    10/08/05    処方せん発行区分の判定方法変更
       *  01.00.03    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.04    吉川    12/07/06    記載順をINIファイルで設定するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -51,6 +52,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *    記載順設定ファイル
+           SELECT  SRT-FILE    ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-SRT.
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -62,6 +71,12 @@
       *    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *    記載順設定ファイル
+       FD  SRT-FILE.
+       01  SRT-SRTKBN   PIC X(01).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -87,6 +102,9 @@
            03  STS-MF100             PIC X(02).
            03  STS-RECE02            PIC X(02).
            03  STS-RECEERR           PIC X(02).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+           03  STS-SRT               PIC X(02).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *
        01  SYS-AREA.
            03  SYS-YMD.
@@ -166,6 +184,9 @@
            03  WRK-ETCSHOKUJIRYOYOHI PIC 9(07).
            03  WRK-ETCSHOKUJIFTN     PIC 9(07).
            03  WRK-SYOHODATA         PIC X(40)  OCCURS 2.
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+           03  WRK-SRTKBN            PIC X(01).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *
            03  WRK-COMP.
                05  WRK-COMP-SRYY        PIC  9(4).
@@ -501,6 +522,11 @@
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *    INIファイル読込処理
+           PERFORM  110-INI-FILE-SEC
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *
            PERFORM 900-KOHSKY-START-SEC
       *
            .
@@ -572,6 +598,45 @@
            .
        1001-PARA-HENSYU-EXT.
            EXIT.
+      *
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *****************************************************************
+      *    INIファイル読み込み処理
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/SORT.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           DISPLAY "ファイル名="  FILE-NAME
+      *
+           INITIALIZE   WRK-SRTKBN
+      *
+           OPEN  INPUT  SRT-FILE
+      *
+           READ SRT-FILE
+             AT END
+               INITIALIZE        WRK-SRTKBN
+             DISPLAY "読み込み失敗"
+           END-READ
+      *
+      *    2以外は全て1を設定
+           IF  WRK-SRTKBN  NOT =  "2"
+               MOVE    "1"           TO  WRK-SRTKBN
+           END-IF
+      *
+           DISPLAY "ソート区分="  WRK-SRTKBN
+      *
+           CLOSE SRT-FILE
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *
       *****************************************************************
       *    主　　処理
@@ -665,6 +730,16 @@
              WHEN  "165"
                MOVE  "5"                     TO   MF100-KOHKBN
            END-EVALUATE
+      *
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
+           EVALUATE  WRK-SRTKBN
+             WHEN  "1"
+               MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
+             WHEN  "2"
+               MOVE    MF100-PTNUM           TO   MF100-SORTNUM
+           END-EVALUATE
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *
       *    収納情報より他法公費情報を取得
            MOVE     MF100-KOHNUM             TO   WRK-KOHNUM  

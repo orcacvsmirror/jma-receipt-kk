@@ -22,6 +22,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         10/08/05  処方せん発行区分追加
+      *  01.00.02    吉川         12/07/06  記載順をINIファイルで設定
       ************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
@@ -31,8 +32,12 @@
                05  MF100-CITYNUM         PIC  X(03).
       *助成区分
                05  MF100-KOHKBN          PIC  X(01).
-      *患者番号
-               05  MF100-PTNUM           PIC  X(20).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      **患者番号
+      *         05  MF100-PTNUM           PIC  X(20).
+      *記載順
+               05  MF100-SORTNUM         PIC  X(20).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *診療年月
                05  MF100-SRYYM           PIC  X(06).
       *診療科
@@ -53,6 +58,10 @@
            03  MF100-TEKSTYMD            PIC  X(08). 
       *患者ＩＤ
            03  MF100-PTID                PIC  9(10).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *患者番号
+           03  MF100-PTNUM               PIC  X(20).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *性別
            03  MF100-SEX                 PIC  9(01).
       *漢字氏名
