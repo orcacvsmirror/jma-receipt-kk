@@ -58,6 +58,7 @@
       *  01.00.16    吉川    11/11/18  備考欄に記載するコメントを増やす
       *  01.00.17    吉川    11/12/21  全国公費と長期を併用した場合の
       *                                公費負担額の計算を修正
+      *  01.00.18    吉川    12/07/05  総点数欄の桁数増加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -203,6 +204,9 @@
       *=== 公費負担額の計算変更 by Yoshikawa(2011/12/21) start
            03  WRK-Z7-9              PIC ZZZ,ZZ9.
       *=== 公費負担額の計算変更 by Yoshikawa(2011/12/21) end
+      *=== 総点数の桁数増加 by Yoshikawa(2012/07/05) start
+           03  WRK-Z9                PIC Z,ZZZ,ZZZ.
+      *=== 総点数の桁数増加 by Yoshikawa(2012/07/05) end
            03  WRK-Z10               PIC ZZ,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
@@ -1431,8 +1435,12 @@
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) end
       *
       *    点数
-           MOVE    MF100-TOTALTEN          TO  WRK-Z7
-           MOVE    WRK-Z7                  TO  SC23-TOTALTEN
+      *=== 総点数の桁数増加 by Yoshikawa(2012/07/05) start
+      *     MOVE    MF100-TOTALTEN          TO  WRK-Z7
+      *     MOVE    WRK-Z7                  TO  SC23-TOTALTEN
+           MOVE    MF100-TOTALTEN          TO  WRK-Z9
+           MOVE    WRK-Z9                  TO  SC23-TOTALTEN
+      *=== 総点数の桁数増加 by Yoshikawa(2012/07/05) end
       *
       *    自己負担月額
            MOVE    MF100-JIKOFTNGK         TO  WRK-Z7
