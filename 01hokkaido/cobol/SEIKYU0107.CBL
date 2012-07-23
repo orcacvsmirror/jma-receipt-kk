@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 北海道・重度心身障害者医療費請求書
+      *  コンポーネント名  : 北海道・重度心身障がい者医療費請求書
       *                      (143,243,343,543,643,743,843)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -85,6 +85,10 @@
       *  01.00.24     吉川     11/02/16    公費請求テーブルclose処理位置変更
       *  01.00.25     吉川     12/04/09    帳票様式の変更に伴う修正
       *                                    外来も高額限度額を印字する
+      *  01.00.26     吉川     12/07/12    高額療養費と長期を持っている場合
+      *                                    限度額欄に値が記載されるのを修正
+      *                                    特定疾患と957等を持っている場合
+      *                                    限度額欄に値が記載されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -488,7 +492,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU0107"    TO  JOB-PGID
-           MOVE    "重度心身障害者医療費請求書" 
+      *=== 帳票タイトル修正 by Yoshikawa(2012/07/12) start
+      *     MOVE    "重度心身障害者医療費請求書" 
+           MOVE    "重度心身障がい者医療費請求書" 
+      *=== 帳票タイトル修正 by Yoshikawa(2012/07/12) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -938,6 +945,22 @@
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) start
+      *    高額療養費チェック
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+           IF  RECE02-FLG(4)  =  ZERO
+             IF   RECE02-ZAITAKU  NOT =  SPACE
+             AND  RECE02-ZAITAKU  NOT =  "1"
+               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+                 MOVE  RECE02-FTNMONEY (1)     TO  MF100-KOGAKU
+               ELSE
+                 COMPUTE  MF100-KOGAKU  =  RECE02-TOTALTEN (1)
+                                        *  RECE02-KYURATE  /  10
+               END-IF
+             END-IF
+           END-IF
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) end
+      *
       *    長期編集
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
       *     IF     FLG-TYOKI             =      1   AND
@@ -958,6 +981,9 @@
       *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  MF100-TOTALTEN
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) start
+             MOVE    ZERO              TO  MF100-KOGAKU
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) end
              IF      MF100-FTNMONEY     >  10000
                MOVE  10000             TO  MF100-FTNMONEY
              END-IF
@@ -988,6 +1014,9 @@
       *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) end
              MOVE    ZERO              TO  MF100-TOTALTEN
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) start
+             MOVE    ZERO              TO  MF100-KOGAKU
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) end
              IF      MF100-FTNMONEY     >  20000
                MOVE  20000             TO  MF100-FTNMONEY
              END-IF
@@ -1004,29 +1033,31 @@
              MOVE    ZERO               TO  MF100-TOTALTEN
            END-IF
       *
-      *---(01.00.04) LINE ADD START ------------------------------------
-      *    高額療養費チェック（入院のみ）
-      *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) start
-      *     IF  RECE02-NYUGAIKBN  =  "1"
-      *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) end
-             IF   RECE02-ZAITAKU  NOT =  SPACE
-             AND  RECE02-ZAITAKU  NOT =  "1"
-               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
-                 MOVE  RECE02-FTNMONEY (1)     TO  MF100-KOGAKU
-               ELSE
-                 COMPUTE  MF100-KOGAKU  =  RECE02-TOTALTEN (1)
-                                        *  RECE02-KYURATE  /  10
-               END-IF
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *       ELSE
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) start
+      **---(01.00.04) LINE ADD START ------------------------------------
+      **    高額療養費チェック（入院のみ）
+      **=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) start
+      **     IF  RECE02-NYUGAIKBN  =  "1"
+      **=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) end
+      *       IF   RECE02-ZAITAKU  NOT =  SPACE
+      *       AND  RECE02-ZAITAKU  NOT =  "1"
+      *         IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+      *           MOVE  RECE02-FTNMONEY (1)     TO  MF100-KOGAKU
+      *         ELSE
       *           COMPUTE  MF100-KOGAKU  =  RECE02-TOTALTEN (1)
       *                                  *  RECE02-KYURATE  /  10
-      *---(01.00.05) LINE ADD END   ------------------------------------
-             END-IF
-      *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) start
-      *     END-IF
-      *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) end
-      *---(01.00.04) LINE ADD END   ------------------------------------
+      *         END-IF
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **       ELSE
+      **           COMPUTE  MF100-KOGAKU  =  RECE02-TOTALTEN (1)
+      **                                  *  RECE02-KYURATE  /  10
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      *       END-IF
+      **=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) start
+      **     END-IF
+      **=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) end
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) end
       *
       *    保険限度額判定
            IF  RECE02-FTNMONEY(1)       <  WRK-SEIKYUGK-G  AND
@@ -1729,7 +1760,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   WRK-PRTID            TO  SPRT-PRTID
-           MOVE    "重度心身障害者医療費請求書"
+      *=== 帳票タイトル修正 by Yoshikawa(2012/07/12) start
+      *     MOVE    "重度心身障害者医療費請求書"
+           MOVE    "重度心身障がい者医療費請求書"
+      *=== 帳票タイトル修正 by Yoshikawa(2012/07/12) end
                                     TO  SPRT-TITLE
            MOVE    SC07             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
