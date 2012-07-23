@@ -87,6 +87,11 @@
       *                                 請求書の枚数欄のカウントを修正
       *  01.00.34    吉川   12/01/12    70歳未満で長期を持っている場合
       *                                 前期高齢者欄に集計される不具合を修正
+      *  01.00.35    吉川   12/07/12    外来も高額は71限度額欄に印字する
+      *                                 70歳未満で障害＋高額の場合、件数が
+      *                                 前期高齢者欄に集計される不具合を修正
+      *                                 特定疾患と957等を持っている場合
+      *                                 限度額欄に値が記載されるのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1332,8 +1337,12 @@
            END-IF
       *
       *---(01.00.12) LINE ADD START ------------------------------------
-      *    高額療養費チェック（入院のみ）
-           IF  RECE02-NYUGAIKBN  =  "1"
+      *    高額療養費チェック
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) start
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+      *     IF  RECE02-NYUGAIKBN  =  "1"
+           IF  RECE02-FLG(4)  =  ZERO
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) end
              IF   RECE02-ZAITAKU  NOT =  SPACE
              AND  RECE02-ZAITAKU  NOT =  "1"
                IF  RECE02-FTNMONEY (1)  NOT =  ZERO
@@ -1402,6 +1411,22 @@
       *****************************************************************
        20012-FUKUSI-HEN-SEC         SECTION.
       *
+      *=== 外来高額、特疾＋957等の印字修正 by Yoshikawa(2012/07/12) start
+      *    高額療養費チェック
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+           IF  RECE02-FLG(4)  =  ZERO
+             IF   RECE02-ZAITAKU  NOT =  SPACE
+             AND  RECE02-ZAITAKU  NOT =  "1"
+               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+                 MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
+               ELSE
+                 COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
+                                          *  RECE02-KYURATE  /  10
+               END-IF
+             END-IF
+           END-IF
+      *=== 外来高額、特疾＋957等の印字修正 by Yoshikawa(2012/07/12) end
+      *
       *    長期編集
       *=== 実日数1日は長期とならないのを修正 by Yoshikawa(2009/10/05) start
       *     IF     FLG-TYOKI             =      1   AND
@@ -1424,6 +1449,9 @@
                                          WRK-SEIKYUGK-G
              MOVE    ZERO            TO  WRK-T-TOTALTEN
                                          WRK-T-KESE
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) start
+             MOVE    ZERO            TO  WRK-T-KOUGAKU
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) end
            END-IF
       *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
       *
@@ -1450,6 +1478,9 @@
                                          WRK-SEIKYUGK-G
              MOVE    ZERO            TO  WRK-T-TOTALTEN
                                          WRK-T-KESE
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) start
+             MOVE    ZERO            TO  WRK-T-KOUGAKU
+      *=== 高額＋長期の印字修正 by Yoshikawa(2012/07/12) end
            END-IF
       *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
       *---(01.00.10) LINE ADD END   ------------------------------------
@@ -1466,24 +1497,26 @@
              MOVE  RECE02-FTNMONEY(1)  TO  WRK-SEIKYUGK-G
            END-IF
       *
+      *=== 外来高額、特疾＋957等の印字修正 by Yoshikawa(2012/07/12) start
       *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
-      *    高額療養費チェック（入院のみ）
-           IF  RECE02-NYUGAIKBN  =  "1"
-             IF   RECE02-ZAITAKU  NOT =  SPACE
-             AND  RECE02-ZAITAKU  NOT =  "1"
-               IF  RECE02-FTNMONEY (1)  NOT =  ZERO
-                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
-                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
-                 MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
-               ELSE
-                 MOVE  ZERO                 TO  WRK-SEIKYUGK-G
-                 MOVE  ZERO                 TO  WRK-T-TOTALTEN
-                 COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
-                                          *  RECE02-KYURATE  /  10
-               END-IF
-             END-IF
-           END-IF
-      *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
+      **    高額療養費チェック
+      *     IF  RECE02-NYUGAIKBN  =  "1"
+      *       IF   RECE02-ZAITAKU  NOT =  SPACE
+      *       AND  RECE02-ZAITAKU  NOT =  "1"
+      *         IF  RECE02-FTNMONEY (1)  NOT =  ZERO
+      *           MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+      *           MOVE  ZERO                 TO  WRK-T-TOTALTEN
+      *           MOVE  RECE02-FTNMONEY (1)  TO  WRK-T-KOUGAKU
+      *         ELSE
+      *           MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+      *           MOVE  ZERO                 TO  WRK-T-TOTALTEN
+      *           COMPUTE  WRK-T-KOUGAKU   =  RECE02-TOTALTEN (1)
+      *                                    *  RECE02-KYURATE  /  10
+      *         END-IF
+      *       END-IF
+      *     END-IF
+      **=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
+      *=== 外来高額、特疾＋957等の印字修正 by Yoshikawa(2012/07/12) end
       *
       *    件数加算場所を判定
            IF    WRK-T-TOTALTEN         =  ZERO  OR
@@ -1520,6 +1553,13 @@
       *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
              MOVE      WRK-T-KESE      TO  WRK-SEIKYUGK-G
            END-IF
+      *
+      *=== 70歳未満＋高額の記載不具合修正 by Yoshikawa(2012/07/12) start
+           IF  WRK-T-KOUGAKU  NOT =  ZERO
+               MOVE  ZERO                 TO  WRK-SEIKYUGK-G
+               MOVE  ZERO                 TO  WRK-T-TOTALTEN
+           END-IF
+      *=== 70歳未満＋高額の記載不具合修正 by Yoshikawa(2012/07/12) end
       *
       *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) start
       **---(01.00.12) LINE ADD START ------------------------------------
