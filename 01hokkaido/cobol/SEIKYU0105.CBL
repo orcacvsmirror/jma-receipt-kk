@@ -61,6 +61,8 @@
       *  01.00.17     吉川     11/02/16    公費請求テーブルclose処理位置変更
       *  01.00.18     吉川     12/04/09    帳票様式の変更に伴う修正
       *                                    外来も高額限度額を印字する
+      *  01.00.19     吉川     12/07/12    特定疾患と957等を持っている場合
+      *                                    限度額欄に値が記載されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -938,6 +940,9 @@
       *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) start
       *     IF  RECE02-NYUGAIKBN  =  "1"
       *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) end
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) start
+           IF  RECE02-FLG(4)  =  ZERO
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) end
              IF   RECE02-ZAITAKU  NOT =  SPACE
              AND  RECE02-ZAITAKU  NOT =  "1"
                IF  RECE02-FTNMONEY (1)  NOT =  ZERO
@@ -955,6 +960,9 @@
       *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) start
       *     END-IF
       *=== 外来も高額限度額を印字する by Yoshikawa(2012/04/09) end
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) start
+           END-IF
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/07/12) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    件数加算場所を判定
