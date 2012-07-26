@@ -56,6 +56,8 @@
       *  01.00.16    吉川    11/05/13    保険番号345は10割に印字する
       *  01.00.17    吉川    12/05/17    災害該当で免除の場合は、
       *                                  年齢問わず各給付割合欄に印字する
+      *  01.00.18    萩野    12/07/11    災害該当で免除の場合は、
+      *                                  70歳未満であれば各給付割合欄に印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -287,6 +289,11 @@
                05  WRK-HOSPADRS2       PIC X(50).
            03  WRK-HOSPTEL             PIC X(15).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== デバッグ↓ =================================================
+           03  WRK-MSG                 PIC  X(90).
+      *=== デバッグ↑ =================================================
+      *
       *
       *=== シス管「2007」対応 by Yoshikawa(2008/10/09) start
       *    公費番号まとめエリア
@@ -1066,20 +1073,26 @@
       *=== 保険番号345は10割 by Yoshikawa(2011/05/13) end
                END-IF
       *
+      *=== 災害で免除は一般の場合に適応する by hagino (2012/07/11) start
+               IF  RECE10-AGE  <  70
+      *=== 災害で免除は一般の場合に適応する by hagino (2012/07/11) end
       *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) start
-               IF  SKT0710TMP-GENMEN  NOT =  SPACE
-                 PERFORM  940-PTKOHINF-SELECT-SEC
-      *          災害で免除の場合、各給付割合へ
-                 IF  FLG-MENJO  =  1
-                   EVALUATE  RECE10-KYURATE
-                     WHEN  7       MOVE  3  TO  IDX1
-                     WHEN  8       MOVE  4  TO  IDX1
-                     WHEN  9       MOVE  5  TO  IDX1
-                     WHEN  OTHER   MOVE  6  TO  IDX1
-                   END-EVALUATE
+                 IF  SKT0710TMP-GENMEN  NOT =  SPACE
+                   PERFORM  940-PTKOHINF-SELECT-SEC
+      *            災害で免除の場合、各給付割合へ
+                   IF  FLG-MENJO  =  1
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  7       MOVE  3  TO  IDX1
+                       WHEN  8       MOVE  4  TO  IDX1
+                       WHEN  9       MOVE  5  TO  IDX1
+                       WHEN  OTHER   MOVE  6  TO  IDX1
+                     END-EVALUATE
+                   END-IF
                  END-IF
-               END-IF
       *=== 災害で免除は各給付割合欄に集計 by Yoshikawa(2012/05/17) end
+      *=== 災害で免除は一般の場合に適応する by hagino (2012/07/11) start
+               END-IF
+      *=== 災害で免除は一般の場合に適応する by hagino (2012/07/11) end
       *
              ELSE
       *    年齢チェック
