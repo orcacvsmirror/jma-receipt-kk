@@ -41,6 +41,10 @@
       *                                  長期欄に値が印字されないのを修正
       *  01.00.06    吉川    11/05/13    整理番号を印字する
       *  01.00.07    吉川    11/10/07    帳票名の変更
+      *  01.00.08    萩野    12/07/31    いわき市帳票の就学区分別印刷
+      *                                  未就学であれば「乳幼児...」の
+      *                                  就学していれば「子ども...」の
+      *                                  帳票をを印刷する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -181,6 +185,9 @@
       *=== 整理番号追加 by Yoshikawa(2011/05/13) start
            03  WRK-CNT               PIC 9(04).
       *=== 整理番号追加 by Yoshikawa(2011/05/13) end
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+           03  WRK-CNT-NYU           PIC 9(04).
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -214,8 +221,14 @@
        01  KEY-AREA.
            03  KEY-NEW.
                05  KEY-N-CITYNUM      PIC X(03).
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+               05  KEY-N-SYUGAKU      PIC X(01).
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
            03  KEY-OLD.
                05  KEY-O-CITYNUM      PIC X(03).
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+               05  KEY-O-SYUGAKU      PIC X(01).
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -312,6 +325,11 @@
       *
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
+      *
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+      *    保険年齢パラメタ
+           COPY    "CPORCSAGECHK.INC".
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
       *
       ****************************************************************
        LINKAGE  SECTION.
@@ -682,6 +700,26 @@
       *    市町村番号設定
            MOVE    MF100-KOHFTNJANUM(1:3)    TO   MF100-CITYNUM
       *
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+      *    保険算定年齢チェック
+           INITIALIZE                  ORCSAGECHKAREA
+           MOVE    SPA-HOSPNUM         TO  AGECHK-HOSPNUM
+           MOVE    RECE02-PTID         TO  AGECHK-PTID
+           MOVE    LNK-PRTKANRI-SKYYMD TO  AGECHK-SRYYMD
+           MOVE    COMB-HKNCOMBINUM    TO  AGECHK-HKNCOMBINUM
+           CALL    "ORCSAGECHK"        USING
+                                       ORCSAGECHKAREA
+                                       SPA-AREA
+           EVALUATE  MF100-CITYNUM
+           WHEN "004"
+      *        いわき市
+               MOVE  AGECHK-SYUGAKUKBN   TO  MF100-SYUGAKU
+           WHEN OTHER
+      *        その他市町村(福島市用帳票)
+               MOVE  "1"                 TO  MF100-SYUGAKU
+           END-EVALUATE
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
+      *
       *    併用公費分集計
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -800,6 +838,10 @@
            MOVE     ZERO        TO       WRK-CNT
       *=== 整理番号追加 by Yoshikawa(2011/05/13) end
       *
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+           MOVE     ZERO        TO       WRK-CNT-NYU
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
+      *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
       *
@@ -808,11 +850,11 @@
            EVALUATE  MF100-CITYNUM
       *    いわき市
            WHEN "004"
-      *    帳票編集<見出し>処理
+      *        帳票編集<見出し>処理
                PERFORM  311-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
+      *        帳票編集<明細>処理
                PERFORM  321-BODY-HEN-SEC
-      *    帳票印刷処理
+      *        帳票印刷処理
                PERFORM  331-PRINT-OUT-SEC
       *
       *    その他市町村(福島市用帳票)
@@ -844,7 +886,7 @@
       *
       *    市町村が切り替わった時はページ番号を振りなおす
            IF      KEY-NEW     NOT =   KEY-OLD
-               MOVE    ZERO        TO  CNT-PAGE2    
+               MOVE    ZERO        TO  CNT-PAGE2
            END-IF
            ADD     1               TO  CNT-PAGE2
            MOVE    CNT-PAGE2       TO  WRK-Z5
@@ -1124,6 +1166,17 @@
       *
            ADD     1                       TO   CNT-PAGE
       *
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+      *    帳票タイトル
+           IF       MF100-SYUGAKU        =   1
+               MOVE    "乳幼児"            TO  SC091-SYUGAKU
+               MOVE    "乳 幼 児"          TO  SC091-SYUGAKU2
+           ELSE
+               MOVE    "子ども"            TO  SC091-SYUGAKU
+               MOVE    "子 ど も"          TO  SC091-SYUGAKU2
+           END-IF
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
+      *
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
@@ -1248,12 +1301,24 @@
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT       TO  SC091-FTNGK(IDX1)
       *
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+               IF       MF100-SYUGAKU        =   1
+      *            乳幼児
+                   ADD     1                   TO  WRK-CNT-NYU
+                   MOVE    WRK-CNT-NYU         TO  WRK-Z4
+                   MOVE    WRK-Z4              TO  SC091-SEIRINUM(IDX1)
+               ELSE
+      *            子ども
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
       *=== 整理番号追加 by Yoshikawa(2011/05/13) start
       *    整理番号
-             ADD     1                   TO  WRK-CNT
-             MOVE    WRK-CNT             TO  WRK-Z4
-             MOVE    WRK-Z4              TO  SC091-SEIRINUM(IDX1)
+                   ADD     1                   TO  WRK-CNT
+                   MOVE    WRK-CNT             TO  WRK-Z4
+                   MOVE    WRK-Z4              TO  SC091-SEIRINUM(IDX1)
       *=== 整理番号追加 by Yoshikawa(2011/05/13) end
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+               END-IF
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
       *
       *    一時ファイル読み込み
              PERFORM  900-TMP-READ-SEC
@@ -1409,6 +1474,9 @@
                    MOVE  1  TO  FLG-PRINT
                NOT  AT  END
                    MOVE    MF100-CITYNUM     TO    KEY-N-CITYNUM
+      *=== 就学区分別印刷 by Hagino(2012/07/31) start
+                   MOVE    MF100-SYUGAKU     TO    KEY-N-SYUGAKU
+      *=== 就学区分別印刷 by Hagino(2012/07/31) end
            END-READ
            .
        900-TMP-READ-EXT.

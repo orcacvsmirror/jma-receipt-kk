@@ -36,6 +36,10 @@
       *                                  ½èÍý¤ò¤¹¤ë
       *  01.00.02    ÆâÅÄ    08/04/06    SPA-AREA½é´ü²½
       *  01.00.03    µÈÀî    11/10/07    Ä¢É¼Ì¾¤ÎÊÑ¹¹
+      *  01.00.04    ÇëÌî    12/07/31    ¤¤¤ï¤­»ÔÄ¢É¼¤Î½¢³Ø¶èÊ¬ÊÌ°õºþ
+      *                                  Ì¤½¢³Ø¤Ç¤¢¤ì¤Ð¡ÖÆýÍÄ»ù...¡×¤Î
+      *                                  ½¢³Ø¤·¤Æ¤¤¤ì¤Ð¡Ö»Ò¤É¤â...¡×¤Î
+      *                                  Ä¢É¼¤ò¤ò°õºþ¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -166,6 +170,9 @@
            03  WRK-TAIHI-AREA.
                05  WRK-KOHNUM            PIC X(03).
                05  WRK-CITYNUM           PIC X(03).
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) start
+               05  WRK-SYUGAKUKBN        PIC X(01).
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) end
                05  WRK-TENSU             PIC 9(09).
                05  WRK-FTNGK             PIC 9(09).
                05  WRK-KOHID             PIC 9(10).
@@ -282,6 +289,11 @@
       *
       *    È¾³Ñ¥Á¥§¥Ã¥¯¥µ¥Ö
            COPY    "CPORCSKANACHK.INC".
+      *
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) start
+      *    ÊÝ¸±Ç¯Îð¥Ñ¥é¥á¥¿
+           COPY    "CPORCSAGECHK.INC".
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) end
       *
       ****************************************************************
        LINKAGE  SECTION.
@@ -658,6 +670,27 @@
       *    KEYÀßÄê
            MOVE    WRK-CITYNUM             TO    MF100-CITYNUM
       *
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) start
+      *    ÊÝ¸±»»ÄêÇ¯Îð¥Á¥§¥Ã¥¯
+           INITIALIZE                  ORCSAGECHKAREA
+           MOVE    SPA-HOSPNUM         TO  AGECHK-HOSPNUM
+           MOVE    RECE02-PTID         TO  AGECHK-PTID
+           MOVE    LNK-PRTKANRI-SKYYMD TO  AGECHK-SRYYMD
+           MOVE    COMB-HKNCOMBINUM    TO  AGECHK-HKNCOMBINUM
+           CALL    "ORCSAGECHK"        USING
+                                       ORCSAGECHKAREA
+                                       SPA-AREA
+      *
+           EVALUATE  MF100-CITYNUM
+           WHEN "004"
+      *        ¤¤¤ï¤­»Ô
+                MOVE    AGECHK-SYUGAKUKBN  TO    MF100-SYUGAKU
+           WHEN OTHER
+      *        ¤½¤ÎÂ¾»ÔÄ®Â¼(Ê¡Åç»ÔÍÑÄ¢É¼)
+               MOVE    "1"                 TO    MF100-SYUGAKU
+           END-EVALUATE
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) end
+      *
       *    °ì»þ¥Õ¥¡¥¤¥ëÆÉ¤ß¹þ¤ß
            PERFORM  800-SKTTMP-READ-SEC
       *
@@ -942,6 +975,15 @@
        311-HEAD-HEN-SEC          SECTION.
       *
            INITIALIZE                             SC071
+      *
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) start
+      *    Ä¢É¼¥¿¥¤¥È¥ëÌ¾
+           IF       MF100-SYUGAKU        =   1
+               MOVE    "ÆýÍÄ»ù"            TO  SC071-SYUGAKU
+           ELSE
+               MOVE    "»Ò¤É¤â"            TO  SC071-SYUGAKU
+           END-IF
+      *=== ½¢³Ø¶èÊ¬ÊÌ°õºþ by Hagino(2012/07/31) end
       *
       *    ¿ÇÎÅÇ¯·î
            MOVE    WRK-SRYYMWH             TO  SC071-SRYYM
