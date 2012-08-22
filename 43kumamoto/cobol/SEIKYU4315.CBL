@@ -41,6 +41,8 @@
       *                                  印字されるように修正
       *  01.00.07    吉川    10/12/16    負担者番号全角対応
       *                                  open-cobol1.0対応
+      *  01.00.08    萩野    12/08/14    帳票枚数が100枚以上の時のページ
+      *                                  印字不具合の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -141,6 +143,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
+           03  WRK-Z3                PIC ZZZ.
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
            03  WRK-Z5                PIC ZZZZZ.
            03  WRK-Z9                PIC ZZZZZZZZZ.
            03  WRK-CNT               PIC 9(02).
@@ -773,10 +778,16 @@
       *
       *    ページ数(複数枚有る時のみ)
            IF    CNT-RECE02     >        10
-             MOVE     CNT-GPAGE          TO  WRK-Z2
-             MOVE     WRK-Z2             TO  SC15-GPAGE
-             MOVE     CNT-PAGE           TO  WRK-Z2
-             MOVE     WRK-Z2             TO  SC15-PAGE
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
+      *       MOVE     CNT-GPAGE          TO  WRK-Z2
+      *       MOVE     WRK-Z2             TO  SC15-GPAGE
+      *       MOVE     CNT-PAGE           TO  WRK-Z2
+      *       MOVE     WRK-Z2             TO  SC15-PAGE
+             MOVE     CNT-GPAGE          TO  WRK-Z3
+             MOVE     WRK-Z3             TO  SC15-GPAGE
+             MOVE     CNT-PAGE           TO  WRK-Z3
+             MOVE     WRK-Z3             TO  SC15-PAGE
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
            END-IF
       *
       *

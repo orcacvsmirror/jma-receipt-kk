@@ -45,6 +45,8 @@
       *  01.00.09    吉川    12/03/14    月途中で保険を変更し、変更後で
       *                                  上限額を超えた場合、変更前と変更後
       *                                  どちらも印字するように修正
+      *  01.00.10    萩野    12/08/14    帳票枚数が100枚以上の時のページ
+      *                                  印字不具合の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -142,6 +144,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
+           03  WRK-Z3                PIC ZZZ.
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) end
            03  WRK-Z5                PIC ZZZZZ.
            03  WRK-Z9                PIC ZZZZZZZZZ.
            03  WRK-SRYYMWH           PIC X(16).
@@ -817,10 +822,16 @@
       *
       *    ページ数(複数枚有る時のみ)
            IF    CNT-RECE02     >        10
-             MOVE     CNT-GPAGE          TO  WRK-Z2
-             MOVE     WRK-Z2             TO  SC11-GPAGE
-             MOVE     CNT-PAGE           TO  WRK-Z2
-             MOVE     WRK-Z2             TO  SC11-PAGE
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
+      *       MOVE     CNT-GPAGE          TO  WRK-Z2
+      *       MOVE     WRK-Z2             TO  SC11-GPAGE
+      *       MOVE     CNT-PAGE           TO  WRK-Z2
+      *       MOVE     WRK-Z2             TO  SC11-PAGE
+             MOVE     CNT-GPAGE          TO  WRK-Z3
+             MOVE     WRK-Z3             TO  SC11-GPAGE
+             MOVE     CNT-PAGE           TO  WRK-Z3
+             MOVE     WRK-Z3             TO  SC11-PAGE
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) end
            END-IF
       *
       *

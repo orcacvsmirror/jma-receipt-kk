@@ -38,6 +38,8 @@
       *                                  印字対象外とするように修正
       *  01.00.06    吉川    12/01/17    公費の助成がない場合は印字しない
       *  01.00.07    吉川    12/02/06    頁数のカウントを修正
+      *  01.00.08    萩野    12/08/14    帳票枚数が100枚以上の時のページ
+      *                                  印字不具合の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -135,6 +137,9 @@
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
            03  WRK-Z2                PIC ZZ.
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
+           03  WRK-Z3                PIC ZZZ.
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) end
            03  WRK-Z5                PIC ZZZZZ.
            03  WRK-Z9                PIC ZZZZZZZZZ.
            03  WRK-CNT               PIC 9(02).
@@ -792,10 +797,16 @@
       *
       *    ページ数(複数枚有る時のみ)
            IF    CNT-RECE02     >        10
-             MOVE     CNT-GPAGE          TO  WRK-Z2
-             MOVE     WRK-Z2             TO  SC13-GPAGE
-             MOVE     CNT-PAGE           TO  WRK-Z2
-             MOVE     WRK-Z2             TO  SC13-PAGE
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) start
+      *       MOVE     CNT-GPAGE          TO  WRK-Z2
+      *       MOVE     WRK-Z2             TO  SC13-GPAGE
+      *       MOVE     CNT-PAGE           TO  WRK-Z2
+      *       MOVE     WRK-Z2             TO  SC13-PAGE
+             MOVE     CNT-GPAGE          TO  WRK-Z3
+             MOVE     WRK-Z3             TO  SC13-GPAGE
+             MOVE     CNT-PAGE           TO  WRK-Z3
+             MOVE     WRK-Z3             TO  SC13-PAGE
+      *=== 帳票枚数が100枚以上の時のページ印字不具合の修正 by Hagino(2012/08/14) end
            END-IF
       *
       *
