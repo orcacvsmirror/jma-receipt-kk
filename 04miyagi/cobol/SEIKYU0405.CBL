@@ -22,6 +22,7 @@
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 宮城・乳幼児医療費請求書(社保用)
       *                      (183,383,483,583,683,783)
+      *                      (対象公費はTAISYOKOHI.INI参照)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/11/02    山口          新規作成
@@ -43,6 +44,8 @@
       *  01.00.06    吉川    10/12/13    対象保険番号の追加（583,683,783）
       *                                  open-cobol1.0対応
       *  01.00.07    吉川    12/01/24    仙台市の市町村名を印字する
+      *  01.00.08    萩野    12/08/15    対象公費番号をINIファイルから
+      *                                  取得するようにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -57,6 +60,14 @@
                                RECORD  KEY     IS  MF100-KEY
                                FILE    STATUS  IS  STS-MF100.
       *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *    印字対象公費番号ファイル
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-TAISYOKOHI.
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
+      *
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
@@ -70,9 +81,22 @@
        01  MF100-REC.
            COPY  "SEI0405.INC".
       *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *    印字対象公費番号ファイル
+       FD  TAISYOKOHI-FILE.
+       01  TAISYOKOHI-REC.
+           03  TAISYO-DAT-KOHNUM   PIC X(03). 
+           03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
+      *
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *    対象公費番号データ
+           COPY  "TAISYO0401.INC".
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -97,6 +121,9 @@
            03  STS-MF100    PIC X(02).
            03  STS-RECE02   PIC X(02).
            03  STS-RECEERR  PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+           03  STS-TAISYOKOHI        PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -119,6 +146,10 @@
       *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) start
            03  FLG-RECE10     PIC 9(01).
       *=== 特定疾患印字対応 by Yoshikawa(2009/11/25) end
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+           03  FLG-TAISYOKOHI        PIC 9(01).
+           03  FLG-TAISYO            PIC 9(01).
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -193,6 +224,10 @@
       *
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *    ファイル名称用エリア
+           03  FILE-NAME             PIC X(512).
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -251,6 +286,12 @@
            03  WRK-CONS-TAIHAKU      PIC X(08)   VALUE   "83040980".
            03  WRK-CONS-IZUMI        PIC X(08)   VALUE   "83040998".
       *=== 仙台市の市町村名を印字する by Yoshikawa(2012/01/24) end
+      *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI.
+           03  TBL-HKOHNUM           PIC X(03)  OCCURS  4.
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *
       *    DB参照用
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -519,6 +560,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *    INIファイル読み込み
+           PERFORM  110-INI-FILE-SEC
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
+      *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -620,6 +666,47 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *****************************************************************
+      *    INIファイル読み込み
+      *****************************************************************
+       110-INI-FILE-SEC         SECTION.
+      *
+      *    印字対象公費番号ファイル読み込み
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   TAISYOKOHI-REC
+      *
+           OPEN  INPUT  TAISYOKOHI-FILE
+      *
+           MOVE  ZERO  TO  IDX
+                           FLG-TAISYOKOHI
+      *
+           PERFORM UNTIL    FLG-TAISYOKOHI = 1
+             READ TAISYOKOHI-FILE NEXT
+               AT END
+                 MOVE  1                 TO  FLG-TAISYOKOHI
+               NOT AT END
+                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+                   CONTINUE
+                 ELSE
+                   ADD   1               TO  IDX
+                   MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+                 END-IF
+             END-READ
+           END-PERFORM
+      *
+           CLOSE TAISYOKOHI-FILE
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -652,10 +739,17 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-             IF  RECE02-KOHNUM (IDZ) =   "183" OR "383"OR "483"
-      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
-                                     OR  "583" OR "683" OR "783"
-      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *       IF  RECE02-KOHNUM (IDZ) =   "183" OR "383"OR "483"
+      **=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+      *                               OR  "583" OR "683" OR "783"
+      **=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
+             INITIALIZE                            TBL-HIKAKU-KOHI
+             MOVE    RECE02-KOHNUM(IDZ)        TO  TBL-HKOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1769,6 +1863,31 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       TAISYO-KOHNUM(IDXX)  =  SPACE
+             IF  TBL-HKOHNUM(1)  =  TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(2)  =  TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(3)  =  TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(4)  =  TAISYO-KOHNUM(IDXX)
+               MOVE     1                   TO  FLG-TAISYO
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *****************************************************************
       *    一時ファイル読込
       *****************************************************************
@@ -1857,20 +1976,30 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
+      **=== 対象保険番号の追加 by Yoshikawa(2010/12/13) start
+      **         IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
+      **          OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
+      **          OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
+      **          OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
       *         IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
+      *                             OR "583" OR "683" OR "783"
       *          OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
+      *                             OR "583" OR "683" OR "783"
       *          OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
+      *                             OR "583" OR "683" OR "783"
       *          OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
-               IF  RECE02-KOHNUM(1) = "183" OR "383" OR "483"
-                                   OR "583" OR "683" OR "783"
-                OR RECE02-KOHNUM(2) = "183" OR "383" OR "483"
-                                   OR "583" OR "683" OR "783"
-                OR RECE02-KOHNUM(3) = "183" OR "383" OR "483"
-                                   OR "583" OR "683" OR "783"
-                OR RECE02-KOHNUM(4) = "183" OR "383" OR "483"
-                                   OR "583" OR "683" OR "783"
-      *=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
+      *                             OR "583" OR "683" OR "783"
+      **=== 対象保険番号の追加 by Yoshikawa(2010/12/13) end
+               INITIALIZE                            TBL-HIKAKU-KOHI
+               MOVE    RECE02-KOHNUM(1)          TO  TBL-HKOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)          TO  TBL-HKOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)          TO  TBL-HKOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)          TO  TBL-HKOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
