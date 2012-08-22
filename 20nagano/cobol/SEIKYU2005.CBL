@@ -45,6 +45,7 @@
       *                                    生保は集計対象外とするように修正
       *                                    open-cobol1.0対応
       *  01.00.09    吉川    2011/05/19    生年月日は８桁で記録する
+      *  01.00.10    萩野    2012/08/10    負担者番号の三桁未満エラー対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -590,7 +591,13 @@
              END-IF
            END-PERFORM
       *
-           PERFORM  900-KOHSKY-READ-SEC
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) start
+           IF  FLG-END  =  ZERO
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) end
+               PERFORM  900-KOHSKY-READ-SEC
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) start
+           END-IF
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) end
       *
            .
        2001-SYUKEI-EXT.
@@ -662,9 +669,27 @@
                MOVE    "不明な負担者番号です。患者番号："
                                          TO  WRK-RECEERR
                MOVE  RECE02-PTNUM        TO  WRK-RECEERR(33:)
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) start
+               MOVE    1                 TO  FLG-END
+               PERFORM  900-KOHSKY-CLOSE-SEC
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) end
                PERFORM  500-ERR-HENSYU-SEC
                GO  TO  20011-SYUKEI-EXT
            END-IF
+      *
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) start
+           IF  RECE02-KOHFTNJANUM(IDZ)(3:1)  =  SPACE
+               MOVE  ZERO  TO  CNT-RECE02
+               MOVE    "負担者番号が３桁未満です。患者番号："
+                                         TO  WRK-RECEERR
+               MOVE  RECE02-PTNUM        TO  WRK-RECEERR(37:)
+               MOVE    1                 TO  FLG-END
+               PERFORM  900-KOHSKY-CLOSE-SEC
+               PERFORM  500-ERR-HENSYU-SEC
+               GO  TO  20011-SYUKEI-EXT
+           END-IF
+      *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) end
+      *
       *    CSV総括用件数カウント
            MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)   TO   WRK-TOWN
       *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
