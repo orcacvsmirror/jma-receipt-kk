@@ -42,6 +42,8 @@
       *                                  インストールすると標榜科欄の
       *                                  表示がおかしくなるのを修正
       *  01.00.15    吉川    2012/03/14  点数と食事療養費の桁数増加
+      *  01.00.16    萩野    2012/08/17  シス管「1901」で設定した電話番号が
+      *                                  印字されるように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1841,7 +1843,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Hagino(2012/08/17) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」の電話番号印字 by Hagino(2012/08/17) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -1909,6 +1914,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Hagino(2012/08/17) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」の電話番号印字 by Hagino(2012/08/17) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
