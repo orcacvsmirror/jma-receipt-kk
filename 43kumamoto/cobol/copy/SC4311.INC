@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    萩野         12/08/14  ページ数、総ページ数の桁数増加
+      *****************************************************************
        01  SC11.
       *印刷日付
            03  SC11-PRTY              PIC  X(04).
@@ -41,9 +45,15 @@
       *電話番号
            03  SC11-TEL               PIC  X(15).
       *総ページ数
-           03  SC11-GPAGE             PIC  X(02).
+      *=== 桁数増加 by Hagino(2012/08/14) start
+      *     03  SC11-GPAGE             PIC  X(02).
+           03  SC11-GPAGE             PIC  X(03).
+      *=== 桁数増加 by Hagino(2012/08/14) end
       *ページ数
-           03  SC11-PAGE              PIC  X(02).
+      *=== 桁数増加 by Hagino(2012/08/14) start
+      *     03  SC11-PAGE              PIC  X(02).
+           03  SC11-PAGE              PIC  X(03).
+      *=== 桁数増加 by Hagino(2012/08/14) end
       *
            03  SC11-MEISAI-TBL OCCURS 10.
       *受給資格者証記号番号
