@@ -15,13 +15,13 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      ************************************************************
       *          医療費請求書 COPY (CPRMF100.INC) *
-      ************************************************************
-      ************************************************************
+      ********************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
-      ************************************************************
+      *  01.00.01    吉川         12/08/17  記載順をINIファイルで設定
+      *                                     KEY内容変更
+      ********************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
       *医療機関ＩＤ
@@ -29,32 +29,56 @@
                05  MF100-HOSPNUM         PIC  9(02).
       *入外区分
                05  MF100-NYUGAIKBN       PIC  X(01).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) start
       *漢字氏名
-               05  MF100-NAME            PIC  X(100).
+      *         05  MF100-NAME            PIC  X(100).
+      *記載順（INIファイルで患者番号かカナ氏名か）
+               05  MF100-SORT            PIC  X(100).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) end
       *診療年月
                05  MF100-SRYYM           PIC  X(06).
+      *=== KEY内容変更 by Yoshikawa(2012/08/17) start
       *公費−負担者番号
-               05  MF100-FTNJANUM        PIC  X(08).
+      *         05  MF100-FTNJANUM        PIC  X(08).
       *公費受給者番号
-               05  MF100-JKYSNUM         PIC  X(08).
+      *         05  MF100-JKYSNUM         PIC  X(08).
+      *=== KEY内容変更 by Yoshikawa(2012/08/17) end
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) start
       *患者番号
-               05  MF100-PTNUM           PIC  X(20).
+      *         05  MF100-PTNUM           PIC  X(20).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) end
       *保険者番号        
                05  MF100-HKNJANUM-KEY    PIC  X(08).
       *適用開始年月日
                05  MF100-TEKSTYMD        PIC  X(08). 
       *診療科
                05  MF100-SRYKA           PIC  X(02).
+      *審査支払機関
+               05  MF100-TEISYUTUSAKI    PIC  9(01).
       *レセプト種別
                05  MF100-RECESYUBETU     PIC  X(04).
       *患者ＩＤ
            03  MF100-PTID                PIC  9(10).
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) start
+      *患者番号
+           03  MF100-PTNUM               PIC  X(20).
+      *漢字氏名
+           03  MF100-NAME                PIC  X(100).
+      *===記載順をINIファイルで設定 by Yoshikawa(2012/08/17) end
       *生年月日
            03  MF100-BIRTHDAY            PIC  9(08).
       *性別
            03  MF100-SEX                 PIC  X(01).
       *年齢
            03  MF100-AGE                 PIC  9(03).
+      *県番号
+           03  MF100-PREFNUM             PIC  X(02).
+      *=== KEY内容変更 by Yoshikawa(2012/08/17) start
+      *公費−負担者番号
+           03  MF100-FTNJANUM            PIC  X(08).
+      *公費受給者番号
+           03  MF100-JKYSNUM             PIC  X(08).
+      *=== KEY内容変更 by Yoshikawa(2012/08/17) end
       *主保険情報
            03  MF100-HKN.
       *主保険−保険ＩＤ
@@ -117,10 +141,14 @@
                05  MF100-YKZFTN          PIC  9(05).
       *主保険負担金
            03  MF100-SYUCOMPFTN          PIC  9(08).
+      *全国公費：実日数
+           03  MF100-TAHOJNISSU          PIC  9(02).
       *全国公費：公費点数
            03  MF100-KOHTENSU            PIC  9(08).
       *全国公費：負担金額
            03  MF100-KOHFTNGK            PIC  9(08).
+      *全国公費：薬剤負担
+           03  MF100-TAHOYKZFTN          PIC  9(06).
       *全国公費：公費番号
            03  MF100-TAHONUM             PIC  X(03).
       *全国公費：負担者番号
@@ -131,3 +159,25 @@
            03  MF100-TAHOKOHID           PIC  9(10).
       *長期高額併用フラグ
            03  MF100-TYOKI               PIC  9(01).
+      *低所得１フラグ
+           03  MF100-TEISHO1             PIC  X(01).
+      *低所得２フラグ
+           03  MF100-TEISHO2             PIC  X(01).
+      *保険情報
+           03  MF100-HKNINF.
+               05  MF100-H-JNISSU        PIC  9(03).
+               05  MF100-H-TOTALTEN      PIC  9(08).
+               05  MF100-H-FTNMONEY      PIC  9(09).
+               05  MF100-H-YKZFTN        PIC  9(05).
+      *保険食事情報
+           03  MF100-H-SHOKUJIINF.
+               05  MF100-H-SHOKUJINISSU    PIC  9(02).
+               05  MF100-H-SHOKUJIRYOYOHI  PIC  9(09).
+               05  MF100-H-SHOKUJIFTN      PIC  9(09).
+      *第１公費食事情報
+           03  MF100-K-SHOKUJIINF.
+               05  MF100-K-SHOKUJINISSU    PIC  9(02).
+               05  MF100-K-SHOKUJIRYOYOHI  PIC  9(09).
+               05  MF100-K-SHOKUJIFTN      PIC  9(09).
+      *在宅再掲
+           03  MF100-ZAITAKU-SAIKEI        PIC  9(09).
