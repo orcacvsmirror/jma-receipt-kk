@@ -51,6 +51,8 @@
       *                                  »ÔÄ®Â¼ÉéÃ´³Û¤Î·×»»½¤Àµ
       *  01.00.12    µÈÀî    12/05/17    °ìµÜ»Ô¤Ç´µ¼ÔÉéÃ´¤¬Ìµ¤¤¾ì¹ç
       *                                  »ÔÄ®Â¼ÉéÃ´³ÛÍó¤Ïµ­ºÜ¤·¤Ê¤¤
+      *  01.00.13    µÈÀî    12/08/22    °ìµÜ»Ô¤Ï»ÔÄ®Â¼ÉéÃ´³ÛÍó¤Ëµ­ºÜ¤·¤Ê¤¤
+      *                                  ¾ì¹ç¤Ç¤â¾åÉô¤Î¹ç·×¶â³ÛÍó¤Ï½¸·×¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -225,6 +227,9 @@
            03  WRK-KYURATE                PIC 9(02).
            03  WRK-KEISAN                 PIC 9(08).
            03  WRK-AMARI                  PIC 9(02).
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
+           03  WRK-KOHFTN                 PIC 9(08).
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
       *    »ÔÄ®Â¼ÍÑ¥Õ¥¡¥¤¥ëÌ¾¥¨¥ê¥¢
            03  FILE-NAME                  PIC X(512).
            03  WRK-KEY-CITYHKNJANUM       PIC X(05).
@@ -234,6 +239,9 @@
                05  WRK-S-FTNGK            PIC 9(09).
                05  WRK-S-KESE             PIC 9(09).
                05  WRK-S-SEIKYUGK         PIC 9(09).
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
+               05  WRK-S-KOHFTN           PIC 9(09).
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
            03  WRK-GKENSU                 PIC 9(04).
            03  WRK-GPAGE                  PIC 9(03).
            03  WRK-PAGE                   PIC 9(03).
@@ -891,13 +899,16 @@
       *=== °ìµÜ»Ô¤Î»ÔÄ®Â¼ÉéÃ´³ÛÍóµ­ºÜ½¤Àµ by Yoshikawa(2012/05/17) start
       *     MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
       *    °ìµÜ»Ô¤Ç´µ¼ÔÉéÃ´¤¬¤Ê¤¤¾ì¹ç¤Ï»ÔÄ®Â¼ÉéÃ´³ÛÍó¤Ëµ­ºÜ¤·¤Ê¤¤
-           IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
-                                   OR  WRK-CONS-ICHINOMIYA2)
-           AND (MF100-FTNMONEY  =  ZERO)
-             MOVE    ZERO             TO    MF100-SEIKYUGK
-           ELSE
-             MOVE    WRK-SEIKYUGK-G2  TO    MF100-SEIKYUGK
-           END-IF
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
+      *     IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
+      *                             OR  WRK-CONS-ICHINOMIYA2)
+      *     AND (MF100-FTNMONEY  =  ZERO)
+      *       MOVE    ZERO             TO    MF100-SEIKYUGK
+      *     ELSE
+      *       MOVE    WRK-SEIKYUGK-G2  TO    MF100-SEIKYUGK
+      *     END-IF
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
+           MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
       *=== °ìµÜ»Ô¤Î»ÔÄ®Â¼ÉéÃ´³ÛÍóµ­ºÜ½¤Àµ by Yoshikawa(2012/05/17) end
       *
            MOVE     MF100-CITYHKNJANUM TO    WRK-KEY-CITYHKNJANUM
@@ -1164,8 +1175,22 @@
              MOVE  MF100-SHOKUJIFTN TO  WRK-Z6
              MOVE  WRK-Z6           TO  SC07-HJNFTN(IDX)
       *    »ÔÄ®Â¼ÉéÃ´³Û
-             MOVE  MF100-SEIKYUGK   TO  WRK-Z7
-             MOVE  WRK-Z7           TO  SC07-KOHFTN(IDX)
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
+      *       MOVE  MF100-SEIKYUGK   TO  WRK-Z7
+      *       MOVE  WRK-Z7           TO  SC07-KOHFTN(IDX)
+           DISPLAY "PTNUM =" MF100-PTNUM
+           DISPLAY "»ÔÄ®Â¼ÉéÃ´³Û =" MF100-SEIKYUGK
+           IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
+                                   OR  WRK-CONS-ICHINOMIYA2)
+           AND (MF100-FTNMONEY  =  ZERO)
+             MOVE  ZERO              TO  WRK-KOHFTN
+             MOVE  SPACE             TO  SC07-KOHFTN(IDX)
+           ELSE
+             MOVE  MF100-SEIKYUGK    TO  WRK-KOHFTN
+                                         WRK-Z7
+             MOVE  WRK-Z7            TO  SC07-KOHFTN(IDX)
+           END-IF
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
       *
       *    ¼«Î©»Ù±çÄÉ²Ã  ADD  UCHI  06/07/20
       *    È÷¹Í
@@ -1260,6 +1285,9 @@
              ADD  MF100-TOTALTEN     TO  WRK-S-TENSU
              ADD  MF100-KESE         TO  WRK-S-KESE
              ADD  MF100-SEIKYUGK     TO  WRK-S-SEIKYUGK
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
+             ADD  WRK-KOHFTN         TO  WRK-S-KOHFTN
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
              ADD  MF100-SHOKUJIFTN   TO  WRK-S-FTNGK
       *
       *    ¥ì¥»¥×¥ÈÌÀºÙÆÉ¹þ
@@ -1349,12 +1377,21 @@
            MOVE    WRK-S-KESE         TO  WRK-Z9
            MOVE    WRK-Z9             TO  SC07-GKESE
       *    »ÔÄ®Â¼ÉéÃ´³Û
-           MOVE    WRK-S-SEIKYUGK     TO  WRK-Z9
-                                          WRK-Z11
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
+      *     MOVE    WRK-S-SEIKYUGK     TO  WRK-Z9
+      *                                    WRK-Z11
+      *     MOVE    WRK-Z9             TO  SC07-GKOHFTN
+      *     MOVE    WRK-Z11            TO  WRK-MAE-INPUT
+      *     PERFORM  2009-HENKAN-SEC
+      *     MOVE     WRK-OUT-INPUT     TO  SC07-GKINGAKU
+           MOVE    WRK-S-KOHFTN       TO  WRK-Z9
            MOVE    WRK-Z9             TO  SC07-GKOHFTN
+      *    ¹ç·×¶â³Û
+           MOVE    WRK-S-SEIKYUGK     TO  WRK-Z11
            MOVE    WRK-Z11            TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT     TO  SC07-GKINGAKU
+      *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
       *
            .
        3201-BODY-HEN-EXT.
