@@ -138,10 +138,12 @@
         </appinfo>
       </element>
     </element>
-    <element name="TOKKI" occurs="1">
-      <appinfo>
-        <embed object="string" length="6"/>
-      </appinfo>
+    <element name="TOKKI-TBL" occurs="3">
+      <element name="TOKKI" occurs="1">
+        <appinfo>
+          <embed object="string" length="8"/>
+        </appinfo>
+      </element>
     </element>
     <element name="ZAISOU" occurs="1">
       <appinfo>
@@ -10297,10 +10299,10 @@
   <layer name="&#186;&#185;&#185;&#254;" visible="true">
     <object type="Embed - Text" version="0" id="O319">
       <attribute name="obj_pos">
-        <point val="9.23118,7.00309"/>
+        <point val="10,7.025"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.23118,6.36605;10.0392,7.16605"/>
+        <rectangle val="10,6.38796;10.808,7.18796"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAIMARU#</string>
@@ -10320,7 +10322,7 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.23118,7.00309"/>
+            <point val="10,7.025"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -11607,13 +11609,13 @@
     </object>
     <object type="Embed - Text" version="0" id="O350">
       <attribute name="obj_pos">
-        <point val="9.12981,6.27085"/>
+        <point val="8.55,6.1"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.12981,5.99215;10.1903,6.34215"/>
+        <rectangle val="8.55,5.8213;9.964,6.1713"/>
       </attribute>
       <attribute name="dnode_path">
-        <string>#TOKKI#</string>
+        <string>#TOKKI-TBL[0].TOKKI#</string>
       </attribute>
       <attribute name="embed_text_string">
         <enum val="0"/>
@@ -11621,7 +11623,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#163;&#176;&#163;&#178;&#196;&#185;#</string>
+            <string>#&#163;&#176;&#163;&#177;&#198;&#195;&#181;&#173;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -11630,7 +11632,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.12981,6.27085"/>
+            <point val="8.55,6.1"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -11649,10 +11651,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O351">
       <attribute name="obj_pos">
-        <point val="9.33118,6.82809"/>
+        <point val="10.1,6.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.33118,6.5892;9.93718,6.8892"/>
+        <rectangle val="10.1,6.61111;10.706,6.91111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAISOU#</string>
@@ -11672,7 +11674,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.33118,6.82809"/>
+            <point val="10.1,6.85"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -12987,6 +12989,90 @@
           </attribute>
           <attribute name="multi">
             <real val="0.15655"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O383">
+      <attribute name="obj_pos">
+        <point val="8.55,6.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.55,6.3213;9.964,6.6713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKKI-TBL[1].TOKKI#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#163;&#176;&#163;&#178;&#198;&#195;&#181;&#173;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.55,6.6"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O384">
+      <attribute name="obj_pos">
+        <point val="8.55,7.1"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="8.55,6.8213;9.964,7.1713"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TOKKI-TBL[2].TOKKI#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#163;&#176;&#163;&#179;&#198;&#195;&#181;&#173;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="8.55,7.1"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
           </attribute>
         </composite>
       </attribute>

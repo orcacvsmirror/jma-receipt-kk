@@ -19,7 +19,11 @@
             02  SC10-SEXNUM PIC X(2).
             02  SC10-SEXN   PIC X(2).
             02  SC10-BIRTHDAY   PIC X(24).
-            02  SC10-TOKKI  PIC X(6).
+      *=== “Á‹LŽ–€ˆóŽš’Ç‰Á by Hagino(2012/09/19) start
+      *      02  SC10-TOKKI  PIC X(6).
+           02  SC10-TOKKI-TBL OCCURS 3.
+               03  SC10-TOKKI              PIC  X(08).
+      *=== “Á‹LŽ–€ˆóŽš’Ç‰Á by Hagino(2012/09/19) end
             02  SC10-ZAISOU PIC X(4).
             02  SC10-ZAIMARU    PIC X(2).
             02  SC10-ADRS   PIC X(100).
