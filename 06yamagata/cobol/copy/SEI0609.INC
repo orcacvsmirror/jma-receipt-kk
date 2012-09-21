@@ -188,3 +188,8 @@
                05  MF101-SHOKUJINISSU-G      PIC  9(02).
                05  MF101-SHOKUJIRYOYOHI-G    PIC  9(09).
                05  MF101-SHOKUJIFTN-G        PIC  9(09).
+      *=== 特記事項印字追加 by Hagino(2012/09/19) start
+      *特記事項
+           03  MF101-TOKKI-TBL           OCCURS  3.
+               05  MF101-TOKKI           PIC  X(02).
+      *=== 特記事項印字追加 by Hagino(2012/09/19) end
