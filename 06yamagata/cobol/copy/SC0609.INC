@@ -66,7 +66,11 @@
            03  SC06-NENGO-TBL OCCURS 4.
                05  SC06-NENGO          PIC  X(02).
       *特記事項
-           03  SC06-TOKKI              PIC  X(06).
+      *=== 特記事項印字追加 by Hagino(2012/09/19) start
+      *     03  SC06-TOKKI              PIC  X(06).
+           03  SC06-TOKKI-TBL OCCURS 3.
+               05  SC06-TOKKI              PIC  X(08).
+      *=== 特記事項印字追加 by Hagino(2012/09/19) end
            03  SC06-ZAISOU             PIC  X(04).
            03  SC06-ZAIMARU            PIC  X(02).
       *医療機関所在地
