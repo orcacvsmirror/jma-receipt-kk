@@ -31,6 +31,5 @@ RENNUM=0
                 exit
             fi
 
-        $DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
-
+	    $DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
         exit
