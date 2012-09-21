@@ -43,6 +43,7 @@
       *  01.00.09    µÈÀî    10/03/08    ÊÝ¸±ÅÀ¿ôÍó¤Ï¸øÈñ¹ç·×ÅÀ¿ô¤ò°õ»ú¤¹¤ë
       *  01.00.10    µÈÀî    11/03/07    open-cobol1.0ÂÐ±þ
       *  01.00.11    µÈÀî    12/02/17    ¥·¥¹´É¡Ö2005¡×¤Î¼çÉÂÌ¾ÊÔ½¸ÂÐ±þ
+      *  01.00.12    ÇëÌî    12/09/19    ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -311,6 +312,63 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) start
+      *    ÆÃµ­»ö¹à
+       01  TBL-TOKKI-AREA.
+           03  FILLER          PIC X(02)   VALUE   "01".
+           03  FILLER          PIC X(10)   VALUE   "£°£±¸ø".
+           03  FILLER          PIC X(02)   VALUE   "02".
+           03  FILLER          PIC X(10)   VALUE   "£°£²Ä¹".
+           03  FILLER          PIC X(02)   VALUE   "03".
+           03  FILLER          PIC X(10)   VALUE   "£°£³Ä¹½è".
+           03  FILLER          PIC X(02)   VALUE   "04".
+           03  FILLER          PIC X(10)   VALUE   "£°£´¸åÊÝ".
+           03  FILLER          PIC X(02)   VALUE   "07".
+           03  FILLER          PIC X(10)   VALUE   "£°£·Ï·Ê»".
+           03  FILLER          PIC X(02)   VALUE   "08".
+           03  FILLER          PIC X(10)   VALUE   "£°£¸Ï··ò".
+           03  FILLER          PIC X(02)   VALUE   "09".
+           03  FILLER          PIC X(10)   VALUE   "£°£¹»Ü".
+           03  FILLER          PIC X(02)   VALUE   "10".
+           03  FILLER          PIC X(10)   VALUE   "£±£°Âè»°".
+           03  FILLER          PIC X(02)   VALUE   "11".
+           03  FILLER          PIC X(10)   VALUE   "£±£±Ìô¼£".
+           03  FILLER          PIC X(02)   VALUE   "12".
+           03  FILLER          PIC X(10)   VALUE   "£±£²´ï¼£".
+           03  FILLER          PIC X(02)   VALUE   "13".
+           03  FILLER          PIC X(10)   VALUE   "£±£³Àè¿Ê".
+           03  FILLER          PIC X(02)   VALUE   "14".
+           03  FILLER          PIC X(10)   VALUE   "£±£´À©Ä¶".
+           03  FILLER          PIC X(02)   VALUE   "15".
+           03  FILLER          PIC X(10)   VALUE   "£±£µ·Ð²á".
+           03  FILLER          PIC X(02)   VALUE   "16".
+           03  FILLER          PIC X(10)   VALUE   "£±£¶Ä¹£²".
+           03  FILLER          PIC X(02)   VALUE   "17".
+           03  FILLER          PIC X(10)   VALUE   "£±£·¾å°Ì".
+           03  FILLER          PIC X(02)   VALUE   "18".
+           03  FILLER          PIC X(10)   VALUE   "£±£¸°ìÈÌ".
+           03  FILLER          PIC X(02)   VALUE   "19".
+           03  FILLER          PIC X(10)   VALUE   "£±£¹Äã½ê".
+           03  FILLER          PIC X(02)   VALUE   "20".
+           03  FILLER          PIC X(10)   VALUE   "£²£°Æó³ä".
+           03  FILLER          PIC X(02)   VALUE   "21".
+           03  FILLER          PIC X(10)   VALUE   "£²£±¹âÈ¾".
+           03  FILLER          PIC X(02)   VALUE   "22".
+           03  FILLER          PIC X(10)   VALUE   "£²£²Â¿¾å".
+           03  FILLER          PIC X(02)   VALUE   "23".
+           03  FILLER          PIC X(10)   VALUE   "£²£³Â¿°ì".
+           03  FILLER          PIC X(02)   VALUE   "24".
+           03  FILLER          PIC X(10)   VALUE   "£²£´Â¿Äã".
+      *
+       01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
+           03  TBL-TOKKI       OCCURS   22.
+               05  TBL-TOKKICD             PIC X(02).
+               05  TBL-TOKKINAME           PIC X(10).
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
+      *
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) end
+      *
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È¡¡ÎÎ°è
       *****************************************************************
@@ -857,6 +915,15 @@
                  MOVE  ZERO                       TO  MF101-ETENSU(IDX)
                END-IF
              END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) start
+      *      ÆÃµ­»ö¹à
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >     3
+                 IF   RECE10-TOKKI(IDX)  NOT =  SPACE
+                   MOVE  RECE10-TOKKI(IDX)  TO  MF101-TOKKI(IDX)
+                 END-IF
+             END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) end
            END-IF
       *
       *    ½õÀ®È½ÄêµÚ¤Ó¡¢·îÅÓÃæ¤Ç¸øÈñ¤òÀÚÂØ¤¨¤¿»þ¤ÎÁ´¹ñ¸øÈñÊ¬¤Î¥Ç¡¼¥¿½¸·×
@@ -1291,10 +1358,22 @@
            
            MOVE  LNK-DAY2-EDTYMD1(2:)  TO  SC06-BIRTHDAY
       *
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) start
       *    ÆÃµ­»ö¹à
-           IF  MF101-TYOKI  =  1
-             MOVE  "£°£²Ä¹"  TO  SC06-TOKKI
-           END-IF
+      *     IF  MF101-TYOKI  =  1
+      *       MOVE  "£°£²Ä¹"  TO  SC06-TOKKI
+      *     END-IF
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             PERFORM  VARYING  IDY  FROM  1  BY  1
+                      UNTIL  IDY  >  TBL-TOKKI-MAX
+               IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
+                   MOVE  TBL-TOKKINAME(IDY)   TO  SC06-TOKKI(IDX)
+                   MOVE  TBL-TOKKI-MAX  TO  IDY
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) end
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE     MF101-JNISSU     TO  WRK-Z2
@@ -2074,10 +2153,22 @@
            MOVE    LNK-DAY2-EDTYMD2 (5:)
                                        TO  SC10-BIRTHDAY(5:)
       *
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) start
       *    ÆÃµ­»ö¹à
-           IF  MF101-TYOKI  =  1
-             MOVE  "£°£²Ä¹"  TO  SC10-TOKKI
-           END-IF
+      *     IF  MF101-TYOKI  =  1
+      *       MOVE  "£°£²Ä¹"  TO  SC10-TOKKI
+      *     END-IF
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             PERFORM  VARYING  IDY  FROM  1  BY  1
+                      UNTIL  IDY  >  TBL-TOKKI-MAX
+               IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
+                   MOVE  TBL-TOKKINAME(IDY)   TO  SC10-TOKKI(IDX)
+                   MOVE  TBL-TOKKI-MAX  TO  IDY
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *    °åÎÅµ¡´Ø½êºßÃÏ
