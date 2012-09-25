@@ -61,6 +61,8 @@
       *  01.00.18    吉川    11/06/23    東北地方太平洋沖地震対応
       *  01.00.19    吉川    11/08/17    障害分は公費再掲欄に記載する
       *  01.00.20    吉川    12/05/16    在宅はまとめて集計するように修正
+      *  01.00.21    吉川    12/09/18    対象公費番号をINIファイルから
+      *                                  取得するようにする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -90,6 +92,14 @@
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-YUSEN.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *    印字対象公費番号ファイル
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+                                   ORGANIZATION   IS  LINE SEQUENTIAL
+                                   ACCESS MODE    IS  SEQUENTIAL
+                                   FILE   STATUS  IS  STS-TAISYOKOHI.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
+      *
        DATA                        DIVISION.
        FILE                        SECTION.
       *
@@ -109,6 +119,16 @@
       *    優先保険者番号ファイル
        FD  YUSEN-FILE.
        01  YUSEN-HKNJANUM             PIC X(06). 
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *    印字対象公費番号ファイル
+       FD  TAISYOKOHI-FILE.
+       01  TAISYOKOHI-REC.
+           03  TAISYO-DAT-KBN      PIC X(01).
+           03  FILLER              PIC X(01).
+           03  TAISYO-DAT-KOHNUM   PIC X(03). 
+           03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -133,6 +153,11 @@
                                     BY         //RECEERR//.
       *---(01.00.10) LINE ADD END   ------------------------------------
       *     
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *    対象公費番号データ
+           COPY  "TAISYO1401.INC".
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
+      *
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
       *
@@ -145,6 +170,9 @@
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
            03  STS-YUSEN           PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+           03  STS-TAISYOKOHI      PIC X(02).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -161,6 +189,10 @@
            03  FLG-TYOKI           PIC 9(01).
            03  FLG-PTKOHINF        PIC 9(01).
            03  FLG-KEIKA           PIC 9(01).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+           03  FLG-TAISYOKOHI      PIC 9(01).
+           03  FLG-TAISYO          PIC 9(01).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -173,6 +205,10 @@
            03  IDZ1                PIC 9(04).
            03  IDZ2                PIC 9(04).
       *=== シス管「2007」対応 by Yoshikawa(2009/07/13) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+           03  IDX                 PIC 9(04).
+           03  IDXX                PIC 9(04).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
       *##  パラメタ領域（地方公費仕様）
        01  WRK-PARA.
@@ -213,6 +249,9 @@
       *=== シス管「2007」対応 by Yoshikawa(2009/07/13) start
            03  WRK-KOHNAME         PIC X(12).
       *=== シス管「2007」対応 by Yoshikawa(2009/07/13) end
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+           03  WRK-HBTKBN          PIC X(01).
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z4              PIC ZZZZ.
@@ -276,6 +315,12 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI.
+           03  TBL-HKOHNUM              PIC X(03)  OCCURS  4.
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
       *---(01.00.11) LINE ADD START ------------------------------------
       *    固定項目
@@ -689,6 +734,40 @@
            DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
       *
            CLOSE YUSEN-FILE
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *    印字対象公費番号ファイル読み込み
+      *    ファイルディレクトリ位置指定
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *
+           INITIALIZE   TAISYOKOHI-REC
+      *
+           OPEN  INPUT  TAISYOKOHI-FILE
+      *
+           MOVE  ZERO  TO  IDX
+                           FLG-TAISYOKOHI
+      *
+           PERFORM UNTIL    FLG-TAISYOKOHI = 1
+             READ TAISYOKOHI-FILE NEXT
+               AT END
+                 MOVE  1                 TO  FLG-TAISYOKOHI
+               NOT AT END
+                 IF  TAISYO-DAT-KBN = "*" OR SPACE
+                   CONTINUE
+                 ELSE
+                   ADD   1               TO  IDX
+                   MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+                   DISPLAY "読み込み対象公費 = " TAISYOKOHI-REC
+                 END-IF
+             END-READ
+           END-PERFORM
+      *
+           CLOSE TAISYOKOHI-FILE
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
            .
        110-INI-FILE-EXT.
@@ -1442,47 +1521,84 @@
       *         WHEN  OTHER MOVE  99  TO  IDX4
       *---(01.00.05) LINE ADD END   ------------------------------------
                WHEN  038   MOVE  14  TO  IDX4
-               WHEN  142
-               WHEN  141   MOVE  15  TO  IDX4
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *         WHEN  142
+      *         WHEN  141   MOVE  15  TO  IDX4
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
                WHEN  051   MOVE  16  TO  IDX4
                WHEN  091   MOVE  16  TO  IDX4
                WHEN  052   MOVE  17  TO  IDX4
                WHEN  053   MOVE  18  TO  IDX4
                WHEN  066   MOVE  19  TO  IDX4
                WHEN  079   MOVE  20  TO  IDX4
-               WHEN  180
-               WHEN  280
-      *=== 障害は公費再掲欄に記載する by Yoshikawa(2011/08/17) start
-      *           IF  RECE10-RJNHKNNUM  NOT =  SPACE
-      **    老人、又は２つの国保組合の場合障老健に分類
-      *             OR  RECE10-HKNJANUM  =  "133033"
-      *             OR  RECE10-HKNJANUM  =  "133298"
-      *             MOVE  21  TO  IDX4
-      *           ELSE
-      *             MOVE  99  TO  IDX4
-      *           END-IF
-                 MOVE  21  TO  IDX4
-      *=== 障害は公費再掲欄に記載する by Yoshikawa(2011/08/17) end
-      *=== 印字対象番号追加 by yoshikawa(2009/07/13) start
-               WHEN  381
-      *=== 印字対象番号追加 by yoshikawa(2009/07/13) end
-               WHEN  281
-               WHEN  181   MOVE  22  TO  IDX4
-      *=== 印字対象番号追加 by yoshikawa(2009/07/13) start
-               WHEN  385
-      *=== 印字対象番号追加 by yoshikawa(2009/07/13) end
-               WHEN  285
-               WHEN  185   MOVE  23  TO  IDX4
-               WHEN  188   MOVE  24  TO  IDX4
-               WHEN  289
-               WHEN  189   MOVE  25  TO  IDX4
-	       WHEN  960
-	       WHEN  961
-	       WHEN  962
-	       WHEN  963   MOVE  29  TO  IDX4
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *         WHEN  180
+      *         WHEN  280
+      **=== 障害は公費再掲欄に記載する by Yoshikawa(2011/08/17) start
+      **           IF  RECE10-RJNHKNNUM  NOT =  SPACE
+      ***    老人、又は２つの国保組合の場合障老健に分類
+      **             OR  RECE10-HKNJANUM  =  "133033"
+      **             OR  RECE10-HKNJANUM  =  "133298"
+      **             MOVE  21  TO  IDX4
+      **           ELSE
+      **             MOVE  99  TO  IDX4
+      **           END-IF
+      *           MOVE  21  TO  IDX4
+      **=== 障害は公費再掲欄に記載する by Yoshikawa(2011/08/17) end
+      **=== 印字対象番号追加 by yoshikawa(2009/07/13) start
+      *         WHEN  381
+      **=== 印字対象番号追加 by yoshikawa(2009/07/13) end
+      *         WHEN  281
+      *         WHEN  181   MOVE  22  TO  IDX4
+      **=== 印字対象番号追加 by yoshikawa(2009/07/13) start
+      *         WHEN  385
+      **=== 印字対象番号追加 by yoshikawa(2009/07/13) end
+      *         WHEN  285
+      *         WHEN  185   MOVE  23  TO  IDX4
+      *         WHEN  188   MOVE  24  TO  IDX4
+      *         WHEN  289
+      *         WHEN  189   MOVE  25  TO  IDX4
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
+               WHEN  960
+               WHEN  961
+               WHEN  962
+               WHEN  963   MOVE  29  TO  IDX4
                WHEN  OTHER MOVE  99  TO  IDX4
       *---(01.00.12) LINE ADD END   ------------------------------------
              END-EVALUATE
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+             IF  RECE10-KOHNUM(IDX3)(1:1)  NOT =  "0" AND "9"
+               INITIALIZE                            TBL-HIKAKU-KOHI
+               MOVE    RECE10-KOHNUM(IDX3)       TO  TBL-HKOHNUM(1)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+                 EVALUATE  WRK-HBTKBN
+      *            老人
+                   WHEN  "1"
+                     MOVE  15        TO  IDX4
+      *            重障
+                   WHEN  "2"
+                     MOVE  21        TO  IDX4
+      *            乳
+                   WHEN  "3"
+                     MOVE  22        TO  IDX4
+      *            親
+                   WHEN  "4"
+                     MOVE  23        TO  IDX4
+      *            ぜん息
+                   WHEN  "5"
+                     MOVE  24        TO  IDX4
+      *            成ぜ
+                   WHEN  "6"
+                     MOVE  25        TO  IDX4
+                 END-EVALUATE
+               ELSE
+                 MOVE    99          TO  IDX4
+               END-IF
+             END-IF
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *
              IF  IDX4  NOT =  99
       *    療養の給付：件数
@@ -1912,6 +2028,33 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+                          WRK-HBTKBN
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       TAISYO-KOHNUM(IDXX)  =  SPACE
+             IF  TAISYO-KOHNUM(IDXX)  =  TBL-HKOHNUM(1)
+                                     OR  TBL-HKOHNUM(2)
+                                     OR  TBL-HKOHNUM(3)
+                                     OR  TBL-HKOHNUM(4)
+               MOVE     1                   TO  FLG-TAISYO
+               MOVE     TAISYO-KBN(IDXX)    TO  WRK-HBTKBN
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *
+      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
       *****************************************************************
       *    請求管理読込
       *****************************************************************
