@@ -34,6 +34,8 @@
       *  01.00.02    吉川    10/08/05    処方せん発行区分の判定方法変更
       *  01.00.03    吉川    10/11/24    open-cobol1.0対応
       *  01.00.04    吉川    12/07/06    記載順をINIファイルで設定するように修正
+      *  01.00.05    萩野    12/09/21    月途中の保険変更でレセプトが分かれても
+      *                                  変更前と後の合算した金額を１行で記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -135,6 +137,9 @@
            03  FLG-SRYACT            PIC 9(01).
            03  FLG-SYOHOKOFU         PIC 9(01).
       *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+           03  FLG-MF100             PIC 9(01).
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -703,22 +708,30 @@
            MOVE  RECE02-SKYYM                TO  MF100-SKYYM
            MOVE  RECE02-SRYYM                TO  MF100-SRYYM
       *
-           MOVE  RECE02-KOHINF      (IDZ)    TO  MF100-KOHINF
-           MOVE  RECE02-KOHFTNJANUM (IDZ)    TO  MF100-FTNJANUM
-           MOVE  RECE02-KOHJKYSNUM  (IDZ)    TO  MF100-KOHJKYSNUM
-           COMPUTE IDY     =       IDZ     +   1
-           MOVE  RECE02-JNISSUINF   (IDY)    TO  MF100-JNISSUINF
-           MOVE  RECE02-TOTALTENINF (IDY)    TO  MF100-TOTALTENINF
-           MOVE  RECE02-FTNMONEYINF (IDY)    TO  MF100-FTNMONEYINF
-           MOVE  RECE02-SHOKUJIINF  (IDY)    TO  MF100-KSHOKUJIINF
-           MOVE  RECE02-SHOKUJIINF  (IDZ)    TO  MF100-SHOKUJIINF
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+      *     MOVE  RECE02-KOHINF      (IDZ)    TO  MF100-KOHINF
+      *     MOVE  RECE02-KOHFTNJANUM (IDZ)    TO  MF100-FTNJANUM
+      *     MOVE  RECE02-KOHJKYSNUM  (IDZ)    TO  MF100-KOHJKYSNUM
+      *     COMPUTE IDY     =       IDZ     +   1
+      *     MOVE  RECE02-JNISSUINF   (IDY)    TO  MF100-JNISSUINF
+      *     MOVE  RECE02-TOTALTENINF (IDY)    TO  MF100-TOTALTENINF
+      *     MOVE  RECE02-FTNMONEYINF (IDY)    TO  MF100-FTNMONEYINF
+      *     MOVE  RECE02-SHOKUJIINF  (IDY)    TO  MF100-KSHOKUJIINF
+      *     MOVE  RECE02-SHOKUJIINF  (IDZ)    TO  MF100-SHOKUJIINF
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
       *    TMP-FILE キーセット
       *    市町村番号
-           MOVE  MF100-KOHFTNJANUM           TO   MF100-CITYNUM
+      *     MOVE  MF100-KOHFTNJANUM           TO   MF100-CITYNUM
+           MOVE  RECE02-KOHFTNJANUM(IDZ)     TO   MF100-CITYNUM
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *
       *    助成種別
-           EVALUATE MF100-KOHNUM
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+      *     EVALUATE MF100-KOHNUM
+           EVALUATE RECE02-KOHNUM(IDZ)
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
              WHEN  "161"
                MOVE  "1"                     TO   MF100-KOHKBN
              WHEN  "162"
@@ -740,6 +753,22 @@
                MOVE    MF100-PTNUM           TO   MF100-SORTNUM
            END-EVALUATE
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+      *    集計ファイル読込
+           PERFORM  900-SKTTMP-READ-SEC
+      *
+           MOVE  RECE02-KOHINF      (IDZ)    TO  MF100-KOHINF
+           MOVE  RECE02-KOHFTNJANUM (IDZ)    TO  MF100-FTNJANUM
+           MOVE  RECE02-KOHJKYSNUM  (IDZ)    TO  MF100-KOHJKYSNUM
+           COMPUTE IDY     =       IDZ     +   1
+           ADD  RECE02-JNISSU       (IDY)    TO  MF100-JNISSU
+           ADD  RECE02-TOTALTEN     (IDY)    TO  MF100-TOTALTEN
+           ADD  RECE02-FTNMONEY     (IDY)    TO  MF100-FTNMONEY
+           ADD  RECE02-SHOKUJINISSU (IDY)    TO  MF100-ETCSHOKUJINISSU
+           ADD  RECE02-SHOKUJIRYOYOHI(IDY)   TO  MF100-ETCSHOKUJIRYOYOHI
+           ADD  RECE02-SHOKUJIFTN   (IDY)    TO  MF100-ETCSHOKUJIFTN
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *
       *    収納情報より他法公費情報を取得
            MOVE     MF100-KOHNUM             TO   WRK-KOHNUM  
@@ -791,8 +820,18 @@
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR    =    ZERO
-             WRITE    MF100-REC 
-             ADD      1                 TO    CNT-MF100
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+      *       WRITE    MF100-REC 
+      *       ADD      1                 TO    CNT-MF100
+             IF  FLG-MF100  =  1
+                 DISPLAY "新規"
+                 WRITE   MF100-REC
+                 ADD     1       TO  CNT-MF100
+             ELSE
+                 DISPLAY "上書き"
+                 REWRITE  MF100-REC
+             END-IF
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
            ELSE
              DISPLAY "助成対象外患者番号="  RECE02-PTNUM
                      "公費番号="            MF100-KOHNUM
@@ -1196,6 +1235,23 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       900-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    MF100-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-MF100
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-MF100
+           END-READ
+           .
+       900-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
