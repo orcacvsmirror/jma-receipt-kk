@@ -34,8 +34,9 @@
       *  01.00.02    吉川    10/08/05    処方せん発行区分の判定方法変更
       *  01.00.03    吉川    10/11/24    open-cobol1.0対応
       *  01.00.04    吉川    12/07/06    記載順をINIファイルで設定するように修正
-      *  01.00.05    萩野    12/09/21    月途中の保険変更でレセプトが分かれても
+      *  01.00.05    萩野    12/09/26    月途中の保険変更でレセプトが分かれても
       *                                  変更前と後の合算した金額を１行で記載する
+      *                                  患者番号順で記載されるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -625,13 +626,23 @@
       *
            READ SRT-FILE
              AT END
-               INITIALIZE        WRK-SRTKBN
+      *=== 患者番号順で記載 by Hagino(2012/09/26) start
+      *         INITIALIZE        WRK-SRTKBN
+               INITIALIZE        SRT-SRTKBN
+      *=== 患者番号順で記載 by Hagino(2012/09/26) end
              DISPLAY "読み込み失敗"
            END-READ
       *
       *    2以外は全て1を設定
-           IF  WRK-SRTKBN  NOT =  "2"
+      *=== 患者番号順で記載 by Hagino(2012/09/26) start
+      *     IF  WRK-SRTKBN  NOT =  "2"
+           IF  SRT-SRTKBN  NOT =  "2"
+      *=== 患者番号順で記載 by Hagino(2012/09/26) end
                MOVE    "1"           TO  WRK-SRTKBN
+      *=== 患者番号順で記載 by Hagino(2012/09/26) start
+           ELSE
+               MOVE    SRT-SRTKBN    TO  WRK-SRTKBN
+      *=== 患者番号順で記載 by Hagino(2012/09/26) end
            END-IF
       *
            DISPLAY "ソート区分="  WRK-SRTKBN
@@ -744,17 +755,24 @@
                MOVE  "5"                     TO   MF100-KOHKBN
            END-EVALUATE
       *
+      *=== 患者番号順で記載 by Hagino(2012/09/26) start
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
-      *    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
+      **    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
+      *     EVALUATE  WRK-SRTKBN
+      *       WHEN  "1"
+      **         MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
+      *       WHEN  "2"
+      **         MOVE    MF100-PTNUM           TO   MF100-SORTNUM
+      *     END-EVALUATE
+      **=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
            EVALUATE  WRK-SRTKBN
              WHEN  "1"
-               MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
+               MOVE    RECE02-KOHJKYSNUM(IDZ)  TO   MF100-SORTNUM
              WHEN  "2"
-               MOVE    MF100-PTNUM           TO   MF100-SORTNUM
+               MOVE    RECE02-PTNUM            TO   MF100-SORTNUM
            END-EVALUATE
-      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *=== 患者番号順で記載 by Hagino(2012/09/26) end
       *
-      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
       *    集計ファイル読込
            PERFORM  900-SKTTMP-READ-SEC
       *
