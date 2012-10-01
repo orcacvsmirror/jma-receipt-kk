@@ -104,7 +104,7 @@
     <element name="TOKKI-TBL" occurs="3">
       <element name="TOKKI" occurs="1">
         <appinfo>
-          <embed object="string" length="6"/>
+          <embed object="string" length="8"/>
         </appinfo>
       </element>
     </element>
