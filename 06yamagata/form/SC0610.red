@@ -8161,10 +8161,10 @@
   <layer name="&#186;&#185;&#185;&#254;" visible="true">
     <object type="Embed - Text" version="0" id="O262">
       <attribute name="obj_pos">
-        <point val="9.8,6.95"/>
+        <point val="9.8,7.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.8,6.31296;10.608,7.11296"/>
+        <rectangle val="9.8,6.51296;10.608,7.31296"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAIMARU#</string>
@@ -8184,7 +8184,7 @@
             <real val="0.8"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.8,6.95"/>
+            <point val="9.8,7.15"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8547,10 +8547,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O271">
       <attribute name="obj_pos">
-        <point val="8.55,5.9"/>
+        <point val="8.6,5.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.55,5.6213;9.964,5.9713"/>
+        <rectangle val="8.6,5.6713;10.014,6.0213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKKI-TBL[0].TOKKI#</string>
@@ -8570,7 +8570,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.55,5.9"/>
+            <point val="8.6,5.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8589,10 +8589,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O272">
       <attribute name="obj_pos">
-        <point val="9.9,6.775"/>
+        <point val="9.9,6.975"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="9.9,6.53611;10.506,6.83611"/>
+        <rectangle val="9.9,6.73611;10.506,7.03611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#ZAISOU#</string>
@@ -8612,7 +8612,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="9.9,6.775"/>
+            <point val="9.9,6.975"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -10731,10 +10731,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O323">
       <attribute name="obj_pos">
-        <point val="8.55,6.4"/>
+        <point val="8.6,6.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.55,6.1213;9.964,6.4713"/>
+        <rectangle val="8.6,6.1213;10.014,6.4713"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKKI-TBL[1].TOKKI#</string>
@@ -10754,7 +10754,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.55,6.4"/>
+            <point val="8.6,6.4"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -10773,10 +10773,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O324">
       <attribute name="obj_pos">
-        <point val="8.55,6.9"/>
+        <point val="8.6,6.85"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.55,6.6213;9.964,6.9713"/>
+        <rectangle val="8.6,6.5713;10.014,6.9213"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TOKKI-TBL[2].TOKKI#</string>
@@ -10796,7 +10796,7 @@
             <real val="0.35"/>
           </attribute>
           <attribute name="pos">
-            <point val="8.55,6.9"/>
+            <point val="8.6,6.85"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
