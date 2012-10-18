@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 岐阜・老人(垣老)医療費助成金請求書(国保・社保用)
+      *  コンポーネント名  : 岐阜・老人(垣老)医療費助成金請求書
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/05/19    有村          再作成(2.5.0対応)
@@ -31,6 +31,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/04/09    SPA-AREA初期化
+      *  01.00.03    吉川    12/10/09    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -359,7 +360,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU2109"    TO  JOB-PGID
-           MOVE    "(国保・社保)老人(垣老)医療費助成金請求書" 
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) start
+      *     MOVE    "(国保・社保)老人(垣老)医療費助成金請求書" 
+           MOVE    "老人(垣老)医療費助成金請求書" 
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -757,6 +761,10 @@
                    MOVE    "○"            TO  SC09-HKNKBN(4)
            END-EVALUATE
       *
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) start
+      *    電話番号
+           MOVE    WRK-HOSPTEL             TO  SC09-TEL
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) end
       *
            .
        310-HEAD-HEN-EXT.
@@ -922,7 +930,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC2109.red"         TO  SPRT-PRTID
-           MOVE    "(国保・社保)老人(垣老)医療費助成金請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) start
+      *     MOVE    "(国保・社保)老人(垣老)医療費助成金請求書"
+           MOVE    "老人(垣老)医療費助成金請求書"
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) end
                                     TO  SPRT-TITLE
            MOVE    SC09             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1251,10 +1262,12 @@
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF
       *
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) start
       *            退職者は読み飛ばす
-                   IF  RECE02-HKNNUM    =  "067"
-                       GO    TO    900-KOHSKY-READ-SEC
-                   END-IF
+      *             IF  RECE02-HKNNUM    =  "067"
+      *                GO    TO    900-KOHSKY-READ-SEC
+      *             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2012/10/09) end
       *
       *           個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
