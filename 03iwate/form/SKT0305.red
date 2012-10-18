@@ -2548,7 +2548,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#186;&#223;&#194;&#240;&#203;&#246;&#180;&#252;&#176;&#229;&#206;&#197;&#193;&#237;&#185;&#231;&#191;&#199;&#206;&#197;&#206;&#193;#</string>
+            <string>#&#186;&#223;&#194;&#240;&#164;&#172;&#164;&#243;&#176;&#229;&#206;&#197;&#193;&#237;&#185;&#231;&#191;&#199;&#206;&#197;&#206;&#193;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7452,7 +7452,7 @@
         <point val="14.7904,15.9689"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.1844,15.5707;14.7904,16.0707"/>
+        <rectangle val="14.1844,15.5708;14.7904,16.0708"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL[2].GHKNJA#</string>
@@ -7494,7 +7494,7 @@
         <point val="14.7904,16.7717"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.1844,16.3735;14.7904,16.8735"/>
+        <rectangle val="14.1844,16.3736;14.7904,16.8736"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL[3].GHKNJA#</string>
@@ -7536,7 +7536,7 @@
         <point val="17.6867,14.3986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,14.0004;17.6867,14.5004"/>
+        <rectangle val="17.0807,14.0005;17.6867,14.5005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL[5].GHKNJA#</string>
@@ -7620,7 +7620,7 @@
         <point val="17.6867,15.9865"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,15.5883;17.6867,16.0883"/>
+        <rectangle val="17.0807,15.5884;17.6867,16.0884"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL[7].GHKNJA#</string>
@@ -7788,7 +7788,7 @@
         <point val="14.7904,17.5745"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="14.1844,17.1763;14.7904,17.6763"/>
+        <rectangle val="14.1844,17.1764;14.7904,17.6764"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL[4].GHKNJA#</string>
@@ -8250,7 +8250,7 @@
         <point val="15.9777,20.6993"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="15.9777,20.4605;16.8867,20.7605"/>
+        <rectangle val="15.9777,20.4604;16.8867,20.7604"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KENMEI-TBL[13].KENMEI#</string>
@@ -8376,7 +8376,7 @@
         <point val="17.6867,18.3684"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,17.9702;17.6867,18.4702"/>
+        <rectangle val="17.0807,17.9703;17.6867,18.4703"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL2[10].GHKNJA2#</string>
@@ -8460,7 +8460,7 @@
         <point val="17.6867,19.9563"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,19.5581;17.6867,20.0581"/>
+        <rectangle val="17.0807,19.5582;17.6867,20.0582"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL2[12].GHKNJA2#</string>
@@ -8544,7 +8544,7 @@
         <point val="3.3,14.4163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,14.0181;3.805,14.5181"/>
+        <rectangle val="3.3,14.0182;3.805,14.5182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[0].NHKNJA#</string>
@@ -8586,7 +8586,7 @@
         <point val="3.3,15.1163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,14.7181;3.805,15.2181"/>
+        <rectangle val="3.3,14.7182;3.805,15.2182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[1].NHKNJA#</string>
@@ -8628,7 +8628,7 @@
         <point val="3.3,15.8163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,15.4181;3.805,15.9181"/>
+        <rectangle val="3.3,15.4182;3.805,15.9182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[2].NHKNJA#</string>
@@ -8670,7 +8670,7 @@
         <point val="3.3,22.8163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,22.4181;3.805,22.9181"/>
+        <rectangle val="3.3,22.4182;3.805,22.9182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[12].NHKNJA#</string>
@@ -8712,7 +8712,7 @@
         <point val="3.3,16.5163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,16.1181;3.805,16.6181"/>
+        <rectangle val="3.3,16.1182;3.805,16.6182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[3].NHKNJA#</string>
@@ -8754,7 +8754,7 @@
         <point val="3.3,17.2163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,16.8181;3.805,17.3181"/>
+        <rectangle val="3.3,16.8182;3.805,17.3182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[4].NHKNJA#</string>
@@ -8796,7 +8796,7 @@
         <point val="3.3,17.9163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,17.5181;3.805,18.0181"/>
+        <rectangle val="3.3,17.5182;3.805,18.0182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[5].NHKNJA#</string>
@@ -8838,7 +8838,7 @@
         <point val="3.3,18.6163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,18.2181;3.805,18.7181"/>
+        <rectangle val="3.3,18.2182;3.805,18.7182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[6].NHKNJA#</string>
@@ -8880,7 +8880,7 @@
         <point val="3.3,19.3163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,18.9181;3.805,19.4181"/>
+        <rectangle val="3.3,18.9182;3.805,19.4182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[7].NHKNJA#</string>
@@ -8922,7 +8922,7 @@
         <point val="3.3,20.0163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,19.6181;3.805,20.1181"/>
+        <rectangle val="3.3,19.6182;3.805,20.1182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[8].NHKNJA#</string>
@@ -8964,7 +8964,7 @@
         <point val="3.3,20.7163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,20.3181;3.805,20.8181"/>
+        <rectangle val="3.3,20.3182;3.805,20.8182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[9].NHKNJA#</string>
@@ -9006,7 +9006,7 @@
         <point val="3.3,21.4163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,21.0181;3.805,21.5181"/>
+        <rectangle val="3.3,21.0182;3.805,21.5182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[10].NHKNJA#</string>
@@ -9048,7 +9048,7 @@
         <point val="3.3,22.1163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.3,21.7181;3.805,22.2181"/>
+        <rectangle val="3.3,21.7182;3.805,22.2182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[11].NHKNJA#</string>
@@ -9090,7 +9090,7 @@
         <point val="10.45,14.3986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.45,14.0004;10.955,14.5004"/>
+        <rectangle val="10.45,14.0005;10.955,14.5005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[30].NHKNJA#</string>
@@ -9132,7 +9132,7 @@
         <point val="10.45,15.0363"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.45,14.6381;10.955,15.1381"/>
+        <rectangle val="10.45,14.6382;10.955,15.1382"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[31].NHKNJA#</string>
@@ -9174,7 +9174,7 @@
         <point val="10.45,15.7986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.45,15.4004;10.955,15.9004"/>
+        <rectangle val="10.45,15.4005;10.955,15.9005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[32].NHKNJA#</string>
@@ -9216,7 +9216,7 @@
         <point val="10.45,16.4986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.45,16.1004;10.955,16.6004"/>
+        <rectangle val="10.45,16.1005;10.955,16.6005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[33].NHKNJA#</string>
@@ -9258,7 +9258,7 @@
         <point val="10.45,17.8986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="10.45,17.5004;10.955,18.0004"/>
+        <rectangle val="10.45,17.5005;10.955,18.0005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[34].NHKNJA#</string>
@@ -9300,7 +9300,7 @@
         <point val="8.05,14.3986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.05,14.0004;8.555,14.5004"/>
+        <rectangle val="8.05,14.0005;8.555,14.5005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[21].NHKNJA#</string>
@@ -9342,7 +9342,7 @@
         <point val="8.05,15.8205"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="8.05,15.4223;8.555,15.9223"/>
+        <rectangle val="8.05,15.4224;8.555,15.9224"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[23].NHKNJA#</string>
@@ -9594,7 +9594,7 @@
         <point val="5.65,14.4163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,14.0181;6.155,14.5181"/>
+        <rectangle val="5.65,14.0182;6.155,14.5182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[13].NHKNJA#</string>
@@ -9636,7 +9636,7 @@
         <point val="5.65,15.0986"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,14.7004;6.155,15.2004"/>
+        <rectangle val="5.65,14.7005;6.155,15.2005"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[14].NHKNJA#</string>
@@ -9678,7 +9678,7 @@
         <point val="5.65,15.8163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,15.4181;6.155,15.9181"/>
+        <rectangle val="5.65,15.4182;6.155,15.9182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[15].NHKNJA#</string>
@@ -9720,7 +9720,7 @@
         <point val="5.65,16.5163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,16.1181;6.155,16.6181"/>
+        <rectangle val="5.65,16.1182;6.155,16.6182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[16].NHKNJA#</string>
@@ -9762,7 +9762,7 @@
         <point val="5.65,17.9163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,17.5181;6.155,18.0181"/>
+        <rectangle val="5.65,17.5182;6.155,18.0182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[17].NHKNJA#</string>
@@ -9804,7 +9804,7 @@
         <point val="5.65,18.6163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,18.2181;6.155,18.7181"/>
+        <rectangle val="5.65,18.2182;6.155,18.7182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[18].NHKNJA#</string>
@@ -9846,7 +9846,7 @@
         <point val="5.65,20.0163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,19.6181;6.155,20.1181"/>
+        <rectangle val="5.65,19.6182;6.155,20.1182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[19].NHKNJA#</string>
@@ -9888,7 +9888,7 @@
         <point val="5.65,21.4163"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="5.65,21.0181;6.155,21.5181"/>
+        <rectangle val="5.65,21.0182;6.155,21.5182"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[20].NHKNJA#</string>
@@ -9972,7 +9972,7 @@
         <point val="3.82652,23.5826"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="3.82652,23.1844;4.33152,23.6844"/>
+        <rectangle val="3.82652,23.1845;4.33152,23.6845"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#NHKNJA-TBL[35].NHKNJA#</string>
@@ -10182,7 +10182,7 @@
         <point val="17.6867,22.3382"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,21.94;17.6867,22.44"/>
+        <rectangle val="17.0807,21.9401;17.6867,22.4401"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL2[15].GHKNJA2#</string>
@@ -10350,7 +10350,7 @@
         <point val="17.6867,23.9261"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,23.5279;17.6867,24.0279"/>
+        <rectangle val="17.0807,23.528;17.6867,24.028"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL2[17].GHKNJA2#</string>
@@ -10434,7 +10434,7 @@
         <point val="17.6867,24.7201"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="17.0807,24.3219;17.6867,24.8219"/>
+        <rectangle val="17.0807,24.322;17.6867,24.822"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#GHKNJA-TBL2[18].GHKNJA2#</string>
