@@ -42,6 +42,8 @@
       *  01.00.05    吉川    11/11/18    備考欄に記載するコメントを増やす
       *  01.00.06    吉川    11/12/21    全国公費と長期を併用した場合の
       *                                  公費負担額の計算を修正
+      *  01.00.07    吉川    12/10/15    長期と高額を持っている場合、
+      *                                  限度額の低い方を特定疾患等欄に記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -837,6 +839,15 @@
                  MOVE    RECE02-FTNMONEY(1)  TO    WRK-SEIKYUGK-G2
              END-IF
       *
+      *=== 特疾欄は限度額が低い方を記載 by Yoshikawa(2012/10/15) start
+      *    高額療養費チェック
+             EVALUATE  RECE02-ZAITAKU
+               WHEN  "2"    MOVE  3      TO  MF100-TYOKI
+               WHEN  "3"    MOVE  4      TO  MF100-TYOKI
+               WHEN  "4"    MOVE  5      TO  MF100-TYOKI
+             END-EVALUATE
+      *=== 特疾欄は限度額が低い方を記載 by Yoshikawa(2012/10/15) end
+      *
              IF  FLG-TYOKI       =   1
                  MOVE    1       TO  MF100-TYOKI
       *=== 前期9割＋長期の請求金額修正 by Yoshikawa(2011/05/23) start
@@ -892,12 +903,14 @@
       *=== 公費負担額の計算変更 by Yoshikawa(2011/12/21) end
              END-IF
       *
-      *    高額療養費チェック
-             EVALUATE  RECE02-ZAITAKU
-               WHEN  "2"    MOVE  3      TO  MF100-TYOKI
-               WHEN  "3"    MOVE  4      TO  MF100-TYOKI
-               WHEN  "4"    MOVE  5      TO  MF100-TYOKI
-             END-EVALUATE
+      *=== 特疾欄は限度額が低い方を記載 by Yoshikawa(2012/10/15) start
+      **    高額療養費チェック
+      *       EVALUATE  RECE02-ZAITAKU
+      *         WHEN  "2"    MOVE  3      TO  MF100-TYOKI
+      *         WHEN  "3"    MOVE  4      TO  MF100-TYOKI
+      *         WHEN  "4"    MOVE  5      TO  MF100-TYOKI
+      *       END-EVALUATE
+      *=== 特疾欄は限度額が低い方を記載 by Yoshikawa(2012/10/15) end
       *
       *    請求金額：自己負担月額設定
              MOVE    WRK-SEIKYUGK-G2     TO  MF100-SEIKYUGK
