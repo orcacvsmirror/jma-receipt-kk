@@ -5,6 +5,8 @@ PREFNAME=tokyo
 PROGRAMID=SOKATU1310
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1310"
 RENNUM=0
+YUSEN="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
+YUSENINI=/tmp/${15}${PROGRAMID}YUSEN.INI
 -------------------------------------------#
 #    国保・診療報酬請求書（東京）
 #        $1-${11}
@@ -28,6 +30,10 @@ RENNUM=0
             rm  ${16}
         fi
         
+##	YUSEN.INI 作成
+##	/tmp/(HOSPNUM)(PROGRAMID).INI
+	echo "${YUSEN}" | psql -At ${DBNAME} > ${YUSENINI}
+
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -61,5 +67,8 @@ RENNUM=0
             fi
         fi
         
+##	YUSEN.INI 削除
+	rm -f ${YUSENINI}
+
 	$DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
