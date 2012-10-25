@@ -74,6 +74,11 @@
       *  01.00.20    吉川    11/08/16    点数欄は福祉点数を印字する
       *  01.00.21    吉川    12/03/19    限度額認定証の有無に関わらず
       *                                  高額療養費対象は「特」欄に記載
+      *  01.00.22    吉川    12/10/18    特定疾患と957等を持っている場合
+      *                                  「特」欄に記載されないのを修正
+      *                                  社保前期高齢者１割＋146障害で
+      *                                  在宅の場合は、在と記載せずに
+      *                                  70歳2割に含めるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -871,7 +876,17 @@
       *=== 旧老人及び70歳以上1割は旧様式 by Yoshikawa(2009/08/25) end
       *
            IF  RECE02-ZAITAKU  =  1
-             MOVE  "99"                   TO  MF100-COMBIKBN
+      *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) start
+      *       MOVE  "99"                   TO  MF100-COMBIKBN
+      *      前期高齢者1割で障害146の場合は在宅としない
+             IF  (MF100-KOHNUM  =  "146")
+             AND (RECE02-AGE  >=  70)
+             AND (RECE02-KYURATE  NOT =  30)
+               CONTINUE
+             ELSE
+               MOVE  "99"                 TO  MF100-COMBIKBN
+             END-IF
+      *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) end
            END-IF
       *
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -1096,33 +1111,40 @@
            END-IF
       *
       *    高額療養費４回目以降
-           IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
-             IF  RECE02-FTNMONEY (1)  =  44400
-             OR  RECE02-FTNMONEY (1)  =  24600
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+           IF  RECE02-FLG(4)  =  ZERO
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+             IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+               IF  RECE02-FTNMONEY (1)  =  44400
+               OR  RECE02-FTNMONEY (1)  =  24600
       *---(01.00.04) LINE ADD START ------------------------------------
-             OR  RECE02-FTNMONEY (1)  =  83400
+               OR  RECE02-FTNMONEY (1)  =  83400
       *---(01.00.04) LINE ADD END   ------------------------------------
-               MOVE  1  TO  MF100-KOGAKU4
+                 MOVE  1  TO  MF100-KOGAKU4
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
-             ELSE
-               EVALUATE  RECE02-ZAITAKU
-                 WHEN  "2"
-                   IF  RECE02-FTNMONEY(1)  <  83400
-                     MOVE  SPACE       TO  MF100-COMBIKBN
-                   END-IF
-                 WHEN  "3"
-                   IF  RECE02-FTNMONEY(1)  <  44400
-                     MOVE  SPACE       TO  MF100-COMBIKBN
-                   END-IF
-                 WHEN  "4"
-                   IF  RECE02-FTNMONEY(1)  <  24600
-                     MOVE  SPACE       TO  MF100-COMBIKBN
-                   END-IF
-               END-EVALUATE
+               ELSE
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"
+                     IF  RECE02-FTNMONEY(1)  <  83400
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "3"
+                     IF  RECE02-FTNMONEY(1)  <  44400
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "4"
+                     IF  RECE02-FTNMONEY(1)  <  24600
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                 END-EVALUATE
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+               END-IF
              END-IF
-           END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+           END-IF
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
       *
       *---(01.00.11) LINE ADD START ------------------------------------
       *    高半チェック

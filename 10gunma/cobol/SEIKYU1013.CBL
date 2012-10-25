@@ -51,6 +51,11 @@
       *                                  高額療養費対象は「特」欄に記載
       *  01.00.10    吉川    2012/09/12  多数該当と非課税の両方の場合
       *                                  備考欄コードは「03」とする
+      *  01.00.11    吉川    2012/10/18  特定疾患と957等を持っている場合
+      *                                  「特」欄に記載されないのを修正
+      *                                  社保前期高齢者１割＋146障害で
+      *                                  在宅の場合は、「特」とせずに
+      *                                  70歳2割に含めるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -803,15 +808,30 @@
              MOVE  "99"                    TO  WRK-TOKURAN
            END-IF
       *
+      *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) start
+           IF  RECE02-ZAITAKU  =  "1"
+      *      前期高齢者1割で障害146の場合は在宅としない
+             IF  (MF100-KOHNUM  =  "146")
+             AND (RECE02-AGE  >=  70)
+             AND (RECE02-KYURATE  NOT =  30)
+               CONTINUE
+             ELSE
+               MOVE  "40"                  TO  WRK-TOKURAN
+             END-IF
+           END-IF
+      *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) end
+      *
       *    請求管理より、保険使用時情報取得
            PERFORM  900-SEIKYU-READ-SEC
            MOVE  RECE10-JNISSU(1)          TO  MF100-H-JNISSU
            MOVE  RECE10-FTNMONEY(1)        TO  MF100-H-FTNMONEY
            MOVE  RECE10-TOTALTEN(1)        TO  MF100-H-TOTALTEN
            MOVE  RECE10-SHOKUJIINF(1)      TO  MF100-H-SHOKUJIINF
-           IF  RECE10-ZAITAKU  =  "1"
-             MOVE  "40"                    TO  WRK-TOKURAN
-           END-IF
+      *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) start
+      *     IF  RECE10-ZAITAKU  =  "1"
+      *       MOVE  "40"                    TO  WRK-TOKURAN
+      *     END-IF
+      *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) end
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
       *    請求管理より、保険使用時情報取得
       *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
@@ -1101,34 +1121,41 @@
            PERFORM 200115-WARIAI-SET-SEC
       *
       *    高額療養費
-           IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
-             IF  MF100-TOKURAN  =  SPACE
-                 MOVE  "99"            TO  MF100-TOKURAN
-             END-IF
-      *      ４回目以降
-             IF  RECE02-FTNMONEY (1)  =  44400
-             OR  RECE02-FTNMONEY (1)  =  24600
-             OR  RECE02-FTNMONEY (1)  =  83400
-               MOVE  1                 TO  MF100-KOGAKU4
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+           IF  RECE02-FLG(4)  =  ZERO
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+             IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+               IF  MF100-TOKURAN  =  SPACE
+                   MOVE  "99"            TO  MF100-TOKURAN
+               END-IF
+      *        ４回目以降
+               IF  RECE02-FTNMONEY (1)  =  44400
+               OR  RECE02-FTNMONEY (1)  =  24600
+               OR  RECE02-FTNMONEY (1)  =  83400
+                 MOVE  1                 TO  MF100-KOGAKU4
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
-             ELSE
-               EVALUATE  RECE02-ZAITAKU
-                 WHEN  "2"
-                   IF  RECE02-FTNMONEY(1)  <  83400
-                     MOVE  SPACE       TO  MF100-TOKURAN
-                   END-IF
-                 WHEN  "3"
-                   IF  RECE02-FTNMONEY(1)  <  44400
-                     MOVE  SPACE       TO  MF100-TOKURAN
-                   END-IF
-                 WHEN  "4"
-                   IF  RECE02-FTNMONEY(1)  <  24600
-                     MOVE  SPACE       TO  MF100-TOKURAN
-                   END-IF
-               END-EVALUATE
+               ELSE
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"
+                     IF  RECE02-FTNMONEY(1)  <  83400
+                       MOVE  SPACE       TO  MF100-TOKURAN
+                     END-IF
+                   WHEN  "3"
+                     IF  RECE02-FTNMONEY(1)  <  44400
+                       MOVE  SPACE       TO  MF100-TOKURAN
+                     END-IF
+                   WHEN  "4"
+                     IF  RECE02-FTNMONEY(1)  <  24600
+                       MOVE  SPACE       TO  MF100-TOKURAN
+                     END-IF
+                 END-EVALUATE
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+               END-IF
              END-IF
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
            END-IF
+      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
       *
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
       *    高額該当者で限度額認定証無しの請求額計算
