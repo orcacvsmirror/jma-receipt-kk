@@ -30,6 +30,7 @@
       *  01.00.01    吉川    2008/06/23  在宅はまとめて印字する
       *  01.00.02    吉川    2010/03/10  広域連合の保険者番号指定対応
       *  01.00.03    吉川    2010/10/01  オンライン返戻対応
+      *  01.00.04    萩野    2012/10/17  PERFORMをGOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1181,7 +1182,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== GOTOに修正 by Hagino(2012/10/17) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO   900-SEIKYU-READ-SEC
+      *=== GOTOに修正 by Hagino(2012/10/17) end
                END-IF   
       *        キーに保険者番号を格納
                MOVE    RECE10-HKNJANUM       TO  KEY-N-HKNJANUM
