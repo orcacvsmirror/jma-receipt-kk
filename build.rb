@@ -2,6 +2,7 @@
 
 require 'yaml'
 require 'fileutils'
+require 'kconv'
 
 @baseurl = "http://ftp.orca.med.or.jp/pub/receipt/plugin/4.7.0/"
 @distdir = "dist"
@@ -47,7 +48,7 @@ def make_list
     str << %|  - :name: "#{c[:name]}"\n|
     str << %|    :version: "#{c[:version]}"\n|
     str << %|    :vendor: "#{c[:vendor]}"\n|
-    str << %|    :description: "#{c[:description]}"\n|
+    str << %|    :description: "#{c[:description].toeuc}"\n|
     str << %|    :date: #{date}\n|
     str << %|    :url: #{url}\n|
   end
