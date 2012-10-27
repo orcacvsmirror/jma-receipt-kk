@@ -5,6 +5,8 @@ PREFNAME=kanagawa
 PROGRAMID=SOKATU1400
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1400"
 RENNUM=0
+ONLINE="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='ONLINE';"
+ONLINEINI=/tmp/${15}${PROGRAMID}ONLINE.INI
 -------------------------------------------#
 #    πÒ ›°¶ø«Œ≈ ÛΩ∑¡Ì≥Á…Ω° ø¿∆‡¿Ó°À
 #        $1-${11}
@@ -24,6 +26,9 @@ RENNUM=0
             rm  ${16}
         fi
         
+##	ONLINE.INI ∫Ó¿Æ
+	echo "${ONLINE}" | psql -At ${DBNAME} > ${ONLINEINI}
+
 ##       ÷Ã· ¨
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -57,5 +62,8 @@ RENNUM=0
             fi
         fi
         
+##	ONLINE.INI ∫ÔΩ¸
+	rm -f ${ONLINEINI}
+
 	$DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

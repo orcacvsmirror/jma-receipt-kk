@@ -5,6 +5,10 @@ PREFNAME=kanagawa
 PROGRAMID=SOKATU1410
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1410"
 RENNUM=0
+YUSEN="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
+YUSENINI=/tmp/${15}${PROGRAMID}YUSEN.INI
+TAISYOKOHI="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
+TAISYOKOHIINI=/tmp/${15}${PROGRAMID}TAISYOKOHI.INI
 -------------------------------------------#
 #    πÒ ›°¶ø«Œ≈ ÛΩ∑¿¡µ·ΩÒ° ø¿∆‡¿Ó°À
 #        $1-${11}
@@ -28,6 +32,10 @@ RENNUM=0
             rm  ${16}
         fi
         
+##	YUSEN.INI,TAISYOKOHI.INI ∫Ó¿Æ
+	echo "${YUSEN}" | psql -At ${DBNAME} > ${YUSENINI}
+	echo "${TAISYOKOHI}" | psql -At ${DBNAME} > ${TAISYOKOHIINI}
+
 ##       ÷Ã· ¨
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -61,5 +69,9 @@ RENNUM=0
             fi
         fi
         
+##	YUSEN.INI,TAISYOKOHI ∫ÔΩ¸
+	rm -f ${YUSENINI}
+	rm -f ${TAISYOKOHIINI}
+
 	$DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

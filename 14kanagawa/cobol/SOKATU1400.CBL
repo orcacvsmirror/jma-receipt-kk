@@ -192,6 +192,12 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(04)  VALUE "/tmp".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1400".
+           03  FILLER              PIC X(10)  VALUE "ONLINE.INI".
       *
       *    一時領域
        01  WRK-AREA.
@@ -245,7 +251,7 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *=== 災害対応 by Yoshikawa(2011/06/23) start
-           03  FILE-NAME           PIC X(512).
+      **** 03  FILE-NAME           PIC X(512).
            03  WRK-ONLINEKBN       PIC X(01).
       *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
@@ -615,10 +621,11 @@
       *
       *    オンライン請求設定取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      **** INITIALIZE           ORCSMKPASSAREA
+      **** MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
+      **** CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **** MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
       *
            INITIALIZE   ONLINE-REC
       *

@@ -31,7 +31,6 @@ YUSENINI=/tmp/${15}${PROGRAMID}YUSEN.INI
         fi
         
 ##	YUSEN.INI 作成
-##	/tmp/(HOSPNUM)(PROGRAMID).INI
 	echo "${YUSEN}" | psql -At ${DBNAME} > ${YUSENINI}
 
 ##      返戻分

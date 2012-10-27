@@ -87,14 +87,14 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+           SELECT  YUSEN-FILE    ASSIGN FILE-NAME1
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-YUSEN.
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
       *    印字対象公費番号ファイル
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
                                    ORGANIZATION   IS  LINE SEQUENTIAL
                                    ACCESS MODE    IS  SEQUENTIAL
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
@@ -226,15 +226,25 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
+      *    ファイル名称用エリア
+       01  FILE-NAME1.
+           03  FILLER              PIC X(04)  VALUE "/tmp".
+           03  FILE-HOSPNUM1       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1410".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+       01  FILE-NAME2.
+           03  FILLER              PIC X(04)  VALUE "/tmp".
+           03  FILE-HOSPNUM2       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1410".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
       *
-      *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
            03  WRK-SRYYMD          PIC X(08).
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      **** 03  FILE-NAME        PIC X(512).
       *
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -714,10 +724,11 @@
        110-INI-FILE-SEC                SECTION.
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      **** INITIALIZE           ORCSMKPASSAREA
+      **** MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      **** CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **** MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM1
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -738,10 +749,11 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      **** INITIALIZE           ORCSMKPASSAREA
+      **** MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **** CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **** MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
       *
            INITIALIZE   TAISYOKOHI-REC
       *
