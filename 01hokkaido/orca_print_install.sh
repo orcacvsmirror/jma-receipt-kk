@@ -32,10 +32,24 @@ fi
 
 echomsg "北海道（総括表・地方公費）プログラムコピー中..."
 
-# file copy
-for d in cobol doc data form lddef record scripts ; do
+# file copy（form以外）
+for d in cobol doc data lddef record scripts ; do
   cp -af ${d} ${SITESRCDIR}
 done
+
+# form copy : *.redファイルはmonpe-0.6.20（ver4.7.0）以降かチェック
+version=`grep "version" /usr/lib/jma-receipt/doc/version | cut -b 11-15`
+if [ $version = "4.5.0" -o $version = "4.6.0" ] ; then
+  for i in form/*-460.red ; do
+    cp -af ${i} ${SITESRCDIR}/${i%%-460.red}.red
+  done
+else
+  for i in form/*.red ; do
+    if ! echo ${i} | grep -sq "460" ; then
+      cp -af ${i} ${SITESRCDIR}/form
+    fi
+  done
+fi
 
 # kentan.inc copy
 cp ${SYSCONFDIR}/kentan.inc ${SYSCONFDIR}/kentan.inc.bak
@@ -45,7 +59,7 @@ echo -e "\thokkaido;" >> ${SYSCONFDIR}/kentan.inc
 
 # site-upgrade.sh run
 if [ -f ${SCRIPTSDIR}/allways/site-upgrade.sh ] ; then
-	sh ${SCRIPTSDIR}/allways/site-upgrade.sh
+	bash ${SCRIPTSDIR}/allways/site-upgrade.sh
 else
 	echomsg "北海道（総括表・地方公費）プログラムコピー異常終了!!"
 	exit
