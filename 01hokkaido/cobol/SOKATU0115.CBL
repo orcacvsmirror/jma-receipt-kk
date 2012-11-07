@@ -44,6 +44,7 @@
       *  01.00.07    等李    2010/02/17  弓拌息圭の瘦副荚戎规回年滦炳
       *  01.00.08    等李    2010/06/17  オンライン手提滦炳
       *  01.00.09    等李    2010/11/25  open-cobol1.0滦炳
+      *  01.00.10    等李    2012/11/01  PERFORMをGOTOに饯赖
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1854,7 +1855,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに饯赖 by Yoshikawa(2012/11/01) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに饯赖 by Yoshikawa(2012/11/01) end
                END-IF   
       *        キ〖に俯戎规を呈羌
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
