@@ -32,6 +32,7 @@
       *  01.00.03    等李    2010/02/18  弓拌息圭の瘦副荚戎规回年滦炳
       *  01.00.04    等李    2010/07/01  オンライン手提滦炳
       *  01.00.05    等李    2010/07/28  咯祸闻蛙を淡很しない给锐の纳裁
+      *  01.00.06    等李    2012/11/02  PERFORMをGOTOに饯赖
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1658,7 +1659,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに饯赖 by Yoshikawa(2012/11/02) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに饯赖 by Yoshikawa(2012/11/02) end
                END-IF   
       *        キ〖に俯戎规を呈羌
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
