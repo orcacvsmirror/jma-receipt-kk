@@ -45,7 +45,7 @@ echo -e "\thokkaido;" >> ${SYSCONFDIR}/kentan.inc
 
 # site-upgrade.sh run
 if [ -f ${SCRIPTSDIR}/allways/site-upgrade.sh ] ; then
-	bash ${SCRIPTSDIR}/allways/site-upgrade.sh
+	sh ${SCRIPTSDIR}/allways/site-upgrade.sh
 else
 	echomsg "北海道（総括表・地方公費）プログラムコピー異常終了!!"
 	exit
