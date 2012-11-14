@@ -44,6 +44,7 @@
       *  01.00.09    吉川    2011/08/10  返戻分の診療年月欄は当月を印字
       *                                  月途中で負担者番号が変更になった場合
       *                                  公費再掲欄の集計が合わないのを修正
+      *  01.00.10    吉川    2012/11/12  PERFORMをGOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2017,7 +2018,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/11/12) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/11/12) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -2177,7 +2181,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== シス管「1901」参照先区分変更 by Yoshikawa(2012/11/12) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== シス管「1901」参照先区分変更 by Yoshikawa(2012/11/12) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
@@ -2214,6 +2221,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1901-REC
                MOVE    SYS-1901-HOSPNAME1  TO  WRK-HOSPNAME1
                MOVE    SYS-1901-HOSPNAME2  TO  WRK-HOSPNAME2
+      *=== シス管「1901」参照先区分変更 by Yoshikawa(2012/11/12) start
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+      *=== シス管「1901」参照先区分変更 by Yoshikawa(2012/11/12) end
            ELSE
                INITIALIZE                  SYS-1901-REC
            END-IF

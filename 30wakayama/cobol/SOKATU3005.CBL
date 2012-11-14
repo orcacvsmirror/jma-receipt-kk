@@ -35,6 +35,7 @@
       *                                   オンライン返戻対応
       *                                   広域連合の保険者番号指定対応
       *  04.03.02    吉川       10/12/08  open-cobol1.0対応
+      *  04.07.01    吉川       12/11/07  PERFORMをGOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1627,7 +1628,10 @@
                       CONTINUE
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
                ELSE
-                      PERFORM 900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/11/07) start
+      *                PERFORM  900-SEIKYU-READ-SEC
+                      GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2012/11/07) end
                END-IF
       *---- KUSUMOTO END ----
       *         
@@ -1791,6 +1795,9 @@
                MOVE    MCPDATA-REC     TO  SYS-1902-REC
                MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
                MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/11/12) start
+               MOVE    SYS-1902-TEL    TO  WRK-TEL
+      *=== シス管「1901」の電話番号印字 by Yoshikawa(2012/11/12) end
            ELSE
                INITIALIZE                  SYS-1902-REC
            END-IF
