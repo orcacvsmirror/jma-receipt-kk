@@ -84,7 +84,7 @@ def make_list
   
   str = "---\n"
   list.each do |c|
-    url = @opts[:baseurl] + c[:filename]
+    url = @opts[:baseurl] + "/" + c[:filename]
     str << %|  - :name: "#{c[:name]}"\n|
     str << %|    :version: "#{c[:version]}"\n|
     str << %|    :vendor: "#{c[:vendor]}"\n|
