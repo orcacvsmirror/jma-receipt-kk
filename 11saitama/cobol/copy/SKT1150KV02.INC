@@ -19,22 +19,31 @@
               03  HCM2KV02-KENSU3 PIC X(6).
               03  HCM2KV02-NISSU3 PIC X(6).
               03  HCM2KV02-TENSU3 PIC X(10).
-            02  HCM2KV02-ITBFTN3    PIC X(9).
+      *=== 办婶砷么垛の淡很滦炳 by Yoshikawa(2012/11/14) start
+      *      02  HCM2KV02-ITBFTN3    PIC X(9).
+              03  HCM2KV02-ITBFTN3  PIC X(9).
+      *=== 办婶砷么垛の淡很滦炳 by Yoshikawa(2012/11/14) end
             02  HCM2KV02-IHO-TBL4       OCCURS  9 TIMES.
               03  HCM2KV02-KENSU4 PIC X(6).
               03  HCM2KV02-NISSU4 PIC X(6).
               03  HCM2KV02-TENSU4 PIC X(10).
+      *=== 办婶砷么垛の淡很滦炳 by Yoshikawa(2012/11/14) start
+              03  HCM2KV02-ITBFTN4 PIC X(9).
+      *=== 办婶砷么垛の淡很滦炳 by Yoshikawa(2012/11/14) end
             02  HCM2KV02-IHO-TBL5       OCCURS  9 TIMES.
               03  HCM2KV02-KENSU5 PIC X(6).
               03  HCM2KV02-NISSU5 PIC X(6).
               03  HCM2KV02-TENSU5 PIC X(10).
+      *=== 办婶砷么垛の淡很滦炳 by Yoshikawa(2012/11/14) start
+              03  HCM2KV02-ITBFTN5 PIC X(9).
+      *=== 办婶砷么垛の淡很滦炳 by Yoshikawa(2012/11/14) end
             02  HCM2KV02-KENSUG PIC X(6).
             02  HCM2KV02-TITLE  PIC X(50).
             02  HCM2KV02-TITLE1 PIC X(10).
-      *=== H20擭10寧夵惓懳墳 by Yoshikawa(2008/10/24) start
+      *=== H20钳10奉猖赖滦炳 by Yoshikawa(2008/10/24) start
             02  HCM2KV02-SEIDONAME
                     PIC X(8)    OCCURS  5 TIMES.
-      *=== H20擭10寧夵惓懳墳 by Yoshikawa(2008/10/24) start
-      *=== 嵭奞懳墳 by Yoshikawa(2011/04/01) start
+      *=== H20钳10奉猖赖滦炳 by Yoshikawa(2008/10/24) start
+      *=== 阂巢滦炳 by Yoshikawa(2011/04/01) start
             02  HCM2KV02-GENMEN PIC X(12).
-      *=== 嵭奞懳墳 by Yoshikawa(2011/04/01) end
+      *=== 阂巢滦炳 by Yoshikawa(2011/04/01) end
