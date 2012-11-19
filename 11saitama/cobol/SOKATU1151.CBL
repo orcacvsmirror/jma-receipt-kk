@@ -49,6 +49,9 @@
       *  01.01.07    吉川         08/12/15  平成20年3月以前の月遅れ分は
       *                                     旧様式で帳票を分けるように修正
       *  01.01.08    吉川         11/04/01  東北地方太平洋沖地震対応（対象者別集計）
+      *  01.01.09    吉川         12/11/14  平成２４年４月改正以降は
+      *                                     在宅をまとめて集計するように修正
+      *                                     一部負担金の記載対応
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -195,6 +198,9 @@
       *=== H20年10月改正対応 by Yoshikawa(2008/10/24) start
            03  WRK-CONS-SRYYM-200810   PIC X(06)   VALUE   "200810".
       *=== H20年10月改正対応 by Yoshikawa(2008/10/24) end
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           03  WRK-CONS-SRYYM-201204   PIC X(06)   VALUE   "201204".
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -580,7 +586,12 @@
       *    
            MOVE    SYS-1001-HOSPCDN    TO  HCM2I-HOSPCD
       *
-           IF      WRK-NYUGAIKBN       =   "2"
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-SRYYM-201204
+             MOVE    SPACE             TO  HCM2I-TITLE
+           ELSE
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
+             IF      WRK-NYUGAIKBN       =   "2"
                EVALUATE    IDX1
                    WHEN    1
                        MOVE    "その他のレセ"      TO  HCM2I-TITLE  
@@ -588,7 +599,10 @@
                        MOVE    "在総診または在医総を算定したレセ"
                                                    TO  HCM2I-TITLE     
                END-EVALUATE
-           END-IF           
+             END-IF           
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           END-IF
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
       *
            EVALUATE    WRK-NYUGAIKBN
                WHEN    "1"
@@ -623,7 +637,12 @@
       *    
            MOVE    SYS-1001-HOSPCDN    TO  HCM2J-HOSPCD 
       *
-           IF      WRK-NYUGAIKBN       =   "2"
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-SRYYM-201204
+             MOVE    SPACE             TO  HCM2J-TITLE
+           ELSE
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
+             IF      WRK-NYUGAIKBN       =   "2"
                EVALUATE    IDX1
                    WHEN    1
                        MOVE    "その他のレセ"      TO  HCM2J-TITLE  
@@ -631,7 +650,10 @@
                        MOVE    "在総診または在医総を算定したレセ"
                                                    TO  HCM2J-TITLE     
                END-EVALUATE
-           END-IF           
+             END-IF           
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           END-IF
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
       *
            EVALUATE    WRK-NYUGAIKBN
               WHEN    "1"
@@ -760,11 +782,15 @@
                MOVE    WRK-NISSUZ              TO  HCM2I-NISSU3 (IDY) 
                MOVE    SUM-TOTALTEN (IDX1 IDX IDY)  TO  WRK-TENSUZ
                MOVE    WRK-TENSUZ              TO  HCM2I-TENSU3 (IDY)
-               IF      IDY             =   3
-                   MOVE    SUM-FTNMONEY (IDX1 IDX IDY)
-                                               TO  WRK-FTNMONEYZ
-                   MOVE    WRK-FTNMONEYZ       TO  HCM2I-ITBFTN3
-               END-IF
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+      *         IF      IDY             =   3
+      *             MOVE    SUM-FTNMONEY (IDX1 IDX IDY)
+      *                                         TO  WRK-FTNMONEYZ
+      *             MOVE    WRK-FTNMONEYZ       TO  HCM2I-ITBFTN3
+      *         END-IF
+               MOVE    SUM-FTNMONEY (IDX1 IDX IDY)  TO  WRK-FTNMONEYZ
+               MOVE    WRK-FTNMONEYZ           TO  HCM2I-ITBFTN3 (IDY)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
                MOVE    SUM-SHOKUJIKENSU (IDX1 IDX IDY) 
                                                TO  WRK-SHOKENSUZ
                MOVE    WRK-SHOKENSUZ           TO  HCM2I-SYOKENSU3 (IDY)
@@ -783,6 +809,10 @@
            MOVE    WRK-NISSUZ              TO  HCM2I-NISSU3 (12) 
            MOVE    SUM-TOTALTEN (IDX1 IDX 12)   TO  WRK-TENSUZ
            MOVE    WRK-TENSUZ              TO  HCM2I-TENSU3 (12)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+           MOVE    SUM-FTNMONEY (IDX1 IDX 12)  TO  WRK-FTNMONEYZ
+           MOVE    WRK-FTNMONEYZ           TO  HCM2I-ITBFTN3 (12)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
            MOVE    SUM-SHOKUJIKENSU (IDX1 IDX 12) 
                                            TO  WRK-SHOKENSUZ
            MOVE    WRK-SHOKENSUZ           TO  HCM2I-SYOKENSU3 (12)
@@ -805,6 +835,10 @@
                MOVE    WRK-NISSUZ              TO  HCM2I-NISSU4 (IDY) 
                MOVE    SUM-TOTALTEN (IDX1 IDX IDY)  TO  WRK-TENSUZ
                MOVE    WRK-TENSUZ              TO  HCM2I-TENSU4 (IDY)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+               MOVE    SUM-FTNMONEY (IDX1 IDX IDY)  TO  WRK-FTNMONEYZ
+               MOVE    WRK-FTNMONEYZ           TO  HCM2I-ITBFTN4 (IDY)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
                MOVE    SUM-SHOKUJIKENSU (IDX1 IDX IDY) 
                                                TO  WRK-SHOKENSUZ
                MOVE    WRK-SHOKENSUZ           TO  HCM2I-SYOKENSU4 (IDY)
@@ -823,6 +857,10 @@
            MOVE    WRK-NISSUZ              TO  HCM2I-NISSU4 (9) 
            MOVE    SUM-TOTALTEN (IDX1 IDX 12)   TO  WRK-TENSUZ
            MOVE    WRK-TENSUZ              TO  HCM2I-TENSU4 (9)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+           MOVE    SUM-FTNMONEY (IDX1 IDX 12)  TO  WRK-FTNMONEYZ
+           MOVE    WRK-FTNMONEYZ           TO  HCM2I-ITBFTN4 (9)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
            MOVE    SUM-SHOKUJIKENSU (IDX1 IDX 12) 
                                            TO  WRK-SHOKENSUZ
            MOVE    WRK-SHOKENSUZ           TO  HCM2I-SYOKENSU4 (9)
@@ -845,6 +883,10 @@
                MOVE    WRK-NISSUZ              TO  HCM2I-NISSU5 (IDY) 
                MOVE    SUM-TOTALTEN (IDX1 IDX IDY)  TO  WRK-TENSUZ
                MOVE    WRK-TENSUZ              TO  HCM2I-TENSU5 (IDY)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+               MOVE    SUM-FTNMONEY (IDX1 IDX IDY)  TO  WRK-FTNMONEYZ
+               MOVE    WRK-FTNMONEYZ           TO  HCM2I-ITBFTN5 (IDY)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
                MOVE    SUM-SHOKUJIKENSU (IDX1 IDX IDY) 
                                                TO  WRK-SHOKENSUZ
                MOVE    WRK-SHOKENSUZ           TO  HCM2I-SYOKENSU5 (IDY)
@@ -863,6 +905,10 @@
            MOVE    WRK-NISSUZ              TO  HCM2I-NISSU5 (9) 
            MOVE    SUM-TOTALTEN (IDX1 IDX 12)   TO  WRK-TENSUZ
            MOVE    WRK-TENSUZ              TO  HCM2I-TENSU5 (9)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+           MOVE    SUM-FTNMONEY (IDX1 IDX 12)  TO  WRK-FTNMONEYZ
+           MOVE    WRK-FTNMONEYZ           TO  HCM2I-ITBFTN5 (9)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
            MOVE    SUM-SHOKUJIKENSU (IDX1 IDX 12) 
                                            TO  WRK-SHOKENSUZ
            MOVE    WRK-SHOKENSUZ           TO  HCM2I-SYOKENSU5 (9)

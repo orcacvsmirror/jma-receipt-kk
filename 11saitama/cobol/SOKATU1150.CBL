@@ -67,6 +67,9 @@
       *  01.02.15    吉川       11/04/01  東北地方太平洋沖地震対応（対象者別集計）
       *  01.02.16    吉川       11/05/24  未確定分のみ別集計とするように修正
       *  01.02.17    吉川       11/12/06  後期高齢非該当対応
+      *  01.02.18    吉川       12/11/14  平成２４年４月改正以降は
+      *                                   在宅をまとめて集計するように修正
+      *                                   一部負担金の記載対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -299,6 +302,9 @@
       *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) start
            03  WRK-CONS-SRYYM-200810   PIC X(06)   VALUE   "200810".
       *=== H20年3月以前の月遅れは旧様式 by Yoshikawa(2008/12/15) end
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           03  WRK-CONS-SRYYM-201204   PIC X(06)   VALUE   "201204".
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
       *     
       *---(01.02.06) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".         
@@ -427,18 +433,22 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "ORCBM022"      TO  JOB-PGID
+      *=== ジョブメッセージ変更 by Yoshikawa(2012/11/14) start
       *=== 災害対応 by Yoshikawa(2011/04/01) start
-      *     MOVE    "社保総括表（改正版）"
+      **     MOVE    "社保総括表（改正版）"
+      **                             TO  JOB-SHELLMSG
+      *     EVALUATE  WRK-PARA-GENMENKBN
+      *       WHEN  "1" 
+      *         MOVE    "社保総括表（改正版）"
       *                             TO  JOB-SHELLMSG
-           EVALUATE  WRK-PARA-GENMENKBN
-             WHEN  "1" 
-               MOVE    "社保総括表（改正版）"
+      *       WHEN  "2"
+      *         MOVE    "未確定分・社保総括表（改正版）"
+      *                             TO  JOB-SHELLMSG
+      *     END-EVALUATE
+      **=== 災害対応 by Yoshikawa(2011/04/01) end
+           MOVE    "社保総括表（改正版）"
                                    TO  JOB-SHELLMSG
-             WHEN  "2"
-               MOVE    "未確定分・社保総括表（改正版）"
-                                   TO  JOB-SHELLMSG
-           END-EVALUATE
-      *=== 災害対応 by Yoshikawa(2011/04/01) end
+      *=== ジョブメッセージ変更 by Yoshikawa(2012/11/14) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA  
                                    JOBKANRI-REC
@@ -693,7 +703,17 @@
            MOVE    ZERO                TO  CNT-RECE10
       *
       *    その他のレセ
-           EVALUATE    WRK-SYOKBN
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-SRYYM-201204
+             EVALUATE    WRK-SYOKBN
+               WHEN    "1"
+                   MOVE    "key32"        TO  WRK-PATH
+               WHEN    "2"
+                   MOVE    "key31"        TO  WRK-PATH
+             END-EVALUATE
+           ELSE
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
+             EVALUATE    WRK-SYOKBN
                WHEN    "1"
       *---(01.02.06) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY28    TO  WRK-PATH
@@ -704,7 +724,10 @@
       *             MOVE    PATH-TBL-SEIKYU-KEY27    TO  WRK-PATH
                    MOVE    "key27"        TO  WRK-PATH
       *---(01.02.06) LINE ADD END   ------------------------------------
-           END-EVALUATE  
+             END-EVALUATE  
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           END-IF
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
            PERFORM 900-SEIKYU-SELECT-SEC
       *
            MOVE    1                   TO  WRK-INDEX
@@ -726,7 +749,12 @@
                                    SPA-AREA
       *---(01.02.06) LINE ADD END   ------------------------------------
       *
-           IF      FLG-ERR             =   ZERO
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-SRYYM-201204
+             CONTINUE
+           ELSE
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
+             IF    FLG-ERR             =   ZERO
       *        在総診または在医総を算定したレセ
                EVALUATE    WRK-SYOKBN
                    WHEN    "1"
@@ -760,7 +788,11 @@
                                        MCPDATA-REC
                                        SPA-AREA
       *---(01.02.06) LINE ADD END   ------------------------------------
+             END-IF
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) start
            END-IF
+      *=== H24年4月以降は在宅をまとめる by Yoshikawa(2012/11/14) end
+      *
            .
        2001-GAIRAI-SYUKEI-EXT.
            EXIT.
@@ -1374,12 +1406,16 @@
                ADD     RECE10-YKZFTN         (IDX1)
                                  TO  SUM-YKZFTN         (IDY3 IDY1 IDY2)
            END-IF
-           IF    (  IDY1              <   3        )
-           OR    ( (IDY1              =   3 ) AND
-                   (IDY2              =   3 )      )                          
-               ADD     RECE10-FTNMONEY       (IDX1)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+      *     IF    (  IDY1              <   3        )
+      *     OR    ( (IDY1              =   3 ) AND
+      *             (IDY2              =   3 )      )                          
+      *         ADD     RECE10-FTNMONEY       (IDX1)
+      *                           TO  SUM-FTNMONEY       (IDY3 IDY1 IDY2)
+      *     END-IF                          
+           ADD     RECE10-FTNMONEY       (IDX1)
                                  TO  SUM-FTNMONEY       (IDY3 IDY1 IDY2)
-           END-IF                          
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
            ADD     RECE10-SHOKUJINISSU   (IDX1)
                                  TO  SUM-SHOKUJINISSU   (IDY3 IDY1 IDY2)
            ADD     RECE10-SHOKUJIRYOYOHI (IDX1)
@@ -1403,10 +1439,14 @@
                    ADD     RECE10-YKZFTN         (IDX1)
                                    TO  SUM-YKZFTN         (IDY3 IDY1 12)
                END-IF                      
-               IF      IDY1              <   3                          
-                   ADD     RECE10-FTNMONEY       (IDX1)
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) start
+      *         IF      IDY1              <   3                          
+      *             ADD     RECE10-FTNMONEY       (IDX1)
+      *                             TO  SUM-FTNMONEY       (IDY3 IDY1 12)
+      *         END-IF                      
+               ADD     RECE10-FTNMONEY       (IDX1)
                                    TO  SUM-FTNMONEY       (IDY3 IDY1 12)
-               END-IF                      
+      *=== 一部負担金の記載対応 by Yoshikawa(2012/11/14) end
                ADD     RECE10-SHOKUJINISSU   (IDX1)
                                    TO  SUM-SHOKUJINISSU   (IDY3 IDY1 12)
                ADD     RECE10-SHOKUJIRYOYOHI (IDX1)
@@ -1714,6 +1754,11 @@
                MOVE    999999              TO  RECE10-XXSRYYM
            END-IF
            MOVE    WRK-NYUGAIKBN        TO  RECE10-NYUGAIKBN
+      *=== 日レセVer4.7.0対応 by Yoshikawa(2012/11/14) start
+      *    今のところは健保直接請求に対応しない
+           MOVE    "%%%%%%%%"           TO  RECE10-HKNJANUM-S
+           MOVE    "%"                  TO  RECE10-DIRECT-FLG
+      *=== 日レセVer4.7.0対応 by Yoshikawa(2012/11/14) end
       *
       *###
            DISPLAY "SYOKBN=" WRK-SYOKBN
