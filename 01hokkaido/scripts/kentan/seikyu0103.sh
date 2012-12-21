@@ -5,6 +5,8 @@ PREFNAME=hokkaido
 PROGRAMID=SEIKYU0103
 LOG_FILE="/var/log/jma-receipt/${14}seikyu0103"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
+INIFILE="/tmp/${14}${PROGRAMID}SRYKA.INI"
 #-------------------------------------------#
 #    地方公費作成（北海道・乳幼児）
 #        $1-${11}
@@ -23,14 +25,20 @@ RENNUM=0
             rm  ${15}
         fi
 
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
-            $DBSTUB -dir $LDDEFDIR/directory -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
             if  [ -e ${15} ]; then
                 exit
             fi
 
-        $DBSTUB  -dir $LDDEFDIR/directory -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
+##      INIファイル 削除
+        rm -f ${INIFILE}
+
+        $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit
