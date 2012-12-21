@@ -38,4 +38,12 @@
  - [scripts/kentan/sokatu0100.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0110.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0115.sh , scripts/kentan/]
+ - [scripts/prgoption/directory , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
+ - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
+ - [scripts/prgoption/SEIKYU0103.exp , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU0110.exp , scripts/prgoption/]
+ - [scripts/prgoption/SEIKYU0103-SRYKA.opt , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU0110-YUSEN.opt , scripts/prgoption/]
 

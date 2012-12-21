@@ -39,6 +39,7 @@
       *  01.00.07    吉川    11/02/16    公費請求テーブルclose処理位置変更
       *  01.00.08    吉川    12/02/13    142以外でも公費の助成が無い場合は
       *                                  印字対象外とするように修正
+      *  01.00.09    吉川    12/12/17    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -148,6 +149,15 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/17) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU0103".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/17) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -179,7 +189,9 @@
            03  WRK-SRYKANAME         PIC X(20).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/17) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/17) end
       *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *---(01.00.04) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -605,10 +617,13 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/17) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/17) end
       *
            INITIALIZE   SRYKA-REC
       *
