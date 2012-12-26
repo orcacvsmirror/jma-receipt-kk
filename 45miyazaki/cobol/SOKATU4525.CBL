@@ -40,6 +40,7 @@
       *  01.00.06    吉川    2012/11/19  シス管「1901」で設定した電話番号が
       *                                  印字されるように修正
       *                                  PERFORMをGOTOに修正
+      *  01.00.07    吉川    2012/12/20  公費が記載されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1878,10 +1879,13 @@
                    OR  RECE10-KOHNUM(IDX1)  =  "145"
                      MOVE  RECE10-KOHNUM(IDX1)   TO  WRK-PTKOHNUM
       *              患者公費情報読込
-      *=== PERFORM→GOTO by Yoshikawa(2012/11/19) start
-      *               PERFORM  900-SEIKYU-READ-SEC
-                     GO  TO  900-SEIKYU-READ-SEC
-      *=== PERFORM→GOTO by Yoshikawa(2012/11/19) end
+      *=== 公費が記載されないのを修正 by Yoshikawa(2012/12/20) start
+      **=== PERFORM→GOTO by Yoshikawa(2012/11/19) start
+      **               PERFORM  900-SEIKYU-READ-SEC
+      *               GO  TO  900-SEIKYU-READ-SEC
+      **=== PERFORM→GOTO by Yoshikawa(2012/11/19) end
+                     PERFORM  900-PTKOHINF-SET-SEC
+      *=== 公費が記載されないのを修正 by Yoshikawa(2012/12/20) end
                    END-IF
                  END-PERFORM
                END-IF
