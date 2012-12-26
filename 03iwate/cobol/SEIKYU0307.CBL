@@ -40,6 +40,7 @@
       *  01.00.05     内田    2009/11/13  帳票上部の公費種別は市町村公費の場合
       *                                   受給者番号の事業コードで判別する
       *  01.00.06     吉川    2011/01/17  帳票様式の変更に伴う修正
+      *  01.00.07     吉川    2012/12/19  医療機関情報編集修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1227,8 +1228,14 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC07-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SC07-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC07-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC07-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC07-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO  SC07-KAISETU
@@ -1555,8 +1562,14 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC08-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SC08-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC08-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC08-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC08-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO  SC08-KAISETU

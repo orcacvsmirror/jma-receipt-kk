@@ -46,6 +46,7 @@
       *  01.00.13     吉川   2011/04/04  東北地方太平洋沖地震対応
       *  01.00.14     吉川   2011/06/15  特別療養費国保対応
       *  01.00.15     吉川   2012/04/19  帳票様式の変更に伴う修正
+      *  01.00.16     吉川   2012/12/19  医療機関情報編集修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1235,9 +1236,15 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT0300-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT0300-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SKT0300-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT0300-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SKT0300-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    開設者名

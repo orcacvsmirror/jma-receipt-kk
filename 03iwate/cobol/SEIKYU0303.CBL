@@ -37,6 +37,7 @@
       *                                 取得するよう修正
       *  01.00.04    吉川    09/01/13   １・２割欄は公費を問わず集計
       *  01.00.05    吉川    09/03/02   帳票様式の変更に伴う修正
+      *  01.00.06    吉川    12/12/19   医療機関情報編集修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -926,8 +927,14 @@
       *     MOVE     SYS-1001-HOSPNAME      TO  SC03-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS            TO  SC03-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC03-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC03-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC03-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE     SYS-1001-KAISETUNAME   TO  SC03-KAISETU
