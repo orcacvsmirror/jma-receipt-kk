@@ -46,3 +46,13 @@
  - [scripts/kentan/sokatu1400.sh , scripts/kentan/]
  - [scripts/kentan/sokatu1410.sh , scripts/kentan/]
  - [scripts/kentan/sokatu1415.sh , scripts/kentan/]
+ - [scripts/prgoption/directory , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
+ - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1400.exp , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1410.exp , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1400-ONLINE.opt , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1410-TAISYOKOHI.opt , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1410-YUSEN.opt , scripts/prgoption/]
+

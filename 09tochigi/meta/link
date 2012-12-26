@@ -18,3 +18,10 @@
  - [scripts/kentan/sokatu0900.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0910.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0915.sh , scripts/kentan/]
+ - [scripts/prgoption/directory , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
+ - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU0910.exp , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU0910-YUSEN.opt , scripts/prgoption/]
+

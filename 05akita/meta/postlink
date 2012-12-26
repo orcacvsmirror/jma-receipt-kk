@@ -13,6 +13,11 @@ fi
 
 umask 022
 
+# program option set
+bash ${SITESRCDIR}/scripts/prgoption/prgoption.sh
+rm -r ${SITESRCDIR}/scripts/prgoption
+echo -n "prgoption......done" | logger
+
 PATH=.:${PATH}
 
 # compile COBOL programs
