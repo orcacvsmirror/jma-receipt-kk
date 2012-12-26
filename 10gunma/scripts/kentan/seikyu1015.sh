@@ -6,6 +6,8 @@ PREFNAME=gunma
 PROGRAMID=SEIKYU1015
 LOG_FILE="/var/log/jma-receipt/${14}seikyu1015"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='BAITAI';"
+INIFILE="/tmp/${14}${PROGRAMID}BAITAI.INI"
 -------------------------------------------#
 #    地方公費作成（群馬）
 #        $1-${11}
@@ -26,12 +28,18 @@ RENNUM=0
 
         cd  ${ORCA_DIR}
 
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+
             RENNUM=$(expr ${RENNUM} + 1) 
             $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
             if  [ -e ${15} ]; then
                 exit
             fi
 
+##      INIファイル 削除
+        rm -f ${INIFILE}
+    
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit
