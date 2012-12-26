@@ -54,6 +54,7 @@
       *  01.01.09    吉川         12/11/14  平成２４年４月改正以降は
       *                                     在宅をまとめて集計するように修正
       *                                     一部負担金の記載対応
+      *  01.00.10    吉川         12/12/21  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -586,8 +587,14 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  HCM2K-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  HCM2K-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT HCM2K-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  HCM2K-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT HCM2K-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.01.03) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME

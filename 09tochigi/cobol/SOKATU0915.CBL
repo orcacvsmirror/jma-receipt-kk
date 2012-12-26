@@ -34,6 +34,7 @@
       *  01.00.03    吉川    2010/03/01  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2010/07/15  オンライン返戻対応
       *  01.00.05    吉川    2012/11/02  PERFORMをGOTOに修正
+      *  01.00.06    吉川    2012/12/21  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1074,8 +1075,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT0915-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT0915-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0915-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT0915-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0915-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT0915-KAISETUNAME

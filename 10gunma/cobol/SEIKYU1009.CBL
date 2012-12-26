@@ -65,6 +65,7 @@
       *                                  社保前期高齢者１割＋146障害で
       *                                  在宅の場合は、「特」とせずに
       *                                  70歳2割に含めるように修正
+      *  01.00.19    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1329,9 +1330,15 @@
       *     MOVE  SYS-1002-TEL           TO  SC09-TEL
       *    医療機関住所
            MOVE  WRK-HOSPADRS           TO  SC09-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC09-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO  SC09-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC09-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL            TO  SC09-TEL
@@ -1557,9 +1564,15 @@
       *
       *    医療機関住所
            MOVE  WRK-HOSPADRS           TO  SC09o-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC09o-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO  SC09o-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC09o-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL            TO  SC09o-TEL

@@ -79,6 +79,7 @@
       *                                  社保前期高齢者１割＋146障害で
       *                                  在宅の場合は、在と記載せずに
       *                                  70歳2割に含めるように修正
+      *  01.00.23    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1532,9 +1533,15 @@
       *     MOVE  SYS-1002-TEL          TO  SC03-TEL
       *　　所在地
            MOVE  WRK-HOSPADRS          TO  SC03-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC03-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC03-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC03-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL           TO  SC03-TEL
@@ -1930,9 +1937,15 @@
       *     MOVE  SYS-1002-TEL          TO  SC04-TEL
       *    所在地
            MOVE  WRK-HOSPADRS          TO  SC04-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC04-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC04-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC04-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL           TO  SC04-TEL
@@ -2314,9 +2327,15 @@
            MOVE  WRK-SEIYMDWH          TO  SC03o-SEIYMD
       *    所在地
            MOVE  WRK-HOSPADRS          TO  SC03o-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC03o-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC03o-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC03o-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL           TO  SC03o-TEL
@@ -2620,9 +2639,15 @@
       *
       *    所在地
            MOVE  WRK-HOSPADRS          TO  SC04o-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC04o-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC04o-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC04o-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL           TO  SC04o-TEL

@@ -34,6 +34,7 @@
       *                                   医療機関情報を参照
       *  01.00.03    内田     08/05/25    ４月改正対応
       *  01.00.04    内田     08/09/17    SPA-AREA初期化
+      *  01.00.05    吉川     12/12/25    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -827,9 +828,15 @@
       *****
       *    住所
            MOVE    WRK-HOSPADRS        TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SC03-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SC03-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SC03-TEL

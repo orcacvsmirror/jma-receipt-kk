@@ -40,6 +40,7 @@
       * 01.00.06     吉川    2010/08/12   同一負担者番号、同一受給者番号で
       *                                   適用期間が異なる場合、別行に印字
       * 01.00.07     吉川    2011/01/13   市国保のみ印字する
+      * 01.00.08     吉川    2012/12/21   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -778,9 +779,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC19-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SC19-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC19-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC19-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC19-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO  SC19-KAISETU

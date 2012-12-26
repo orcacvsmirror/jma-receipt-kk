@@ -41,6 +41,7 @@
       *  01.00.09    吉川   10/07/02   代表保険者番号追加
       *                                オンライン返戻対応
       *  01.00.10    吉川   11/03/08   open-cobol1.0対応
+      *  01.00.11    吉川   12/12/21   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -933,9 +934,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SKT0600-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO   SKT0600-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0600-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO   SKT0600-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0600-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
            MOVE     SYS-1001-KAISETUNAME     TO   SKT0600-KAISETUNAME

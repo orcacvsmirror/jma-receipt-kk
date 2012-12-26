@@ -41,6 +41,7 @@
       *  01.00.08    吉川   2012/02/13   シス管「2010」の公費再掲欄への
       *                                  地方公費記載設定対応
       *  01.00.09    吉川   2012/06/12   電話番号を印字するように修正
+      *  01.00.10    吉川   2012/12/19   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1087,8 +1088,14 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SKT0400-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SKT0400-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SKT0400-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SKT0400-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SKT0400-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *=== 電話番号印字 by Yoshikawa(2012/06/12) start
       *    医療機関電話番号

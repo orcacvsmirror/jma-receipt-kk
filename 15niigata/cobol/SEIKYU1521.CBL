@@ -36,6 +36,7 @@
       *  01.00.03    吉川    10/05/18    市町村名の取得方法の変更
       *  01.00.04    吉川    10/06/08    帳票様式の変更に伴う修正
       *  01.00.05    吉川    10/06/22    印字対象番号の追加(280,282,284,286)
+      *  01.00.06    吉川    12/12/25    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -874,9 +875,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO  SC21-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SC21-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SC21-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SC21-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SC21-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名

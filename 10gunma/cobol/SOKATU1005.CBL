@@ -38,6 +38,7 @@
       *  01.00.07    吉川    12/04/27    在宅はまとめて集計するように修正
       *  01.00.08    吉川    12/08/10    シス管「1901」で設定した電話番号が
       *                                  印字されるように修正
+      *  01.00.09    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -724,9 +725,15 @@
       *
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1005-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1005-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1005-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1005-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT1005-TEL

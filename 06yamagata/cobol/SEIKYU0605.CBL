@@ -37,6 +37,7 @@
       *                                  処理をする
       *  01.00.04    内田    08/06/10    帳票様式に伴う修正
       *                                  SPA-AREA初期化
+      *  01.00.05    吉川    12/12/21    医療機関情報編集対応
       ********************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -870,9 +871,15 @@
       *     MOVE  SYS-1002-TEL            TO  SC05-TEL
       *    医療機関住所
            MOVE  WRK-HOSPADRS            TO  SC05-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC05-ADRS             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME            TO  SC05-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC05-HOSPNAME         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL             TO  SC05-TEL

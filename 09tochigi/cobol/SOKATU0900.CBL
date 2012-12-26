@@ -31,6 +31,7 @@
       *                                  システム管理マスタ「1901」の
       *                                  医療機関情報を参照
       *  01.00.02    吉川    08/10/09    SPA-AREA初期化
+      *  01.00.03    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -442,8 +443,14 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  SKT0900-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT0900-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0900-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT0900-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0900-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME

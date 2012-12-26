@@ -44,6 +44,7 @@
       *  01.00.10    吉川    11/03/07    open-cobol1.0対応
       *  01.00.11    吉川    12/02/17    シス管「2005」の主病名編集対応
       *  01.00.12    萩野    12/09/19    特記事項に印字内容追加
+      *  01.00.13    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1122,9 +1123,15 @@
       *     MOVE  SYS-1001-HOSPNAME      TO  SC06-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS           TO   SC06-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC06-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO   SC06-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC06-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    管理者名
@@ -2178,9 +2185,15 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  SC10-HOSPNAME
       *    医療機関所在地
            MOVE    WRK-HOSPADRS        TO   SC10-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC10-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO   SC10-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC10-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    医療機関ＴＥＬ

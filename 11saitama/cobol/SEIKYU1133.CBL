@@ -39,6 +39,7 @@
       * 01.00.05     吉川    10/02/16   協会けんぽ対応
       *                                 食事欄の食事回数を食事日数に変更
       * 01.00.06     吉川    10/06/02   医療機関コードの8桁目は点数表区分を印字
+      * 01.00.07     吉川    12/12/21   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -906,8 +907,14 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC33-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SC33-HOSPADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC33-HOSPADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC33-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC33-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO  SC33-DAIHYOUNAME

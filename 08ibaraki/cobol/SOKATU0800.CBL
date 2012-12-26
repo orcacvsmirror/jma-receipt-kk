@@ -47,6 +47,7 @@
       *                                 地方公費記載設定対応
       *  01.00.14    吉川   11/01/11    特別療養費国保対応
       *  01.00.15    吉川   11/04/04    東北地方太平洋沖地震対応
+      *  01.00.16    吉川   12/12/21    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1126,8 +1127,14 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  SKT0800-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT0800-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0800-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT0800-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0800-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME

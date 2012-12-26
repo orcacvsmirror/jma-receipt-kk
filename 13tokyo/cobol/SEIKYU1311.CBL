@@ -35,6 +35,7 @@
       *                                  処理をする
       *  01.00.02    内田    08/04/06    SPA-AREA初期化
       *  01.00.03    吉川    12/02/22    印字対象番号の追加（382,482,285,286,287)
+      *  01.00.04    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -781,9 +782,15 @@
       *     MOVE    SYS-1002-TEL            TO  SC11-TEL
       *    住所
            MOVE    WRK-HOSPADRS            TO  SC11-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC11-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC11-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC11-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL             TO  SC11-TEL

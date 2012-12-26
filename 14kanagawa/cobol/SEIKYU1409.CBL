@@ -45,6 +45,7 @@
       *  01.00.10    吉川     11/01/25    特記事項に高額療養費を印字する
       *  01.00.11    吉川     12/02/16    主病名が一つのみの場合
       *                                   区切り線の次の番号を正しくする
+      *  01.00.12    吉川     12/12/25    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1021,9 +1022,15 @@
       *     MOVE  SYS-1001-HOSPNAME         TO  SC09-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS            TO  SC09-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SC09-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC09-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SC09-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    管理者名

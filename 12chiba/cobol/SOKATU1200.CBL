@@ -42,6 +42,7 @@
       *  01.00.10    吉川     11/04/04    東北地方太平洋沖地震対応
       *  01.00.11    吉川     11/04/20    東北地方太平洋沖地震対応（仕様変更）
       *  01.00.12    吉川     12/05/14    レセ電の場合災害分は帳票を分けない
+      *  01.00.13    吉川     12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -923,8 +924,14 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  SKT1200-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1200-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1200-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1200-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1200-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    
            MOVE    SYS-1001-KAISETUNAME

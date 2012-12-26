@@ -37,6 +37,7 @@
       *  01.00.06    吉川    11/06/23    東北地方太平洋沖地震対応
       *  01.00.07    吉川    12/05/16    在宅はまとめて集計するように修正
       *                                  PERFORM→GOTOに修正
+      *  01.00.08    吉川    12/12/25    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1309,8 +1310,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT1415-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1415-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SKT1415-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1415-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SKT1415-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1415-KAISETUNAME

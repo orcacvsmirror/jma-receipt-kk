@@ -45,6 +45,7 @@
       * 01.00.14     吉川    2011/04/25    災害分は県外とする
       * 01.00.15     吉川    2011/10/17    県内災害分は県内とする
       * 01.00.16     吉川    2012/04/27    在宅はまとめて集計するように修正
+      * 01.00.17     吉川    2012/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1152,9 +1153,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT1000-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1000-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1000-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1000-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1000-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT1000-TEL

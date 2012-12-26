@@ -42,6 +42,7 @@
       *                                  印字されるように修正
       *                                  PERFORM→GOTOに修正
       *  01.00.09    吉川    2012/08/08  東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.10    吉川    2012/12/21  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1223,8 +1224,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT1215-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1215-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1215-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1215-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1215-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1215-KAISETUNAME
@@ -1599,8 +1606,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT1225-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1225-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1225-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1225-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1225-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1225-KAISETUNAME

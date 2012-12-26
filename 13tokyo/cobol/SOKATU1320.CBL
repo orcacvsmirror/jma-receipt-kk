@@ -42,7 +42,8 @@
       *  01.00.07    吉川    2010/12/15  特別療養費国保(068)が退職者に
       *                                  記載される不具合を修正
       *                                  open-cobol1.0対応
-      *  00.00.08    吉川    2012/05/16  H24年4月に新設された在総診対応
+      *  01.00.08    吉川    2012/05/16  H24年4月に新設された在総診対応
+      *  01.00.09    吉川    2012/12/21  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -858,8 +859,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT1330-SEIYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1330-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1330-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1330-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1330-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    開設者氏名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1330-KAISETUNAME

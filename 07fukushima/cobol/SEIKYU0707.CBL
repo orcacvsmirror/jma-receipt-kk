@@ -40,6 +40,7 @@
       *                                  未就学であれば「乳幼児...」の
       *                                  就学していれば「子ども...」の
       *                                  帳票をを印刷する
+      *  01.00.05    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -836,9 +837,15 @@
       *     MOVE     SYS-1001-HOSPNAME      TO   SC07-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SC07-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC07-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC07-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC07-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名
@@ -1004,9 +1011,15 @@
       *     MOVE     SYS-1001-HOSPNAME      TO   SC071-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SC071-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC071-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC071-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC071-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名

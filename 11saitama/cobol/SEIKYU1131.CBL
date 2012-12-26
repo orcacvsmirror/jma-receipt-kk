@@ -34,6 +34,7 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    吉川    08/10/08    SPA-AREA初期化
+      *  01.00.03    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -932,6 +933,9 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC31-HOSPNAME
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC31-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC31-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名
