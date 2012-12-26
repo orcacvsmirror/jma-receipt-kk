@@ -51,6 +51,8 @@
       *  01.00.16    吉川    11/04/25    災害分は県外とする
       *  01.00.17    吉川    11/10/17    県内災害分は県内とする
       *  01.00.18    吉川    12/04/27    在宅はまとめて集計するように修正
+      *  01.00.19    吉川    12/12/21    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -177,6 +179,15 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1010".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR         PIC X(200).
@@ -186,7 +197,9 @@
            03  WRK-SRYYMD          PIC X(08).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -536,10 +549,13 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -1385,9 +1401,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT1010-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1010-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1010-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1010-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1010-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT1010-TEL
@@ -1611,9 +1633,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT1020-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1020-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1020-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1020-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1020-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT1020-TEL
@@ -1814,9 +1842,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT1030-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1030-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1030-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1030-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1030-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT1030-TEL

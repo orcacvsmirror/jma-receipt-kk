@@ -42,6 +42,8 @@
       *  01.00.09    吉川    11/04/14    東北地方太平洋沖地震対応（仕様変更）
       *  01.00.10    吉川    11/04/22    オンライン請求の場合
       *                                  災害分のみ印字するように修正
+      *  01.00.11    吉川    12/12/21    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -69,14 +71,20 @@
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-SRYKA.
       *
-           SELECT  CITYNUM-FILE  ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     SELECT  CITYNUM-FILE  ASSIGN FILE-NAME
+           SELECT  CITYNUM-FILE  ASSIGN FILE-NAME2
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-CITYNUM.
       *
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
       *    金融機関ファイル
-           SELECT  KINYU-FILE    ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     SELECT  KINYU-FILE    ASSIGN FILE-NAME
+           SELECT  KINYU-FILE    ASSIGN FILE-NAME3
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-KINYU.
@@ -84,7 +92,10 @@
       *
       *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
       *    オンライン請求設定ファイル
-           SELECT  ONLINE-FILE   ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     SELECT  ONLINE-FILE   ASSIGN FILE-NAME
+           SELECT  ONLINE-FILE   ASSIGN FILE-NAME4
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-ONLINE.
@@ -216,6 +227,33 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU0700".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *
+       01  FILE-NAME2.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM2       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU0700".
+           03  FILLER              PIC X(11)  VALUE "CITYNUM.INI".
+      *
+       01  FILE-NAME3.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM3       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU0700".
+           03  FILLER              PIC X(09)  VALUE "KINYU.INI".
+      *
+       01  FILE-NAME4.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM4       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU0700".
+           03  FILLER              PIC X(10)  VALUE "ONLINE.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD            PIC X(08).
@@ -251,7 +289,9 @@
                05  WRK-KENGAI-HKNJA  PIC X(06) OCCURS 100.
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
            03  WRK-SRYKANAME    PIC X(30) OCCURS 2.
       *=== 指定金融機関を印字 by Yoshikawa(2009/11/04) start
            03  WRK-KINYUDATA    PIC X(20) OCCURS 2.
@@ -582,10 +622,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SRYKA-REC
       *
@@ -630,12 +675,15 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/CITYNUM.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/CITYNUM.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *
-           DISPLAY "ファイル名="  FILE-NAME
+           DISPLAY "ファイル名2="  FILE-NAME2
       *
            INITIALIZE   CITYNUM-REC
       *
@@ -667,10 +715,15 @@
       *
       *    金融機関情報取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
+           DISPLAY "ファイル名3="  FILE-NAME3
       *
            INITIALIZE   KINYU-REC
       *
@@ -709,10 +762,15 @@
       *
       *    オンライン請求設定取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM4
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
+           DISPLAY "ファイル名4="  FILE-NAME4
       *
            INITIALIZE   ONLINE-REC
       *
@@ -1187,9 +1245,15 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  SKT0700-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT0700-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0700-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT0700-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT0700-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名

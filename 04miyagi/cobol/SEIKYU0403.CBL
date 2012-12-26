@@ -38,8 +38,10 @@
       *  01.00.03    吉川    10/06/04    川崎町、富谷町、美里町は
       *                                  食事療養費を半額助成とする
       *  01.00.04    吉川    10/12/13    対象保険番号の追加（583,683,783）
-      *  01.00.03    萩野    12/08/15    対象公費番号をINIファイルから
+      *  01.00.05    萩野    12/08/15    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.06    吉川    12/12/19    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -162,6 +164,15 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/19) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU0403".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/19) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -202,7 +213,9 @@
       *
       *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) start
       *    ファイル名称用エリア
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/19) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/19) end
       *=== 対象公費をINIファイルから取得 by Hagino(2012/08/15) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -624,10 +637,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/19) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/19) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -652,7 +670,6 @@
       *
            CLOSE TAISYOKOHI-FILE
       *
-           DISPLAY  "*** INI-FILE-SEC end *****************"
            .
        110-INI-FILE-EXT.
            EXIT.
@@ -1051,9 +1068,15 @@
       *     MOVE  SYS-1002-TEL            TO  SC03-TEL
       *    住所
            MOVE    WRK-HOSPADRS          TO  SC03-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC03-ADRS             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SC03-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) start
+           INSPECT SC03-HOSPNAME         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *
       *    医療機関電話番号
            MOVE  WRK-HOSPTEL             TO  SC03-TEL
