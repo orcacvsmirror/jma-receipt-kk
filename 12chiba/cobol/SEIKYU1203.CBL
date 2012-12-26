@@ -36,6 +36,8 @@
       *  01.00.03     内田     08/01/22    帳票様式の変更
       *                                    入院用帳票の追加
       *  01.00.04     吉川     08/10/10    SPA-AREA初期化
+      *  01.00.05     吉川     12/12/21    プラグイン対応
+      *                                    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -148,6 +150,15 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU1203".
+           03  FILLER              PIC X(09)  VALUE "KOUZA.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR            PIC X(200).
@@ -156,7 +167,9 @@
            03  WRK-SRYYM              PIC X(09).
       *---(01.00.03) LINE ADD START ------------------------------------
       *    ファイル名称用エリア
-           03  FILE-NAME              PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     03  FILE-NAME              PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    編集用エリア
            03  WRK-TENSUX      PIC ZZZ,ZZ9.
@@ -502,11 +515,15 @@
        110-INI-FILE-SEC                SECTION.
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/KOUZA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/KOUZA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   KOUZA-REC
       *
@@ -810,9 +827,15 @@
       *
       *    住所
            MOVE  WRK-HOSPADRS          TO  SC04-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC04-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC04-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC04-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE  SYS-1002-TEL          TO  SC04-TEL
@@ -1002,9 +1025,15 @@
       *     MOVE  SYS-1001-HOSPNAME  TO  SC03-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS          TO  SC03-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC03-ADRS           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME          TO  SC03-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SC03-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD START ------------------------------------
       *

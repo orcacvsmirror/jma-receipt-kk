@@ -72,6 +72,8 @@
       *  01.00.27    吉川    12/04/17   「全国土木」「全国建設」は
       *                                 東京都に含めて集計する
       *                                 県外分は都道府県ごとに集計する
+      *  01.00.28    吉川    12/12/21   プラグイン対応
+      *                                 医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -244,6 +246,15 @@
       ****2006/02/11 @@@@-BRAND END
       *****
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1105".
+           03  FILLER              PIC X(08)  VALUE "KOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
        01  GOUKEI-AREA.
            03  KOKUHO-TAL.
                05  WRK-KOKUHO-NYUGAI OCCURS 2.
@@ -308,7 +319,9 @@
       *=== 災害対応 by Yoshikawa(2011/05/24) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) start
       *    パラメータファイル名
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/11) end
       *
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -838,10 +851,15 @@
       *
       *    請求額印字対象外公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/KOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/KOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   KOHI-REC
       *
@@ -1874,6 +1892,9 @@
       *     MOVE    SYS-1002-TEL            TO  SKT05-TEL1
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT05-HOSPADRS1
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT05-HOSPADRS1         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL             TO  SKT05-TEL1
@@ -1887,6 +1908,9 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT05-HOSPNAME1
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT05-HOSPNAME1
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT05-HOSPNAME1         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *
       *    開設者氏名

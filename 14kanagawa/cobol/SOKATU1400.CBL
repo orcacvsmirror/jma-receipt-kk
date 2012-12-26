@@ -43,6 +43,8 @@
       *                                  相模原市の代表番号追加
       *  01.00.09    吉川    11/01/25    open-cobol1.0対応
       *  01.00.10    吉川    11/06/23    東北地方太平洋沖地震対応
+      *  01.00.11    吉川    12/12/25    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -192,6 +194,14 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1400".
+           03  FILLER              PIC X(10)  VALUE "ONLINE.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -245,7 +255,9 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *=== 災害対応 by Yoshikawa(2011/06/23) start
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
            03  WRK-ONLINEKBN       PIC X(01).
       *=== 災害対応 by Yoshikawa(2011/06/23) end
       *
@@ -615,10 +627,15 @@
       *
       *    オンライン請求設定取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   ONLINE-REC
       *
@@ -1229,6 +1246,9 @@
       *---(01.00.03) LINE ADD START ------------------------------------
       *     MOVE     SYS-1001-HOSPNAME   TO     SKT1400-HOSPNAME
            MOVE     WRK-HOSPNAME        TO     SKT1400-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SKT1400-HOSPNAME     REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE     SYS-1001-HOSPCDN    TO     SKT1400-HOSPCD
       *   保険者数

@@ -63,6 +63,8 @@
       *  01.00.20    吉川    12/05/16    在宅はまとめて集計するように修正
       *  01.00.21    吉川    12/09/18    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.22    吉川    12/12/25    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -94,7 +96,10 @@
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
       *    印字対象公費番号ファイル
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
                                    ORGANIZATION   IS  LINE SEQUENTIAL
                                    ACCESS MODE    IS  SEQUENTIAL
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
@@ -226,6 +231,20 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1410".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *
+       01  FILE-NAME2.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM2       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1410".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -234,7 +253,9 @@
            03  WRK-SRYYMWH         PIC X(16).
            03  WRK-SRYYMD          PIC X(08).
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
       *
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -714,10 +735,13 @@
        110-INI-FILE-SEC                SECTION.
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -738,10 +762,15 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      *=== プラグイン対応 by Yoshikawa(2012/12/25) end
+      *
+           DISPLAY "ファイル名2="  FILE-NAME2
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -1752,8 +1781,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT1410-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1410-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SKT1410-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1410-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) start
+           INSPECT SKT1410-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/25) end
       *---(01.00.10) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT1410-KAISETUNAME
