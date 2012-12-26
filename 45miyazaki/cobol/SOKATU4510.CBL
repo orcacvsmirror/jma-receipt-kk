@@ -46,6 +46,7 @@
       *  01.00.10    吉川    10/06/01    オンライン返戻対応
       *  01.00.11    吉川    11/02/10    特別療養費国保対応
       *                                  open-cobol1.0対応
+      *  01.00.12    吉川    12/12/20    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1442,9 +1443,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT4510-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT4510-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4510-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT4510-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4510-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名
@@ -1770,9 +1777,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT4511-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT4511-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4511-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT4511-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4511-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名

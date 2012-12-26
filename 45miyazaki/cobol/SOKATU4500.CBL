@@ -41,6 +41,7 @@
       *  01.00.08    吉川    10/06/01    オンライン返戻対応
       *  01.00.09    吉川    11/02/10    特別療養費国保対応
       *                                  open-cobol1.0対応
+      *  01.00.10    吉川    12/12/20    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -983,9 +984,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT4500-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT4500-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4500-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT4500-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4500-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名

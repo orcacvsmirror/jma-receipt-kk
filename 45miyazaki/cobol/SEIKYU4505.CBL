@@ -44,6 +44,7 @@
       *  01.00.10    吉川    10/06/15    対象公費番号をINIファイルから
       *                                  取得するようにする
       *  01.00.11    吉川    11/02/10    open-cobol1.0対応
+      *  01.00.12    吉川    12/12/20    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1032,8 +1033,14 @@
            MOVE    WRK-OUT-INPUT           TO  SKT4510-HOSPCD
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SKT4510-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4510-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SKT4510-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4510-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO  SKT4510-KAISETU
       *=== 電話番号を印字 by Yoshikawa(2009/01/16) start

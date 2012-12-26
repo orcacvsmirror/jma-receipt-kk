@@ -41,6 +41,7 @@
       *                                  印字されるように修正
       *                                  PERFORMをGOTOに修正
       *  01.00.07    吉川    2012/12/20  公費が記載されない不具合を修正
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1148,8 +1149,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT4525-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT4525-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4525-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT4525-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SKT4525-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT4525-KAISETUNAME

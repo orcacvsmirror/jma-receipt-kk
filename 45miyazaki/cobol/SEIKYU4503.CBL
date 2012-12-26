@@ -55,6 +55,7 @@
       *  01.00.16    吉川    12/02/10    月途中に公費を変更した場合
       *                                  変更前に診療を登録した公費が
       *                                  公費１に印字されるように修正
+      *  01.00.17    吉川    12/12/20    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1352,9 +1353,15 @@
       *     MOVE    SYS-1002-TEL        TO  SC03-HOSPTEL
       *    医療機関所在地
            MOVE    WRK-HOSPADRS        TO  SC03-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SC03-HOSPADRS       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関名称
            MOVE    WRK-HOSPNAME        TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SC03-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関ＴＥＬ
            MOVE    WRK-HOSPTEL         TO  SC03-HOSPTEL
@@ -1758,9 +1765,15 @@
       *     MOVE    SYS-1002-TEL        TO  SC04-HOSPTEL
       *    医療機関所在地
            MOVE    WRK-HOSPADRS        TO  SC04-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SC04-HOSPADRS       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SC04-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SC04-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SC04-HOSPTEL

@@ -41,6 +41,7 @@
       *  01.00.08    吉川    10/01/26    190は助成の有無に関わらず記載
       *  01.00.09    吉川    10/06/15    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.10    吉川    12/12/20    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -927,9 +928,15 @@
       *     MOVE     SYS-1001-HOSPNAME      TO  SC07-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SC07-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SC07-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC07-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) start
+           INSPECT SC07-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2012/12/20) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名
