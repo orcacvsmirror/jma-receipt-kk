@@ -92,6 +92,7 @@
       *                                 前期高齢者欄に集計される不具合を修正
       *                                 特定疾患と957等を持っている場合
       *                                 限度額欄に値が記載されるのを修正
+      *  01.00.36    吉川   12/12/13    医療機関情報編集修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1831,8 +1832,14 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SKT0100-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SKT0100-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) start
+           INSPECT SKT0100-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) end
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SKT0100-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) start
+           INSPECT SKT0100-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) end
       *---(01.00.10) LINE ADD END   ------------------------------------
       *    医療機関コード
            MOVE     SYS-1001-HOSPCD          TO   SKT0100-HOSPCD

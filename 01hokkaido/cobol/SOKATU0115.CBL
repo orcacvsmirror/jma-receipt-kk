@@ -45,6 +45,7 @@
       *  01.00.08    吉川    2010/06/17  オンライン返戻対応
       *  01.00.09    吉川    2010/11/25  open-cobol1.0対応
       *  01.00.10    吉川    2012/11/01  PERFORMをGOTOに修正
+      *  01.00.11    吉川    2012/12/13  医療機関情報編集修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1309,8 +1310,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT0115-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT0115-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) start
+           INSPECT SKT0115-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT0115-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) start
+           INSPECT SKT0115-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT0115-KAISETUNAME
