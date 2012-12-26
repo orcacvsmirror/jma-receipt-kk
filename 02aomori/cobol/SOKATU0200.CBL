@@ -50,6 +50,7 @@
       *  01.00.14    吉川     11/06/15   特別療養費国保対応
       *  01.00.15    吉川     12/06/12   妊産婦(144)を使用している場合は
       *                                  １０割欄に印字するように修正
+      *  01.00.16    吉川     12/12/17   医療機関情報編集修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1291,9 +1292,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT0200-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT0200-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/17) start
+           INSPECT SKT0200-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/17) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT0200-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/17) start
+           INSPECT SKT0200-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/17) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT0200-TEL
