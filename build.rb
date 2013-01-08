@@ -89,8 +89,8 @@ def make_list
     str << %|    :version: "#{c[:version]}"\n|
     str << %|    :vendor: "#{c[:vendor]}"\n|
     str << %|    :description: "#{c[:description].toeuc}"\n|
-    str << %|    :date: #{date}\n|
-    str << %|    :url: #{url}\n|
+    str << %|    :date: "#{date}"\n|
+    str << %|    :url: "#{url}"\n|
   end
   listfile = File.join(@opts[:distdir],@opts[:list])
   File.open(listfile,"w") do|io| io.puts str end
