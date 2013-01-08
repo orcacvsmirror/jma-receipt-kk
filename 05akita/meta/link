@@ -10,6 +10,7 @@
  - [lddef/akita.bd , lddef/]
  - [scripts/kentan/sokatu0520.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0525.sh , scripts/kentan/]
+ - [scripts/prgoption/directory , scripts/prgoption/]
  - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
  - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
  - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
