@@ -3664,7 +3664,7 @@
         <point val="7.80495,5.57354"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.80495,5.33465;9.31995,5.63465"/>
+        <rectangle val="7.80495,5.33465;13.865,5.93465"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#KAISETU#</string>
@@ -3678,7 +3678,8 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#179;&#171;&#192;&#223;&#188;&#212;&#187;&#225;&#204;&#190;#</string>
+            <string>#&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;
+&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;&#164;&#162;#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8032,10 +8033,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O216">
       <attribute name="obj_pos">
-        <point val="7.77385,5.97173"/>
+        <point val="7.77385,6.20141"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="7.77385,5.65321;10.6827,6.05321"/>
+        <rectangle val="7.77385,5.88289;10.6827,6.28289"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#TEL#</string>
@@ -8055,7 +8056,7 @@
             <real val="0.4"/>
           </attribute>
           <attribute name="pos">
-            <point val="7.77385,5.97173"/>
+            <point val="7.77385,6.20141"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
