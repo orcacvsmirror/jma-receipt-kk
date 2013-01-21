@@ -60,6 +60,9 @@
       *                                  印字されない不具合を修正
       *  01.00.18    吉川    12/06/14    自己負担が上限額未満の場合
       *                                  １円単位で記載するように修正
+      *  01.00.19    吉川    13/01/10    プラグイン対応
+      *                                  医療機関情報編集対応
+      *  01.00.20    吉川    13/01/16    テーブルのprimary key変更対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -99,8 +102,10 @@
       *    印字対象公費番号ファイル
        FD  TAISYOKOHI-FILE.
        01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-CHOHYO   PIC X(01).
-           03  FILLER              PIC X(01).
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/10) start
+      *     03  TAISYO-DAT-CHOHYO   PIC X(01).
+      *     03  FILLER              PIC X(01).
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/10) end
            03  TAISYO-DAT-KOHNUM   PIC X(03). 
            03  TAISYO-DAT-KAIGYO   PIC X(01). 
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) end
@@ -192,6 +197,15 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU2603".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
       *    一時領域  
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -261,7 +275,9 @@
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) start
       *    パラメータファイル名
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) end
       *
       *    集計エリア
@@ -686,10 +702,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -699,13 +720,20 @@
                            FLG-TAISYOKOHI
       *
            PERFORM UNTIL    FLG-TAISYOKOHI = 1
-                   OR       TAISYO-DAT-CHOHYO = "*"
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/10) start
+      *             OR       TAISYO-DAT-CHOHYO = "*"
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/10) end
              READ TAISYOKOHI-FILE NEXT
                AT END
                  MOVE  1                 TO  FLG-TAISYOKOHI
                NOT AT END
       *          1=福祉及び子育て支援医療費請求書
-                 IF  TAISYO-DAT-CHOHYO  =  "1"
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/10) start
+      *           IF  TAISYO-DAT-CHOHYO  =  "1"
+                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+                   CONTINUE
+                 ELSE
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/10) end
                    ADD   1               TO  IDX
                    MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
                  END-IF
@@ -1294,8 +1322,14 @@
       *     MOVE    SYS-1001-HOSPNAME        TO  SC03-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS             TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC03-ADRS                REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *    医療機関名
            MOVE    WRK-HOSPNAME             TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC03-HOSPNAME            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME     TO  SC03-KAISETUNAME
@@ -2132,16 +2166,19 @@
       *    請求管理ＤＢ検索
            INITIALIZE                     RECE10-REC
       *
-           MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
-           MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
-           MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
-           MOVE  RECE02-PTID          TO  RECE10-PTID
-           MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
-           MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
-           MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
-           MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
-           MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
-           MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+      *=== primary key変更対応 by Yoshikawa(2013/01/16) start
+      *     MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
+      *     MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
+      *     MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+      *     MOVE  RECE02-PTID          TO  RECE10-PTID
+      *     MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
+      *     MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+      *     MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+      *     MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+      *     MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+      *     MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+           MOVE  RECE02-KEY           TO  RECE10-KEY
+      *=== primary key変更対応 by Yoshikawa(2013/01/16) end
       *
            MOVE  RECE10-REC           TO  MCPDATA-REC
            MOVE  "DBSELECT"           TO  MCP-FUNC
