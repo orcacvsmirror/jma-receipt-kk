@@ -39,6 +39,7 @@
       *  01.00.04    内田    08/02/23    再印刷の帳票タイトルの修正
       *                                  高額療養費の上限額を考慮する
       *  01.00.05    吉川    08/11/04    SPA-AREA初期化
+      *  01.00.06    吉川    13/01/11    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -838,9 +839,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC07-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS                TO  SC07-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SC07-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME                TO  SC07-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SC07-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名

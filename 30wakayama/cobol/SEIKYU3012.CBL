@@ -42,6 +42,7 @@
       *                                         医療機関情報を参照
       *  02.00.02       吉川    10/12/08        open-cobol1.0対応
       *  02.00.03       吉川    11/05/30        ver4.6.0での印字不具合対応
+      *  02.00.04       吉川    13/01/11        医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -629,9 +630,15 @@
       *     MOVE  SYS-1002-TEL           TO  SC11-TEL
       *    住所
            MOVE  WRK-HOSPADRS           TO  SC11-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SC11-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO  SC11-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SC11-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL            TO  SC11-TEL

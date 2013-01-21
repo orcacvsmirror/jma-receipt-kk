@@ -54,6 +54,7 @@
       *  02.00.02       吉川    10/06/24        和歌山市、橋本市以外の帳票廃止
       *  02.00.03       吉川    10/12/08        open-cobol1.0対応
       *  02.00.04       吉川    11/05/30        ver4.6.0での印字不具合対応
+      *  02.00.05       吉川    13/01/11        医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -861,9 +862,15 @@
       *     MOVE  SYS-1002-TEL           TO  SC03-TEL
       *    住所
            MOVE  WRK-HOSPADRS           TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SC03-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SC03-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL            TO  SC03-TEL

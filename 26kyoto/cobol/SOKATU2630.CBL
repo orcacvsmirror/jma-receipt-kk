@@ -47,6 +47,7 @@
       *  01.00.13    吉川    10/11/24    open-cobol1.0対応
       *  01.00.14    吉川    11/04/22    東北地方太平洋沖地震対応
       *  01.00.15    吉川    12/04/27    在宅はまとめて集計するように修正
+      *  01.00.16    吉川    13/01/10    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1286,8 +1287,14 @@
       *     MOVE    SYS-1002-TEL          TO  SKT2630-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT2630-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2630-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT2630-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2630-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT2630-TEL
       *---(01.00.04) LINE ADD END   ------------------------------------

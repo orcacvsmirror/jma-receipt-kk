@@ -36,6 +36,7 @@
       *                                   広域連合の保険者番号指定対応
       *  04.03.02    吉川       10/12/08  open-cobol1.0対応
       *  04.07.01    吉川       12/11/07  PERFORMをGOTOに修正
+      *  04.07.02    吉川       13/01/11  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1044,8 +1045,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT3005-PRTYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT3005-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3005-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT3005-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3005-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    電話番号
            MOVE    WRK-TEL             TO  SKT3005-TEL
       *    

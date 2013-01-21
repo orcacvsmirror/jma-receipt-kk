@@ -45,6 +45,7 @@
       *                                  月途中で負担者番号が変更になった場合
       *                                  公費再掲欄の集計が合わないのを修正
       *  01.00.10    吉川    2012/11/12  PERFORMをGOTOに修正
+      *  01.00.11    吉川    2013/01/11  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1338,8 +1339,14 @@
       *=== 返戻分は当月を印字 by Yoshikawa(2011/08/10) end
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT2815-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT2815-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT2815-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT2815-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT2815-KAISETUNAME

@@ -44,6 +44,7 @@
       *  01.00.09    吉川    10/11/02    特別療養費国保対応
       *  01.00.10    吉川    10/11/24    open-cobol1.0対応
       *  01.00.11    吉川    11/02/02    政令指定都市も区毎に集計する
+      *  01.00.12    吉川    13/01/11    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1162,8 +1163,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT2710-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT2710-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT2710-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT2710-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT2710-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT2710-KAISETU
