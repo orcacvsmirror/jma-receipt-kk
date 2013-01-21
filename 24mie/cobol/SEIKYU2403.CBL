@@ -34,6 +34,8 @@
       *                                  記載されるのを修正
       *  01.00.03    吉川    10/08/05    処方せん発行区分の判定方法変更
       *  01.00.04    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.05    吉川    13/01/10    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -135,6 +137,15 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU2403".
+           03  FILLER              PIC X(09)  VALUE "SYOHO.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -172,7 +183,9 @@
            03  WRK-SYOHODATA         PIC X(40)  OCCURS 2.
       *
       *    ファイル名称エリア
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -552,11 +565,16 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-                                FILE-NAME
-           MOVE  "data/SYOHO.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *                          FILE-NAME
+      *     MOVE  "data/SYOHO.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SYOHO-REC
       *
@@ -842,9 +860,15 @@
       *
       *    医療機関住所
            MOVE    WRK-HOSPADRS             TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC03-ADRS                REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME             TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC03-HOSPNAME            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    開設者氏名
            MOVE    SYS-1001-KAISETUNAME     TO  SC03-KAISETU

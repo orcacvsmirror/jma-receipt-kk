@@ -37,6 +37,8 @@
       *  01.00.05    萩野    12/09/26    月途中の保険変更でレセプトが分かれても
       *                                  変更前と後の合算した金額を１行で記載する
       *                                  患者番号順で記載されるように修正
+      *  01.00.06    吉川    13/01/10    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -160,6 +162,15 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU2407".
+           03  FILLER              PIC X(08)  VALUE "SORT.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC X(200).
@@ -212,7 +223,9 @@
            03  WRK-Z12          PIC ZZZ,ZZZ,ZZZ.
       *
       *    市町村用ファイル名エリア
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -613,10 +626,13 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SORT.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SORT.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -626,23 +642,23 @@
       *
            READ SRT-FILE
              AT END
-      *=== 患者番号順で記載 by Hagino(2012/09/26) start
+      *--- 2012/09/26 START ------------------------------------------
       *         INITIALIZE        WRK-SRTKBN
                INITIALIZE        SRT-SRTKBN
-      *=== 患者番号順で記載 by Hagino(2012/09/26) end
+      *--- 2012/09/26 END   ------------------------------------------
              DISPLAY "読み込み失敗"
            END-READ
       *
       *    2以外は全て1を設定
-      *=== 患者番号順で記載 by Hagino(2012/09/26) start
+      *--- 2012/09/26 START ------------------------------------------
       *     IF  WRK-SRTKBN  NOT =  "2"
            IF  SRT-SRTKBN  NOT =  "2"
-      *=== 患者番号順で記載 by Hagino(2012/09/26) end
+      *--- 2012/09/26 END   ------------------------------------------
                MOVE    "1"           TO  WRK-SRTKBN
-      *=== 患者番号順で記載 by Hagino(2012/09/26) start
+      *--- 2012/09/26 START ------------------------------------------
            ELSE
                MOVE    SRT-SRTKBN    TO  WRK-SRTKBN
-      *=== 患者番号順で記載 by Hagino(2012/09/26) end
+      *--- 2012/09/26 END   ------------------------------------------
            END-IF
       *
            DISPLAY "ソート区分="  WRK-SRTKBN
@@ -755,24 +771,17 @@
                MOVE  "5"                     TO   MF100-KOHKBN
            END-EVALUATE
       *
-      *=== 患者番号順で記載 by Hagino(2012/09/26) start
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
-      **    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
-      *     EVALUATE  WRK-SRTKBN
-      *       WHEN  "1"
-      **         MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
-      *       WHEN  "2"
-      **         MOVE    MF100-PTNUM           TO   MF100-SORTNUM
-      *     END-EVALUATE
-      **=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
            EVALUATE  WRK-SRTKBN
              WHEN  "1"
-               MOVE    RECE02-KOHJKYSNUM(IDZ)  TO   MF100-SORTNUM
+               MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
              WHEN  "2"
-               MOVE    RECE02-PTNUM            TO   MF100-SORTNUM
+               MOVE    MF100-PTNUM           TO   MF100-SORTNUM
            END-EVALUATE
-      *=== 患者番号順で記載 by Hagino(2012/09/26) end
+      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *
+      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
       *    集計ファイル読込
            PERFORM  900-SKTTMP-READ-SEC
       *
@@ -956,9 +965,15 @@
       *
       *    医療機関住所
            MOVE    WRK-HOSPADRS             TO  SC07-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC07-ADRS                REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME             TO  SC07-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC07-HOSPNAME            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    開設者氏名
            MOVE    SYS-1001-KAISETUNAME     TO  SC07-KAISETU

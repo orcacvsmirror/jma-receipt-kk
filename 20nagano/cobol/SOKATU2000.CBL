@@ -43,6 +43,8 @@
       *                                  特別療養費国保対応
       *  01.00.09    吉川    11/03/07    open-cobol1.0対応
       *  01.00.10    吉川    11/11/10    診療科を５行まで印字できるように修正
+      *  01.00.11    吉川    13/01/09    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -193,6 +195,15 @@
       ****2006/01/27  onuki INS.
            03  WRK-PARA-SYOKBN     PIC X(01).
       ****
+      *=== プラグイン対応 by Yoshikawa(2013/01/09) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU2000".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -219,7 +230,9 @@
                05  WRK-STYOKI2     PIC 9(05).
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/09) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
       *=== 診療科を５行まで印字 by Yoshikawa(2011/11/10) start
       *     03  WRK-SRYKANAME    PIC X(20) OCCURS 3.
            03  WRK-SRYKANAME    PIC X(20) OCCURS 5.
@@ -642,10 +655,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE  ORCSMKPASSAREA
-           MOVE    "data/SRYKA.INI"    TO  MKPASS-IN-01
-           CALL    "ORCSMKPASSSITE"        USING   ORCSMKPASSAREA
-           MOVE    MKPASS-OT-01        TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/09) start
+      *     INITIALIZE  ORCSMKPASSAREA
+      *     MOVE    "data/SRYKA.INI"    TO  MKPASS-IN-01
+      *     CALL    "ORCSMKPASSSITE"        USING   ORCSMKPASSAREA
+      *     MOVE    MKPASS-OT-01        TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE  SRYKA-REC
       *
@@ -1143,9 +1161,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT2000-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT2000-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT2000-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT2000-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT2000-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名

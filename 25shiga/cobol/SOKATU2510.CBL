@@ -49,6 +49,7 @@
       *  01.00.15    吉川    2010/09/16    後期高齢は県毎にまとめる
       *  01.00.16    吉川    2010/11/01    特別療養費国保対応
       *  01.00.17    吉川    2010/11/24    open-cobol1.0対応
+      *  01.00.18    吉川    2013/01/10    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1404,9 +1405,15 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT2510-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT2510-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2510-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT2510-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2510-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *    開設者名
