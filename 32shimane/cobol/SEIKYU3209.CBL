@@ -29,8 +29,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
-      *  01.00.06    吉川    12/09/19    対象公費番号をINIファイルから
+      *  01.00.01    吉川    12/09/19    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.02    吉川    13/01/11    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -73,8 +74,10 @@
       *    印字対象公費番号ファイル
        FD  TAISYOKOHI-FILE.
        01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-KBN      PIC X(01).
-           03  FILLER              PIC X(01).
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) start
+      *     03  TAISYO-DAT-KBN      PIC X(01).
+      *     03  FILLER              PIC X(01).
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) end
            03  TAISYO-DAT-KOHNUM   PIC X(03). 
            03  TAISYO-DAT-KAIGYO   PIC X(01). 
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/19) end
@@ -148,6 +151,15 @@
            03  WRK-PARA-PAGE           PIC 9(10).
            03  WRK-PARA-SYORIFLG       PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU3209".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR             PIC  X(200).
@@ -202,7 +214,9 @@
            03  WRK-FILENAME            PIC  X(40).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/19) start
       *    ファイル名称用エリア
-           03  FILE-NAME               PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     03  FILE-NAME               PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/19) end
       *
       *    医療機関情報
@@ -587,10 +601,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -604,14 +623,21 @@
                AT END
                  MOVE  1                 TO  FLG-TAISYOKOHI
                NOT AT END
-                 IF  TAISYO-DAT-KBN = "*" OR SPACE
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) start
+      *           IF  TAISYO-DAT-KBN = "*" OR SPACE
+                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) end
                    CONTINUE
                  ELSE
-                   IF  TAISYO-DAT-KBN = "3"
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) start
+      *             IF  TAISYO-DAT-KBN = "3"
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) end
                      ADD   1               TO  IDX
                      MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
                      DISPLAY "読み込み対象公費 = " TAISYOKOHI-REC
-                   END-IF
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) start
+      *             END-IF
+      *=== INIの帳票区分廃止 by Yoshikawa(2013/01/11) end
                  END-IF
              END-READ
            END-PERFORM

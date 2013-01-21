@@ -5,6 +5,8 @@ PREFNAME=tottori
 PROGRAMID=SOKATU3100
 LOG_FILE="/var/log/jma-receipt/${15}sokatu3100"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
+INIFILE="/tmp/${15}${PROGRAMID}YUSEN.INI"
 #-------------------------------------------#
 #    診療報酬請求明細書送付書（鳥取）
 #        $1-${11}
@@ -23,6 +25,9 @@ RENNUM=0
         fi
 
         cd  ${ORCA_DIR}
+
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
 
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
@@ -57,6 +62,7 @@ RENNUM=0
             fi
         fi
 
+##      INIファイル 削除
+        rm -f ${INIFILE}
+        
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
-
-        exit
