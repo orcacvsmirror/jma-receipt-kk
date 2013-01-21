@@ -5,6 +5,12 @@ PREFNAME=hyogo
 PROGRAMID=SOKATU2800
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2800"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='HOSPKBN';"
+PRGOPT2="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
+PRGOPT3="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
+INIFILE="/tmp/${15}${PROGRAMID}HOSPKBN.INI"
+INIFILE2="/tmp/${15}${PROGRAMID}SRYKA.INI"
+INIFILE3="/tmp/${15}${PROGRAMID}TAISYOKOHI.INI"
 -------------------------------------------#
 #    国保総括表作成（兵庫）
 #        $1-${11}
@@ -24,6 +30,11 @@ RENNUM=0
             rm  ${16}
         fi
         
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
+        echo "${PRGOPT3}" | psql -At ${DBNAME} > ${INIFILE3}
+
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -56,6 +67,11 @@ RENNUM=0
                 exit
             fi
         fi
+        
+##      INIファイル 削除
+        rm -f ${INIFILE}
+        rm -f ${INIFILE2}
+        rm -f ${INIFILE3}
         
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

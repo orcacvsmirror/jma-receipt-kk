@@ -5,6 +5,10 @@ PREFNAME=hyogo
 PROGRAMID=SEIKYU2805
 LOG_FILE="/var/log/jma-receipt/${14}seikyu2805"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
+PRGOPT2="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='SEINENGETU';"
+INIFILE="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
+INIFILE2="/tmp/${14}${PROGRAMID}SEINENGETU.INI"
 #-------------------------------------------#
 #    地方公費作成（兵庫・福祉）
 #        $1-${11}
@@ -23,6 +27,10 @@ RENNUM=0
             rm  ${15}
         fi
 
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
+
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -31,6 +39,10 @@ RENNUM=0
                 exit
             fi
 
+##      INIファイル 削除
+        rm -f ${INIFILE}
+        rm -f ${INIFILE2}
+        
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit
