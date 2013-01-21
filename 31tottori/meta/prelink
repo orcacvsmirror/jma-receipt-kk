@@ -1,3 +1,16 @@
 #!/bin/bash
 echo $0 | logger
 echo `pwd`  | logger
+
+if test -z "$JMARECEIPT_ENV" ; then
+    JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+fi
+if ! test -f "$JMARECEIPT_ENV" ; then
+    exit 0
+fi
+
+. $JMARECEIPT_ENV
+
+if ! test -d ${SITESRCDIR}/scripts/prgoption ; then
+    mkdir -m 775 ${SITESRCDIR}/scripts/prgoption
+fi
