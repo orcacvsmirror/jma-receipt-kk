@@ -40,6 +40,8 @@
       *  01.00.09    吉川      10/11/25    open-cobol1.0対応
       *  01.00.10    吉川      10/12/09    特別療養費候補対応
       *  01.00.11    吉川      12/06/06    帳票様式の変更に伴う修正
+      *  01.00.12    吉川      13/01/11    プラグイン対応
+      *                                    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -165,6 +167,15 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU3200".
+           03  FILLER              PIC X(09)  VALUE "SEIKYU.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -175,7 +186,9 @@
            03  WRK-SEIKYUKBN       PIC X(01).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
       *=== 電子請求時、単独医療は記載不要 by Yoshikawa(2010/11/09) end
       *  
            03  WRK-SYMD.
@@ -627,10 +640,15 @@
       *
       *    請求設定取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SEIKYU.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SEIKYU.INI"    TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SEIKYU-REC
       *
@@ -1224,6 +1242,9 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT3200-HOSPNAME
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3200-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3200-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) start
       *    特別療養費
