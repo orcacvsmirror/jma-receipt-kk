@@ -32,6 +32,11 @@
       *                                  医療機関情報を参照
       *  01.00.02    内田    08/04/09    SPA-AREA初期化
       *  01.00.03    吉川    12/10/09    帳票様式の変更に伴う修正
+      *  01.00.04    吉川    13/01/09    医療機関情報編集対応
+      *  01.00.05    吉川    13/01/16    一部負担金欄は該当公費に係る
+      *                                  負担分のみを印字するように修正
+      *                                  外来の場合、010等を併用しても
+      *                                  公費点数欄に印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -151,6 +156,9 @@
            03  WRK-KOHTENSU          PIC 9(08).
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-KOHID             PIC 9(10).
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
+           03  WRK-ITBFTN            PIC 9(08).
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -652,12 +660,18 @@
            ELSE
       *---(01.00.01) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY25   TO  WRK-PATH
-               MOVE    "key33"             TO  WRK-PATH
+      *=== 外来010等の点数印字不具合修正 by Yoshikawa(2013/01/16) start
+      *         MOVE    "key33"             TO  WRK-PATH
+               MOVE    "key25"             TO  WRK-PATH
+      *=== 外来010等の点数印字不具合修正 by Yoshikawa(2013/01/16) end
       *---(01.00.01) LINE ADD END   ------------------------------------
            END-IF
            PERFORM  920-SYUNOU-SET-SEC
       *
            MOVE    WRK-KOHTENSU        TO  MF100-KOHTENSU
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
+           MOVE    WRK-ITBFTN          TO  MF100-FTNMONEY
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
       *
       *    ソートKEY設定
       *    健保本人→健保家族→市町村国保→国保組合
@@ -741,9 +755,15 @@
       *     MOVE  SYS-1001-HOSPNAME         TO  SC09-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS              TO  SC09-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC09-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC09-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC09-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名
@@ -997,17 +1017,30 @@
       *****************************************************************
        800-SEIKYU-SEC  SECTION.
       *
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
+           MOVE    ZERO                        TO  FLG-HEIYOU
+                                                   WRK-ITBFTN
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
                    SYU-KOH-HKNNUM(IDX) =   SPACE
                IF  SYU-KOH-HKNNUM(IDX)     =   "010" OR "011"
                OR                              "020" OR "021"
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
+                   MOVE    1                   TO  FLG-HEIYOU
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
                    ADD     SYU-TOTAL-HKNTEN    TO  WRK-KOHTENSU
                END-IF
       *
            END-PERFORM
       *
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
+      *    一部負担金は141に係る分のみ
+           IF  FLG-HEIYOU  =  ZERO
+               ADD    SYU-KOH-COMPFTN(1)       TO  WRK-ITBFTN
+           END-IF
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
       *
            .
        800-SEIKYU-SEC-EXT.
