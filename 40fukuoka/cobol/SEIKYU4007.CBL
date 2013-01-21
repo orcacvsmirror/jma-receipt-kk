@@ -60,6 +60,7 @@
       *  01.00.19    吉川     10/12/16    open-cobol1.0対応
       *  01.00.20    吉川     12/03/12    対象公費番号をINIファイルから
       *                                   取得するようにする
+      *  01.00.21    吉川     13/01/17    テーブルのprimary key変更対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -3460,19 +3461,22 @@
       *    請求管理ＤＢ検索
            INITIALIZE                     RECE10-REC
       *
-      *---(01.00.09) LINE ADD START ------------------------------------
-      *     MOVE  RECE02-HOSPID        TO  RECE10-HOSPID
-           MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
-      *---(01.00.09) LINE ADD END   ------------------------------------
-           MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
-           MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
-           MOVE  RECE02-PTID          TO  RECE10-PTID
-           MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
-           MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
-           MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
-           MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
-           MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
-           MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+      *=== primary key変更対応 by Yoshikawa(2013/01/17) start
+      **---(01.00.09) LINE ADD START ------------------------------------
+      **     MOVE  RECE02-HOSPID        TO  RECE10-HOSPID
+      *     MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
+      **---(01.00.09) LINE ADD END   ------------------------------------
+      *     MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
+      *     MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+      *     MOVE  RECE02-PTID          TO  RECE10-PTID
+      *     MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
+      *     MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+      *     MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+      *     MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+      *     MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+      *     MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+           MOVE  RECE02-KEY           TO  RECE10-KEY
+      *=== primary key変更対応 by Yoshikawa(2013/01/17) end
       *
            MOVE  RECE10-REC           TO  MCPDATA-REC
            MOVE  "DBSELECT"           TO  MCP-FUNC

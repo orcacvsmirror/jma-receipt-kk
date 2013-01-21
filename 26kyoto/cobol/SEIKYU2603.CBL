@@ -60,6 +60,7 @@
       *                                  印字されない不具合を修正
       *  01.00.18    吉川    12/06/14    自己負担が上限額未満の場合
       *                                  １円単位で記載するように修正
+      *  01.00.19    吉川    13/01/16    テーブルのprimary key変更対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2132,16 +2133,19 @@
       *    請求管理ＤＢ検索
            INITIALIZE                     RECE10-REC
       *
-           MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
-           MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
-           MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
-           MOVE  RECE02-PTID          TO  RECE10-PTID
-           MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
-           MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
-           MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
-           MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
-           MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
-           MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+      *=== primary key変更対応 by Yoshikawa(2013/01/16) start
+      *     MOVE  SPA-HOSPNUM          TO  RECE10-HOSPNUM
+      *     MOVE  RECE02-SRYYM         TO  RECE10-SRYYM
+      *     MOVE  RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+      *     MOVE  RECE02-PTID          TO  RECE10-PTID
+      *     MOVE  RECE02-RECEKA        TO  RECE10-RECEKA
+      *     MOVE  RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+      *     MOVE  RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+      *     MOVE  RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+      *     MOVE  RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+      *     MOVE  RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+           MOVE  RECE02-KEY           TO  RECE10-KEY
+      *=== primary key変更対応 by Yoshikawa(2013/01/16) end
       *
            MOVE  RECE10-REC           TO  MCPDATA-REC
            MOVE  "DBSELECT"           TO  MCP-FUNC
