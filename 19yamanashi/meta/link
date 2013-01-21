@@ -20,3 +20,10 @@
  - [scripts/kentan/sokatu1900.sh , scripts/kentan/]
  - [scripts/kentan/sokatu1910.sh , scripts/kentan/]
  - [scripts/kentan/sokatu1915.sh , scripts/kentan/]
+ - [scripts/prgoption/directory , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
+ - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
+ - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1910.exp , scripts/prgoption/]
+ - [scripts/prgoption/SOKATU1910-YUSEN.opt , scripts/prgoption/]
+
