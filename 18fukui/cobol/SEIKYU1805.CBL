@@ -61,6 +61,7 @@
       *  01.00.16       吉川    2012/04/13   同月内に公費を変更した場合
       *                                      請求点数と実日数はそれぞれの
       *                                      公費で診療した値を印字する
+      *  01.00.17       吉川    2013/01/09   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1296,12 +1297,18 @@
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) start
       *     MOVE  SYS-1002-ADRS           TO  SC1805-HOSPADRS
            MOVE  WRK-HOSPADRS            TO  SC1805-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC1805-HOSPADRS       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
       *
       *    医療機関名
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) start
       *     MOVE  SYS-1001-HOSPNAME       TO  SC1805-HOSPNAME
            MOVE  WRK-HOSPNAME            TO  SC1805-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC1805-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
       *
       *    電話番号

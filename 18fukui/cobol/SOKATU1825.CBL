@@ -31,6 +31,7 @@
       *  01.00.02    吉川    2010/03/10  広域連合の保険者番号指定対応
       *  01.00.03    吉川    2010/10/01  オンライン返戻対応
       *  01.00.04    萩野    2012/10/17  PERFORMをGOTOに修正
+      *  01.00.05    吉川    2013/01/09  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -810,6 +811,9 @@
            MOVE     WRK-OUT-INPUT      TO  SKT1825-HKNJANUM
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1825-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1825-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    医療機関コード
            MOVE     SYS-1001-HOSPCD    TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC

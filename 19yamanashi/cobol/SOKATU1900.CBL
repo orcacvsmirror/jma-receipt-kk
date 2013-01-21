@@ -48,6 +48,7 @@
       *  01.00.16       吉川     10/10/01  オンライン返戻対応
       *                                    特別療養費国保対応
       *  01.00.17       吉川     11/03/10  open-cobol1.0対応
+      *  01.00.18       吉川     13/01/09  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1132,9 +1133,15 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT1900-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1900-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1900-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1900-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1900-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT1900-KAISETUNAME
@@ -1568,8 +1575,14 @@
            MOVE    WRK-SRYYMWH           TO  SKT1900-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1900-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1900-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1900-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1900-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT1900-KAISETUNAME
       *    医療機関コード

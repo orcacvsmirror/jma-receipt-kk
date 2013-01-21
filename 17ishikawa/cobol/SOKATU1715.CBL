@@ -37,6 +37,7 @@
       *  01.00.06    吉川    2012/05/23  帳票様式の変更に伴う修正
       *                                  在宅はまとめて集計するように修正
       *                                  PERFORM→GOTOに修正
+      *  01.00.07    吉川    2013/01/09  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1317,8 +1318,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT1715-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1715-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1715-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1715-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1715-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT1715-KAISETUNAME

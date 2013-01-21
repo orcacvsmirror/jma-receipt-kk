@@ -42,6 +42,7 @@
       *  01.00.06       吉川    2011/02/17   open-cobol1.0対応
       *  01.00.07       吉川    2011/12/16   同月内で受給者番号が変わっても
       *                                      帳票に反映されないのを修正
+      *  01.00.08       吉川    2013/01/09   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -891,12 +892,18 @@
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) start
       *     MOVE  SYS-1002-ADRS  TO  SC1803-HOSPADRS
            MOVE  WRK-HOSPADRS       TO  SC1803-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC1803-HOSPADRS  REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
       *
       *    医療機関名
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) start
       *     MOVE  SYS-1001-HOSPNAME  TO  SC1803-HOSPNAME
            MOVE  WRK-HOSPNAME       TO  SC1803-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC1803-HOSPNAME  REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/05) end
       *
       *

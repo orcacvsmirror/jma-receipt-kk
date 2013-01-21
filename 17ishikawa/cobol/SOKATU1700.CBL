@@ -37,6 +37,7 @@
       *  01.00.04    吉川    11/02/17    open-cobol1.0対応
       *                                  特別療養費印刷時の再印刷画面の
       *                                  帳票タイトル変更
+      *  01.00.05    吉川    13/01/09    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -920,8 +921,14 @@
            MOVE    WRK-SEIYMDWH          TO  SKT1700-SEIYMD
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT1700-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1700-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT1700-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SKT1700-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *    医療機関コード
            MOVE     SYS-1001-HOSPCD    TO   WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
