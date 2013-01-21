@@ -210,7 +210,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="背景" visible="true" active="true">
+  <dia:layer name="背景" visible="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="0.874377,7.68904"/>
@@ -338,7 +338,7 @@
         <dia:point val="0.892058,10.8547"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="0.882057,10.8447;16.8914,10.8663"/>
+        <dia:rectangle val="0.882057,10.8447;16.8914,10.8662"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="0.892058,10.8547"/>
@@ -662,7 +662,7 @@
         <dia:point val="4.08645,20.144"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.07645,20.1337;16.8915,20.154"/>
+        <dia:rectangle val="4.07645,20.1338;16.8915,20.154"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="4.08645,20.144"/>
@@ -3262,7 +3262,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true">
+  <dia:layer name="差し込み" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O107">
       <dia:attribute name="obj_pos">
         <dia:point val="2.83249,1.63467"/>
@@ -3480,12 +3480,13 @@
         <dia:point val="7.80495,5.57354"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.80495,5.30854;9.30495,5.61104"/>
+        <dia:rectangle val="7.80495,5.30098;13.8125,6.00117"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#開設者氏名#</dia:string>
+            <dia:string>#ああああああああああああああああああああ
+ああああああああああああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7845,10 +7846,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O216">
       <dia:attribute name="obj_pos">
-        <dia:point val="7.77385,5.97173"/>
+        <dia:point val="7.82385,6.27173"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.77385,5.61923;10.1738,6.02173"/>
+        <dia:rectangle val="7.82385,5.91923;10.2239,6.32173"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -7862,7 +7863,7 @@
             <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="7.77385,5.97173"/>
+            <dia:point val="7.82385,6.27173"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
