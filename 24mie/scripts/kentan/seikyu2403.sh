@@ -6,6 +6,8 @@ PREFNAME=mie
 PROGRAMID=SEIKYU2403
 LOG_FILE="/var/log/jma-receipt/${14}seikyu2403"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='SYOHO';"
+INIFILE="/tmp/${14}${PROGRAMID}SYOHO.INI"
 #-------------------------------------------#
 #    ÃÏÊý¸øÈñºîÀ®¡Ê»°½Å¡¦Ê¡»ã°åÎÅÈñÎÎ¼ý¾ÚÌÀ½ñ¡Ë
 #        $1-${11}
@@ -24,6 +26,9 @@ RENNUM=0
             rm  ${15}
         fi
 
+##      INI¥Õ¥¡¥¤¥ë ºîÀ®
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -32,6 +37,9 @@ RENNUM=0
                 exit
             fi
 
+##      INI¥Õ¥¡¥¤¥ë ºï½ü
+        rm -f ${INIFILE}
+        
 	    $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit

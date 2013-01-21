@@ -5,8 +5,12 @@ PREFNAME=shiga
 PROGRAMID=SEIKYU2503
 LOG_FILE="/var/log/jma-receipt/${14}seikyu2503"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='SORT';"
+PRGOPT2="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
+INIFILE="/tmp/${14}${PROGRAMID}SORT.INI"
+INIFILE2="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
 #-------------------------------------------#
-#    ÃÏÊý¸øÈñºîÀ®¡Ê¼¢²ì¡¦Ï·¿Í¡Ë
+#    ÃÏÊý¸øÈñºîÀ®¡Ê¼¢²ì¡Ë
 #        $1-${11}
 #              °õºþ£Ä£ÂÍÑÄê¸ÇÄê°ú¿ô(CPORCSRTLNK.INC)
 #        ${12} ¥¸¥ç¥Ö£É£Ä
@@ -23,6 +27,10 @@ RENNUM=0
             rm  ${15}
         fi
 
+##      INI¥Õ¥¡¥¤¥ë ºîÀ®
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
+
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -31,6 +39,10 @@ RENNUM=0
                 exit
             fi
 
+##      INI¥Õ¥¡¥¤¥ë ºï½ü
+        rm -f ${INIFILE}
+        rm -f ${INIFILE2}
+        
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit

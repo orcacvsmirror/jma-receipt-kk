@@ -6,6 +6,8 @@ PREFNAME=mie
 PROGRAMID=SEIKYU2407
 LOG_FILE="/var/log/jma-receipt/${14}seikyu2407"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='SORT';"
+INIFILE="/tmp/${14}${PROGRAMID}SORT.INI"
 #-------------------------------------------#
 #    地方公費作成（三重・領収証明一覧表）
 #        $1-${11}
@@ -24,6 +26,9 @@ RENNUM=0
             rm  ${15}
         fi
 
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -32,6 +37,9 @@ RENNUM=0
                 exit
             fi
 
+##      INIファイル 削除
+        rm -f ${INIFILE}
+        
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
         exit

@@ -45,6 +45,7 @@
       *                                  取得するようにする
       *                                  地方公費を２つ所持している場合
       *                                  第二公費欄に印字する
+      *  01.00.09    吉川    13/01/10    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -201,6 +202,15 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU2505".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -262,7 +272,9 @@
            03  WRK-PATH                   PIC  X(50).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/08/17) start
       *    ファイル名称用エリア
-           03  FILE-NAME               PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     03  FILE-NAME               PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/08/17) end
       *
       *    データ編集
@@ -675,10 +687,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   TAISYOKOHI-REC
       *
