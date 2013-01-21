@@ -60,6 +60,8 @@
       *  01.00.19    吉川    10/11/24    open-cobol1.0対応
       *  01.00.20    吉川    11/10/27    対象公費番号をINIファイルから
       *                                  取得するように修正
+      *  01.00.21    吉川    13/01/11    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -78,19 +80,25 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-           SELECT  SRYKA-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-SRYKA.
-      *
            SELECT  HOSPKBN-FILE  ASSIGN FILE-NAME
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-HOSPKBN.
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     SELECT  SRYKA-FILE    ASSIGN FILE-NAME
+           SELECT  SRYKA-FILE    ASSIGN FILE-NAME2
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-SRYKA.
+      *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
       *    印字対象公費番号ファイル
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME3
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
                                    ORGANIZATION   IS  LINE SEQUENTIAL
                                    ACCESS MODE    IS  SEQUENTIAL
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
@@ -232,6 +240,27 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU2800".
+           03  FILLER              PIC X(11)  VALUE "HOSPKBN.INI".
+      *
+       01  FILE-NAME2.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM2       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU2800".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *
+       01  FILE-NAME3.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM3       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU2800".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD        PIC X(08).
@@ -240,7 +269,9 @@
            03  WRK-SRYYMD        PIC X(08).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
            03  WRK-SRYKANAME    PIC X(34) OCCURS 3.
       *
            03  WRK-Z3            PIC ZZZ.
@@ -800,10 +831,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
+           DISPLAY "ファイル名2="  FILE-NAME2
       *
            INITIALIZE   SRYKA-REC
       *
@@ -832,10 +868,15 @@
       *
       *    医療機関区分取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/HOSPKBN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/HOSPKBN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   HOSPKBN-REC
       *
@@ -861,10 +902,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
+           DISPLAY "ファイル名3="  FILE-NAME3
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -1506,6 +1552,9 @@
       *     MOVE     SYS-1002-ADRS            TO   SKT2800-ADRS
       *    医療機関住所
            MOVE     WRK-HOSPADRS             TO   SKT2800-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT2800-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *    
       *    郵便番号
@@ -1530,6 +1579,9 @@
       *
       *    医療機関名
            MOVE     WRK-HOSPNAME             TO   SKT2800-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT2800-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    開設者氏名

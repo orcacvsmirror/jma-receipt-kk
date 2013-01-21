@@ -40,6 +40,8 @@
       *                                    在総診の診療があれば別集計とする
       *  02.02.02      吉川    10/12/08    特別療養費国保対応
       *                                    open-cobol1.0対応
+      *  02.00.03      吉川    13/01/11    プラグイン対応
+      *                                    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -172,6 +174,15 @@
        01  SYS-AREA.
            03  SYS-TIME            PIC 9(08).    
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU3000".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -202,7 +213,9 @@
            03  WRK-RECEERR         PIC X(200).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
@@ -574,7 +587,7 @@
            PERFORM 900-1900-READ-SEC
       *=== シス管「1901」対応 by Yoshikawa(2010/05/19) end
       *
-      *     PERFORM  110-INI-FILE-SEC
+           PERFORM  110-INI-FILE-SEC
       *
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/08) start
       *     EVALUATE    WRK-PARA-SYOKBN 
@@ -619,10 +632,13 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -1269,8 +1285,14 @@
       *     MOVE    SYS-1002-TEL          TO  SKT3000-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3000-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3000-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3000-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3000-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT3000-TEL
       *=== シス管「1901」対応 by Yoshikawa(2010/05/19) end
@@ -1509,8 +1531,14 @@
       *     MOVE    SYS-1002-TEL          TO  SKT3010-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3010-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3010-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3010-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
+           INSPECT SKT3010-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT3010-TEL
       *=== シス管「1901」対応 by Yoshikawa(2010/05/19) end

@@ -45,6 +45,8 @@
       *  01.00.11       吉川    11/04/19   レセ電時も件数を印字する
       *  01.00.12       吉川    11/04/22   東北地方太平洋沖地震対応
       *  01.00.13       吉川    12/04/23   帳票様式の変更に伴う修正
+      *  01.00.14       吉川    13/01/10   プラグイン対応
+      *                                    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -177,6 +179,14 @@
            03  WRK-PARA-SYOKBN     PIC X(01).
       *****
       *
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU2612".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -210,7 +220,9 @@
            03  WRK-RECEERR         PIC X(200).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
            03  WRK-SRYKANAME    PIC X(20) OCCURS 5.
       *
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -615,10 +627,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SRYKA-REC
       *
@@ -1278,9 +1295,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT2650-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT2650-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2650-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT2650-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2650-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT2650-TEL
