@@ -31,6 +31,7 @@
       *  01.00.01    吉川    09/11/26    市町村番号と異なる市町村名が
       *                                  印字される不具合を修正
       *  01.00.02    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.03    吉川    13/01/10    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -692,9 +693,15 @@
       *
       *    医療機関住所
            MOVE  WRK-HOSPADRS              TO  SC05-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC05-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC05-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC05-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    開設者名
            MOVE     SYS-1001-KAISETUNAME   TO  SC05-KAISETU

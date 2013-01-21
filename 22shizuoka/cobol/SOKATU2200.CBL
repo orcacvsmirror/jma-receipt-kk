@@ -56,6 +56,7 @@
       *  01.00.14    吉川    2010/11/25   open-cobol1.0対応
       *  01.00.15    吉川    2012/05/14   全国土木、全国建設、中央建設は
       *                                   県外とするように修正
+      *  01.00.16    吉川    2013/01/10   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1502,12 +1503,18 @@
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
       *     MOVE    SYS-1002-ADRS         TO  SKT2200-ADRS
            MOVE    WRK-HOSPADRS          TO  SKT2200-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2200-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
       *
       *    医療機関名
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT2200-HOSPNAME
            MOVE    WRK-HOSPNAME          TO  SKT2200-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2200-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
       *
       *    医療機関コード
@@ -1547,9 +1554,15 @@
       *
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT2200-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2200-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT2200-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2200-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関コード
            MOVE    SYS-1001-HOSPCDN      TO  SKT2200-HOSPCDN

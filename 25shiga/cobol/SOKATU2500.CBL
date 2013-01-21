@@ -44,6 +44,7 @@
       *                                    印字されない不具合を修正
       *  01.00.11    吉川    2012/04/20    帳票様式の変更に伴う修正
       *                                    （県内・県外を同一様式へ）
+      *  01.00.12    吉川    2013/01/10    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1293,9 +1294,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT2500-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT2500-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2500-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT2500-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2500-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名

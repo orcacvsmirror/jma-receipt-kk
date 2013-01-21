@@ -51,6 +51,7 @@
       *                                  集計されないのを修正
       *                                  生保は集計対象外とするように修正
       *  02.05.11    吉川    12/02/17    シス管「2005」の主病名編集対応
+      *  02.05.12    吉川    13/01/09    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1421,9 +1422,15 @@
       *     MOVE  SYS-1001-HOSPNAME      TO  SC03-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS           TO   SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC03-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO   SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC03-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *---(02.05.05) LINE ADD END   ------------------------------------
       *
       *    管理者名

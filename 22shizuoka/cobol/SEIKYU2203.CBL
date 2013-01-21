@@ -35,6 +35,7 @@
       *  01.00.02       内田    2008/07/18   静岡市の保険者番号の変更
       *  01.00.03       吉川    2009/07/07   浜松市の保険者番号の変更
       *  01.00.04       吉川    2010/10/07   帳票名変更
+      *  01.00.05       吉川    2013/01/10   医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -753,12 +754,18 @@
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
       *     MOVE     SYS-1002-ADRS            TO   SC03-ADRS
            MOVE    WRK-HOSPADRS              TO   SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC03-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
       *
       *    医療機関名
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) start
       *     MOVE     SYS-1001-HOSPNAME        TO   SC03-HOSPNAME
            MOVE    WRK-HOSPNAME              TO   SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SC03-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *=== シス管「1901」対応 By Yoshikawa(2007/10/03) end
       *
       *    開設者名

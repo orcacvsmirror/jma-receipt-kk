@@ -37,6 +37,7 @@
       *  01.00.06    吉川    2010/04/05  オンライン返戻対応
       *  01.00.07    吉川    2012/04/27  在宅はまとめて集計するように修正
       *  01.00.08    吉川    2012/05/14  PERFORM→GOTOに修正
+      *  01.00.09    吉川    2013/01/10  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1168,8 +1169,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT2215-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT2215-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2215-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT2215-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+           INSPECT SKT2215-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT2215-KAISETUNAME

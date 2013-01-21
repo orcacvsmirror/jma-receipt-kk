@@ -43,6 +43,7 @@
       *                                  印字されなくなるのを修正
       *  01.00.06    吉川    11/11/15    障害児施設(079)は障害者自立支援と
       *                                  同等の処理をするように修正
+      *  01.00.07    吉川    13/01/09    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -808,9 +809,15 @@
       *     MOVE  SYS-1001-HOSPNAME         TO  SC03-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS              TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC03-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) start
+           INSPECT SC03-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/09) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名
