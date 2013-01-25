@@ -60,6 +60,7 @@
       *  01.00.13    吉川    13/01/10    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.14    吉川    13/01/16    テーブルのprimary key変更対応
+      *  01.00.15    内田    13/01/25    プラグイン対応外し
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -204,14 +205,16 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応外し by Uchida(2013/01/25) start
       *=== プラグイン対応 by Yoshikawa(2013/01/10) start
       *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU2503".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU2503".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
       *
+      *=== プラグイン対応外し by Uchida(2013/01/25) end
        01  FILE-NAME2.
            03  FILLER              PIC X(05)  VALUE "/tmp/".
            03  FILE-HOSPNUM2       PIC 9(02).
@@ -271,9 +274,12 @@
            03  WRK-PATH              PIC  X(50).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/08/17) start
       *    ファイル名称用エリア
+      *=== プラグイン対応外し by Uchida(2013/01/25) start
       *=== プラグイン対応 by Yoshikawa(2013/01/10) start
       *     03  FILE-NAME             PIC X(512).
+           03  FILE-NAME             PIC X(512).
       *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *=== プラグイン対応外し by Uchida(2013/01/25) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/08/17) end
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) start
            03  WRK-SRTKBN            PIC X(01).
@@ -712,13 +718,19 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
+      *=== プラグイン対応外し by Uchida(2013/01/25) start
       *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
       *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応外し by Uchida(2013/01/25) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -747,13 +759,19 @@
       *
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) start
       *    ファイルディレクトリ位置指定
+      *=== プラグイン対応外し by Uchida(2013/01/25) start
       *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/SORT.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/SORT.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
       *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/SORT.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応外し by Uchida(2013/01/25) end
       *
            DISPLAY "ファイル名2="  FILE-NAME2
       *
