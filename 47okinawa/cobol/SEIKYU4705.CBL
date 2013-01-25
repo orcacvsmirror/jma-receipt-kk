@@ -40,6 +40,8 @@
       *  01.00.07    吉川    2011/07/12  所得者情報は診療月時点での情報を
       *                                  参照するように修正
       *  01.00.08    吉川    2013/01/17  テーブルのprimary key変更対応
+      *  01.00.09    吉川    2013/01/22  スタックオーバーフロー対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1326,9 +1328,15 @@
       *
       *    医療機関所在地
            MOVE  WRK-HOSPADRS          TO  SC05-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC05-HOSPADRS       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名称
            MOVE  WRK-HOSPNAME          TO  SC05-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC05-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    開設者名
            MOVE  SYS-1001-KAISETUNAME  TO  SC05-KAISETU
@@ -2370,7 +2378,10 @@
       *
       *            入院は対象外
                    IF  RECE02-NYUGAIKBN  =  "1"
-                     PERFORM  900-KOHSKY-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) start
+      *               PERFORM  900-KOHSKY-READ-SEC
+                     GO  TO  900-KOHSKY-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) end
                    END-IF
       *
       *            個別発行で患者番号指定の場合、対象判定を行う
@@ -2389,12 +2400,18 @@
                    END-IF
       *
                    IF      FLG-ERR           =   1
-                     PERFORM  900-KOHSKY-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) start
+      *               PERFORM  900-KOHSKY-READ-SEC
+                     GO  TO  900-KOHSKY-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) end
                    END-IF
       *
                    ADD  1  TO  CNT-RECE02
                ELSE
-                 PERFORM  900-KOHSKY-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) start
+      *           PERFORM  900-KOHSKY-READ-SEC
+                 GO  TO  900-KOHSKY-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) end
                END-IF
            ELSE
                MOVE    1                   TO  FLG-END
@@ -2504,11 +2521,17 @@
                    MOVE    ZERO      TO  FLG-RECE031
       *    保険者が同一かどうか
                    IF  RECE031-HKNJANUM  NOT =  MF100-HKNJANUM
-                       PERFORM  990-RECE031-NEXT-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) start
+      *                 PERFORM  990-RECE031-NEXT-SEC
+                       GO  TO  990-RECE031-NEXT-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) end
                    END-IF
       *
                    IF      RECE031-TENKIKBN     =   "8"
-                       PERFORM  990-RECE031-NEXT-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) start
+      *                 PERFORM  990-RECE031-NEXT-SEC
+                       GO  TO  990-RECE031-NEXT-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) end
                    END-IF
            END-READ
       *
