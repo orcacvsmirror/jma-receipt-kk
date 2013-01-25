@@ -36,6 +36,7 @@
       *  01.00.02    吉川    09/01/14    SPA-AREA初期化
       *  01.00.03    吉川    10/10/25    金額は１０円未満を四捨五入する
       *                                  請求年月日は空欄のままにする
+      *  01.00.04    吉川    13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -796,9 +797,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC01-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS            TO  SC01-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC01-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC01-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC01-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名

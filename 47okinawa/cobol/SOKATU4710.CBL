@@ -43,6 +43,7 @@
       *  01.00.08      吉川     10/06/01    オンライン返戻対応
       *  01.00.09      吉川     10/11/25    open-cobol1.0対応
       *  01.00.10      吉川     11/03/04    特別療養費国保対応
+      *  01.00.11      吉川     13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1223,8 +1224,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4710-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4710-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4710-HOSPADRS      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4710-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4710-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4710-KAISETU

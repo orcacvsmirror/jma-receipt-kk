@@ -39,6 +39,7 @@
       *                      09/06/24    金額は１０円未満を四捨五入する
       *  01.00.05    吉川    09/09/09    前期高齢者の家族が本人に
       *                                  集計されてしまう不具合を修正
+      *  01.00.06    吉川    13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -799,9 +800,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC03-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS             TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC03-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME             TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC03-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名

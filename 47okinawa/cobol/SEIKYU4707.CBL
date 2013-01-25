@@ -31,6 +31,7 @@
       *  01.00.01    吉川      10/10/25  金額は１０円未満を四捨五入する
       *  01.00.02    吉川      10/11/25  open-cobol1.0対応
       *  01.00.03    吉川      11/09/02  診療月は当月分を印字するように修正
+      *  01.00.04    吉川      13/01/22  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -764,9 +765,15 @@
       *
       *    住所
            MOVE  WRK-HOSPADRS              TO  SC07-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC07-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC07-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC07-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    開設者名
            MOVE  SYS-1001-KAISETUNAME      TO  SC07-KAISETU
