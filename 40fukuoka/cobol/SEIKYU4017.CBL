@@ -35,6 +35,7 @@
       *                                   長期上位（974）は長期と同様の
       *                                   処理をする
       *  01.00.03    内田     08/10/04    SPA-AREA初期化
+      *  01.00.04    吉川     13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -804,8 +805,14 @@
       *     MOVE     SYS-1001-HOSPNAME      TO  SC17-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SC17-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC17-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC17-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC17-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE     SYS-1001-KAISETUNAME   TO  SC17-KAISETU

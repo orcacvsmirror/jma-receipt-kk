@@ -42,6 +42,7 @@
       *  01.00.06    吉川    2011/12/07  印字対象番号の追加（250）
       *  01.00.07    吉川    2012/03/12  対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.08    吉川    2013/01/22  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1064,9 +1065,15 @@
       *
       *    住所
            MOVE    WRK-HOSPADRS            TO  SC23-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC23-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC23-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC23-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
       **    開設者名

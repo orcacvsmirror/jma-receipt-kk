@@ -65,6 +65,7 @@
       *  01.00.23    吉川    12/05/17    在宅はまとめて集計するように修正
       *  01.00.24    吉川    12/07/04    シス管「2010」の公費再掲欄への
       *                                  地方公費記載設定対応
+      *  01.00.25    吉川    13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1395,8 +1396,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4030-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4030-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4030-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4030-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4030-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.08) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4030-KAISETUNAME
@@ -1656,8 +1663,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4050-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4050-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4050-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4050-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4050-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.08) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4050-KAISETUNAME
@@ -2033,8 +2046,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4040-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4040-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4040-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4040-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4040-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.08) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4040-KAISETUNAME

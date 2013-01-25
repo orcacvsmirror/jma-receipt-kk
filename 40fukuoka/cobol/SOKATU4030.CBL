@@ -28,6 +28,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者   日付        内容
       *  01.00.01    吉川     12/05/17    在宅はまとめて集計するように修正
+      *  01.00.02    吉川     13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -759,9 +760,16 @@
            MOVE    WRK-SRYYMWH           TO  SKT4060-SRYYM
       *    請求年月日
            MOVE    WRK-SEIYMDWH          TO  SKT4060-SEIYMD
+      *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4060-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4060-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4060-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4060-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4060-KAISETUNAME
       *    電話番号

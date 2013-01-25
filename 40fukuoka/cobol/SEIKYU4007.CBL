@@ -61,6 +61,7 @@
       *  01.00.20    吉川     12/03/12    対象公費番号をINIファイルから
       *                                   取得するようにする
       *  01.00.21    吉川     13/01/17    テーブルのprimary key変更対応
+      *  01.00.22    吉川     13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1592,9 +1593,15 @@
       *     MOVE    SYS-1002-TEL        TO  HC06-HOSPTEL
       *    医療機関所在地
            MOVE    WRK-HOSPADRS        TO  HC06-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT HC06-HOSPADRS       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名称
            MOVE    WRK-HOSPNAME        TO  HC06-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT HC06-HOSPNAME       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関ＴＥＬ
            MOVE    WRK-HOSPTEL         TO  HC06-HOSPTEL
@@ -1926,9 +1933,15 @@
       *     MOVE    SYS-1002-TEL        TO  HCN06-HOSPTEL
       *    医療機関所在地
            MOVE    WRK-HOSPADRS        TO  HCN06-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT HCN06-HOSPADRS      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関名称
            MOVE    WRK-HOSPNAME        TO  HCN06-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT HC06-HOSPADRS       REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関ＴＥＬ
            MOVE    WRK-HOSPTEL         TO  HCN06-HOSPTEL

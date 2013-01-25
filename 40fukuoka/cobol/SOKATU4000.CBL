@@ -70,6 +70,7 @@
       *  01.00.29    吉川    12/01/13    特別療養費は専用の請求書に集計
       *  01.00.30    吉川    12/03/12    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.31    吉川    13/01/22    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1680,8 +1681,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4000-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4000-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4000-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4000-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4000-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4000-KANRINAME

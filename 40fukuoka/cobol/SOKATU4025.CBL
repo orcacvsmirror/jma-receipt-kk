@@ -47,6 +47,7 @@
       *                                  PERFORM→GOTOに修正
       *  01.00.11    吉川    2012/07/04  シス管「2010」の公費再掲欄への
       *                                  地方公費記載設定対応
+      *  01.00.12    吉川    2013/01/22  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1506,8 +1507,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT4025-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT4025-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4025-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT4025-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SKT4025-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT4025-KAISETUNAME

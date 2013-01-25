@@ -36,6 +36,7 @@
       *                                   処理をする
       *  01.00.03    内田     08/01/27    公費の負担者番号で市の判定をする
       *  01.00.04    内田     08/10/04    SPA-AREA初期化
+      *  01.00.05    吉川     13/01/22    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -814,8 +815,14 @@
       *     MOVE     SYS-1002-TEL             TO   SC13-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SC13-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC13-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SC13-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
+           INSPECT SC13-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    電話番号
            MOVE    WRK-HOSPTEL               TO  SC13-TEL
       *---(01.00.02) LINE ADD END   ------------------------------------
