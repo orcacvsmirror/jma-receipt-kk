@@ -70,6 +70,7 @@
       *                                  在宅の場合は、「特」とせずに
       *                                  70歳2割に含めるように修正
       *  01.00.22    吉川    12/12/21    医療機関情報編集対応
+      *  01.00.23    吉川    13/01/16    テーブルのprimary key変更対応
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -2466,16 +2467,19 @@
       *    請求管理ＤＢ検索
            INITIALIZE                  RECE10-REC
       *
-           MOVE   RECE02-HOSPNUM       TO  RECE10-HOSPNUM
-           MOVE   RECE02-SRYYM         TO  RECE10-SRYYM
-           MOVE   RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
-           MOVE   RECE02-PTID          TO  RECE10-PTID
-           MOVE   RECE02-RECEKA        TO  RECE10-RECEKA
-           MOVE   RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
-           MOVE   RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
-           MOVE   RECE02-HKNJANUM      TO  RECE10-HKNJANUM
-           MOVE   RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
-           MOVE   RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+      *=== primary key変更対応 by Yoshikawa(2013/01/16) start
+      *     MOVE   RECE02-HOSPNUM       TO  RECE10-HOSPNUM
+      *     MOVE   RECE02-SRYYM         TO  RECE10-SRYYM
+      *     MOVE   RECE02-NYUGAIKBN     TO  RECE10-NYUGAIKBN
+      *     MOVE   RECE02-PTID          TO  RECE10-PTID
+      *     MOVE   RECE02-RECEKA        TO  RECE10-RECEKA
+      *     MOVE   RECE02-TEISYUTUSAKI  TO  RECE10-TEISYUTUSAKI
+      *     MOVE   RECE02-RECESYUBETU   TO  RECE10-RECESYUBETU
+      *     MOVE   RECE02-HKNJANUM      TO  RECE10-HKNJANUM
+      *     MOVE   RECE02-HOJOKBN-KEY   TO  RECE10-HOJOKBN-KEY
+      *     MOVE   RECE02-TEKSTYMD      TO  RECE10-TEKSTYMD
+           MOVE    RECE02-KEY          TO  RECE10-KEY
+      *=== primary key変更対応 by Yoshikawa(2013/01/16) end
       *
            MOVE    RECE10-REC          TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
