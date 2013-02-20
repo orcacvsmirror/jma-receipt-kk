@@ -56,6 +56,9 @@
       *                                  社保前期高齢者１割＋146障害で
       *                                  在宅の場合は、「特」とせずに
       *                                  70歳2割に含めるように修正
+      *  01.00.12    吉川    2013/02/13  福祉請求点数欄には福祉分を
+      *                                  第一公費請求点数欄には公費分を
+      *                                  記載するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1958,20 +1961,26 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    ２１．福祉請求点数
-      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
-      *     MOVE    MF100-TOTALTEN          TO  WRK-NUM
-           IF  MF100-TOTALTEN2  NOT =  ZERO
-             MOVE  MF100-TOTALTEN2         TO  WRK-NUM
-           ELSE
-             MOVE  MF100-TOTALTEN          TO  WRK-NUM
-           END-IF
-      *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
+      *=== 福祉欄は福祉分を記載 by Yoshikawa(2013/02/13) start
+      **=== 点数欄記載の変更 by Yoshikawa(2010/07/26) start
+      **     MOVE    MF100-TOTALTEN          TO  WRK-NUM
+      *     IF  MF100-TOTALTEN2  NOT =  ZERO
+      *       MOVE  MF100-TOTALTEN2         TO  WRK-NUM
+      *     ELSE
+      *       MOVE  MF100-TOTALTEN          TO  WRK-NUM
+      *     END-IF
+      **=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
+           MOVE    MF100-TOTALTEN          TO  WRK-NUM
+      *=== 福祉欄は福祉分を記載 by Yoshikawa(2013/02/13) end
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    ２２．第一公費請求点数
            IF  MF100-EKOHFTNJANUM(1)  NOT =  SPACE
-             MOVE  MF100-ETENSU(1)         TO  WRK-NUM9
+      *=== 第一公費請求点数は公費分を記載 by Yoshikawa(2013/02/13) start
+      *       MOVE  MF100-ETENSU(1)         TO  WRK-NUM9
+             MOVE  MF100-TOTALTEN2         TO  WRK-NUM9
+      *=== 第一公費請求点数は公費分を記載 by Yoshikawa(2013/02/13) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
