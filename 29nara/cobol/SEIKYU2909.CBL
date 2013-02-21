@@ -46,8 +46,6 @@
       *                                後期高齢の場合、保険区分は国保とする
       *  01.00.07    吉川    12/03/07  対象公費番号をINIファイルから
       *                                取得するようにする
-      *  01.00.08    吉川    13/01/11  プラグイン対応
-      *                                医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -170,15 +168,6 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU2909".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC X(200).
@@ -210,9 +199,7 @@
            03  WRK-OUT-INPUT              PIC X(200).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/07) start
       *    ファイル名称用エリア
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     03  FILE-NAME             PIC X(512).
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+           03  FILE-NAME             PIC X(512).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/07) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -637,15 +624,10 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -962,15 +944,9 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC09-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS                TO   SC09-ADRS
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
-           INSPECT SC09-ADRS                 REPLACING ALL "  " BY "　"
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME                TO   SC09-HOSPNAME
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) start
-           INSPECT SC09-HOSPNAME             REPLACING ALL "  " BY "　"
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/11) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名
