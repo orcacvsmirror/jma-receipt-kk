@@ -46,6 +46,8 @@
       *                                後期高齢の場合、保険区分は国保とする
       *  01.00.07    吉川    12/03/07  対象公費番号をINIファイルから
       *                                取得するようにする
+      *  01.00.08    萩野    13/02/13  社保と国保の合計頁数を分けて計上し
+      *                                記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -187,6 +189,12 @@
            03  WRK-KENSU-TBL     OCCURS 2.
                05  WRK-KENSU         PIC 9(05).
            03  WRK-GPAGE             PIC 9(03).
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+           03  WRK-PAGE              PIC 9(03).
+           03  WRK-GPAGE-KOKUHO      PIC 9(03).
+           03  WRK-GPAGE-SYAHO       PIC 9(03).
+           03  WRK-HKNKBN            PIC 9(01).
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
            03  WRK-KEISAN            PIC 9(03).
            03  WRK-AMARI             PIC 9(02).
            03  WRK-HKNJANUM          PIC X(06).
@@ -872,6 +880,9 @@
            OPEN     INPUT       MF100-FILE
       *
            MOVE     ZERO        TO       FLG-PRINT
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+           MOVE     ZERO        TO       WRK-HKNKBN
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
       *
       *    総枚数計算処理
            PERFORM  20011-MAISU-SYUKEI-SEC
@@ -900,17 +911,37 @@
       *****************************************************************
        20011-MAISU-SYUKEI-SEC                SECTION.
       *
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+           MOVE  ZERO                    TO  WRK-GPAGE-KOKUHO
+           MOVE  ZERO                    TO  WRK-GPAGE-SYAHO
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
+      *
            PERFORM  VARYING  IDX2  FROM  1  BY  1
                     UNTIL    IDX2  >    2
       *
              MOVE  ZERO                  TO  WRK-KEISAN
                                              WRK-AMARI
+      *
              DIVIDE   WRK-KENSU(IDX2)    BY  12
                       GIVING             WRK-KEISAN
                       REMAINDER          WRK-AMARI
              ADD  WRK-KEISAN             TO  WRK-GPAGE
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+             IF  IDX2  =  1
+                 MOVE  WRK-KEISAN         TO   WRK-GPAGE-KOKUHO
+             ELSE
+                 MOVE  WRK-KEISAN         TO   WRK-GPAGE-SYAHO
+             END-IF
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
              IF  WRK-AMARI  >  0
                ADD  1                    TO  WRK-GPAGE
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+               IF  IDX2  =  1
+                   ADD  1                    TO  WRK-GPAGE-KOKUHO
+               ELSE
+                   ADD  1                    TO  WRK-GPAGE-SYAHO
+               END-IF
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
              END-IF
            END-PERFORM
       *
@@ -925,6 +956,13 @@
       *
            INITIALIZE                             SC09
       *
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+           IF  MF100-HKNKBN  NOT   =  WRK-HKNKBN
+               MOVE    ZERO                TO  WRK-PAGE
+           END-IF
+           MOVE    MF100-HKNKBN             TO   WRK-HKNKBN
+           ADD     1    TO    WRK-PAGE
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
            ADD     1    TO    CNT-PAGE
       *
       *    対象年月
@@ -971,9 +1009,19 @@
       *
       *    ページ番号
            IF  WRK-GPAGE  >  1
-             MOVE    WRK-GPAGE                 TO  WRK-Z3
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+      *       MOVE    WRK-GPAGE                 TO  WRK-Z3
+             IF  MF100-HKNKBN  =  1
+                 MOVE    WRK-GPAGE-KOKUHO      TO  WRK-Z3
+             ELSE
+                 MOVE    WRK-GPAGE-SYAHO       TO  WRK-Z3
+             END-IF
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
              MOVE    WRK-Z3                    TO  SC09-GPAGE
-             MOVE    CNT-PAGE                  TO  WRK-Z3
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) start
+      *       MOVE    CNT-PAGE                  TO  WRK-Z3
+             MOVE    WRK-PAGE                  TO  WRK-Z3
+      *=== 社保と国保の合計頁数を分けて計上 by Hagino(2013/02/13) end
              MOVE    WRK-Z3                    TO  SC09-PAGE
            END-IF
       *
