@@ -38,6 +38,7 @@
       *  01.00.07    吉川     10/05/21    長期は分けて印字する
       *  01.00.08    吉川     10/12/08    特別療養費国保対応
       *  01.00.09    吉川     12/06/04    帳票様式の変更に伴う修正
+      *  01.00.10    萩野     13/02/13    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1009,9 +1010,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT2910-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT2910-HOSPADRS
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) start
+           INSPECT SKT2910-HOSPADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT2910-HOSPNAME
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) start
+           INSPECT SKT2910-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *=== 帳票様式の変更 by Yoshikawa(2012/06/04) start
@@ -1241,9 +1248,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SKT2911-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT2911-HOSPADRS
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) start
+           INSPECT SKT2911-HOSPADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT2911-HOSPNAME
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) start
+           INSPECT SKT2911-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/13) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名
