@@ -43,8 +43,7 @@
       *  01.00.10    吉川    11/03/08    open-cobol1.0対応
       *  01.00.11    吉川    11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *  01.00.12    吉川    12/05/10    帳票様式の変更に伴う修正
-      *  01.00.13    吉川    12/12/21    プラグイン対応
-      *                                  医療機関情報編集対応
+      *  01.00.13    吉川    12/12/21    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -190,15 +189,6 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2009/11/05) end
       *
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU0610".
-           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
-      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -207,9 +197,7 @@
            03  WRK-SRYYMD          PIC X(08).
       *
       *    ファイル名称用エリア
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *     03  FILE-NAME           PIC X(512).
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+           03  FILE-NAME           PIC X(512).
       *
            03  WRK-HKNJANUM        PIC X(06).
       *=== 帳票様式の変更に伴う修正 by Yoshikawa(2012/05/10) start
@@ -638,13 +626,10 @@
       *
       *
       *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
