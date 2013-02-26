@@ -42,6 +42,8 @@
       *  01.00.06    吉川    10/05/17    オンライン返戻対応
       *  01.00.07    吉川    10/08/17    再印刷画面に返戻分は「返戻分」と表示
       *  01.00.08    吉川    11/01/12    特別療養費国保対応
+      *  01.00.09    萩野    13/02/14    後期高齢の請求書と分けて枚数を印字する
+      *                                  医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -169,6 +171,10 @@
       *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
            03  WRK-KENNAI             PIC 9(03).
            03  WRK-KENGAI             PIC 9(03).
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) start
+           03  WRK-KENNAI-KOUKI       PIC 9(03).
+           03  WRK-KENGAI-KOUKI       PIC 9(03).
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) end
       *
            03  WRK-Z3              PIC ZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
@@ -778,11 +784,29 @@
       *       IF    WRK-CHK-HKNJANUM(IDX1) = SPACE
              IF    WRK-CHK-HKNJA-TBL(IDX1) = SPACE
       *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) end
+      *
                IF  RECE10-PREFKBN         = "1"
-                 ADD   1                 TO WRK-KENNAI
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) start
+      *           ADD   1                 TO WRK-KENNAI
+      *          県内
+                 IF  RECE10-HKNNUM    =  "039"  OR  "040"
+                     ADD   1                 TO WRK-KENNAI-KOUKI
+                 ELSE
+                     ADD   1                 TO WRK-KENNAI
+                 END-IF
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) end
                ELSE
-                 ADD   1                 TO WRK-KENGAI
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) start
+      *           ADD   1                 TO WRK-KENGAI
+      *          県外
+                 IF  RECE10-HKNNUM    =  "039"  OR  "040"
+                     ADD   1                 TO WRK-KENGAI-KOUKI
+                 ELSE
+                     ADD   1                 TO WRK-KENGAI
+                 END-IF
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) end
                END-IF
+      *
                MOVE    WRK-HKNJANUM    TO  WRK-CHK-HKNJANUM(IDX1)
       *=== 請求書枚数に在宅分を含める by Yoshikawa(2008/12/15) start
                MOVE    WRK-ZAITAKU     TO  WRK-CHK-ZAITAKU(IDX1)
@@ -856,8 +880,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4200-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4200-ADRS
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) start
+           INSPECT SKT4200-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4200-HOSPNAME
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) start
+           INSPECT SKT4200-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4200-KAISETU
@@ -912,6 +942,12 @@
            MOVE    WRK-Z3                TO    SKT4200-KENNAI
            MOVE    WRK-KENGAI            TO    WRK-Z3
            MOVE    WRK-Z3                TO    SKT4200-KENGAI
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) start
+           MOVE    WRK-KENNAI-KOUKI      TO    WRK-Z3
+           MOVE    WRK-Z3                TO    SKT4200-KENNAI-KOUKI
+           MOVE    WRK-KENGAI-KOUKI      TO    WRK-Z3
+           MOVE    WRK-Z3                TO    SKT4200-KENGAI-KOUKI
+      *=== 後期高齢の請求書枚数をカウント by hagino(2013/02/14) end
       *
            .
        320-BODY-HEN-EXT.
