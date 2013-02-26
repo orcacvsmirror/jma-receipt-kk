@@ -51,6 +51,7 @@
       *  01.00.11    吉川    10/08/17    再印刷画面に返戻分は「返戻分」と表示
       *  01.00.12    吉川    11/01/12    特別療養費国保対応
       *                                  open-cobol1.0対応
+      *  01.00.13    萩野    13/02/14    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2119,8 +2120,14 @@
            MOVE    WRK-SEIYMDWH          TO  SKT4210-SEIYMD
       *    郵便番号
            MOVE    WRK-HOSPADRS          TO  SKT4210-ADRS
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) start
+           INSPECT SKT4210-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4210-HOSPNAME
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) start
+           INSPECT SKT4210-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by hagino(2013/02/14) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4210-KAISETUNAME
       *    電話番号
