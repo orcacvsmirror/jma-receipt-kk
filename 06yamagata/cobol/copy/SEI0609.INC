@@ -21,6 +21,8 @@
       ************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         13/02/18  低所得、低年金、減免区分追加
+      *                                     特記事項要素数追加
       ************************************************************
       *01  MF101-REC.
            03  MF101-KEY.
@@ -190,6 +192,26 @@
                05  MF101-SHOKUJIFTN-G        PIC  9(09).
       *=== 特記事項印字追加 by Hagino(2012/09/19) start
       *特記事項
-           03  MF101-TOKKI-TBL           OCCURS  3.
+      *=== 特記事項要素数追加 by Yoshikawa(2013/02/18) start
+      *     03  MF101-TOKKI-TBL           OCCURS  3.
+           03  MF101-TOKKI-TBL           OCCURS  5.
+      *=== 特記事項要素数追加 by Yoshikawa(2013/02/18) start
                05  MF101-TOKKI           PIC  X(02).
       *=== 特記事項印字追加 by Hagino(2012/09/19) end
+      *=== 項目追加 by Yoshikawa(2013/02/18) start
+      *公費給付対象一部負担金
+           03  MF101-FTNMONEYSAI-TBL    OCCURS 4.
+               05  MF101-FTNMONEYSAI     PIC 9(09).
+      *減免区分
+           03  MF101-GENMEN              PIC 9(01).
+      *減免割合
+           03  MF101-GENMENWARI          PIC 9(03).
+      *減免金額
+           03  MF101-GENMENGK            PIC 9(08).
+      *低所得
+           03  MF101-TEISHO              PIC 9(01).
+      *低年金
+           03  MF101-TEINEN              PIC 9(01).
+      *コメント区分
+           03  MF101-COMMENT             PIC X(02).
+      *=== 項目追加 by Yoshikawa(2013/02/18) end
