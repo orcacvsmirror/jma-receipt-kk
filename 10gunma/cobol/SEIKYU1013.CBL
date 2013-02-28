@@ -59,6 +59,7 @@
       *  01.00.12    吉川    2013/02/13  福祉請求点数欄には福祉分を
       *                                  第一公費請求点数欄には公費分を
       *                                  記載するように修正
+      *  01.00.13    吉川    2013/02/26  福祉請求点数の計算方法修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -220,6 +221,9 @@
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
            03  WRK-JGNGAK                 PIC 9(08).
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *=== 福祉請求点数欄の計算方法修正 by Yoshikawa(2013/02/26) start
+           03  WRK-FUKUSHI                PIC 9(08).
+      *=== 福祉請求点数欄の計算方法修正 by Yoshikawa(2013/02/26) end
       *
       *=== 負担者番号の空白はゼロで埋める by Yoshikawa(2009/10/23) start
       *    負担者番号ゼロ埋め変換
@@ -1970,7 +1974,11 @@
       *       MOVE  MF100-TOTALTEN          TO  WRK-NUM
       *     END-IF
       **=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
-           MOVE    MF100-TOTALTEN          TO  WRK-NUM
+      *=== 福祉請求点数欄の計算方法修正 by Yoshikawa(2013/02/26) start
+      *     MOVE    MF100-TOTALTEN          TO  WRK-NUM
+           COMPUTE  WRK-FUKUSHI  =  MF100-TOTALTEN  -  MF100-TOTALTEN2
+           MOVE    WRK-FUKUSHI             TO  WRK-NUM
+      *=== 福祉請求点数欄の計算方法修正 by Yoshikawa(2013/02/26) end
       *=== 福祉欄は福祉分を記載 by Yoshikawa(2013/02/13) end
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
