@@ -53,6 +53,8 @@
       *                                  市町村負担額欄は記載しない
       *  01.00.13    吉川    12/08/22    一宮市は市町村負担額欄に記載しない
       *                                  場合でも上部の合計金額欄は集計する
+      *  01.00.14    吉川    13/03/11    総点数欄は福祉分の点数ではなく
+      *                                  保険の総点数を記載するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -164,6 +166,9 @@
            03  FLG-TAISYOKOHI   PIC 9(01).
            03  FLG-TAISYO       PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/04/18) end
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+           03  FLG-RECE10       PIC 9(01).
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -371,6 +376,11 @@
       *    保険組合せ
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
+      *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *    請求管理
+           COPY    "CPRCF010.INC".
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -836,12 +846,20 @@
            MOVE  MF100-KOHJKYSNUM          TO  MF100-JKYSNUM
            COMPUTE IDY     =       IDZ     +   1
            MOVE  RECE02-JNISSUINF   (IDY)  TO  MF100-JNISSUINF
-           MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *     MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
       *
       *    市町村番号設定
            PERFORM  2001-CITYNUM-SEC
+      *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *    請求管理から総点数取得
+           PERFORM  900-SEIKYU-READ-SEC
+           MOVE    RECE10-TOTALTEN(1)      TO  MF100-TOTALTEN
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *---(01.00.03) LINE ADD START ------------------------------------
       *    高額療養費チェック
@@ -2190,6 +2208,55 @@
        925-HKNJAINF-READ-EXT.
            EXIT.
       *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *****************************************************************
+      *    請求管理情報読み込み
+      *****************************************************************
+       900-SEIKYU-READ-SEC         SECTION.
+      *
+           INITIALIZE                  RECE10-REC
+           MOVE    RECE02-KEY          TO  RECE10-KEY
+           MOVE    RECE10-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_seikyu"        TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-RECE10
+                   MOVE    MCPDATA-REC         TO  RECE10-REC
+               ELSE
+                   MOVE    1                   TO  FLG-RECE10
+                   INITIALIZE                  RECE10-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-RECE10
+               INITIALIZE                  RECE10-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
