@@ -53,7 +53,8 @@
       *                                  市町村負担額欄は記載しない
       *  01.00.13    吉川    12/08/22    一宮市は市町村負担額欄に記載しない
       *                                  場合でも上部の合計金額欄は集計する
-      *  01.00.14    吉川    13/01/10    プラグイン対応
+      *  01.00.14    吉川    13/03/11    総点数欄は福祉分の点数ではなく
+      *                                  保険の総点数を記載するように修正
       *                                  医療機関情報編集対応
       *****************************************************************
       *
@@ -74,10 +75,7 @@
                                 FILE    STATUS  IS  STS-RECEERR.
       *
       *    市町村名用ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *     SELECT  CITY-FILE      ASSIGN FILE-NAME
-           SELECT  CITY-FILE      ASSIGN TXT-NAME
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+           SELECT  CITY-FILE      ASSIGN FILE-NAME
                                   ORGANIZATION   IS  LINE SEQUENTIAL
                                   ACCESS MODE    IS  SEQUENTIAL
                                   FILE   STATUS  IS  STS-CITY.
@@ -168,6 +166,9 @@
            03  FLG-TAISYOKOHI   PIC 9(01).
            03  FLG-TAISYO       PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/04/18) end
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+           03  FLG-RECE10       PIC 9(01).
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -190,15 +191,6 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
-      *
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU2309".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -244,10 +236,7 @@
            03  WRK-KOHFTN                 PIC 9(08).
       *=== 一宮市の合計金額記載修正 by Yoshikawa(2012/08/22) end
       *    市町村用ファイル名エリア
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *     03  FILE-NAME                  PIC X(512).
-           03  TXT-NAME                   PIC X(512).
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+           03  FILE-NAME                  PIC X(512).
            03  WRK-KEY-CITYHKNJANUM       PIC X(05).
            03  WRK-SYOKEI-AREA.
                05  WRK-S-KENSU            PIC 9(02).
@@ -387,6 +376,11 @@
       *    保険組合せ
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
+      *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *    請求管理
+           COPY    "CPRCF010.INC".
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -610,10 +604,7 @@
            INITIALIZE              ORCSMKPASSAREA
            MOVE  "data/TOWN2307.TXT"     TO  MKPASS-IN-01
            CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  MKPASS-OT-01  TO  TXT-NAME
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
       *
            OPEN  INPUT  CITY-FILE
       *
@@ -735,13 +726,10 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+           INITIALIZE           ORCSMKPASSAREA
+           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+           MOVE  MKPASS-OT-01  TO  FILE-NAME
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -860,12 +848,20 @@
            MOVE  MF100-KOHJKYSNUM          TO  MF100-JKYSNUM
            COMPUTE IDY     =       IDZ     +   1
            MOVE  RECE02-JNISSUINF   (IDY)  TO  MF100-JNISSUINF
-           MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *     MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
       *
       *    市町村番号設定
            PERFORM  2001-CITYNUM-SEC
+      *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *    請求管理から総点数取得
+           PERFORM  900-SEIKYU-READ-SEC
+           MOVE    RECE10-TOTALTEN(1)      TO  MF100-TOTALTEN
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *---(01.00.03) LINE ADD START ------------------------------------
       *    高額療養費チェック
@@ -1109,15 +1105,15 @@
       *     MOVE  SYS-1001-HOSPNAME      TO  SC09-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS           TO  SC09-ADRS
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/03/11) start
            INSPECT SC09-ADRS            REPLACING ALL "  " BY "　"
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/03/11) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO  SC09-HOSPNAME
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) start
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/03/11) start
            INSPECT SC09-HOSPNAME        REPLACING ALL "  " BY "　"
-      *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/03/11) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    管理者名
@@ -2211,6 +2207,55 @@
        925-HKNJAINF-READ-EXT.
            EXIT.
       *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
+      *****************************************************************
+      *    請求管理情報読み込み
+      *****************************************************************
+       900-SEIKYU-READ-SEC         SECTION.
+      *
+           INITIALIZE                  RECE10-REC
+           MOVE    RECE02-KEY          TO  RECE10-KEY
+           MOVE    RECE10-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_seikyu"        TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-RECE10
+                   MOVE    MCPDATA-REC         TO  RECE10-REC
+               ELSE
+                   MOVE    1                   TO  FLG-RECE10
+                   INITIALIZE                  RECE10-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-RECE10
+               INITIALIZE                  RECE10-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *
+      *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
