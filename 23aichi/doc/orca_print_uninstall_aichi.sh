@@ -29,7 +29,7 @@ function echomsg() {
 
 # user check
 if [ ${usrname} != "root" ] ; then
-  echomsg "\nrootユーザで実行してください\n"
+  echomsg "rootユーザで実行してください"
   exit 1
 fi
 
@@ -60,6 +60,14 @@ for f in ${SITESRCDIR}/cobol/copy/SEI${prefno}* ; do
   rm -rf $f
 done
 
+for f in ${SITESRCDIR}/cobol/copy/TAISYO${prefno}* ; do
+  rm -rf $f
+done
+
+for f in ${SITESRCDIR}/cobol/copy/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
 for f in ${SITESRCDIR}/form/SC${prefno}* ; do
   rm -rf $f
 done
@@ -87,6 +95,22 @@ done
 for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
+
+for f in ${SITESRCDIR}/data/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
+if test -f ${SITESRCDIR}/data/TAISYOKOHI.INI ; then
+  rm -rf ${SITESRCDIR}/data/TAISYOKOHI.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
 
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
@@ -128,6 +152,23 @@ done
 
 if test -f ${LDDEFDIR}/${prefname}.bd ; then
   rm -rf ${LDDEFDIR}/${prefname}.bd
+fi
+
+
+for f in ${SITEDATADIR}/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
+if test -f ${SITEDATADIR}/TAISYOKOHI.INI ; then
+  rm -rf ${SITEDATADIR}/TAISYOKOHI.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
 fi
 
 
