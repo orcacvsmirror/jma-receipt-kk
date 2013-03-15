@@ -61,6 +61,7 @@
       *                                  医療機関情報編集対応
       *  01.00.14    吉川    13/01/16    テーブルのprimary key変更対応
       *  01.00.15    内田    13/01/25    プラグイン対応外し
+      *  01.00.16    吉川    13/03/12    プラグイン対応外し漏れ修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -85,10 +86,13 @@
       *
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/08/17) start
       *    記載順設定ファイル
+      *=== プラグイン対応外し by Yoshikawa(2013/03/12) start
       *=== プラグイン対応 by Yoshikawa(2013/01/10) start
       *     SELECT  SRT-FILE    ASSIGN FILE-NAME
-           SELECT  SRT-FILE    ASSIGN FILE-NAME2
+      *     SELECT  SRT-FILE    ASSIGN FILE-NAME2
+           SELECT  SRT-FILE    ASSIGN FILE-NAME
       *=== プラグイン対応 by Yoshikawa(2013/01/10) end
+      *=== プラグイン対応外し by Yoshikawa(2013/03/12) end
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-SRT.
@@ -773,7 +777,7 @@
            MOVE  MKPASS-OT-01  TO  FILE-NAME
       *=== プラグイン対応外し by Uchida(2013/01/25) end
       *
-           DISPLAY "ファイル名2="  FILE-NAME2
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   WRK-SRTKBN
       *
