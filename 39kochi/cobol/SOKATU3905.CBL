@@ -44,6 +44,7 @@
       *  01.00.08    吉川    2012/04/16  シス管「1901」で設定した電話番号が
       *                                  印字されるように修正
       *                                  PERFORM→GOTOに修正
+      *  01.00.09    吉川    2013/02/07  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1021,8 +1022,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT3905-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT3905-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3905-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT3905-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3905-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT3905-KAISETUNAME

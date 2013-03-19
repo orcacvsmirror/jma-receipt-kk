@@ -40,6 +40,7 @@
       *  01.00.07    吉川    11/01/12    特別療養費国保対応
       *  01.00.08    吉川    11/04/18    帳票様式の変更に伴う修正
       *  01.00.09    吉川    11/04/25    県外でも高知県単独公費等は印字しない
+      *  01.00.10    吉川    13/02/07    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -977,9 +978,15 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT3920-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3920-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3920-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3920-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3920-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名
@@ -1186,9 +1193,15 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT3930-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3930-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3930-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3930-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3930-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名

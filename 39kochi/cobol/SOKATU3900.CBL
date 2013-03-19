@@ -38,6 +38,7 @@
       *  01.00.06    内田    09/04/24    ７０歳未満も一部負担金欄へ集計する
       *  01.00.07    吉川    10/05/14    オンライン返戻対応
       *  01.00.08    吉川    11/01/12    特別療養費国保対応
+      *  01.00.09    吉川    13/02/07    医療機関情報編集対応
       ****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -850,9 +851,15 @@
       *     MOVE    SYS-1002-TEL          TO  SKT3900-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3900-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3900-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3900-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3900-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT3900-TEL

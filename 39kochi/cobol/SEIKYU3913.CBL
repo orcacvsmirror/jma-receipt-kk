@@ -47,6 +47,7 @@
       *  01.00.16    吉川    10/02/22      全国公費を併用している場合のみ
       *                                    「老人分一部負担金〜」欄は記載し
       *                                    「点数」欄は集計不要
+      *  01.00.17    吉川    13/02/07      医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -949,8 +950,14 @@
       *     MOVE    SYS-1002-TEL          TO  SC13-TEL
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SC13-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC13-ADRS             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SC13-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC13-HOSPNAME         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SC13-TEL
       *---(01.00.12) LINE ADD END   ------------------------------------
