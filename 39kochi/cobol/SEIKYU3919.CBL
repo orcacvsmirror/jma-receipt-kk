@@ -48,6 +48,9 @@
       *                                   全国公費の自己負担分がある場合
       *                                   点数欄はゼロを印字する
       *  01.00.10     吉川    12/04/16    高額該当の場合、点数はゼロを印字
+      *  01.00.11     吉川    13/02/07    医療機関情報編集対応
+      *  01.00.12     吉川    13/03/13    全国公費の上限額未満でも
+      *                                   備考欄に記載し、点数はゼロを印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -849,9 +852,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC19-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS                TO  SC19-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC19-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME                TO  SC19-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC19-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名
@@ -972,8 +981,11 @@
            END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 全国公費の上限額未満の記載修正 by Yoshikawa(2013/03/13) start
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
-           IF  MF100-TAHOUFTN  NOT =  ZERO
+      *     IF  MF100-TAHOUFTN  NOT =  ZERO
+           IF  MF100-TAHOUHBT  NOT =  SPACE
+      *=== 全国公費の上限額未満の記載修正 by Yoshikawa(2013/03/13) end
       *=== 全国公費併用時の備考欄記載変更 by Yoshikawa(2011/01/18) start
       **    他法法別
       *       MOVE     MF100-TAHOUHBT         TO   SC19-TAHOUHBT
