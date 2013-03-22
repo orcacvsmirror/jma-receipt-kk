@@ -41,6 +41,7 @@
       *  01.00.07    吉川    11/02/16    公費請求テーブルclose処理位置変更
       *  01.00.08    吉川    12/02/13    142以外でも公費の助成が無い場合は
       *                                  印字対象外とするように修正
+      *  01.00.09    吉川    13/03/18    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -762,8 +763,14 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC09-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SC09-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2013/03/18) start
+           INSPECT SC09-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) end
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SC09-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2013/03/18) start
+           INSPECT SC09-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/13) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE     SYS-1001-KAISETUNAME     TO   SC09-KAISETU
