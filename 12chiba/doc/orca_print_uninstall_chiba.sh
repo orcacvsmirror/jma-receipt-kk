@@ -60,6 +60,10 @@ for f in ${SITESRCDIR}/cobol/copy/SEI${prefno}* ; do
   rm -rf $f
 done
 
+for f in ${SITESRCDIR}/cobol/copy/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
 for f in ${SITESRCDIR}/form/SC${prefno}* ; do
   rm -rf $f
 done
@@ -87,6 +91,22 @@ done
 for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
+
+for f in ${SITESRCDIR}/data/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
+if test -f ${SITESRCDIR}/data/KOUZA.INI ; then
+  rm -rf ${SITESRCDIR}/data/KOUZA.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
 
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
@@ -128,6 +148,23 @@ done
 
 if test -f ${LDDEFDIR}/${prefname}.bd ; then
   rm -rf ${LDDEFDIR}/${prefname}.bd
+fi
+
+
+for f in ${SITEDATADIR}/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
+if test -f ${SITEDATADIR}/KOUZA.INI ; then
+  rm -rf ${SITEDATADIR}/KOUZA.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
 fi
 
 
