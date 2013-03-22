@@ -95,6 +95,10 @@
       *                                    印字がされなかったのを修正
       *                                    643で患者負担額が580円未満の場合、
       *                                    備考欄の数字は患者負担額を記載
+      *  01.00.28     吉川     13/03/18    旭川市助成分が580円未満の場合の
+      *                                    備考欄の金額を修正
+      *                                    限度額欄と前期高齢者欄の両方に
+      *                                    値がある場合、前期高齢者のみ印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -255,6 +259,9 @@
                05  WRK-ETC-ITBFTN    PIC 9(07)V9(01).
                05  WRK-ETC-ITBFTN-G  PIC 9(07).
                05  WRK-ETC-SYOSINFTN PIC 9(07)V9(01).
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
+               05  WRK-ASAHIFTN      PIC 9(07).
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
            03  WRK-N-JOUGENGK        PIC 9(07).
            03  WRK-G-JOUGENGK        PIC 9(07).
            03  WRK-KEISAN            PIC 9(07).
@@ -899,6 +906,9 @@
            MOVE     MF100-KOHNUM               TO  WRK-KOHNUM
            MOVE     MF100-KOHID                TO  WRK-KOHID
            INITIALIZE                              WRK-SYUKEI-TBL
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
+                                                   WRK-COMPFTN
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.08) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -952,10 +962,19 @@
              COMPUTE WRK-ETC-ITBFTN-G ROUNDED = WRK-ETC-ITBFTN
       *      患者負担額と計算負担金の値が一致しなかったら
       *      初診時一部負担金が引かれたということなので、初診と判定
-             IF  WRK-ETC-ITBFTN-G  <  WRK-SHOSAI
-      *        580円に満たない場合、備考欄に患者負担額を記載
-               IF  WRK-SHOSAI  <  580
-                 MOVE  WRK-SHOSAI          TO  MF100-ETCFTNMONEY
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
+      *       IF  WRK-ETC-ITBFTN-G  <  WRK-SHOSAI
+      **        580円に満たない場合、備考欄に患者負担額を記載
+      *         IF  WRK-SHOSAI  <  580
+      *           MOVE  WRK-SHOSAI          TO  MF100-ETCFTNMONEY
+             IF  WRK-COMPFTN  NOT =  WRK-ETC-ITBFTN-G
+      *        市助成分が580円に満たない場合、備考欄に患者負担額を記載
+               IF  (WRK-ASAHIFTN  NOT =  ZERO)
+               AND (WRK-ASAHIFTN  <  580)
+                 MOVE  WRK-ASAHIFTN        TO  MF100-ETCFTNMONEY
+               ELSE
+                 MOVE  580                 TO  MF100-ETCFTNMONEY
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
                END-IF
                MOVE  WRK-ETC-ITBFTN-G      TO  MF100-FTNMONEY
                MOVE  1                     TO  MF100-SHOSAISIN
@@ -1604,6 +1623,13 @@
              ELSE
                MOVE  MF100-SEIKYUGK    TO  WRK-Z7
                MOVE  WRK-Z7            TO  SC07-ZNK(IDX1)
+      *=== 高額と前期は前期高齢者のみ印字 by Yoshikawa(2013/03/18) start
+      *        限度額欄にも値がある場合は、前期高齢者欄を優先
+               IF  MF100-KOGAKU  NOT =  ZERO
+                 MOVE  SPACE           TO  SC07-TENSU9(IDX1)
+                 MOVE  ZERO            TO  MF100-KOGAKU
+               END-IF
+      *=== 高額と前期は前期高齢者のみ印字 by Yoshikawa(2013/03/18) end
              END-IF
       *
              IF    (MF100-RJNHKNNUM  NOT   =  SPACE  OR
@@ -1690,18 +1716,22 @@
       *       IF  MF100-KOHNUM  =  "643"
              IF  MF100-SHOSAISIN  =  1
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) start
-               IF  MF100-FTNMONEY  =  ZERO
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
+      **=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) start
+      *         IF  MF100-FTNMONEY  =  ZERO
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
                  MOVE  MF100-ETCFTNMONEY  TO  WRK-Z3
                  MOVE  WRK-Z3          TO  SC07-BIKO1(IDX1)
                  MOVE  "○"            TO  SC07-BIKO2(IDX1)
-               ELSE
-      *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
-                 MOVE  "580"           TO  SC07-BIKO1(IDX1)
-                 MOVE  "○"            TO  SC07-BIKO2(IDX1)
-      *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) start
-               END-IF
-      *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
+      *         ELSE
+      **=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
+      *           MOVE  "580"           TO  SC07-BIKO1(IDX1)
+      *           MOVE  "○"            TO  SC07-BIKO2(IDX1)
+      **=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) start
+      *         END-IF
+      **=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    小計加算
@@ -2237,6 +2267,14 @@
       *    旭川障の場合、初診時一部負担金との差額を記載
       *    （本体側でSYU-KOH-COMPFTN-ENTANIに計算済み）
              IF  SYU-KOH-HKNNUM(IDX)  =  "643" OR "743"
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
+               IF  SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO
+      *          市助成分を集計
+                 ADD  SYU-KOH-COMPFTN(IDX)         TO  WRK-ASAHIFTN
+               END-IF
+      *        初診判定用にCOMPFTN集計
+               ADD    SYU-KOH-COMPFTN(IDX)         TO  WRK-COMPFTN
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
                ADD    SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-ETC-ITBFTN
              END-IF
       *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
