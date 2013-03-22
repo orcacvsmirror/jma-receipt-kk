@@ -144,6 +144,13 @@
            05  WRK-PARA-LINK-SHELLID PIC  X(08).
            05  WRK-PARA-LINK-HOSPNUM PIC  9(02). 
       *
+      *    ¥Õ¥¡¥¤¥ëÌ¾¾ÎÍÑ¥¨¥ê¥¢
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU0611".
+           03  FILLER              PIC X(11)  VALUE "COMMENT.INI".
+      *
       *    °ì»þÎÎ°è
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -186,7 +193,6 @@
                05  WRK-COMMENTKBN    PIC X(02) OCCURS 5.
                05  WRK-COMMENTCD     PIC X(09) OCCURS 5.
       *
-           03  FILE-NAME             PIC X(512).
       *    Ê¸»úÊÑ´¹
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
@@ -690,11 +696,7 @@
        110-INI-FILE-SEC                SECTION.
       *
       *    È÷¹ÍÍó¥³¥á¥ó¥ÈÀßÄê¼èÆÀ
-      *    ¥Õ¥¡¥¤¥ë¥Ç¥£¥ì¥¯¥È¥ê°ÌÃÖ»ØÄê
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/COMMENT.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
       *
            DISPLAY "¥Õ¥¡¥¤¥ëÌ¾="  FILE-NAME
       *
@@ -908,6 +910,7 @@
              END-IF
            END-IF
       *
+      *
            IF  RECE02-FTNMONEY(1)          >   ZERO  AND
                RECE02-FTNMONEY(1)          <   WRK-FTNMONEY-G
              MOVE  RECE02-FTNMONEY(1)      TO  WRK-FTNMONEY-G
@@ -951,7 +954,7 @@
       *
       *    ¥³¥á¥ó¥È¥Á¥§¥Ã¥¯
            PERFORM  940-SRYACT-SET-SEC
-      *
+      *    
            IF     FLG-ERR         =     1
              DISPLAY "½õÀ®ÂÐ¾Ý³°="  RECE02-PTNUM
            ELSE
@@ -1272,6 +1275,7 @@
            STRING  "0"                       DELIMITED BY SIZE
                    MF101-RECESYUBETU (4:1)   DELIMITED BY SIZE
                    INTO  WRK-DATA
+      *     MOVE    MF101-RECESYUBETU (4:1)   TO  WRK-NUM9
            MOVE    2                         TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
@@ -1366,14 +1370,14 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    £²£°¡¥°åÎÅÊÝ¸±°ìÉôÉéÃ´¶â³Û
-           MOVE    MF101-FTNMONEY-G          TO  WRK-NUM
+           MOVE    MF101-FTNMONEY-G           TO  WRK-NUM
            MOVE    9                         TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *    
       *    £²£±¡¥¸øÈñ£±µëÉÕÂÐ¾Ý°ìÉôÉéÃ´¶â
-           MOVE    MF101-FTNMONEYSAI(1)      TO  WRK-NUM
+           MOVE    SPACE                     TO  WRK-DATA
            MOVE    7                         TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    £²£²¡¥¸øÈñ£²µëÉÕÂÐ¾Ý°ìÉôÉéÃ´¶â
            MOVE    SPACE                     TO  WRK-DATA
