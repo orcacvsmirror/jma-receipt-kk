@@ -44,6 +44,9 @@
       *  01.00.06    吉川    11/11/15    障害児施設(079)は障害者自立支援と
       *                                  同等の処理をするように修正
       *  01.00.07    吉川    13/01/09    医療機関情報編集対応
+      *  01.00.08    吉川    13/03/14    特定疾患等＋高額療養費で分点時
+      *                                  福祉助成分が上限額を超えた場合
+      *                                  患者負担額欄には上限額分を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -113,6 +116,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) start
+           03  FLG-JOUGEN     PIC 9(01).
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -688,6 +694,10 @@
            PERFORM  920-SYUNOU-SET-SEC
            DISPLAY "集計終了 請求額=" WRK-SEIKYUGK-G
       *
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) start
+           MOVE  ZERO                      TO  FLG-JOUGEN
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) end
+      *
       *    長期併用か、特定疾患併用かレセプトに
       *    一部負担金を記載する場合のみ患者負担額を記載する
            IF  MF100-TYOKI         NOT =   ZERO    OR
@@ -698,6 +708,9 @@
                    RECE02-FTNMONEY(1)  <   WRK-SEIKYUGK-G
                    MOVE  RECE02-FTNMONEY(1)
                                            TO  WRK-SEIKYUGK-G
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) start
+                   MOVE  1                 TO  FLG-JOUGEN
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) end
                END-IF
       *    長期限度額設定
                IF  WRK-SEIKYUGK-G      >   10000   AND
@@ -726,6 +739,14 @@
                                        TO  MF100-ITBFTN
                    IF  MF100-KOHTENSU  =   MF100-TOTALTEN
                        MOVE    ZERO    TO  MF100-KOHTENSU
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) start
+                   ELSE
+                       IF  (FLG-JOUGEN  =  1)
+                       OR  (RECE02-ZAITAKU  =  "2" OR "3" OR "4")
+                           MOVE    WRK-SEIKYUGK-G
+                                       TO  MF100-ITBFTN
+                       END-IF
+      *=== 特疾等＋高額の患者負担額修正 by Yoshikawa(2013/03/14) end
                    END-IF
                END-IF
            END-IF
