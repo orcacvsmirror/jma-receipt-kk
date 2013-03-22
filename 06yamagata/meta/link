@@ -1,6 +1,7 @@
 ---
  - [cobol/SEIKYU0605.CBL , cobol/]
  - [cobol/SEIKYU0609.CBL , cobol/]
+ - [cobol/SEIKYU0611.CBL , cobol/]
  - [cobol/SEIKYU06BYOMEI1.CBL , cobol/]
  - [cobol/SEIKYU06BYOMEI2.CBL , cobol/]
  - [cobol/SOKATU0600.CBL , cobol/]
@@ -30,6 +31,7 @@
  - [lddef/yamagata.bd , lddef/]
  - [scripts/kentan/seikyu0605.sh , scripts/kentan/]
  - [scripts/kentan/seikyu0609.sh , scripts/kentan/]
+ - [scripts/kentan/seikyu0611.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0600.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0605.sh , scripts/kentan/]
  - [scripts/kentan/sokatu0610.sh , scripts/kentan/]
@@ -39,5 +41,7 @@
  - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
  - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0610.exp , scripts/prgoption/]
+ - [scripts/prgoption/SEIKYU0611.exp , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0610-YUSEN.opt , scripts/prgoption/]
+ - [scripts/prgoption/SEIKYU0611-COMMENT.opt , scripts/prgoption/]
 
