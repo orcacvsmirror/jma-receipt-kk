@@ -93,6 +93,8 @@
       *                                 特定疾患と957等を持っている場合
       *                                 限度額欄に値が記載されるのを修正
       *  01.00.36    吉川   12/12/13    医療機関情報編集修正
+      *  01.00.37    吉川   13/03/18    限度額欄と前期高齢者欄の両方に
+      *                                 値がある場合、前期高齢者のみ印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1541,6 +1543,11 @@
       *         MOVE     2              TO  IDX1
                MOVE     3              TO  IDX1
       *=== 一般＋長期の集計位置修正 by Yoshikawa(2012/01/12) end
+      *=== 高額と前期は前期高齢者のみ印字 by Yoshikawa(2013/03/18) start
+               IF  WRK-T-KOUGAKU  NOT =  ZERO
+                 MOVE  ZERO            TO  WRK-T-KOUGAKU
+               END-IF
+      *=== 高額と前期は前期高齢者のみ印字 by Yoshikawa(2013/03/18) end
              END-IF
              MOVE    ZERO              TO  WRK-T-TOTALTEN
            ELSE
