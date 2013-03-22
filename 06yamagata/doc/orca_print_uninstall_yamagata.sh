@@ -33,7 +33,7 @@ if [ ${usrname} != "root" ] ; then
   exit 1
 fi
 
-echomsg "山形(総括表)アンインストール中..."
+echomsg "山形県(総括表・地方公費)アンインストール中..."
 
 cp ${SYSCONFDIR}/kentan.inc ${SYSCONFDIR}/kentan.inc.bak
 sed '/yamagata/d' ${SYSCONFDIR}/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
@@ -88,6 +88,18 @@ for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
 
+if test -f ${SITESRCDIR}/data/COMMENT.INI ; then
+  rm -rf ${SITESRCDIR}/data/COMMENT.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
   rm -rf $f
@@ -131,5 +143,18 @@ if test -f ${LDDEFDIR}/${prefname}.bd ; then
 fi
 
 
-echomsg "山形(総括表)アンインストール終了！！"
+if test -f ${SITEDATADIR}/COMMENT.INI ; then
+  rm -rf ${SITEDATADIR}/COMMENT.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
+
+echomsg "山形県(総括表・地方公費)アンインストール終了！！"
 
