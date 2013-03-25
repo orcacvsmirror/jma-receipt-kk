@@ -64,6 +64,10 @@ for f in ${SITESRCDIR}/cobol/copy/SEI${prefno}* ; do
   rm -rf $f
 done
 
+if test -f ${SITESRCDIR}/cobol/copy/A30012.INC ; then
+  rm -rf ${SITESRCDIR}/cobol/copy/A30012.INC
+fi
+
 for f in ${SITESRCDIR}/form/SC${prefno}* ; do
   rm -rf $f
 done
