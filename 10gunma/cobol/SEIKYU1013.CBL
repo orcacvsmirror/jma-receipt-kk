@@ -60,6 +60,8 @@
       *                                  第一公費請求点数欄には公費分を
       *                                  記載するように修正
       *  01.00.13    吉川    2013/02/26  福祉請求点数の計算方法修正
+      *  01.00.14    吉川    2013/03/19  福祉請求点数欄と第一公費請求点数欄は
+      *                                  併用全国公費に関係なく記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -990,32 +992,34 @@
       *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) end
              MOVE    ZERO             TO    MF100-TOTALTEN2
            ELSE
-      *      感染症及び精神通院以外は福祉点数を上段に記載
-             IF  WRK-TOKURAN  NOT =  "10" AND "11" AND "21"
-      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
-      *    保険＋全国公費のような、地方公費が絡まないことにより
-      *    収納から正しく請求額を取得できない場合の請求額の計算
-               IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
-      *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
+      *=== 福祉と公費点数の記載変更 by Yoshikawa(2013/03/19) start
+      **      感染症及び精神通院以外は福祉点数を上段に記載
+      *       IF  WRK-TOKURAN  NOT =  "10" AND "11" AND "21"
+      **=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
+      **    保険＋全国公費のような、地方公費が絡まないことにより
+      **    収納から正しく請求額を取得できない場合の請求額の計算
+      *         IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
+      **=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
+      **            COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
+      **                     ( (MF100-H-TOTALTEN  - MF100-TOTALTEN2) *
+      **                        MF100-KYURATE  /  10)
       *            COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
-      *                     ( (MF100-H-TOTALTEN  - MF100-TOTALTEN2) *
+      *                     ( (MF100-TOTALTEN  -  MF100-TOTALTEN2) *
       *                        MF100-KYURATE  /  10)
-                  COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
-                           ( (MF100-TOTALTEN  -  MF100-TOTALTEN2) *
-                              MF100-KYURATE  /  10)
-      *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
-               END-IF
-      *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
-      *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) start
-      *         MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
-      *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
+      **=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
+      *         END-IF
+      **=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
+      **=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) start
+      **         MOVE  MF100-TOTALTEN   TO    MF100-TOTALTEN2
+      **=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
+      **         COMPUTE  MF100-TOTALTEN2  =
+      **                  MF100-H-TOTALTEN  -  MF100-TOTALTEN2
       *         COMPUTE  MF100-TOTALTEN2  =
-      *                  MF100-H-TOTALTEN  -  MF100-TOTALTEN2
-               COMPUTE  MF100-TOTALTEN2  =
-                        MF100-TOTALTEN   -  MF100-TOTALTEN2
-      *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
-      *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) end
-             END-IF
+      *                  MF100-TOTALTEN   -  MF100-TOTALTEN2
+      **=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
+      **=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) end
+      *       END-IF
+      *=== 福祉と公費点数の記載変更 by Yoshikawa(2013/03/19) end
       *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
       *       COMPUTE  WRK-SEIKYUGK-G  =  
       *                MF100-TOTALTEN2  *  MF100-KYURATE  /  10
