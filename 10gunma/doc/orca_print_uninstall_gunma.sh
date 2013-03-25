@@ -29,11 +29,11 @@ function echomsg() {
 
 # user check
 if [ ${usrname} != "root" ] ; then
-  echomsg "\nrootユーザで実行してください\n"
+  echomsg "rootユーザで実行してください"
   exit 1
 fi
 
-echomsg "群馬県(地方公費・総括表)アンインストール中..."
+echomsg "群馬県(総括表・地方公費)アンインストール中..."
 
 cp ${SYSCONFDIR}/kentan.inc ${SYSCONFDIR}/kentan.inc.bak
 sed '/gunma/d' ${SYSCONFDIR}/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
@@ -57,6 +57,10 @@ for f in ${SITESRCDIR}/cobol/copy/SC${prefno}* ; do
 done
 
 for f in ${SITESRCDIR}/cobol/copy/SEI${prefno}* ; do
+  rm -rf $f
+done
+
+for f in ${SITESRCDIR}/cobol/copy/TOWN${prefno}* ; do
   rm -rf $f
 done
 
@@ -87,6 +91,22 @@ done
 for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
+
+for f in ${SITESRCDIR}/data/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
+if test -f ${SITESRCDIR}/data/BAITAI.INI ; then
+  rm -rf ${SITESRCDIR}/data/BAITAI.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
 
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
@@ -131,5 +151,22 @@ if test -f ${LDDEFDIR}/${prefname}.bd ; then
 fi
 
 
-echomsg "群馬県(地方公費・総括表)アンインストール終了！！"
+for f in ${SITEDATADIR}/TOWN${prefno}* ; do
+  rm -rf $f
+done
+
+if test -f ${SITEDATADIR}/BAITAI.INI ; then
+  rm -rf ${SITEDATADIR}/BAITAI.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
+
+echomsg "群馬県(総括表・地方公費)アンインストール終了！！"
 
