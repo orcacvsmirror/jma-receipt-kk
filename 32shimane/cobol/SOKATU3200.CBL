@@ -173,7 +173,7 @@
            03  FILLER              PIC X(05)  VALUE "/tmp/".
            03  FILE-HOSPNUM        PIC 9(02).
            03  FILLER              PIC X(10)  VALUE "SOKATU3200".
-           03  FILLER              PIC X(09)  VALUE "SEIKYU.INI".
+           03  FILLER              PIC X(10)  VALUE "SEIKYU.INI".
       *=== プラグイン対応 by Yoshikawa(2013/01/11) end
       *
       *    一時領域
