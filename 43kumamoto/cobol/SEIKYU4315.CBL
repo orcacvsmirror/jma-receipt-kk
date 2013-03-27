@@ -43,6 +43,7 @@
       *                                  open-cobol1.0対応
       *  01.00.08    萩野    12/08/14    帳票枚数が100枚以上の時のページ
       *                                  印字不具合の修正
+      *  01.00.09    吉川    13/02/08    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -765,9 +766,15 @@
       *     MOVE  SYS-1002-TEL            TO  SC15-TEL
       *    住所
            MOVE  WRK-HOSPADRS            TO  SC15-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC15-ADRS             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME            TO  SC15-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC15-HOSPNAME         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL             TO  SC15-TEL

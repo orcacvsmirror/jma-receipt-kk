@@ -52,6 +52,7 @@
       *                                    外来の場合のみ負担金襴は記載しない
       *  01.00.11     吉川     11/10/12    佐伯市と姫島村の場合の日数と
       *                                    一部負担金欄の記載を修正
+      *  01.00.12     吉川     13/02/08    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1033,9 +1034,15 @@
       *     MOVE    SYS-1001-HOSPNAME       TO  SC01-HOSPNAME
       *    住所
            MOVE  WRK-HOSPADRS              TO  SC01-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC01-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME              TO  SC01-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC01-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名

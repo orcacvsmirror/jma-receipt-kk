@@ -36,6 +36,7 @@
       *  01.00.02    門間    09/01/20    SPA-AREAの初期化
       *  01.00.03    吉川    09/03/25    入院と外来の3併の患者を出力すると
       *                                  処理が止まる不具合を修正
+      *  01.00.04    吉川    13/02/08    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -832,9 +833,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC17-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS              TO  SC17-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC17-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SC17-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC17-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名

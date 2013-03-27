@@ -37,6 +37,7 @@
       *  01.00.04    吉川    08/11/20    SPA-AREA初期化
       *  01.00.05    吉川    10/06/01    オンライン返戻対応
       *  01.00.06    吉川    11/02/10    特別療養費国保対応
+      *  01.00.07    吉川    13/02/08    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -775,8 +776,14 @@
       *     MOVE    SYS-1001-HOSPNAME   TO  SKT4400-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT4400-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4400-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT4400-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4400-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者氏名
            MOVE    SYS-1001-KAISETUNAME

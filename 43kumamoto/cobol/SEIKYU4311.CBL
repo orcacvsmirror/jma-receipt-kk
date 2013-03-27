@@ -47,6 +47,7 @@
       *                                  どちらも印字するように修正
       *  01.00.10    萩野    12/08/14    帳票枚数が100枚以上の時のページ
       *                                  印字不具合の修正
+      *  01.00.11    吉川    13/02/08    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -809,9 +810,15 @@
       *     MOVE  SYS-1002-TEL            TO  SC11-TEL
       *    住所
            MOVE  WRK-HOSPADRS            TO  SC11-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC11-ADRS             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME            TO  SC11-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SC11-HOSPNAME         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL             TO  SC11-TEL
