@@ -44,6 +44,7 @@
       *  01.00.09      吉川     10/11/25    open-cobol1.0対応
       *  01.00.10      吉川     11/03/04    特別療養費国保対応
       *  01.00.11      吉川     13/01/22    医療機関情報編集対応
+      *  01.00.12      吉川     13/02/12    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -174,6 +175,15 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2011/03/04) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4710".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -206,7 +216,9 @@
            03  WRK-RECEERR         PIC X(200).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
@@ -655,10 +667,13 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *

@@ -6,6 +6,12 @@ PREFNAME=fukuoka
 PROGRAMID=SOKATU4000
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4000"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
+PRGOPT2="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
+PRGOPT3="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
+INIFILE="/tmp/${15}${PROGRAMID}SRYKA.INI"
+INIFILE2="/tmp/${15}${PROGRAMID}TAISYOKOHI.INI"
+INIFILE3="/tmp/${15}${PROGRAMID}YUSEN.INI"
 #-------------------------------------------#
 #    国保総括表作成（福岡）
 #        $1-${11}
@@ -27,6 +33,11 @@ RENNUM=0
             rm  ${16}
         fi
 
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
+        echo "${PRGOPT3}" | psql -At ${DBNAME} > ${INIFILE3}
+
         cd  ${ORCA_DIR}
 
 ##      返戻分
@@ -45,6 +56,11 @@ RENNUM=0
                 exit
             fi
         fi
+
+##      INIファイル 削除
+        rm -f ${INIFILE}
+        rm -f ${INIFILE2}
+        rm -f ${INIFILE3}
 
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

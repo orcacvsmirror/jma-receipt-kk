@@ -5,7 +5,9 @@ PREFNAME=miyazaki
 PROGRAMID=SOKATU4510
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4510"
 RENNUM=0
--------------------------------------------#
+PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
+INIFILE="/tmp/${15}${PROGRAMID}YUSEN.INI"
+#-------------------------------------------#
 #    πÒ ›°¶ø«Œ≈ ÛΩ∑¿¡µ·ΩÒ° µ‹∫Í°À
 #        $1-${11}
 #              ∞ı∫˛£ƒ£¬Õ—ƒÍ∏«ƒÍ∞˙øÙ(CPORCSRTLNK.INC)
@@ -28,6 +30,9 @@ RENNUM=0
             rm  ${16}
         fi
         
+##      INI•’•°•§•Î ∫Ó¿Æ
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+
 ##       ÷Ã· ¨
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -61,5 +66,8 @@ RENNUM=0
             fi
         fi
         
+##      INI•’•°•§•Î ∫ÔΩ¸
+        rm -f ${INIFILE}
+
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

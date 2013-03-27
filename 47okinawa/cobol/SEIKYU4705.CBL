@@ -42,6 +42,7 @@
       *  01.00.08    吉川    2013/01/17  テーブルのprimary key変更対応
       *  01.00.09    吉川    2013/01/22  スタックオーバーフロー対応
       *                                  医療機関情報編集対応
+      *  01.00.10    吉川    2013/02/12  プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -219,6 +220,15 @@
            05  WRK-PARA-LINK-HOSPNUM PIC  9(02).
       *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU4705".
+           03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
+      *
       *    一時領域
        01  WRK-AREA.
       *
@@ -245,7 +255,9 @@
            03  WRK-PTID            PIC 9(10).
            03  WRK-HKNCOMBI        PIC 9(04).
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
       *
            03  WRK-PATH              PIC X(50).
       *    医療機関情報
@@ -632,11 +644,15 @@
       *
       *    出力順設定ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
       *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   STU-REC
       *

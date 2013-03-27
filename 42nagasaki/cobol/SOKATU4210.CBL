@@ -52,6 +52,7 @@
       *  01.00.12    吉川    11/01/12    特別療養費国保対応
       *                                  open-cobol1.0対応
       *  01.00.13    萩野    13/02/14    医療機関情報編集対応
+      *  01.00.14    吉川    13/03/25    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -184,13 +185,24 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/03/25) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4210".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/03/25) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMDWH        PIC X(22).
            03  WRK-SRYYMWH         PIC X(16).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/03/25) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/03/25) end
       *  
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -627,12 +639,14 @@
       *****************************************************************
        110-INI-FILE-SEC                SECTION.
       *
-      *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/03/25) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/03/25) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *

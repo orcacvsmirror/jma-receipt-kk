@@ -71,6 +71,7 @@
       *  01.00.30    吉川    12/03/12    対象公費番号をINIファイルから
       *                                  取得するようにする
       *  01.00.31    吉川    13/01/22    医療機関情報編集対応
+      *  01.00.32    吉川    13/02/07    プラグイン対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -104,7 +105,10 @@
                                    FILE    STATUS  IS  STS-RECEERR.
       *
       *
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+           SELECT  YUSEN-FILE    ASSIGN FILE-NAME3
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                                  ORGANIZATION   IS  LINE SEQUENTIAL
                                  ACCESS MODE    IS  SEQUENTIAL
                                  FILE   STATUS  IS  STS-YUSEN.
@@ -117,7 +121,10 @@
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
       *    印字対象公費番号ファイル
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                                    ORGANIZATION   IS  LINE SEQUENTIAL
                                    ACCESS MODE    IS  SEQUENTIAL
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
@@ -157,8 +164,10 @@
       *    印字対象公費番号ファイル
        FD  TAISYOKOHI-FILE.
        01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-CHOHYO   PIC X(01).
-           03  FILLER              PIC X(01).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     03  TAISYO-DAT-CHOHYO   PIC X(01).
+      *     03  FILLER              PIC X(01).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
            03  TAISYO-DAT-KOHNUM   PIC X(03). 
            03  TAISYO-DAT-KAIGYO   PIC X(01). 
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
@@ -277,6 +286,25 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4000".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+       01  FILE-NAME2.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM2       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4000".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+       01  FILE-NAME3.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM3       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4000".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -284,7 +312,9 @@
            03  WRK-SRYYMWH         PIC X(16).
            03  WRK-SRYYMD          PIC X(08).
       *    ファイル名称用エリア
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
            03  WRK-SRYKANAME       PIC X(20) OCCURS 3.
       *  
            03  WRK-SYMD.
@@ -813,12 +843,15 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
       *
-           DISPLAY "ファイル名="  FILE-NAME
+           DISPLAY "ファイル名3="  FILE-NAME3
       *
            INITIALIZE   YUSEN-HKNJANUM
       *
@@ -845,10 +878,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SRYKA-REC
       *
@@ -887,10 +925,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
+           DISPLAY "ファイル名2="  FILE-NAME2
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -904,14 +947,21 @@
                AT END
                  MOVE  1                 TO  FLG-TAISYOKOHI
                NOT AT END
-                 IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                    CONTINUE
                  ELSE
       *            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
-                   IF  TAISYO-DAT-CHOHYO  =  "1"
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *             IF  TAISYO-DAT-CHOHYO  =  "1"
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                      ADD   1               TO  IDX
                      MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-                   END-IF
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *             END-IF
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                    DISPLAY "読み込みレコード=" TAISYOKOHI-REC
                  END-IF
              END-READ

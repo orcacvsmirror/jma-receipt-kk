@@ -62,6 +62,7 @@
       *                                   取得するようにする
       *  01.00.21    吉川     13/01/17    テーブルのprimary key変更対応
       *  01.00.22    吉川     13/01/22    医療機関情報編集対応
+      *  01.00.23    吉川     13/02/07    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -93,7 +94,10 @@
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
       *    印字対象公費番号ファイル
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                                    ORGANIZATION   IS  LINE SEQUENTIAL
                                    ACCESS MODE    IS  SEQUENTIAL
                                    FILE   STATUS  IS  STS-TAISYOKOHI.
@@ -126,8 +130,10 @@
       *    印字対象公費番号ファイル
        FD  TAISYOKOHI-FILE.
        01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-CHOHYO   PIC X(01).
-           03  FILLER              PIC X(01).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     03  TAISYO-DAT-CHOHYO   PIC X(01).
+      *     03  FILLER              PIC X(01).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
            03  TAISYO-DAT-KOHNUM   PIC X(03). 
            03  TAISYO-DAT-KAIGYO   PIC X(01). 
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
@@ -281,6 +287,20 @@
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU4007".
+           03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
+       01  FILE-NAME2.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM2       PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU4007".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
       *    一時領域
        01  WRK-AREA.
       *
@@ -312,7 +332,9 @@
            03  WRK-PTID            PIC 9(10).
            03  WRK-HKNCOMBI        PIC 9(04).
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
       *
       *---(01.00.09) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -775,11 +797,15 @@
       *
       *    出力順設定ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
       *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   STU-REC
       *
@@ -803,10 +829,15 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
+           DISPLAY "ファイル名2="  FILE-NAME2
       *
            INITIALIZE   TAISYOKOHI-REC
       *
@@ -820,14 +851,21 @@
                AT END
                  MOVE  1                 TO  FLG-TAISYOKOHI
                NOT AT END
-                 IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                    CONTINUE
                  ELSE
       *            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
-                   IF  TAISYO-DAT-CHOHYO  =  "1"
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *             IF  TAISYO-DAT-CHOHYO  =  "1"
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                      ADD   1               TO  IDX
                      MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-                   END-IF
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *             END-IF
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
                    DISPLAY "読み込みレコード=" TAISYOKOHI-REC
                  END-IF
              END-READ
@@ -1940,7 +1978,7 @@
       *    医療機関名称
            MOVE    WRK-HOSPNAME        TO  HCN06-HOSPNAME
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) start
-           INSPECT HC06-HOSPADRS       REPLACING ALL "  " BY "　"
+           INSPECT HCN06-HOSPNAME      REPLACING ALL "  " BY "　"
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    医療機関ＴＥＬ

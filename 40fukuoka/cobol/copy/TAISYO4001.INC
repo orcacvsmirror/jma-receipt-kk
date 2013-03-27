@@ -17,7 +17,5 @@
       ********************************************************************
        01  TAISYO-DAT.
            03  TAISYO-TBL  OCCURS  100.
-               05  TAISYO-CHOHYO   PIC X(01).
-               05  FILLER          PIC X(01).
                05  TAISYO-KOHNUM   PIC X(03).
                05  TAISYO-KAIGYO   PIC X(01).
