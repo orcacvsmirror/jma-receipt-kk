@@ -88,6 +88,22 @@ for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
 
+if test -f ${SITESRCDIR}/data/KINYU.INI ; then
+  rm -rf ${SITESRCDIR}/data/KINYU.INI
+fi
+
+if test -f ${SITESRCDIR}/data/KINYU_UTAZU.INI ; then
+  rm -rf ${SITESRCDIR}/data/KINYU_UTAZU.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
   rm -rf $f
@@ -128,6 +144,23 @@ done
 
 if test -f ${LDDEFDIR}/${prefname}.bd ; then
   rm -rf ${LDDEFDIR}/${prefname}.bd
+fi
+
+
+if test -f ${SITEDATADIR}/KINYU.INI ; then
+  rm -rf ${SITEDATADIR}/KINYU.INI 
+fi
+
+if test -f ${SITEDATADIR}/KINYU_UTAZU.INI ; then
+  rm -rf ${SITEDATADIR}/KINYU_UTAZU.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
 fi
 
 
