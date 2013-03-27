@@ -46,6 +46,7 @@
       *  01.00.10    吉川    10/05/13    オンライン返戻対応
       *  01.00.11    吉川    10/09/24    主科対応
       *  01.00.12    吉川    11/01/11    特別療養費国保対応
+      *  01.00.13    吉川    13/02/06    医療機関情報編集対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1072,8 +1073,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT3700-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3700-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3700-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3700-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3700-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    開設者名

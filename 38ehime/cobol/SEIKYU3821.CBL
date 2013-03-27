@@ -40,6 +40,7 @@
       *  01.00.05     吉川     11/09/22    前期高齢者９割＋長期の請求金額の修正
       *  01.00.06     吉川     11/10/04    長期を持っていなくても上限額で
       *                                    止まってしまう不具合を修正
+      *  01.00.07     吉川     13/02/07    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -914,9 +915,15 @@
       *     MOVE    SYS-1002-TEL            TO  SC21-TEL
       *    住所
            MOVE    WRK-HOSPADRS            TO  SC21-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC21-ADRS               REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SC21-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC21-HOSPNAME           REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    電話番号
            MOVE    WRK-HOSPTEL             TO  SC21-TEL

@@ -43,6 +43,7 @@
       *  01.00.08    吉川    10/04/30    印字対象番号の追加(781)
       *  01.00.09    吉川    12/06/21    患者負担がある公費で高額の場合
       *                                  一部負担金と福祉医療費請求額の計算を修正
+      *  01.00.10    吉川    13/02/06    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -854,9 +855,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC13-HOSPNAME
       *    医療機関住所
            MOVE  WRK-HOSPADRS                TO  SC13-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SC13-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME                TO  SC13-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SC13-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    開設者名

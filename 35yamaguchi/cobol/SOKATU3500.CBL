@@ -37,6 +37,7 @@
       *  01.00.06    吉川     10/04/30    オンライン返戻対応
       *  01.00.07    吉川     10/12/09    特別療養費国保対応
       *  01.00.08    吉川     11/04/19    東北地方太平洋沖地震対応
+      *  01.00.09    吉川     13/02/06    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -830,9 +831,15 @@
            MOVE     SYS-1001-HOSPNAME        TO   SKT3500-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SKT3500-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3500-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SKT3500-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3500-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名

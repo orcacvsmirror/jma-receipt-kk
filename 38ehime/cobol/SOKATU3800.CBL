@@ -52,6 +52,7 @@
       *  01.00.17    吉川      12/04/11    帳票様式の変更に伴う修正
       *  01.00.18    吉川      12/05/21    一般等の７０歳未満の
       *                                    一部負担金欄は印字する
+      *  01.00.19    吉川      13/02/07    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1468,8 +1469,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT3810-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT3810-HOSPADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3810-HOSPADRS      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT3810-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3810-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *    医療機関コード
            MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT

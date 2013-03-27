@@ -52,6 +52,7 @@
       *  01.00.13    吉川    10/11/10    診療科は旧総合病院のみ印字
       *  01.00.14    吉川    12/06/21    患者負担がある公費で高額の場合
       *                                  一部負担金と福祉医療費請求額の計算を修正
+      *  01.00.15    吉川    13/02/06    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -980,9 +981,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SC15-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS              TO   SC15-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SC15-ADRS                 REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO   SC15-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SC15-HOSPNAME             REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    開設者名

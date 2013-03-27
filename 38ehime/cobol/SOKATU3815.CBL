@@ -31,6 +31,7 @@
       *                                  広域連合の保険者番号指定対応
       *  01.00.02    吉川    2012/04/27  在宅はまとめて集計するように修正
       *  01.00.03    吉川    2012/05/21  PERFORM→GOTOに修正
+      *  01.00.04    吉川    2013/02/07  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -835,8 +836,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT3815-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT3815-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3815-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT3815-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT3815-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT3815-KAISETUNAME
