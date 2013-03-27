@@ -36,6 +36,7 @@
       *  01.00.04    吉川    2011/06/17  食事回数は1万の位まで表示する
       *  01.00.05    吉川    2012/06/15  在宅はまとめて集計するように修正
       *                                  PERFORM→GOTOに修正
+      *  01.00.06    吉川    2013/02/12  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1143,8 +1144,14 @@
            MOVE    WRK-SRYYMWH         TO  SKT4615-SRYYM
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT4615-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/12) start
+           INSPECT SKT4615-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/12) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT4615-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/12) start
+           INSPECT SKT4615-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/12) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT4615-KAISETUNAME
