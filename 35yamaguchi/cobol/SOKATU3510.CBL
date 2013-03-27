@@ -37,6 +37,8 @@
       *  01.00.05    内田    09/08/25    中国九州北部豪雨対応（対象者別集計）
       *  01.00.06    吉川    10/04/30    オンライン返戻対応
       *  01.00.07    吉川    10/12/09    特別療養費国保対応
+      *  01.00.08    吉川    13/02/06    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -163,6 +165,15 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU3510".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMDWH        PIC X(22).
@@ -177,7 +188,9 @@
            03  WRK-CNT             PIC  9(02).
            03  WRK-HKNJANUM        PIC  X(06).
            03  WRK-KOHNUM          PIC  X(03).
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
       *
            03  WRK-SRYKA-TBL  OCCURS 50.
                05  WRK-SRYKACD     PIC  X(02).
@@ -562,10 +575,13 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -1061,9 +1077,15 @@
            MOVE     SYS-1001-HOSPNAME        TO   SKT3510-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO   SKT3510-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3510-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO   SKT3510-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3510-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名
@@ -1269,9 +1291,15 @@
       *     MOVE     SYS-1001-HOSPNAME        TO   SKT3520-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS              TO  SKT3520-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3520-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME              TO  SKT3520-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SKT3520-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *    開設者名
