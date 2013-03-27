@@ -88,6 +88,18 @@ for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
 
+if test -f ${SITESRCDIR}/data/SRYKA.INI ; then
+  rm -rf ${SITESRCDIR}/data/SRYKA.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
   rm -rf $f
@@ -129,6 +141,20 @@ done
 if test -f ${LDDEFDIR}/${prefname}.bd ; then
   rm -rf ${LDDEFDIR}/${prefname}.bd
 fi
+
+
+if test -f ${SITEDATADIR}/SRYKA.INI ; then
+  rm -rf ${SITEDATADIR}/SRYKA.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
 
 echomsg "集基喷俯(另崇山ˇ孟数给锐)アンインスト〖ル姜位——"
 
