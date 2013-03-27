@@ -5,6 +5,8 @@ PREFNAME=tokushima
 PROGRAMID=SOKATU3620
 LOG_FILE="/var/log/jma-receipt/${15}sokatu3620"
 RENNUM=0
+PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
+INIFILE="/tmp/${15}${PROGRAMID}YUSEN.INI"
 -------------------------------------------#
 #    国保・診療報酬請求書（徳島）
 #        $1-${11}
@@ -28,6 +30,9 @@ RENNUM=0
             rm  ${16}
         fi
         
+##      INIファイル 作成
+        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
+
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -61,5 +66,8 @@ RENNUM=0
             fi
         fi
         
+##      INIファイル 削除
+        rm -f ${INIFILE}
+
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
