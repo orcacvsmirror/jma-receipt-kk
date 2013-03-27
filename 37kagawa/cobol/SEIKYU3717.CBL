@@ -33,6 +33,8 @@
       *                                  処理をする
       *  01.00.02    門間    08/12/17    SPA-AREA初期化
       *  01.00.03    吉川    11/01/11    open-cobol1.0対応
+      *  01.00.04    吉川    13/02/06    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -140,6 +142,15 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU3717".
+           03  FILLER              PIC X(09)  VALUE "KINYU.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC X(200).
@@ -178,7 +189,9 @@
            03  WRK-YMD               PIC X(08).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
            03  WRK-KINYUDATA       PIC X(20) OCCURS 4.
       *
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -502,11 +515,16 @@
       *
       *    金融機関情報取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-                                FILE-NAME
-           MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *                          FILE-NAME
+      *     MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   KINYU-REC
       *
@@ -1087,13 +1105,24 @@
            MOVE  SYS-1001-HOSPCDN         TO    SC17-HOSPCD
       *
       *    医療機関名称
-           MOVE  SYS-1001-HOSPNAME        TO    SC17-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+      *     MOVE  SYS-1001-HOSPNAME        TO    SC17-HOSPNAME
+           MOVE    WRK-HOSPNAME           TO  SC17-HOSPNAME
+           INSPECT SC17-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関所在地
-           MOVE  SYS-1002-ADRS            TO    SC17-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+      *     MOVE  SYS-1002-ADRS            TO    SC17-ADRS
+           MOVE    WRK-HOSPADRS           TO  SC17-ADRS
+           INSPECT SC17-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    電話番号
-           MOVE  SYS-1002-TEL             TO    SC17-TEL
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+      *     MOVE  SYS-1002-TEL             TO    SC17-TEL
+           MOVE    WRK-HOSPTEL            TO  SC17-TEL
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    開設者名
            MOVE  SYS-1001-KAISETUNAME     TO    SC17-KAISETU

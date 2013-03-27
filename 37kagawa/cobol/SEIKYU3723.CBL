@@ -34,6 +34,8 @@
       *                                  長期上位（974）は長期と同様の
       *                                  処理をする
       *  01.00.02    門間    08/12/17    SPA-AREA初期化
+      *  01.00.03    吉川    13/02/06    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -140,6 +142,15 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU3723".
+           03  FILLER              PIC X(09)  VALUE "KINYU.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC X(200).
@@ -175,7 +186,9 @@
            03  WRK-GOKEI-SEIKYUGK    PIC 9(07).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
            03  WRK-KINYUDATA       PIC X(12) OCCURS 3.
       *
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -490,11 +503,16 @@
       *
       *    金融機関情報取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-                                FILE-NAME
-           MOVE  "data/KINYU_UTAZU.INI"   TO     MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"         USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01             TO     FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *                          FILE-NAME
+      *     MOVE  "data/KINYU_UTAZU.INI"   TO     MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"         USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01             TO     FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/06) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   KINYU-REC
       *
@@ -882,9 +900,15 @@
       *     MOVE  SYS-1002-ADRS            TO  SC23-ADRS
       *    住所
            MOVE  WRK-HOSPADRS             TO  SC23-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SC23-ADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME             TO  SC23-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) start
+           INSPECT SC23-HOSPNAME          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名

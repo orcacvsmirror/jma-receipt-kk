@@ -44,6 +44,8 @@
       *                                  公費負担額の計算を修正
       *  01.00.07    吉川    12/10/15    長期と高額を持っている場合、
       *                                  限度額の低い方を特定疾患等欄に記載
+      *  01.00.08    吉川    13/02/07    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -167,6 +169,15 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU3825".
+           03  FILLER              PIC X(11)  VALUE "COMMENT.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -233,7 +244,9 @@
       *=== 備考欄修正 by Yoshikawa(2011/07/13) end
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
            03  WRK-BIKO4             PIC X(40).
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
            03  WRK-COMMENTCD         PIC X(09).
            03  WRK-COMMENT           PIC X(40).
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
@@ -676,10 +689,15 @@
       *
       *    備考欄コメント設定取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/COMMENT.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/COMMENT.INI"    TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   COMMENT-REC
       *
@@ -1512,6 +1530,9 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    ３２．医療機関等所在地
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT WRK-HOSPADRS              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
            MOVE    WRK-HOSPADRS              TO  WRK-DATA
       *=== 文字数増加 by Yoshikawa(2011/05/23) start
       *     MOVE    100                       TO  WRK-NAGASA
@@ -1520,6 +1541,9 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    ３３．医療機関等名称
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT WRK-HOSPNAME              REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
            MOVE    WRK-HOSPNAME              TO  WRK-DATA
       *=== 文字数増加 by Yoshikawa(2011/05/23) start
       *     MOVE    30                        TO  WRK-NAGASA
