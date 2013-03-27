@@ -38,13 +38,15 @@
       *                                  広域連合の保険者番号指定対応
       *  01.00.07    吉川    2011/08/18  印字する都道府県数が8つ以上の場合
       *                                  帳票が印字されない不具合を修正
-      *  01.00.14    吉川    2011/09/05  SRYKA.INIがある他県のプログラムを
+      *  01.00.08    吉川    2011/09/05  SRYKA.INIがある他県のプログラムを
       *                                  インストールすると標榜科欄の
       *                                  表示がおかしくなるのを修正
-      *  01.00.15    吉川    2012/03/14  点数と食事療養費の桁数増加
-      *  01.00.16    萩野    2012/08/17  シス管「1901」で設定した電話番号が
+      *  01.00.09    吉川    2012/03/14  点数と食事療養費の桁数増加
+      *  01.00.10    萩野    2012/08/17  シス管「1901」で設定した電話番号が
       *                                  印字されるように修正
-      *  01.00.07    吉川    2012/11/19  PERFORMをGOTOに修正
+      *  01.00.11    吉川    2012/11/19  PERFORMをGOTOに修正
+      *  01.00.12    吉川    2013/02/08  プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -157,6 +159,15 @@
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-SYOKBN1    PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4305".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -224,7 +235,9 @@
            03  WRK-HOSPTEL         PIC X(15).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
            03  WRK-SRYKANAME    PIC X(16) OCCURS 2.
       *
        01  WRK-2007-AREA.
@@ -615,10 +628,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SRYKA-REC
       *
@@ -1206,8 +1224,14 @@
            MOVE    WRK-SRYKANAME(2)      TO  SKT4305-SRYKANAME(2)
       *    医療機関住所
            MOVE    WRK-HOSPADRS        TO  SKT4305-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4305-ADRS        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    医療機関名
            MOVE    WRK-HOSPNAME        TO  SKT4305-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4305-HOSPNAME    REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME
                                        TO  SKT4305-KAISETUNAME

@@ -46,6 +46,8 @@
       *  01.00.09    吉川    10/06/01    オンライン返戻対応
       *  01.00.10    吉川    10/12/16    open-cobol1.0対応
       *  01.00.11    吉川    11/02/10    特別療養費国保対応
+      *  01.00.12    吉川    13/02/08    プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -179,6 +181,15 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/10) end
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4320".
+           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMDWH        PIC X(22).
@@ -188,7 +199,9 @@
       *=== 診療年月の表示修正 by Yoshikawa(2008/05/29) end
       *
       *    ファイル名称用エリア
-           03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     03  FILE-NAME        PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
       *
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -629,10 +642,13 @@
       *
       *
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
       *
            DISPLAY "ファイル名="  FILE-NAME
       *
@@ -1180,8 +1196,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4320o-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4320o-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4320o-ADRS         REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4320o-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4320o-HOSPNAME     REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4320o-KAISETU
@@ -1342,8 +1364,14 @@
       *     MOVE    SYS-1001-HOSPNAME     TO  SKT4330-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4330-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4330-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4330-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4330-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4330-KAISETU
@@ -1556,8 +1584,14 @@
       *    郵便番号
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT4320-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4320-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT4320-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) start
+           INSPECT SKT4320-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/08) end
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT4320-KAISETU
       *    電話番号

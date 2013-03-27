@@ -45,6 +45,7 @@
       *                                  取得するようにする
       *  01.00.11    吉川    11/02/10    open-cobol1.0対応
       *  01.00.12    吉川    12/12/20    医療機関情報編集対応
+      *  01.00.13    吉川    13/02/08    プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -174,6 +175,15 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU4505".
+           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
@@ -223,7 +233,9 @@
            03  WRK-OUT-INPUT           PIC X(200).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
       *    ファイル名称用エリア
-           03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     03  FILE-NAME             PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
       *
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -636,10 +648,15 @@
       *
       *    印字対象公費番号ファイル読み込み
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   TAISYOKOHI-REC
       *

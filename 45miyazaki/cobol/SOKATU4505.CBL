@@ -35,6 +35,7 @@
       *                                  印字されるように修正
       *                                  PERFORMをGOTOに修正
       *  01.00.04    吉川    2012/12/20  医療機関情報編集対応
+      *  01.00.05    吉川    2013/02/08  プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -147,6 +148,15 @@
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-SYOKBN1    PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU4505".
+           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SEIYMD          PIC X(08).
@@ -155,7 +165,9 @@
            03  WRK-SRYYMD          PIC X(08).
       *  
       *    ファイル名称用エリア
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
       *
            03  WRK-HYOUBOUKA       PIC X(20) OCCURS 3.
       *
@@ -482,10 +494,15 @@
       *
       *    診療科名取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   SRYKA-REC
       *
