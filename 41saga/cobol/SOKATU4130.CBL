@@ -36,6 +36,7 @@
       *  01.00.04    内田    08/03/18    公費の助成が無い場合は印字しない
       *  01.00.05    内田    08/07/29    公費助成の有無の判定修正
       *  01.00.06    門間    08/11/20    SPA-AREA初期化
+      *  01.00.07    吉川    13/02/07    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -772,8 +773,14 @@
       *     MOVE    SYS-1001-HOSPNAME       TO   SKT4130-HOSPNAME
       *    医療機関住所
            MOVE    WRK-HOSPADRS            TO  SKT4130-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT4130-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *    医療機関名
            MOVE    WRK-HOSPNAME            TO  SKT4130-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SKT4130-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME    TO   SKT4130-KAISETUNAME

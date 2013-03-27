@@ -38,6 +38,7 @@
       *  01.00.07    吉川    10/04/01    月途中で負担者番号を変更しても
       *                                  変更前の市町村が取得されるのを修正
       *  01.00.08    吉川    11/04/15    帳票様式の変更に伴う修正
+      *  01.00.09    吉川    13/02/07    医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -987,9 +988,15 @@
       *     MOVE  SYS-1002-TEL           TO  SC03-TEL
       *    住所
            MOVE  WRK-HOSPADRS           TO  SC03-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC03-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    医療機関名
            MOVE  WRK-HOSPNAME           TO  SC03-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) start
+           INSPECT SC03-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2013/02/07) end
       *
       *    電話番号
            MOVE  WRK-HOSPTEL            TO  SC03-TEL
