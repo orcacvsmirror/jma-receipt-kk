@@ -28,6 +28,8 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2009/08/25  媒体種類欄はINIファイルで制御
+      *  01.00.02    吉川    2012/12/21  プラグイン対応
+      *                                  医療機関情報編集対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -121,6 +123,15 @@
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SOKATU1020".
+           03  FILLER              PIC X(10)  VALUE "BAITAI.INI".
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR         PIC X(200).
@@ -132,7 +143,9 @@
            03  WRK-BAITAISYURUI    PIC X(01).
       *
       *    ファイル名称用エリア
-           03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     03  FILE-NAME           PIC X(512).
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
       *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
            03  WRK-SYMD.
@@ -398,10 +411,15 @@
       *
       *    媒体種類取得
       *    ファイルディレクトリ位置指定
-           INITIALIZE           ORCSMKPASSAREA
-           MOVE  "data/BAITAI.INI"    TO  MKPASS-IN-01
-           CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-           MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      *     INITIALIZE           ORCSMKPASSAREA
+      *     MOVE  "data/BAITAI.INI"    TO  MKPASS-IN-01
+      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *
+           DISPLAY "ファイル名="  FILE-NAME
       *
            INITIALIZE   BAITAI-REC
       *
@@ -494,9 +512,15 @@
       *
       *    医療機関住所
            MOVE    WRK-HOSPADRS          TO  SKT1040-ADRS
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1040-ADRS          REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SKT1040-HOSPNAME
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) start
+           INSPECT SKT1040-HOSPNAME      REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SKT1040-KAISETUNAME
