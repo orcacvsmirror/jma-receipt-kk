@@ -40,6 +40,7 @@
            03  SKT3620TMP-KOH-AREA.
                05  SKT3620TMP-KOH-TBL  OCCURS  20.
                    07  SKT3620TMP-KOHNUM                PIC  X(03).
+                   07  SKT3620TMP-KOHNAME               PIC  X(16).
                    07  SKT3620TMP-KOH-NYUGAI-TBL OCCURS 2.
                        09  SKT3620TMP-K-KENSU           PIC  9(05).
                        09  SKT3620TMP-K-NISSU           PIC  9(05).

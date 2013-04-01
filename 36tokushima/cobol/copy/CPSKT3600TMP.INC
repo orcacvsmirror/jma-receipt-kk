@@ -38,6 +38,7 @@
            03  SKT3600TMP-KOH-AREA.
                05  SKT3600TMP-KOH-TBL  OCCURS  20.
                    07  SKT3600TMP-KOHNUM           PIC X(03).
+                   07  SKT3600TMP-KOHNAME          PIC X(16).
                    07  SKT3600TMP-K-NYUGAI-TBL  OCCURS  2.
                        09  SKT3600TMP-K-KENSU      PIC 9(05).
                        09  SKT3600TMP-K-NISSU      PIC 9(05).
