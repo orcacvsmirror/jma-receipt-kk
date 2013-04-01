@@ -692,7 +692,7 @@
       *      Âà¹ñÊÝ
              MOVE  RECE02-HONKZKKBN          TO  MF110-RECEHONKZKKBN
            ELSE
-             MOVE  " "                       TO  MF110-RECEHONKZKKBN
+             MOVE  SPACE                     TO  MF110-RECEHONKZKKBN
            END-IF
       *    
       *    ¹ñ¤Î¹ñÊÝ¤ò¸¡º÷
@@ -932,7 +932,6 @@
                                           WRK-REC-LENGTH
                                           WRK-MOJIHEN
       *
-           DISPLAY "*** PTNUM  ="MF110-PTNUM
       *    ÀÁµáÇ¯·î(ÏÂÎñ)
            MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
            MOVE    "01"                    TO  WRK-SYMD(7:2)
@@ -981,15 +980,15 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ¼õµë»ñ³Ê¼ÔÈÖ¹æ
-           MOVE    MF110-KOHJKYSNUM        TO  WRK-NUM
+           MOVE    MF110-KOHJKYSNUM        TO  WRK-DATA
            MOVE    11                      TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+           PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ´µ¼Ô¥«¥Ê»áÌ¾
       *    È¾³Ñ
            MOVE    MF110-KANANAME          TO  WRK-DATA
       *    È¾¥«¥ÊÊÑ´¹
-      *      MOVE    WRK-DATA                TO  WRK-MAE-INPUT
+      *     MOVE    WRK-DATA                TO  WRK-MAE-INPUT
       *     PERFORM 31013-HENKAN-SEC
       *     MOVE    WRK-OUT-INPUT           TO  WRK-DATA
            MOVE    20                      TO  WRK-NAGASA
@@ -1185,9 +1184,6 @@
                  MOVE    "000000"                  TO  WRK-DATA
                  MOVE    6                         TO  WRK-NAGASA
                  PERFORM 5004-MOJI-HENSYU-SEC
-      *         INITIALIZE  WRK-DATA
-      *         MOVE    6                         TO  WRK-NAGASA
-      *         PERFORM 5005-NUM-HENSYU-SEC
       *      
       *          ¸øÈñÂÐ¾Ý´µ¼ÔÉéÃ´³Û
                  MOVE  MF110-RECEFTNMONEY (IDX2)   TO  WRK-Z7
