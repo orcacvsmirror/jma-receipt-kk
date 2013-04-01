@@ -22,6 +22,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         10/02/23  特記事項追加
+      *  01.00.02    吉川         12/02/10  公費適用開始年月日追加
       ************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
@@ -133,6 +134,10 @@
                05  MF100-SHOKUJIRYOYOHI  PIC  9(09).
       *標準負担額
                05  MF100-SHOKUJIFTN      PIC  9(09).
+      *=== 公費適用開始年月日追加 by Yoshikawa(2012/02/10) start
+      *公費−適用開始年月日
+           03  MF100-KOHTEKSTYMD         PIC  X(08).
+      *=== 公費適用開始年月日追加 by Yoshikawa(2012/02/10) end
       *総合計
            03  MF100-TOTALTEN-G          PIC  9(09).
            03  MF100-JNISSU-G            PIC  9(09).
@@ -148,6 +153,9 @@
            03  MF100-T-JNISSU            PIC  9(02).
            03  MF100-T-TOTALTEN          PIC  9(09).
            03  MF100-T-FTNMONEY          PIC  9(09).
+      *=== 公費適用開始年月日追加 by Yoshikawa(2012/02/10) start
+           03  MF100-T-KOHTEKSTYMD       PIC  X(08).
+      *=== 公費適用開始年月日追加 by Yoshikawa(2012/02/10) end
       *
            03  MF100-T-SHOKUJIINF.
                05  MF100-T-SHOKUJINISSU      PIC  9(02).
