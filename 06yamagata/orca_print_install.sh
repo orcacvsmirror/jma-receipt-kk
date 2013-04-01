@@ -30,7 +30,7 @@ if [ $usrname != "root" ] ; then
   exit 1
 fi
 
-echomsg "山形県地方公費・総括表プログラムコピー中..."
+echomsg "山形県(総括表・地方公費)プログラムコピー中..."
 
 # file copy
 for d in cobol doc data form lddef record scripts ; do
@@ -45,11 +45,11 @@ echo -e "\tyamagata;" >> ${SYSCONFDIR}/kentan.inc
 
 # site-upgrade.sh run
 if [ -f ${SCRIPTSDIR}/allways/site-upgrade.sh ] ; then
-	sh ${SCRIPTSDIR}/allways/site-upgrade.sh
+	bash ${SCRIPTSDIR}/allways/site-upgrade.sh
 else
-	echomsg "地方公費・総括表プログラムコピー異常終了!!"
+	echomsg "山形県(総括表・地方公費)プログラムコピー異常終了!!"
 	exit
 fi
 
 sync
-echomsg "山形県地方公費・総括表プログラムコピー終了!!"
+echomsg "山形県(総括表・地方公費)プログラムコピー終了!!"
