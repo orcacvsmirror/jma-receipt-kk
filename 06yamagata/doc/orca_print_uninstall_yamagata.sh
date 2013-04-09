@@ -92,6 +92,10 @@ if test -f ${SITESRCDIR}/data/COMMENT.INI ; then
   rm -rf ${SITESRCDIR}/data/COMMENT.INI
 fi
 
+if test -f ${SITESRCDIR}/data/KENSIN.INI ; then
+  rm -rf ${SITESRCDIR}/data/KENSIN.INI
+fi
+
 if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
   rm -rf ${SITESRCDIR}/data/YUSEN.INI
 fi
