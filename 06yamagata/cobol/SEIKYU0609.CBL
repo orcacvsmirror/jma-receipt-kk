@@ -45,6 +45,9 @@
       *  01.00.11    吉川    12/02/17    シス管「2005」の主病名編集対応
       *  01.00.12    萩野    12/09/19    特記事項に印字内容追加
       *  01.00.13    吉川    12/12/21    医療機関情報編集対応
+      *  01.00.14    吉川    13/04/03    公費欄−一部負担金金額置換対応
+      *                                  摘要欄にコメントを印字
+      *                                  プラグイン対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -70,6 +73,14 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *    備考欄コメントファイル
+           SELECT  KENSIN-FILE  ASSIGN FILE-NAME
+                                 ORGANIZATION   IS  LINE SEQUENTIAL
+                                 ACCESS MODE    IS  SEQUENTIAL
+                                 FILE   STATUS  IS  STS-KENSIN.
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *
        DATA  DIVISION.
        FILE  SECTION.
       *
@@ -87,6 +98,13 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
+      *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+       FD  KENSIN-FILE.
+       01  KENSIN-REC.
+           03  KENSIN-COMMENTCD   PIC X(09).
+           03  FILLER              PIC X(01).
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -120,6 +138,9 @@
            03  STS-RECE02     PIC X(02).
            03  STS-RECEERR    PIC X(02).
            03  STS-RECE       PIC X(02).
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+           03  STS-KENSIN     PIC X(02).
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -137,6 +158,10 @@
            03  FLG-HKNCOMBI   PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+           03  FLG-SRYACT     PIC 9(01).
+           03  FLG-PTCOM      PIC 9(01).
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -145,6 +170,11 @@
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
            03  IDX3           PIC 9(04).
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+           03  IDX4           PIC 9(04).
+           03  IDW1           PIC 9(04).
+           03  IDW2           PIC 9(04).
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
       *
@@ -171,6 +201,15 @@
       *     05  WRK-PARA-LINK-HOSPID  PIC  X(24). 
            05  WRK-PARA-LINK-HOSPNUM PIC  9(02). 
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *=== プラグイン対応 by Yoshikawa(2013/04/03) start
+      *    ファイル名称用エリア
+       01  FILE-NAME.
+           03  FILLER              PIC X(05)  VALUE "/tmp/".
+           03  FILE-HOSPNUM        PIC 9(02).
+           03  FILLER              PIC X(10)  VALUE "SEIKYU0609".
+           03  FILLER              PIC X(10)  VALUE "KENSIN.INI".
+      *=== プラグイン対応 by Yoshikawa(2013/04/03) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -248,6 +287,18 @@
                05  WRK-ETC-ITBFTN          PIC 9(07) OCCURS 2.
                05  WRK-ETC-FTNJANUM        PIC X(20).
                05  WRK-ETC-JKYSNUM         PIC X(20).
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+           03  WRK-SRYCD               PIC X(09).
+           03  WRK-INPUTCOMENT         PIC X(80).
+           03  WRK-INPUTCOMENT2        PIC X(14).
+           03  WRK-INPUTCOMENT-KIN-T.
+               05  WRK-INPUTCOMENT-KIN     PIC 9(07).
+           03  WRK-INPUTCOMENT-KIN2-T.
+               05  WRK-INPUTCOMENT-KIN2    PIC X(07).
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+           03  WRK-KENSINCD            PIC X(09).
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -313,6 +364,10 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *    公費一部負担金置換コード
+           03  WRK-CONS-KIN-OKIKAE     PIC X(09)   VALUE   "099999921".
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
       *
       *=== 特記事項印字追加 by Hagino(2012/09/19) start
       *    特記事項
@@ -424,6 +479,16 @@
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
       *
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *    診療行為
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *
+      *    患者コメント
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
@@ -447,6 +512,11 @@
       *   日付変換サブ
            COPY    "CPORCSDAY.INC".
            COPY    "CPORCSLNK.INC".      
+      *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *    ファイルディレクトリ位置指定サブ
+           COPY    "CPMKPASS.INC".
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *
            COPY  "MCPDATA.INC".
       *
@@ -657,6 +727,10 @@
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+           PERFORM 110-INI-FILE-SEC
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *
            PERFORM 900-KOHSKY-START-SEC
            .
        100-INIT-EXT.
@@ -781,6 +855,42 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *****************************************************************
+      *    INIファイル読み込み処理  
+      *****************************************************************
+       110-INI-FILE-SEC                SECTION.
+      *
+      *    検診コメント設定取得
+           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      *
+           DISPLAY "ファイル名="  FILE-NAME
+      *
+           INITIALIZE   KENSIN-REC
+      *
+           OPEN  INPUT  KENSIN-FILE
+      *
+           READ KENSIN-FILE
+             AT END
+               INITIALIZE        KENSIN-REC
+           END-READ
+      *
+           DISPLAY "検診コメント設定取得=" KENSIN-COMMENTCD
+           IF    KENSIN-COMMENTCD(1:2)  =  "※"
+             MOVE   SPACE              TO  WRK-KENSINCD
+           ELSE
+             MOVE   KENSIN-COMMENTCD  TO  WRK-KENSINCD
+           END-IF
+      *
+           DISPLAY "検診コメントコード =" WRK-KENSINCD
+      *
+           CLOSE KENSIN-FILE
+      *
+           .
+       110-INI-FILE-EXT.
+           EXIT.
+      *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -999,6 +1109,24 @@
            MOVE    RECE02-FLG (1)     TO  MF101-FLG (1)
            MOVE    RECE02-FLG (2)     TO  MF101-FLG (2)
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *    診療行為情報取得
+           MOVE    WRK-CONS-KIN-OKIKAE     TO  WRK-SRYCD
+           PERFORM 940-SRYACT-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+      *      公費−一部負担金置換編集
+             PERFORM  200112-ICHIBUFTN-HENSYU-SEC
+      *
+             MOVE  WRK-KENSINCD            TO  WRK-SRYCD
+             PERFORM 940-SRYACT-SET-SEC
+             IF  FLG-SRYACT  =  ZERO
+      *        検診コメント取得
+               PERFORM  200113-COMMENT-HENSYU-SEC
+             END-IF
+           END-IF
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
@@ -1044,6 +1172,136 @@
            .
        200111-HKNJANUM-CHK-EXT.
            EXIT.
+      *
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *****************************************************************
+      *    公費欄−一部負担金金額編集処理
+      *****************************************************************
+       200112-ICHIBUFTN-HENSYU-SEC                SECTION.
+      *
+           INITIALIZE                             WRK-INPUTCOMENT
+                                                  WRK-INPUTCOMENT2
+                                                  WRK-INPUTCOMENT-KIN
+                                                  WRK-INPUTCOMENT-KIN2
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *
+      *        患者コメント情報読込
+               PERFORM  950-PTCOM-READ-SEC
+               MOVE  PTCOM-INPUTCOMENT           TO  WRK-INPUTCOMENT
+      *
+               IF  WRK-INPUTCOMENT(1:12)  =  "公１負担金："
+               OR  WRK-INPUTCOMENT(1:12)  =  "公２負担金："
+               OR  WRK-INPUTCOMENT(1:12)  =  "公３負担金："
+               OR  WRK-INPUTCOMENT(1:12)  =  "公４負担金："
+                 MOVE  WRK-INPUTCOMENT(13:14)    TO  WRK-INPUTCOMENT2
+      *
+      *          置換金額編集
+                 IF  WRK-INPUTCOMENT2  =  "　　　　　　　"  OR  SPACE
+                   CONTINUE
+                 ELSE
+      *            全角数字を半角に置き換える
+                   PERFORM  VARYING  IDW1  FROM  1  BY  2
+                            UNTIL    IDW1  >  14
+                     COMPUTE  IDW2  =  (IDW1  +  1)  /  2
+                     EVALUATE  WRK-INPUTCOMENT2(IDW1:2)
+                       WHEN  "０"
+                         MOVE  "0"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "１"
+                         MOVE  "1"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "２"
+                         MOVE  "2"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "３"
+                         MOVE  "3"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "４"
+                         MOVE  "4"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "５"
+                         MOVE  "5"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "６"
+                         MOVE  "6"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "７"
+                         MOVE  "7"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "８"
+                         MOVE  "8"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "９"
+                         MOVE  "9"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  OTHER
+                         MOVE  14   TO  IDW1
+                     END-EVALUATE
+                   END-PERFORM
+      *
+                   IF  WRK-INPUTCOMENT-KIN2-T  NOT =  SPACE
+      *              右詰めの数字項目に変換する
+                     MOVE    8      TO  IDW2
+                     PERFORM  VARYING  IDW1  FROM  7  BY  -1
+                              UNTIL    IDW1  <  1
+                       IF  WRK-INPUTCOMENT-KIN2-T(IDW1:1)  =  SPACE
+                         CONTINUE
+                       ELSE
+                         COMPUTE  IDW2  =  IDW2  -  1
+                         MOVE  WRK-INPUTCOMENT-KIN2-T(IDW1:1)
+                                    TO  WRK-INPUTCOMENT-KIN-T(IDW2:1)
+                       END-IF
+                     END-PERFORM
+      *
+      *              集計用ファイルに格納
+                     IF  WRK-INPUTCOMENT(1:12)  =  "公１負担金："
+                       MOVE  WRK-INPUTCOMENT-KIN  
+                                    TO  MF101-OKIKAE-FTN(1)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "公２負担金："
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                    TO  MF101-OKIKAE-FTN(2)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "公３負担金："
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF101-OKIKAE-FTN(3)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "公４負担金："
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF101-OKIKAE-FTN(4)
+                     END-IF
+                   END-IF
+      *
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       200112-ICHIBUFTN-HENSYU-EXT.
+           EXIT.
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *****************************************************************
+      *    コメント編集処理
+      *****************************************************************
+       200113-COMMENT-HENSYU-SEC                SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *        患者コメント情報読込
+               PERFORM  950-PTCOM-READ-SEC
+               STRING  "＊"                 DELIMITED BY SIZE
+                       PTCOM-INPUTCOMENT    DELIMITED BY SIZE
+                       INTO                 MF101-KENSIN
+               END-STRING
+             END-IF
+      *
+           END-PERFORM
+      *
+           .
+       200113-COMMENT-HENSYU-EXT.
+           EXIT.
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
       *
       *****************************************************************
       *    帳票ファイル出力処理
@@ -1472,16 +1730,46 @@
       ***** 05/12/19 yamaguchi INS
       *    一部負担金額
            IF  MF101-EKOHFTNJANUM (1) NOT = SPACE
-             MOVE  MF101-EITBFTN(1)    TO  WRK-Z7
-             MOVE  WRK-Z7              TO  SC06-ITBFTN2
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *       MOVE  MF101-EITBFTN(1)    TO  WRK-Z7
+      *       MOVE  WRK-Z7              TO  SC06-ITBFTN2
       *
-             MOVE  MF101-FTNMONEY2     TO  WRK-Z7
-             MOVE  WRK-Z7              TO  SC06-ITBFTN3
+      *       MOVE  MF101-FTNMONEY2     TO  WRK-Z7
+      *       MOVE  WRK-Z7              TO  SC06-ITBFTN3
+             IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
+               MOVE  MF101-OKIKAE-FTN(1)   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC06-ITBFTN2
+             ELSE
+               MOVE  MF101-EITBFTN(1)  TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC06-ITBFTN2
+             END-IF
+      *
+             IF  MF101-OKIKAE-FTN(2)  NOT =  ZERO
+               MOVE  MF101-OKIKAE-FTN(2)   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC06-ITBFTN3
+             ELSE
+               MOVE  MF101-FTNMONEY2   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC06-ITBFTN3
+             END-IF
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
            ELSE
-             MOVE  MF101-FTNMONEY2     TO  WRK-Z7
-             MOVE  WRK-Z7              TO  SC06-ITBFTN2
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *       MOVE  MF101-FTNMONEY2     TO  WRK-Z7
+      *       MOVE  WRK-Z7              TO  SC06-ITBFTN2
+             IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
+               MOVE  MF101-OKIKAE-FTN(1)   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC06-ITBFTN2
+             ELSE
+               MOVE  MF101-FTNMONEY2   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC06-ITBFTN2
+             END-IF
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
            END-IF
       *****
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *    置換コメント
+           MOVE  MF101-KENSIN          TO  SC06-KENSIN
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *
       *    傷病名編集処理
            PERFORM 3201-BYOMEI-HEN-SEC
@@ -2236,14 +2524,40 @@
            MOVE  WRK-Z7              TO  SC10-ITBFTN1
       *    一部負担金額
            IF  MF101-EKOHFTNJANUM (1) NOT = SPACE
-             MOVE  MF101-EITBFTN(1)    TO  WRK-Z7
-             MOVE  WRK-Z7              TO  SC10-ITBFTN2
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *       MOVE  MF101-EITBFTN(1)    TO  WRK-Z7
+      *       MOVE  WRK-Z7              TO  SC10-ITBFTN2
+      *       
+      *       MOVE  MF101-FTNMONEY2     TO  WRK-Z7
+      *       MOVE  WRK-Z7              TO  SC10-ITBFTN3
+             IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
+               MOVE  MF101-OKIKAE-FTN(1)   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC10-ITBFTN2
+             ELSE
+               MOVE  MF101-EITBFTN(1)  TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC10-ITBFTN2
+             END-IF
       *
-             MOVE  MF101-FTNMONEY2     TO  WRK-Z7
-             MOVE  WRK-Z7              TO  SC10-ITBFTN3
+             IF  MF101-OKIKAE-FTN(2)  NOT =  ZERO
+               MOVE  MF101-OKIKAE-FTN(2)   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC10-ITBFTN3
+             ELSE
+               MOVE  MF101-FTNMONEY2   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC10-ITBFTN3
+             END-IF
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
            ELSE
-             MOVE  MF101-FTNMONEY2     TO  WRK-Z7
-             MOVE  WRK-Z7              TO  SC10-ITBFTN2
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *       MOVE  MF101-FTNMONEY2     TO  WRK-Z7
+      *       MOVE  WRK-Z7              TO  SC10-ITBFTN2
+             IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
+               MOVE  MF101-OKIKAE-FTN(1)   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC10-ITBFTN2
+             ELSE
+               MOVE  MF101-FTNMONEY2   TO  WRK-Z7
+               MOVE  WRK-Z7            TO  SC10-ITBFTN2
+             END-IF
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
            END-IF
       *    食事日数
            MOVE    MF101-SHOKUJINISSU-G    TO  WRK-Z2
@@ -2287,6 +2601,11 @@
              MOVE    WRK-Z9                 TO  SC10-SKJFTN(3)
       *=== open-cobol1.0対応 by Yoshikawa(2011/03/07) end
            END-IF
+      *
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *    置換コメント
+           MOVE  MF101-KENSIN               TO  SC10-KENSIN
+      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *
       *    傷病名編集処理
            PERFORM 3201-BYOMEI-HEN-SEC
@@ -3091,6 +3410,129 @@
        935-PTKOHINF-READ-EXT.
            EXIT.
       *
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) start
+      *****************************************************************
+      *    診療情報セット
+      *****************************************************************
+       940-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE                      SRYACT-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  WRK-SRYCD             TO  SRY-SRYCD(1)
+                                             SRY-SRYCD(2)
+                                             SRY-SRYCD(3)
+                                             SRY-SRYCD(4)
+                                             SRY-SRYCD(5)
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key7"              TO  MCP-PATHNAME
+               PERFORM  945-SRYACT-READ-SEC
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       940-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       945-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       945-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    患者コメント情報セット
+      *****************************************************************
+       950-PTCOM-READ-SEC  SECTION.
+      *
+             INITIALIZE                      PTCOM-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  PTCOM-HOSPNUM
+             MOVE  SRY-PTID              TO  PTCOM-PTID
+             MOVE  SRY-ZAINUM            TO  PTCOM-ZAINUM
+             MOVE  SRY-SRYCD(IDX4)       TO  PTCOM-SRYCD
+             MOVE  SRY-INPUTNUM(IDX4)    TO  PTCOM-RENNUM
+             MOVE  PTCOM-REC             TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_ptcom"         TO  MCP-TABLE
+               MOVE  "key"               TO  MCP-PATHNAME
+               MOVE  "DBFETCH"           TO  MCP-FUNC
+               CALL  "ORCDBMAIN"         USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF  MCP-RC  =  ZERO
+                 MOVE  MCPDATA-REC       TO  PTCOM-REC
+                 MOVE  ZERO              TO  FLG-PTCOM
+               ELSE
+                 INITIALIZE                  PTCOM-REC
+                 MOVE    1               TO  FLG-PTCOM
+               END-IF
+             ELSE
+               DISPLAY  "PTCOM SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       950-PTCOM-READ-EXT.
+           EXIT.
+      *
+      *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
