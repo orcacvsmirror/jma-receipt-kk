@@ -269,6 +269,11 @@
         <embed object="text" length="7"/>
       </appinfo>
     </element>
+    <element name="KENSIN" occurs="1">
+      <appinfo>
+        <embed object="text" length="60"/>
+      </appinfo>
+    </element>
   </dia:dictionarydata>
   <dia:diagramdata>
     <dia:attribute name="background">
@@ -338,7 +343,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="背景" visible="true" active="true">
+  <dia:layer name="背景" visible="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="15.85,2.5"/>
@@ -1351,7 +1356,7 @@
         <dia:point val="7.37406,4.0329"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.36906,4.0279;7.62659,4.26774"/>
+        <dia:rectangle val="7.36906,4.0279;7.62658,4.26774"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="7.37406,4.0329"/>
@@ -2854,7 +2859,7 @@
         <dia:point val="14.8051,2.05607"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.8051,1.79107;15.1052,2.46857"/>
+        <dia:rectangle val="14.8051,1.79107;15.1051,2.46857"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3867,7 +3872,7 @@
         <dia:point val="1.75429,26.513"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.75429,26.2479;2.05429,26.5505"/>
+        <dia:rectangle val="1.75429,26.248;2.05429,26.5505"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3900,7 +3905,7 @@
         <dia:point val="1.75429,27.4066"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.75429,27.1416;2.05429,27.4442"/>
+        <dia:rectangle val="1.75429,27.1416;2.05429,27.4441"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -9657,7 +9662,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差込" visible="true">
+  <dia:layer name="差込" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O319">
       <dia:attribute name="obj_pos">
         <dia:point val="10,7.025"/>
@@ -12424,6 +12429,48 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#TOKKI-TBL[2].TOKKI#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O385">
+      <dia:attribute name="obj_pos">
+        <dia:point val="11.3855,10.0188"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="11.3855,9.7438;19.7555,10.0563"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#＊一部負担金に３歳児検診の負担額９９９９９９９円を含む#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.38734998610859439"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="11.3855,10.0188"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#KENSIN#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>

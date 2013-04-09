@@ -19,11 +19,11 @@
             02  SC10-SEXNUM PIC X(2).
             02  SC10-SEXN   PIC X(2).
             02  SC10-BIRTHDAY   PIC X(24).
-      *=== ì¡ãLéñçÄàÛéöí«â¡ by Hagino(2012/09/19) start
+      *=== ∆√µ≠ªˆπ‡∞ıª˙ƒ…≤√ by Hagino(2012/09/19) start
       *      02  SC10-TOKKI  PIC X(6).
            02  SC10-TOKKI-TBL OCCURS 3.
                03  SC10-TOKKI              PIC  X(08).
-      *=== ì¡ãLéñçÄàÛéöí«â¡ by Hagino(2012/09/19) end
+      *=== ∆√µ≠ªˆπ‡∞ıª˙ƒ…≤√ by Hagino(2012/09/19) end
             02  SC10-ZAISOU PIC X(4).
             02  SC10-ZAIMARU    PIC X(2).
             02  SC10-ADRS   PIC X(100).
@@ -54,3 +54,7 @@
                 04  SC10-SNISSU PIC X(2).
                 04  SC10-SKJRYOHOHI PIC X(9).
                 04  SC10-SKJFTN PIC X(9).
+      *=== √÷¥π•≥•·•Û•»ƒ…≤√ by Yoshikawa(2013/04/03) start
+      *∏°ø«•≥•·•Û•»
+           02  SC10-KENSIN             PIC  X(60).
+      *=== √÷¥π•≥•·•Û•»ƒ…≤√ by Yoshikawa(2013/04/03) end

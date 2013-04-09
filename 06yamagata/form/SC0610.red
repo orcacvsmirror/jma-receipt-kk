@@ -246,6 +246,11 @@
         </element>
       </element>
     </element>
+    <element name="KENSIN" occurs="1">
+      <appinfo>
+        <embed object="text" length="60"/>
+      </appinfo>
+    </element>
   </dia:dictionarydata>
   <dia:diagramdata>
     <dia:attribute name="background">
@@ -315,7 +320,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="背景" visible="true" active="true">
+  <dia:layer name="背景" visible="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="0.84,9.83"/>
@@ -7652,7 +7657,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差込" visible="true">
+  <dia:layer name="差込" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O261">
       <dia:attribute name="obj_pos">
         <dia:point val="9.8,7.15"/>
@@ -10293,6 +10298,48 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#TOKKI-TBL[2].TOKKI#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O324">
+      <dia:attribute name="obj_pos">
+        <dia:point val="11.6403,10.3312"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="11.6403,10.0562;20.0103,10.3687"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#＊一部負担金に３歳児検診の負担額９９９９９９９円を含む#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.38734998610859439"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="11.6403,10.3312"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#KENSIN#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
