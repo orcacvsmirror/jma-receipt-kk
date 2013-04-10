@@ -27,7 +27,8 @@
       *  13/02/14    µÈÀî          ¿·µ¬ºîÀ®
       *****************************************************************
       *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
-      * Maj/Min/Rev	½¤Àµ¼Ô	ÆüÉÕ		ÆâÍÆ
+      * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
+      *  01.00.13    µÈÀî    13/04/03    ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -113,6 +114,9 @@
            03  FLG-SYORI             PIC 9(01).
            03  FLG-COMMENT           PIC 9(01).
            03  FLG-MOJI              PIC 9(01).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+           03  FLG-PTCOM             PIC 9(01).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -125,6 +129,10 @@
            03  IDY                   PIC 9(04).
            03  IDZ                   PIC 9(04).
            03  IDW                   PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+           03  IDW1           PIC 9(04).
+           03  IDW2           PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *
       *    ¥Ñ¥é¥á¥¿ÎÎ°è
        01  WRK-PARA.
@@ -199,6 +207,15 @@
                05  WRK-ETC-ITBFTN    PIC 9(07) OCCURS 2.
                05  WRK-ETC-FTNJANUM  PIC X(20).
                05  WRK-ETC-JKYSNUM   PIC X(20).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+           03  WRK-SRYCD             PIC X(09).
+           03  WRK-INPUTCOMENT       PIC X(80).
+           03  WRK-INPUTCOMENT2      PIC X(14).
+           03  WRK-INPUTCOMENT-KIN-T.
+               05  WRK-INPUTCOMENT-KIN     PIC 9(07).
+           03  WRK-INPUTCOMENT-KIN2-T.
+               05  WRK-INPUTCOMENT-KIN2    PIC X(07).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *
       *    ¥Ç¡¼¥¿ÊÔ½¸
            03  WRK-HENSHU.
@@ -272,6 +289,10 @@
            03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
       *    EOF¥³¡¼¥É
            03  WRK-EOF                PIC X(01)   VALUE   X"1A".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *    ¸øÈñ°ìÉôÉéÃ´¶âÃÖ´¹¥³¡¼¥É
+           03  WRK-CONS-KIN-OKIKAE     PIC X(09)   VALUE   "099999921".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *    
       *    ÆÃµ­»ö¹à
        01  TBL-TOKKI-AREA.
@@ -387,6 +408,12 @@
       *
       *    ÅÀ¿ô
            COPY    "CPTENSU.INC".
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *    ´µ¼Ô¥³¥á¥ó¥È
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *
       *    ´µ¼Ô¾ðÊó
        01  PTINF-REC.
@@ -952,6 +979,16 @@
       *    ¥³¥á¥ó¥È¥Á¥§¥Ã¥¯
            PERFORM  940-SRYACT-SET-SEC
       *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *    ¿ÇÎÅ¹Ô°Ù¾ðÊó¼èÆÀ
+           MOVE    WRK-CONS-KIN-OKIKAE     TO  WRK-SRYCD
+           PERFORM 940-SRYACT2-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+      *      ¸øÈñ¡Ý°ìÉôÉéÃ´¶âÃÖ´¹ÊÔ½¸
+             PERFORM  200115-ICHIBUFTN-HENSYU-SEC
+           END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
+      *
            IF     FLG-ERR         =     1
              DISPLAY "½õÀ®ÂÐ¾Ý³°="  RECE02-PTNUM
            ELSE
@@ -1132,6 +1169,109 @@
            .
        200114-TEINEN-CHK-EXT.
            EXIT.
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *****************************************************************
+      *    ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÊÔ½¸½èÍý
+      *****************************************************************
+       200115-ICHIBUFTN-HENSYU-SEC                SECTION.
+      *
+           INITIALIZE                             WRK-INPUTCOMENT
+                                                  WRK-INPUTCOMENT2
+                                                  WRK-INPUTCOMENT-KIN
+                                                  WRK-INPUTCOMENT-KIN2
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *
+      *        ´µ¼Ô¥³¥á¥ó¥È¾ðÊóÆÉ¹þ
+               PERFORM  950-PTCOM-READ-SEC
+               MOVE  PTCOM-INPUTCOMENT           TO  WRK-INPUTCOMENT
+      *
+               IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£±ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£²ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£³ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£´ÉéÃ´¶â¡§"
+                 MOVE  WRK-INPUTCOMENT(13:14)    TO  WRK-INPUTCOMENT2
+      *
+      *          ÃÖ´¹¶â³ÛÊÔ½¸
+                 IF  WRK-INPUTCOMENT2  =  "¡¡¡¡¡¡¡¡¡¡¡¡¡¡"  OR  SPACE
+                   CONTINUE
+                 ELSE
+      *            Á´³Ñ¿ô»ú¤òÈ¾³Ñ¤ËÃÖ¤­´¹¤¨¤ë
+                   PERFORM  VARYING  IDW1  FROM  1  BY  2
+                            UNTIL    IDW1  >  14
+                     COMPUTE  IDW2  =  (IDW1  +  1)  /  2
+                     EVALUATE  WRK-INPUTCOMENT2(IDW1:2)
+                       WHEN  "£°"
+                         MOVE  "0"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£±"
+                         MOVE  "1"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£²"
+                         MOVE  "2"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£³"
+                         MOVE  "3"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£´"
+                         MOVE  "4"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£µ"
+                         MOVE  "5"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¶"
+                         MOVE  "6"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£·"
+                         MOVE  "7"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¸"
+                         MOVE  "8"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¹"
+                         MOVE  "9"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  OTHER
+                         MOVE  14   TO  IDW1
+                     END-EVALUATE
+                   END-PERFORM
+      *
+                   IF  WRK-INPUTCOMENT-KIN2-T  NOT =  SPACE
+      *              ±¦µÍ¤á¤Î¿ô»ú¹àÌÜ¤ËÊÑ´¹¤¹¤ë
+                     MOVE    8      TO  IDW2
+                     PERFORM  VARYING  IDW1  FROM  7  BY  -1
+                              UNTIL    IDW1  <  1
+                       IF  WRK-INPUTCOMENT-KIN2-T(IDW1:1)  =  SPACE
+                         CONTINUE
+                       ELSE
+                         COMPUTE  IDW2  =  IDW2  -  1
+                         MOVE  WRK-INPUTCOMENT-KIN2-T(IDW1:1)
+                                    TO  WRK-INPUTCOMENT-KIN-T(IDW2:1)
+                       END-IF
+                     END-PERFORM
+      *
+      *              ½¸·×ÍÑ¥Õ¥¡¥¤¥ë¤Ë³ÊÇ¼
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£±ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN  
+                                    TO  MF101-OKIKAE-FTN(1)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£²ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                    TO  MF101-OKIKAE-FTN(2)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£³ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF101-OKIKAE-FTN(3)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£´ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF101-OKIKAE-FTN(4)
+                     END-IF
+                   END-IF
+      *
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       200115-ICHIBUFTN-HENSYU-EXT.
+           EXIT.
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *****************************************************************
       *    Ä¢É¼¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
@@ -1652,7 +1792,14 @@
              MOVE    MF101-EKOHJKYSNUM(1)    TO  WRK-KOH-JKYSNUM(1)
              MOVE    MF101-ENISSU(1)         TO  WRK-KOH-JNISSU(1)
              MOVE    MF101-ETENSU(1)         TO  WRK-KOH-TOTALTEN(1)
-             MOVE    MF101-EITBFTN(1)        TO  WRK-KOH-FTNMONEY(1)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *       MOVE    MF101-EITBFTN(1)        TO  WRK-KOH-FTNMONEY(1)
+             IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
+               MOVE    MF101-EITBFTN(1)      TO  WRK-KOH-FTNMONEY(1)
+             ELSE
+               MOVE    MF101-EITBFTN(1)      TO  WRK-KOH-FTNMONEY(1)
+             END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
              MOVE    MF101-ESHOKUJIINF(1)    TO  WRK-KOH-SHOKUJIINF(1)
       *
              IF  MF101-EKOHFTNJANUM (2)  NOT = SPACE
@@ -1662,7 +1809,14 @@
                MOVE    MF101-EKOHJKYSNUM(2)  TO  WRK-KOH-JKYSNUM(2)
                MOVE    MF101-ENISSU(2)       TO  WRK-KOH-JNISSU(2)
                MOVE    MF101-ETENSU(2)       TO  WRK-KOH-TOTALTEN(2)
-               MOVE    MF101-EITBFTN(2)      TO  WRK-KOH-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *         MOVE    MF101-EITBFTN(2)      TO  WRK-KOH-FTNMONEY(2)
+               IF  MF101-OKIKAE-FTN(2)  NOT =  ZERO
+                 MOVE    MF101-OKIKAE-FTN(2) TO  WRK-KOH-FTNMONEY(2)
+               ELSE
+                 MOVE    MF101-EITBFTN(2)    TO  WRK-KOH-FTNMONEY(2)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
                MOVE    MF101-ESHOKUJIINF(2)  TO  WRK-KOH-SHOKUJIINF(2)
       *
       *        ¸øÈñ£³
@@ -1670,7 +1824,14 @@
                MOVE    MF101-KOHJKYSNUM      TO  WRK-KOH-JKYSNUM(3)
                MOVE    MF101-JNISSU          TO  WRK-KOH-JNISSU(3)
                MOVE    MF101-TOTALTEN        TO  WRK-KOH-TOTALTEN(3)
-               MOVE    MF101-FTNMONEY        TO  WRK-KOH-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *         MOVE    MF101-FTNMONEY        TO  WRK-KOH-FTNMONEY(3)
+               IF  MF101-OKIKAE-FTN(3)  NOT =  ZERO
+                 MOVE    MF101-OKIKAE-FTN(3) TO  WRK-KOH-FTNMONEY(3)
+               ELSE
+                 MOVE    MF101-FTNMONEY      TO  WRK-KOH-FTNMONEY(3)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
                MOVE    MF101-SHOKUJIINF      TO  WRK-KOH-SHOKUJIINF(3)
       *
              ELSE
@@ -1679,7 +1840,14 @@
                MOVE    MF101-KOHJKYSNUM      TO  WRK-KOH-JKYSNUM(2)
                MOVE    MF101-JNISSU          TO  WRK-KOH-JNISSU(2)
                MOVE    MF101-TOTALTEN        TO  WRK-KOH-TOTALTEN(2)
-               MOVE    MF101-FTNMONEY        TO  WRK-KOH-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *         MOVE    MF101-FTNMONEY        TO  WRK-KOH-FTNMONEY(2)
+               IF  MF101-OKIKAE-FTN(2)  NOT =  ZERO
+                 MOVE    MF101-OKIKAE-FTN(2) TO  WRK-KOH-FTNMONEY(2)
+               ELSE
+                 MOVE    MF101-FTNMONEY      TO  WRK-KOH-FTNMONEY(2)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
                MOVE    MF101-SHOKUJIINF      TO  WRK-KOH-SHOKUJIINF(2)
              END-IF
       *
@@ -1690,7 +1858,14 @@
              MOVE    MF101-KOHJKYSNUM        TO  WRK-KOH-JKYSNUM(1)
              MOVE    MF101-JNISSU            TO  WRK-KOH-JNISSU(1)
              MOVE    MF101-TOTALTEN          TO  WRK-KOH-TOTALTEN(1)
-             MOVE    MF101-FTNMONEY          TO  WRK-KOH-FTNMONEY(1)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *       MOVE    MF101-FTNMONEY          TO  WRK-KOH-FTNMONEY(1)
+             IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
+               MOVE    MF101-OKIKAE-FTN(1)   TO  WRK-KOH-FTNMONEY(1)
+             ELSE
+               MOVE    MF101-FTNMONEY        TO  WRK-KOH-FTNMONEY(1)
+             END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
              MOVE    MF101-SHOKUJIINF        TO  WRK-KOH-SHOKUJIINF(1)
            END-IF
       *
@@ -2693,6 +2868,107 @@
        945-SRYACT-READ-EXT.
            EXIT.
       *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) start
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       940-SRYACT2-SET-SEC  SECTION.
+      *
+             INITIALIZE                      SRYACT-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  WRK-SRYCD             TO  SRY-SRYCD(1)
+                                             SRY-SRYCD(2)
+                                             SRY-SRYCD(3)
+                                             SRY-SRYCD(4)
+                                             SRY-SRYCD(5)
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key7"              TO  MCP-PATHNAME
+               PERFORM  945-SRYACT-READ-SEC
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       940-SRYACT2-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ´µ¼Ô¥³¥á¥ó¥È¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       950-PTCOM-READ-SEC  SECTION.
+      *
+             INITIALIZE                      PTCOM-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  PTCOM-HOSPNUM
+             MOVE  SRY-PTID              TO  PTCOM-PTID
+             MOVE  SRY-ZAINUM            TO  PTCOM-ZAINUM
+             MOVE  SRY-SRYCD(IDX4)       TO  PTCOM-SRYCD
+             MOVE  SRY-INPUTNUM(IDX4)    TO  PTCOM-RENNUM
+             MOVE  PTCOM-REC             TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_ptcom"         TO  MCP-TABLE
+               MOVE  "key"               TO  MCP-PATHNAME
+               MOVE  "DBFETCH"           TO  MCP-FUNC
+               CALL  "ORCDBMAIN"         USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF  MCP-RC  =  ZERO
+                 MOVE  MCPDATA-REC       TO  PTCOM-REC
+                 MOVE  ZERO              TO  FLG-PTCOM
+               ELSE
+                 INITIALIZE                  PTCOM-REC
+                 MOVE    1               TO  FLG-PTCOM
+               END-IF
+             ELSE
+               DISPLAY  "PTCOM SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       950-PTCOM-SET-EXT.
+           EXIT.
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Yoshikawa(2013/04/03) end
       *****************************************************************
       *    ´µ¼Ô¸øÈñ¾ðÊó¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
