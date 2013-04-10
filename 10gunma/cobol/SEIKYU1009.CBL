@@ -66,6 +66,7 @@
       *                                  在宅の場合は、「特」とせずに
       *                                  70歳2割に含めるように修正
       *  01.00.19    吉川    13/01/16    テーブルのprimary key変更対応
+      *  01.00.20    吉川    13/04/08    「特」欄対象に024,038,079追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -866,6 +867,9 @@
                 IF  WRK-H-KOHNUM(IDX1)  =  "010" OR "011" OR "020" OR
                                            "021" OR "015" OR "016" OR
                                            "051" OR "091" OR "052"
+      *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) start
+                                        OR "024" OR "038" OR "079"
+      *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) end
       *
                   MOVE  WRK-H-KOHNUM(IDX1)(2:2)  TO  MF100-COMBIKBN
       *
@@ -1806,6 +1810,9 @@
       *---(01.00.03) LINE ADD START ------------------------------------
                                       OR "974"
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) start
+                                      OR "024"  OR  "038"  OR  "079"
+      *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) end
                ADD   SYU-TOTAL-HKNTEN     TO  MF100-FUKUSHIGAITEN
                MOVE  SYU-KOH-HKNNUM(IDX)(2:2)  TO  MF100-COMBIKBN
       *=== 長期と長期上位はまとめる by Yoshikawa(2009/09/08) start
