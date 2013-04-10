@@ -111,3 +111,7 @@
            03  SC06-ITBFTN1            PIC  X(07).
            03  SC06-ITBFTN2            PIC  X(07).
            03  SC06-ITBFTN3            PIC  X(07).
+      *=== 置換コメント追加 by Yoshikawa(2013/04/03) start
+      *検診コメント
+           03  SC06-KENSIN             PIC  X(60).
+      *=== 置換コメント追加 by Yoshikawa(2013/04/03) end

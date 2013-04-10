@@ -246,6 +246,11 @@
         </element>
       </element>
     </element>
+    <element name="KENSIN" occurs="1">
+      <appinfo>
+        <embed object="string" length="60"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -10809,6 +10814,48 @@
           </attribute>
           <attribute name="multi">
             <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O325">
+      <attribute name="obj_pos">
+        <point val="11.6363,10.2827"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="11.6363,10.0438;19.8173,10.3438"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KENSIN#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#&#161;&#246;&#176;&#236;&#201;&#244;&#201;&#233;&#195;&#180;&#182;&#226;&#164;&#203;&#163;&#179;&#186;&#208;&#187;&#249;&#184;&#161;&#191;&#199;&#164;&#206;&#201;&#233;&#195;&#180;&#179;&#219;&#163;&#185;&#163;&#185;&#163;&#185;&#163;&#185;&#163;&#185;&#163;&#185;&#163;&#185;&#177;&#223;&#164;&#242;&#180;&#222;&#164;&#224;#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="11.6363,10.2827"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
           </attribute>
         </composite>
       </attribute>
