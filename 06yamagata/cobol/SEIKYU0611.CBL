@@ -28,7 +28,10 @@
       *****************************************************************
       *  •◊•Ì•∞•È•‡Ω§¿µÕ˙ŒÚ
       * Maj/Min/Rev  Ω§¿µº‘  ∆¸…’        ∆‚Õ∆
-      *  01.00.13    µ»¿Ó    13/04/03    ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛
+      *  01.00.01    µ»¿Ó    13/04/03    ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛
+      *  01.00.02    µ»¿Ó    13/04/12    µÎ…’≥‰πÁ§Œ√Õ§ÚΩ§¿µ(100-≥‰πÁ)
+      *                                  ∏¯»Ò£±∞Ï…Ù…È√¥∂‚≥€§Úµ≠∫‹§π§Î
+      *                                  π‡Ã‹£∂£µ°¡£∑£∞§Úµ≠œø§π§Î
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -130,8 +133,8 @@
            03  IDZ                   PIC 9(04).
            03  IDW                   PIC 9(04).
       *=== ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛ by Yoshikawa(2013/04/03) start
-           03  IDW1           PIC 9(04).
-           03  IDW2           PIC 9(04).
+           03  IDW1                  PIC 9(04).
+           03  IDW2                  PIC 9(04).
       *=== ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛ by Yoshikawa(2013/04/03) end
       *
       *    •—•È•·•øŒŒ∞Ë
@@ -216,6 +219,9 @@
            03  WRK-INPUTCOMENT-KIN2-T.
                05  WRK-INPUTCOMENT-KIN2    PIC X(07).
       *=== ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛ by Yoshikawa(2013/04/03) end
+      *=== µÎ…’≥‰πÁ§Œ…Ωº®Ω§¿µ by Yoshikawa(2013/04/12) start
+           03  WRK-KYURATE           PIC 9(03).
+      *=== µÎ…’≥‰πÁ§Œ…Ωº®Ω§¿µ by Yoshikawa(2013/04/12) end
       *
       *    •«°º•ø ‘Ω∏
            03  WRK-HENSHU.
@@ -1416,7 +1422,11 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
       *    £µ°•µÎ…’≥‰πÁ
-           MOVE    MF101-KYURATE             TO  WRK-NUM
+      *=== µÎ…’≥‰πÁ§Œ…Ωº®Ω§¿µ by Yoshikawa(2013/04/12) start
+      *     MOVE    MF101-KYURATE             TO  WRK-NUM
+           COMPUTE WRK-KYURATE  =  100  -  MF101-KYURATE
+           MOVE    WRK-KYURATE               TO  WRK-NUM
+      *=== µÎ…’≥‰πÁ§Œ…Ωº®Ω§¿µ by Yoshikawa(2013/04/12) end
            MOVE    3                         TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *    
@@ -1749,15 +1759,43 @@
       *    £∂£¥°•∏∫≥€∂‚≥€
            MOVE    MF101-GENMENGK            TO  WRK-NUM
            MOVE    8                         TO  WRK-NAGASA
-           MOVE    1                         TO  WRK-END
+      *=== ÕΩ»˜π‡Ã‹µ≠∫‹ by Yoshikawa(2013/04/12) start
+      *     MOVE    1                         TO  WRK-END
+      *=== ÕΩ»˜π‡Ã‹µ≠∫‹ by Yoshikawa(2013/04/12) end
            PERFORM 5005-NUM-HENSYU-SEC
       *    
+      *=== ÕΩ»˜π‡Ã‹µ≠∫‹ by Yoshikawa(2013/04/12) start
       *    £∂£µ°•ÕΩ»˜π‡Ã‹£±
+           MOVE    SPACE                     TO  WRK-DATA
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
       *    £∂£∂°•ÕΩ»˜π‡Ã‹£≤
+           MOVE    SPACE                     TO  WRK-DATA
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
       *    £∂£∑°•ÕΩ»˜π‡Ã‹£≥
+           MOVE    SPACE                     TO  WRK-DATA
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
       *    £∂£∏°•ÕΩ»˜π‡Ã‹£¥
+           MOVE    SPACE                     TO  WRK-DATA
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
       *    £∂£π°•ÕΩ»˜π‡Ã‹£µ
+           MOVE    SPACE                     TO  WRK-DATA
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
       *    £∑£∞°•ÕΩ»˜π‡Ã‹£∂
+           MOVE    SPACE                     TO  WRK-DATA
+           MOVE    1                         TO  WRK-NAGASA
+           MOVE    1                         TO  WRK-END
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== ÕΩ»˜π‡Ã‹µ≠∫‹ by Yoshikawa(2013/04/12) end
       *    
       *    ≤˛π‘•≥°º•… ‘Ω∏
            STRING  WRK-REC(1:WRK-REC-LENGTH)     DELIMITED  BY  SIZE
@@ -1829,7 +1867,7 @@
                IF  MF101-OKIKAE-FTN(3)  NOT =  ZERO
                  MOVE    MF101-OKIKAE-FTN(3) TO  WRK-KOH-FTNMONEY(3)
                ELSE
-                 MOVE    MF101-FTNMONEY      TO  WRK-KOH-FTNMONEY(3)
+                 MOVE    MF101-FTNMONEY2     TO  WRK-KOH-FTNMONEY(3)
                END-IF
       *=== ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛ by Yoshikawa(2013/04/03) end
                MOVE    MF101-SHOKUJIINF      TO  WRK-KOH-SHOKUJIINF(3)
@@ -1845,7 +1883,7 @@
                IF  MF101-OKIKAE-FTN(2)  NOT =  ZERO
                  MOVE    MF101-OKIKAE-FTN(2) TO  WRK-KOH-FTNMONEY(2)
                ELSE
-                 MOVE    MF101-FTNMONEY      TO  WRK-KOH-FTNMONEY(2)
+                 MOVE    MF101-FTNMONEY2     TO  WRK-KOH-FTNMONEY(2)
                END-IF
       *=== ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛ by Yoshikawa(2013/04/03) end
                MOVE    MF101-SHOKUJIINF      TO  WRK-KOH-SHOKUJIINF(2)
@@ -1863,7 +1901,7 @@
              IF  MF101-OKIKAE-FTN(1)  NOT =  ZERO
                MOVE    MF101-OKIKAE-FTN(1)   TO  WRK-KOH-FTNMONEY(1)
              ELSE
-               MOVE    MF101-FTNMONEY        TO  WRK-KOH-FTNMONEY(1)
+               MOVE    MF101-FTNMONEY2       TO  WRK-KOH-FTNMONEY(1)
              END-IF
       *=== ∏¯»ÒÕÛ°›∞Ï…Ù…È√¥∂‚∂‚≥€√÷¥π¬–±˛ by Yoshikawa(2013/04/03) end
              MOVE    MF101-SHOKUJIINF        TO  WRK-KOH-SHOKUJIINF(1)
