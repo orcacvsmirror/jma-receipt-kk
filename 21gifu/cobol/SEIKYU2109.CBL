@@ -37,6 +37,8 @@
       *                                  負担分のみを印字するように修正
       *                                  外来の場合、010等を併用しても
       *                                  公費点数欄に印字されない不具合を修正
+      *  01.00.06    吉川    13/04/11    2日以上診療登録しても、1日分の
+      *                                  負担金額しか印字されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -652,6 +654,9 @@
            MOVE    MF100-KOHNUM            TO  WRK-KOHNUM
            MOVE    MF100-KOHID             TO  WRK-KOHID
            MOVE    ZERO                    TO  WRK-KOHTENSU
+      *=== 複数日診療時の負担金不具合修正 by Yoshikawa(2013/04/11) start
+           MOVE    ZERO                    TO  WRK-ITBFTN
+      *=== 複数日診療時の負担金不具合修正 by Yoshikawa(2013/04/11) end
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.01) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -1019,7 +1024,9 @@
       *
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
            MOVE    ZERO                        TO  FLG-HEIYOU
-                                                   WRK-ITBFTN
+      *=== 複数日診療時の負担金不具合修正 by Yoshikawa(2013/04/11) start
+      *                                             WRK-ITBFTN
+      *=== 複数日診療時の負担金不具合修正 by Yoshikawa(2013/04/11) end
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
