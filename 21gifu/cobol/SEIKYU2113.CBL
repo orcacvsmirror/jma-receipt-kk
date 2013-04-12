@@ -27,6 +27,8 @@
       *****************************************************************
       *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
       * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
+      *  01.00.01    µÈÀî    13/04/11    Á°´ü¹âÎð¼Ô¤Ç¹â³ÛÎÅÍÜÈñ¤Ë
+      *                                  Ã£¤·¤¿¾ì¹ç¤Î´µ¼ÔÉéÃ´³Û¤Î·×»»½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -91,6 +93,11 @@
            03  FLG-SYORI             PIC 9(01).
            03  FLG-TYOKI             PIC 9(01).
            03  FLG-JOUGEN            PIC 9(01).
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) start
+           03  FLG-TSYRRK            PIC 9(01).
+           03  FLG-TNKRRK            PIC 9(01).
+           03  FLG-TEISHO            PIC 9(01).
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -286,6 +293,16 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) start
+      *    Äã½êÆÀ¾ðÊó
+       01  TSYRRK-REC.
+           COPY    "CPTSYRRK.INC".
+      *
+      *    ÄãÇ¯¶â¾ðÊó
+       01  TNKRRK-REC.
+           COPY    "CPTNKRRK.INC".
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) end
       *
       *    ¥Ñ¥é¥á¥¿
        01  BTPARA-REC.
@@ -680,11 +697,76 @@
                    IF  MF100-KOHTENSU  =   MF100-TOTALTEN
                        CONTINUE
                    ELSE
-                       IF  (FLG-JOUGEN  =  1)
-                       OR  (RECE02-ZAITAKU  =  "2" OR "3" OR "4")
-                           MOVE    WRK-SEIKYUGK-G
-                                       TO  MF100-ITBFTN
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) start
+      *                 IF  (FLG-JOUGEN  =  1)
+      *                 OR  (RECE02-ZAITAKU  =  "2" OR "3" OR "4")
+      *                     MOVE    WRK-SEIKYUGK-G
+      *                                 TO  MF100-ITBFTN
+      *              ¹â³ÛÎÅÍÜÈñ¤Î¾ì¹ç¤ÏÀÁµá³Û¤ò°õ»ú
+                     IF RECE02-ZAITAKU  =  "2" OR "3" OR "4"
+                        MOVE    WRK-SEIKYUGK-G   TO  MF100-ITBFTN
+                     ELSE
+                       MOVE    ZERO              TO  FLG-TEISHO
+      *                Äã½êÆÀ¥Á¥§¥Ã¥¯
+                       PERFORM 200113-TEISHO-CHK-SEC
+      *                ÄãÇ¯¶â¥Á¥§¥Ã¥¯
+                       IF  FLG-TEISHO  =  ZERO
+                           PERFORM 200114-TEINEN-CHK-SEC
                        END-IF
+      *
+      *                70ºÐ°Ê¾å¤Ç¡¢¹â³Û¸ÂÅÙ³Û¤ËÃ£À®¤·¤Æ¤¤¤¿¤È¤­¤Î
+      *                ´µ¼ÔÉéÃ´³Û¤Î·×»»
+                       IF  RECE02-AGE  >=  70
+      *
+      *                  Æþ±¡
+                         IF  RECE02-NYUGAIKBN  =  "1"
+      *                    ¸½ÌòÊÂ¤ß½êÆÀ¼Ô
+                           IF  RECE02-KYURATE  =  70
+                             MOVE    WRK-SEIKYUGK-G    TO  MF100-ITBFTN
+                           ELSE
+                             EVALUATE  FLG-TEISHO
+      *                        Äã½êÆÀ
+                               WHEN  1
+                                 IF  RECE02-FTNMONEY(1)  >=  24600
+                                   MOVE    24600       TO  MF100-ITBFTN
+                                 END-IF
+      *                        ÄãÇ¯¶â
+                               WHEN  2
+                                 IF  RECE02-FTNMONEY(1)  >=  15000
+                                   MOVE    15000       TO  MF100-ITBFTN
+                                 END-IF
+      *                        °ìÈÌ
+                               WHEN  OTHER
+                                 IF  RECE02-FTNMONEY(1)  >=  44400
+                                   MOVE    44400       TO  MF100-ITBFTN
+                                 END-IF
+                             END-EVALUATE
+                           END-IF
+      *
+      *                  ³°Íè
+                         ELSE
+      *                    ¸½ÌòÊÂ¤ß½êÆÀ¼Ô
+                           IF  RECE02-KYURATE  =  70
+                             IF  RECE02-FTNMONEY(1)  >=  44400
+                               MOVE    44400           TO  MF100-ITBFTN
+                             END-IF
+                           ELSE
+      *                      Äã½êÆÀ¡¦ÄãÇ¯¶â
+                             IF  FLG-TEISHO  NOT =  ZERO
+                               IF  RECE02-FTNMONEY(1)  >=  8000
+                                 MOVE    8000          TO  MF100-ITBFTN
+                               END-IF
+      *                      °ìÈÌ
+                             ELSE
+                               IF  RECE02-FTNMONEY(1)  >=  12000
+                                 MOVE    12000         TO  MF100-ITBFTN
+                               END-IF
+                             END-IF
+                           END-IF
+                         END-IF
+                       END-IF
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) end
+                     END-IF
                    END-IF
                END-IF
            END-IF
@@ -732,6 +814,90 @@
        200111-HKNJANUM-CHK-EXT.
            EXIT.
       *
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) start
+      *****************************************************************
+      *    Äã½êÆÀ¥Á¥§¥Ã¥¯½èÍý
+      *****************************************************************
+       200113-TEISHO-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      TSYRRK-REC
+                                           FLG-TSYRRK
+           MOVE    SPA-HOSPNUM             TO  TSYRRK-HOSPNUM
+           MOVE    RECE02-PTID             TO  TSYRRK-PTID
+           MOVE    TSYRRK-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      FLG-TSYRRK          =   ZERO
+               PERFORM  800-TSYRRK-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-TSYRRK  =  1
+                 IF  RECE02-SRYYM  >=  TSYRRK-NINSTYMD(1:6)  AND
+                     RECE02-SRYYM  <=  TSYRRK-NINEDYMD(1:6)
+                   MOVE  1  TO  FLG-TEISHO
+                   MOVE  1  TO  FLG-TSYRRK
+                 END-IF
+                 PERFORM  800-TSYRRK-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       200113-TEISHO-CHK-EXT.
+           EXIT.
+      *****************************************************************
+      *    ÄãÇ¯¶â¥Á¥§¥Ã¥¯½èÍý
+      *****************************************************************
+       200114-TEINEN-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      TNKRRK-REC
+                                           FLG-TNKRRK
+           MOVE    SPA-HOSPNUM             TO  TNKRRK-HOSPNUM
+           MOVE    RECE02-PTID             TO  TNKRRK-PTID
+           MOVE    TNKRRK-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      FLG-TNKRRK          =   ZERO
+               PERFORM  800-TNKRRK-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-TNKRRK  =  1
+                 IF  RECE02-SRYYM  >=  TNKRRK-STYMD(1:6)  AND
+                     RECE02-SRYYM  <=  TNKRRK-EDYMD(1:6)
+                   MOVE  2  TO  FLG-TEISHO
+                   MOVE  1  TO  FLG-TNKRRK
+                 END-IF
+                 PERFORM  800-TNKRRK-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       200114-TEINEN-CHK-EXT.
+           EXIT.
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) end
       *****************************************************************
       *    Ä¢É¼¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
@@ -2078,6 +2244,54 @@
        800-SYSKANRI-READ-EXT.
            EXIT.
       *      
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) start
+      *****************************************************************
+      *    Äã½êÆÀ¥Þ¥¹¥¿ÆÉ¹þ
+      *****************************************************************
+       800-TSYRRK-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO                TO  FLG-TSYRRK
+               MOVE    MCPDATA-REC         TO  TSYRRK-REC
+           ELSE
+               MOVE    1                   TO  FLG-TSYRRK
+               INITIALIZE                  TSYRRK-REC
+           END-IF
+      *
+           .
+       800-TSYRRK-FETCH-EXT.
+           EXIT.
+      *****************************************************************
+      *    ÄãÇ¯¶â¥Þ¥¹¥¿ÆÉ¹þ
+      *****************************************************************
+       800-TNKRRK-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO                TO  FLG-TNKRRK
+               MOVE    MCPDATA-REC         TO  TNKRRK-REC
+           ELSE
+               MOVE    1                   TO  FLG-TNKRRK
+               INITIALIZE                  TNKRRK-REC
+           END-IF
+      *
+           .
+       800-TNKRRK-FETCH-EXT.
+           EXIT.
+      *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) end
       *****************************************************************
       *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
       *****************************************************************
