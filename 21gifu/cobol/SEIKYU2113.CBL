@@ -721,7 +721,7 @@
       *                  Æþ±¡
                          IF  RECE02-NYUGAIKBN  =  "1"
       *                    ¸½ÌòÊÂ¤ß½êÆÀ¼Ô
-                           IF  RECE02-KYURATE  =  70
+                           IF  RECE02-KYURATE  =  30
                              MOVE    WRK-SEIKYUGK-G    TO  MF100-ITBFTN
                            ELSE
                              EVALUATE  FLG-TEISHO
@@ -746,7 +746,7 @@
       *                  ³°Íè
                          ELSE
       *                    ¸½ÌòÊÂ¤ß½êÆÀ¼Ô
-                           IF  RECE02-KYURATE  =  70
+                           IF  RECE02-KYURATE  =  30
                              IF  RECE02-FTNMONEY(1)  >=  44400
                                MOVE    44400           TO  MF100-ITBFTN
                              END-IF
@@ -766,6 +766,7 @@
                          END-IF
                        END-IF
       *=== Á°´ü¹âÎð¡Ü¹â³Û¤Î´µ¼ÔÉéÃ´³Û½¤Àµ by Yoshikawa(2013/04/11) end
+                     END-IF
                    END-IF
                END-IF
            END-IF

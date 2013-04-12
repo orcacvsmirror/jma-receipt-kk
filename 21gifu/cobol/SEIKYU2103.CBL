@@ -782,7 +782,7 @@
       *                  入院
                          IF  RECE02-NYUGAIKBN  =  "1"
       *                    現役並み所得者
-                           IF  RECE02-KYURATE  =  70
+                           IF  RECE02-KYURATE  =  30
                              MOVE    WRK-SEIKYUGK-G    TO  MF100-ITBFTN
                            ELSE
                              EVALUATE  FLG-TEISHO
@@ -807,7 +807,7 @@
       *                  外来
                          ELSE
       *                    現役並み所得者
-                           IF  RECE02-KYURATE  =  70
+                           IF  RECE02-KYURATE  =  30
                              IF  RECE02-FTNMONEY(1)  >=  44400
                                MOVE    44400           TO  MF100-ITBFTN
                              END-IF
