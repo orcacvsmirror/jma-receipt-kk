@@ -483,7 +483,7 @@
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME          TO  SC13-HOSPNAME
-           INSPECT SC10-HOSPNAME         REPLACING ALL "  " BY "　"
+           INSPECT SC13-HOSPNAME         REPLACING ALL "  " BY "　"
       *
       *    開設者名
            MOVE    SYS-1001-KAISETUNAME  TO  SC13-KAISETUNAME
