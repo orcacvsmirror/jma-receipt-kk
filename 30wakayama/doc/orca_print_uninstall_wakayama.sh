@@ -33,7 +33,7 @@ if [ ${usrname} != "root" ] ; then
   exit 1
 fi
 
-echomsg "下参怀俯(孟数给锐ˇ另崇山)アンインスト〖ル面..."
+echomsg "下参怀俯(另崇山ˇ孟数给锐)アンインスト〖ル面..."
 
 cp ${SYSCONFDIR}/kentan.inc ${SYSCONFDIR}/kentan.inc.bak
 sed '/wakayama/d' ${SYSCONFDIR}/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
@@ -48,6 +48,10 @@ for f in ${SITESRCDIR}/cobol/SOKATU${prefno}* ; do
   rm -rf $f
 done
 
+if test -f ${SITESRCDIR}/cobol/KOUZASUB.CBL ; then
+  rm -rf ${SITESRCDIR}/cobol/KOUZASUB.CBL
+fi
+
 for f in ${SITESRCDIR}/cobol/copy/*SKT${prefno}* ; do
   rm -rf $f
 done
@@ -59,6 +63,10 @@ done
 for f in ${SITESRCDIR}/cobol/copy/SEI${prefno}* ; do
   rm -rf $f
 done
+
+if test -f ${SITESRCDIR}/cobol/copy/A30012.INC ; then
+  rm -rf ${SITESRCDIR}/cobol/copy/A30012.INC
+fi
 
 for f in ${SITESRCDIR}/form/SC${prefno}* ; do
   rm -rf $f
@@ -88,6 +96,18 @@ for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
 
+if test -f ${SITESRCDIR}/data/SRYKA.INI ; then
+  rm -rf ${SITESRCDIR}/data/SRYKA.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
+  rm -rf ${SITESRCDIR}/data/YUSEN.INI
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
   rm -rf $f
@@ -96,6 +116,10 @@ done
 for f in ${SITELIBDIR}/SOKATU${prefno}* ; do
   rm -rf $f
 done
+
+if test -f ${SITELIBDIR}/KOUZASUB.so ; then
+  rm -rf ${SITELIBDIR}/KOUZASUB.so
+fi
 
 for f in ${SITEFORMDIR}/SC${prefno}* ; do
   rm -rf $f
@@ -131,5 +155,18 @@ if test -f ${LDDEFDIR}/${prefname}.bd ; then
 fi
 
 
-echomsg "下参怀俯(孟数给锐ˇ另崇山)アンインスト〖ル姜位——"
+if test -f ${SITEDATADIR}/SRYKA.INI ; then
+  rm -rf ${SITEDATADIR}/SRYKA.INI 
+fi
+
+if test -f ${SITEDATADIR}/YUSEN.INI ; then
+  rm -rf ${SITEDATADIR}/YUSEN.INI 
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
+
+
+echomsg "下参怀俯(另崇山ˇ孟数给锐)アンインスト〖ル姜位——"
 
