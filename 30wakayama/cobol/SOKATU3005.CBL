@@ -35,6 +35,7 @@
       *                                   オンライン返戻対応
       *                                   広域連合の保険者番号指定対応
       *  04.03.02    吉川       10/12/08  open-cobol1.0対応
+      *  04.07.01    吉川       13/04/16  スタックオーバーフロー対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1627,7 +1628,10 @@
                       CONTINUE
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
                ELSE
-                      PERFORM 900-SEIKYU-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/04/16) start
+      *                PERFORM 900-SEIKYU-READ-SEC
+                      GO  TO  900-SEIKYU-READ-SEC
+      *=== スタックオーバーフロー対応 by Yoshikawa(2013/04/16) end
                END-IF
       *---- KUSUMOTO END ----
       *         
