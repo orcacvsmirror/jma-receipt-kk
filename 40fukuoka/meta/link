@@ -82,4 +82,8 @@
  - [scripts/prgoption/SOKATU4010-YUSEN.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU4020-YUSEN.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU4030-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

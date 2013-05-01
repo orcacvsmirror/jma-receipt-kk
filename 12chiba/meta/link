@@ -38,4 +38,8 @@
  - [scripts/prgoption/SOKATU1210.exp , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU1203-KOUZA.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU1210-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

@@ -34,4 +34,8 @@
  - [scripts/prgoption/SEIKYU2403-SYOHO.opt , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU2407-SORT.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU2410-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

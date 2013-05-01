@@ -17,4 +17,8 @@
  - [scripts/prgoption/SOKATU0520.exp , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0520-SRYKA.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0520-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

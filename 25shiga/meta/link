@@ -53,4 +53,8 @@
  - [scripts/prgoption/SEIKYU2505-TAISYOKOHI.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU2520-YUSEN.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU2530-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

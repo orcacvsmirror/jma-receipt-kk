@@ -88,4 +88,8 @@
  - [scripts/prgoption/SOKATU1100-KOHI.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU1105-KOHI.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU1110-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

@@ -18,6 +18,11 @@ bash ${SITESRCDIR}/scripts/prgoption/prgoption.sh
 rm -r ${SITESRCDIR}/scripts/prgoption
 echo -n "prgoption......done" | logger
 
+# syskanri 3004 set
+bash ${SITESRCDIR}/scripts/syskanri/sys3004.sh
+rm -r ${SITESRCDIR}/scripts/syskanri
+echo -n "syskanri 3004......done" | logger
+
 PATH=.:${PATH}
 
 # compile COBOL programs

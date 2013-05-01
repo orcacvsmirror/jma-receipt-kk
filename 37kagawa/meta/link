@@ -66,4 +66,8 @@
  - [scripts/prgoption/SEIKYU3723-KINYU.opt , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU3725-KINYU.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU3750-YUSEN.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

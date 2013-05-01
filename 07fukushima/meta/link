@@ -54,4 +54,8 @@
  - [scripts/prgoption/SOKATU0710-ONLINE.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0710-YUSEN.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0715-ONLINE.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

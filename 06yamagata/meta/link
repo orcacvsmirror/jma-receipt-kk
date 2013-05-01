@@ -50,4 +50,8 @@
  - [scripts/prgoption/SOKATU0610-YUSEN.opt , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU0609-KENSIN.opt , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU0611-COMMENT.opt , scripts/prgoption/]
-
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]

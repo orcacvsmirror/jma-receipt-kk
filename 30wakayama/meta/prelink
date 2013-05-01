@@ -14,3 +14,19 @@ fi
 if ! test -d ${SITESRCDIR}/scripts/prgoption ; then
     mkdir -m 775 ${SITESRCDIR}/scripts/prgoption
 fi
+
+if ! test -d ${SITESRCDIR}/scripts/syskanri ; then
+    mkdir -m 775 ${SITESRCDIR}/scripts/syskanri
+fi
+
+#rm
+echo -n "rm start" | logger
+for d in cobol data doc form lddef init record screen scripts; do
+  m='module ${d}'
+  for f in ${m}; do
+    if test -f "${SITESRCDIR}/${f}" ; then
+       echo -n "rm ${SITESRCDIR}/${f}..." | logger
+       rm  ${SITESRCDIR}/${f}
+    fi
+  done
+done

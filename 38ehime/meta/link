@@ -42,3 +42,8 @@
  - [scripts/prgoption/SEIKYU3823-COMMENT.opt , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU3825-COMMENT.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU3810-YUSEN.opt , scripts/prgoption/]
+ - [scripts/syskanri/directory , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.bd , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.data , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004.sh , scripts/syskanri/]
