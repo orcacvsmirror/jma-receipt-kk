@@ -11,7 +11,7 @@ sokatu1105.sh       国保総括表（病院・有床用）              FTFF
 sokatu1110.sh       国保請求書                              FTFF
 sokatu1115.sh       後期高齢者請求書                        FFFT
 sokatu1150.sh       社保総括表（病院：有床用）              TFFF
-sokatu1150.sh       社保総括表（無床診療所用）              TFFF
+sokatu1160.sh       社保総括表（無床診療所用）              TFFF
                                                             FFFF
                                                             FFFF
                                                             FFFF
