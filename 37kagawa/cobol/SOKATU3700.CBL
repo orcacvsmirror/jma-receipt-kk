@@ -46,6 +46,7 @@
       *  01.00.10    等李    10/05/13    オンライン手提滦炳
       *  01.00.11    等李    10/09/24    肩彩滦炳
       *  01.00.12    等李    11/01/11    泼侍闻蛙锐柜瘦滦炳
+      *  01.00.13    等李    13/05/09    蘑杉屯及の恃构に燃う饯赖
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1142,8 +1143,16 @@
       *           MOVE  WRK-Z9   TO  SKT3700-YKZFTN (IDX1 IDX2)
       *---(01.00.02) LINE ADD START ------------------------------------
       *    闻蛙の惦烧¨办婶砷么垛
-                 MOVE  SKT3700TMP-ITBFTN (IDX1 IDX2)    TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT3700-ITBFTN (IDX1 IDX2)
+      *=== 蘑杉屯及の恃构 by Yoshikawa(2013/05/09) start
+                 IF  (IDX1 = 1 OR 2)
+                 OR  ( (IDX1 = 3 OR 4 OR 5 OR 8 OR 9) 
+                       AND (IDX2 = 1) )
+      *=== 蘑杉屯及の恃构 by Yoshikawa(2013/05/09) end
+                   MOVE  SKT3700TMP-ITBFTN (IDX1 IDX2)    TO  WRK-Z9
+                   MOVE  WRK-Z9   TO  SKT3700-ITBFTN (IDX1 IDX2)
+      *=== 蘑杉屯及の恃构 by Yoshikawa(2013/05/09) start
+                 END-IF
+      *=== 蘑杉屯及の恃构 by Yoshikawa(2013/05/09) end
                END-PERFORM
              END-PERFORM
            END-IF
