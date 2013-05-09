@@ -47,6 +47,7 @@
       *  01.00.11    吉川    10/09/24    主科対応
       *  01.00.12    吉川    11/01/11    特別療養費国保対応
       *  01.00.13    吉川    13/02/06    医療機関情報編集対応
+      *  01.00.14    吉川    13/05/09    帳票様式の変更に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1149,8 +1150,16 @@
       *           MOVE  WRK-Z9   TO  SKT3700-YKZFTN (IDX1 IDX2)
       *---(01.00.02) LINE ADD START ------------------------------------
       *    療養の給付：一部負担金
-                 MOVE  SKT3700TMP-ITBFTN (IDX1 IDX2)    TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT3700-ITBFTN (IDX1 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2013/05/09) start
+                 IF  (IDX1 = 1 OR 2)
+                 OR  ( (IDX1 = 3 OR 4 OR 5 OR 8 OR 9) 
+                       AND (IDX2 = 1) )
+      *=== 帳票様式の変更 by Yoshikawa(2013/05/09) end
+                   MOVE  SKT3700TMP-ITBFTN (IDX1 IDX2)    TO  WRK-Z9
+                   MOVE  WRK-Z9   TO  SKT3700-ITBFTN (IDX1 IDX2)
+      *=== 帳票様式の変更 by Yoshikawa(2013/05/09) start
+                 END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2013/05/09) end
                END-PERFORM
              END-PERFORM
            END-IF

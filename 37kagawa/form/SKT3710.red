@@ -218,13 +218,13 @@
     </dia:object>
     <dia:object type="Standard - Box" version="0" id="O4">
       <dia:attribute name="obj_pos">
-        <dia:point val="2.45,27.05"/>
+        <dia:point val="2.85636,27.3504"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.43,27.03;4.17,27.37"/>
+        <dia:rectangle val="2.83636,27.3304;4.57636,27.6704"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="2.45,27.05"/>
+        <dia:point val="2.85636,27.3504"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="1.7"/>
@@ -1004,10 +1004,10 @@
   <dia:layer name="文字" visible="true">
     <dia:object type="Standard - Text" version="0" id="O45">
       <dia:attribute name="obj_pos">
-        <dia:point val="1.33853,27.3441"/>
+        <dia:point val="1.56821,27.6091"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.33853,27.1052;1.64153,27.4052"/>
+        <dia:rectangle val="1.56821,27.3702;1.87121,27.6702"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1021,7 +1021,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="1.33853,27.3441"/>
+            <dia:point val="1.56821,27.6091"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1040,15 +1040,15 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O46">
       <dia:attribute name="obj_pos">
-        <dia:point val="1.98853,27.3441"/>
+        <dia:point val="2.21251,27.6091"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.98853,27.1052;2.47333,27.4052"/>
+        <dia:rectangle val="2.21251,27.3702;2.81851,27.6702"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#１.#</dia:string>
+            <dia:string>#１、#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -1057,7 +1057,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="1.98853,27.3441"/>
+            <dia:point val="2.21251,27.6091"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1076,10 +1076,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O47">
       <dia:attribute name="obj_pos">
-        <dia:point val="4.33853,27.3441"/>
+        <dia:point val="4.62122,27.6091"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.33853,27.1052;8.27753,27.4052"/>
+        <dia:rectangle val="4.62122,27.3702;8.56022,27.6702"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1093,7 +1093,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="4.33853,27.3441"/>
+            <dia:point val="4.62122,27.6091"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1112,15 +1112,15 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O48">
       <dia:attribute name="obj_pos">
-        <dia:point val="1.98853,27.6795"/>
+        <dia:point val="2.21251,27.9761"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.98853,27.4406;12.1693,27.7406"/>
+        <dia:rectangle val="2.21251,27.7372;11.3025,28.0372"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#２.結予３４条欄以降は、国保被保険者、退職者、老人保健欄の再掲です。#</dia:string>
+            <dia:string>#２、感３７の２条欄以降は、一般被保険者、退職者欄の再掲です。#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -1129,7 +1129,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="1.98853,27.6795"/>
+            <dia:point val="2.21251,27.9761"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1148,51 +1148,15 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O49">
       <dia:attribute name="obj_pos">
-        <dia:point val="7.55859,2.4392"/>
+        <dia:point val="6.49852,2.54521"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.55859,1.96142;13.6186,2.56142"/>
+        <dia:rectangle val="6.49852,2.14706;14.5785,2.64706"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#診療報酬請求書送り状#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
-          </dia:attribute>
-          <dia:attribute name="height">
-            <dia:real val="0.750000"/>
-          </dia:attribute>
-          <dia:attribute name="pos">
-            <dia:point val="7.55859,2.4392"/>
-          </dia:attribute>
-          <dia:attribute name="color">
-            <dia:color val="#000000"/>
-          </dia:attribute>
-          <dia:attribute name="alignment">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.3636"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-        </dia:composite>
-      </dia:attribute>
-    </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O50">
-      <dia:attribute name="obj_pos">
-        <dia:point val="8.70859,3.1392"/>
-      </dia:attribute>
-      <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.70859,2.74105;12.3446,3.24105"/>
-      </dia:attribute>
-      <dia:attribute name="text">
-        <dia:composite type="text">
-          <dia:attribute name="string">
-            <dia:string>#(国保連合会宛)#</dia:string>
+            <dia:string>#国民健康保険診療報酬請求書送り状#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -1201,7 +1165,7 @@
             <dia:real val="0.625000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="8.70859,3.1392"/>
+            <dia:point val="6.49852,2.54521"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1218,12 +1182,48 @@
         </dia:composite>
       </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O51">
+    <dia:object type="Standard - Text" version="0" id="O50">
       <dia:attribute name="obj_pos">
-        <dia:point val="11.5086,4.9392"/>
+        <dia:point val="8.60258,3.15687"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.5086,4.62068;12.3166,5.02068"/>
+        <dia:rectangle val="8.60258,2.79854;11.875,3.24854"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#(国保連合会宛)#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font name="Courier" family="Takao明朝" style="0"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.562500"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="8.60258,3.15687"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="single">
+            <dia:real val="0.2727"/>
+          </dia:attribute>
+          <dia:attribute name="multi">
+            <dia:real val="0.22725"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - Text" version="0" id="O51">
+      <dia:attribute name="obj_pos">
+        <dia:point val="11.4203,4.9392"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="11.4203,4.62068;12.2283,5.02068"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1237,7 +1237,7 @@
             <dia:real val="0.500000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="11.5086,4.9392"/>
+            <dia:point val="11.4203,4.9392"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1256,10 +1256,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O52">
       <dia:attribute name="obj_pos">
-        <dia:point val="14.2586,4.9392"/>
+        <dia:point val="14.612,4.9392"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.2586,4.54105;17.7936,5.04105"/>
+        <dia:rectangle val="14.612,4.62068;17.44,5.02068"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1270,10 +1270,10 @@
             <dia:font name="Courier" family="Takao明朝" style="0"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.500000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="14.2586,4.9392"/>
+            <dia:point val="14.612,4.9392"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1282,10 +1282,10 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="single">
-            <dia:real val="0.303"/>
+            <dia:real val="0.2424"/>
           </dia:attribute>
           <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
+            <dia:real val="0.202"/>
           </dia:attribute>
         </dia:composite>
       </dia:attribute>
@@ -1590,10 +1590,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O61">
       <dia:attribute name="obj_pos">
-        <dia:point val="3.34347,9.5176"/>
+        <dia:point val="3.34347,9.41159"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.34347,9.27871;4.25247,9.57871"/>
+        <dia:rectangle val="3.34347,9.1727;4.25247,9.4727"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1607,7 +1607,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="3.34347,9.5176"/>
+            <dia:point val="3.34347,9.41159"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1662,10 +1662,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O63">
       <dia:attribute name="obj_pos">
-        <dia:point val="3.35054,11.2157"/>
+        <dia:point val="3.35054,11.1274"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.35054,10.9768;4.25954,11.2768"/>
+        <dia:rectangle val="3.35054,10.8885;4.25954,11.1885"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1679,7 +1679,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="3.35054,11.2157"/>
+            <dia:point val="3.35054,11.1274"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1950,10 +1950,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O71">
       <dia:attribute name="obj_pos">
-        <dia:point val="3.36823,17.977"/>
+        <dia:point val="3.36823,17.9063"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.36823,17.7381;4.27723,18.0381"/>
+        <dia:rectangle val="3.36823,17.6674;4.27723,17.9674"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1967,7 +1967,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="3.36823,17.977"/>
+            <dia:point val="3.36823,17.9063"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -2022,10 +2022,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O73">
       <dia:attribute name="obj_pos">
-        <dia:point val="3.35054,19.6389"/>
+        <dia:point val="3.35054,19.5682"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.35054,19.4;4.25954,19.7"/>
+        <dia:rectangle val="3.35054,19.3293;4.25954,19.6293"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2039,7 +2039,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="3.35054,19.6389"/>
+            <dia:point val="3.35054,19.5682"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -2390,7 +2390,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#法 別 番 号#</dia:string>
+            <dia:string>#法 制 番 号#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -3318,17 +3318,16 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O109">
       <dia:attribute name="obj_pos">
-        <dia:point val="2.40316,8.68678"/>
+        <dia:point val="2.40316,8.86346"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.40316,8.44789;2.70616,9.34789"/>
+        <dia:rectangle val="2.40316,8.62457;3.19096,9.22457"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#結
-
-予#</dia:string>
+            <dia:string>#感37
+の2条#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -3337,7 +3336,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="2.40316,8.68678"/>
+            <dia:point val="2.40316,8.86346"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -3356,17 +3355,16 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O110">
       <dia:attribute name="obj_pos">
-        <dia:point val="2.91589,8.6691"/>
+        <dia:point val="2.45619,10.0658"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.91589,8.43021;3.27949,9.33021"/>
+        <dia:rectangle val="2.45619,9.82691;3.12279,10.4269"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#34
-
-条#</dia:string>
+            <dia:string>#感37
+ 条#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -3375,7 +3373,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="2.91589,8.6691"/>
+            <dia:point val="2.45619,10.0658"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -3394,16 +3392,16 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O111">
       <dia:attribute name="obj_pos">
-        <dia:point val="2.43852,10.0658"/>
+        <dia:point val="2.49152,10.9322"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.43852,9.82691;3.28692,10.4269"/>
+        <dia:rectangle val="2.49152,10.6933;3.09752,11.2933"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#結 35
-予 条#</dia:string>
+            <dia:string>#精神
+通院#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -3412,7 +3410,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="2.43852,10.0658"/>
+            <dia:point val="2.49152,10.9322"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -3431,16 +3429,15 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O112">
       <dia:attribute name="obj_pos">
-        <dia:point val="2.43852,10.9322"/>
+        <dia:point val="2.21251,28.3432"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.43852,10.6933;3.28692,11.2933"/>
+        <dia:rectangle val="2.21251,28.1043;11.3025,28.4043"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#精 32
-神 条#</dia:string>
+            <dia:string>#３、法制番号の記入のない公費は、順次空欄に記入してください。#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
@@ -3449,7 +3446,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="2.43852,10.9322"/>
+            <dia:point val="2.21251,28.3432"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -3468,24 +3465,24 @@
     </dia:object>
     <dia:object type="Standard - Text" version="0" id="O113">
       <dia:attribute name="obj_pos">
-        <dia:point val="1.98283,27.9898"/>
+        <dia:point val="1.27739,6.02618"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.98283,27.7509;10.9516,28.0509"/>
+        <dia:rectangle val="1.27739,5.70766;3.70139,6.10766"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#３.法別番号の記入のない公費は、順次空欄に記入してください。#</dia:string>
+            <dia:string>#公費負担医療#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Courier" family="Takao明朝" style="0"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.375000"/>
+            <dia:real val="0.500000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="1.98283,27.9898"/>
+            <dia:point val="1.27739,6.02618"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -3494,10 +3491,10 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="single">
-            <dia:real val="0.1818"/>
+            <dia:real val="0.2424"/>
           </dia:attribute>
           <dia:attribute name="multi">
-            <dia:real val="0.1515"/>
+            <dia:real val="0.202"/>
           </dia:attribute>
         </dia:composite>
       </dia:attribute>
@@ -7946,10 +7943,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="0" id="O201">
       <dia:attribute name="obj_pos">
-        <dia:point val="1.30742,5.87482"/>
+        <dia:point val="1.30742,5.27411"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.30742,5.63593;4.33742,5.93593"/>
+        <dia:rectangle val="1.30742,5.03522;4.33742,5.33522"/>
       </dia:attribute>
       <dia:attribute name="dnode_path">
         <dia:string>#RECEKA#</dia:string>
@@ -7969,7 +7966,7 @@
             <dia:real val="0.375000"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="1.30742,5.87482"/>
+            <dia:point val="1.30742,5.27411"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
