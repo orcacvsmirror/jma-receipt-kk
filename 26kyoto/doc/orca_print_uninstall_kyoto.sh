@@ -60,6 +60,10 @@ for f in ${SITESRCDIR}/cobol/copy/SEI${prefno}* ; do
   rm -rf $f
 done
 
+for f in ${SITESRCDIR}/cobol/copy/TAISYO${prefno}* ; do
+  rm -rf $f
+done
+
 for f in ${SITESRCDIR}/form/SC${prefno}* ; do
   rm -rf $f
 done
@@ -87,6 +91,26 @@ done
 for f in ${SITESRCDIR}/scripts/kentan/sokatu${prefno}* ; do
   rm -rf $f
 done
+
+if test -f ${SITESRCDIR}/data/SRYKA.INI ; then
+  rm -rf ${SITESRCDIR}/data/SRYKA.INI
+fi
+
+if test -f ${SITESRCDIR}/data/TAISYOKOHI.INI ; then
+  rm -rf ${SITESRCDIR}/data/TAISYOKOHI.INI
+fi
+
+if test -f ${SITESRCDIR}/data/YOBOU.INI ; then
+  rm -rf ${SITESRCDIR}/data/YOBOU.INI
+fi
+
+if test -f ${SITESRCDIR}/data/${prefname}.png ; then
+  rm -rf ${SITESRCDIR}/data/${prefname}.png
+fi
+
+if test -f ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITESRCDIR}/doc/orca_print_uninstall_${prefname}.sh
+fi
 
 
 for f in ${SITELIBDIR}/SEIKYU${prefno}* ; do
@@ -128,6 +152,27 @@ done
 
 if test -f ${LDDEFDIR}/${prefname}.bd ; then
   rm -rf ${LDDEFDIR}/${prefname}.bd
+fi
+
+
+if test -f ${SITEDATADIR}/SRYKA.INI ; then
+  rm -rf ${SITEDATADIR}/SRYKA.INI 
+fi
+
+if test -f ${SITEDATADIR}/TAISYOKOHI.INI ; then
+  rm -rf ${SITEDATADIR}/TAISYOKOHI.INI 
+fi
+
+if test -f ${SITEDATADIR}/YOBOU.INI ; then
+  rm -rf ${SITEDATADIR}/YOBOU.INI 
+fi
+
+if test -f ${SITEDATADIR}/${prefname}.png ; then
+  rm -rf ${SITEDATADIR}/${prefname}.png
+fi
+
+if test -f ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh ; then
+  rm -rf ${SITELIBDIR}/doc/orca_print_uninstall_${prefname}.sh
 fi
 
 
