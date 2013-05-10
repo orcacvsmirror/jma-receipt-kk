@@ -45,6 +45,8 @@
       *                                  未就学であれば「乳幼児...」の
       *                                  就学していれば「子ども...」の
       *                                  帳票をを印刷する
+      *  01.00.09    吉川    13/05/10    4月で印刷処理をすると6歳の患者が
+      *                                  子ども医療に印刷されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -713,7 +715,10 @@
            EVALUATE  MF100-CITYNUM
            WHEN "004"
       *        いわき市
-               MOVE  AGECHK-SYUGAKUKBN   TO  MF100-SYUGAKU
+      *=== 就学区分判定修正 by Yoshikawa(2013/05/10) start
+      *         MOVE  AGECHK-SYUGAKUKBN   TO  MF100-SYUGAKU
+               MOVE    RECE02-FLG(1)     TO  MF100-SYUGAKU
+      *=== 就学区分判定修正 by Yoshikawa(2013/05/10) end
            WHEN OTHER
       *        その他市町村(福島市用帳票)
                MOVE  "1"                 TO  MF100-SYUGAKU
