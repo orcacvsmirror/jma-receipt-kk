@@ -1,5 +1,6 @@
 ---
  - [cobol/SEIKYU4401.CBL , cobol/]
+ - [cobol/SEIKYU4403.CBL , cobol/]
  - [cobol/SOKATU4400.CBL , cobol/]
  - [cobol/SOKATU4410.CBL , cobol/]
  - [cobol/SOKATU4415.CBL , cobol/]
@@ -18,6 +19,7 @@
  - [form/SKT4420.red , form/]
  - [lddef/oita.bd , lddef/]
  - [scripts/kentan/seikyu4401.sh , scripts/kentan/]
+ - [scripts/kentan/seikyu4403.sh , scripts/kentan/]
  - [scripts/kentan/sokatu4400.sh , scripts/kentan/]
  - [scripts/kentan/sokatu4410.sh , scripts/kentan/]
  - [scripts/kentan/sokatu4415.sh , scripts/kentan/]
