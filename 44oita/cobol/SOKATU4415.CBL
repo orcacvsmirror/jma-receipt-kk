@@ -34,6 +34,7 @@
       *  01.00.03    吉川    2010/06/01  オンライン返戻対応
       *                                  広域連合の保険者番号指定対応
       *  01.00.04    吉川    2012/01/10  点数のバイト数増加
+      *  01.00.05    吉川    2013/05/10  PERFORMをGOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1601,7 +1602,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2013/05/10) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORM→GOTO by Yoshikawa(2013/05/10) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
@@ -1685,7 +1689,10 @@
            PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1900-REC
-               IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+      *=== PRTKBN変更 by Yoshikawa(2013/05/10) start
+      *         IF      SYS-1900-PRTKBN(8)  NOT =   SPACE
+               IF      SYS-1900-PRTKBN(17)  NOT =   SPACE
+      *=== PRTKBN変更 by Yoshikawa(2013/05/10) end
       *            医療機関名称編集情報
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
