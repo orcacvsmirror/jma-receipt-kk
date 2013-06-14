@@ -659,6 +659,18 @@
            MOVE    "SOKATU2700"              TO  WRK-PRGID
            MOVE    "YUSEN"                   TO  WRK-KBNCD
            PERFORM  900-PRGOPTION-READ-SEC
+           PERFORM  1001-OPTION-SET-SEC
+      *
+      *    パラメタセット
+           PERFORM  1002-OPTION-CALL-SEC
+      *
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
       *
            MOVE    1                         TO  CNT-PARA
            IF  FLG-PRGOPTION  =  ZERO
@@ -689,23 +701,20 @@
              END-PERFORM
            END-IF
       *
-      *    パラメタセット
-           PERFORM  1001-OPTION-CALL-SEC
-      *
            .
-       100-OPTION-SELECT-EXT.
+       100-OPTION-SET-EXT.
            EXIT.
       *****************************************************************
       *    プログラムオプションパラメタ取得処理
       *****************************************************************
-       1001-OPTION-CALL-SEC             SECTION.
+       1002-OPTION-CALL-SEC             SECTION.
       *
       *    優先保険者番号
            MOVE    WRK-OPTION(1)           TO  PARA-HKNJANUM
            DISPLAY "優先保険者番号="           PARA-HKNJANUM
       *
            .
-       1001-OPTION-CALL-EXT.
+       1002-OPTION-CALL-EXT.
            EXIT.
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
@@ -1798,8 +1807,6 @@
                                         MCPAREA
                                         MCPDATA-REC
                                         SPA-AREA
-           DISPLAY "MCP-RC =" MCP-RC
-           DISPLAY "SELECT" 
            IF      MCP-RC              =   ZERO
                MOVE    "DBFETCH"           TO  MCP-FUNC
                MOVE    "tbl_prgoption"     TO  MCP-TABLE
@@ -1808,8 +1815,6 @@
                                             MCPAREA
                                             MCPDATA-REC
                                             SPA-AREA
-           DISPLAY "MCP-RC =" MCP-RC
-           DISPLAY "FETCH" 
                IF      MCP-RC              =   ZERO
                    MOVE    MCPDATA-REC         TO  PRGOPTION-REC
                    MOVE    ZERO                TO  FLG-PRGOPTION
