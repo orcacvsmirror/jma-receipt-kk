@@ -100,6 +100,10 @@
       *                                    備考欄の金額を修正
       *                                    限度額欄と前期高齢者欄の両方に
       *                                    値がある場合、前期高齢者のみ印字
+      *  01.00.29     吉川     13/06/10    743の場合の備考欄の印字修正
+      *                                    在宅は70歳未満の場合でも印字する
+      *                                    70歳未満で343＋高額の場合
+      *                                    限度額欄に印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -192,6 +196,9 @@
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
            03  IDX3           PIC 9(04).
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) start
+           03  IDX4           PIC 9(04).
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) end
            03  IDX-STG.
                05  IDX-ST     PIC 9(02).
            03  IDX-EDG.
@@ -326,6 +333,18 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) start
+      *    固定項目
+       01  WRK-CONS-AREA.
+      *    在宅総合・在宅末期（在医総）
+           03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+           03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+           03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+           03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+           03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+           03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) end
       *
       *    DB参照用
       *---(01.00.08) LINE ADD START ------------------------------------
@@ -961,26 +980,44 @@
       *         MOVE  1  TO  MF100-SHOSAISIN
       *       END-IF
              COMPUTE WRK-ETC-ITBFTN-G ROUNDED = WRK-ETC-ITBFTN
-      *      患者負担額と計算負担金の値が一致しなかったら
-      *      初診時一部負担金が引かれたということなので、初診と判定
       *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
       *       IF  WRK-ETC-ITBFTN-G  <  WRK-SHOSAI
       **        580円に満たない場合、備考欄に患者負担額を記載
       *         IF  WRK-SHOSAI  <  580
       *           MOVE  WRK-SHOSAI          TO  MF100-ETCFTNMONEY
-             IF  WRK-COMPFTN  NOT =  WRK-ETC-ITBFTN-G
-      *        市助成分が580円に満たない場合、備考欄に患者負担額を記載
-               IF  (WRK-ASAHIFTN  NOT =  ZERO)
-               AND (WRK-ASAHIFTN  <  580)
-                 MOVE  WRK-ASAHIFTN        TO  MF100-ETCFTNMONEY
-               ELSE
-                 MOVE  580                 TO  MF100-ETCFTNMONEY
-      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
+      *=== 743の場合の備考欄印字修正 by Yoshikawa(2013/06/10) start
+             IF  MF100-KOHNUM  =  "743"
+               IF  WRK-ETC-ITBFTN-G  <  WRK-SHOSAI
+      *          580円に満たない場合、備考欄に患者負担額を記載
+                 IF  WRK-SHOSAI  <  580
+                   MOVE  WRK-SHOSAI          TO  MF100-ETCFTNMONEY
+                 END-IF
+                 MOVE  WRK-ETC-ITBFTN-G      TO  MF100-FTNMONEY
+                 IF  MF100-FTNMONEY  NOT =  ZERO
+                   MOVE  580                 TO  MF100-ETCFTNMONEY
+                 END-IF
+                 MOVE  1                     TO  MF100-SHOSAISIN
                END-IF
-               MOVE  WRK-ETC-ITBFTN-G      TO  MF100-FTNMONEY
-               MOVE  1                     TO  MF100-SHOSAISIN
-             END-IF
+             ELSE
+      *=== 743の場合の備考欄印字修正 by Yoshikawa(2013/06/10) end
+      *        患者負担額と計算負担金の値が一致しなかったら
+      *        初診時一部負担金が引かれたということなので、初診と判定
+               IF  WRK-COMPFTN  NOT =  WRK-ETC-ITBFTN-G
+      *          市助成分が580円に満たない場合、備考欄に患者負担額を記載
+                 IF  (WRK-ASAHIFTN  NOT =  ZERO)
+                 AND (WRK-ASAHIFTN  <  580)
+                   MOVE  WRK-ASAHIFTN        TO  MF100-ETCFTNMONEY
+                 ELSE
+                   MOVE  580                 TO  MF100-ETCFTNMONEY
+      *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
+                 END-IF
+                 MOVE  WRK-ETC-ITBFTN-G      TO  MF100-FTNMONEY
+                 MOVE  1                     TO  MF100-SHOSAISIN
+               END-IF
       *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
+      *=== 743の場合の備考欄印字修正 by Yoshikawa(2013/06/10) start
+             END-IF
+      *=== 743の場合の備考欄印字修正 by Yoshikawa(2013/06/10) end
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
@@ -1148,6 +1185,13 @@
            END-IF
       *    一般患者用区分設定
            MOVE         2              TO  MF100-KBN
+      *
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) start
+      *      在総診・在医総か
+             IF  RECE02-ZAITAKU  NOT =  1
+               PERFORM  960-SRYACT-SET-SEC
+             END-IF
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) end
       *
       *    合計ファイル用にデータ退避
            INITIALIZE   WRK-TAIHI-TBL
@@ -1633,6 +1677,9 @@
       *=== 高額と前期は前期高齢者のみ印字 by Yoshikawa(2013/03/18) start
       *        限度額欄にも値がある場合は、前期高齢者欄を優先
                IF  MF100-KOGAKU  NOT =  ZERO
+      *=== 70歳未満で高額の場合の印字修正 by Yoshikawa(2013/06/10) start
+               AND MF100-SEIKYUGK  NOT =  ZERO
+      *=== 70歳未満で高額の場合の印字修正 by Yoshikawa(2013/06/10) end
                  MOVE  SPACE           TO  SC07-TENSU9(IDX1)
                  MOVE  ZERO            TO  MF100-KOGAKU
                END-IF
@@ -3004,6 +3051,100 @@
        925-HKNJAINF-READ-EXT.
            EXIT.
       *
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) start
+      *****************************************************************
+      *  診療情報セット
+      *****************************************************************
+       960-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE  SRYACT-REC
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key4"              TO  MCP-PATHNAME
+               PERFORM  965-SRYACT-READ-SEC
+      *    在総診の患者取得
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  965-ZAISOU-CHK-SEC
+      *
+                 MOVE  "tbl_sryact"      TO  MCP-TABLE
+                 MOVE  "key4"            TO  MCP-PATHNAME
+                 PERFORM  965-SRYACT-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       960-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       965-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       965-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    在総診チェック
+      *****************************************************************
+       965-ZAISOU-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL   (IDX4  >     5) OR
+                            (SRY-SRYCD(IDX4)  =  SPACE)
+             IF  SRY-SRYKBN  =  "14"
+               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
+                                       WRK-CONS-ZAITAKU2  OR
+                                       WRK-CONS-ZAITAKU3  OR
+                                       WRK-CONS-ZAITAKU4  OR
+                                       WRK-CONS-ZAITAKU5  OR
+                                       WRK-CONS-ZAITAKU6
+                 MOVE  "1"  TO  MF100-ZAITAKU
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       965-ZAISOU-CHK-EXT.
+           EXIT.
+      *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/06/10) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
