@@ -49,6 +49,7 @@
       *  01.00.12    吉川       11/04/18    後期高齢の記載順を県外→県内に修正
       *  01.00.13    吉川       13/02/07    プラグイン対応
       *                                     医療機関情報編集対応
+      *  01.00.14    吉川       13/06/17    プログラムオプション対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -167,6 +168,10 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            03  FLG-KOUKI           PIC 9(01).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -175,6 +180,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  IDX                 PIC 9(04).
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
       *##  パラメタ領域（地方公費仕様）
        01  WRK-PARA.
@@ -254,6 +263,15 @@
            03  WRK-PATH2               PIC X(50).
            03  WRK-HKNNUM              PIC X(03).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+           03  WRK-YUSEN           PIC X(06).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -344,6 +362,12 @@
        01  PRTDATA-REC.
            COPY    "CPPRTDATA.INC".          
       * 
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -563,9 +587,13 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-           PERFORM  110-INI-FILE-SEC
-      *
-           PERFORM  111-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *     PERFORM  110-INI-FILE-SEC
+      **
+      *     PERFORM  111-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
            OPEN    OUTPUT  UPD-FILE
       *
@@ -686,6 +714,83 @@
        111-INI-FILE-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SOKATU4100"              TO  WRK-PRGID
+      *
+      *    プログラムオプション取得
+      *    優先保険者番号
+           MOVE    "YUSEN"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:6)        TO  WRK-YUSEN
+           DISPLAY "優先保険者番号="  WRK-YUSEN
+      *
+      *    診療科
+           MOVE    "SRYKA"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             IF  WRK-OPTION(IDX)(1:2)  =  "※"
+               MOVE    SPACE                 TO  WRK-SRYKANAME(IDX)
+             ELSE
+               MOVE    WRK-OPTION(IDX)(1:20) TO  WRK-SRYKANAME(IDX)
+             END-IF
+           END-PERFORM
+           DISPLAY "診療科１="  WRK-SRYKANAME(1)
+           DISPLAY "診療科２="  WRK-SRYKANAME(2)
+           DISPLAY "診療科３="  WRK-SRYKANAME(3)
+      *
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -822,7 +927,10 @@
       *
       ***    県外→県内市町村→県内扱い国保組合の順で印字する
       *    県外→県内市町村→県内扱い国保組合→県外後期→県内後期の順で印字する
-           IF    YUSEN-HKNJANUM   =  SKT4100TMP-HKNJANUM
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *     IF    YUSEN-HKNJANUM   =  SKT4110TMP-HKNJANUM
+           IF    WRK-YUSEN        =  SKT4100TMP-HKNJANUM
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
              MOVE          1   TO    SKT4100TMP-SYUTURYOKU
            ELSE
              IF     RECE10-PREFKBN            =  "1"
@@ -2037,6 +2145,54 @@
        900-SEIKYU-CLOSE-EXT.
            EXIT.
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************
