@@ -62,6 +62,7 @@
       *                                  取得するように修正
       *  01.00.21    吉川    13/01/11    プラグイン対応
       *                                  医療機関情報編集対応
+      *  01.00.22    吉川    13/06/17    プログラムオプション対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -205,6 +206,9 @@
            03  FLG-TAISYOKOHI      PIC 9(01).
            03  FLG-TAISYO          PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  FLG-PRGOPTION       PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -218,6 +222,9 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
            03  IDXX                PIC 9(04).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
       *    システム領域
        01  SYS-AREA.
@@ -388,6 +395,16 @@
            03  WRK-KOHKEI            PIC 9(03).
            03  WRK-KOHKEI2           PIC 9(03).
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+           03  WRK-HOSPKBN.
+               05  FILLER            PIC X(13).
+               05  WRK-HOSPKBN-CD    PIC X(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -406,6 +423,9 @@
            03  CNT-PAGE              PIC 9(03).
            03  CNT-RECE10            PIC 9(06).
            03  CNT-UPDFILE           PIC 9(06).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+           03  CNT-PARA              PIC 9(03).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
       *    集計領域
        01  SUM-AREA.
@@ -443,6 +463,7 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -512,6 +533,12 @@
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
       *****
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
       ******************************************************************
       *    サブプロ用  領域
@@ -772,12 +799,16 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
-           PERFORM  111-INI-FILE-SEC
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
-      *    INIファイル読み込み
-           PERFORM  112-INI-FILE-SEC
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *     PERFORM  111-INI-FILE-SEC
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
+      **    INIファイル読み込み
+      *     PERFORM  112-INI-FILE-SEC
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
            OPEN     OUTPUT  UPD-FILE
       *
@@ -940,6 +971,93 @@
            EXIT.
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SOKATU2800"              TO  WRK-PRGID
+      *
+      *    プログラムオプション取得
+      *    医療機関区分
+           MOVE    "HOSPKBN"                 TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:14)       TO  WRK-HOSPKBN
+           DISPLAY                               WRK-HOSPKBN
+      *
+      *    診療科
+           MOVE    "SRYKA"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             IF  WRK-OPTION(IDX)(1:2)  =  "※"
+               MOVE    SPACE                 TO  WRK-SRYKANAME(IDX)
+             ELSE
+               MOVE    WRK-OPTION(IDX)(1:34) TO  WRK-SRYKANAME(IDX)
+             END-IF
+             DISPLAY "診療科１="  WRK-SRYKANAME(1)
+             DISPLAY "診療科２="  WRK-SRYKANAME(2)
+             DISPLAY "診療科３="  WRK-SRYKANAME(3)
+           END-PERFORM
+      *
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *    
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+           MOVE    1                         TO  CNT-PARA
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (CNT-PARA  >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  CNT-PARA
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(CNT-PARA)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
+      *
       *****************************************************************
       *    主    処理
       *****************************************************************
@@ -2972,6 +3090,54 @@
       *     EXIT.
       *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.05) LINE ADD START ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *****************************************************************
       *    医療機関編集情報読み込み
       *****************************************************************
