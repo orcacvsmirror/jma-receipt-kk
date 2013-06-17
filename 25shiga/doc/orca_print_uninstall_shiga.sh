@@ -100,6 +100,9 @@ if test -f ${SITESRCDIR}/data/TAISYOKOHI.INI ; then
   rm -rf ${SITESRCDIR}/data/TAISYOKOHI.INI
 fi
 
+if test -f ${SITESRCDIR}/data/TAISYOKOHIS.INI ; then
+  rm -rf ${SITESRCDIR}/data/TAISYOKOHIS.INI
+fi
 if test -f ${SITESRCDIR}/data/YUSEN.INI ; then
   rm -rf ${SITESRCDIR}/data/YUSEN.INI
 fi
@@ -157,6 +160,10 @@ fi
 
 if test -f ${SITEDATADIR}/TAISYOKOHI.INI ; then
   rm -rf ${SITEDATADIR}/TAISYOKOHI.INI 
+fi
+
+if test -f ${SITEDATADIR}/TAISYOKOHIS.INI ; then
+  rm -rf ${SITEDATADIR}/TAISYOKOHIS.INI 
 fi
 
 if test -f ${SITEDATADIR}/YUSEN.INI ; then
