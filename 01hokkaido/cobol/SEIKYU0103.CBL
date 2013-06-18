@@ -208,7 +208,8 @@
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH              PIC  X(50).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-           03  WRK-OPTION            PIC X(100)  OCCURS 100.
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
            03  WRK-PRGID             PIC X(25).
            03  WRK-KBNCD             PIC X(16).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end

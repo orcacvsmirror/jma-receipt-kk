@@ -263,7 +263,8 @@
            03  WRK-PATH2             PIC X(50).
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-           03  WRK-OPTION            PIC X(100)  OCCURS 100.
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
            03  WRK-PRGID             PIC X(25).
            03  WRK-KBNCD             PIC X(16).
            03  WRK-YUSEN             PIC X(06).
