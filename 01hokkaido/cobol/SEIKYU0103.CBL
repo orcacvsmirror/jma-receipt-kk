@@ -239,9 +239,6 @@
            03  CNT-MF100   PIC 9(06).
            03  CNT-PAGE    PIC 9(03).
            03  CNT-SYOSIN  PIC 9(03).
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-           03  CNT-PARA    PIC 9(03).
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
       *    キー用エリア
        01  KEY-AREA.
@@ -256,12 +253,6 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
-      *
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-      *    プログラムオプションパラメタ
-       01  PARA-AREA.
-           03  PARA-SRYKANAME       PIC X(20).
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
       *    DB参照用
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -690,14 +681,17 @@
       *****************************************************************
        100-OPTION-SELECT-SEC             SECTION.
       *
-      *    プログラムオプション取得
            MOVE    "SEIKYU0103"              TO  WRK-PRGID
-           MOVE    "SRYKA"                   TO  WRK-KBNCD
-           PERFORM  900-PRGOPTION-READ-SEC
-           PERFORM  1001-OPTION-SET-SEC
       *
-      *    パラメタセット
-           PERFORM  1002-OPTION-CALL-SEC
+      *    プログラムオプション取得
+      *    診療科
+           MOVE    "SRYKA"                   TO  WRK-KBNCD
+           PERFORM  1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:20)       TO  WRK-SRYKANAME
+           IF  WRK-SRYKANAME(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-SRYKANAME
+           END-IF
+           DISPLAY "診療科="                     WRK-SRYKANAME
       *
            .
        100-OPTION-SELECT-EXT.
@@ -707,11 +701,17 @@
       *****************************************************************
        1001-OPTION-SET-SEC              SECTION.
       *
-           MOVE    1                         TO  CNT-PARA
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
            IF  FLG-PRGOPTION  =  ZERO
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL   (IDX     >   44000 )
-                         OR   (CNT-PARA  >  100)
+                         OR   (IDX1  >  100)
                          OR   (FLG-OK  NOT =   ZERO)
       *
       *        オプションの1桁目が空白であれば処理終了
@@ -724,13 +724,13 @@
       *          改行地点か
                  IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
                  OR  IDY  >=  100
-                   ADD    1                  TO  CNT-PARA
+                   ADD    1                  TO  IDX1
                    MOVE    ZERO              TO  IDY
                  ELSE
                    ADD    1                  TO  IDY
       *            PGオプション内容を１文字ずつセット
                    MOVE    PRGOPTION-OPTION(IDX:1)
-                                         TO  WRK-OPTION(CNT-PARA)(IDY:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
                  END-IF
                END-IF
              END-PERFORM
@@ -739,22 +739,8 @@
            .
        1001-OPTION-SET-EXT.
            EXIT.
-      *****************************************************************
-      *    プログラムオプションパラメタ取得処理
-      *****************************************************************
-       1002-OPTION-CALL-SEC             SECTION.
-      *
-      *    診療科
-           MOVE    WRK-OPTION(1)           TO  PARA-SRYKANAME
-           DISPLAY "診療科="                   PARA-SRYKANAME
-           IF  PARA-SRYKANAME(1:2)  =  "※"
-             MOVE    SPACE                 TO  PARA-SRYKANAME
-           END-IF
-      *
-           .
-       1002-OPTION-CALL-EXT.
-           EXIT.
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
+      *
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -934,10 +920,7 @@
       *
       *=== 診療科名を印字 by Yoshikawa(2009/09/07) start
       *    診療科名
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-      *     MOVE  WRK-SRYKANAME               TO   SC03-SRYKANAME
-           MOVE  PARA-SRYKANAME              TO   SC03-SRYKANAME
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
+           MOVE  WRK-SRYKANAME               TO   SC03-SRYKANAME
       *=== 診療科名を印字 by Yoshikawa(2009/09/07) end
       *
       *    公費負担者番号

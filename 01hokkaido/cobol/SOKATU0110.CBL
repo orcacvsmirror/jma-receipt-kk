@@ -266,6 +266,7 @@
            03  WRK-OPTION            PIC X(100)  OCCURS 100.
            03  WRK-PRGID             PIC X(25).
            03  WRK-KBNCD             PIC X(16).
+           03  WRK-YUSEN             PIC X(06).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
       *    医療機関情報
@@ -319,9 +320,6 @@
            03  CNT-IN              PIC 9(02).
            03  CNT-KOH             PIC 9(02).
            03  CNT-KOH2            PIC 9(02).
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-           03  CNT-PARA            PIC 9(03).
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
            COPY    "CPSHELLTBL.INC".
       *     
@@ -334,12 +332,6 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.08) LINE ADD END   ------------------------------------
-      *
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
-      *    プログラムオプションパラメタ
-       01  PARA-AREA.
-           03  PARA-HKNJANUM       PIC X(06).
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -791,14 +783,14 @@
       *****************************************************************
        100-OPTION-SELECT-SEC             SECTION.
       *
-      *    プログラムオプション取得
            MOVE    "SOKATU0110"              TO  WRK-PRGID
-           MOVE    "YUSEN"                   TO  WRK-KBNCD
-           PERFORM  900-PRGOPTION-READ-SEC
-           PERFORM  1001-OPTION-SET-SEC
       *
-      *    パラメタセット
-           PERFORM  1002-OPTION-CALL-SEC
+      *    プログラムオプション取得
+      *    優先保険者番号
+           MOVE    "YUSEN"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:6)        TO  WRK-YUSEN
+           DISPLAY "優先保険者番号="  WRK-YUSEN
       *
            .
        100-OPTION-SELECT-EXT.
@@ -808,11 +800,17 @@
       *****************************************************************
        1001-OPTION-SET-SEC              SECTION.
       *
-           MOVE    1                         TO  CNT-PARA
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
            IF  FLG-PRGOPTION  =  ZERO
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL   (IDX     >   44000 )
-                         OR   (CNT-PARA  >  100)
+                         OR   (IDX1  >  100)
                          OR   (FLG-OK  NOT =   ZERO)
       *
       *        オプションの1桁目が空白であれば処理終了
@@ -825,13 +823,13 @@
       *          改行地点か
                  IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
                  OR  IDY  >=  100
-                   ADD    1                  TO  CNT-PARA
+                   ADD    1                  TO  IDX1
                    MOVE    ZERO              TO  IDY
                  ELSE
                    ADD    1                  TO  IDY
       *            PGオプション内容を１文字ずつセット
                    MOVE    PRGOPTION-OPTION(IDX:1)
-                                         TO  WRK-OPTION(CNT-PARA)(IDY:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
                  END-IF
                END-IF
              END-PERFORM
@@ -839,18 +837,6 @@
       *
            .
        1001-OPTION-SET-EXT.
-           EXIT.
-      *****************************************************************
-      *    プログラムオプションパラメタ取得処理
-      *****************************************************************
-       1002-OPTION-CALL-SEC             SECTION.
-      *
-      *    優先保険者番号
-           MOVE    WRK-OPTION(1)           TO  PARA-HKNJANUM
-           DISPLAY "優先保険者番号="           PARA-HKNJANUM
-      *
-           .
-       1002-OPTION-CALL-EXT.
            EXIT.
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
       *
@@ -950,7 +936,7 @@
       *    出力順設定
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) start
       *     IF     YUSEN-HKNJANUM    =    SKT0110TMP-HKNJANUM
-           IF     PARA-HKNJANUM     =    SKT0110TMP-HKNJANUM
+           IF     WRK-YUSEN         =    SKT0110TMP-HKNJANUM
       *=== プログラムオプション対応 by Yoshikawa(2013/06/14) end
              MOVE        1          TO   SKT0110TMP-SYUTURYOKU
            ELSE
