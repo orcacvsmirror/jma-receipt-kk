@@ -72,6 +72,7 @@
       *                                  取得するようにする
       *  01.00.31    吉川    13/01/22    医療機関情報編集対応
       *  01.00.32    吉川    13/02/07    プラグイン対応
+      *  01.00.33    吉川    13/06/18    プログラムオプション対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -253,6 +254,10 @@
            03  FLG-TAISYOKOHI      PIC 9(01).
            03  FLG-TAISYO          PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -265,6 +270,9 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
       *
       *##  パラメタ領域
        01  WRK-PARA.
@@ -416,6 +424,14 @@
            03  WRK-KOHID           PIC 9(10).
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2008/11/05) end
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+           03  WRK-YUSEN             PIC X(06).
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -529,6 +545,12 @@
       *    全角チェックパラメタ
            COPY    "CPORCSKANACHK.INC".
       * 
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -785,14 +807,18 @@
            END-IF
       *---(01.00.13) LINE ADD END   ------------------------------------
       *
-           PERFORM  110-INI-FILE-SEC
-      *
-           PERFORM  111-INI-FILE-SEC
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    INIファイル読み込み
-           PERFORM  112-INI-FILE-SEC
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+      *     PERFORM  110-INI-FILE-SEC
+      **
+      *     PERFORM  111-INI-FILE-SEC
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    INIファイル読み込み
+      *     PERFORM  112-INI-FILE-SEC
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
       *
       *
            OPEN    OUTPUT  UPD-FILE
@@ -836,6 +862,93 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SOKATU4000"              TO  WRK-PRGID
+      *
+      *    プログラムオプション取得
+      *    診療科
+           MOVE    "SRYKA"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             IF  WRK-OPTION(IDX)(1:2)  =  "※"
+               MOVE    SPACE                 TO  WRK-SRYKANAME(IDX)
+             ELSE
+               MOVE    WRK-OPTION(IDX)(1:20) TO  WRK-SRYKANAME(IDX)
+             END-IF
+           END-PERFORM
+           DISPLAY "診療科１="  WRK-SRYKANAME(1)
+           DISPLAY "診療科２="  WRK-SRYKANAME(2)
+           DISPLAY "診療科３="  WRK-SRYKANAME(3)
+      *
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *
+      *    優先保険者番号
+           MOVE    "YUSEN"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:6)        TO  WRK-YUSEN
+           DISPLAY "優先保険者番号="  WRK-YUSEN
+      *
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1  >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
       *****************************************************************
       *    優先保険者番号INIファイル読み込み処理   
       *****************************************************************
@@ -1317,7 +1430,10 @@
            END-IF
       *
       *    印字順設定
-           IF    YUSEN-HKNJANUM   =  SKT4000TMP-HKNJANUM
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
+      *     IF    YUSEN-HKNJANUM   =  SKT4000TMP-HKNJANUM
+           IF    WRK-YUSEN        =  SKT4000TMP-HKNJANUM
+      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
              MOVE          1   TO    SKT4000TMP-SYUTURYOKU
            ELSE
              IF    RECE10-PREFKBN    =    "1"
