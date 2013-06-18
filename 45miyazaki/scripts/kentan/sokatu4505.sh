@@ -5,8 +5,6 @@ PREFNAME=miyazaki
 PROGRAMID=SOKATU4505
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4505"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
-INIFILE="/tmp/${15}${PROGRAMID}SRYKA.INI"
 #-------------------------------------------#
 #    後期高齢者請求添付票作成（宮崎）
 #        $1-${11}
@@ -28,17 +26,11 @@ INIFILE="/tmp/${15}${PROGRAMID}SRYKA.INI"
             rm  ${16}
         fi
 
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
         RENNUM=$(expr $RENNUM + 1) 
         $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,${16} > ${LOG_FILE}-1.log 2>&1
         if  [ -e ${16} ]; then
             exit
         fi
         
-##      INIファイル 削除
-        rm -f ${INIFILE}
-
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
