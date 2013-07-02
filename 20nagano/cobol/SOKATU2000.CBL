@@ -45,6 +45,7 @@
       *  01.00.10    吉川    11/11/10    診療科を５行まで印字できるように修正
       *  01.00.11    吉川    13/01/09    プラグイン対応
       *                                  医療機関情報編集対応
+      *  01.00.12    吉川    13/07/02    プログラムオプション対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -76,12 +77,13 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-      *    標榜科名用ファイル
-           SELECT  SRYKA-FILE      ASSIGN FILE-NAME
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-SRYKA.
-      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+      **    標榜科名用ファイル
+      *     SELECT  SRYKA-FILE      ASSIGN FILE-NAME
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-SRYKA.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -105,11 +107,13 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *    標榜科名ファイル
-       FD  SRYKA-FILE.
-       01  SRYKA-REC.
-           03  SRYKA-SRYKANAME           PIC X(20).
-           03  FILLER                    PIC X(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+      **    標榜科名ファイル
+      * FD  SRYKA-FILE.
+      * 01  SRYKA-REC.
+      *     03  SRYKA-SRYKANAME           PIC X(20).
+      *     03  FILLER                    PIC X(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -173,6 +177,10 @@
            03  FLG-RECEDEN         PIC 9(01).
            03  FLG-KOURECEDEN      PIC 9(01).
       *=== レセ電は返戻をまとめて前月表示 by Yoshikawa(2009/12/07) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -181,6 +189,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+           03  IDX                 PIC 9(04).
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -195,14 +207,16 @@
       ****2006/01/27  onuki INS.
            03  WRK-PARA-SYOKBN     PIC X(01).
       ****
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
       *=== プラグイン対応 by Yoshikawa(2013/01/09) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU2000".
-           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU2000".
+      *     03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -260,6 +274,15 @@
            03  WRK-HKNNUM            PIC X(03).
            03  WRK-KENNAME           PIC X(08).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+           03  WRK-YUSEN           PIC X(06).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -356,6 +379,12 @@
        01  JOBKANRI-REC.
            COPY    "CPJOBKANRI.INC".
       * 
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -445,9 +474,9 @@
       *                                         WRK-PARA-HOSPID
                                                WRK-PARA-HOSPNUM
       *---(01.00.01) LINE ADD END   ------------------------------------
-					       WRK-PARA-JOBID
-					       WRK-PARA-SHELLID
-					       WRK-PARA-SYOKBN
+                                               WRK-PARA-JOBID
+                                               WRK-PARA-SHELLID
+                                               WRK-PARA-SYOKBN
       *---(01.00.01) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.01) LINE ADD END   ------------------------------------
@@ -618,24 +647,28 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
-           PERFORM 111-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+      *     PERFORM 111-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *
            OPEN    OUTPUT  UPD-FILE
       *
       **** 2006/01/27 onuki INS.
            EVALUATE    WRK-PARA-SYOKBN
-	       WHEN    "2"
+           WHEN    "2"
       *---(01.00.01) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
-	           MOVE    "key37"                  TO  WRK-PATH
+                   MOVE    "key37"                  TO  WRK-PATH
       *---(01.00.01) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD START ------------------------------------
                    MOVE    "key65"                  TO  WRK-PATH2
       *---(01.00.02) LINE ADD END   ------------------------------------
-	       WHEN    "1"
+           WHEN    "1"
       *---(01.00.01) LINE ADD START ------------------------------------
       *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-	           MOVE    "key38"                  TO  WRK-PATH
+                   MOVE    "key38"                  TO  WRK-PATH
       *---(01.00.01) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD START ------------------------------------
                    MOVE    "key66"                  TO  WRK-PATH2
@@ -648,52 +681,125 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+      ******************************************************************
+      **    標榜科INIファイル読み込み処理
+      ******************************************************************
+      * 111-INI-FILE-SEC                SECTION.
+      **
+      **    診療科名取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) start
+      **     INITIALIZE  ORCSMKPASSAREA
+      **     MOVE    "data/SRYKA.INI"    TO  MKPASS-IN-01
+      **     CALL    "ORCSMKPASSSITE"        USING   ORCSMKPASSAREA
+      **     MOVE    MKPASS-OT-01        TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE  SRYKA-REC
+      **
+      *     OPEN    INPUT   SRYKA-FILE
+      **
+      *     PERFORM VARYING IDX1    FROM    1   BY  1
+      **=== 診療科を５行まで印字 by Yoshikawa(2011/11/10) start
+      **             UNTIL   IDX1    >       3
+      *             UNTIL   IDX1    >       5
+      **=== 診療科を５行まで印字 by Yoshikawa(2011/11/10) end
+      *         READ    SRYKA-FILE
+      *             AT  END
+      *                 INITIALIZE  SRYKA-REC
+      *         END-READ
+      **
+      *         DISPLAY "診療科名取得=" SRYKA-SRYKANAME
+      *         IF      SRYKA-SRYKANAME(1:2)    =   "※"
+      *             MOVE    SPACE               TO  WRK-SRYKANAME(IDX1)
+      *         ELSE
+      *             MOVE    SRYKA-SRYKANAME     TO  WRK-SRYKANAME(IDX1)
+      *         END-IF
+      *     END-PERFORM
+      **
+      *     CLOSE SRYKA-FILE
+      **
+      **
+      *     .
+      * 111-INI-FILE-EXT.
+      *     EXIT.
+      *
       *****************************************************************
-      *    標榜科INIファイル読み込み処理
+      *    プログラムオプション取込み処理
       *****************************************************************
-       111-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    診療科名取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) start
-      *     INITIALIZE  ORCSMKPASSAREA
-      *     MOVE    "data/SRYKA.INI"    TO  MKPASS-IN-01
-      *     CALL    "ORCSMKPASSSITE"        USING   ORCSMKPASSAREA
-      *     MOVE    MKPASS-OT-01        TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
+           MOVE    "SOKATU2000"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE  SRYKA-REC
-      *
-           OPEN    INPUT   SRYKA-FILE
-      *
-           PERFORM VARYING IDX1    FROM    1   BY  1
-      *=== 診療科を５行まで印字 by Yoshikawa(2011/11/10) start
-      *             UNTIL   IDX1    >       3
-                   UNTIL   IDX1    >       5
-      *=== 診療科を５行まで印字 by Yoshikawa(2011/11/10) end
-               READ    SRYKA-FILE
-                   AT  END
-                       INITIALIZE  SRYKA-REC
-               END-READ
-      *
-               DISPLAY "診療科名取得=" SRYKA-SRYKANAME
-               IF      SRYKA-SRYKANAME(1:2)    =   "※"
-                   MOVE    SPACE               TO  WRK-SRYKANAME(IDX1)
-               ELSE
-                   MOVE    SRYKA-SRYKANAME     TO  WRK-SRYKANAME(IDX1)
-               END-IF
+      *    プログラムオプション取得
+      *    診療科
+           MOVE    "SRYKA"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  5
+             IF  WRK-OPTION(IDX)(1:2)  =  "※"
+               MOVE    SPACE                 TO  WRK-SRYKANAME(IDX)
+             ELSE
+               MOVE    WRK-OPTION(IDX)(1:20) TO  WRK-SRYKANAME(IDX)
+             END-IF
            END-PERFORM
-      *
-           CLOSE SRYKA-FILE
-      *
+           DISPLAY "診療科１="  WRK-SRYKANAME(1)
+           DISPLAY "診療科２="  WRK-SRYKANAME(2)
+           DISPLAY "診療科３="  WRK-SRYKANAME(3)
+           DISPLAY "診療科４="  WRK-SRYKANAME(4)
+           DISPLAY "診療科５="  WRK-SRYKANAME(5)
       *
            .
-       111-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
       *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -2245,6 +2351,54 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/02) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************
