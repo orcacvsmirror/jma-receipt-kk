@@ -38,6 +38,7 @@
       *                                  診療年月がおかしくなるのを修正
       *  01.00.06    吉川    2010/10/01  オンライン返戻対応
       *  01.00.07    吉川    2011/03/07  open-cobol1.0対応
+      *  01.00.08    吉川    2013/07/02  PERFORMをGOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1700,7 +1701,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2013/07/02) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2013/07/02) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
