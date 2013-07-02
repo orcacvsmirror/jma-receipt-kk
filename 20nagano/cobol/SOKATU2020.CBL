@@ -45,6 +45,7 @@
       *                                  特別療養費国保対応
       *  01.00.10    吉川    11/03/07    open-cobol1.0対応
       *  01.00.11    吉川    11/03/15    東北地方太平洋沖地震対応（対象者は別集計）
+      *  01.00.12    吉川    13/07/02    在宅はまとめて集計するように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -825,7 +826,9 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    在宅
-           MOVE    RECE10-ZAITAKU  TO  SKT2020TMP-ZAITAKU
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) start
+      *     MOVE    RECE10-ZAITAKU  TO  SKT2020TMP-ZAITAKU
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) end
       *
       *=== 災害対応 by Yoshikawa(2011/03/15) start
       *    災害対象者は別集計
@@ -1327,10 +1330,12 @@
            MOVE    HKNJA-HKNJANAME         TO  SKT2020-HKNJANAME
       *
       *    在宅
-           IF      SKT2020TMP-ZAITAKU  =   "1"
-               MOVE    "在"    TO  SKT2020-ZAI1
-               MOVE    "◯"    TO  SKT2020-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) start
+      *     IF      SKT2020TMP-ZAITAKU  =   "1"
+      *         MOVE    "在"    TO  SKT2020-ZAI1
+      *         MOVE    "◯"    TO  SKT2020-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) end
       *
       *    ページ番号
            MOVE    CNT-PAGE                TO  WRK-Z4
@@ -1501,10 +1506,12 @@
            MOVE    WRK-OUT-INPUT       TO  SKT2030-HOSPCD
       *
       *    在宅
-           IF      SKT2020TMP-ZAITAKU  =   "1"
-               MOVE    "在"    TO  SKT2030-ZAI1
-               MOVE  "◯"      TO  SKT2030-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) start
+      *     IF      SKT2020TMP-ZAITAKU  =   "1"
+      *         MOVE    "在"    TO  SKT2030-ZAI1
+      *         MOVE  "◯"      TO  SKT2030-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) end
       *
       *    ページ番号
            MOVE    CNT-PAGE    TO  WRK-Z4
@@ -1773,10 +1780,12 @@
            MOVE    WRK-OUT-INPUT           TO  SKT2040-HOSPCD
       *
       *    在宅
-           IF      SKT2020TMP-ZAITAKU  =   "1"
-               MOVE    "在"    TO  SKT2020-ZAI1
-               MOVE    "◯"    TO  SKT2020-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) start
+      *     IF      SKT2020TMP-ZAITAKU  =   "1"
+      *         MOVE    "在"    TO  SKT2020-ZAI1
+      *         MOVE    "◯"    TO  SKT2020-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) end
       *
       *    ページ番号
            MOVE    CNT-PAGE                TO  WRK-Z4

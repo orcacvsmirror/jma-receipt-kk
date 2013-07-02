@@ -35,6 +35,7 @@
       *                                  特別療養費国保対応
       *  01.00.04    吉川    2011/03/07  open-cobol1.0対応
       *  01.00.05    吉川    2011/03/15  東北地方太平洋沖地震対応（対象者別集計）
+      *  01.00.06    吉川    2013/07/02  在宅はまとめて集計するように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -712,7 +713,9 @@
            END-IF
       *
       *    在宅
-           MOVE    RECE10-ZAITAKU      TO  SKT2030TMP-ZAITAKU
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) start
+      *     MOVE    RECE10-ZAITAKU      TO  SKT2030TMP-ZAITAKU
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) end
       *
       *=== 災害対応 by Yoshikawa(2011/03/15) start
       *    災害対象者は別集計
@@ -1033,10 +1036,12 @@
            MOVE    HKNJA-HKNJANAME         TO  SKT2050-HKNJANAME
       *
       *    在宅
-           IF      SKT2030TMP-ZAITAKU  =   "1"
-               MOVE    "在"                TO  SKT2050-ZAI1
-               MOVE    "◯"                TO  SKT2050-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) start
+      *     IF      SKT2030TMP-ZAITAKU  =   "1"
+      *         MOVE    "在"                TO  SKT2050-ZAI1
+      *         MOVE    "◯"                TO  SKT2050-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計する by Yoshikawa(2013/07/02) end
       *
       *    ページ番号
            MOVE    CNT-PAGE                TO  WRK-Z4
