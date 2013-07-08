@@ -6,8 +6,6 @@ PREFNAME=aichi
 PROGRAMID=SOKATU2300
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2300"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='YUSEN';"
-INIFILE="/tmp/${15}${PROGRAMID}YUSEN.INI"
 #-------------------------------------------#
 #    国保総括表作成（愛知）
 #        $1-${11}
@@ -32,11 +30,6 @@ INIFILE="/tmp/${15}${PROGRAMID}YUSEN.INI"
         if  [ -e ${16} ]; then
             rm  ${16}
         fi
-
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
-        cd  ${ORCA_DIR}
 
 ## =====返戻対応 (2006/07/12) Update By Takashima
 ##      返戻分
@@ -72,9 +65,6 @@ INIFILE="/tmp/${15}${PROGRAMID}YUSEN.INI"
             fi
         fi
 
-##      INIファイル 削除
-        rm -f ${INIFILE}
-        
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
         exit
