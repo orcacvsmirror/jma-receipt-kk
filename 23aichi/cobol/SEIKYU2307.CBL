@@ -55,6 +55,8 @@
       *                                  場合でも上部の合計金額欄は集計する
       *  01.00.14    吉川    13/03/11    総点数欄は福祉分の点数ではなく
       *                                  保険の総点数を記載するように修正
+      *  01.00.15    吉川    13/07/08    備考の診療年月は「yyyy年mm月」
+      *                                  のように印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1239,13 +1241,28 @@
              END-IF
       *
              IF    LNK-PRTKANRI-SRYYM  NOT  =  MF100-SRYYM
+      *=== 診療年月の印字修正 by Yoshikawa(2013/07/08) start
+               STRING    MF100-SRYYM(1:4)    DELIMITED BY SIZE
+                         "年"                DELIMITED BY SIZE
+                         MF100-SRYYM(5:2)    DELIMITED BY SIZE
+                         "月"                DELIMITED BY SIZE
+                         INTO                WRK-HENYMDG
+               END-STRING
+      *=== 診療年月の印字修正 by Yoshikawa(2013/07/08) end
                IF  SC07-BIKO2(IDX)  =  SPACE
-                 MOVE  MF100-SRYYM      TO  SC07-BIKO2(IDX)
+      *=== 診療年月の印字修正 by Yoshikawa(2013/07/08) start
+      *           MOVE  MF100-SRYYM      TO  SC07-BIKO2(IDX)
+                 MOVE  WRK-HENYMDG(1:10) TO  SC07-BIKO2(IDX)
+      *=== 診療年月の印字修正 by Yoshikawa(2013/07/08) end
                ELSE
                  MOVE    SC07-BIKO2(IDX) TO  WRK-BIKO
                  STRING    WRK-BIKO     DELIMITED BY SPACE
                            ","          DELIMITED BY SIZE
-                           MF100-SRYYM  DELIMITED BY SIZE
+      *=== 診療年月の印字修正 by Yoshikawa(2013/07/08) start
+      *                     MF100-SRYYM  DELIMITED BY SIZE
+                           WRK-HENYMDG(1:10)
+                                        DELIMITED BY SIZE
+      *=== 診療年月の印字修正 by Yoshikawa(2013/07/08) end
                            INTO         SC07-BIKO2(IDX)
                  END-STRING
                END-IF
