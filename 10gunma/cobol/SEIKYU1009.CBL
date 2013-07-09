@@ -67,6 +67,8 @@
       *                                  70歳2割に含めるように修正
       *  01.00.19    吉川    13/01/16    テーブルのprimary key変更対応
       *  01.00.20    吉川    13/04/08    「特」欄対象に024,038,079追加
+      *  01.00.21    吉川    13/07/09    全国公費と高額療養費の場合
+      *                                  全国公費を「特」とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -831,11 +833,33 @@
       *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) end
            END-IF
       *
-      *---(01.00.02) LINE ADD START ------------------------------------
-           IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR  "4"
-             MOVE  "98"                    TO  MF100-COMBIKBN
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) start
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *     IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR  "4"
+      *       MOVE  "98"                    TO  MF100-COMBIKBN
+      *     END-IF
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+           IF  RECE02-FLG(4)  =  ZERO
+             IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+               MOVE  "98"                TO  MF100-COMBIKBN
+               EVALUATE  RECE02-ZAITAKU
+                 WHEN  "2"
+                   IF  RECE02-FTNMONEY(1)  <  83400
+                     MOVE  SPACE         TO  MF100-COMBIKBN
+                   END-IF
+                 WHEN  "3"
+                   IF  RECE02-FTNMONEY(1)  <  44400
+                     MOVE  SPACE         TO  MF100-COMBIKBN
+                   END-IF
+                 WHEN  "4"
+                   IF  RECE02-FTNMONEY(1)  <  24600
+                     MOVE  SPACE         TO  MF100-COMBIKBN
+                   END-IF
+               END-EVALUATE
+             END-IF
            END-IF
-      *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) end
       *
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -998,29 +1022,31 @@
            END-IF
       *=== 帳票様式の変更 by Yoshikawa(2009/07/24) end
       *
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
-      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
-           IF  RECE02-FLG(4)  =  ZERO
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
-      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
-             EVALUATE  RECE02-ZAITAKU
-               WHEN  "2"
-                 IF  RECE02-FTNMONEY(1)  <  83400
-                   MOVE  SPACE       TO  MF100-COMBIKBN
-                 END-IF
-               WHEN  "3"
-                 IF  RECE02-FTNMONEY(1)  <  44400
-                   MOVE  SPACE       TO  MF100-COMBIKBN
-                 END-IF
-               WHEN  "4"
-                 IF  RECE02-FTNMONEY(1)  <  24600
-                   MOVE  SPACE       TO  MF100-COMBIKBN
-                 END-IF
-             END-EVALUATE
-      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
-           END-IF
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) start
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+      **    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+      *     IF  RECE02-FLG(4)  =  ZERO
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+      **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+      *       EVALUATE  RECE02-ZAITAKU
+      *         WHEN  "2"
+      *           IF  RECE02-FTNMONEY(1)  <  83400
+      *             MOVE  SPACE       TO  MF100-COMBIKBN
+      *           END-IF
+      *         WHEN  "3"
+      *           IF  RECE02-FTNMONEY(1)  <  44400
+      *             MOVE  SPACE       TO  MF100-COMBIKBN
+      *           END-IF
+      *         WHEN  "4"
+      *           IF  RECE02-FTNMONEY(1)  <  24600
+      *             MOVE  SPACE       TO  MF100-COMBIKBN
+      *           END-IF
+      *       END-EVALUATE
+      **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+      *     END-IF
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) end
       *
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
       *    高額該当者で限度額認定証無しの請求額計算
