@@ -31,6 +31,7 @@
       *  01.00.01    吉川    2011/03/10  open-cobol1.0対応
       *  01.00.02    吉川    2012/12/21  プラグイン対応
       *                                  医療機関情報編集対応
+      *  01.00.03    吉川    2013/07/09  プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -49,11 +50,13 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
-      *    媒体種類ファイル
-           SELECT  BAITAI-FILE   ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-BAITAI.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      **    媒体種類ファイル
+      *     SELECT  BAITAI-FILE   ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-BAITAI.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
        DATA  DIVISION.
        FILE  SECTION.
@@ -68,11 +71,13 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
-      *    媒体種類ファイル
-       FD  BAITAI-FILE.
-       01  BAITAI-REC.
-           03  BAITAI-BAITAISYURUI       PIC X(01).
-           03  FILLER                    PIC X(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      **    媒体種類ファイル
+      * FD  BAITAI-FILE.
+      * 01  BAITAI-REC.
+      *     03  BAITAI-BAITAISYURUI       PIC X(01).
+      *     03  FILLER                    PIC X(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -104,6 +109,10 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+           03  FLG-PRGOPTION  PIC 9(01).
+           03  FLG-OK         PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -124,14 +133,16 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU1015".
-           03  FILLER              PIC X(10)  VALUE "BAITAI.INI".
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU1015".
+      *     03  FILLER              PIC X(10)  VALUE "BAITAI.INI".
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -182,6 +193,13 @@
       *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) end
       *
            03  WRK-PATH              PIC  X(50).
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
@@ -245,6 +263,12 @@
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -415,8 +439,12 @@
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
-      *    INIファイル取得
-           PERFORM 110-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      **    INIファイル取得
+      *     PERFORM  110-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
            PERFORM 900-KOHSKY-START-SEC
            .
@@ -490,46 +518,108 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      ******************************************************************
+      **    INIファイル読み込み処理  
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **    媒体種類取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/BAITAI.INI"    TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   BAITAI-REC
+      **
+      *     OPEN  INPUT  BAITAI-FILE
+      **
+      *     READ BAITAI-FILE
+      *       AT END
+      *         INITIALIZE        BAITAI-REC
+      *     END-READ
+      **
+      *     CLOSE BAITAI-FILE
+      **
+      *     DISPLAY "媒体種類取得=" BAITAI-BAITAISYURUI
+      *     IF    BAITAI-BAITAISYURUI  =  1 OR 2 OR 3
+      *       MOVE   BAITAI-BAITAISYURUI  TO  WRK-BAITAISYURUI
+      *     ELSE
+      *       MOVE   SPACE                TO  WRK-BAITAISYURUI
+      *     END-IF
+      **
+      *     DISPLAY "媒体種類 ="  WRK-BAITAISYURUI
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
       *****************************************************************
-      *    INIファイル読み込み処理  
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    媒体種類取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/BAITAI.INI"    TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+           MOVE    "SEIKYU1015"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   BAITAI-REC
-      *
-           OPEN  INPUT  BAITAI-FILE
-      *
-           READ BAITAI-FILE
-             AT END
-               INITIALIZE        BAITAI-REC
-           END-READ
-      *
-           CLOSE BAITAI-FILE
-      *
-           DISPLAY "媒体種類取得=" BAITAI-BAITAISYURUI
-           IF    BAITAI-BAITAISYURUI  =  1 OR 2 OR 3
-             MOVE   BAITAI-BAITAISYURUI  TO  WRK-BAITAISYURUI
-           ELSE
-             MOVE   SPACE                TO  WRK-BAITAISYURUI
-           END-IF
-      *
-           DISPLAY "媒体種類 ="  WRK-BAITAISYURUI
+      *    プログラムオプション取得
+      *    媒体種類
+           MOVE    "BAITAI"                  TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:1)        TO  WRK-BAITAISYURUI
+           DISPLAY "媒体種類="  WRK-BAITAISYURUI
       *
            .
-       110-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *
       *****************************************************************
       *    主　　処理
@@ -1049,6 +1139,54 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
