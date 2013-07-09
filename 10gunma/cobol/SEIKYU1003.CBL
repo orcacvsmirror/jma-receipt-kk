@@ -82,6 +82,8 @@
       *  01.00.23    吉川    12/12/21    医療機関情報編集対応
       *  01.00.24    吉川    13/01/16    テーブルのprimary key変更対応
       *  01.00.25    吉川    13/04/08    「特」欄対象に024,038,079追加
+      *  01.00.26    吉川    13/07/09    全国公費と高額療養費の場合
+      *                                  全国公費を「特」とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -892,12 +894,41 @@
       *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) end
            END-IF
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *    一般高額療養費は別集計
-           IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR  "4"
-             MOVE  "98"                    TO  MF100-COMBIKBN
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **    一般高額療養費は別集計
+      *     IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR  "4"
+      *       MOVE  "98"                    TO  MF100-COMBIKBN
+      *     END-IF
+      **---(01.00.03) LINE ADD END ------------------------------------
+      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+           IF  RECE02-FLG(4)  =  ZERO
+             IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+               MOVE  "98"                TO  MF100-COMBIKBN
+      *        高額療養費４回目以降
+               IF  RECE02-FTNMONEY (1)  =  44400
+               OR  RECE02-FTNMONEY (1)  =  24600
+               OR  RECE02-FTNMONEY (1)  =  83400
+                 MOVE    1               TO  MF100-KOGAKU4
+               ELSE
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"
+                     IF  RECE02-FTNMONEY(1)  <  83400
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "3"
+                     IF  RECE02-FTNMONEY(1)  <  44400
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "4"
+                     IF  RECE02-FTNMONEY(1)  <  24600
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                 END-EVALUATE
+               END-IF
+             END-IF
            END-IF
-      *---(01.00.03) LINE ADD END ------------------------------------
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) end
       *
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -1116,41 +1147,43 @@
                PERFORM 200114-TEINEN-CHK-SEC
            END-IF
       *
-      *    高額療養費４回目以降
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
-      *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
-           IF  RECE02-FLG(4)  =  ZERO
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
-             IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
-               IF  RECE02-FTNMONEY (1)  =  44400
-               OR  RECE02-FTNMONEY (1)  =  24600
-      *---(01.00.04) LINE ADD START ------------------------------------
-               OR  RECE02-FTNMONEY (1)  =  83400
-      *---(01.00.04) LINE ADD END   ------------------------------------
-                 MOVE  1  TO  MF100-KOGAKU4
-      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
-               ELSE
-                 EVALUATE  RECE02-ZAITAKU
-                   WHEN  "2"
-                     IF  RECE02-FTNMONEY(1)  <  83400
-                       MOVE  SPACE       TO  MF100-COMBIKBN
-                     END-IF
-                   WHEN  "3"
-                     IF  RECE02-FTNMONEY(1)  <  44400
-                       MOVE  SPACE       TO  MF100-COMBIKBN
-                     END-IF
-                   WHEN  "4"
-                     IF  RECE02-FTNMONEY(1)  <  24600
-                       MOVE  SPACE       TO  MF100-COMBIKBN
-                     END-IF
-                 END-EVALUATE
-      *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
-               END-IF
-             END-IF
-      *---(01.00.03) LINE ADD END   ------------------------------------
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
-           END-IF
-      *=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) start
+      **    高額療養費４回目以降
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+      **    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
+      *     IF  RECE02-FLG(4)  =  ZERO
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+      *       IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+      *         IF  RECE02-FTNMONEY (1)  =  44400
+      *         OR  RECE02-FTNMONEY (1)  =  24600
+      **---(01.00.04) LINE ADD START ------------------------------------
+      *         OR  RECE02-FTNMONEY (1)  =  83400
+      **---(01.00.04) LINE ADD END   ------------------------------------
+      *           MOVE  1  TO  MF100-KOGAKU4
+      **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
+      *         ELSE
+      *           EVALUATE  RECE02-ZAITAKU
+      *             WHEN  "2"
+      *               IF  RECE02-FTNMONEY(1)  <  83400
+      *                 MOVE  SPACE       TO  MF100-COMBIKBN
+      *               END-IF
+      *             WHEN  "3"
+      *               IF  RECE02-FTNMONEY(1)  <  44400
+      *                 MOVE  SPACE       TO  MF100-COMBIKBN
+      *               END-IF
+      *             WHEN  "4"
+      *               IF  RECE02-FTNMONEY(1)  <  24600
+      *                 MOVE  SPACE       TO  MF100-COMBIKBN
+      *               END-IF
+      *           END-EVALUATE
+      **=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *         END-IF
+      *       END-IF
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) start
+      *     END-IF
+      **=== 特疾＋957等の印字修正 by Yoshikawa(2012/10/18) end
+      *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) end
       *
       *---(01.00.11) LINE ADD START ------------------------------------
       *    高半チェック
