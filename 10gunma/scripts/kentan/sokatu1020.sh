@@ -5,8 +5,6 @@ PREFNAME=gunma
 PROGRAMID=SOKATU1020
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1020"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='BAITAI';"
-INIFILE="/tmp/${15}${PROGRAMID}BAITAI.INI"
 -------------------------------------------#
 #    光ディスク等送付書（群馬）
 #        $1-${11}
@@ -30,9 +28,6 @@ INIFILE="/tmp/${15}${PROGRAMID}BAITAI.INI"
             rm  ${16}
         fi
         
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
 ##      当月・月遅れ分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -42,8 +37,5 @@ INIFILE="/tmp/${15}${PROGRAMID}BAITAI.INI"
             fi
         fi
 
-##      INIファイル 削除
-        rm -f ${INIFILE}
-    
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
