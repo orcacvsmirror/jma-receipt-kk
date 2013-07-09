@@ -92,7 +92,7 @@
         </element>
         <element name="S-NISSU" occurs="1">
           <appinfo>
-            <embed object="string" length="5"/>
+            <embed object="string" length="6"/>
           </appinfo>
         </element>
         <element name="S-KINGK" occurs="1">
@@ -141,7 +141,7 @@
         </element>
         <element name="S-KNISSU" occurs="1">
           <appinfo>
-            <embed object="string" length="5"/>
+            <embed object="string" length="6"/>
           </appinfo>
         </element>
         <element name="S-KKINGK" occurs="1">
@@ -1599,7 +1599,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#&#202;&#221; &#183;&#242; &#176;&#229; &#206;&#197; &#181;&#161; &#180;&#216; &#164;&#206;
+            <string>#&#202;&#221; &#184;&#177; &#176;&#229; &#206;&#197; &#181;&#161; &#180;&#216; &#164;&#206;
 &#189;&#234; &#186;&#223; &#195;&#207; &#181;&#218; &#164;&#211; &#204;&#190; &#190;&#206;#</string>
           </attribute>
           <attribute name="font">
@@ -6860,10 +6860,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O242">
       <attribute name="obj_pos">
-        <point val="14.65,8.15"/>
+        <point val="14.75,8.15"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.741,7.91111;14.65,8.21111"/>
+        <rectangle val="13.6592,7.91111;14.75,8.21111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.ROUHO-TBL[0].S-NISSU#</string>
@@ -6874,7 +6874,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6883,7 +6883,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.65,8.15"/>
+            <point val="14.75,8.15"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -6902,10 +6902,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O243">
       <attribute name="obj_pos">
-        <point val="14.65,10.7"/>
+        <point val="14.75,10.7"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.741,10.4611;14.65,10.7611"/>
+        <rectangle val="13.6592,10.4611;14.75,10.7611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.ROUHO-TBL[1].S-NISSU#</string>
@@ -6916,7 +6916,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -6925,7 +6925,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.65,10.7"/>
+            <point val="14.75,10.7"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -7616,10 +7616,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O260">
       <attribute name="obj_pos">
-        <point val="14.7,14.95"/>
+        <point val="14.75,14.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.791,14.7111;14.7,15.0111"/>
+        <rectangle val="13.6592,14.7111;14.75,15.0111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[0].S-KNISSU#</string>
@@ -7630,7 +7630,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -7639,7 +7639,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.7,14.95"/>
+            <point val="14.75,14.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8120,10 +8120,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O272">
       <attribute name="obj_pos">
-        <point val="14.7,17.45"/>
+        <point val="14.75,17.45"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.791,17.2111;14.7,17.5111"/>
+        <rectangle val="13.6592,17.2111;14.75,17.5111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[1].S-KNISSU#</string>
@@ -8134,7 +8134,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8143,7 +8143,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.7,17.45"/>
+            <point val="14.75,17.45"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -8624,10 +8624,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O284">
       <attribute name="obj_pos">
-        <point val="14.7,19.95"/>
+        <point val="14.75,19.95"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.791,19.7111;14.7,20.0111"/>
+        <rectangle val="13.6592,19.7111;14.75,20.0111"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[2].S-KNISSU#</string>
@@ -8638,7 +8638,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -8647,7 +8647,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.7,19.95"/>
+            <point val="14.75,19.95"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>
@@ -9128,10 +9128,10 @@
     </object>
     <object type="Embed - Text" version="0" id="O296">
       <attribute name="obj_pos">
-        <point val="14.7,22.4"/>
+        <point val="14.75,22.4"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="13.791,22.1611;14.7,22.4611"/>
+        <rectangle val="13.6592,22.1611;14.75,22.4611"/>
       </attribute>
       <attribute name="dnode_path">
         <string>#HKN-TBL.KOH-TBL[3].S-KNISSU#</string>
@@ -9142,7 +9142,7 @@
       <attribute name="text">
         <composite type="text">
           <attribute name="string">
-            <string>#9,999#</string>
+            <string>#99,999#</string>
           </attribute>
           <attribute name="font">
             <font name="Courier"/>
@@ -9151,7 +9151,7 @@
             <real val="0.3"/>
           </attribute>
           <attribute name="pos">
-            <point val="14.7,22.4"/>
+            <point val="14.75,22.4"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>

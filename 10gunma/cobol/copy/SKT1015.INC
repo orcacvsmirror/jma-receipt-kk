@@ -23,6 +23,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2008/05/22  公費名は印字しない
+      *  01.00.02    吉川    2013/07/09  食事回数の桁数増加
       ********************************************************************
        01  SKT1015.
       *    保険者番号
@@ -57,7 +58,10 @@
                        09  SKT1015-TENSU                PIC  X(09).
                        09  SKT1015-ITBFTN               PIC  X(09).
                    07  SKT1015-S-KENSU                  PIC  X(05).
-                   07  SKT1015-S-NISSU                  PIC  X(05).
+      *=== 食事回数の桁数増加 by Yoshikawa(2013/07/09) start
+      *             07  SKT1015-S-NISSU                  PIC  X(05).
+                   07  SKT1015-S-NISSU                  PIC  X(06).
+      *=== 食事回数の桁数増加 by Yoshikawa(2013/07/09) end
                    07  SKT1015-S-KINGK                  PIC  X(09).
                    07  SKT1015-S-FTNGK                  PIC  X(09).
                05  SKT1015-KOH-TBL  OCCURS 4.
@@ -71,6 +75,9 @@
                        09  SKT1015-KTENSU             PIC  X(09).
                        09  SKT1015-KITBFTN            PIC  X(09).
                    07  SKT1015-S-KKENSU                PIC  X(05).
-                   07  SKT1015-S-KNISSU                PIC  X(05).
+      *=== 食事回数の桁数増加 by Yoshikawa(2013/07/09) start
+      *             07  SKT1015-S-KNISSU                PIC  X(05).
+                   07  SKT1015-S-KNISSU                PIC  X(06).
+      *=== 食事回数の桁数増加 by Yoshikawa(2013/07/09) end
                    07  SKT1015-S-KKINGK                PIC  X(09).
                    07  SKT1015-S-KFTNGK                PIC  X(09).
