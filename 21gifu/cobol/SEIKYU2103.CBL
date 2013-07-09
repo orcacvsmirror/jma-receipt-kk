@@ -48,6 +48,8 @@
       *                                  ¥µº‘…È√¥≥€ÕÛ§À§œæÂ∏¬≥€ ¨§Úµ≠∫‹§π§Î
       *  01.00.08    µ»¿Ó    13/04/11    ¡∞¥¸π‚Œº‘§«π‚≥€Œ≈Õ‹»Ò§À
       *                                  √£§∑§øæÏπÁ§Œ¥µº‘…È√¥≥€§Œ∑◊ªªΩ§¿µ
+      *  01.00.09    µ»¿Ó    13/07/08    ¡¥πÒ∏¯»Ò°‹π‚≥€§«π‚≥€§Œ∏¬≈Ÿ≥€§Úƒ∂§®§øæÏπÁ
+      *                                   °ª„Ωı¿Æ ¨§Ú¥µº‘…È√¥≥€ÕÛ§À∞ıª˙§π§Î
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -758,77 +760,82 @@
                        MOVE    ZERO    TO  MF100-KOHTENSU
       *=== ∆√º¿≈˘°‹π‚≥€§Œ¥µº‘…È√¥≥€Ω§¿µ by Yoshikawa(2013/03/14) start
                    ELSE
-      *=== ¡∞¥¸π‚Œ°‹π‚≥€§Œ¥µº‘…È√¥≥€Ω§¿µ by Yoshikawa(2013/04/11) start
-      *                 IF  (FLG-JOUGEN  =  1)
-      *                 OR  (RECE02-ZAITAKU  =  "2" OR "3" OR "4")
-      *                     MOVE    WRK-SEIKYUGK-G
-      *                                 TO  MF100-ITBFTN
-      *              π‚≥€Œ≈Õ‹»Ò§ŒæÏπÁ§œ¿¡µ·≥€§Ú∞ıª˙
-                     IF RECE02-ZAITAKU  =  "2" OR "3" OR "4"
-                        MOVE    WRK-SEIKYUGK-G   TO  MF100-ITBFTN
-                     ELSE
-                       MOVE    ZERO              TO  FLG-TEISHO
-      *                ƒ„ΩÍ∆¿•¡•ß•√•Ø
-                       PERFORM 200113-TEISHO-CHK-SEC
-      *                ƒ„«Ø∂‚•¡•ß•√•Ø
-                       IF  FLG-TEISHO  =  ZERO
-                           PERFORM 200114-TEINEN-CHK-SEC
-                       END-IF
-      *
-      *                70∫–∞ æÂ§«°¢π‚≥€∏¬≈Ÿ≥€§À√£¿Æ§∑§∆§§§ø§»§≠§Œ
-      *                ¥µº‘…È√¥≥€§Œ∑◊ªª
-                       IF  RECE02-AGE  >=  70
-      *
-      *                  ∆˛±°
-                         IF  RECE02-NYUGAIKBN  =  "1"
-      *                    ∏ΩÃÚ ¬§ﬂΩÍ∆¿º‘
-                           IF  RECE02-KYURATE  =  30
-                             MOVE    WRK-SEIKYUGK-G    TO  MF100-ITBFTN
-                           ELSE
-                             EVALUATE  FLG-TEISHO
-      *                        ƒ„ΩÍ∆¿
-                               WHEN  1
-                                 IF  RECE02-FTNMONEY(1)  >=  24600
-                                   MOVE    24600       TO  MF100-ITBFTN
-                                 END-IF
-      *                        ƒ„«Ø∂‚
-                               WHEN  2
-                                 IF  RECE02-FTNMONEY(1)  >=  15000
-                                   MOVE    15000       TO  MF100-ITBFTN
-                                 END-IF
-      *                        ∞Ï»Ã
-                               WHEN  OTHER
-                                 IF  RECE02-FTNMONEY(1)  >=  44400
-                                   MOVE    44400       TO  MF100-ITBFTN
-                                 END-IF
-                             END-EVALUATE
-                           END-IF
-      *
-      *                  ≥∞ÕË
-                         ELSE
-      *                    ∏ΩÃÚ ¬§ﬂΩÍ∆¿º‘
-                           IF  RECE02-KYURATE  =  30
-                             IF  RECE02-FTNMONEY(1)  >=  44400
-                               MOVE    44400           TO  MF100-ITBFTN
-                             END-IF
-                           ELSE
-      *                      ƒ„ΩÍ∆¿°¶ƒ„«Ø∂‚
-                             IF  FLG-TEISHO  NOT =  ZERO
-                               IF  RECE02-FTNMONEY(1)  >=  8000
-                                 MOVE    8000          TO  MF100-ITBFTN
-                               END-IF
-      *                      ∞Ï»Ã
-                             ELSE
-                               IF  RECE02-FTNMONEY(1)  >=  12000
-                                 MOVE    12000         TO  MF100-ITBFTN
-                               END-IF
-                             END-IF
-                           END-IF
-                         END-IF
-                       END-IF
-      *=== ¡∞¥¸π‚Œ°‹π‚≥€§Œ¥µº‘…È√¥≥€Ω§¿µ by Yoshikawa(2013/04/11) end
-                     END-IF
+      *=== ¥µº‘…È√¥≥€§Œ∞ıª˙∆‚Õ∆Ω§¿µ by Yoshikawa(2013/07/08) start
+      **=== ¡∞¥¸π‚Œ°‹π‚≥€§Œ¥µº‘…È√¥≥€Ω§¿µ by Yoshikawa(2013/04/11) start
+      **                 IF  (FLG-JOUGEN  =  1)
+      **                 OR  (RECE02-ZAITAKU  =  "2" OR "3" OR "4")
+      **                     MOVE    WRK-SEIKYUGK-G
+      **                                 TO  MF100-ITBFTN
+      **              π‚≥€Œ≈Õ‹»Ò§ŒæÏπÁ§œ¿¡µ·≥€§Ú∞ıª˙
+      *               IF RECE02-ZAITAKU  =  "2" OR "3" OR "4"
+      *                  MOVE    WRK-SEIKYUGK-G   TO  MF100-ITBFTN
+      *               ELSE
+      *                 MOVE    ZERO              TO  FLG-TEISHO
+      **                ƒ„ΩÍ∆¿•¡•ß•√•Ø
+      *                 PERFORM 200113-TEISHO-CHK-SEC
+      **                ƒ„«Ø∂‚•¡•ß•√•Ø
+      *                 IF  FLG-TEISHO  =  ZERO
+      *                     PERFORM 200114-TEINEN-CHK-SEC
+      *                 END-IF
+      **
+      **                70∫–∞ æÂ§«°¢π‚≥€∏¬≈Ÿ≥€§À√£¿Æ§∑§∆§§§ø§»§≠§Œ
+      **                ¥µº‘…È√¥≥€§Œ∑◊ªª
+      *                 IF  RECE02-AGE  >=  70
+      **
+      **                  ∆˛±°
+      *                   IF  RECE02-NYUGAIKBN  =  "1"
+      **                    ∏ΩÃÚ ¬§ﬂΩÍ∆¿º‘
+      *                     IF  RECE02-KYURATE  =  30
+      *                       MOVE    WRK-SEIKYUGK-G    TO  MF100-ITBFTN
+      *                     ELSE
+      *                       EVALUATE  FLG-TEISHO
+      **                        ƒ„ΩÍ∆¿
+      *                         WHEN  1
+      *                           IF  RECE02-FTNMONEY(1)  >=  24600
+      *                             MOVE    24600       TO  MF100-ITBFTN
+      *                           END-IF
+      **                        ƒ„«Ø∂‚
+      *                         WHEN  2
+      *                           IF  RECE02-FTNMONEY(1)  >=  15000
+      *                             MOVE    15000       TO  MF100-ITBFTN
+      *                           END-IF
+      **                        ∞Ï»Ã
+      *                         WHEN  OTHER
+      *                           IF  RECE02-FTNMONEY(1)  >=  44400
+      *                             MOVE    44400       TO  MF100-ITBFTN
+      *                           END-IF
+      *                       END-EVALUATE
+      *                     END-IF
+      **
+      **                  ≥∞ÕË
+      *                   ELSE
+      **                    ∏ΩÃÚ ¬§ﬂΩÍ∆¿º‘
+      *                     IF  RECE02-KYURATE  =  30
+      *                       IF  RECE02-FTNMONEY(1)  >=  44400
+      *                         MOVE    44400           TO  MF100-ITBFTN
+      *                       END-IF
+      *                     ELSE
+      **                      ƒ„ΩÍ∆¿°¶ƒ„«Ø∂‚
+      *                       IF  FLG-TEISHO  NOT =  ZERO
+      *                         IF  RECE02-FTNMONEY(1)  >=  8000
+      *                           MOVE    8000          TO  MF100-ITBFTN
+      *                         END-IF
+      **                      ∞Ï»Ã
+      *                       ELSE
+      *                         IF  RECE02-FTNMONEY(1)  >=  12000
+      *                           MOVE    12000         TO  MF100-ITBFTN
+      *                         END-IF
+      *                       END-IF
+      *                     END-IF
+      *                   END-IF
+      *                 END-IF
+      **=== ¡∞¥¸π‚Œ°‹π‚≥€§Œ¥µº‘…È√¥≥€Ω§¿µ by Yoshikawa(2013/04/11) end
+      *               END-IF
       *=== ∆√º¿≈˘°‹π‚≥€§Œ¥µº‘…È√¥≥€Ω§¿µ by Yoshikawa(2013/03/14) end
+                     IF  FLG-JOUGEN  =  1
+                        MOVE    WRK-SEIKYUGK-G   TO  MF100-ITBFTN
+                     END-IF
+      *=== ¥µº‘…È√¥≥€§Œ∞ıª˙∆‚Õ∆Ω§¿µ by Yoshikawa(2013/07/08) end
                    END-IF
                END-IF
            END-IF
