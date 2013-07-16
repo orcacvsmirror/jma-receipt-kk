@@ -53,6 +53,10 @@
       *  01.00.14    µ»¿Ó    12/06/21    ¥µº‘…È√¥§¨§¢§Î∏¯»Ò§«π‚≥€§ŒæÏπÁ
       *                                  ∞Ï…Ù…È√¥∂‚§» °ª„∞ÂŒ≈»Ò¿¡µ·≥€§Œ∑◊ªª§ÚΩ§¿µ
       *  01.00.15    µ»¿Ó    13/02/06    ∞ÂŒ≈µ°¥ÿæ Û ‘Ω∏¬–±˛
+      *  01.00.16    µ»¿Ó    13/07/16    π‚≥€æÂ∏¬Ã§À˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ
+      *                                  ±ﬂ√±∞Ã§«µ≠∫‹§π§Î§Ë§¶§ÀΩ§¿µ
+      *                                   ›∏±»÷πÊ781§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€§»
+      *                                  ∞Ï…Ù…È√¥∂‚ÕÛ§Œ∑◊ªªΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -125,6 +129,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) start
+           03  FLG-ETCKOH     PIC 9(01).
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) end
       *
       *    ≈∫ª˙ŒŒ∞Ë
        01  IDX-AREA.
@@ -683,6 +690,9 @@
       *
       *    ∑Î≥À°¶¿∫ø¿≈¿øÙ≈˘Ω∏∑◊
            MOVE    ZERO     TO        FLG-TYOKI
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) start
+                                      FLG-ETCKOH
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) end
       *---(01.00.03) LINE ADD START ------------------------------------
            INITIALIZE                              WRK-SYUKEI-TBL
       *---(01.00.03) LINE ADD END   ------------------------------------
@@ -754,6 +764,21 @@
                                            MF101-YKZFTN
            END-IF
       *=== ¥µº‘…È√¥§¨§¢§Î∏¯»Ò§Œ∑◊ªªΩ§¿µ by Yoshikawa(2012/06/21) end
+      *
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) start
+      *    ª∞º‘ ªÕ—ÀÙ§œπ‚≥€Œ≈Õ‹»Ò§¨»Ø¿∏§π§ÎæÏπÁ°¢∏¯»Ò…È√¥°¢
+      *    π‚≥€Œ≈Õ‹»Ò§Ú∫π§∑∞˙§§§ø∏Â§Œº´∏ …È√¥ ¨¡Í≈ˆ≥€§Œ1/3§ÚΩı¿Æ§π§Î
+           IF  WRK-KOHNUM  =  "781"
+             IF  (FLG-ETCKOH  =  1)
+             OR  (FLG-TYOKI   NOT =  ZERO)
+             OR  ((RECE02-ZAITAKU  NOT =  SPACE AND "1")
+                  AND (RECE02-FTNMONEY(IDY)  NOT =  ZERO))
+               COMPUTE  MF101-YKZFTN  ROUNDED =  WRK-SEIKYUGK-G2  /  3
+               COMPUTE  MF101-KESEYKZFTN  =  WRK-SEIKYUGK-G2  -
+                                             MF101-YKZFTN
+             END-IF
+           END-IF
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) end
       *
            PERFORM  950-HKNNUM-SET-SEC
       *
@@ -1225,21 +1250,24 @@
       *****************************************************************
        800-SEIKYU-SEC  SECTION.
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-           IF       RECE02-RJNHKNNUM   =  SPACE
-             IF     RECE02-FTNMONEY(1) >  ZERO
-               MOVE   SYU-SYUCOMPFTN            TO  WRK-SEIKYUGK
-             ELSE
-               MOVE   SYU-SYUCOMPFTN-ENTANI     TO  WRK-SEIKYUGK
-             END-IF
-           ELSE
-             IF     RECE02-FTNMONEY(1) >  ZERO
-               MOVE   SYU-KOH-COMPFTN(1)        TO  WRK-SEIKYUGK
-             ELSE
-               MOVE   SYU-KOH-COMPFTN-ENTANI(1) TO  WRK-SEIKYUGK
-             END-IF
-           END-IF
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ±ﬂ√±∞Ã by Yoshikawa(2013/07/16) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *     IF       RECE02-RJNHKNNUM   =  SPACE
+      *       IF     RECE02-FTNMONEY(1) >  ZERO
+      *         MOVE   SYU-SYUCOMPFTN            TO  WRK-SEIKYUGK
+      *       ELSE
+      *         MOVE   SYU-SYUCOMPFTN-ENTANI     TO  WRK-SEIKYUGK
+      *       END-IF
+      *     ELSE
+      *       IF     RECE02-FTNMONEY(1) >  ZERO
+      *         MOVE   SYU-KOH-COMPFTN(1)        TO  WRK-SEIKYUGK
+      *       ELSE
+      *         MOVE   SYU-KOH-COMPFTN-ENTANI(1) TO  WRK-SEIKYUGK
+      *       END-IF
+      *     END-IF
+      **---(01.00.03) LINE ADD END   ------------------------------------
+           MOVE   SYU-SYUCOMPFTN-ENTANI          TO  WRK-SEIKYUGK
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ±ﬂ√±∞Ã by Yoshikawa(2013/07/16) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4
@@ -1283,6 +1311,9 @@
              IF   SYU-KOH-HKNNUM(IDX)(1:1)  =  "0"
              AND  SYU-KOH-HKNNUM(IDX)   NOT =  "027"
                  MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-SEIKYUGK
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) start
+                 MOVE   1                            TO  FLG-ETCKOH
+      *=== 781§Œ °ª„¿¡µ·≥€≈˘§Œ∑◊ªªΩ§¿µ by Yoshikawa(2013/07/16) end
              END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
            END-PERFORM
