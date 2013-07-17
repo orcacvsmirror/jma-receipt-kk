@@ -198,6 +198,9 @@
                05  WRK-SEIKYUGK-G    PIC 9(07)V9(01).
                05  WRK-SEIKYUGK-G2   PIC 9(07).
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ±ﬂ√±∞Ã by Yoshikawa(2013/07/16) start
+           03  WRK-KEISAN            PIC 9(07).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ±ﬂ√±∞Ã by Yoshikawa(2013/07/16) end
       *
       *     ∏ª˙ —¥π
            03  WRK-MAE-INPUT         PIC X(200).
@@ -738,7 +741,17 @@
       *     ›∏±∏¬≈Ÿ≥€»ΩƒÍ
            IF  RECE02-FTNMONEY(1)       <  WRK-SEIKYUGK-G  AND
                RECE02-FTNMONEY(1)       >  ZERO
-             MOVE  RECE02-FTNMONEY(1)  TO  WRK-SEIKYUGK-G
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ±ﬂ√±∞Ã by Yoshikawa(2013/07/16) start
+      *       MOVE  RECE02-FTNMONEY(1)  TO  WRK-SEIKYUGK-G
+             COMPUTE  WRK-KEISAN  =
+                      WRK-SEIKYUGK-G  -  RECE02-FTNMONEY(1)
+             IF  (WRK-KEISAN  <  10)
+             AND (RECE02-FLG(2)  =  1)
+               CONTINUE
+             ELSE
+               MOVE  RECE02-FTNMONEY(1)  TO  WRK-SEIKYUGK-G
+             END-IF
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ±ﬂ√±∞Ã by Yoshikawa(2013/07/16) end
            END-IF
       *
       *     °ª„∞ÂŒ≈»Ò¿¡µ·≥€§Ú∑◊ªª
