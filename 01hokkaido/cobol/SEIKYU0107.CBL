@@ -104,6 +104,7 @@
       *                                    ºßÂð¤Ï70ºÐÌ¤Ëþ¤Î¾ì¹ç¤Ç¤â°õ»ú¤¹¤ë
       *                                    70ºÐÌ¤Ëþ¤Ç343¡Ü¹â³Û¤Î¾ì¹ç
       *                                    ¸ÂÅÙ³ÛÍó¤Ë°õ»ú¤µ¤ì¤Ê¤¤¤Î¤ò½¤Àµ
+      *  01.00.30     µÈÀî     13/07/26    ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -345,6 +346,24 @@
            03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
            03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
       *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) end
+      *=== ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹ by Yoshikawa(2013/07/26) start
+      *    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù¡Ë
+           03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114013010".
+           03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114013110".
+      *    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù°Ê³°¡Ë
+           03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114013210".
+           03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114013310".
+      *    ºß°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
+           03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114018710".
+           03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114018810".
+           03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114018910".
+           03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019010".
+      *    ÆÃ°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
+           03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114019110".
+           03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114019210".
+           03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114019310".
+           03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114019410".
+      *=== ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹ by Yoshikawa(2013/07/26) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.08) LINE ADD START ------------------------------------
@@ -1109,6 +1128,13 @@
              MOVE    ZERO               TO  MF100-TOTALTEN
            END-IF
       *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) start
+      *      ºßÁí¿Ç¡¦ºß°åÁí¤«
+             IF  RECE02-ZAITAKU  NOT =  1
+               PERFORM  960-SRYACT-SET-SEC
+             END-IF
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) end
+      *
       *=== ¹â³Û¡ÜÄ¹´ü¤Î°õ»ú½¤Àµ by Yoshikawa(2012/07/12) start
       **---(01.00.04) LINE ADD START ------------------------------------
       **    ¹â³ÛÎÅÍÜÈñ¥Á¥§¥Ã¥¯¡ÊÆþ±¡¤Î¤ß¡Ë
@@ -1148,7 +1174,11 @@
                  MF100-HKNNUM           =  "039" OR
                  MF100-HKNNUM           =  "040" OR
       *---(01.00.10) LINE ADD END   ------------------------------------
-                 RECE02-AGE            >=  70
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) start
+      *           RECE02-AGE            >=  70
+                 RECE02-AGE            >=  70    OR
+                 MF100-ZAITAKU          =  "1"
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) end
              IF  RECE02-RJNHKNNUM   NOT =  SPACE
       *---(01.00.10) LINE ADD START ------------------------------------
              OR  MF100-HKNNUM           =  "039"
@@ -1185,13 +1215,6 @@
            END-IF
       *    °ìÈÌ´µ¼ÔÍÑ¶èÊ¬ÀßÄê
            MOVE         2              TO  MF100-KBN
-      *
-      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) start
-      *      ºßÁí¿Ç¡¦ºß°åÁí¤«
-             IF  RECE02-ZAITAKU  NOT =  1
-               PERFORM  960-SRYACT-SET-SEC
-             END-IF
-      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/06/10) end
       *
       *    ¹ç·×¥Õ¥¡¥¤¥ëÍÑ¤Ë¥Ç¡¼¥¿ÂàÈò
            INITIALIZE   WRK-TAIHI-TBL
@@ -3130,12 +3153,32 @@
                     UNTIL   (IDX4  >     5) OR
                             (SRY-SRYCD(IDX4)  =  SPACE)
              IF  SRY-SRYKBN  =  "14"
-               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
-                                       WRK-CONS-ZAITAKU2  OR
-                                       WRK-CONS-ZAITAKU3  OR
-                                       WRK-CONS-ZAITAKU4  OR
-                                       WRK-CONS-ZAITAKU5  OR
-                                       WRK-CONS-ZAITAKU6
+      *=== ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹ by Yoshikawa(2013/07/26) start
+      *         IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
+      *                                 WRK-CONS-ZAITAKU2  OR
+      *                                 WRK-CONS-ZAITAKU3  OR
+      *                                 WRK-CONS-ZAITAKU4  OR
+      *                                 WRK-CONS-ZAITAKU5  OR
+      *                                 WRK-CONS-ZAITAKU6
+               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
+                                   OR  WRK-CONS-ZAITAKU2
+                                   OR  WRK-CONS-ZAITAKU3
+                                   OR  WRK-CONS-ZAITAKU4
+                                   OR  WRK-CONS-ZAITAKU5
+                                   OR  WRK-CONS-ZAITAKU6
+                                   OR  WRK-CONS-ZAITAKU7
+                                   OR  WRK-CONS-ZAITAKU8
+                                   OR  WRK-CONS-ZAITAKU9
+                                   OR  WRK-CONS-ZAITAKU10
+                                   OR  WRK-CONS-ZAITAKU11
+                                   OR  WRK-CONS-ZAITAKU12
+                                   OR  WRK-CONS-ZAITAKU13
+                                   OR  WRK-CONS-ZAITAKU14
+                                   OR  WRK-CONS-ZAITAKU15
+                                   OR  WRK-CONS-ZAITAKU16
+                                   OR  WRK-CONS-ZAITAKU17
+                                   OR  WRK-CONS-ZAITAKU18
+      *=== ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹ by Yoshikawa(2013/07/26) end
                  MOVE  "1"  TO  MF100-ZAITAKU
                END-IF
              END-IF
