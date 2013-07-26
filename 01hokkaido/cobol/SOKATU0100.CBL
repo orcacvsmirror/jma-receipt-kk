@@ -97,6 +97,8 @@
       *                                 ÃÍ¤¬¤¢¤ë¾ì¹ç¡¢Á°´ü¹âÎð¼Ô¤Î¤ß°õ»ú
       *  01.00.38    µÈÀî   13/06/10    70ºÐÌ¤Ëþ¤Ç343¡Ü¹â³Û¤Î¾ì¹ç
       *                                 ¸ÂÅÙ³ÛÍó¤Ë°õ»ú¤µ¤ì¤Ê¤¤¤Î¤ò½¤Àµ
+      *  01.00.39    µÈÀî   13/07/26    ¾ã³²¼Ô¤Î¸ÂÅÙ³ÛÍó¤Ë¤ª¤¤¤Æ
+      *                                 ºßÂð¤Ï70ºÐÌ¤Ëþ¤Î¾ì¹ç¤Ç¤â°õ»ú¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -207,6 +209,10 @@
       *=== ¸øÈñ½õÀ®È½Äê¤Î½¤Àµ by Yoshikawa(2010/03/25) start
            03  FLG-SYORI2     PIC 9(01).
       *=== ¸øÈñ½õÀ®È½Äê¤Î½¤Àµ by Yoshikawa(2010/03/25) end
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
+           03  FLG-SRYACT          PIC 9(01).
+           03  FLG-ZAITAKU         PIC 9(01).
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -364,6 +370,31 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.14) LINE ADD END   ------------------------------------
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
+      *    ºßÂðÁí¹ç¡¦ºßÂðËö´ü¡Êºß°åÁí¡Ë
+           03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+           03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+           03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+           03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+           03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+           03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù¡Ë
+           03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114013010".
+           03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114013110".
+      *    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù°Ê³°¡Ë
+           03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114013210".
+           03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114013310".
+      *    ºß°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
+           03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114018710".
+           03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114018810".
+           03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114018910".
+           03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019010".
+      *    ÆÃ°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
+           03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114019110".
+           03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114019210".
+           03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114019310".
+           03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114019410".
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
@@ -428,6 +459,12 @@
       *    ÊÝ¸±ÁÈ¹ç¤»
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
+      *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
+      *    ¿ÇÎÅ¹Ô°Ù¥Þ¥¹¥¿
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
       *
       ******************************************************************
       *    ¥µ¥Ö¥×¥íÍÑ¡¡ÎÎ°è
@@ -1502,6 +1539,16 @@
              MOVE  RECE02-FTNMONEY(1)  TO  WRK-SEIKYUGK-G
            END-IF
       *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
+      *      ºßÁí¿Ç¡¦ºß°åÁí¤«
+             MOVE    ZERO               TO  FLG-ZAITAKU
+             IF  RECE02-ZAITAKU  =  "1"
+               MOVE    1                TO  FLG-ZAITAKU
+             ELSE
+               PERFORM 960-SRYACT-SET-SEC
+             END-IF
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
+      *
       *=== ³°Íè¹â³Û¡¢ÆÃ¼À¡Ü957Åù¤Î°õ»ú½¤Àµ by Yoshikawa(2012/07/12) start
       *=== °ìÈÌ¡ÜÄ¹´ü¤Î½¸·×°ÌÃÖ½¤Àµ by Yoshikawa(2012/01/12) start
       **    ¹â³ÛÎÅÍÜÈñ¥Á¥§¥Ã¥¯
@@ -1530,7 +1577,11 @@
                  RECE02-HKNNUM          =  "039" OR
                  RECE02-HKNNUM          =  "040" OR
       *---(01.00.15) LINE ADD START ------------------------------------
-                 RECE02-AGE            >=  70
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
+      *           RECE02-AGE            >=  70
+                 RECE02-AGE            >=  70    OR
+                 FLG-ZAITAKU            =  1
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
              IF  RECE02-RJNHKNNUM   NOT =  SPACE
       *---(01.00.15) LINE ADD START ------------------------------------
              OR  RECE02-HKNNUM          =  "039"
@@ -2745,6 +2796,112 @@
        955-HKNNUM-READ-EXT.
            EXIT.
       *
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
+      *****************************************************************
+      *  ¿ÇÎÅ¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       960-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE  SRYACT-REC
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key4"              TO  MCP-PATHNAME
+               PERFORM  965-SRYACT-READ-SEC
+      *    ºßÁí¿Ç¤Î´µ¼Ô¼èÆÀ
+               PERFORM  UNTIL  FLG-SRYACT  =  1
+                 PERFORM  965-ZAISOU-CHK-SEC
+      *
+                 MOVE  "tbl_sryact"      TO  MCP-TABLE
+                 MOVE  "key4"            TO  MCP-PATHNAME
+                 PERFORM  965-SRYACT-READ-SEC
+               END-PERFORM
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key4"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       960-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊóÆÉ¹þ
+      *****************************************************************
+       965-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       965-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ºßÁí¿Ç¥Á¥§¥Ã¥¯
+      *****************************************************************
+       965-ZAISOU-CHK-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL   (IDX4  >     5) OR
+                            (SRY-SRYCD(IDX4)  =  SPACE)
+             IF  SRY-SRYKBN  =  "14"
+               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
+                                   OR  WRK-CONS-ZAITAKU2
+                                   OR  WRK-CONS-ZAITAKU3
+                                   OR  WRK-CONS-ZAITAKU4
+                                   OR  WRK-CONS-ZAITAKU5
+                                   OR  WRK-CONS-ZAITAKU6
+                                   OR  WRK-CONS-ZAITAKU7
+                                   OR  WRK-CONS-ZAITAKU8
+                                   OR  WRK-CONS-ZAITAKU9
+                                   OR  WRK-CONS-ZAITAKU10
+                                   OR  WRK-CONS-ZAITAKU11
+                                   OR  WRK-CONS-ZAITAKU12
+                                   OR  WRK-CONS-ZAITAKU13
+                                   OR  WRK-CONS-ZAITAKU14
+                                   OR  WRK-CONS-ZAITAKU15
+                                   OR  WRK-CONS-ZAITAKU16
+                                   OR  WRK-CONS-ZAITAKU17
+                                   OR  WRK-CONS-ZAITAKU18
+                 MOVE    1             TO  FLG-ZAITAKU
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       965-ZAISOU-CHK-EXT.
+           EXIT.
+      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
       *****************************************************************
       *    ¸øÈñÀÁµá½ñ¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
