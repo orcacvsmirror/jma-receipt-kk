@@ -44,6 +44,7 @@
       *  01.00.08    吉川    10/12/15    open-cobol1.0対応
       *  01.00.09    吉川    11/03/15    東北地方太平洋沖地震対応（対象者別集計）
       *  00.00.10    吉川    12/05/16    H24年4月に新設された在総診対応
+      *  01.00.11    吉川    13/07/26    在宅の対象とする診療コード追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -305,6 +306,16 @@
            03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114019710".
            03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019810".
       *=== 新設された在総診対応 by Yoshikawa(2012/05/16) end
+      *=== 在宅コード追加 by Yoshikawa(2013/07/26) start
+           03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114013010".
+           03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114013110".
+           03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114013210".
+           03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114013310".
+           03  WRK-CONS-ZAITAKU19      PIC X(09) VALUE "114019110".
+           03  WRK-CONS-ZAITAKU20      PIC X(09) VALUE "114019210".
+           03  WRK-CONS-ZAITAKU21      PIC X(09) VALUE "114019310".
+           03  WRK-CONS-ZAITAKU22      PIC X(09) VALUE "114019410".
+      *=== 在宅コード追加 by Yoshikawa(2013/07/26) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -2005,6 +2016,16 @@
                                    OR  WRK-CONS-ZAITAKU13
                                    OR  WRK-CONS-ZAITAKU14
       *=== 新設された在総診対応 by Yoshikawa(2012/05/16) end
+      *=== 在宅コード追加 by Yoshikawa(2013/07/26) start
+                                   OR  WRK-CONS-ZAITAKU15
+                                   OR  WRK-CONS-ZAITAKU16
+                                   OR  WRK-CONS-ZAITAKU17
+                                   OR  WRK-CONS-ZAITAKU18
+                                   OR  WRK-CONS-ZAITAKU19
+                                   OR  WRK-CONS-ZAITAKU20
+                                   OR  WRK-CONS-ZAITAKU21
+                                   OR  WRK-CONS-ZAITAKU22
+      *=== 在宅コード追加 by Yoshikawa(2013/07/26) end
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
       *           MOVE  1  TO  SKT1310TMP-ZAITAKU
                  MOVE  "1"  TO  SKT1310TMP-ZAITAKU
