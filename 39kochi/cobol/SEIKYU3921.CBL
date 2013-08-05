@@ -51,6 +51,8 @@
       *  01.00.10     吉川    12/04/16    高額該当の場合、点数はゼロを印字
       *  01.00.11     吉川    13/03/13    全国公費の上限額未満でも
       *                                   備考欄に記載し、点数はゼロを印字
+      *  01.00.12     吉川    13/08/05    高額療養費の現物給付該当者は
+      *                                   備考欄に「高額該当」を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -689,6 +691,11 @@
              IF    RECE02-FTNMONEY(1)  <    WRK-SEIKYUGK-G2  OR
                    MF100-HEIYOU           =  ZERO
                MOVE    1                    TO  MF100-HEIYOU
+      *=== 高額療養費現物給付は高額該当 by Yoshikawa(2013/08/05) start
+               IF  MF100-TYOKI  =  ZERO
+                 MOVE    1                  TO  MF100-KOGAKU
+               END-IF
+      *=== 高額療養費現物給付は高額該当 by Yoshikawa(2013/08/05) end
                MOVE    RECE02-FTNMONEY(1)   TO
                                        WRK-SEIKYUGK-G2
              END-IF
