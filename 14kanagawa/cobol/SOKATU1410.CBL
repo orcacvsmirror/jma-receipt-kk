@@ -66,6 +66,7 @@
       *  01.00.22    吉川    12/12/25    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.23    吉川    13/08/06    プログラムオプション対応
+      *                                  MCPDATA-RECへの移行漏れ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2398,6 +2399,9 @@
            MOVE    SPA-HOSPNUM                TO  PTKOH-HOSPNUM
       *---(01.00.10) LINE ADD END   ------------------------------------
            MOVE    RECE10-PTID                TO  PTKOH-PTID
+      *=== MCPDATA-RECへの移行漏れ by Yoshikawa(2013/08/06) start
+           MOVE    PTKOHINF-REC               TO  MCPDATA-REC
+      *=== MCPDATA-RECへの移行漏れ by Yoshikawa(2013/08/06) end
            MOVE    "DBSELECT"                 TO  MCP-FUNC
       *---(01.00.10) LINE ADD START ------------------------------------
       *     MOVE    PATH-TBL-PTKOHINF-KEY2     TO  MCP-PATH
