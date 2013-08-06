@@ -43,6 +43,7 @@
       *                                  相模原市の代表番号追加
       *  01.00.09    吉川    11/01/25    open-cobol1.0対応
       *  01.00.10    吉川    11/06/23    東北地方太平洋沖地震対応
+      *  01.00.11    吉川    13/08/06    総括表をもう1枚印刷する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1144,7 +1145,12 @@
            PERFORM    341-PRINT-OUT-SEC
       *---(01.00.06) LINE ADD END   ------------------------------------
       *    帳票印刷処理
-           PERFORM    340-PRINT-OUT-SEC
+      *=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) start
+      *     PERFORM    340-PRINT-OUT-SEC
+           PERFORM  2  TIMES
+               PERFORM    340-PRINT-OUT-SEC
+           END-PERFORM
+      *=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) end
       *
            .
        2002-PRINT-EXT.
@@ -1219,7 +1225,10 @@
            INITIALIZE                   SKT1400
       *---(01.00.06) LINE ADD START ------------------------------------
       *     ADD  1                       TO     CNT-PAGE
-           ADD  2                       TO     CNT-PAGE
+      *=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) start
+      *     ADD  2                       TO     CNT-PAGE
+           ADD  3                       TO     CNT-PAGE
+      *=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
       *   総括表発行日
