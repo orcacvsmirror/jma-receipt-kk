@@ -182,6 +182,10 @@
        01  IDX-AREA.
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
+           03  IDX                 PIC 9(04).
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *    システム領域
        01  SYS-AREA.

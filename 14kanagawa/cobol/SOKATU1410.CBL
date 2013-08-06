@@ -90,7 +90,7 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
       *                           ORGANIZATION   IS  LINE SEQUENTIAL
       *                           ACCESS MODE    IS  SEQUENTIAL
@@ -106,7 +106,7 @@
       *                             ACCESS MODE    IS  SEQUENTIAL
       *                             FILE   STATUS  IS  STS-TAISYOKOHI.
       **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -124,7 +124,7 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       **    優先保険者番号ファイル
       * FD  YUSEN-FILE.
       * 01  YUSEN-HKNJANUM             PIC X(06). 
@@ -138,7 +138,7 @@
       *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
       *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
       **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -203,10 +203,10 @@
            03  FLG-TAISYOKOHI      PIC 9(01).
            03  FLG-TAISYO          PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
            03  FLG-PRGOPTION       PIC 9(01).
            03  FLG-OK              PIC 9(01).
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -223,6 +223,9 @@
            03  IDX                 PIC 9(04).
            03  IDXX                PIC 9(04).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *##  パラメタ領域（地方公費仕様）
        01  WRK-PARA.
@@ -240,7 +243,7 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       **=== プラグイン対応 by Yoshikawa(2012/12/25) start
       **    ファイル名称用エリア
       * 01  FILE-NAME.
@@ -255,7 +258,7 @@
       *     03  FILLER              PIC X(10)  VALUE "SOKATU1410".
       *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
       **=== プラグイン対応 by Yoshikawa(2012/12/25) end
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -310,13 +313,13 @@
            03  WRK-PATH2           PIC X(50).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/04) end
       *
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
            03  WRK-OPTION-TBL.
                05  WRK-OPTION      PIC X(100)  OCCURS 100.
            03  WRK-PRGID           PIC X(25).
            03  WRK-KBNCD           PIC X(16).
            03  WRK-YUSEN           PIC X(06).
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
@@ -445,11 +448,11 @@
        01  PRTDATA-REC.
            COPY    "CPPRTDATA.INC".
       * 
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       *    プログラムオプション
        01  PRGOPTION-REC.
            COPY    "CPPRGOPTION.INC".
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       ******************************************************************
       *    サブプロ用　領域
@@ -715,11 +718,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       *     PERFORM  110-INI-FILE-SEC
       *    プログラムオプション取込み
            PERFORM 100-OPTION-SELECT-SEC
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
            OPEN    OUTPUT  UPD-FILE
       *  
@@ -759,7 +762,7 @@
        100-INIT-EXT.
            EXIT.
       *
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       ******************************************************************
       **    優先保険者番号INIファイル読み込み処理 
       ******************************************************************
@@ -904,7 +907,7 @@
            .
        1001-OPTION-SET-EXT.
            EXIT.
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *****************************************************************
       *    主　　処理
@@ -999,10 +1002,10 @@
       *=== 在宅はまとめて集計 by Yoshikawa(2012/05/16) end
       *
       *    印字順設定
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       *     IF    YUSEN-HKNJANUM   =  SKT1410TMP-HKNJANUM
            IF    WRK-YUSEN        =  SKT1410TMP-HKNJANUM
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
              MOVE          1   TO    SKT1410TMP-SYUTURYOKU
            ELSE
              IF    RECE10-PREFKBN    =    "1"
@@ -2830,7 +2833,7 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.10) LINE ADD END   ------------------------------------
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) start
       *****************************************************************
       *    プログラムオプション情報読込
       *****************************************************************
@@ -2877,7 +2880,7 @@
            .
        900-PRGOPTION-READ-EXT.
            EXIT.
-      *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/08/06) end
       *
       *****************************************************************
       *    ＤＢ　オープン処理
