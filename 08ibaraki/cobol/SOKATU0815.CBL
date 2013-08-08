@@ -33,7 +33,7 @@
       *                                  6つ目以降がまとまらない不具合を修正
       *  01.00.03    吉川    10/02/26    広域連合の保険者番号指定対応
       *  01.00.04    吉川    10/07/15    オンライン返戻対応
-      *  
+      *  01.00.05    吉川    13/08/08    PERFORMをGOTOに修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1710,7 +1710,10 @@
                PERFORM 800-PTINF-READ-SEC
                IF      FLG-PTINF           =   ZERO
                AND     PTINF-TSTPTNUMKBN   =   "1"
-                   PERFORM  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2013/08/08) start
+      *             PERFORM  900-SEIKYU-READ-SEC
+                   GO  TO  900-SEIKYU-READ-SEC
+      *=== PERFORMをGOTOに修正 by Yoshikawa(2013/08/08) end
                END-IF   
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
