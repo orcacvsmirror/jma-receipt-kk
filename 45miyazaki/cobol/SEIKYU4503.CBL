@@ -58,6 +58,8 @@
       *  01.00.17    吉川    12/12/20    医療機関情報編集対応
       *  01.00.18    吉川    13/02/08    プラグイン対応
       *  01.00.19    吉川    13/06/18    プログラムオプション対応
+      *  01.00.20    吉川    13/08/09    併用した全国公費の負担者番号と
+      *                                  受給者番号が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1179,6 +1181,10 @@
              MOVE  RECE10-SRYYM(1:6)      TO  WRK-SRYYM
       *=== 公費の印字順番修正 by Yoshikawa(2012/02/10) end
              PERFORM  930-PTKOHINF-SET-SEC
+      *=== 全国公費の負担者と受給者印字 by Yoshikawa(2013/08/09) start
+             MOVE  WRK-FTNJANUM           TO  MF100-T-FTNJANUM
+             MOVE  WRK-JKYSNUM            TO  MF100-T-JKYSNUM
+      *=== 全国公費の負担者と受給者印字 by Yoshikawa(2013/08/09) end
       *    公費点数=保険点数(地方公費点数)の場合は記載しない
              IF  MF100-TOTALTEN  =  MF100-T-TOTALTEN
                MOVE     ZERO              TO  MF100-T-TOTALTEN
