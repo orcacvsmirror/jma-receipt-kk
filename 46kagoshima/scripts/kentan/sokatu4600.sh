@@ -6,8 +6,6 @@ PREFNAME=kagoshima
 PROGRAMID=SOKATU4600
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4600"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
-INIFILE="/tmp/${15}${PROGRAMID}SRYKA.INI"
 -------------------------------------------#
 #    国保総括表（鹿児島）
 #        $1-${11}
@@ -24,9 +22,6 @@ INIFILE="/tmp/${15}${PROGRAMID}SRYKA.INI"
         if  [ -e ${16} ]; then
             rm  ${16}
         fi
-
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
 
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
@@ -60,9 +55,6 @@ INIFILE="/tmp/${15}${PROGRAMID}SRYKA.INI"
                 exit
             fi
         fi
-
-##      INIファイル 削除
-        rm -f ${INIFILE}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
