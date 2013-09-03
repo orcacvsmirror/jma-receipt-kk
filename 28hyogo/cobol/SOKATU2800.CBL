@@ -63,6 +63,7 @@
       *  01.00.21    吉川    13/01/11    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.22    吉川    13/06/17    プログラムオプション対応
+      *  01.00.23    吉川    13/09/03    医療機関区分の設定不具合修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -81,29 +82,31 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-           SELECT  HOSPKBN-FILE  ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-HOSPKBN.
-      *
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     SELECT  SRYKA-FILE    ASSIGN FILE-NAME
-           SELECT  SRYKA-FILE    ASSIGN FILE-NAME2
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-SRYKA.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
-      *    印字対象公費番号ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME3
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-TAISYOKOHI.
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) start
+      *     SELECT  HOSPKBN-FILE  ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-HOSPKBN.
+      **
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **     SELECT  SRYKA-FILE    ASSIGN FILE-NAME
+      *     SELECT  SRYKA-FILE    ASSIGN FILE-NAME2
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-SRYKA.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
+      **    印字対象公費番号ファイル
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME3
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-TAISYOKOHI.
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -122,24 +125,26 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *    診療科CDファイル
-       FD  SRYKA-FILE.
-       01  SRYKA-REC.
-           03  SRYKA-SRYKANAME           PIC X(34).
-           03  FILLER                    PIC X(01).
-      *
-       FD  HOSPKBN-FILE.
-       01  HOSPKBN-REC.
-           03  FILLER                    PIC X(13).
-           03  HOSPKBN-CD                PIC X(01).
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
-      *    印字対象公費番号ファイル
-       FD  TAISYOKOHI-FILE.
-       01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-KOHNUM   PIC X(03). 
-           03  TAISYO-DAT-KAIGYO   PIC X(01). 
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) start
+      **    診療科CDファイル
+      * FD  SRYKA-FILE.
+      * 01  SRYKA-REC.
+      *     03  SRYKA-SRYKANAME           PIC X(34).
+      *     03  FILLER                    PIC X(01).
+      **
+      * FD  HOSPKBN-FILE.
+      * 01  HOSPKBN-REC.
+      *     03  FILLER                    PIC X(13).
+      *     03  HOSPKBN-CD                PIC X(01).
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
+      **    印字対象公費番号ファイル
+      * FD  TAISYOKOHI-FILE.
+      * 01  TAISYOKOHI-REC.
+      *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
+      *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -247,26 +252,28 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU2800".
-           03  FILLER              PIC X(11)  VALUE "HOSPKBN.INI".
-      *
-       01  FILE-NAME2.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM2       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU2800".
-           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
-      *
-       01  FILE-NAME3.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM3       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU2800".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) start
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU2800".
+      *     03  FILLER              PIC X(11)  VALUE "HOSPKBN.INI".
+      **
+      * 01  FILE-NAME2.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM2       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU2800".
+      *     03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      **
+      * 01  FILE-NAME3.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM3       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU2800".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -852,122 +859,125 @@
       *
        100-INIT-EXT.
            EXIT.
-      *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理
-      *****************************************************************
-       111-INI-FILE-SEC                SECTION.
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) start
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理
+      ******************************************************************
+      * 111-INI-FILE-SEC                SECTION.
+      **
+      **    診療科名取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      **
+      *     DISPLAY "ファイル名2="  FILE-NAME2
+      **
+      *     INITIALIZE   SRYKA-REC
+      **
+      *     OPEN  INPUT  SRYKA-FILE
+      **
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     3
+      *       READ SRYKA-FILE
+      *         AT END
+      *           INITIALIZE        SRYKA-REC
+      *       END-READ
+      **
+      *       DISPLAY "診療科名取得=" SRYKA-SRYKANAME
+      *       IF    SRYKA-SRYKANAME(1:2)  =  "※"
+      *         MOVE   SPACE             TO  WRK-SRYKANAME(IDX1)
+      *       ELSE
+      *         MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME(IDX1)
+      *       END-IF
+      *     END-PERFORM
+      **
+      *     CLOSE SRYKA-FILE
+      **
+      *     DISPLAY "診療科１="  WRK-SRYKANAME(1)
+      *     DISPLAY "診療科２="  WRK-SRYKANAME(2)
+      *     DISPLAY "診療科３="  WRK-SRYKANAME(3)
+      **
+      **    医療機関区分取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/HOSPKBN.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   HOSPKBN-REC
+      **
+      *     OPEN  INPUT  HOSPKBN-FILE
+      **
+      *     READ HOSPKBN-FILE
+      *       AT END
+      *         INITIALIZE        HOSPKBN-REC
+      *     END-READ
+      **
+      **
+      *     CLOSE HOSPKBN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 112-INI-FILE-SEC         SECTION.
+      **
+      **    印字対象公費番号ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      **
+      *     DISPLAY "ファイル名3="  FILE-NAME3
+      **
+      *     INITIALIZE   TAISYOKOHI-REC
+      **
+      *     OPEN  INPUT  TAISYOKOHI-FILE
+      **
+      *     MOVE  ZERO  TO  IDX
+      *                     FLG-TAISYOKOHI
+      **
+      *     PERFORM UNTIL    FLG-TAISYOKOHI = 1
+      *       READ TAISYOKOHI-FILE NEXT
+      *         AT END
+      *           MOVE  1                 TO  FLG-TAISYOKOHI
+      *         NOT AT END
+      *           IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      *             MOVE  1               TO  FLG-TAISYOKOHI
+      *           ELSE
+      *             ADD   1               TO  IDX
+      *             MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+      *           END-IF
+      *       END-READ
+      *     END-PERFORM
+      **
+      *     CLOSE TAISYOKOHI-FILE
+      **
+      *     .
+      * 112-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) end
       *
-      *    診療科名取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-      *
-           DISPLAY "ファイル名2="  FILE-NAME2
-      *
-           INITIALIZE   SRYKA-REC
-      *
-           OPEN  INPUT  SRYKA-FILE
-      *
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     3
-             READ SRYKA-FILE
-               AT END
-                 INITIALIZE        SRYKA-REC
-             END-READ
-      *
-             DISPLAY "診療科名取得=" SRYKA-SRYKANAME
-             IF    SRYKA-SRYKANAME(1:2)  =  "※"
-               MOVE   SPACE             TO  WRK-SRYKANAME(IDX1)
-             ELSE
-               MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME(IDX1)
-             END-IF
-           END-PERFORM
-      *
-           CLOSE SRYKA-FILE
-      *
-           DISPLAY "診療科１="  WRK-SRYKANAME(1)
-           DISPLAY "診療科２="  WRK-SRYKANAME(2)
-           DISPLAY "診療科３="  WRK-SRYKANAME(3)
-      *
-      *    医療機関区分取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/HOSPKBN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   HOSPKBN-REC
-      *
-           OPEN  INPUT  HOSPKBN-FILE
-      *
-           READ HOSPKBN-FILE
-             AT END
-               INITIALIZE        HOSPKBN-REC
-           END-READ
-      *
-      *
-           CLOSE HOSPKBN-FILE
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) start
-      *****************************************************************
-      *    INIファイル読み込み
-      *****************************************************************
-       112-INI-FILE-SEC         SECTION.
-      *
-      *    印字対象公費番号ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-      *
-           DISPLAY "ファイル名3="  FILE-NAME3
-      *
-           INITIALIZE   TAISYOKOHI-REC
-      *
-           OPEN  INPUT  TAISYOKOHI-FILE
-      *
-           MOVE  ZERO  TO  IDX
-                           FLG-TAISYOKOHI
-      *
-           PERFORM UNTIL    FLG-TAISYOKOHI = 1
-             READ TAISYOKOHI-FILE NEXT
-               AT END
-                 MOVE  1                 TO  FLG-TAISYOKOHI
-               NOT AT END
-                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
-                   MOVE  1               TO  FLG-TAISYOKOHI
-                 ELSE
-                   ADD   1               TO  IDX
-                   MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-                 END-IF
-             END-READ
-           END-PERFORM
-      *
-           CLOSE TAISYOKOHI-FILE
-      *
-           .
-       112-INI-FILE-EXT.
-           EXIT.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2011/10/27) end
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
       *****************************************************************
       *    プログラムオプション取込み処理
@@ -981,7 +991,7 @@
            MOVE    "HOSPKBN"                 TO  WRK-KBNCD
            PERFORM 1001-OPTION-SET-SEC
            MOVE    WRK-OPTION(1)(1:14)       TO  WRK-HOSPKBN
-           DISPLAY                               WRK-HOSPKBN
+           DISPLAY "医療機関区分="  WRK-HOSPKBN
       *
       *    診療科
            MOVE    "SRYKA"                   TO  WRK-KBNCD
@@ -1726,7 +1736,10 @@
            MOVE    WRK-SRYKANAME(3)   TO     SKT2800-SRYKAMEI(3)
       *
       *    医療機関区分
-           EVALUATE  HOSPKBN-CD
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) start
+      *     EVALUATE  HOSPKBN-CD
+           EVALUATE  WRK-HOSPKBN-CD
+      *=== 医療機関区分設定不具合修正 by Yoshikawa(2013/09/03) end
            WHEN "1"
              MOVE  "○"               TO     SKT2800-HOSPKBN(1)
            WHEN "2"
