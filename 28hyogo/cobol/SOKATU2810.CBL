@@ -45,6 +45,8 @@
       *  01.00.11    吉川    13/01/11    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.12    吉川    13/06/17    プログラムオプション対応
+      *  01.00.13    吉川    13/09/03    優先保険者番号を設定した場合
+      *                                  最初に印字するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -794,12 +796,21 @@
       *     IF  YUSEN-HKNJANUM        =    SKT2810TMP-HKNJANUM
            IF  WRK-YUSEN             =    SKT2810TMP-HKNJANUM
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
-             MOVE       "9"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) start
+      *       MOVE       "9"            TO   SKT2810TMP-SYUTURYOKU
+             MOVE       "1"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) end
            ELSE
              IF     RECE10-PREFKBN   =    "1"
-               MOVE     "1"            TO   SKT2810TMP-SYUTURYOKU
-             ELSE
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) start
+      *         MOVE     "1"            TO   SKT2810TMP-SYUTURYOKU
                MOVE     "2"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) end
+             ELSE
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) start
+      *         MOVE     "2"            TO   SKT2810TMP-SYUTURYOKU
+               MOVE     "3"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) end
              END-IF
            END-IF
       *
