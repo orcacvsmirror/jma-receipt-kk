@@ -991,7 +991,7 @@
            MOVE    "HOSPKBN"                 TO  WRK-KBNCD
            PERFORM 1001-OPTION-SET-SEC
            MOVE    WRK-OPTION(1)(1:14)       TO  WRK-HOSPKBN
-           DISPLAY "°åÎÅµ¡´Ø¶èÊ¬="  WRK-HOSPKBN
+           DISPLAY "°åÎÅµ¡´Ø¶èÊ¬="  WRK-HOSPKBN-CD
       *
       *    ¿ÇÎÅ²Ê
            MOVE    "SRYKA"                   TO  WRK-KBNCD
@@ -1644,11 +1644,9 @@
       *
       *    Ä¢É¼ÊÔ½¸<¸«½Ð¤·>½èÍý
              PERFORM  310-HEAD-HEN-SEC
-             DISPLAY "310 OK"
       *
       *    Ä¢É¼ÊÔ½¸(ÌÀºÙ)½èÍý
              PERFORM  320-BODY-HEN-SEC
-             DISPLAY "320 OK"
       *
       *    Ä¢É¼ÊÔ½¸(°õºþ)½èÍý
              PERFORM  330-PRINT-OUT-SEC
