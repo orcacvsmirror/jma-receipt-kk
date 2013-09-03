@@ -42,6 +42,8 @@
       *  01.00.08    吉川    10/07/06    返戻分は1枚にまとめる
       *  01.00.09    吉川    10/11/02    特別療養費国保対応
       *  01.00.10    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.11    吉川    13/09/03    優先保険者番号を設定した場合
+      *                                  最初に印字するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -685,12 +687,21 @@
       *
       *    出力順
            IF  YUSEN-HKNJANUM        =    SKT2810TMP-HKNJANUM
-             MOVE       "9"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) start
+      *       MOVE       "9"            TO   SKT2810TMP-SYUTURYOKU
+             MOVE       "1"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) end
            ELSE
              IF     RECE10-PREFKBN   =    "1"
-               MOVE     "1"            TO   SKT2810TMP-SYUTURYOKU
-             ELSE
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) start
+      *         MOVE     "1"            TO   SKT2810TMP-SYUTURYOKU
                MOVE     "2"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) end
+             ELSE
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) start
+      *         MOVE     "2"            TO   SKT2810TMP-SYUTURYOKU
+               MOVE     "3"            TO   SKT2810TMP-SYUTURYOKU
+      *=== 優先保険者番号の設定修正 by Yoshikawa(2013/09/03) end
              END-IF
            END-IF
       *
