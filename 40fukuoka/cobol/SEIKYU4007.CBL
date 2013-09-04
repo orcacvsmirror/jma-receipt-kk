@@ -61,6 +61,8 @@
       *  01.00.20    吉川     12/03/12    対象公費番号をINIファイルから
       *                                   取得するようにする
       *  01.00.21    吉川     13/01/17    テーブルのprimary key変更対応
+      *  01.00.22    吉川     13/09/04    TAISYOKOHIで設定した公費を持つ
+      *                                   患者の病名を印字するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -726,6 +728,11 @@
       *
            PERFORM 100-DBOPEN-SEC
       *
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+      *    INIファイル読み込み
+           PERFORM  110-INI-FILE-SEC
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
+      *
       *    地方公費対象患者用病名ファイル作成
            PERFORM 1001-BYOMEI-HEN-SEC
       *
@@ -750,8 +757,10 @@
       *    ファイルＯＰＥＮ処理
            PERFORM 110-FILE-OPEN-SEC
       *
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
       *    INIファイル読み込み
-           PERFORM  110-INI-FILE-SEC
+      *     PERFORM  110-INI-FILE-SEC
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
       *
       *    システム管理マスタ（医療機関情報）
            PERFORM 120-HOSPINF-GET-SEC
@@ -857,6 +866,9 @@
       * 
            DISPLAY "編集１開始"
            CALL  "SEIKYU40BYOMEI1"    USING  WRK-PARA-LINK
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+                                             TAISYO-DAT
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
            DISPLAY "編集２開始"
            CALL  "SEIKYU40BYOMEI2"    USING  WRK-PARA-LINK
            DISPLAY "病名ファイル作成終了"
