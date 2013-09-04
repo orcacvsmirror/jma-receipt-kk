@@ -55,6 +55,8 @@
       *                                     （480,481,590,690,780）
       *  01.00.08    吉川         11/05/18  レセプト病名記載順対応
       *                                     補足コメント対応
+      *  01.00.09    吉川         13/09/04  TAISYOKOHIで設定した公費を持つ
+      *                                     患者の病名を印字するように修正
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -114,6 +116,10 @@
            03  FLG-SYSKANRI        PIC 9(01).
            03  FLG-CHK             PIC 9(01).
            03  FLG-PTINF           PIC 9(01).
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+           03  FLG-TAISYOKOHI      PIC 9(01).
+           03  FLG-TAISYO          PIC 9(01).
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -124,6 +130,9 @@
            03  IDX                 PIC 9(03). 
            03  IDY                 PIC 9(03). 
            03  IDZ                 PIC 9(03).
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+           03  IDXX                PIC 9(04).
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -171,6 +180,12 @@
                05  KEY-N-SRYYMD    PIC 9(08).
            03  KEY-OLD.
                05  KEY-O-SRYYMD    PIC 9(08).
+      *
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI.
+           03  TBL-HKOHNUM              PIC X(03)  OCCURS  4.
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
       *
       *    疑い編集
        01  WRK-UTAGAI-AREA.
@@ -264,9 +279,19 @@
       *     03  WRK-PARA-LINK-HOSPID   PIC  X(24).
            03  WRK-PARA-LINK-HOSPNUM  PIC  9(02).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+      *    対象公費番号データ
+           COPY  "TAISYO4001.INC".
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
+      *
       ****************************************************************
        PROCEDURE           DIVISION
-               USING    WRK-PARA-LINK.
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+      *         USING    WRK-PARA-LINK.
+               USING    WRK-PARA-LINK
+                        TAISYO-DAT.
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
       *
       *****************************************************************
       *    主処理
@@ -1091,22 +1116,32 @@
       *         OR  RECE02-KOHNUM(4) = "180" OR "181" OR "190" OR "281"
       *                             OR "290" OR "280" OR "380" OR "381"
       *                             OR "390" OR "490"
-               IF  RECE02-KOHNUM(1) = "180" OR "181" OR "190" OR "281"
-                                   OR "290" OR "280" OR "380" OR "381"
-                                   OR "390" OR "490" OR "480" OR "481"
-                                   OR "590" OR "690" OR "780"
-               OR  RECE02-KOHNUM(2) = "180" OR "181" OR "190" OR "281"
-                                   OR "290" OR "280" OR "380" OR "381"
-                                   OR "390" OR "490" OR "480" OR "481"
-                                   OR "590" OR "690" OR "780"
-               OR  RECE02-KOHNUM(3) = "180" OR "181" OR "190" OR "281"
-                                   OR "290" OR "280" OR "380" OR "381"
-                                   OR "390" OR "490" OR "480" OR "481"
-                                   OR "590" OR "690" OR "780"
-               OR  RECE02-KOHNUM(4) = "180" OR "181" OR "190" OR "281"
-                                   OR "290" OR "280" OR "380" OR "381"
-                                   OR "390" OR "490" OR "480" OR "481"
-                                   OR "590" OR "690" OR "780"
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+      *         IF  RECE02-KOHNUM(1) = "180" OR "181" OR "190" OR "281"
+      *                             OR "290" OR "280" OR "380" OR "381"
+      *                             OR "390" OR "490" OR "480" OR "481"
+      *                             OR "590" OR "690" OR "780"
+      *         OR  RECE02-KOHNUM(2) = "180" OR "181" OR "190" OR "281"
+      *                             OR "290" OR "280" OR "380" OR "381"
+      *                             OR "390" OR "490" OR "480" OR "481"
+      *                             OR "590" OR "690" OR "780"
+      *         OR  RECE02-KOHNUM(3) = "180" OR "181" OR "190" OR "281"
+      *                             OR "290" OR "280" OR "380" OR "381"
+      *                             OR "390" OR "490" OR "480" OR "481"
+      *                             OR "590" OR "690" OR "780"
+      *         OR  RECE02-KOHNUM(4) = "180" OR "181" OR "190" OR "281"
+      *                             OR "290" OR "280" OR "380" OR "381"
+      *                             OR "390" OR "490" OR "480" OR "481"
+      *                             OR "590" OR "690" OR "780"
+               INITIALIZE                          TBL-HIKAKU-KOHI
+               MOVE    RECE02-KOHNUM(1)        TO  TBL-HKOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  TBL-HKOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  TBL-HKOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  TBL-HKOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
       *=== 印字対象番号追加 by Yoshikawa(2009/11/02) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *---(01.00.04) LINE ADD END   ------------------------------------
@@ -1278,3 +1313,28 @@
        800-PTINF-READ-EXT.
            EXIT.
       *
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       TAISYO-KOHNUM(IDXX)  =  SPACE
+             IF  TAISYO-KOHNUM(IDXX)  =  TBL-HKOHNUM(1)
+                                     OR  TBL-HKOHNUM(2)
+                                     OR  TBL-HKOHNUM(3)
+                                     OR  TBL-HKOHNUM(4)
+               MOVE     1                   TO  FLG-TAISYO
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
