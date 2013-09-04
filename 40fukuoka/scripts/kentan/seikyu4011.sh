@@ -6,8 +6,6 @@ PREFNAME=fukuoka
 PROGRAMID=SEIKYU4011
 LOG_FILE="/var/log/jma-receipt/${14}seikyu4011"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
-INIFILE="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
 #-------------------------------------------#
 #    地方公費作成（福岡・カスタマイズレセ）
 #        $1-${11}
@@ -26,9 +24,6 @@ INIFILE="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
             rm  ${15}
         fi
 
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -36,9 +31,6 @@ INIFILE="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
             if  [ -e ${15} ]; then
                 exit
             fi
-
-##      INIファイル 削除
-        rm -f ${INIFILE}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 

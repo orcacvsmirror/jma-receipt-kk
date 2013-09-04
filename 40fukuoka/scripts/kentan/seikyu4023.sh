@@ -6,10 +6,6 @@ PREFNAME=fukuoka
 PROGRAMID=SEIKYU4023
 LOG_FILE="/var/log/jma-receipt/${14}seikyu4023"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='KINYU';"
-PRGOPT2="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
-INIFILE="/tmp/${14}${PROGRAMID}KINYU.INI"
-INIFILE2="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
 #-------------------------------------------#
 #    ÃÏÊý¸øÈñºîÀ®¡ÊÊ¡²¬¡¦ÆÃÄê¼ÀÉÂÎÅÍÜ¼õÎÎ¾ÚÊÝ»ý¼Ô¤Î¼«¸ÊÉéÃ´Ê¬ÁêÅö³Û¿½ÀÁ½ñ¡Ë
 #        $1-${11}
@@ -28,10 +24,6 @@ INIFILE2="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
             rm  ${15}
         fi
 
-##      INI¥Õ¥¡¥¤¥ë ºîÀ®
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
-
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -39,10 +31,6 @@ INIFILE2="/tmp/${14}${PROGRAMID}TAISYOKOHI.INI"
             if  [ -e ${15} ]; then
                 exit
             fi
-
-##      INI¥Õ¥¡¥¤¥ë ºï½ü
-        rm -f ${INIFILE}
-        rm -f ${INIFILE2}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
