@@ -63,6 +63,9 @@
       *  01.00.21    吉川     13/01/17    テーブルのprimary key変更対応
       *  01.00.22    吉川     13/01/22    医療機関情報編集対応
       *  01.00.23    吉川     13/02/07    プラグイン対応
+      *  01.00.24    吉川     13/09/04    TAISYOKOHIで設定した公費を持つ
+      *                                   患者の病名を印字するように修正
+      *                                   プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -76,11 +79,13 @@
                                    RECORD  KEY     IS  MF100-KEY
                                    FILE    STATUS  IS  STS-MF100.
       *
-      *    レセプト印刷順ファイル
-           SELECT  SYUTURYOKU-FILE ASSIGN FILE-NAME
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-SYUTURYOKU.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **    レセプト印刷順ファイル
+      *     SELECT  SYUTURYOKU-FILE ASSIGN FILE-NAME
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-SYUTURYOKU.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    レセプト０３１データ
            SELECT  RECE031-FILE     ASSIGN  RECE031PARA
@@ -92,16 +97,18 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-TAISYOKOHI.
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-TAISYOKOHI.
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -111,11 +118,13 @@
        01  MF100-REC.
            COPY  "SEI4007.INC".
       *
-      *    レセプト印刷順ファイル
-       FD  SYUTURYOKU-FILE.
-       01  STU-REC.
-           03  FILLER              PIC X(21).
-           03  STU-NUM             PIC X(02). 
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **    レセプト印刷順ファイル
+      * FD  SYUTURYOKU-FILE.
+      * 01  STU-REC.
+      *     03  FILLER              PIC X(21).
+      *     03  STU-NUM             PIC X(02). 
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    レセプト０３１データ
        FD  RECE031-FILE.
@@ -126,17 +135,19 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル
-       FD  TAISYOKOHI-FILE.
-       01  TAISYOKOHI-REC.
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     03  TAISYO-DAT-CHOHYO   PIC X(01).
-      *     03  FILLER              PIC X(01).
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-           03  TAISYO-DAT-KOHNUM   PIC X(03). 
-           03  TAISYO-DAT-KAIGYO   PIC X(01). 
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル
+      * FD  TAISYOKOHI-FILE.
+      * 01  TAISYOKOHI-REC.
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     03  TAISYO-DAT-CHOHYO   PIC X(01).
+      **     03  FILLER              PIC X(01).
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
+      *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
        WORKING-STORAGE             SECTION.
       *    シェル用領域
@@ -187,6 +198,10 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
            03  STS-TAISYOKOHI      PIC X(02).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -287,19 +302,21 @@
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/16) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4007".
-           03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
-       01  FILE-NAME2.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM2       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4007".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4007".
+      *     03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
+      * 01  FILE-NAME2.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM2       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4007".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -342,6 +359,17 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH              PIC X(50).
+      *     
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+           03  WRK-STUNUM-T.
+               05  FILLER            PIC X(21).
+               05  WRK-STUNUM        PIC X(02).
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -651,6 +679,12 @@
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
+      *
       *****************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -749,6 +783,11 @@
       *
            PERFORM 100-DBOPEN-SEC
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
+      *
       *    地方公費対象患者用病名ファイル作成
            PERFORM 1001-BYOMEI-HEN-SEC
       *
@@ -773,8 +812,10 @@
       *    ファイルＯＰＥＮ処理
            PERFORM 110-FILE-OPEN-SEC
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
       *    INIファイル読み込み
-           PERFORM  110-INI-FILE-SEC
+      *     PERFORM  110-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    システム管理マスタ（医療機関情報）
            PERFORM 120-HOSPINF-GET-SEC
@@ -790,93 +831,165 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 110-INI-FILE-SEC         SECTION.
+      **
+      **    出力順設定ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   STU-REC
+      **
+      *     OPEN  INPUT  SYUTURYOKU-FILE
+      **
+      *     READ SYUTURYOKU-FILE
+      *       AT END
+      *         INITIALIZE        STU-REC
+      *     END-READ
+      **
+      *     DISPLAY "出力番号=" STU-NUM
+      **
+      **    正しいデータでは無い時は０１に置き換える
+      *     IF     STU-NUM  NOT  =  "01" AND "02" AND "03" AND "04"
+      *       MOVE     "01"     TO  STU-NUM
+      *       DISPLAY  "出力順変換=" STU-NUM
+      *     END-IF
+      **
+      *     CLOSE  SYUTURYOKU-FILE
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名2="  FILE-NAME2
+      **
+      *     INITIALIZE   TAISYOKOHI-REC
+      **
+      *     OPEN  INPUT  TAISYOKOHI-FILE
+      **
+      *     MOVE  ZERO  TO  IDX
+      *                     FLG-TAISYOKOHI
+      **
+      *     PERFORM UNTIL    FLG-TAISYOKOHI = 1
+      *       READ TAISYOKOHI-FILE NEXT
+      *         AT END
+      *           MOVE  1                 TO  FLG-TAISYOKOHI
+      *         NOT AT END
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+      *           IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *             CONTINUE
+      *           ELSE
+      **            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **             IF  TAISYO-DAT-CHOHYO  =  "1"
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *               ADD   1               TO  IDX
+      *               MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **             END-IF
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *             DISPLAY "読み込みレコード=" TAISYOKOHI-REC
+      *           END-IF
+      *       END-READ
+      *     END-PERFORM
+      **
+      *     CLOSE TAISYOKOHI-FILE
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
       *****************************************************************
-      *    INIファイル読み込み
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC         SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    出力順設定ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+           MOVE    "SEIKYU4007"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
+      *    プログラムオプション取得
+      *    レセプト出力順
+           MOVE    "RECESYUTURYOKU"          TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:23)       TO  WRK-STUNUM-T
+           DISPLAY "レセプト出力順="  WRK-STUNUM
       *
-           INITIALIZE   STU-REC
-      *
-           OPEN  INPUT  SYUTURYOKU-FILE
-      *
-           READ SYUTURYOKU-FILE
-             AT END
-               INITIALIZE        STU-REC
-           END-READ
-      *
-           DISPLAY "出力番号=" STU-NUM
-      *
-      *    正しいデータでは無い時は０１に置き換える
-           IF     STU-NUM  NOT  =  "01" AND "02" AND "03" AND "04"
-             MOVE     "01"     TO  STU-NUM
-             DISPLAY  "出力順変換=" STU-NUM
-           END-IF
-      *
-           CLOSE  SYUTURYOKU-FILE
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名2="  FILE-NAME2
-      *
-           INITIALIZE   TAISYOKOHI-REC
-      *
-           OPEN  INPUT  TAISYOKOHI-FILE
-      *
-           MOVE  ZERO  TO  IDX
-                           FLG-TAISYOKOHI
-      *
-           PERFORM UNTIL    FLG-TAISYOKOHI = 1
-             READ TAISYOKOHI-FILE NEXT
-               AT END
-                 MOVE  1                 TO  FLG-TAISYOKOHI
-               NOT AT END
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
-                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                   CONTINUE
-                 ELSE
-      *            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *             IF  TAISYO-DAT-CHOHYO  =  "1"
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                     ADD   1               TO  IDX
-                     MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *             END-IF
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                   DISPLAY "読み込みレコード=" TAISYOKOHI-REC
-                 END-IF
-             END-READ
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
            END-PERFORM
       *
-           CLOSE TAISYOKOHI-FILE
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1  >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
       *
            .
-       110-INI-FILE-EXT.
+       1001-OPTION-SET-EXT.
            EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *****************************************************************
       *    地方公費対象患者用病名ファイル作成
@@ -896,6 +1009,9 @@
       * 
            DISPLAY "編集１開始"
            CALL  "SEIKYU40BYOMEI1"    USING  WRK-PARA-LINK
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) start
+                                             TAISYO-DAT
+      *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
            DISPLAY "編集２開始"
            CALL  "SEIKYU40BYOMEI2"    USING  WRK-PARA-LINK
            DISPLAY "病名ファイル作成終了"
@@ -1322,7 +1438,10 @@
       *
       *      出力順設定
       *      保険者番号順
-           IF    STU-NUM  =  "01" OR "02"
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *     IF    STU-NUM  =  "01" OR "02"
+           IF    WRK-STUNUM  =  "01" OR "02"
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
              EVALUATE  MF100-HKNNUM
       *      ４桁
              WHEN "001"
@@ -1359,7 +1478,10 @@
            END-IF
       *
       *      カナ氏名順・患者番号順
-           IF  STU-NUM  =  "01" OR "03"
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *     IF  STU-NUM  =  "01" OR "03"
+           IF  WRK-STUNUM  =  "01" OR "03"
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
              MOVE  MF100-KANANAME  TO  MF100-KANANAME-KEY
            ELSE
              MOVE  MF100-PTNUM     TO  MF100-PTNUM-KEY
@@ -4345,6 +4467,54 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
