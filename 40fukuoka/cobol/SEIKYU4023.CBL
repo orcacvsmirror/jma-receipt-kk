@@ -44,6 +44,7 @@
       *                                  取得するようにする
       *  01.00.08    吉川    2013/01/22  医療機関情報編集対応
       *  01.00.09    吉川    2013/02/07  プラグイン対応
+      *  01.00.10    吉川    2013/09/04  プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -62,22 +63,24 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
-      *    金融機関情報ファイル
-           SELECT  KINYU-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-KINYU.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-TAISYOKOHI.
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **    金融機関情報ファイル
+      *     SELECT  KINYU-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-KINYU.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-TAISYOKOHI.
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
        DATA  DIVISION.
        FILE  SECTION.
@@ -91,26 +94,28 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
-      *    金融機関ファイル
-       FD  KINYU-FILE.
-       01  KINYU-REC.
-      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
-      *     03  KINYU-KINYUDATA           PIC X(20).
-           03  KINYU-KINYUDATA           PIC X(40).
-      *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
-           03  FILLER                    PIC X(01).
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル
-       FD  TAISYOKOHI-FILE.
-       01  TAISYOKOHI-REC.
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     03  TAISYO-DAT-CHOHYO   PIC X(01).
-      *     03  FILLER              PIC X(01).
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-           03  TAISYO-DAT-KOHNUM   PIC X(03). 
-           03  TAISYO-DAT-KAIGYO   PIC X(01). 
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **    金融機関ファイル
+      * FD  KINYU-FILE.
+      * 01  KINYU-REC.
+      **=== 口座名義人追加 by Yoshikawa(2009/03/05) start
+      **     03  KINYU-KINYUDATA           PIC X(20).
+      *     03  KINYU-KINYUDATA           PIC X(40).
+      **=== 口座名義人追加 by Yoshikawa(2009/03/05) end
+      *     03  FILLER                    PIC X(01).
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル
+      * FD  TAISYOKOHI-FILE.
+      * 01  TAISYOKOHI-REC.
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     03  TAISYO-DAT-CHOHYO   PIC X(01).
+      **     03  FILLER              PIC X(01).
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
+      *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -160,6 +165,10 @@
            03  FLG-TAISYOKOHI        PIC 9(01).
            03  FLG-TAISYO            PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+           03  FLG-PRGOPTION         PIC 9(01).
+           03  FLG-OK                PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -180,19 +189,21 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4023".
-           03  FILLER              PIC X(09)  VALUE "KINYU.INI".
-       01  FILE-NAME2.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM2       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4023".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4023".
+      *     03  FILLER              PIC X(09)  VALUE "KINYU.INI".
+      * 01  FILE-NAME2.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM2       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4023".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -261,6 +272,13 @@
       *     03  WRK-KINYUDATA         PIC X(20) OCCURS 4.
            03  WRK-KINYUDATA         PIC X(40) OCCURS 5.
       *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
@@ -375,6 +393,12 @@
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -543,13 +567,17 @@
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    INIファイル読み込み
-           PERFORM  110-INI-FILE-SEC
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
-      *
-      *    金融機関情報
-           PERFORM  111-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    INIファイル読み込み
+      *     PERFORM  110-INI-FILE-SEC
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      **
+      **    金融機関情報
+      *     PERFORM  111-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
@@ -560,115 +588,198 @@
        100-INIT-EXT.
            EXIT.
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 110-INI-FILE-SEC         SECTION.
+      **
+      **    印字対象公費番号ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME2
+      **
+      *     INITIALIZE   TAISYOKOHI-REC
+      **
+      *     OPEN  INPUT  TAISYOKOHI-FILE
+      **
+      *     MOVE  ZERO  TO  IDX
+      *                     FLG-TAISYOKOHI
+      **
+      *     PERFORM UNTIL    FLG-TAISYOKOHI = 1
+      *       READ TAISYOKOHI-FILE NEXT
+      *         AT END
+      *           MOVE  1                 TO  FLG-TAISYOKOHI
+      *         NOT AT END
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+      *           IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *             CONTINUE
+      *           ELSE
+      **            2=特定疾病療養受領証保持者の自己負担分相当額申請書
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **             IF  TAISYO-DAT-CHOHYO  =  "2"
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *               ADD   1               TO  IDX
+      *               MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **             END-IF
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *             DISPLAY "読み込みレコード=" TAISYOKOHI-REC
+      *           END-IF
+      *       END-READ
+      *     END-PERFORM
+      **
+      *     CLOSE TAISYOKOHI-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      ******************************************************************
+      **    金融機関情報INIファイル読み込み処理  
+      ******************************************************************
+      * 111-INI-FILE-SEC                SECTION.
+      **
+      **    金融機関情報取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **                          FILE-NAME
+      **     MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   KINYU-REC
+      **
+      *     OPEN  INPUT  KINYU-FILE
+      **
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      **=== 口座名義人追加 by Yoshikawa(2009/03/05) start
+      **              UNTIL    IDX1  >     4
+      *              UNTIL    IDX1  >     5
+      **=== 口座名義人追加 by Yoshikawa(2009/03/05) end
+      *       READ KINYU-FILE
+      *         AT END
+      *           INITIALIZE        KINYU-REC
+      *       END-READ
+      **
+      *       DISPLAY "金融情報取得=" KINYU-KINYUDATA
+      *       IF    KINYU-KINYUDATA(1:2)  =  "※"
+      *         MOVE   SPACE             TO  WRK-KINYUDATA(IDX1)
+      *       ELSE
+      *         MOVE   KINYU-KINYUDATA   TO  WRK-KINYUDATA(IDX1)
+      *       END-IF
+      *     END-PERFORM
+      **
+      *     CLOSE KINYU-FILE
+      **
+      *     DISPLAY "銀行名 ="  WRK-KINYUDATA(1)
+      *     DISPLAY "支店名 ="  WRK-KINYUDATA(2)
+      *     DISPLAY "普・当 ="  WRK-KINYUDATA(3)
+      *     DISPLAY "口座番号 ="  WRK-KINYUDATA(4)
+      *     DISPLAY "口座名義人 =" WRK-KINYUDATA(5)
+      **
+      *     .
+      * 111-INI-FILE-EXT.
+      *     EXIT.
+      *
       *****************************************************************
-      *    INIファイル読み込み
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC         SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    印字対象公費番号ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+           MOVE    "SEIKYU4023"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME2
-      *
-           INITIALIZE   TAISYOKOHI-REC
-      *
-           OPEN  INPUT  TAISYOKOHI-FILE
-      *
-           MOVE  ZERO  TO  IDX
-                           FLG-TAISYOKOHI
-      *
-           PERFORM UNTIL    FLG-TAISYOKOHI = 1
-             READ TAISYOKOHI-FILE NEXT
-               AT END
-                 MOVE  1                 TO  FLG-TAISYOKOHI
-               NOT AT END
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
-                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                   CONTINUE
-                 ELSE
-      *            2=特定疾病療養受領証保持者の自己負担分相当額申請書
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *             IF  TAISYO-DAT-CHOHYO  =  "2"
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                     ADD   1               TO  IDX
-                     MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *             END-IF
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                   DISPLAY "読み込みレコード=" TAISYOKOHI-REC
-                 END-IF
-             END-READ
-           END-PERFORM
-      *
-           CLOSE TAISYOKOHI-FILE
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
-      *****************************************************************
-      *    金融機関情報INIファイル読み込み処理  
-      *****************************************************************
-       111-INI-FILE-SEC                SECTION.
-      *
-      *    金融機関情報取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *                          FILE-NAME
-      *     MOVE  "data/KINYU.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   KINYU-REC
-      *
-           OPEN  INPUT  KINYU-FILE
-      *
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-      *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
-      *              UNTIL    IDX1  >     4
-                    UNTIL    IDX1  >     5
-      *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
-             READ KINYU-FILE
-               AT END
-                 INITIALIZE        KINYU-REC
-             END-READ
-      *
-             DISPLAY "金融情報取得=" KINYU-KINYUDATA
-             IF    KINYU-KINYUDATA(1:2)  =  "※"
-               MOVE   SPACE             TO  WRK-KINYUDATA(IDX1)
+      *    プログラムオプション取得
+      *    金融機関情報
+           MOVE    "KINYU"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  5
+             IF  WRK-OPTION(IDX)(1:2)  =  "※"
+               MOVE    SPACE                 TO  WRK-KINYUDATA(IDX)
              ELSE
-               MOVE   KINYU-KINYUDATA   TO  WRK-KINYUDATA(IDX1)
+               MOVE    WRK-OPTION(IDX)(1:40) TO  WRK-KINYUDATA(IDX)
              END-IF
            END-PERFORM
-      *
-           CLOSE KINYU-FILE
-      *
            DISPLAY "銀行名 ="  WRK-KINYUDATA(1)
            DISPLAY "支店名 ="  WRK-KINYUDATA(2)
            DISPLAY "普・当 ="  WRK-KINYUDATA(3)
            DISPLAY "口座番号 ="  WRK-KINYUDATA(4)
            DISPLAY "口座名義人 =" WRK-KINYUDATA(5)
       *
-           .
-       111-INI-FILE-EXT.
-           EXIT.
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
+           END-PERFORM
       *
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1  >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *****************************************************************
       *    パラメタ編集処理
       *****************************************************************
@@ -2173,6 +2284,54 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
