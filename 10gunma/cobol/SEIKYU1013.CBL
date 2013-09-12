@@ -65,6 +65,11 @@
       *  01.00.15    吉川    2013/04/08  「特」欄対象に024,038,079追加
       *  01.00.16    吉川    2013/07/09  全国公費と高額療養費の場合
       *                                  全国公費を「特」とするように修正
+      *  01.00.17    吉川    2013/09/11  公費と福祉が同点数の場合
+      *                                  第一請求点数は公費の点数を記録
+      *                                  月途中で全国公費を追加して、
+      *                                  保険＋全国公費(新)を組合せた場合
+      *                                  全国公費(新)の分が記録されないように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -155,6 +160,9 @@
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
            03  FLG-KOGAKU                 PIC 9(01).
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) start
+           03  FLG-KOHOK                  PIC 9(01).
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -894,6 +902,12 @@
                       UNTIL    IDX  >     2  OR
                       RECE10-KOHNUM(IDX)  =  SPACE
       *
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) start
+      *       月途中に追加した公費と福祉と絡んでいるかどうか判定
+              PERFORM 200117-KOHI-CHK-SEC
+      *
+              IF  FLG-KOHOK  =  1
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) end
                MOVE  RECE10-KOHNUM(IDX)         TO  MF100-EKOHNUM(IDX)
                MOVE  RECE10-JNISSU(IDX + 1)     TO  MF100-ENISSU(IDX)
                MOVE  RECE10-TOTALTEN(IDX + 1)   TO  MF100-ETENSU(IDX)
@@ -913,6 +927,9 @@
                PERFORM 930-PTKOHINF-SET-SEC
                MOVE    WRK-ETC-FTNJANUM    TO  MF100-EKOHFTNJANUM(IDX)
                MOVE    WRK-ETC-JKYSNUM     TO  MF100-EKOHJKYSNUM(IDX)
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) start
+              END-IF
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) end
              END-PERFORM
            END-IF
       *
@@ -1027,7 +1044,10 @@
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
            OR  MF100-TOTALTEN2        =     ZERO
       *=== 福祉点数に記載する条件変更 by Yoshikawa(2010/09/29) end
-             MOVE    ZERO             TO    MF100-TOTALTEN2
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) start
+      *       MOVE    ZERO             TO    MF100-TOTALTEN2
+             CONTINUE
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) end
            ELSE
       *=== 福祉と公費点数の記載変更 by Yoshikawa(2013/03/19) start
       **      感染症及び精神通院以外は福祉点数を上段に記載
@@ -1065,8 +1085,11 @@
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
       *       COMPUTE  MF100-ETENSU(1) =
       *                MF100-H-TOTALTEN  -  MF100-TOTALTEN2
-             COMPUTE  MF100-ETENSU(1) =
-                      MF100-TOTALTEN  -  MF100-TOTALTEN2
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) start
+      *       COMPUTE  MF100-ETENSU(1) =
+      *                MF100-TOTALTEN  -  MF100-TOTALTEN2
+             DISPLAY "第一公費点数 = " MF100-ETENSU(1)
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) end
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
            END-IF
       *=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
@@ -1576,6 +1599,51 @@
            .
        200116-BIKO-SET-EXT.
            EXIT.
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) start
+      *****************************************************************
+      *    公費と福祉の組合せチェック処理
+      *****************************************************************
+       200117-KOHI-CHK-SEC  SECTION.
+      *
+           INITIALIZE                      FLG-KOHOK
+      *
+      *    保険組合せ号マスタ読込
+           PERFORM 910-HKNCOMBI2-SELECT-SEC
+      *
+           PERFORM  UNTIL  FLG-HKNCOMBI  =  1
+      *      公費＋福祉の組合せ探索
+             IF  MF100-KOHNUM  =  COMB-KOHHKNNUM(1)
+                               OR COMB-KOHHKNNUM(2)
+                               OR COMB-KOHHKNNUM(3)
+                               OR COMB-KOHHKNNUM(4)
+      *
+      *        保険組合せが公費請求テーブルに存在していれば
+      *        公費＋福祉の組合せを使用していることになる
+               IF  COMB-HKNCOMBINUM  =  RECE02-HKNCOMBI(1)
+                                    OR  RECE02-HKNCOMBI(2)
+                                    OR  RECE02-HKNCOMBI(3)
+                                    OR  RECE02-HKNCOMBI(4)
+                                    OR  RECE02-HKNCOMBI(5)
+                                    OR  RECE02-HKNCOMBI(6)
+                                    OR  RECE02-HKNCOMBI(7)
+                                    OR  RECE02-HKNCOMBI(8)
+                                    OR  RECE02-HKNCOMBI(9)
+                                    OR  RECE02-HKNCOMBI(10)
+      *
+                 MOVE    1             TO  FLG-KOHOK
+               END-IF
+             END-IF
+      *
+             PERFORM 910-HKNCOMBI2-FETCH-SEC
+           END-PERFORM
+      *
+           PERFORM 910-HKNCOMBI2-CLOSE-SEC
+      *
+           .
+       200117-KOHI-CHK-EXT.
+           EXIT.
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) end
+      *
       *****************************************************************
       *    帳票ファイル出力処理
       *****************************************************************
@@ -2019,7 +2087,14 @@
       **=== 点数欄記載の変更 by Yoshikawa(2010/07/26) end
       *=== 福祉請求点数欄の計算方法修正 by Yoshikawa(2013/02/26) start
       *     MOVE    MF100-TOTALTEN          TO  WRK-NUM
-           COMPUTE  WRK-FUKUSHI  =  MF100-TOTALTEN  -  MF100-TOTALTEN2
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) start
+      *     COMPUTE  WRK-FUKUSHI  =  MF100-TOTALTEN  -  MF100-TOTALTEN2
+           IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
+             MOVE    MF100-TOTALTEN        TO  WRK-FUKUSHI
+           ELSE
+             COMPUTE  WRK-FUKUSHI  =  MF100-TOTALTEN  -  MF100-TOTALTEN2
+           END-IF
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) end
            MOVE    WRK-FUKUSHI             TO  WRK-NUM
       *=== 福祉請求点数欄の計算方法修正 by Yoshikawa(2013/02/26) end
       *=== 福祉欄は福祉分を記載 by Yoshikawa(2013/02/13) end
@@ -2028,10 +2103,17 @@
       *    
       *    ２２．第一公費請求点数
            IF  MF100-EKOHFTNJANUM(1)  NOT =  SPACE
-      *=== 第一公費請求点数は公費分を記載 by Yoshikawa(2013/02/13) start
-      *       MOVE  MF100-ETENSU(1)         TO  WRK-NUM9
-             MOVE  MF100-TOTALTEN2         TO  WRK-NUM9
-      *=== 第一公費請求点数は公費分を記載 by Yoshikawa(2013/02/13) end
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) start
+      **=== 第一公費請求点数は公費分を記載 by Yoshikawa(2013/02/13) start
+      **       MOVE  MF100-ETENSU(1)         TO  WRK-NUM9
+      *       MOVE  MF100-TOTALTEN2         TO  WRK-NUM9
+      **=== 第一公費請求点数は公費分を記載 by Yoshikawa(2013/02/13) end
+           IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
+             MOVE    MF100-ETENSU(1)       TO  WRK-NUM9
+           ELSE
+             MOVE    MF100-TOTALTEN2       TO  WRK-NUM9
+           END-IF
+      *=== 公費と福祉が同点数の場合記載 by Yoshikawa(2013/09/11) end
              MOVE  8                       TO  WRK-NAGASA
              PERFORM 5006-NUM-HENSYU-SEC
            ELSE
@@ -2853,6 +2935,82 @@
            .
        910-HKNCOMBI-READ-EXT.
            EXIT.
+      *
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) start
+      *****************************************************************
+      *    保険組合せマスター読込処理２
+      *****************************************************************
+       910-HKNCOMBI2-SELECT-SEC  SECTION.
+      *
+           INITIALIZE                      HKNCOMBI-REC
+           MOVE    SPA-HOSPNUM             TO  COMB-HOSPNUM
+           MOVE    RECE10-PTID             TO  COMB-PTID
+           MOVE    RECE10-KOHID(IDX)       TO  COMB-KOHID(1)
+                                               COMB-KOHID(2)
+                                               COMB-KOHID(3)
+                                               COMB-KOHID(4)
+           MOVE    HKNCOMBI-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"          TO  MCP-TABLE
+           MOVE    "key4"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           IF      MCP-RC              =   ZERO
+               PERFORM 910-HKNCOMBI2-FETCH-SEC
+           ELSE
+               INITIALIZE                  HKNCOMBI-REC
+               MOVE    1                   TO  FLG-HKNCOMBI
+           END-IF
+      *
+           .
+       910-HKNCOMBI2-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険組合せマスターＦＥＴＣＨ
+      *****************************************************************
+       910-HKNCOMBI2-FETCH-SEC  SECTION.
+      *
+           MOVE    "tbl_hkncombi"        TO  MCP-TABLE
+           MOVE    "key4"                TO  MCP-PATHNAME
+           MOVE    "DBFETCH"             TO  MCP-FUNC
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    MCPDATA-REC       TO  HKNCOMBI-REC
+               MOVE    ZERO              TO  FLG-HKNCOMBI
+           ELSE
+               INITIALIZE                    HKNCOMBI-REC
+               MOVE    1                 TO  FLG-HKNCOMBI
+           END-IF
+      *
+           .
+       910-HKNCOMBI2-FETCH-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険組合せマスタークローズ処理
+      *****************************************************************
+       910-HKNCOMBI2-CLOSE-SEC  SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"        TO  MCP-TABLE
+           MOVE    "key4"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       910-HKNCOMBI2-CLOSE-EXT.
+           EXIT.
+      *=== 福祉と絡まない公費の掲載防止 by Yoshikawa(2013/09/11) end
+      *
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) start
       *****************************************************************
       *    患者公費負担情報読込処理
