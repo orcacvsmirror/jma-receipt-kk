@@ -110,9 +110,9 @@ end
 
 def sign(file)
   if @opts[:passphrase].nil? || @opts[:passphrase].empty?
-    exec("gpg -u #{@opts[:keyuser]} -abs #{file}")
+    exec("gpg -u \"#{@opts[:keyuser]}\" -abs #{file}")
   else
-    exec("gpg --passphrase #{@opts[:passphrase]} -u #{@opts[:keyuser]} -abs #{file}")
+    exec("gpg --passphrase \"#{@opts[:passphrase]}\" -u \"#{@opts[:keyuser]}\" -abs #{file}")
   end
 end
 
