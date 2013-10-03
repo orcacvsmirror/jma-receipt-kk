@@ -41,6 +41,7 @@
       *  01.00.08    吉川   2012/02/13   シス管「2010」の公費再掲欄への
       *                                  地方公費記載設定対応
       *  01.00.09    吉川   2012/06/12   電話番号を印字するように修正
+      *  01.00.10    吉川   2013/10/03   後期高齢者の公費も集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -897,7 +898,6 @@
       *****************************************************************
        220-KOUKI-SYUKEI-SEC               SECTION.
       *
-       DISPLAY "220-KOUKI-SYUKEI-SEC"
       *    入院／外来
            IF  RECE10-NYUGAIKBN  =  "1"
              MOVE  1  TO  IDX2
@@ -913,6 +913,16 @@
            END-IF
       *
            PERFORM  2101-SYUKEI-SEC
+      *
+      *=== 後期高齢者の公費も集計する by Yoshikawa(2013/10/03) start
+      *    公費併用チェック
+           IF  RECE10-KOHNUM (1)   NOT =   SPACE  OR
+               RECE10-KOHNUM (2)   NOT =   SPACE  OR
+               RECE10-KOHNUM (3)   NOT =   SPACE  OR
+               RECE10-KOHNUM (4)   NOT =   SPACE
+               PERFORM 220-KOH-SYUKEI-SEC
+           END-IF
+      *=== 後期高齢者の公費も集計する by Yoshikawa(2013/10/03) end
       *
            IF      FLG-SKT0400TMP  =  1
                    WRITE    SKT0400TMP-REC
