@@ -46,6 +46,7 @@
       *  01.00.07    吉川    12/01/24    仙台市の市町村名を印字する
       *  01.00.08    萩野    12/08/15    対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.09    吉川    13/10/03    実日数がゼロの場合は0を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -176,6 +177,9 @@
       *    一時領域
        01  WRK-AREA.
            03  WRK-RECEERR           PIC  X(200).
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2013/10/03) start
+           03  WRK-Z1-9              PIC Z9.
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2013/10/03) end
            03  WRK-Z2                PIC ZZ.
            03  WRK-Z3                PIC ZZZ.
            03  WRK-Z7                PIC ZZZ,ZZZ.
@@ -1241,8 +1245,12 @@
              MOVE     MF100-SEX               TO  SC05-SEX  (IDX1)
       *
       *    診療日数
-             MOVE     MF100-JNISSU            TO  WRK-Z2
-             MOVE     WRK-Z2                  TO  SC05-NISSU (IDX1)
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2013/10/03) start
+      *       MOVE     MF100-JNISSU            TO  WRK-Z2
+      *       MOVE     WRK-Z2                  TO  SC05-NISSU (IDX1)
+             MOVE     MF100-JNISSU            TO  WRK-Z1-9
+             MOVE     WRK-Z1-9                TO  SC05-NISSU (IDX1)
+      *=== 実日数がゼロの場合は0を印字 by Yoshikawa(2013/10/03) end
       *
       *    請求点数
              MOVE     MF100-TOTALTEN          TO  WRK-Z7
