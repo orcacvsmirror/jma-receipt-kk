@@ -182,6 +182,9 @@
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2013/06/17) start
            03  IDXX                PIC 9(04).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2013/06/17) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/04) start
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/04) end
       *
        01  WRK-PARA.
            COPY    "CPORCSPRTLNK.INC".
