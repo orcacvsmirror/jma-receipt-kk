@@ -5,9 +5,7 @@ PREFNAME=shiga
 PROGRAMID=SOKATU2500
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2500"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='TAISYOKOHI';"
-INIFILE="/tmp/${15}${PROGRAMID}TAISYOKOHI.INI"
--------------------------------------------#
+#-------------------------------------------#
 #    国保総括表作成（滋賀）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
@@ -26,9 +24,6 @@ INIFILE="/tmp/${15}${PROGRAMID}TAISYOKOHI.INI"
             rm  ${16}
         fi
         
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
@@ -45,9 +40,6 @@ INIFILE="/tmp/${15}${PROGRAMID}TAISYOKOHI.INI"
                 exit
             fi
         fi
-        
-##      INIファイル 削除
-        rm -f ${INIFILE}
         
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
