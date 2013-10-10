@@ -13,7 +13,8 @@ bind	"SEIKYU4705"	"OpenCOBOL";
 bind	"SEIKYU47BYOMEI1"	"OpenCOBOL";
 bind	"SEIKYU47BYOMEI2"	"OpenCOBOL";
 bind	"SEIKYU4707"	"OpenCOBOL";
-
-
+bind	"SEIKYU4709"	"OpenCOBOL";
+bind	"SEIKYU4711"	"OpenCOBOL";
+bind	"SEIKYU4713"	"OpenCOBOL";
 
 #include "orcadb.inc"
