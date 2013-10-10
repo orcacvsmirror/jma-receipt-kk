@@ -538,8 +538,8 @@
       *    金融機関情報
            MOVE    "KINYU"                   TO  WRK-KBNCD
            PERFORM 1001-OPTION-SET-SEC
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >  5
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  5
              IF  WRK-OPTION(IDX)(1:2)  =  "※"
                MOVE    SPACE                 TO  WRK-KINYUDATA(IDX)
              ELSE
