@@ -718,7 +718,7 @@
       *    レセプト出力順
            MOVE    "RECESYUTURYOKU"          TO  WRK-KBNCD
            PERFORM 1001-OPTION-SET-SEC
-           MOVE    WRK-OPTION(1)(1:2)        TO  WRK-STUNUM
+           MOVE    WRK-OPTION(1)(22:2)        TO  WRK-STUNUM
       *    正しいデータでは無い時は０１に置き換える
            IF  WRK-STUNUM  NOT =  "01" AND "02" AND "03" AND "04"
              MOVE    "01"                    TO  WRK-STUNUM
