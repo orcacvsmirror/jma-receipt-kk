@@ -43,6 +43,7 @@
       *  01.00.09    吉川    2013/01/22  スタックオーバーフロー対応
       *                                  医療機関情報編集対応
       *  01.00.10    吉川    2013/02/12  プラグイン対応
+      *  01.00.11    吉川    2013/10/09  プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -56,11 +57,13 @@
                                    RECORD  KEY     IS  MF100-KEY
                                    FILE    STATUS  IS  STS-MF100.
       *
-      *    レセプト印刷順ファイル
-           SELECT  SYUTURYOKU-FILE ASSIGN FILE-NAME
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-SYUTURYOKU.
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      **    レセプト印刷順ファイル
+      *     SELECT  SYUTURYOKU-FILE ASSIGN FILE-NAME
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-SYUTURYOKU.
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *    レセプト０３１データ
            SELECT  RECE031-FILE     ASSIGN  RECE031PARA
@@ -80,11 +83,13 @@
        01  MF100-REC.
            COPY  "SEI4705.INC".
       *
-      *    レセプト印刷順ファイル
-       FD  SYUTURYOKU-FILE.
-       01  STU-REC.
-           03  FILLER              PIC X(21).
-           03  STU-NUM             PIC X(02). 
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      **    レセプト印刷順ファイル
+      * FD  SYUTURYOKU-FILE.
+      * 01  STU-REC.
+      *     03  FILLER              PIC X(21).
+      *     03  STU-NUM             PIC X(02). 
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *    レセプト０３１データ
        FD  RECE031-FILE.
@@ -153,6 +158,10 @@
            03  FLG-PTKOHFTN    PIC 9(01).
            03  FLG-HEIYOU      PIC 9(01).
            03  FLG-TYOKI       PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+           03  FLG-PRGOPTION   PIC 9(01).
+           03  FLG-OK          PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -220,14 +229,16 @@
            05  WRK-PARA-LINK-HOSPNUM PIC  9(02).
       *=== open-cobol1.0対応 by Yoshikawa(2010/11/25) end
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4705".
-           03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4705".
+      *     03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/12) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -260,6 +271,15 @@
       *=== プラグイン対応 by Yoshikawa(2013/02/12) end
       *
            03  WRK-PATH              PIC X(50).
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+           03  WRK-STUNUM          PIC X(02).
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -509,6 +529,12 @@
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
+      *
       *****************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -620,8 +646,12 @@
       *    ファイルＯＰＥＮ処理
            PERFORM 110-FILE-OPEN-SEC
       *
-      *    INIファイル読み込み
-           PERFORM  110-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      **    INIファイル読み込み
+      *     PERFORM  110-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *    システム管理マスタ（医療機関情報）
            PERFORM 120-HOSPINF-GET-SEC
@@ -637,45 +667,111 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 110-INI-FILE-SEC         SECTION.
+      **
+      **    出力順設定ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/12) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/12) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   STU-REC
+      **
+      *     OPEN  INPUT  SYUTURYOKU-FILE
+      **
+      *     READ SYUTURYOKU-FILE
+      *       AT END
+      *         INITIALIZE        STU-REC
+      *     END-READ
+      **
+      *     DISPLAY "出力番号=" STU-NUM
+      **
+      **    正しいデータでは無い時は０１に置き換える
+      *     IF     STU-NUM  NOT  =  "01" AND "02" AND "03" AND "04"
+      *       MOVE     "01"     TO  STU-NUM
+      *       DISPLAY  "出力順変換=" STU-NUM
+      *     END-IF
+      **
+      *     CLOSE  SYUTURYOKU-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
       *****************************************************************
-      *    INIファイル読み込み
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC         SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    出力順設定ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/12) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/12) end
+           MOVE    "SEIKYU4705"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   STU-REC
-      *
-           OPEN  INPUT  SYUTURYOKU-FILE
-      *
-           READ SYUTURYOKU-FILE
-             AT END
-               INITIALIZE        STU-REC
-           END-READ
-      *
-           DISPLAY "出力番号=" STU-NUM
-      *
+      *    プログラムオプション取得
+      *    レセプト出力順
+           MOVE    "RECESYUTURYOKU"          TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:2)        TO  WRK-STUNUM
       *    正しいデータでは無い時は０１に置き換える
-           IF     STU-NUM  NOT  =  "01" AND "02" AND "03" AND "04"
-             MOVE     "01"     TO  STU-NUM
-             DISPLAY  "出力順変換=" STU-NUM
+           IF  WRK-STUNUM  NOT =  "01" AND "02" AND "03" AND "04"
+             MOVE    "01"                    TO  WRK-STUNUM
            END-IF
-      *
-           CLOSE  SYUTURYOKU-FILE
+           DISPLAY "出力順変換="  WRK-STUNUM
       *
            .
-       110-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *****************************************************************
       *    地方公費対象患者用病名ファイル作成
@@ -1110,7 +1206,10 @@
       *
       *    ＜出力順設定＞
       *    保険者番号順
-           IF    STU-NUM  =  "01" OR "02"
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      *     IF    STU-NUM  =  "01" OR "02"
+           IF    WRK-STUNUM  =  "01" OR "02"
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
              EVALUATE  MF100-HKNNUM
       *      ４桁
              WHEN "001"
@@ -1147,7 +1246,10 @@
            END-IF
       *
       *      カナ氏名順・患者番号順
-           IF  STU-NUM  =  "01" OR "03"
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      *     IF  STU-NUM  =  "01" OR "03"
+           IF  WRK-STUNUM  =  "01" OR "03"
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
              MOVE  MF100-KANANAME  TO  MF100-KANANAME-KEY
            ELSE
              MOVE  MF100-PTNUM     TO  MF100-PTNUM-KEY
@@ -3268,6 +3370,54 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
