@@ -44,6 +44,7 @@
       *  01.00.09    吉川    11/01/25    open-cobol1.0対応
       *  01.00.10    吉川    11/06/23    東北地方太平洋沖地震対応
       *  01.00.11    吉川    13/08/06    総括表をもう1枚印刷する
+      *  01.00.12    吉川    13/10/10    2枚目の帳票様式変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1140,17 +1141,24 @@
       *    帳票編集処理
            PERFORM    330-BODY-HEN-SEC
       *
-      *---(01.00.06) LINE ADD START ------------------------------------
-      *    追加帳票（受領書）印刷処理
-           PERFORM    341-PRINT-OUT-SEC
-      *---(01.00.06) LINE ADD END   ------------------------------------
-      *    帳票印刷処理
-      *=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) start
-      *     PERFORM    340-PRINT-OUT-SEC
-           PERFORM  2  TIMES
-               PERFORM    340-PRINT-OUT-SEC
+      *=== 2枚目の帳票様式変更 by Yoshikawa(2013/10/10) start
+      **---(01.00.06) LINE ADD START ------------------------------------
+      **    追加帳票（受領書）印刷処理
+      *     PERFORM    341-PRINT-OUT-SEC
+      **---(01.00.06) LINE ADD END   ------------------------------------
+      **    帳票印刷処理
+      **=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) start
+      **     PERFORM    340-PRINT-OUT-SEC
+      *     PERFORM  2  TIMES
+      *         PERFORM    340-PRINT-OUT-SEC
+      *     END-PERFORM
+      **=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) end
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >  3
+      *      帳票印刷処理
+             PERFORM 340-PRINT-OUT-SEC
            END-PERFORM
-      *=== 総括表をもう1枚印刷する by Yoshikawa(2013/08/06) end
+      *=== 2枚目の帳票様式変更 by Yoshikawa(2013/10/10) end
       *
            .
        2002-PRINT-EXT.
@@ -1368,7 +1376,20 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT1400.red"        TO  SPRT-PRTID
+      *=== 2枚目の帳票様式変更 by Yoshikawa(2013/10/10) start
+      *     MOVE   "SKT1400.red"        TO  SPRT-PRTID
+           EVALUATE  IDX1
+             WHEN  1
+      *        受領書
+               MOVE    "SKT1401.red"   TO  SPRT-PRTID
+             WHEN  2
+      *        総括表2枚目
+               MOVE    "SKT1402.red"   TO  SPRT-PRTID
+             WHEN  3
+      *        総括表3枚目
+               MOVE    "SKT1400.red"   TO  SPRT-PRTID
+           END-EVALUATE
+      *=== 2枚目の帳票様式変更 by Yoshikawa(2013/10/10) end
            MOVE    "国保総括表"        TO  SPRT-TITLE
            MOVE    SKT1400             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
