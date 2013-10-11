@@ -48,6 +48,7 @@
       *                                取得するようにする
       *  01.00.08    萩野    13/02/13  社保と国保の合計頁数を分けて計上し
       *                                記載する
+      *  01.00.09    吉川    13/10/11  自己負担額がない場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -816,7 +817,7 @@
       *
       *    国保／社保別に件数をカウント
       *    国保→社保の順に印刷する
-           IF      FLG-ERR     =   ZERO    
+           IF      FLG-ERR     =   ZERO
                IF  RECE02-TEISYUTUSAKI  =  2
       *=== 後期高齢の保険区分は国保とする by Yoshikawa(2011/06/22) start
                                        OR  6
@@ -1276,13 +1277,17 @@
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) start
       *      全国公費が全額助成の場合は、地方公費の助成が発生しない
              IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
-               IF  IDX   =   1
-                 MOVE      ZERO          TO  FLG-ERR
-               ELSE
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) start
+      *         IF  IDX   =   1
+      *           MOVE      ZERO          TO  FLG-ERR
+      *         ELSE
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) end
                  IF  SYU-KOH-COMPFTN-ENTANI(IDX)  NOT =  ZERO
                    MOVE    ZERO          TO  FLG-ERR
                  END-IF
-               END-IF
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) start
+      *         END-IF
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) end
              END-IF
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) end
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"

@@ -32,6 +32,7 @@
       *                                  後期高齢の場合、保険区分は国保とする
       *  01.00.02    吉川    2012/03/07  対象公費番号をINIファイルから
       *                                  取得するようにする
+      *  01.00.03    吉川    2013/10/11  自己負担額がない場合は印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1539,13 +1540,17 @@
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) start
       *      全国公費が全額助成の場合は、地方公費の助成が発生しない
              IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
-               IF  IDX   =   1
-                 MOVE      ZERO        TO    FLG-ERR
-               ELSE
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) start
+      *         IF  IDX   =   1
+      *           MOVE      ZERO        TO    FLG-ERR
+      *         ELSE
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) end
                  IF  SYU-KOH-COMPFTN-ENTANI(IDX)  NOT =  ZERO
                    MOVE    ZERO        TO    FLG-ERR
                  END-IF
-               END-IF
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) start
+      *         END-IF
+      *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) end
              END-IF
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) end
       *      長期
