@@ -110,6 +110,21 @@
         </appinfo>
       </element>
     </element>
+    <element name="TUKIOKURE" occurs="1">
+      <appinfo>
+        <embed object="string" length="5"/>
+      </appinfo>
+    </element>
+    <element name="TYOKI" occurs="1">
+      <appinfo>
+        <embed object="string" length="5"/>
+      </appinfo>
+    </element>
+    <element name="KOGAKU" occurs="1">
+      <appinfo>
+        <embed object="string" length="5"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -814,7 +829,7 @@
         <point val="0.65,4.13233"/>
       </attribute>
       <attribute name="obj_bb">
-        <rectangle val="0.635,4.11733;19.7433,7.46812"/>
+        <rectangle val="0.635,4.11733;19.7433,7.46813"/>
       </attribute>
       <attribute name="elem_corner">
         <point val="0.65,4.13233"/>
@@ -6486,6 +6501,132 @@
           </attribute>
           <attribute name="pos">
             <point val="3.5879,8.83454"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O207">
+      <attribute name="obj_pos">
+        <point val="15.1171,10.6007"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.0566,10.322;15.1171,10.672"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TUKIOKURE#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.1171,10.6007"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O208">
+      <attribute name="obj_pos">
+        <point val="16.5535,10.6007"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.493,10.322;16.5535,10.672"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TYOKI#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="16.5535,10.6007"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.2121"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.17675"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O209">
+      <attribute name="obj_pos">
+        <point val="18.02,10.6007"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="16.9595,10.322;18.02,10.672"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#KOGAKU#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#9,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.35"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="18.02,10.6007"/>
           </attribute>
           <attribute name="color">
             <color val="#000000"/>

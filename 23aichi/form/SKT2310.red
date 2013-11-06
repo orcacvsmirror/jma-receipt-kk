@@ -122,6 +122,16 @@
         <embed object="string" length="7"/>
       </appinfo>
     </element>
+    <element name="TUKIOKURE" occurs="1">
+      <appinfo>
+        <embed object="string" length="7"/>
+      </appinfo>
+    </element>
+    <element name="TYOKI" occurs="1">
+      <appinfo>
+        <embed object="string" length="7"/>
+      </appinfo>
+    </element>
   </dictionarydata>
   <diagramdata>
     <attribute name="background">
@@ -14637,6 +14647,90 @@
           </attribute>
           <attribute name="multi">
             <real val="0.202"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O466">
+      <attribute name="obj_pos">
+        <point val="15.6313,20.0712"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.3587,19.8323;15.6313,20.1323"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TUKIOKURE#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.6313,20.0712"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="Embed - Text" version="0" id="O467">
+      <attribute name="obj_pos">
+        <point val="17.133,20.0712"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="15.8604,19.8323;17.133,20.1323"/>
+      </attribute>
+      <attribute name="dnode_path">
+        <string>#TYOKI#</string>
+      </attribute>
+      <attribute name="embed_text_string">
+        <enum val="0"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#999,999#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.3"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="17.133,20.0712"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="2"/>
+          </attribute>
+          <attribute name="single">
+            <real val="0.1818"/>
+          </attribute>
+          <attribute name="multi">
+            <real val="0.1515"/>
           </attribute>
         </composite>
       </attribute>
