@@ -53,6 +53,7 @@
       *  01.00.14    吉川     13/01/10    プラグイン対応
       *                                   医療機関情報編集対応
       *  01.00.15    吉川     13/07/08    プログラムオプション対応
+      *  01.00.16    吉川     13/11/05    月遅れ件数、長期件数追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -994,6 +995,22 @@
              PERFORM  220-KOH-SYUKEI-SEC
            END-IF
       *
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) start
+      *    月遅れチェック
+           IF  (WRK-PARA-SYOKBN  =  "1")
+           AND (LNK-PRTKANRI-SRYYM  NOT =  RECE10-SRYYM)
+             ADD  1           TO  SKT2310TMP-TUKIOKURE
+           END-IF
+      *    
+      *    長期チェック
+           IF  RECE10-ETC-KOHNUM(1)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(2)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(3)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(4)  =  "972" OR "974"
+             ADD  1           TO  SKT2310TMP-TYOKI
+           END-IF
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) end
+      *
            IF  FLG-SKT2310TMP  =  1
                WRITE    SKT2310TMP-REC
            ELSE
@@ -1343,6 +1360,14 @@
            MOVE  SKT2310TMP-KOGAKU       TO    WRK-Z7
            MOVE  WRK-Z7                  TO    SKT2310-KOGAKU
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) start
+      *    月遅れ件数
+           MOVE  SKT2310TMP-TUKIOKURE    TO    WRK-Z7
+           MOVE  WRK-Z7                  TO    SKT2310-TUKIOKURE
+      *    長期件数
+           MOVE  SKT2310TMP-TYOKI        TO    WRK-Z7
+           MOVE  WRK-Z7                  TO    SKT2310-TYOKI
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) end
       *
            .
        321-BODY-HEN-EXT.

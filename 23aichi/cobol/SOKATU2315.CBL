@@ -37,6 +37,7 @@
       *                                  印字されるように修正
       *                                  PERFORM→GOTOに修正
       *  01.00.08    吉川    2013/01/10  医療機関情報編集対応
+      *  01.00.09    吉川    2013/11/05  月遅れ件数、長期件数追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -236,6 +237,11 @@
       *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) end
                05  SUM-KOHKENSU                PIC  9(07).
       *=== 対象公費追加 by Yoshikawa(2008/06/24) end
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) start
+               05  SUM-TUKIOKURE               PIC  9(06).
+               05  SUM-TYOKI                   PIC  9(06).
+               05  SUM-KOGAKU                  PIC  9(06).
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) end
       *
       *    キー領域
        01  KEY-AREA                    VALUE   LOW-VALUE.
@@ -751,6 +757,30 @@
            END-PERFORM
       *=== 原爆件数不具合修正 by Yoshikawa(2008/05/20) end
       *
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) start
+      *    月遅れチェック
+           IF  (WRK-SYOKBN  =  "1")
+           AND (LNK-PRTKANRI-SRYYM  NOT =  RECE10-SRYYM)
+               ADD    1                      TO  SUM-TUKIOKURE
+           END-IF
+      *
+      *    長期チェック
+           IF  RECE10-ETC-KOHNUM(1)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(2)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(3)  =  "972" OR "974"
+           OR  RECE10-ETC-KOHNUM(4)  =  "972" OR "974"
+               ADD    1                      TO  SUM-TYOKI
+           END-IF
+      *
+      *    高額療養費チェック
+           IF  RECE10-TOKKI(1)  =  "17" OR "18" OR "19"
+           OR  RECE10-TOKKI(2)  =  "17" OR "18" OR "19"
+           OR  RECE10-TOKKI(3)  =  "17" OR "18" OR "19"
+           OR  RECE10-TOKKI(4)  =  "17" OR "18" OR "19"
+               ADD    1                      TO  SUM-KOGAKU
+           END-IF
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) end
+      *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
                PERFORM 20013-UPD-FILE-HENSYU-SEC
@@ -1121,6 +1151,17 @@
            MOVE  SUM-KOHKENSU            TO  WRK-Z9
            MOVE  WRK-Z9                  TO  SKT2315-KOHKENSU
       *=== 対象公費追加 by Yoshikawa(2008/06/24) end
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) start
+      *    月遅れ件数
+           MOVE  SUM-TUKIOKURE           TO  WRK-Z5
+           MOVE  WRK-Z5                  TO  SKT2315-TUKIOKURE
+      *    長期件数
+           MOVE  SUM-TYOKI               TO  WRK-Z5
+           MOVE  WRK-Z5                  TO  SKT2315-TYOKI
+      *    高額療養費件数
+           MOVE  SUM-KOGAKU              TO  WRK-Z5
+           MOVE  WRK-Z5                  TO  SKT2315-KOGAKU
+      *=== 月遅れ、長期件数追加 by Yoshikawa(2013/11/05) end
       *
            .
        20023-BODY-HEN-EXT.
