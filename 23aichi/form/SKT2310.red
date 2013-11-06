@@ -122,6 +122,16 @@
         <embed object="text" length="7"/>
       </appinfo>
     </element>
+    <element name="TUKIOKURE" occurs="1">
+      <appinfo>
+        <embed object="text" length="7"/>
+      </appinfo>
+    </element>
+    <element name="TYOKI" occurs="1">
+      <appinfo>
+        <embed object="text" length="7"/>
+      </appinfo>
+    </element>
   </dia:dictionarydata>
   <dia:diagramdata>
     <dia:attribute name="background">
@@ -14084,10 +14094,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O464">
       <dia:attribute name="obj_pos">
-        <dia:point val="18.729,20.0712"/>
+        <dia:point val="18.6165,20.0462"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.679,19.8062;18.729,20.1087"/>
+        <dia:rectangle val="17.5315,19.7712;18.6165,20.0837"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -14098,10 +14108,10 @@
             <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.375"/>
+            <dia:real val="0.38805554062128067"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="18.729,20.0712"/>
+            <dia:point val="18.6165,20.0462"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -14158,6 +14168,90 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#TOKUBETU#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O466">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.5678,20.0462"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="14.4828,19.7712;15.5678,20.0837"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#999,999#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.38805554062128067"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.5678,20.0462"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="2"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#TUKIOKURE#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O467">
+      <dia:attribute name="obj_pos">
+        <dia:point val="17.0928,20.0462"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="16.0078,19.7712;17.0928,20.0837"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#999,999#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.38805554062128067"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="17.0928,20.0462"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="2"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#TYOKI#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>

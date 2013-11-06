@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川      2013/11/05   月遅れ件数、長期件数追加
       ************************************************************
        01  SKT2310TMP-REC.
            03  SKT2310TMP-KEY.
@@ -55,3 +56,7 @@
                05  SKT2310TMP-KOHKENSU2             PIC  9(07).
                05  SKT2310TMP-KOHKENSU3             PIC  9(07).
            03  SKT2310TMP-KOGAKU                    PIC  9(06).
+      *=== 項目追加 by Yoshikawa(2013/11/05) start
+           03  SKT2310TMP-TUKIOKURE                 PIC  9(06).
+           03  SKT2310TMP-TYOKI                     PIC  9(06).
+      *=== 項目追加 by Yoshikawa(2013/11/05) end
