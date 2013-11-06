@@ -38,6 +38,7 @@
       *                                  PERFORM→GOTOに修正
       *  01.00.08    吉川    2013/01/10  医療機関情報編集対応
       *  01.00.09    吉川    2013/11/05  月遅れ件数、長期件数追加
+      *                                  特別療養費を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1098,6 +1099,12 @@
              MOVE    "在"              TO  SKT2315-ZAI1
              MOVE    "◯"              TO  SKT2315-ZAI2
            END-IF
+      *=== 特別療養費を印字 by Yoshikawa(2013/11/05) start
+      *    特別療養費
+           IF  WRK-PARA-SYOKBN1  =  "2"
+             MOVE    "特別療養費"      TO  SKT2315-TOKUBETU
+           END-IF
+      *=== 特別療養費を印字 by Yoshikawa(2013/11/05) end
       *
            .
        20021-HEAD-HEN-EXT.
