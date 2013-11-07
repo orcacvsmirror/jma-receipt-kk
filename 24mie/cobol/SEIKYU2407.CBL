@@ -37,6 +37,7 @@
       *  01.00.05    萩野    12/09/26    月途中の保険変更でレセプトが分かれても
       *                                  変更前と後の合算した金額を１行で記載する
       *                                  患者番号順で記載されるように修正
+      *  01.00.06    吉川    13/11/07    食事療養費の印字不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -783,9 +784,14 @@
            ADD  RECE02-JNISSU       (IDY)    TO  MF100-JNISSU
            ADD  RECE02-TOTALTEN     (IDY)    TO  MF100-TOTALTEN
            ADD  RECE02-FTNMONEY     (IDY)    TO  MF100-FTNMONEY
-           ADD  RECE02-SHOKUJINISSU (IDY)    TO  MF100-ETCSHOKUJINISSU
-           ADD  RECE02-SHOKUJIRYOYOHI(IDY)   TO  MF100-ETCSHOKUJIRYOYOHI
-           ADD  RECE02-SHOKUJIFTN   (IDY)    TO  MF100-ETCSHOKUJIFTN
+      *=== 食事療養費の印字不具合修正 by Yoshikawa(2013/11/07) start
+      *     ADD  RECE02-SHOKUJINISSU (IDY)    TO  MF100-ETCSHOKUJINISSU
+      *     ADD  RECE02-SHOKUJIRYOYOHI(IDY)   TO  MF100-ETCSHOKUJIRYOYOHI
+      *     ADD  RECE02-SHOKUJIFTN   (IDY)    TO  MF100-ETCSHOKUJIFTN
+           ADD  RECE02-SHOKUJINISSU (1)      TO  MF100-SHOKUJINISSU
+           ADD  RECE02-SHOKUJIRYOYOHI(1)     TO  MF100-SHOKUJIRYOYOHI
+           ADD  RECE02-SHOKUJIFTN   (1)      TO  MF100-SHOKUJIFTN
+      *=== 食事療養費の印字不具合修正 by Yoshikawa(2013/11/07) end
       *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *
       *    収納情報より他法公費情報を取得
