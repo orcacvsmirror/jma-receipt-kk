@@ -2405,7 +2405,7 @@
         <dia:string>#ADRS#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
-        <dia:int val="0"/>
+        <dia:int val="25"/>
       </dia:attribute>
       <dia:attribute name="embed_char_type">
         <dia:enum val="0"/>
@@ -2448,7 +2448,7 @@
         <dia:string>#HOSPNAME#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
-        <dia:int val="0"/>
+        <dia:int val="25"/>
       </dia:attribute>
       <dia:attribute name="embed_char_type">
         <dia:enum val="0"/>
