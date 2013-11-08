@@ -956,9 +956,15 @@
              PERFORM 5005-NUM-HENSYU-SEC
       * 
       *    £±£∂°•∞Ï…Ù…È√¥≥€° π‚≥€Œ≈Õ‹»Ò°À
-             MOVE    MF100-FTNMONEY          TO  WRK-NUM
-             MOVE    7                       TO  WRK-NAGASA
-             PERFORM 5005-NUM-HENSYU-SEC
+             IF  MF100-FTNMONEY  NOT =  ZERO
+               MOVE    MF100-FTNMONEY        TO  WRK-NUM
+               MOVE    7                     TO  WRK-NAGASA
+               PERFORM 5005-NUM-HENSYU-SEC
+             ELSE
+               MOVE    SPACE                 TO  WRK-DATA
+               MOVE    7                     TO  WRK-NAGASA
+               PERFORM 5004-MOJI-HENSYU-SEC
+             END-IF
       *
       *    £±£∑°•∏¯»Ò°¶•ﬁ•Îƒπ∂Ë ¨
              IF  MF100-TYOKI  =  1
