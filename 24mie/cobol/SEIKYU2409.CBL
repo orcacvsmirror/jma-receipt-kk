@@ -2276,6 +2276,9 @@
                WHEN  "¥Ã"
                  MOVE  "Ž¯"  TO  WRK-OUT-INPUT(IDX3:2)
                  ADD   2    TO  IDX3
+               WHEN  "¡¼"
+                 MOVE  "Ž°"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
                WHEN  "£±"
                  MOVE  "1"  TO  WRK-OUT-INPUT(IDX3:2)
                  ADD   1    TO  IDX3
