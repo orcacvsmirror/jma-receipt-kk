@@ -32,6 +32,8 @@
       *  01.00.02    吉川    13/04/12    給付割合の値を修正(100-割合)
       *                                  公費１一部負担金額を記載する
       *                                  項目６５〜７０を記録する
+      *  01.00.03    萩野    13/11/11    前期高齢者で特例措置該当者の
+      *                                  給付割合を「80」と記録する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -950,6 +952,11 @@
       *    公費給付対象一部負担金
            MOVE    RECE02-ZAITAKU-SAIKEI   TO  MF101-FTNMONEYSAI(1)
       *    
+      *=== 特例措置該当者の給付割合を修正 by hagino(2013/11/11) start
+      *    フラグ（特例措置）
+           MOVE    RECE02-FLG (2)     TO  MF101-FLG (2)
+      *=== 特例措置該当者の給付割合を修正 by hagino(2013/11/11) end
+      *    
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
@@ -1425,6 +1432,11 @@
       *=== 給付割合の表示修正 by Yoshikawa(2013/04/12) start
       *     MOVE    MF101-KYURATE             TO  WRK-NUM
            COMPUTE WRK-KYURATE  =  100  -  MF101-KYURATE
+      *=== 特例措置該当者の給付割合を修正 by hagino(2013/11/11) start
+           IF  MF101-FLG (2)  =  1
+               MOVE   80                    TO  WRK-KYURATE
+           END-IF
+      *=== 特例措置該当者の給付割合を修正 by hagino(2013/11/11) end
            MOVE    WRK-KYURATE               TO  WRK-NUM
       *=== 給付割合の表示修正 by Yoshikawa(2013/04/12) end
            MOVE    3                         TO  WRK-NAGASA
