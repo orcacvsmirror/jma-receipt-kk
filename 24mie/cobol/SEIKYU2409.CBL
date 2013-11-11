@@ -119,6 +119,7 @@
            03  IDZ                   PIC 9(04).
            03  IDXX                  PIC 9(04).
            03  IDX1                  PIC 9(04).
+           03  IDX2                  PIC 9(04).
            03  IDX3                  PIC 9(04).
            03  IDW                   PIC 9(04).
       *
@@ -871,9 +872,13 @@
              MOVE    10                      TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    ８．氏名（カナ）
-             MOVE    MF100-NAME              TO  WRK-DATA
-             MOVE    20                      TO  WRK-NAGASA
+      *    ８．氏名（半角カナ）
+             MOVE    MF100-NAME(1:40)        TO  WRK-MAE-INPUT
+             PERFORM 2009-HANKANA-HENKAN-SEC
+             MOVE    WRK-OUT-INPUT           TO  WRK-DATA
+      *      EUC半角カナは2バイトだが1ケタ扱い
+      *      部分参照における制御文字の誤参照を防ぐ為、長さは39バイトとする
+             MOVE    39                      TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ９．性別
@@ -2097,6 +2102,298 @@
            .
        2009-HENKAN-EXT.
            EXIT.
+      *****************************************************************
+      *    半角変換処理
+      *****************************************************************
+       2009-HANKANA-HENKAN-SEC                 SECTION.
+      *
+           MOVE    1                   TO  IDX3
+           PERFORM VARYING  IDX2  FROM  1  BY  2
+                   UNTIL    IDX2  >  40
+             EVALUATE   WRK-MAE-INPUT(IDX2:2)
+               WHEN  "ア"
+                 MOVE  "ｱ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "イ"
+                 MOVE  "ｲ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ウ"
+                 MOVE  "ｳ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "エ"
+                 MOVE  "ｴ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "オ"
+                 MOVE  "ｵ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "カ"
+                 MOVE  "ｶ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "キ"
+                 MOVE  "ｷ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ク"
+                 MOVE  "ｸ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ケ"
+                 MOVE  "ｹ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "コ"
+                 MOVE  "ｺ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "サ"
+                 MOVE  "ｻ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "シ"
+                 MOVE  "ｼ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ス"
+                 MOVE  "ｽ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "セ"
+                 MOVE  "ｾ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ソ"
+                 MOVE  "ｿ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "タ"
+                 MOVE  "ﾀ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "チ"
+                 MOVE  "ﾁ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ツ"
+                 MOVE  "ﾂ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "テ"
+                 MOVE  "ﾃ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ト"
+                 MOVE  "ﾄ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ナ"
+                 MOVE  "ﾅ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ニ"
+                 MOVE  "ﾆ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ヌ"
+                 MOVE  "ﾇ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ネ"
+                 MOVE  "ﾈ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ノ"
+                 MOVE  "ﾉ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ハ"
+                 MOVE  "ﾊ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ヒ"
+                 MOVE  "ﾋ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "フ"
+                 MOVE  "ﾌ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ヘ"
+                 MOVE  "ﾍ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ホ"
+                 MOVE  "ﾎ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "マ"
+                 MOVE  "ﾏ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ミ"
+                 MOVE  "ﾐ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ム"
+                 MOVE  "ﾑ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "メ"
+                 MOVE  "ﾒ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "モ"
+                 MOVE  "ﾓ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ヤ"
+                 MOVE  "ﾔ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ユ"
+                 MOVE  "ﾕ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ヨ"
+                 MOVE  "ﾖ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ラ"
+                 MOVE  "ﾗ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "リ"
+                 MOVE  "ﾘ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ル"
+                 MOVE  "ﾙ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "レ"
+                 MOVE  "ﾚ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ロ"
+                 MOVE  "ﾛ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ワ"
+                 MOVE  "ﾜ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ヲ"
+                 MOVE  "ｦ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ン"
+                 MOVE  "ﾝ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ァ"
+                 MOVE  "ｧ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ィ"
+                 MOVE  "ｨ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ゥ"
+                 MOVE  "ｩ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ェ"
+                 MOVE  "ｪ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ォ"
+                 MOVE  "ｫ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ャ"
+                 MOVE  "ｬ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ュ"
+                 MOVE  "ｭ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ョ"
+                 MOVE  "ｮ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "ッ"
+                 MOVE  "ｯ"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+               WHEN  "１"
+                 MOVE  "1"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "２"
+                 MOVE  "2"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "３"
+                 MOVE  "3"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "４"
+                 MOVE  "4"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "５"
+                 MOVE  "5"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "６"
+                 MOVE  "6"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "７"
+                 MOVE  "7"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "８"
+                 MOVE  "8"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "９"
+                 MOVE  "9"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "０"
+                 MOVE  "0"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "　"
+                 MOVE  " "  TO  WRK-OUT-INPUT(IDX3:1)
+                 ADD   1    TO  IDX3
+               WHEN  "ガ"
+                 MOVE  "ｶﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ギ"
+                 MOVE  "ｷﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "グ"
+                 MOVE  "ｸﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ゲ"
+                 MOVE  "ｹﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ゴ"
+                 MOVE  "ｺﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ザ"
+                 MOVE  "ｻﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ジ"
+                 MOVE  "ｼﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ズ"
+                 MOVE  "ｽﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ゼ"
+                 MOVE  "ｾﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ゾ"
+                 MOVE  "ｿﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ダ"
+                 MOVE  "ﾀﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ヂ"
+                 MOVE  "ﾁﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ヅ"
+                 MOVE  "ﾂﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "デ"
+                 MOVE  "ﾃﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ド"
+                 MOVE  "ﾄﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "バ"
+                 MOVE  "ﾊﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ビ"
+                 MOVE  "ﾋﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ブ"
+                 MOVE  "ﾌﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ベ"
+                 MOVE  "ﾍﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ボ"
+                 MOVE  "ﾎﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "パ"
+                 MOVE  "ﾊﾟ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ピ"
+                 MOVE  "ﾋﾟ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "プ"
+                 MOVE  "ﾌﾟ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ペ"
+                 MOVE  "ﾍﾟ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ポ"
+                 MOVE  "ﾎﾟ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+               WHEN  "ヴ"
+                 MOVE  "ｳﾞ" TO  WRK-OUT-INPUT(IDX3:4)
+                 ADD   4    TO  IDX3
+             END-EVALUATE
+           END-PERFORM
+      *
+           .
+       2009-HANKANA-HENKAN-EXT.
+           EXIT.
+      *
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
