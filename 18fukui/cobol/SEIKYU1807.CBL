@@ -28,6 +28,7 @@
       *****************************************************************
       *  ¥×¥í¥°¥é¥à½¤ÀµÍúÎò
       * Maj/Min/Rev	½¤Àµ¼Ô	ÆüÉÕ		ÆâÍÆ
+      *  01.00.01       ÇëÌî    2013/11/12   ÊÝ¸±¼Ô¾ÚÈÖ¹æ¤òÈ¾³Ñ¤ËÊÑ´¹¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1016,6 +1017,12 @@
       *
       *    ÈÖ¹æ
            MOVE    MF110-NUM               TO  WRK-DATA
+      *=== ÊÝ¸±¼Ô¾ÚÈÖ¹æ¤òÈ¾³Ñ¤ËÊÑ´¹ by hagino(2013/11/12) start
+           MOVE    WRK-DATA                TO  WRK-MAE-INPUT
+           MOVE    SPACE                   TO  WRK-OUT-INPUT
+           PERFORM 31014-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  WRK-DATA
+      *=== ÊÝ¸±¼Ô¾ÚÈÖ¹æ¤òÈ¾³Ñ¤ËÊÑ´¹ by hagino(2013/11/12) end
            MOVE    15                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1326,6 +1333,66 @@
            .
        31012-SEIWA-HEN-EXT.
            EXIT.
+      *
+      *=== ÊÝ¸±¼Ô¾ÚÈÖ¹æ¤òÈ¾³Ñ¤ËÊÑ´¹ by hagino(2013/11/12) start
+      *****************************************************************
+      *    È¾³ÑÊÑ´¹½èÍý
+      *****************************************************************
+       31014-HENKAN-SEC                 SECTION.
+      *
+           MOVE  1  TO  IDX3
+           PERFORM VARYING  IDX2  FROM  1  BY  2
+                   UNTIL    IDX2  >=  81
+             EVALUATE   WRK-MAE-INPUT(IDX2:2)
+               WHEN  "£±"
+                 MOVE  "1"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£²"
+                 MOVE  "2"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£³"
+                 MOVE  "3"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£´"
+                 MOVE  "4"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£µ"
+                 MOVE  "5"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£¶"
+                 MOVE  "6"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£·"
+                 MOVE  "7"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£¸"
+                 MOVE  "8"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£¹"
+                 MOVE  "9"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "£°"
+                 MOVE  "0"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "¡½"
+                 MOVE  "-"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "¡¼"
+                 MOVE  "-"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "¡Ý"
+                 MOVE  "-"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+               WHEN  "¡¾"
+                 MOVE  "-"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   1    TO  IDX3
+             END-EVALUATE
+           END-PERFORM
+      *
+           .
+       31014-HENKAN-EXT.
+           EXIT.
+      *=== ÊÝ¸±¼Ô¾ÚÈÖ¹æ¤òÈ¾³Ñ¤ËÊÑ´¹ by hagino(2013/11/12) end
       *
       *****************************************************************
       *    È¾³ÑÊÑ´¹½èÍý
