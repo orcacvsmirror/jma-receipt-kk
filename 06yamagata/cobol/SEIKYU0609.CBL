@@ -48,6 +48,7 @@
       *  01.00.14    吉川    13/04/03    公費欄−一部負担金金額置換対応
       *                                  摘要欄にコメントを印字
       *                                  プラグイン対応
+      *  01.00.15    吉川    13/11/14    プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -73,13 +74,15 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
-      *    備考欄コメントファイル
-           SELECT  KENSIN-FILE  ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-KENSIN.
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      **    備考欄コメントファイル
+      *     SELECT  KENSIN-FILE  ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-KENSIN.
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *
        DATA  DIVISION.
        FILE  SECTION.
@@ -99,12 +102,14 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
-       FD  KENSIN-FILE.
-       01  KENSIN-REC.
-           03  KENSIN-COMMENTCD   PIC X(09).
-           03  FILLER              PIC X(01).
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      * FD  KENSIN-FILE.
+      * 01  KENSIN-REC.
+      *     03  KENSIN-COMMENTCD   PIC X(09).
+      *     03  FILLER              PIC X(01).
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -162,6 +167,10 @@
            03  FLG-SRYACT     PIC 9(01).
            03  FLG-PTCOM      PIC 9(01).
       *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+           03  FLG-PRGOPTION  PIC 9(01).
+           03  FLG-OK         PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -202,14 +211,16 @@
            05  WRK-PARA-LINK-HOSPNUM PIC  9(02). 
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
-      *=== プラグイン対応 by Yoshikawa(2013/04/03) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU0609".
-           03  FILLER              PIC X(10)  VALUE "KENSIN.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      **=== プラグイン対応 by Yoshikawa(2013/04/03) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU0609".
+      *     03  FILLER              PIC X(10)  VALUE "KENSIN.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -306,6 +317,14 @@
       *         05  FILLER            PIC S9(09)  BINARY.
       *         05  FILLER            PIC S9(09)  BINARY.
            03  WRK-PATH              PIC X(50).
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -492,6 +511,12 @@
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -727,9 +752,13 @@
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
-           PERFORM 110-INI-FILE-SEC
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *     PERFORM 110-INI-FILE-SEC
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *
            PERFORM 900-KOHSKY-START-SEC
            .
@@ -855,42 +884,108 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) start
+      ******************************************************************
+      **    INIファイル読み込み処理  
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **    検診コメント設定取得
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   KENSIN-REC
+      **
+      *     OPEN  INPUT  KENSIN-FILE
+      **
+      *     READ KENSIN-FILE
+      *       AT END
+      *         INITIALIZE        KENSIN-REC
+      *     END-READ
+      **
+      *     DISPLAY "検診コメント設定取得=" KENSIN-COMMENTCD
+      *     IF    KENSIN-COMMENTCD(1:2)  =  "※"
+      *       MOVE   SPACE              TO  WRK-KENSINCD
+      *     ELSE
+      *       MOVE   KENSIN-COMMENTCD  TO  WRK-KENSINCD
+      *     END-IF
+      **
+      *     DISPLAY "検診コメントコード =" WRK-KENSINCD
+      **
+      *     CLOSE KENSIN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
       *****************************************************************
-      *    INIファイル読み込み処理  
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    検診コメント設定取得
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+           MOVE    "SEIKYU0609"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   KENSIN-REC
-      *
-           OPEN  INPUT  KENSIN-FILE
-      *
-           READ KENSIN-FILE
-             AT END
-               INITIALIZE        KENSIN-REC
-           END-READ
-      *
-           DISPLAY "検診コメント設定取得=" KENSIN-COMMENTCD
-           IF    KENSIN-COMMENTCD(1:2)  =  "※"
-             MOVE   SPACE              TO  WRK-KENSINCD
+      *    プログラムオプション取得
+      *    検診コメント設定
+           MOVE    "KENSIN"                  TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-KENSINCD
            ELSE
-             MOVE   KENSIN-COMMENTCD  TO  WRK-KENSINCD
+             MOVE    WRK-OPTION(1)(1:9)      TO  WRK-KENSINCD
            END-IF
-      *
            DISPLAY "検診コメントコード =" WRK-KENSINCD
       *
-           CLOSE KENSIN-FILE
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
       *
            .
-       110-INI-FILE-EXT.
+       1001-OPTION-SET-EXT.
            EXIT.
-      *
-      *=== 摘要欄にコメントを印字 by Yoshikawa(2013/04/03) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -3750,6 +3845,54 @@
        900-BTPARA-READ-N-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************
