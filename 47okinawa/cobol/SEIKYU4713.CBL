@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      * 01.00.01     吉川    13/12/02    「請求年月」は請求年月日から取得
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -759,7 +760,10 @@
                                              WRK-REC-LENGTH
       *
       *    １．請求年月
-             MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
+      *=== 請求年月の修正 by Yoshikawa(2013/12/02) start
+      *       MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
+             MOVE    LNK-PRTKANRI-SKYYMD(1:6)    TO  WRK-SYMD(1:6)
+      *=== 請求年月の修正 by Yoshikawa(2013/12/02) end
              MOVE    "01"                    TO  WRK-SYMD(7:2)
              PERFORM 31011-SEIWA-HEN-SEC
              EVALUATE  LNK-DAY1-GENKIGO
@@ -773,7 +777,10 @@
                  MOVE  "4"                   TO  WRK-DATA(1:1)
              END-EVALUATE
              MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-DATA(2:2)
-             MOVE    LNK-PRTKANRI-SRYYM(5:2) TO  WRK-DATA(4:2)
+      *=== 請求年月の修正 by Yoshikawa(2013/12/02) start
+      *       MOVE    LNK-PRTKANRI-SRYYM(5:2) TO  WRK-DATA(4:2)
+             MOVE    LNK-PRTKANRI-SKYYMD(5:2)    TO  WRK-DATA(4:2)
+      *=== 請求年月の修正 by Yoshikawa(2013/12/02) end
              MOVE    5                       TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1151,7 +1158,10 @@
            MOVE    LNK-PRTKANRI-SKYYMD
                                    TO  SFILESV-SKYYMD   (1)
       *    ファイル名「報告年月_医療機関等番号_出力日付.CSV」
-           STRING  LNK-PRTKANRI-SRYYM      DELIMITED  BY  SIZE
+      *=== 請求年月の修正 by Yoshikawa(2013/12/02) start
+      *     STRING  LNK-PRTKANRI-SRYYM      DELIMITED  BY  SIZE
+           STRING  LNK-PRTKANRI-SKYYMD(1:6)  DELIMITED  BY  SIZE
+      *=== 請求年月の修正 by Yoshikawa(2013/12/02) end
                    "_"                     DELIMITED  BY  SIZE
                    "471"                   DELIMITED  BY  SIZE
                    SYS-1001-HOSPCD         DELIMITED  BY  SIZE
