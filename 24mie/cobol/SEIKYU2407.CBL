@@ -880,7 +880,7 @@
       *     END-EVALUATE
       **=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
-           EVALUATE  WRK-SRTKNB
+           EVALUATE  WRK-SRTKBN
              WHEN  "1"
                MOVE    RECE02-KOHJKYSNUM(IDZ)  TO   MF100-SORTNUM
              WHEN  "2"
