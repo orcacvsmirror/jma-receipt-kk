@@ -41,6 +41,8 @@
       *                                  医療機関情報編集対応
       *  01.00.07    吉川    13/11/07    食事療養費の印字不具合修正
       *                                  プログラムオプション対応
+      *  01.00.08    吉川    13/12/05    プログラムオプションの記載順が
+      *                                  反映されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -867,15 +869,24 @@
                MOVE  "5"                     TO   MF100-KOHKBN
            END-EVALUATE
       *
-      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      *=== 記載順が反映されない不具合修正 by Yoshikawa(2013/12/05) start
+      **=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
+      **    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
+      *     EVALUATE  WRK-SRTKBN
+      *       WHEN  "1"
+      *         MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
+      *       WHEN  "2"
+      *         MOVE    MF100-PTNUM           TO   MF100-SORTNUM
+      *     END-EVALUATE
+      **=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
       *    SORT.INIによって記載順を変える(1=受給者番号順、2=患者番号順)
            EVALUATE  WRK-SRTKBN
              WHEN  "1"
-               MOVE    MF100-KOHJKYSNUM      TO   MF100-SORTNUM
+               MOVE    RECE02-KOHJKYSNUM(IDZ)  TO   MF100-SORTNUM
              WHEN  "2"
-               MOVE    MF100-PTNUM           TO   MF100-SORTNUM
+               MOVE    RECE02-PTNUM            TO   MF100-SORTNUM
            END-EVALUATE
-      *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *=== 記載順が反映されない不具合修正 by Yoshikawa(2013/12/05) end
       *
       *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
       *    集計ファイル読込
