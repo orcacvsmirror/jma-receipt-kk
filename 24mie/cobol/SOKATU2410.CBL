@@ -35,6 +35,8 @@
       *  01.00.04    吉川    10/04/05    オンライン返戻対応
       *  01.00.05    吉川    10/11/01    特別療養費国保対応
       *  01.00.06    吉川    10/11/24    open-cobol1.0対応
+      *  01.00.07    吉川    13/12/05    優先保険者番号で設定された
+      *                                  保険者番号は最初に印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -629,12 +631,20 @@
              END-IF
       *
              IF      SKT2410TMP-HKNJANUM(3:1)  =  "3"
-                     MOVE  "0"    TO  SKT2410TMP-SYUTURYOKU
+      *=== 優先保険者番号設定の修正 by Yoshikawa(2013/12/05) start
+      *               MOVE  "0"    TO  SKT2410TMP-SYUTURYOKU
+                     MOVE  "1"    TO  SKT2410TMP-SYUTURYOKU
+      *=== 優先保険者番号設定の修正 by Yoshikawa(2013/12/05) end
              ELSE
                IF      YUSEN-HKNJANUM = SKT2410TMP-HKNJANUM
-                   MOVE  "2"    TO  SKT2410TMP-SYUTURYOKU
+      *=== 優先保険者番号設定の修正 by Yoshikawa(2013/12/05) start
+      *             MOVE  "2"    TO  SKT2410TMP-SYUTURYOKU
+      *         ELSE
+      *             MOVE  "1"    TO  SKT2410TMP-SYUTURYOKU
+                   MOVE  "0"    TO  SKT2410TMP-SYUTURYOKU
                ELSE
-                   MOVE  "1"    TO  SKT2410TMP-SYUTURYOKU
+                   MOVE  "2"    TO  SKT2410TMP-SYUTURYOKU
+      *=== 優先保険者番号設定の修正 by Yoshikawa(2013/12/05) end
                END-IF
              END-IF
            END-IF
