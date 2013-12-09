@@ -98,6 +98,7 @@
       *                                 限度額欄に印字されないのを修正
       *  01.00.38    吉川   13/07/26    障害者の限度額欄において
       *                                 在宅は70歳未満の場合でも印字する
+      *  01.00.39    萩野   13/12/05    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -883,7 +884,9 @@
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    在宅
-           MOVE   RECE10-ZAITAKU    TO   SKT0100TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) start
+      *     MOVE   RECE10-ZAITAKU    TO   SKT0100TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *    TMPファイル読み込み
            PERFORM  800-SKTTMP-READ-SEC
@@ -1907,10 +1910,12 @@
            MOVE     WRK-SEIYMDWH             TO   SKT0100-SEIYMD
       *---(01.00.06) LINE ADD START ------------------------------------
       *    在総診
-           IF      SKT0100TMP-ZAITAKU     =    "1"
-             MOVE  "在"                      TO   SKT0100-ZAI1
-             MOVE  "◯"                      TO   SKT0100-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) start
+      *     IF      SKT0100TMP-ZAITAKU     =    "1"
+      *       MOVE  "在"                      TO   SKT0100-ZAI1
+      *       MOVE  "◯"                      TO   SKT0100-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) end
       *---(01.00.06) LINE ADD START ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
       *    特別療養費
