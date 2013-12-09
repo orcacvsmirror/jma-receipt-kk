@@ -61,6 +61,7 @@
       *  01.00.19    吉川   12/12/13    医療機関情報編集修正
       *  01.00.20    吉川   13/03/27    プラグイン対応
       *  01.00.21    吉川   13/06/14    プログラムオプション対応
+      *  01.00.22    萩野   13/12/05    在宅はまとめて集計するように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -949,7 +950,9 @@
            END-IF
       *---(01.00.03) LINE ADD START ------------------------------------
       *    在宅
-           MOVE   RECE10-ZAITAKU    TO   SKT0110TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) star
+      *     MOVE   RECE10-ZAITAKU    TO   SKT0110TMP-ZAITAKU
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
            PERFORM  800-SKTTMP-READ-SEC
@@ -1722,10 +1725,12 @@
       *---(01.00.14) LINE ADD END   ------------------------------------
       *---(01.00.03) LINE ADD START ------------------------------------
       *    在総診
-           IF      SKT0110TMP-ZAITAKU     =    "1"
-             MOVE  "在"                      TO   SKT0110-ZAI1
-             MOVE  "◯"                      TO   SKT0110-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) star
+      *     IF      SKT0110TMP-ZAITAKU     =    "1"
+      *       MOVE  "在"                      TO   SKT0110-ZAI1
+      *       MOVE  "◯"                      TO   SKT0110-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) end
       *---(01.00.03) LINE ADD START ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
       *    特別療養費
@@ -1861,10 +1866,12 @@
            MOVE    WRK-OUT-INPUT       TO   SKT0120-HKNJANUM
       *---(01.00.03) LINE ADD START ------------------------------------
       *    在総診
-           IF      SKT0110TMP-ZAITAKU     =    "1"
-             MOVE  "在"                      TO   SKT0120-ZAI1
-             MOVE  "◯"                      TO   SKT0120-ZAI2
-           END-IF
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) star
+      *     IF      SKT0110TMP-ZAITAKU     =    "1"
+      *       MOVE  "在"                      TO   SKT0120-ZAI1
+      *       MOVE  "◯"                      TO   SKT0120-ZAI2
+      *     END-IF
+      *=== 在宅はまとめて集計 by hagino(2013/12/05) end
       *---(01.00.03) LINE ADD START ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
       *    特別療養費
