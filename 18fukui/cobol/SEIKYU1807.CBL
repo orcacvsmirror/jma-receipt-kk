@@ -29,6 +29,8 @@
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
       *  01.00.01       萩野    2013/11/12   保険者証番号を半角に変換する
+      *  01.00.02       萩野    2013/12/06   点数欄は小数点以下１桁までを記録し、
+      *                                      小数点そのものは削除する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1093,9 +1095,15 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    点数
-           MOVE    MF110-TOTALTEN          TO  WRK-NUM1
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *     MOVE    MF110-TOTALTEN          TO  WRK-NUM1
+           COMPUTE WRK-NUM  =  ( MF110-TOTALTEN  *  10 )
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
            MOVE    9                       TO  WRK-NAGASA
-           PERFORM 5006-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *     PERFORM 5006-NUM-HENSYU-SEC
+           PERFORM 5005-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
       * 
       *    一部負担金 
       *    食事医療費負担額を加算
