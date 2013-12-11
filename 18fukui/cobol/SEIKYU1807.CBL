@@ -1132,9 +1132,15 @@
                PERFORM 5005-NUM-HENSYU-SEC
       *
       *        公費対象点数
-               MOVE  ZERO                     TO  WRK-NUM1
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *         MOVE  ZERO                     TO  WRK-NUM1
+               MOVE  ZERO                     TO  WRK-NUM
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
                MOVE    9                      TO  WRK-NAGASA
-               PERFORM 5006-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *         PERFORM 5006-NUM-HENSYU-SEC
+               PERFORM 5005-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
       *
       *        余白
                MOVE    "000000"                  TO  WRK-DATA
@@ -1159,9 +1165,15 @@
                PERFORM 5005-NUM-HENSYU-SEC
       *
       *        公費対象点数
-               MOVE    MF110-RECETOTALTEN (2)    TO  WRK-NUM1
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *         MOVE    MF110-RECETOTALTEN (2)    TO  WRK-NUM1
+               COMPUTE WRK-NUM  =  ( MF110-RECETOTALTEN (2)  *  10 )
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
                MOVE    9                         TO  WRK-NAGASA
-               PERFORM 5006-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *         PERFORM 5006-NUM-HENSYU-SEC
+               PERFORM 5005-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
       *
       *        余白
                MOVE    "000000"                  TO  WRK-DATA
@@ -1190,10 +1202,16 @@
                  PERFORM 5005-NUM-HENSYU-SEC
       *      
       *          公費対象点数
-                 MOVE  MF110-RECETOTALTEN (IDX2)   TO  WRK-Z7
-                 MOVE  WRK-Z7                      TO  WRK-NUM1
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *           MOVE  MF110-RECETOTALTEN (IDX2)   TO  WRK-Z7
+      *           MOVE  WRK-Z7                      TO  WRK-NUM1
+               COMPUTE WRK-NUM  =  ( MF110-RECETOTALTEN (IDX2)  *  10 )
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
                  MOVE    9                         TO  WRK-NAGASA
-                 PERFORM 5006-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) start
+      *           PERFORM 5006-NUM-HENSYU-SEC
+                 PERFORM 5005-NUM-HENSYU-SEC
+      *=== 点数欄の記録修正 by hagino(2013/12/06) end
       *      
       *          余白
                  MOVE    "000000"                  TO  WRK-DATA
