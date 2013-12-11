@@ -730,6 +730,7 @@
            PERFORM  900-PRGOPTION-READ-SEC
       *
       *    オプション数の初期設定
+           MOVE    ZERO                      TO  IDY
            MOVE    1                         TO  IDX1
            IF  FLG-PRGOPTION  =  ZERO
              PERFORM  VARYING  IDX  FROM  1  BY  1
