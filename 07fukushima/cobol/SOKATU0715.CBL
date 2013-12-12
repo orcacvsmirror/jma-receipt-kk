@@ -42,6 +42,7 @@
       *                                  PERFORM→GOTOに修正
       *  01.00.08    吉川    2012/12/21  プラグイン対応
       *                                  医療機関情報編集対応
+      *  01.00.09    吉川    2013/12/12  プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -68,13 +69,15 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
-      *    オンライン請求設定ファイル
-           SELECT  ONLINE-FILE     ASSIGN FILE-NAME
-                                   ORGANIZATION    IS  LINE SEQUENTIAL
-                                   ACCESS MODE     IS  SEQUENTIAL
-                                   FILE   STATUS   IS  STS-ONLINE.
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      **    オンライン請求設定ファイル
+      *     SELECT  ONLINE-FILE     ASSIGN FILE-NAME
+      *                             ORGANIZATION    IS  LINE SEQUENTIAL
+      *                             ACCESS MODE     IS  SEQUENTIAL
+      *                             FILE   STATUS   IS  STS-ONLINE.
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -94,12 +97,14 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
-       FD  ONLINE-FILE.
-       01  ONLINE-REC.
-           03  ONLINE-ONLINEKBN    PIC X(01).
-           03  FILLER              PIC X(01).
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      * FD  ONLINE-FILE.
+      * 01  ONLINE-REC.
+      *     03  ONLINE-ONLINEKBN    PIC X(01).
+      *     03  FILLER              PIC X(01).
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -156,10 +161,17 @@
            03  FLG-PTINF           PIC 9(01).
       *     
            03  FLG-PRTKBN          PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      *     03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
@@ -188,14 +200,16 @@
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-SYOKBN1    PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU0715".
-           03  FILLER              PIC X(10)  VALUE "ONLINE.INI".
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU0715".
+      *     03  FILLER              PIC X(10)  VALUE "ONLINE.INI".
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -246,6 +260,13 @@
       *=== プラグイン対応 by Yoshikawa(2012/12/21) end
            03  WRK-ONLINEKBN       PIC X(01).
       *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
@@ -363,6 +384,12 @@
        01  JOBKANRI-REC.
            COPY    "CPJOBKANRI.INC".
       * 
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -628,9 +655,13 @@
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/02/26) end
       *
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
-           PERFORM  110-INI-FILE-SEC
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *     PERFORM  110-INI-FILE-SEC
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *
       *=== 災害対応 by Yoshikawa(2011/04/14) start
       *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
@@ -652,49 +683,112 @@
        100-INIT-EXT.
            EXIT.
       *
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) start
+      ******************************************************************
+      **    オンライン請求設定INIファイル読み込み処理  
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **    オンライン請求設定取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   ONLINE-REC
+      **
+      *     OPEN  INPUT  ONLINE-FILE
+      **
+      *     READ ONLINE-FILE
+      *       AT END
+      *         INITIALIZE        ONLINE-REC
+      *     END-READ
+      **
+      *     CLOSE ONLINE-FILE
+      **
+      *     DISPLAY "オンライン請求設定取得=" ONLINE-ONLINEKBN
+      *     IF    ONLINE-ONLINEKBN  =  "0" OR "1"
+      *       MOVE   ONLINE-ONLINEKBN  TO  WRK-ONLINEKBN
+      *     ELSE
+      *       MOVE   "0"               TO  WRK-ONLINEKBN
+      *     END-IF
+      **
+      *     DISPLAY "オンライン請求設定 =" WRK-ONLINEKBN
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
       *****************************************************************
-      *    オンライン請求設定INIファイル読み込み処理  
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    オンライン請求設定取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/ONLINE.INI"    TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+           MOVE    "SOKATU0715"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   ONLINE-REC
-      *
-           OPEN  INPUT  ONLINE-FILE
-      *
-           READ ONLINE-FILE
-             AT END
-               INITIALIZE        ONLINE-REC
-           END-READ
-      *
-           CLOSE ONLINE-FILE
-      *
-           DISPLAY "オンライン請求設定取得=" ONLINE-ONLINEKBN
-           IF    ONLINE-ONLINEKBN  =  "0" OR "1"
-             MOVE   ONLINE-ONLINEKBN  TO  WRK-ONLINEKBN
-           ELSE
-             MOVE   "0"               TO  WRK-ONLINEKBN
-           END-IF
-      *
+      *    プログラムオプション取得
+      *    オンライン請求設定
+           MOVE    "ONLINE"                  TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:1)        TO  WRK-ONLINEKBN
            DISPLAY "オンライン請求設定 =" WRK-ONLINEKBN
       *
            .
-       110-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
       *
-      *=== オンライン時、災害分のみ記載 by Yoshikawa(2011/04/22) end
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    ZERO                      TO  IDY
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *****************************************************************
       *    主　　処理
       *****************************************************************
@@ -2278,6 +2372,54 @@
        900-1902-READ-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2013/12/12) end
       *****************************************************************
       *    システム管理マスタ読込
       *****************************************************************
