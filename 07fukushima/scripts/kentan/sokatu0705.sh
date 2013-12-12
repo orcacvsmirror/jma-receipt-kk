@@ -5,12 +5,6 @@ PREFNAME=fukushima
 PROGRAMID=SOKATU0705
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0705"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='KINYU';"
-PRGOPT2="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='ONLINE';"
-PRGOPT3="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
-INIFILE="/tmp/${15}${PROGRAMID}KINYU.INI"
-INIFILE2="/tmp/${15}${PROGRAMID}ONLINE.INI"
-INIFILE3="/tmp/${15}${PROGRAMID}SRYKA.INI"
 #-------------------------------------------#
 #    広域連合総括表作成（福島）
 #        $1-${11}
@@ -30,11 +24,6 @@ INIFILE3="/tmp/${15}${PROGRAMID}SRYKA.INI"
         if  [ -e ${16} ]; then
             rm  ${16}
         fi
-
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
-        echo "${PRGOPT3}" | psql -At ${DBNAME} > ${INIFILE3}
 
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
@@ -70,10 +59,5 @@ INIFILE3="/tmp/${15}${PROGRAMID}SRYKA.INI"
             fi
         fi
         
-##      INIファイル 削除
-        rm -f ${INIFILE}
-        rm -f ${INIFILE2}
-        rm -f ${INIFILE3}
-
 	$DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 

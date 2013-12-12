@@ -6,14 +6,6 @@ PREFNAME=fukushima
 PROGRAMID=SOKATU0700
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0700"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='CITYNUM';"
-PRGOPT2="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='KINYU';"
-PRGOPT3="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='ONLINE';"
-PRGOPT4="select option from tbl_prgoption where hospnum=${15} and prgid='${PROGRAMID}' and kbncd='SRYKA';"
-INIFILE="/tmp/${15}${PROGRAMID}CITYNUM.INI"
-INIFILE2="/tmp/${15}${PROGRAMID}KINYU.INI"
-INIFILE3="/tmp/${15}${PROGRAMID}ONLINE.INI"
-INIFILE4="/tmp/${15}${PROGRAMID}SRYKA.INI"
 #-------------------------------------------#
 #    国保総括表作成（福島）
 #        $1-${11}
@@ -32,12 +24,6 @@ INIFILE4="/tmp/${15}${PROGRAMID}SRYKA.INI"
         if  [ -e ${16} ]; then
             rm  ${16}
         fi
-
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-        echo "${PRGOPT2}" | psql -At ${DBNAME} > ${INIFILE2}
-        echo "${PRGOPT3}" | psql -At ${DBNAME} > ${INIFILE3}
-        echo "${PRGOPT4}" | psql -At ${DBNAME} > ${INIFILE4}
 
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
@@ -71,12 +57,6 @@ INIFILE4="/tmp/${15}${PROGRAMID}SRYKA.INI"
                 exit
             fi
         fi
-
-##      INIファイル 削除
-        rm -f ${INIFILE}
-        rm -f ${INIFILE2}
-        rm -f ${INIFILE3}
-        rm -f ${INIFILE4}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${15}
 
