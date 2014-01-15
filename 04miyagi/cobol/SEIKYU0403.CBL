@@ -43,6 +43,7 @@
       *  01.00.06    吉川    12/12/19    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.07    吉川    13/10/03    プログラムオプション対応
+      *  01.00.08    萩野    14/01/14    請求年月欄に請求年月を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -471,10 +472,13 @@
            PERFORM 31012-LASTDAY-GET-SEC
            MOVE    WRK-SYMD         TO    WRK-LASTYMD
       *
-           MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+      *=== 請求年月欄に請求年月を印字する by hagino(2014/01/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
+           MOVE    LNK-PRTKANRI-SKYYMD TO  WRK-SYMD (1:6)
+      *=== 請求年月欄に請求年月を印字する by hagino(2014/01/14) end
            MOVE    "01"                TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
-           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH 
+           MOVE    WRK-HENYMDG(1:16)   TO  WRK-SRYYMWH
       *
            INITIALIZE                      STS-AREA-DAY
            INITIALIZE                      LNK-DAY2-AREA
