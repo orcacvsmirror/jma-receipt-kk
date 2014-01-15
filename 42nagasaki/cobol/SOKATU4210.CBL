@@ -51,6 +51,7 @@
       *  01.00.11    吉川    10/08/17    再印刷画面に返戻分は「返戻分」と表示
       *  01.00.12    吉川    11/01/12    特別療養費国保対応
       *                                  open-cobol1.0対応
+      *  01.00.13    萩野    14/01/10    長期分を一般分に合算するよう修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -789,21 +790,23 @@
            MOVE   RECE10-ZAITAKU    TO   SKT4210TMP-ZAITAKU
       *
       *    長期
-      *---(01.00.05) LINE ADD START ------------------------------------
-      *     IF     RECE10-ETC-KOHNUM(1)  =  "972"  OR
-      *            RECE10-ETC-KOHNUM(2)  =  "972"  OR
-      *            RECE10-ETC-KOHNUM(3)  =  "972"  OR
-      *            RECE10-ETC-KOHNUM(4)  =  "972"
-           IF     RECE10-ETC-KOHNUM(1)  =  "972"  OR  "974"
-           OR     RECE10-ETC-KOHNUM(2)  =  "972"  OR  "974"
-           OR     RECE10-ETC-KOHNUM(3)  =  "972"  OR  "974"
-           OR     RECE10-ETC-KOHNUM(4)  =  "972"  OR  "974"
-      *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
-      *       MOVE        1          TO   SKT4210TMP-TYOKI
-             MOVE        "1"        TO   SKT4210TMP-TYOKI
-      *=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
-           END-IF
+      *=== 長期分を一般分に合算する by hagino(2014/01/10) start
+      **---(01.00.05) LINE ADD START ------------------------------------
+      **     IF     RECE10-ETC-KOHNUM(1)  =  "972"  OR
+      **            RECE10-ETC-KOHNUM(2)  =  "972"  OR
+      **            RECE10-ETC-KOHNUM(3)  =  "972"  OR
+      **            RECE10-ETC-KOHNUM(4)  =  "972"
+      *     IF     RECE10-ETC-KOHNUM(1)  =  "972"  OR  "974"
+      *     OR     RECE10-ETC-KOHNUM(2)  =  "972"  OR  "974"
+      *     OR     RECE10-ETC-KOHNUM(3)  =  "972"  OR  "974"
+      *     OR     RECE10-ETC-KOHNUM(4)  =  "972"  OR  "974"
+      **---(01.00.05) LINE ADD END   ------------------------------------
+      **=== open-cobol1.0対応 by Yoshikawa(2011/01/12) start
+      **       MOVE        1          TO   SKT4210TMP-TYOKI
+      *       MOVE        "1"        TO   SKT4210TMP-TYOKI
+      **=== open-cobol1.0対応 by Yoshikawa(2011/01/12) end
+      *     END-IF
+      *=== 長期分を一般分に合算する by hagino(2014/01/10) end
       *
       *
            PERFORM  900-SKTTMP-READ-SEC
