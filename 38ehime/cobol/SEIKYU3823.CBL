@@ -63,6 +63,8 @@
       *                                限度額の低い方を特定疾患等欄に記載
       *  01.00.20    吉川    13/02/07  プラグイン対応
       *                                医療機関情報編集対応
+      *  01.00.21    吉川    14/01/15  前期高齢者で全国公費と長期を併用
+      *                                した場合の公費負担額の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -171,6 +173,9 @@
            03  FLG-COMMENT    PIC 9(01).
            03  FLG-PROC       PIC 9(01).
       *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) end
+      *=== 特定患者の公費負担額修正 by Yoshikawa(2014/01/15) start
+           03  FLG-HEIYOU2    PIC 9(01).
+      *=== 特定患者の公費負担額修正 by Yoshikawa(2014/01/15) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -892,6 +897,13 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
            END-IF
            PERFORM 920-SYUNOU-SET-SEC
+      *
+      *=== 特定患者の公費負担額修正 by Yoshikawa(2014/01/15) start
+      *    全国公費を併用している場合、特例措置計算フラグを無効にする
+           IF  FLG-HEIYOU2  =  1
+             MOVE    ZERO                  TO  FLG-TOKUREI
+           END-IF
+      *=== 特定患者の公費負担額修正 by Yoshikawa(2014/01/15) end
       *
            MOVE  ZERO                          TO  FLG-ERR
       *=== 備考欄コメント増加対応 by Yoshikawa(2011/11/18) start
