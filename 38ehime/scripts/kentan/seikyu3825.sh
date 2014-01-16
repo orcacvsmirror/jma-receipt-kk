@@ -5,8 +5,6 @@ PREFNAME=ehime
 PROGRAMID=SEIKYU3825
 LOG_FILE="/var/log/jma-receipt/${14}seikyu3825"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='COMMENT';"
-INIFILE="/tmp/${14}${PROGRAMID}COMMENT.INI"
 #-------------------------------------------#
 #    ÃÏÊý¸øÈñºîÀ® Ê¡»ã°åÎÅÈñ»Ùµë¿½ÀÁ¡¦ÀÁµáÌÀºÙ½ñ£Ã£Ó£Ö
 #        $1-${11}
@@ -25,9 +23,6 @@ INIFILE="/tmp/${14}${PROGRAMID}COMMENT.INI"
             rm  ${15}
         fi
 
-##      INI¥Õ¥¡¥¤¥ë ºîÀ®
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -35,9 +30,6 @@ INIFILE="/tmp/${14}${PROGRAMID}COMMENT.INI"
             if  [ -e ${15} ]; then
                 exit
             fi
-
-##      INI¥Õ¥¡¥¤¥ë ºï½ü
-        rm -f ${INIFILE}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
