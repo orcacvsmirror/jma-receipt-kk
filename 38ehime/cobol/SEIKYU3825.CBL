@@ -2121,6 +2121,9 @@
                IF  SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
                    SYU-KOH-HKNNUM(IDX)     NOT =   "027"
                    MOVE    1       TO      FLG-HEIYOU
+      *=== ∆√ƒÍ¥µº‘§Œ∏¯»Ò…È√¥≥€Ω§¿µ by Yoshikawa(2014/01/15) start
+                                           FLG-HEIYOU2
+      *=== ∆√ƒÍ¥µº‘§Œ∏¯»Ò…È√¥≥€Ω§¿µ by Yoshikawa(2014/01/15) end
       *
                    EVALUATE    SYU-KOH-HKNNUM(IDX)
                        WHEN    "020"
