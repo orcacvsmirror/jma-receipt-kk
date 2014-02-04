@@ -49,6 +49,8 @@
       *  01.00.09    吉川    14/01/15    前期高齢者で全国公費と長期を併用
       *                                  した場合の公費負担額の修正
       *                                  プログラムオプション対応
+      *  01.00.10    吉川    14/02/04    同月内に再入院した場合、備考欄に
+      *                                  それぞれの入院期間を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -226,6 +228,26 @@
                05  WRK-TYY           PIC 9(04).
                05  WRK-TMM           PIC 9(02).
                05  WRK-TDD           PIC 9(02).
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+           03  TBL-MINNYMD.
+               05  WRK-MINNYMD  OCCURS 2.
+                   07  WRK-MINNYY    PIC 9(04).
+                   07  WRK-MINNMM    PIC 9(02).
+                   07  WRK-MINNDD    PIC 9(02).
+           03  TBL-MINTYMD.
+               05  WRK-MINTYMD  OCCURS 2.
+                   07  WRK-MINTYY    PIC 9(04).
+                   07  WRK-MINTMM    PIC 9(02).
+                   07  WRK-MINTDD    PIC 9(02).
+           03  WRK-NYUINKIKAN.
+               05  WRK-NYUMM         PIC X(04).
+               05  WRK-NYUDD         PIC X(02).
+               05  WRK-TAIDD         PIC X(02).
+           03  WRK-HENNYUTAIYMD OCCURS 5.
+               05  WRK-HENNYMDG      PIC X(22).
+               05  WRK-HENTYMDG      PIC X(22).
+           03  WRK-HKNCOMBINUM       PIC X(04).
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
            03  WRK-HKNJANUM          PIC X(05).
            03  WRK-PRTID             PIC X(20).
            03  WRK-DAYX.
@@ -263,6 +285,9 @@
       *=== 備考欄修正 by Yoshikawa(2011/07/13) end
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
            03  WRK-BIKO4             PIC X(40).
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+           03  WRK-BIKO5             PIC X(110).
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
       *=== プラグイン対応 by Yoshikawa(2013/02/07) start
       *     03  FILE-NAME             PIC X(512).
       *=== プラグイン対応 by Yoshikawa(2013/02/07) end
@@ -1183,6 +1208,11 @@
       *****************************************************************
        20013-YMDSET-SEC  SECTION.
       *
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+           INITIALIZE                     TBL-MINNYMD
+                                          TBL-MINTYMD
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
+      *
       *    診療年月の最終日を取得
            MOVE    RECE02-SRYYM     TO    WRK-SYMD(1:6)
            PERFORM 31012-LASTDAY-GET-SEC
@@ -1196,23 +1226,70 @@
            MOVE    1                   TO  WRK-TDD
            MOVE    WRK-NYMD            TO  PTNYUINRRK-NYUINYMD
            MOVE    WRK-TYMD            TO  PTNYUINRRK-TAIINYMD
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+           MOVE    WRK-HKNCOMBINUM     TO  PTNYUINRRK-HKNCOMBINUM
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
            PERFORM 930-PTNYUINRRK-SELECT-SEC
            PERFORM 930-PTNYUINRRK-CLOSE-SEC
       *
-      *
-           IF  WRK-TYMD                >   PTNYUINRRK-NYUINYMD
-               MOVE    WRK-TYMD        TO  MF100-NYUINYMD
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *     IF  WRK-TYMD                >   PTNYUINRRK-NYUINYMD
+      *         MOVE    WRK-TYMD        TO  MF100-NYUINYMD
+      *     ELSE
+      *         MOVE    PTNYUINRRK-NYUINYMD
+      *                                 TO  MF100-NYUINYMD
+      *     END-IF
+      **
+      *     IF  WRK-NYMD                <   PTNYUINRRK-TAIINYMD
+      *         MOVE    WRK-NYMD        TO  MF100-TAIINYMD
+      *     ELSE
+      *         MOVE    PTNYUINRRK-TAIINYMD
+      *                                 TO  MF100-TAIINYMD
+      *     END-IF
+      *    入院日セット
+           IF    WRK-TYMD  >  WRK-MINNYMD(1)
+               MOVE    WRK-TYMD        TO  MF100-NYUINYMD(1)
            ELSE
-               MOVE    PTNYUINRRK-NYUINYMD
-                                       TO  MF100-NYUINYMD
+               MOVE    WRK-MINNYMD(1)  TO  MF100-NYUINYMD(1)
            END-IF
+           MOVE    WRK-MINNYMD(2)      TO  MF100-NYUINYMD(2)
       *
-           IF  WRK-NYMD                <   PTNYUINRRK-TAIINYMD
-               MOVE    WRK-NYMD        TO  MF100-TAIINYMD
+      *    退院日セット
+           IF  WRK-NYMD  <  WRK-MINTYMD(2)
+               MOVE    WRK-NYMD        TO  MF100-TAIINYMD(2)
            ELSE
-               MOVE    PTNYUINRRK-TAIINYMD
-                                       TO  MF100-TAIINYMD
+               MOVE    WRK-MINTYMD(2)  TO  MF100-TAIINYMD(2)
            END-IF
+           MOVE    WRK-MINTYMD(1)      TO  MF100-TAIINYMD(1)
+      *
+      *    備考３（複数入院期間）
+           IF  MF100-NYUINYMD(2)  NOT =  ZERO
+             PERFORM  VARYING  IDX3  FROM  1  BY  1
+                      UNTIL    IDX3  >  2
+      *        入院日和暦変換
+               MOVE    MF100-NYUINYMD(IDX3)  TO  WRK-SYMD
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE    WRK-HENYMDG           TO  WRK-HENNYMDG(IDX3)
+      *        退院日和暦変換
+               MOVE    MF100-TAIINYMD(IDX3)  TO  WRK-SYMD
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE    WRK-HENYMDG           TO  WRK-HENTYMDG(IDX3)
+             END-PERFORM
+      *
+      *      文字結合
+             STRING  "入院期間："          DELIMITED  BY  SIZE
+                     WRK-HENNYMDG(1)       DELIMITED  BY  SIZE
+                     "ー"                  DELIMITED  BY  SIZE
+                     WRK-HENTYMDG(1)       DELIMITED  BY  SIZE
+                     "、"                  DELIMITED  BY  SIZE
+                     WRK-HENNYMDG(2)       DELIMITED  BY  SIZE
+                     "ー"                  DELIMITED  BY  SIZE
+                     WRK-HENTYMDG(2)       DELIMITED  BY  SIZE
+                     "　"                  DELIMITED  BY  SIZE
+                     INTO                  MF100-BIKO3
+             END-STRING
+           END-IF
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
       *
            .
        20013-YMDSET-EXT.
@@ -1424,12 +1501,22 @@
              PERFORM 5006-NUM-HENSYU-SEC
       *
       *    １９．入院診療開始日
-             MOVE    MF100-NYUINYMD          TO  WRK-DATA
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *       MOVE    MF100-NYUINYMD          TO  WRK-DATA
+             MOVE    MF100-NYUINYMD(1)       TO  WRK-DATA
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
              MOVE    8                       TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ２０．入院診療終了日
-             MOVE    MF100-TAIINYMD          TO  WRK-DATA
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *       MOVE    MF100-TAIINYMD          TO  WRK-DATA
+             IF  MF100-NYUINYMD(2)  =  ZERO
+               MOVE    MF100-TAIINYMD(1)     TO  WRK-DATA
+             ELSE
+               MOVE    MF100-TAIINYMD(2)     TO  WRK-DATA
+             END-IF
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
              MOVE    8                       TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
            ELSE
@@ -1596,6 +1683,9 @@
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
                                                  WRK-BIKO4
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+                                                 WRK-BIKO5
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
       *    高半
            IF  MF100-BIKO  NOT =  SPACE
              MOVE  MF100-BIKO                TO  WRK-BIKO1
@@ -1626,11 +1716,20 @@
              MOVE  MF100-BIKO2               TO  WRK-BIKO4
            END-IF
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *    複数入院期間
+           IF  MF100-BIKO3  NOT =  SPACE
+             MOVE  MF100-BIKO3               TO  WRK-BIKO5
+           END-IF
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
            STRING    WRK-BIKO1               DELIMITED  BY  SPACE
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) start
                      WRK-BIKO4               DELIMITED  BY  SPACE
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
                      WRK-BIKO2               DELIMITED  BY  SPACE
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+                     WRK-BIKO5               DELIMITED  BY  SPACE
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
                      WRK-BIKO3               DELIMITED  BY  SIZE
                      INTO                    WRK-DATA
            END-STRING
@@ -2283,6 +2382,9 @@
                          COMB-KOHID(3)    =  WRK-KOHID   OR
                          COMB-KOHID(4)    =  WRK-KOHID
                        PERFORM  800-SEIKYU-SEC
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+                       MOVE  SYU-HKNCOMBINUM      TO  WRK-HKNCOMBINUM
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
                      END-IF
                    END-IF
                  END-IF
@@ -2338,13 +2440,33 @@
            MOVE    PTNYUINRRK-REC                TO  MCPDATA-REC
            MOVE    "DBSELECT"                    TO  MCP-FUNC
            MOVE    "tbl_ptnyuinrrk"   TO  MCP-TABLE
-           MOVE    "key11"            TO  MCP-PATHNAME
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *     MOVE    "key11"            TO  MCP-PATHNAME
+           MOVE    "key21"            TO  MCP-PATHNAME
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
            CALL    "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
                                       SPA-AREA
            IF      MCP-RC           =   ZERO
                    PERFORM 930-PTNYUINRRK-FETCH-SEC
+      *
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *    その月の最小入退院日を取得（とりあえず2件まで）
+                   MOVE  PTNYUINRRK-NYUINYMD      TO  WRK-MINNYMD(1)
+                   MOVE  PTNYUINRRK-TAIINYMD      TO  WRK-MINTYMD(1)
+      *
+                   PERFORM  UNTIL  FLG-PTNYUINRRK  =  1
+      *              最小入院日が見つかったら並べ替え
+                     IF  PTNYUINRRK-NYUINYMD  <  WRK-MINNYMD(1)
+                       MOVE  WRK-MINNYMD(1)       TO  WRK-MINNYMD(2)
+                       MOVE  WRK-MINTYMD(1)       TO  WRK-MINTYMD(2)
+                       MOVE  PTNYUINRRK-NYUINYMD  TO  WRK-MINNYMD(1)
+                       MOVE  PTNYUINRRK-TAIINYMD  TO  WRK-MINTYMD(1)
+                     END-IF
+                     PERFORM 930-PTNYUINRRK-FETCH-SEC
+                   END-PERFORM
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
            ELSE
                    MOVE   1               TO  FLG-PTNYUINRRK
            END-IF
@@ -2358,7 +2480,10 @@
       *
            MOVE    "DBFETCH"                      TO  MCP-FUNC
            MOVE    "tbl_ptnyuinrrk"   TO  MCP-TABLE
-           MOVE    "key11"            TO  MCP-PATHNAME
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *     MOVE    "key11"            TO  MCP-PATHNAME
+           MOVE    "key21"            TO  MCP-PATHNAME
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
            CALL    "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
@@ -2379,7 +2504,10 @@
       *
            MOVE    "DBCLOSECURSOR"               TO  MCP-FUNC
            MOVE    "tbl_ptnyuinrrk"   TO  MCP-TABLE
-           MOVE    "key11"            TO  MCP-PATHNAME
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *     MOVE    "key11"            TO  MCP-PATHNAME
+           MOVE    "key21"            TO  MCP-PATHNAME
+      *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
            CALL    "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
