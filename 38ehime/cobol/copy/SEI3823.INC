@@ -29,7 +29,7 @@
       *                                   公費対象点数追加
       * 01.00.03     吉川       11/09/22  備考２追加(診療日数ゼロ理由)
       * 01.00.04     吉川       12/07/05  傷病名バイト数増加
-      * 01.00.05     吉川       14/02/04  2度目の入退院日追加
+      * 01.00.05     吉川       14/02/04  複数の入退院日印字対応
       ************************************************************
       *01  MF100-REC.
            03  MF100-KEY.
@@ -149,21 +149,21 @@
       *請求額
            03  MF100-SEIKYUGK           PIC  9(09).
       *入院日
-      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *=== 複数の入退院日印字対応 by Yoshikawa(2014/02/04) start
       *     03  MF100-NYUINYMD           PIC  9(08).
            03  MF100-NYUINYMD  OCCURS 5.
                05  MF100-NYUINYY         PIC  9(04).
                05  MF100-NYUINMM         PIC  9(02).
                05  MF100-NYUINDD         PIC  9(02).
-      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
+      *=== 複数の入退院日印字対応 by Yoshikawa(2014/02/04) end
       *退院日
-      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *=== 複数の入退院日印字対応 by Yoshikawa(2014/02/04) start
       *     03  MF100-TAIINYMD           PIC  9(08). 
            03  MF100-TAIINYMD  OCCURS 5.
                05  MF100-TAIINYY         PIC  9(04).
                05  MF100-TAIINMM         PIC  9(02).
                05  MF100-TAIINDD         PIC  9(02).
-      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
+      *=== 複数の入退院日印字対応 by Yoshikawa(2014/02/04) end
       *全国共通公費区分
            03  MF100-KOHKBN-TBL.
                05  MF100-KOHKBN   PIC 9(01) OCCURS 6.
@@ -195,7 +195,7 @@
       *備考２
            03  MF100-BIKO2              PIC  X(40).
       *=== 備考２追加 by Yoshikawa(2011/09/22) end
-      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) start
+      *=== 複数の入退院日印字対応 by Yoshikawa(2014/02/04) start
       *備考３
            03  MF100-BIKO3              PIC  X(110).
-      *=== 2回目の入院期間を印字 by Yoshikawa(2009/08/20) end
+      *=== 複数の入退院日印字対応 by Yoshikawa(2014/02/04) end
