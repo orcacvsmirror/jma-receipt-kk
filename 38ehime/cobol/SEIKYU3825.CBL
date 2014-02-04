@@ -230,12 +230,12 @@
                05  WRK-TDD           PIC 9(02).
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
            03  TBL-MINNYMD.
-               05  WRK-MINNYMD  OCCURS 2.
+               05  WRK-MINNYMD  OCCURS 5.
                    07  WRK-MINNYY    PIC 9(04).
                    07  WRK-MINNMM    PIC 9(02).
                    07  WRK-MINNDD    PIC 9(02).
            03  TBL-MINTYMD.
-               05  WRK-MINTYMD  OCCURS 2.
+               05  WRK-MINTYMD  OCCURS 5.
                    07  WRK-MINTYY    PIC 9(04).
                    07  WRK-MINTMM    PIC 9(02).
                    07  WRK-MINTDD    PIC 9(02).
