@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      * 01.00.01     吉川    2014/02/05  患者カナ氏名の不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -873,6 +874,10 @@
              PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ８．氏名（半角カナ）
+      *=== 患者カナ氏名の不具合修正 by Yoshikawa(2014/02/05) start
+             INITIALIZE                          WRK-MAE-INPUT
+                                                 WRK-OUT-INPUT
+      *=== 患者カナ氏名の不具合修正 by Yoshikawa(2014/02/05) end
              MOVE    MF100-NAME(1:40)        TO  WRK-MAE-INPUT
              PERFORM 2009-HANKANA-HENKAN-SEC
              MOVE    WRK-OUT-INPUT           TO  WRK-DATA
