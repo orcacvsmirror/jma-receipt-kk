@@ -27,7 +27,8 @@
       *  13/05/10    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev	修正者	日付		内容
+      * Maj/Min/Rev   修正者   日付        内容
+      *  01.00.01     吉川     14/02/05    診療年月は月遅れに関わらず記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1226,7 +1227,9 @@
              PERFORM 5005-NUM-HENSYU-SEC
       *      
       *      １７．診療年月
-             IF  MF100-SRYYM  NOT =  LNK-PRTKANRI-SRYYM
+      *=== 診療年月は常に記載 by Yoshikawa(2014/02/05) start
+      *       IF  MF100-SRYYM  NOT =  LNK-PRTKANRI-SRYYM
+      *=== 診療年月は常に記載 by Yoshikawa(2014/02/05) end
                MOVE    MF100-SRYYM             TO  WRK-SYMD (1:6)
                MOVE    "01"                    TO  WRK-SYMD (7:2)
                PERFORM   31011-SEIWA-HEN-SEC
@@ -1243,9 +1246,11 @@
                MOVE    LNK-DAY1-WYMD(2:2)      TO  WRK-WYY
                MOVE    LNK-DAY1-WYMD(4:2)      TO  WRK-WMM
                MOVE    WRK-WYMD(1:5)           TO  WRK-DATA
-             ELSE
-               MOVE    SPACE                   TO  WRK-DATA
-             END-IF
+      *=== 診療年月は常に記載 by Yoshikawa(2014/02/05) start
+      *       ELSE
+      *         MOVE    SPACE                   TO  WRK-DATA
+      *       END-IF
+      *=== 診療年月は常に記載 by Yoshikawa(2014/02/05) end
              MOVE    5                         TO  WRK-NAGASA
              PERFORM 5004-MOJI-HENSYU-SEC
       *      
