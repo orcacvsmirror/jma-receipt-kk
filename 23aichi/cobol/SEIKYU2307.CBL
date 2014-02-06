@@ -1523,13 +1523,13 @@
                          INTO             WRK-BIKO
                END-STRING
       *
-               IF  SC09-BIKO3(IDX)  =  SPACE
-                 MOVE  WRK-BIKO        TO  SC09-BIKO3(IDX)
+               IF  SC07-BIKO3(IDX)  =  SPACE
+                 MOVE  WRK-BIKO        TO  SC07-BIKO3(IDX)
                ELSE
-                 IF  SC09-BIKO2(IDX)  =  SPACE
-                   MOVE  WRK-BIKO      TO  SC09-BIKO2(IDX)
+                 IF  SC07-BIKO2(IDX)  =  SPACE
+                   MOVE  WRK-BIKO      TO  SC07-BIKO2(IDX)
                  ELSE
-                   MOVE  WRK-BIKO      TO  SC09-BIKO1(IDX)
+                   MOVE  WRK-BIKO      TO  SC07-BIKO1(IDX)
                  END-IF
                END-IF
              END-IF
