@@ -60,6 +60,8 @@
       *  01.00.16    吉川    13/07/08    備考の診療年月は「yyyy年mm月」
       *                                  のように印字する
       *                                  プログラムオプション対応
+      *  01.00.17    吉川    14/02/06    月途中で市町村が変わった場合
+      *                                  備考にそれぞれの市の点数を記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -227,6 +229,9 @@
            03  WRK-Z3                PIC ZZZ.
            03  WRK-Z5                PIC Z,ZZZ.
            03  WRK-Z6                PIC ZZ,ZZZ.
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+           03  WRK-Z6-2              PIC ZZZZZZ.
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
            03  WRK-Z7                PIC ZZZ,ZZZ.
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
            03  WRK-Z11               PIC ZZZ,ZZZ,ZZZ.
@@ -285,6 +290,11 @@
            03  WRK-BIKO2                  PIC X(10).
       *---(01.00.03) LINE ADD END   ------------------------------------
            03  WRK-JTENSU                 PIC ZZZZZZ.
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+           03  WRK-KOHJKYSNUM             PIC X(07).
+           03  WRK-CITYHKNJANUM           PIC X(05).
+           03  WRK-TENSU                  PIC X(06).
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
       *
            03  WRK-MAE-INPUT              PIC X(200).
            03  WRK-OUT-INPUT              PIC X(200).
@@ -670,7 +680,6 @@
       *
            CLOSE CITY-FILE
       *
-      *
            .
        1001-CITY-EXT.
            EXIT.
@@ -975,13 +984,37 @@
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
       *
       *    市町村番号設定
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+           MOVE  MF100-KOHJKYSNUM          TO  WRK-KOHJKYSNUM
+           MOVE  MF100-KOHNUM              TO  WRK-KOHNUM
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
            PERFORM  2001-CITYNUM-SEC
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+           MOVE  WRK-CITYHKNJANUM          TO  MF100-CITYHKNJANUM
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
       *
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
       *    請求管理から総点数取得
            PERFORM  900-SEIKYU-READ-SEC
            MOVE    RECE10-TOTALTEN(1)      TO  MF100-TOTALTEN
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
+      *
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+           IF  RECE02-KOHNUM(2)  NOT =  SPACE
+      *      月途中で変更になった公費の市町村と点数保存
+             IF  IDZ  =  1
+               MOVE  RECE02-KOHJKYSNUM(2)  TO  WRK-KOHJKYSNUM
+               MOVE  RECE02-KOHNUM(2)      TO  WRK-KOHNUM
+               MOVE  RECE02-TOTALTEN(3)    TO  MF100-TAKOHTEN
+             ELSE
+               MOVE  RECE02-KOHJKYSNUM(1)  TO  WRK-KOHJKYSNUM
+               MOVE  RECE02-KOHNUM(1)      TO  WRK-KOHNUM
+               MOVE  RECE02-TOTALTEN(2)    TO  MF100-TAKOHTEN
+             END-IF
+             PERFORM  2001-CITYNUM-SEC
+             MOVE  WRK-CITYHKNJANUM        TO  MF100-TACITYHKNJANUM
+           END-IF
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
       *
       *---(01.00.03) LINE ADD START ------------------------------------
       *    高額療養費チェック
@@ -1093,45 +1126,81 @@
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >   100  OR
                     FLG-PASS      =   1
-             IF MF100-KOHJKYSNUM(2:2)   =  CITY-NUM(IDX)
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+      *       IF MF100-KOHJKYSNUM(2:2)   =  CITY-NUM(IDX)
+             IF WRK-KOHJKYSNUM(2:2)   =  CITY-NUM(IDX)
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
                MOVE    1    TO    FLG-PASS
-               MOVE    CITY-HKNJA(IDX)    TO  MF100-CITYHKNJANUM
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+      *         MOVE    CITY-HKNJA(IDX)    TO  MF100-CITYHKNJANUM
+               MOVE    CITY-HKNJA(IDX)    TO  WRK-CITYHKNJANUM
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
              END-IF
            END-PERFORM
       *
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+      **    市長村合併対応(赤羽町は田原市に統合する。)
+      *     IF  MF100-CITYHKNJANUM = '23107'
+      *         MOVE  '23106'  TO  MF100-CITYHKNJANUM
+      *     END-IF
+      **
+      **=== 市町村合併対応 by Yoshikawa(2010/04/08) start
+      **    七宝町、美和町、甚目寺町はあま市に統合する
+      *     IF  MF100-CITYHKNJANUM = "23066" OR "23067" OR "23068"
+      *         MOVE  "23034"  TO  MF100-CITYHKNJANUM
+      *     END-IF
+      **=== 市町村合併対応 by Yoshikawa(2010/04/08) end
+      **
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **    保険番号185,285で「00」の場合は豊橋市
+      *     IF  (MF100-KOHNUM  =  "185" OR "285")
+      *     AND (MF100-KOHJKYSNUM(2:2)  =  "00")
+      *         MOVE  "23002"  TO  MF100-CITYHKNJANUM
+      *     END-IF
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      **
+      **=== 岡崎市の判定追加 by Yoshikawa(2010/09/15) start
+      **    受給者番号の2桁目が「9」の場合は岡崎市
+      *     IF  MF100-KOHJKYSNUM(2:1)  =  "9"
+      *       MOVE    "23003"  TO  MF100-CITYHKNJANUM
+      *     END-IF
+      **=== 岡崎市の判定追加 by Yoshikawa(2010/09/15) end
+      **
+      **    名古屋用保険者番号設定
+      *     IF  MF100-KOHJKYSNUM(1:1)  =  "0" OR "1" OR "6" OR "7"
+      *       MOVE    "23400"    TO    MF100-CITYHKNJANUM
+      *     END-IF 
+      **
+      *     MOVE  MF100-CITYHKNJANUM(3:3)      TO  WRK-KOBETUCITYNUM
+      *     
       *    市長村合併対応(赤羽町は田原市に統合する。)
-           IF  MF100-CITYHKNJANUM = '23107'
-               MOVE  '23106'  TO  MF100-CITYHKNJANUM
+           IF  WRK-CITYHKNJANUM  =  "23107"
+               MOVE  "23106"    TO  WRK-CITYHKNJANUM
            END-IF
       *
-      *=== 市町村合併対応 by Yoshikawa(2010/04/08) start
       *    七宝町、美和町、甚目寺町はあま市に統合する
-           IF  MF100-CITYHKNJANUM = "23066" OR "23067" OR "23068"
-               MOVE  "23034"  TO  MF100-CITYHKNJANUM
+           IF  WRK-CITYHKNJANUM  =  "23066" OR "23067" OR "23068"
+               MOVE  "23034"    TO  WRK-CITYHKNJANUM
            END-IF
-      *=== 市町村合併対応 by Yoshikawa(2010/04/08) end
       *
-      *---(01.00.08) LINE ADD START ------------------------------------
       *    保険番号185,285で「00」の場合は豊橋市
-           IF  (MF100-KOHNUM  =  "185" OR "285")
-           AND (MF100-KOHJKYSNUM(2:2)  =  "00")
-               MOVE  "23002"  TO  MF100-CITYHKNJANUM
+           IF  (WRK-KOHNUM  =  "185" OR "285")
+           AND (WRK-KOHJKYSNUM(2:2)  =  "00")
+               MOVE  "23002"    TO  WRK-CITYHKNJANUM
            END-IF
-      *---(01.00.08) LINE ADD END   ------------------------------------
       *
-      *=== 岡崎市の判定追加 by Yoshikawa(2010/09/15) start
       *    受給者番号の2桁目が「9」の場合は岡崎市
-           IF  MF100-KOHJKYSNUM(2:1)  =  "9"
-             MOVE    "23003"  TO  MF100-CITYHKNJANUM
+           IF  WRK-KOHJKYSNUM(2:1)  =  "9"
+             MOVE    "23003"    TO  WRK-CITYHKNJANUM
            END-IF
-      *=== 岡崎市の判定追加 by Yoshikawa(2010/09/15) end
       *
       *    名古屋用保険者番号設定
-           IF  MF100-KOHJKYSNUM(1:1)  =  "0" OR "1" OR "6" OR "7"
-             MOVE    "23400"    TO    MF100-CITYHKNJANUM
+           IF  WRK-KOHJKYSNUM(1:1)  =  "0" OR "1" OR "6" OR "7"
+             MOVE    "23400"    TO    WRK-CITYHKNJANUM
            END-IF 
       *
-           MOVE  MF100-CITYHKNJANUM(3:3)      TO  WRK-KOBETUCITYNUM
+           MOVE  WRK-CITYHKNJANUM(3:3)      TO  WRK-KOBETUCITYNUM
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
       *
             .
        2001-CITYNUM-EXT.
@@ -1440,6 +1509,31 @@
                END-IF
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
+      *      他市町村にも点数がある場合、備考にその市町村と点数を記載
+             IF  MF100-TACITYHKNJANUM  NOT =  SPACE
+               MOVE    MF100-TACITYHKNJANUM     TO  WRK-HKNJANUM
+               MOVE    MF100-TAKOHTEN           TO  WRK-Z6-2
+               MOVE    WRK-Z6-2                 TO  WRK-TENSU
+               PERFORM 920-HKNJAINF-SET-SEC
+               STRING    HKNJA-HKNJANAME  DELIMITED BY SPACE
+                         WRK-TENSU        DELIMITED BY SIZE
+                         "点"             DELIMITED BY SIZE
+                         INTO             WRK-BIKO
+               END-STRING
+      *
+               IF  SC09-BIKO3(IDX)  =  SPACE
+                 MOVE  WRK-BIKO        TO  SC09-BIKO3(IDX)
+               ELSE
+                 IF  SC09-BIKO2(IDX)  =  SPACE
+                   MOVE  WRK-BIKO      TO  SC09-BIKO2(IDX)
+                 ELSE
+                   MOVE  WRK-BIKO      TO  SC09-BIKO1(IDX)
+                 END-IF
+               END-IF
+             END-IF
+      *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
       *
       *    小計加算
              ADD  1                  TO  WRK-S-KENSU
