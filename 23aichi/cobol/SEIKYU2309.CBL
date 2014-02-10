@@ -1000,7 +1000,9 @@
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
-           IF  RECE02-KOHNUM(2)  NOT =  SPACE
+           IF  (RECE02-KOHNUM(2)  NOT =  SPACE)
+           AND (RECE02-KOHJKYSNUM(1)(2:2)  NOT =
+                RECE02-KOHJKYSNUM(2)(2:2))
       *      月途中で変更になった公費の市町村と点数保存
              IF  IDZ  =  1
                MOVE  RECE02-KOHJKYSNUM(2)  TO  WRK-KOHJKYSNUM
