@@ -31,6 +31,9 @@
       *  01.00.01       ÇëÌî    2013/11/12   ÊÝ¸±¼Ô¾ÚÈÖ¹æ¤òÈ¾³Ñ¤ËÊÑ´¹¤¹¤ë
       *  01.00.02       ÇëÌî    2013/12/06   ÅÀ¿ôÍó¤Ï¾®¿ôÅÀ°Ê²¼£±·å¤Þ¤Ç¤òµ­Ï¿¤·¡¢
       *                                      ¾®¿ôÅÀ¤½¤Î¤â¤Î¤Ïºï½ü¤¹¤ë
+      *  01.00.03       ÇëÌî    2014/02/12   ÊÝ¸±°åÎÅµ¡´Ø¥³¡¼¥ÉÍó¤ò[18¡ÜÅÀ¿ôÉ½¡Ü°åÎÅµ¡´ØÈÖ¹æ]
+      *                                      ¤Èµ­Ï¿¤¹¤ë¤è¤¦¤Ë½¤Àµ
+      *                                      ´µ¼Ô¥«¥Ê»áÌ¾Íó¤ÏÈ¾³Ñ¤Çµ­Ï¿¤¹¤ë¤è¤¦¤Ë½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -109,6 +112,9 @@
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
            03  IDX3           PIC 9(04).
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) start
+           03  IDX4           PIC 9(04).
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) end
            03  IDW            PIC 9(04).
       *
       *    ¥Ñ¥é¥á¥¿ÎÎ°è
@@ -226,6 +232,9 @@
                05  WRK-NUM             PIC ZZZZZZZZZZ.
                05  WRK-NUM1            PIC ZZZZZZZZ.Z.
                05  WRK-NAGASA          PIC 9(04).
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) start
+               05  WRK-NAGASA-SPACE    PIC 9(04).
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) end
                05  WRK-ST              PIC 9(02).
                05  WRK-SYOSUU          PIC 9(01).
                05  WRK-END             PIC 9(01).
@@ -978,7 +987,15 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ÊÝ¸±°åÎÅµ¡´Ø¥³¡¼¥É
-           MOVE    SYS-1001-HOSPCD         TO  WRK-DATA
+      *=== °åÎÅµ¡´Ø¥³¡¼¥É¤ò½¤Àµ by hagino(2014/02/12) start
+      *     MOVE    SYS-1001-HOSPCD         TO  WRK-DATA
+      *    ÊÝ¸±°åÎÅµ¡´Ø¥³¡¼¥É¡Ê£±£¸¡ÜÅÀ¿ôÉ½¡Ü°åÎÅµ¡´ØÈÖ¹æ¡Ë
+           STRING  "18"                    DELIMITED  BY  SIZE
+                   SYS-1001-TENHYOKBN      DELIMITED  BY  SIZE
+                   SYS-1001-HOSPCD         DELIMITED  BY  SIZE
+                   INTO                    WRK-DATA
+           END-STRING
+      *=== °åÎÅµ¡´Ø¥³¡¼¥É¤ò½¤Àµ by hagino(2014/02/12) end
            MOVE    10                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -988,13 +1005,24 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ´µ¼Ô¥«¥Ê»áÌ¾
-      *    È¾³Ñ
-           MOVE    MF110-KANANAME          TO  WRK-DATA
-      *    È¾¥«¥ÊÊÑ´¹
-      *     MOVE    WRK-DATA                TO  WRK-MAE-INPUT
-      *     PERFORM 31013-HENKAN-SEC
-      *     MOVE    WRK-OUT-INPUT           TO  WRK-DATA
-           MOVE    20                      TO  WRK-NAGASA
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) start
+      *     MOVE    MF110-KANANAME          TO  WRK-DATA
+      **    È¾¥«¥ÊÊÑ´¹
+      **     MOVE    WRK-DATA                TO  WRK-MAE-INPUT
+      **     PERFORM 31013-HENKAN-SEC
+      **     MOVE    WRK-OUT-INPUT           TO  WRK-DATA
+      *     MOVE    20                      TO  WRK-NAGASA
+           INITIALIZE                          WRK-MAE-INPUT
+                                               WRK-OUT-INPUT
+           MOVE    MF110-KANANAME(1:40)    TO  WRK-MAE-INPUT
+           PERFORM 31013-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  WRK-DATA
+           COMPUTE WRK-NAGASA-SPACE = ( ( IDX3 - IDX4 ) - 1 ) / 2 
+           IF  WRK-NAGASA-SPACE  >   20
+               MOVE    20                      TO  WRK-NAGASA-SPACE
+           END-IF
+           COMPUTE WRK-NAGASA = 20 + WRK-NAGASA-SPACE
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ´µ¼Ô»áÌ¾
@@ -1425,9 +1453,15 @@
       *****************************************************************
        31013-HENKAN-SEC                 SECTION.
       *
-           MOVE  1  TO  IDX3
+           MOVE  1     TO  IDX3
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) start
+           MOVE  ZERO  TO  IDX4
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) end
            PERFORM VARYING  IDX2  FROM  1  BY  2
-                   UNTIL    IDX2  >=  129
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) start
+      *             UNTIL    IDX2  >=  129
+                   UNTIL    IDX2  >  40
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) end
              EVALUATE   WRK-MAE-INPUT(IDX2:2)
                WHEN  "¥¢"
                  MOVE  "Ž±"  TO  WRK-OUT-INPUT(IDX3:2)
@@ -1627,6 +1661,16 @@
                WHEN  "¡¡"
                  MOVE  " "  TO  WRK-OUT-INPUT(IDX3:1)
                  ADD   1    TO  IDX3
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) start
+                 IF  WRK-MAE-INPUT(IDX2 - 2:2)   NOT  =   SPACE
+                   IF  WRK-MAE-INPUT(IDX2 + 2:2)   NOT  =   SPACE
+                       ADD   1    TO  IDX4
+                   END-IF
+                 END-IF
+               WHEN  "¡¼"
+                 MOVE  "Ž°"  TO  WRK-OUT-INPUT(IDX3:2)
+                 ADD   2    TO  IDX3
+      *=== ´µ¼Ô¥«¥Ê»áÌ¾¤òÈ¾³Ñ¤Ë½¤Àµ by hagino(2014/02/12) end
                WHEN  "¥¬"
                  MOVE  "Ž¶ŽÞ" TO  WRK-OUT-INPUT(IDX3:4)
                  ADD   4    TO  IDX3
@@ -1722,7 +1766,7 @@
                    INTO        WRK-REC
            END-STRING
            ADD     WRK-NAGASA               TO  WRK-REC-LENGTH
-      *     
+      *
            INITIALIZE                      WRK-HENSYU-AREA
       *
            .
