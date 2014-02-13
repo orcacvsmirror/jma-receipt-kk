@@ -46,6 +46,8 @@
       *                                    open-cobol1.0対応
       *  01.00.09    吉川    2011/05/19    生年月日は８桁で記録する
       *  01.00.10    萩野    2012/08/10    負担者番号の三桁未満エラー対応
+      *  01.00.11    萩野    2014/02/13    実日数、点数ともに福祉使用分のみの
+      *                                    記載に修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -642,22 +644,28 @@
       *     MOVE  RECE02-FTNMONEY    (1)    TO  MF101-FTNMONEY2
       *     MOVE  RECE02-TOTALTEN    (1)    TO  MF101-TOTALTEN
       *     MOVE  RECE02-SHOKUJIINF  (1)    TO  MF101-SHOKUJIINF
+      *=== 福祉使用分のみデータを取得 by hagino(2014/02/13) start
       *    生保は主保険＋福祉のみのデータを取得
-           PERFORM  900-SEIKYU-READ-SEC
-           IF  RECE10-KOHNUM(1)  =  "012"
-           OR  RECE10-KOHNUM(2)  =  "012"
-           OR  RECE10-KOHNUM(3)  =  "012"
-           OR  RECE10-KOHNUM(4)  =  "012"
-             MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
-             MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
-             MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
-             MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
-           ELSE
-             MOVE  RECE10-JNISSU(1)        TO  MF101-JNISSU
-             MOVE  RECE10-FTNMONEY(1)      TO  MF101-FTNMONEY2
-             MOVE  RECE10-TOTALTEN(1)      TO  MF101-TOTALTEN
-             MOVE  RECE10-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
-           END-IF
+      *     PERFORM  900-SEIKYU-READ-SEC
+      *     IF  RECE10-KOHNUM(1)  =  "012"
+      *     OR  RECE10-KOHNUM(2)  =  "012"
+      *     OR  RECE10-KOHNUM(3)  =  "012"
+      *     OR  RECE10-KOHNUM(4)  =  "012"
+      *       MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
+      *       MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
+      *       MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
+      *       MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+      *     ELSE
+      *       MOVE  RECE10-JNISSU(1)        TO  MF101-JNISSU
+      *       MOVE  RECE10-FTNMONEY(1)      TO  MF101-FTNMONEY2
+      *       MOVE  RECE10-TOTALTEN(1)      TO  MF101-TOTALTEN
+      *       MOVE  RECE10-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+      *     END-IF
+           MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
+           MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
+           MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
+           MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+      *=== 福祉使用分のみデータを取得 by hagino(2014/02/13) end
       *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) end
       *
       *    正しい市町村番号か
