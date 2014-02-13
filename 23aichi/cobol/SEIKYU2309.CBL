@@ -62,6 +62,7 @@
       *                                  プログラムオプション対応
       *  01.00.17    吉川    14/02/06    月途中で市町村が変わった場合
       *                                  備考にそれぞれの市の点数を記載
+      *  01.00.18    吉川    14/02/13    長期の判定不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1058,14 +1059,20 @@
       *
       *    長期
            IF    FLG-TYOKI    =    1  AND
-                 WRK-SEIKYUGK-G2   >  10000
+      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) start
+      *           WRK-SEIKYUGK-G2    >  10000
+                 WRK-SEIKYUGK-G2    >=  10000
+      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) end
                MOVE    10000          TO    WRK-SEIKYUGK-G2
                MOVE    1              TO    MF100-TYOKI
            END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
       *    長期上位
            IF    FLG-TYOKI    =    2  AND
-                 WRK-SEIKYUGK-G2   >  20000
+      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) start
+      *           WRK-SEIKYUGK-G2   >  20000
+                 WRK-SEIKYUGK-G2   >=  20000
+      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) end
                MOVE    20000          TO    WRK-SEIKYUGK-G2
                MOVE    1              TO    MF100-TYOKI
            END-IF
