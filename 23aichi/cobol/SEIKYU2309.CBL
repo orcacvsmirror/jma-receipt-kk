@@ -1519,11 +1519,18 @@
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
       *      他市町村にも点数がある場合、備考にその市町村と点数を記載
              IF  MF100-TACITYHKNJANUM  NOT =  SPACE
+               INITIALIZE                           WRK-BIKO
+                                                    WRK-HKNJANAME
                MOVE    MF100-TACITYHKNJANUM     TO  WRK-HKNJANUM
                MOVE    MF100-TAKOHTEN           TO  WRK-Z6-2
                MOVE    WRK-Z6-2                 TO  WRK-TENSU
                PERFORM 920-HKNJAINF-SET-SEC
-               STRING    HKNJA-HKNJANAME  DELIMITED BY SPACE
+      *        "（）"が付く市町村名は括弧を除去
+               STRING    HKNJA-HKNJANAME  DELIMITED BY "（"
+                         INTO             WRK-HKNJANAME
+               END-STRING
+      *        文字結合
+               STRING    WRK-HKNJANAME    DELIMITED BY SPACE
                          WRK-TENSU        DELIMITED BY SIZE
                          "点"             DELIMITED BY SIZE
                          INTO             WRK-BIKO
