@@ -37,6 +37,7 @@
       *  01.00.05    吉川    13/01/10    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.06    吉川    13/11/07    プログラムオプション対応
+      *  01.00.07    吉川    14/03/05    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -830,11 +831,19 @@
              MOVE   2                        TO   MF100-TYOKI
            END-IF
       *
-      *    保険に限度額が有る場合の対応
-           IF   RECE02-FTNMONEY(1)            >   ZERO
-           AND  RECE02-FTNMONEY(1)            <   MF100-FTNMONEY
-             MOVE   RECE02-FTNMONEY(1)       TO   MF100-FTNMONEY
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      **    保険に限度額が有る場合の対応
+      *     IF   RECE02-FTNMONEY(1)            >   ZERO
+      *     AND  RECE02-FTNMONEY(1)            <   MF100-FTNMONEY
+      *       MOVE   RECE02-FTNMONEY(1)       TO   MF100-FTNMONEY
+      *     END-IF
+      *    高額療養費
+           IF  RECE02-ZAITAKU  =  "2" OR "3" OR "4"
+             IF  RECE02-FTNMONEY(1)  >  ZERO
+               MOVE    RECE02-FTNMONEY(1)    TO  MF100-FTNMONEY
+             END-IF
            END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *    保険請求額
            COMPUTE   MF100-SEIKYUGK  =  RECE02-TOTALTEN(1)  *  10
@@ -942,11 +951,13 @@
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT            TO  SC03-HOSPCD
       *
-      *    処方せん発行医療機関等の名称
-           MOVE    WRK-SYOHODATA(1)         TO  SC03-SYOHONAME
-      *
-      *    処方せん発行医療機関番号
-           MOVE    WRK-SYOHODATA(2)         TO  SC03-SYOHONUM
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      **    処方せん発行医療機関等の名称
+      *     MOVE    WRK-SYOHODATA(1)         TO  SC03-SYOHONAME
+      **
+      **    処方せん発行医療機関番号
+      *     MOVE    WRK-SYOHODATA(2)         TO  SC03-SYOHONUM
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *    請求年月日
            MOVE    WRK-SEIYMDWH             TO  SC03-SEIYMD
@@ -980,6 +991,13 @@
            MOVE    MF100-CITYNUM            TO  WRK-HKNJANUM(3:3)
            PERFORM  920-HKNJAINF-SET-SEC
            MOVE    HKNJA-HKNJANAME          TO  SC03-CITYNAME
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *    市町コード
+           MOVE    MF100-CITYNUM            TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT            TO  SC03-CITYCD
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
            .
        310-HEAD-HEN-EXT.
@@ -1072,29 +1090,31 @@
                END-IF
              END-IF
       *
-      *      診療科名
-             INITIALIZE                  SYS-1005-REC
-             IF  (MF100-SRYKA  NOT =  ZERO)
-             AND (MF100-SRYKA  NOT =  "99")
-      *      診療科目情報取得
-               INITIALIZE                SYS-1005-REC
-               MOVE    "1005"            TO  SYS-1005-KANRICD
-               MOVE    MF100-SRYKA      TO  SYS-1005-KBNCD
-               MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                         TO  SYS-1005-STYUKYMD(1:6)
-                                             SYS-1005-EDYUKYMD(1:6)
-               MOVE    "01"              TO  SYS-1005-STYUKYMD(7:2)
-                                             SYS-1005-EDYUKYMD(7:2)
-               MOVE    SPA-HOSPNUM       TO  SYS-1005-HOSPNUM
-               MOVE    SYS-1005-REC      TO  MCPDATA-REC
-               PERFORM 800-SYSKANRI-READ-SEC
-               IF      FLG-SYSKANRI      =   ZERO
-                   MOVE    MCPDATA-REC         TO  SYS-1005-REC
-                   MOVE    SYS-1005-SRYKANAME1 TO  SC03-SRYKANAME(IDX1)
-               END-IF
-      *        診療科コード
-               MOVE     MF100-SRYKA            TO  SC03-SRYKA(IDX1)
-             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      **      診療科名
+      *       INITIALIZE                  SYS-1005-REC
+      *       IF  (MF100-SRYKA  NOT =  ZERO)
+      *       AND (MF100-SRYKA  NOT =  "99")
+      **      診療科目情報取得
+      *         INITIALIZE                SYS-1005-REC
+      *         MOVE    "1005"            TO  SYS-1005-KANRICD
+      *         MOVE    MF100-SRYKA      TO  SYS-1005-KBNCD
+      *         MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                                   TO  SYS-1005-STYUKYMD(1:6)
+      *                                       SYS-1005-EDYUKYMD(1:6)
+      *         MOVE    "01"              TO  SYS-1005-STYUKYMD(7:2)
+      *                                       SYS-1005-EDYUKYMD(7:2)
+      *         MOVE    SPA-HOSPNUM       TO  SYS-1005-HOSPNUM
+      *         MOVE    SYS-1005-REC      TO  MCPDATA-REC
+      *         PERFORM 800-SYSKANRI-READ-SEC
+      *         IF      FLG-SYSKANRI      =   ZERO
+      *             MOVE    MCPDATA-REC         TO  SYS-1005-REC
+      *             MOVE    SYS-1005-SRYKANAME1 TO  SC03-SRYKANAME(IDX1)
+      *         END-IF
+      **        診療科コード
+      *         MOVE     MF100-SRYKA            TO  SC03-SRYKA(IDX1)
+      *       END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *      入院外来区分
              IF  MF100-NYUGAIKBN  =  "1"
@@ -1116,6 +1136,12 @@
       *      請求点数
              MOVE  MF100-TOTALTEN             TO  WRK-Z9
              MOVE  WRK-Z9                     TO  SC03-TENSU(IDX1)
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *      一部負担額
+             MOVE  MF100-FTNMONEY             TO  WRK-Z9
+             MOVE  WRK-Z9                     TO  SC03-ITBFTN(IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *      公費・長期区分
              PERFORM  VARYING  IDX  FROM  1  BY  1
@@ -1170,6 +1196,12 @@
              IF  MF100-SYOHO  =  1
       *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
                MOVE   "○"                    TO  SC03-SYOHOKBN(IDX1 1)
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *        処方せん発行医療機関等の名称
+               MOVE    WRK-SYOHODATA(1)       TO  SC03-SYOHONAME(IDX1)
+      *        処方せん発行医療機関番号
+               MOVE    WRK-SYOHODATA(2)       TO  SC03-SYOHONUM(IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
              ELSE
                MOVE   "○"                    TO  SC03-SYOHOKBN(IDX1 2)
              END-IF

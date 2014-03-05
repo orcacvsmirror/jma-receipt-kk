@@ -43,6 +43,7 @@
       *                                  プログラムオプション対応
       *  01.00.08    吉川    13/12/05    プログラムオプションの記載順が
       *                                  反映されないのを修正
+      *  01.00.09    吉川    14/03/05    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -935,11 +936,19 @@
              MOVE   2                        TO   MF100-TYOKI
            END-IF
       *
-      *    保険に限度額が有る場合の対応
-           IF   RECE02-FTNMONEY(1)            >   ZERO
-           AND  RECE02-FTNMONEY(1)            <   MF100-FTNMONEY
-             MOVE   RECE02-FTNMONEY(1)       TO   MF100-FTNMONEY
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      **    保険に限度額が有る場合の対応
+      *     IF   RECE02-FTNMONEY(1)            >   ZERO
+      *     AND  RECE02-FTNMONEY(1)            <   MF100-FTNMONEY
+      *       MOVE   RECE02-FTNMONEY(1)       TO   MF100-FTNMONEY
+      *     END-IF
+      *    高額療養費
+           IF  RECE02-ZAITAKU  =  "2" OR "3" OR "4"
+             IF  RECE02-FTNMONEY(1)  >  ZERO
+               MOVE    RECE02-FTNMONEY(1)    TO  MF100-FTNMONEY
+             END-IF
            END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) start
       *    レセプトの「処方せん」に点数がある場合、発行区分に1をセット
@@ -1069,6 +1078,13 @@
       *    請求年月日
            MOVE    WRK-SEIYMDWH             TO  SC07-SEIYMD
       *
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCD          TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT            TO  SC07-HOSPCD
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
+      *
       *    郵便番号
            MOVE    "〒"                     TO  SC07-POST (1:)
            MOVE    SYS-1002-POST (1:3)      TO  SC07-POST (3:)
@@ -1176,11 +1192,13 @@
       *    給付割合
              MOVE  MF100-KYURATE(2:1)   TO  SC07-RATE (IDX1)
       *
-      *    診療科コード
-             IF  (MF100-SRYKA  NOT =  ZERO)
-             AND (MF100-SRYKA  NOT =  "99")
-               MOVE  MF100-SRYKA        TO  SC07-SRYKA(IDX1)
-             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      **    診療科コード
+      *       IF  (MF100-SRYKA  NOT =  ZERO)
+      *       AND (MF100-SRYKA  NOT =  "99")
+      *         MOVE  MF100-SRYKA        TO  SC07-SRYKA(IDX1)
+      *       END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *    入外区分
              IF  MF100-NYUGAIKBN  =  "1"
@@ -1196,6 +1214,12 @@
       *    保険点数
              MOVE  MF100-TOTALTEN       TO  WRK-Z7
              MOVE  WRK-Z7               TO  SC07-TENSU (IDX1)
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *    一部負担額
+             MOVE  MF100-FTNMONEY       TO  WRK-Z9
+             MOVE  WRK-Z9               TO  SC07-ITBFTN (IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *    公費・長期区分
              MOVE  MF100-TAHO           TO  WRK-KOHNUM
