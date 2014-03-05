@@ -30,7 +30,7 @@
       *    電話番号
            03  SC13-TEL                        PIC  X(15).
       *    医療機関コード
-           03  SC13-HOSPCD                     PIC  X(07).
+           03  SC13-HOSPCD                     PIC  X(14).
       *    点数表区分（１：医科　２：歯科　３：調剤　４：訪問看護）
            03  SC13-TENHYOKBN                  PIC  X(02)  OCCURS  4.
       *    提出方法（１：領収証明書　２：領収証明一覧表）
