@@ -105,6 +105,8 @@
       *                                    70歳未満で343＋高額の場合
       *                                    限度額欄に印字されないのを修正
       *  01.00.30     吉川     13/07/26    在宅の対象コードを増やす
+      *  01.00.31     吉川     14/03/10    743を使用時、旭川市助成分が
+      *                                    580円未満の場合の備考欄の金額修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1007,14 +1009,23 @@
       *=== 743の場合の備考欄印字修正 by Yoshikawa(2013/06/10) start
              IF  MF100-KOHNUM  =  "743"
                IF  WRK-ETC-ITBFTN-G  <  WRK-SHOSAI
-      *          580円に満たない場合、備考欄に患者負担額を記載
-                 IF  WRK-SHOSAI  <  580
-                   MOVE  WRK-SHOSAI          TO  MF100-ETCFTNMONEY
+      *          580円に満たない場合、備考欄に市助成分を記載
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) start
+      *           IF  WRK-SHOSAI  <  580
+      *             MOVE  WRK-SHOSAI          TO  MF100-ETCFTNMONEY
+                 IF  (WRK-ASAHIFTN  NOT =  ZERO)
+                 AND (WRK-ASAHIFTN  <  580)
+                   MOVE  WRK-ASAHIFTN          TO  MF100-ETCFTNMONEY
+                 ELSE
+                   MOVE  580                   TO  MF100-ETCFTNMONEY
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) end
                  END-IF
                  MOVE  WRK-ETC-ITBFTN-G      TO  MF100-FTNMONEY
-                 IF  MF100-FTNMONEY  NOT =  ZERO
-                   MOVE  580                 TO  MF100-ETCFTNMONEY
-                 END-IF
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) start
+      *           IF  MF100-FTNMONEY  NOT =  ZERO
+      *             MOVE  580                 TO  MF100-ETCFTNMONEY
+      *           END-IF
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) end
                  MOVE  1                     TO  MF100-SHOSAISIN
                END-IF
              ELSE
@@ -2343,7 +2354,10 @@
       *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) start
       *    旭川障の場合、初診時一部負担金との差額を記載
       *    （本体側でSYU-KOH-COMPFTN-ENTANIに計算済み）
-             IF  SYU-KOH-HKNNUM(IDX)  =  "643" OR "743"
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) start
+      *       IF  SYU-KOH-HKNNUM(IDX)  =  "643" OR "743"
+             IF  SYU-KOH-HKNNUM(IDX)  =  "643"
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) end
       *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) start
                IF  SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO
       *          市助成分を集計
@@ -2353,6 +2367,16 @@
                ADD    SYU-KOH-COMPFTN(IDX)         TO  WRK-COMPFTN
       *=== 旭川市の備考欄金額計算修正 by Yoshikawa(2013/03/18) end
                ADD    SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-ETC-ITBFTN
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) start
+             ELSE
+               IF  SYU-KOH-HKNNUM(IDX)  =  "743"
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX)  =  ZERO
+      *            市助成分を集計
+                   ADD  SYU-SYUCOMPFTN-ENTANI      TO  WRK-ASAHIFTN
+                 END-IF
+                 ADD  SYU-KOH-COMPFTN-ENTANI(IDX)  TO  WRK-ETC-ITBFTN
+               END-IF
+      *=== 743使用時の備考欄の金額修正 by Yoshikawa(2014/03/10) end
              END-IF
       *=== 旭川市の一部負担金計算修正 by Yoshikawa(2012/12/13) end
       *
