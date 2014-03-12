@@ -219,6 +219,9 @@
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
            03  WRK-SRTKBN            PIC X(01).
       *=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) end
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+           03  WRK-HOSPCD            PIC X(10).
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
            03  WRK-COMP.
                05  WRK-COMP-SRYY        PIC  9(4).
@@ -1080,7 +1083,12 @@
       *
       *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
       *    医療機関コード
-           MOVE    SYS-1001-HOSPCD          TO  WRK-MAE-INPUT
+           STRING  "24"                     DELIMITED  BY  SIZE
+                   SYS-1001-TENHYOKBN       DELIMITED  BY  SIZE
+                   SYS-1001-HOSPCD          DELIMITED  BY  SIZE
+                   INTO                     WRK-HOSPCD
+           END-STRING
+           MOVE    WRK-HOSPCD               TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT            TO  SC07-HOSPCD
       *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end

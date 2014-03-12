@@ -193,6 +193,9 @@
            03  WRK-ETCSHOKUJIRYOYOHI PIC 9(07).
            03  WRK-ETCSHOKUJIFTN     PIC 9(07).
            03  WRK-SYOHODATA         PIC X(40)  OCCURS 2.
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+           03  WRK-HOSPCD            PIC X(10).
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *    ファイル名称エリア
       *=== プラグイン対応 by Yoshikawa(2013/01/10) start
@@ -947,7 +950,15 @@
            INITIALIZE                             SC03
       *
       *    医療機関コード
-           MOVE    SYS-1001-HOSPCD          TO  WRK-MAE-INPUT
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *     MOVE    SYS-1001-HOSPCD          TO  WRK-MAE-INPUT
+           STRING  "24"                     DELIMITED  BY  SIZE
+                   SYS-1001-TENHYOKBN       DELIMITED  BY  SIZE
+                   SYS-1001-HOSPCD          DELIMITED  BY  SIZE
+                   INTO                     WRK-HOSPCD
+           END-STRING
+           MOVE    WRK-HOSPCD               TO  WRK-MAE-INPUT
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT            TO  SC03-HOSPCD
       *

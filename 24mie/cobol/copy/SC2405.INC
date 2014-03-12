@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * 擔堛昗弨儗僙僾僩僜僼僩乮JMA standard receipt software乯
+      * 泣板筛洁レセプトソフト∈JMA standard receipt software∷
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -15,29 +15,33 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピ〖剁饯赖旺悟
+      * Maj/Min/Rev  饯赖荚       泣烧      柒推
+      *  01.00.01    等李         14/03/12  辉漠录コ〖ド恃构
+      ********************************************************************
        01  SC05.
-      *    堛椕婡娭僐乕僪
+      *    板闻怠簇コ〖ド
            03  SC05-HOSPCD-G  OCCURS  7.
                05  SC05-HOSPCD                 PIC  X(02).
-      *    敪峴擭寧擔
+      *    券乖钳奉泣
            03  SC05-SEIYMD                     PIC  X(22).
-      *    巗挰懞柤
+      *    辉漠录叹
            03  SC05-CITYNAME                   PIC  X(20)  OCCURS  2.
-      *    梄曋斣崋
+      *    凸守戎规
            03  SC05-POST                       PIC  X(18).
-      *    堛椕婡娭廧強
+      *    板闻怠簇交疥
            03  SC05-ADRS                       PIC  X(100).
-      *    堛椕婡娭柤徧
+      *    板闻怠簇叹疚
            03  SC05-HOSPNAME                   PIC  X(100).
-      *    奐愝幰巵柤
+      *    倡肋荚会叹
            03  SC05-KAISETU                    PIC  X(40).
-      *    揹榖斣崋
+      *    排厦戎规
            03  SC05-TEL                        PIC  X(24).
-      *    巗挰懞僐乕僪
-           03  SC05-CITYCD                     PIC  X(03).
-      *    憲晅寧
+      *    辉漠录コ〖ド
+           03  SC05-CITYCD                     PIC  X(01)  OCCURS  3.
+      *    流烧奉
            03  SC05-SEIYM                      PIC  X(16).
-      *    審悢僥乕僽儖
+      *    凤眶テ〖ブル
            03  SC05-KENSU-TBL  OCCURS  6.
-      *    審悢
+      *    凤眶
                05  SC05-KENSU                  PIC  X(05).

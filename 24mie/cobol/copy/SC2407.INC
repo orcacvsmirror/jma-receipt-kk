@@ -28,7 +28,7 @@
       *    請求年月日
            03  SC07-SEIYMD               PIC X(22).
       *    医療機関コード
-           03  SC07-HOSPCD               PIC X(14).
+           03  SC07-HOSPCD               PIC X(20).
       *    郵便番号
            03  SC07-POST                 PIC X(10).
       *    所在地

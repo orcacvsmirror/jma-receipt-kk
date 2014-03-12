@@ -122,7 +122,7 @@
                05  WRK-SEIMM         PIC 9(04).
                05  WRK-SEIDD         PIC 9(04).
            03  WRK-HKNJANUM          PIC X(08).
-           03  WRK-HOSPCD            PIC X(14).
+           03  WRK-HOSPCD            PIC X(10).
            03  WRK-TEISYUTU          PIC X(01).
       *
       *    件数カウントテーブル
@@ -704,6 +704,9 @@
       *
            INITIALIZE                          SC13
       *
+      *    請求年月
+           MOVE  WRK-SEIYMDWH              TO  SC13-SEIYMD
+      *    
       *    送付月
            MOVE  LNK-PRTKANRI-SKYYMD       TO  WRK-SYMD
            PERFORM 31012-SEIWA-HEN-SEC
@@ -727,7 +730,12 @@
            MOVE     WRK-HOSPTEL            TO  SC13-TEL
       *
       *    医療機関コード
-           MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
+           STRING  "24"                     DELIMITED  BY  SIZE
+                   SYS-1001-TENHYOKBN       DELIMITED  BY  SIZE
+                   SYS-1001-HOSPCD          DELIMITED  BY  SIZE
+                   INTO                     WRK-HOSPCD
+           END-STRING
+           MOVE    WRK-HOSPCD              TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  SC13-HOSPCD
       *

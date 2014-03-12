@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * 擔堛昗弨儗僙僾僩僜僼僩乮JMA standard receipt software乯
+      * 泣板筛洁レセプトソフト∈JMA standard receipt software∷
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -15,85 +15,85 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      *  僐僺乕嬪廋惓棜楌
-      * Maj/Min/Rev  廋惓幰       擔晅      撪梕
-      *  01.00.01    媑愳         10/08/19  庴媼幰斣崋偺寘悢憹壛
-      *  01.00.02    媑愳         14/03/05  堦晹晧扴妟丄巗挰僐乕僪偺捛壛
-      *                                     張曽偣傫堛椕婡娭忣曬偺埵抲曄峏
+      *  コピ〖剁饯赖旺悟
+      * Maj/Min/Rev  饯赖荚       泣烧      柒推
+      *  01.00.01    等李         10/08/19  减惦荚戎规の峰眶笼裁
+      *  01.00.02    等李         14/03/05  办婶砷么驰、辉漠コ〖ドの纳裁
+      *                                     借数せん板闻怠簇攫鼠の疤弥恃构
       ********************************************************************
        01  SC03.
-      *    堛椕婡娭僐乕僪
-           03  SC03-HOSPCD               PIC X(14).
-      *    惪媮擭寧擔
+      *    板闻怠簇コ〖ド
+           03  SC03-HOSPCD               PIC X(20).
+      *    懒滇钳奉泣
            03  SC03-SEIYMD               PIC X(22).
-      *    梄曋斣崋
+      *    凸守戎规
            03  SC03-POST                 PIC X(10).
-      *    強嵼抧
+      *    疥哼孟
            03  SC03-ADRS                 PIC X(100).
-      *    堛椕婡娭柤徧
+      *    板闻怠簇叹疚
            03  SC03-HOSPNAME             PIC X(100).
-      *    奐愝幰巵柤
+      *    倡肋荚会叹
            03  SC03-KAISETU              PIC X(40).
-      *    揹榖斣崋
+      *    排厦戎规
            03  SC03-TEL                  PIC X(15).
-      *    巗挰僐乕僪
+      *    辉漠コ〖ド
            03  SC03-CITYCD               PIC X(06).
-      *    巗挰懞柤
+      *    辉漠录叹
            03  SC03-CITYNAME             PIC X(26).
-      *    岞旓嬫暘
+      *    给锐惰尸
            03  SC03-KOHKBN               PIC X(02)  OCCURS  5.
-      *    庴媼帒奿徹斣崋
-      *=== 庴媼幰斣崋偺寘悢憹壛 by Yoshikawa(2010/08/19) start
+      *    减惦获呈沮戎规
+      *=== 减惦荚戎规の峰眶笼裁 by Yoshikawa(2010/08/19) start
       *     03  SC03-JKYSNUM              PIC X(14).
            03  SC03-JKYSNUM              PIC X(20).
-      *=== 庴媼幰斣崋偺寘悢憹壛 by Yoshikawa(2010/08/19) end
-      *    姵幰巵柤
+      *=== 减惦荚戎规の峰眶笼裁 by Yoshikawa(2010/08/19) end
+      *    吹荚会叹
            03  SC03-NAME                 PIC X(26).
-      *    惈暿
+      *    拉侍
            03  SC03-SEX                  PIC X(02)  OCCURS  2.
-      *    擭崋
+      *    钳规
            03  SC03-NENGO                PIC X(02)  OCCURS  4.
-      *    惗擭寧擔
+      *    栏钳奉泣
            03  SC03-TANJOYMD             PIC X(18).
-      *    儁乕僕
+      *    ペ〖ジ
            03  SC03-PAGE                 PIC X(03).
-      *    惪媮僥乕僽儖
+      *    懒滇テ〖ブル
            03  SC03-SEIKYU-TBL  OCCURS  4.
-      *    恌椕擭寧
+      *    壳闻钳奉
                05  SC03-SRYYM            PIC X(16).
-      *    堦晹晧扴妱崌
+      *    办婶砷么充圭
                05  SC03-KYURATE          PIC X(02)  OCCURS  4.
-      *    恌椕壢柤
+      *    壳闻彩叹
                05  SC03-SRYKANAME        PIC X(20).
-      *    恌椕壢僐乕僪
+      *    壳闻彩コ〖ド
                05  SC03-SRYKA            PIC X(02).
-      *    擖堾奜棃嬫暘
+      *    掐薄嘲丸惰尸
                05  SC03-NYUGAIKBN        PIC X(02)  OCCURS  2.
-      *    擖堾恌椕幚擔悢
+      *    掐薄壳闻悸泣眶
                05  SC03-NISSU            PIC X(02).
-      *    曐尟惪媮妟
+      *    瘦副懒滇驰
                05  SC03-SEIKYUGK         PIC X(09).
-      *    曐尟惪媮揰悢
+      *    瘦副懒滇爬眶
                05  SC03-TENSU            PIC X(09).
-      *    堦晹晧扴妟
+      *    办婶砷么驰
                05  SC03-ITBFTN           PIC X(09).
-      *    岞旓丒挿婜嬫暘
+      *    给锐ˇ墓袋惰尸
                05  SC03-TAHO             PIC X(10).
-      *    岞旓惪媮揰悢
+      *    给锐懒滇爬眶
                05  SC03-EKOHTENSU        PIC X(09).
-      *    岞旓丒挿婜堦晹晧扴妟
+      *    给锐ˇ墓袋办婶砷么驰
                05  SC03-EKOHFTNGK        PIC X(09).
-      *    怘帠亅曐尟惪媮暘
+      *    咯祸≥瘦副懒滇尸
                05  SC03-SKINGK           PIC X(09).
-      *    怘帠亅昗弨晧扴暘
+      *    咯祸≥筛洁砷么尸
                05  SC03-SFTNGK           PIC X(09).
-      *    怘帠亅岞旓惪媮暘
+      *    咯祸≥给锐懒滇尸
                05  SC03-EKOHSKINGK       PIC X(09).
-      *    怘帠亅岞旓昗弨晧扴暘
+      *    咯祸≥给锐筛洁砷么尸
                05  SC03-EKOHSFTNGK       PIC X(09).
-      *    張曽偣傫敪峴嬫暘
+      *    借数せん券乖惰尸
                05  SC03-SYOHOKBN         PIC X(02)  OCCURS  2.
-      *    張曽偣傫敪峴堛椕婡娭斣崋
+      *    借数せん券乖板闻怠簇戎规
                05  SC03-SYOHONUM         PIC X(10).
-      *    張曽偣傫敪峴堛椕婡娭摍偺柤徧
+      *    借数せん券乖板闻怠簇霹の叹疚
                05  SC03-SYOHONAME        PIC X(40).

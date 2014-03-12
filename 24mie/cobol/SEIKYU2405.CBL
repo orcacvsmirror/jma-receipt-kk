@@ -32,6 +32,7 @@
       *                                  印字される不具合を修正
       *  01.00.02    吉川    10/11/24    open-cobol1.0対応
       *  01.00.03    吉川    13/01/10    医療機関情報編集対応
+      *  01.00.04    吉川    14/03/05    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -710,7 +711,13 @@
            MOVE     WRK-HOSPTEL            TO  SC05-TEL
       *
       *    市町村コード
-           MOVE    MF100-CITYNUM           TO  SC05-CITYCD
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) start
+      *     MOVE    MF100-CITYNUM           TO  SC05-CITYCD
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >     3
+             MOVE  MF100-CITYNUM(IDX1:1)   TO  SC05-CITYCD(IDX1)
+           END-PERFORM
+      *=== 帳票様式の変更 by Yoshikawa(2014/03/05) end
       *
       *    送付月
            MOVE  LNK-PRTKANRI-SKYYMD       TO  WRK-SYMD
