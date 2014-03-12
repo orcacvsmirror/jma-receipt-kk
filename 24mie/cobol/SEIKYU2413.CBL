@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 三重・福祉医療費紙媒体総括表
+      *  コンポーネント名  : 三重・福祉医療費紙媒体送付書
       *                      (161,162,163,164,165)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -304,7 +304,7 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU2413"    TO  JOB-PGID
-           MOVE    "福祉医療費紙媒体総括表" 
+           MOVE    "福祉医療費紙媒体送付書" 
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -795,7 +795,7 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC2413.red"         TO  SPRT-PRTID
-           MOVE    "福祉医療費紙媒体総括表"
+           MOVE    "福祉医療費紙媒体送付書"
                                        TO  SPRT-TITLE
            MOVE    SC13                TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
