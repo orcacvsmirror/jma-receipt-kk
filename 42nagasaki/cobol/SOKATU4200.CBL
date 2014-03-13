@@ -1012,7 +1012,7 @@
                                        TO  SPRT-PRIORITY
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by hagino(2014/03/12) start
       *     MOVE   "SKT4200.red"        TO  SPRT-PRTID
-           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-201403
+           IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-201403
       *        Ê¿À®£²£¶Ç¯£³·î°ÊÁ°¤ÏµìÍÍ¼°
                MOVE   "SKT4200o.red"       TO  SPRT-PRTID
            ELSE
