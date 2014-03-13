@@ -44,6 +44,7 @@
       *  01.00.08    吉川    11/01/12    特別療養費国保対応
       *  01.00.09    萩野    13/02/14    後期高齢の請求書と分けて枚数を印字する
       *                                  医療機関情報編集対応
+      *  01.00.10    萩野    14/03/12    帳票様式の変更に伴う修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -750,14 +751,24 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
                ADD   1                  TO  WRK-KOGAKU (1)
            ELSE
-             EVALUATE  TRUE
-             WHEN  RECE10-TOTALTEN (1)  >=  420000
-               ADD   1                  TO  WRK-KOGAKU (4)
-             WHEN  RECE10-TOTALTEN (1)  >=  200000
-               ADD   1                  TO  WRK-KOGAKU (3)
-             WHEN  RECE10-TOTALTEN (1)  >=  100000
-               ADD   1                  TO  WRK-KOGAKU (2)
-             END-EVALUATE
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+             IF  RECE10-SRYYM  <  "201403"
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
+               EVALUATE  TRUE
+               WHEN  RECE10-TOTALTEN (1)  >=  420000
+                 ADD   1                  TO  WRK-KOGAKU (4)
+               WHEN  RECE10-TOTALTEN (1)  >=  200000
+                 ADD   1                  TO  WRK-KOGAKU (3)
+               WHEN  RECE10-TOTALTEN (1)  >=  100000
+                 ADD   1                  TO  WRK-KOGAKU (2)
+               END-EVALUATE
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+             ELSE
+               IF  RECE10-TOTALTEN (1)  >=  100000
+                 ADD   1                  TO  WRK-KOGAKU (2)
+               END-IF
+             END-IF
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
            END-IF
       *
       *    保険者数カウント
@@ -916,26 +927,48 @@
        320-BODY-HEN-SEC      SECTION.
       *
       *    明細
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+           IF  RECE10-SRYYM  <  "201403"
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
       *---(01.00.03) LINE ADD START ------------------------------------
       *              UNTIL    IDX1  >     15
-                    UNTIL    IDX1  >     17
+                      UNTIL    IDX1  >     17
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    件数
-             MOVE     WRK-KENSU(IDX1)    TO    WRK-Z5
-             MOVE     WRK-Z5             TO    SKT4200-KENSU(IDX1)
+               MOVE     WRK-KENSU(IDX1)    TO    WRK-Z5
+               MOVE     WRK-Z5             TO    SKT4200-KENSU(IDX1)
       *    点数
-             MOVE     WRK-TENSU(IDX1)    TO    WRK-Z9
-             MOVE     WRK-Z9             TO    SKT4200-TENSU(IDX1)
-           END-PERFORM
+               MOVE     WRK-TENSU(IDX1)    TO    WRK-Z9
+               MOVE     WRK-Z9             TO    SKT4200-TENSU(IDX1)
+             END-PERFORM
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+           ELSE
+             MOVE     WRK-KENSU(13)      TO    WRK-Z5
+             MOVE     WRK-Z5             TO    SKT4200-KENSU(13)
+             MOVE     WRK-KENSU(16)      TO    WRK-Z5
+             MOVE     WRK-Z5             TO    SKT4200-KENSU(16)
+             MOVE     WRK-KENSU(17)      TO    WRK-Z5
+             MOVE     WRK-Z5             TO    SKT4200-KENSU(17)
+           END-IF
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
       *
       *    高額明細書
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     4
-      *    件数
-             MOVE     WRK-KOGAKU(IDX1)   TO    WRK-Z3
-             MOVE     WRK-Z3             TO    SKT4200-KOGAKU(IDX1)
-           END-PERFORM
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+           IF  RECE10-SRYYM  <  "201403"
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1  >     4
+      *      件数
+               MOVE     WRK-KOGAKU(IDX1)   TO    WRK-Z3
+               MOVE     WRK-Z3             TO    SKT4200-KOGAKU(IDX1)
+             END-PERFORM
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+           ELSE
+             MOVE     WRK-KOGAKU(2)      TO    WRK-Z3
+             MOVE     WRK-Z3             TO    SKT4200-KOGAKU(2)
+           END-IF
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
       *
       *    保険者数
            MOVE    WRK-KENNAI            TO    WRK-Z3
@@ -974,7 +1007,15 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SKT4200.red"        TO  SPRT-PRTID
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
+      *     MOVE   "SKT4200.red"        TO  SPRT-PRTID
+           IF  RECE10-SRYYM  <  "201403"
+      *        平成２６年３月以前は旧様式
+               MOVE   "SKT4200o.red"       TO  SPRT-PRTID
+           ELSE
+               MOVE   "SKT4200.red"        TO  SPRT-PRTID
+           END-IF
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
       *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
       **=== 返戻は「返戻分」と表示 by Yoshikawa(2010/08/17) start
       **     MOVE    "国保総括表"        TO  SPRT-TITLE
