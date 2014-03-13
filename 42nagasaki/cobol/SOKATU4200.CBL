@@ -216,6 +216,9 @@
       *    固定項目
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/10) start
+           03  WRK-CONS-SRYYM-201403   PIC X(06)   VALUE   "201403".
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/03/10) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
@@ -752,7 +755,7 @@
                ADD   1                  TO  WRK-KOGAKU (1)
            ELSE
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
-             IF  RECE10-SRYYM  <  "201403"
+             IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-201403
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
                EVALUATE  TRUE
                WHEN  RECE10-TOTALTEN (1)  >=  420000
@@ -928,7 +931,7 @@
       *
       *    明細
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
-           IF  RECE10-SRYYM  <  "201403"
+           IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-201403
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
              PERFORM  VARYING  IDX1  FROM  1  BY  1
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -955,7 +958,7 @@
       *
       *    高額明細書
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
-           IF  RECE10-SRYYM  <  "201403"
+           IF  WRK-SYMD (1:6)  <  WRK-CONS-SRYYM-201403
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) end
              PERFORM  VARYING  IDX1  FROM  1  BY  1
                       UNTIL    IDX1  >     4
@@ -1009,7 +1012,7 @@
                                        TO  SPRT-PRIORITY
       *=== 帳票様式の変更に伴う修正 by hagino(2014/03/12) start
       *     MOVE   "SKT4200.red"        TO  SPRT-PRTID
-           IF  RECE10-SRYYM  <  "201403"
+           IF  WRK-SYMD (1:6)  >=  WRK-CONS-SRYYM-201403
       *        平成２６年３月以前は旧様式
                MOVE   "SKT4200o.red"       TO  SPRT-PRTID
            ELSE
