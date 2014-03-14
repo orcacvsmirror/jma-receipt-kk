@@ -72,6 +72,7 @@
       *                                    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸½¤Àµ
       *  01.00.21     µÈÀî     13/03/18    °°Àî»Ô½õÀ®Ê¬¤¬580±ßÌ¤Ëþ¤Î¾ì¹ç¤Î
       *                                    È÷¹ÍÍó¤Î¶â³Û¤ò½¤Àµ
+      *  01.00.22     µÈÀî     14/03/14    ¾ÃÈñÀÇ²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -289,6 +290,13 @@
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-201403         PIC X(06) VALUE "201403".
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
+      *
+      *---(01.00.08) LINE ADD END   ------------------------------------
       *    DB»²¾ÈÍÑ
       *---(01.00.08) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".
@@ -1087,7 +1095,15 @@
            ADD      1                 TO    MF100-GKENSU(IDX1)
                                             MF100-TOTAL-KENSU
            ADD      WRK-T-ITBFTN      TO    MF100-GITBFTN(IDX1)
-           ADD      210               TO    MF100-GTESURYO(IDX1)
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
+      *     ADD      210               TO    MF100-GTESURYO(IDX1)
+      *    ÀÁµá»öÌ³¼ê¿ôÎÁ
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-201403
+             ADD    216               TO    MF100-GTESURYO(IDX1)
+           ELSE
+             ADD    210               TO    MF100-GTESURYO(IDX1)
+           END-IF
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
            ADD      WRK-T-KESE        TO    MF100-GTENSU(5)
            ADD      WRK-T-TYOKI       TO    MF100-GTENSU(4)
       *---(01.00.04) LINE ADD START ------------------------------------

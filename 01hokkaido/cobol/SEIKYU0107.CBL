@@ -107,6 +107,7 @@
       *  01.00.30     µÈÀî     13/07/26    ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹
       *  01.00.31     µÈÀî     14/03/10    743¤ò»ÈÍÑ»þ¡¢°°Àî»Ô½õÀ®Ê¬¤¬
       *                                    580±ßÌ¤Ëþ¤Î¾ì¹ç¤ÎÈ÷¹ÍÍó¤Î¶â³Û½¤Àµ
+      *  01.00.32     µÈÀî     14/03/14    ¾ÃÈñÀÇ²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -366,6 +367,10 @@
            03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114019310".
            03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114019410".
       *=== ºßÂð¤ÎÂÐ¾Ý¥³¡¼¥É¤òÁý¤ä¤¹ by Yoshikawa(2013/07/26) end
+      *
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
+           03  WRK-CONS-201403         PIC X(06) VALUE "201403".
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.08) LINE ADD START ------------------------------------
@@ -1281,7 +1286,15 @@
            ADD      1                 TO    MF100-GKENSU(IDX1)
                                             MF100-TOTAL-KENSU
            ADD      WRK-T-ITBFTN      TO    MF100-GITBFTN(IDX1)
-           ADD      210               TO    MF100-GTESURYO(IDX1)
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
+      *     ADD      210               TO    MF100-GTESURYO(IDX1)
+      *    ÀÁµá»öÌ³¼ê¿ôÎÁ
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-201403
+             ADD    216               TO    MF100-GTESURYO(IDX1)
+           ELSE
+             ADD    210               TO    MF100-GTESURYO(IDX1)
+           END-IF
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     EVALUATE  IDX1

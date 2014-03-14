@@ -42,6 +42,7 @@
       *  01.00.08    µÈÀî    12/02/13    142°Ê³°¤Ç¤â¸øÈñ¤Î½õÀ®¤¬Ìµ¤¤¾ì¹ç¤Ï
       *                                  °õ»úÂÐ¾Ý³°¤È¤¹¤ë¤è¤¦¤Ë½¤Àµ
       *  01.00.09    µÈÀî    13/03/18    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
+      *  01.00.10    µÈÀî    14/03/14    ¾ÃÈñÀÇ²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -213,6 +214,12 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+           03  WRK-CONS-201403         PIC X(06) VALUE "201403".
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -867,7 +874,14 @@
                                              SUM-GOKEI(6)
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    ¼ê¿ôÎÁ²Ã»»
-             ADD        210              TO  SUM-TESURYO(IDX1)
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
+      *       ADD        210              TO  SUM-TESURYO(IDX1)
+           IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-201403
+             ADD    216                  TO  SUM-TESURYO(IDX1)
+           ELSE
+             ADD    210                  TO  SUM-TESURYO(IDX1)
+           END-IF
+      *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *                                       SUM-TESURYO(5)
                                              SUM-TESURYO(6)
