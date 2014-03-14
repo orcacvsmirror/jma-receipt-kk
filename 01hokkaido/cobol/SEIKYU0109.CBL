@@ -876,21 +876,27 @@
       *    ¼ê¿ôÎÁ²Ã»»
       *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) start
       *       ADD        210              TO  SUM-TESURYO(IDX1)
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **                                       SUM-TESURYO(5)
+      *                                       SUM-TESURYO(6)
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *                                       SUM-GOKEI(IDX1)
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **                                       SUM-GOKEI(5)
+      *                                       SUM-GOKEI(6)
+      **---(01.00.02) LINE ADD END   ------------------------------------
            IF  LNK-PRTKANRI-SRYYM  >=  WRK-CONS-201403
              ADD    216                  TO  SUM-TESURYO(IDX1)
+                                             SUM-TESURYO(6)
+                                             SUM-GOKEI(IDX1)
+                                             SUM-GOKEI(6)
            ELSE
              ADD    210                  TO  SUM-TESURYO(IDX1)
+                                             SUM-TESURYO(6)
+                                             SUM-GOKEI(IDX1)
+                                             SUM-GOKEI(6)
            END-IF
       *=== ¾ÃÈñÀÇ²þÀµÂÐ±þ by Yoshikawa(2014/03/14) end
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *                                       SUM-TESURYO(5)
-                                             SUM-TESURYO(6)
-      *---(01.00.02) LINE ADD END   ------------------------------------
-                                             SUM-GOKEI(IDX1)
-      *---(01.00.02) LINE ADD START ------------------------------------
-      *                                       SUM-GOKEI(5)
-                                             SUM-GOKEI(6)
-      *---(01.00.02) LINE ADD END   ------------------------------------
       *
              PERFORM   900-TMP-READ-SEC
            END-PERFORM
