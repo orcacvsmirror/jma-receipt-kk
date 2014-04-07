@@ -54,6 +54,7 @@
       *                                   医療機関情報編集対応
       *  01.00.15    吉川     13/07/08    プログラムオプション対応
       *  01.00.16    吉川     13/11/05    月遅れ件数、長期件数追加
+      *  01.00.17    萩野     14/04/03    一部負担金欄は保険分のみの金額を集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1046,17 +1047,21 @@
       *     IF    RECE10-RJNHKNNUM  =  SPACE  AND
       *           RECE10-AGE        <  70
       *---(01.00.06) LINE ADD END   ------------------------------------
-             PERFORM  VARYING  IDX3 FROM  1  BY  1
-                      UNTIL    IDX3 >     4
-               IF    RECE10-KOHNUM(IDX3)    =  "051" OR "141" 
-                                            OR "241" OR "341"
-      *=== １９１の一部負担金を集計 by Yoshikawa(2009/10/21) start
-                                            OR "191"
-      *=== １９１の一部負担金を集計 by Yoshikawa(2009/10/21) start
-                 ADD    RECE10-FTNMONEY(IDX3 + 1)  TO
-                                       SKT2310TMP-ITBFTN(IDX1 IDX2)
-               END-IF
-             END-PERFORM
+      *
+      **=== 一部負担金欄は保険分みを集計対応 by hagino(2014/04/03) start
+      *       PERFORM  VARYING  IDX3 FROM  1  BY  1
+      *                UNTIL    IDX3 >     4
+      *         IF    RECE10-KOHNUM(IDX3)    =  "051" OR "141" 
+      *                                      OR "241" OR "341"
+      **=== １９１の一部負担金を集計 by Yoshikawa(2009/10/21) start
+      *                                      OR "191"
+      **=== １９１の一部負担金を集計 by Yoshikawa(2009/10/21) start
+      *           ADD    RECE10-FTNMONEY(IDX3 + 1)  TO
+      *                                 SKT2310TMP-ITBFTN(IDX1 IDX2)
+      *         END-IF
+      *       END-PERFORM
+      *=== 一部負担金欄は保険分みを集計対応 by hagino(2014/04/03) end
+      *
       *---(01.00.06) LINE ADD START ------------------------------------
       *     END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
