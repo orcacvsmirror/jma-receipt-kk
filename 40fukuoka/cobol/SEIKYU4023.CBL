@@ -45,6 +45,7 @@
       *  01.00.08    吉川    2013/01/22  医療機関情報編集対応
       *  01.00.09    吉川    2013/02/07  プラグイン対応
       *  01.00.10    吉川    2013/09/04  プログラムオプション対応
+      *  01.00.11    吉川    2014/04/07  口座名義人を３０文字まで印字対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -172,7 +173,10 @@
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX                   PIC 9(04).
+      *=== IDXを5桁に by Yoshikawa(2014/04/07) start
+      *     03  IDX                   PIC 9(04).
+           03  IDX                   PIC 9(05).
+      *=== IDXを5桁に by Yoshikawa(2014/04/07) start
            03  IDXX                  PIC 9(04).
            03  IDX1                  PIC 9(04).
            03  IDX2                  PIC 9(04).
@@ -270,7 +274,10 @@
       *=== プラグイン対応 by Yoshikawa(2013/02/07) end
       *=== 口座名義人追加 by Yoshikawa(2009/03/05) start
       *     03  WRK-KINYUDATA         PIC X(20) OCCURS 4.
-           03  WRK-KINYUDATA         PIC X(40) OCCURS 5.
+      *=== 口座名義人30文字対応 by Yoshikawa(2014/04/07) start
+      *     03  WRK-KINYUDATA         PIC X(40) OCCURS 5.
+           03  WRK-KINYUDATA         PIC X(60) OCCURS 5.
+      *=== 口座名義人30文字対応 by Yoshikawa(2014/04/07) end
       *=== 口座名義人追加 by Yoshikawa(2009/03/05) end
       *
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
@@ -714,7 +721,10 @@
              IF  WRK-OPTION(IDX)(1:2)  =  "※"
                MOVE    SPACE                 TO  WRK-KINYUDATA(IDX)
              ELSE
-               MOVE    WRK-OPTION(IDX)(1:40) TO  WRK-KINYUDATA(IDX)
+      *=== 口座名義人30文字対応 by Yoshikawa(2014/04/07) start
+      *         MOVE    WRK-OPTION(IDX)(1:40) TO  WRK-KINYUDATA(IDX)
+               MOVE    WRK-OPTION(IDX)(1:60) TO  WRK-KINYUDATA(IDX)
+      *=== 口座名義人30文字対応 by Yoshikawa(2014/04/07) end
              END-IF
            END-PERFORM
            DISPLAY "銀行名 ="  WRK-KINYUDATA(1)
