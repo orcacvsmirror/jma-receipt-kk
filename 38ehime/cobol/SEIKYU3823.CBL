@@ -68,6 +68,8 @@
       *                                プログラムオプション対応
       *  01.00.22    吉川    14/02/04  同月内に再入院した場合、備考欄に
       *                                それぞれの入院期間を印字する
+      *  01.00.23    吉川    14/04/09  一部負担金が印字されない場合がある
+      *                                現象を修正（FLG-HEIYOU2初期化漏れ）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2202,6 +2204,9 @@
       *=== 全国公費点数の分点を備考に印字 by Yoshikawa(2011/07/13) start
                                    WRK-TAHOTEN
       *=== 全国公費点数の分点を備考に印字 by Yoshikawa(2011/07/13) end
+      *=== FLG-HEIYOU2初期化漏れ by Yoshikawa(2014/04/09) start
+                                   FLG-HEIYOU2
+      *=== FLG-HEIYOU2初期化漏れ by Yoshikawa(2014/04/09) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
