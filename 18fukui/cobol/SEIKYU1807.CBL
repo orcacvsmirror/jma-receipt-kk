@@ -34,6 +34,8 @@
       *  01.00.03       萩野    2014/02/12   保険医療機関コード欄を[18＋点数表＋医療機関番号]
       *                                      と記録するように修正
       *                                      患者カナ氏名欄は半角で記録するように修正
+      *  01.00.04       萩野    2014/04/09   数字項目について、桁数に達しない場合は
+      *                                      先頭に０を付加するよう修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -231,6 +233,9 @@
                05  WRK-DATA            PIC X(100).
                05  WRK-NUM             PIC ZZZZZZZZZZ.
                05  WRK-NUM1            PIC ZZZZZZZZ.Z.
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+               05  WRK-NUM9            PIC 99999999999.
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
                05  WRK-NAGASA          PIC 9(04).
       *=== 患者カナ氏名を半角に修正 by hagino(2014/02/12) start
                05  WRK-NAGASA-SPACE    PIC 9(04).
@@ -245,7 +250,6 @@
            03  WRK-SCSVINFO-NYUGAIKBN  PIC X(01).
       *
            03  WRK-KANA-G              PIC X(128).
-      *
       *
       *市町村コード確認用
        01  WRK-CITY-DATA.
@@ -1000,9 +1004,15 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    受給資格者番号
-           MOVE    MF110-KOHJKYSNUM        TO  WRK-DATA
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *     MOVE    MF110-KOHJKYSNUM        TO  WRK-DATA
+           MOVE    MF110-KOHJKYSNUM        TO  WRK-NUM
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
            MOVE    11                      TO  WRK-NAGASA
-           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *     PERFORM 5004-MOJI-HENSYU-SEC
+           PERFORM 5005-NUM-HENSYU-SEC
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
       *
       *    患者カナ氏名
       *=== 患者カナ氏名を半角に修正 by hagino(2014/02/12) start
@@ -1036,9 +1046,15 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    保険者番号
-           MOVE    MF110-HKNJANUM          TO  WRK-DATA
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *     MOVE    MF110-HKNJANUM          TO  WRK-DATA
+           MOVE    MF110-HKNJANUM          TO  WRK-NUM
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
            MOVE    8                       TO  WRK-NAGASA
-           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *     PERFORM 5004-MOJI-HENSYU-SEC
+           PERFORM 5005-NUM-HENSYU-SEC
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
       *
       *    記号
            MOVE    MF110-KIGO              TO  WRK-DATA
@@ -1778,20 +1794,31 @@
       *****************************************************************
        5005-NUM-HENSYU-SEC          SECTION.
       *
-           IF  WRK-NUM  =  ZERO
-             MOVE    SPACE                  TO  WRK-DATA
-             PERFORM  5004-MOJI-HENSYU-SEC
-           ELSE
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *     IF  WRK-NUM  =  ZERO
+      *       MOVE    SPACE                  TO  WRK-DATA
+      *       PERFORM  5004-MOJI-HENSYU-SEC
+      *     ELSE
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
+           MOVE    WRK-NUM                 TO  WRK-NUM9
       *      開始位置
-             COMPUTE WRK-ST  =   11      -   WRK-NAGASA
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *       COMPUTE WRK-ST  =   11      -   WRK-NAGASA
+             COMPUTE WRK-ST  =   12      -   WRK-NAGASA
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
              STRING  WRK-REC(1:WRK-REC-LENGTH) DELIMITED  BY  SIZE
-                     WRK-NUM(WRK-ST:WRK-NAGASA) DELIMITED  BY SIZE
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *               WRK-NUM(WRK-ST:WRK-NAGASA) DELIMITED  BY SIZE
+                     WRK-NUM9(WRK-ST:WRK-NAGASA) DELIMITED  BY SIZE
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
                      INTO        WRK-REC
              END-STRING
              ADD     WRK-NAGASA             TO  WRK-REC-LENGTH
       *       
              INITIALIZE                      WRK-HENSYU-AREA
-           END-IF
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
+      *     END-IF
+      *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
       *
            .
        5005-NUM-HENSYU-EXT.
