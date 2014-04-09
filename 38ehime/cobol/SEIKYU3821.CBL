@@ -41,6 +41,8 @@
       *  01.00.06     µ»¿Ó     11/10/04    ƒπ¥¸§Úª˝§√§∆§§§ §Ø§∆§‚æÂ∏¬≥€§«
       *                                    ªﬂ§ﬁ§√§∆§∑§ﬁ§¶…‘∂ÒπÁ§ÚΩ§¿µ
       *  01.00.07     µ»¿Ó     13/02/07    ∞ÂŒ≈µ°¥ÿæ Û ‘Ω∏¬–±˛
+      *  01.00.08     µ»¿Ó     14/04/09    ¡∞¥¸π‚Œº‘§«¡¥πÒ∏¯»Ò§»ƒπ¥¸§Ú ªÕ—
+      *                                    §∑§øæÏπÁ§Œ¿¡µ·∂‚≥€§ŒΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -117,6 +119,9 @@
       *=== ¡∞¥¸9≥‰°‹ƒπ¥¸§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2011/09/22) start
            03  FLG-TOKUREI    PIC 9(01).
       *=== ¡∞¥¸9≥‰°‹ƒπ¥¸§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2011/09/22) end
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) start
+           03  FLG-HEIYOU2    PIC 9(01).
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) end
       *
       *    ≈∫ª˙ŒŒ∞Ë
        01  IDX-AREA.
@@ -657,6 +662,13 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
            END-IF
            PERFORM 920-SYUNOU-SET-SEC
+      *
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) start
+      *    ¡¥πÒ∏¯»Ò§Ú ªÕ—§∑§∆§§§ÎæÏπÁ°¢∆√Œ„¡º√÷∑◊ªª•’•È•∞§ÚÃµ∏˙§À§π§Î
+           IF  FLG-HEIYOU2  =  1
+             MOVE    ZERO                  TO  FLG-TOKUREI
+           END-IF
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) end
       *
            MOVE  ZERO                          TO  FLG-ERR
       *
@@ -1428,6 +1440,9 @@
       *=== ¡∞¥¸9≥‰°‹ƒπ¥¸§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2010/09/28) start
                                    FLG-TOKUREI
       *=== ¡∞¥¸9≥‰°‹ƒπ¥¸§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2010/09/28) end
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) start
+                                   FLG-HEIYOU2
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -1435,6 +1450,9 @@
                IF  SYU-KOH-HKNNUM(IDX)(1:1)    =   "0" AND
                    SYU-KOH-HKNNUM(IDX)     NOT =   "027"
                    MOVE    1       TO      FLG-HEIYOU
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) start
+                                           FLG-HEIYOU2
+      *=== ∆√ƒÍ¥µº‘§Œ¿¡µ·∂‚≥€Ω§¿µ by Yoshikawa(2014/04/09) end
                    IF  RECE02-FTNMONEY(1)  =   ZERO
                        MOVE    SYU-KOH-COMPFTN-ENTANI(IDX)
                                            TO  WRK-SEIKYUGK
