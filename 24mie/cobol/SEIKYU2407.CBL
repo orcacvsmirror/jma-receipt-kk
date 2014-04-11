@@ -44,6 +44,7 @@
       *  01.00.08    吉川    13/12/05    プログラムオプションの記載順が
       *                                  反映されないのを修正
       *  01.00.09    吉川    14/03/05    帳票様式の変更に伴う修正
+      *  01.00.10    吉川    14/04/11    診療年月に年号を追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1191,11 +1192,28 @@
              MOVE  "01"                 TO  WRK-SYMD (7:2)
              PERFORM 31012-SEIWA-HEN-SEC
              MOVE  WRK-HENYMDG1         TO  WRK-SRYYM
-             MOVE  WRK-SRYYM (2:2)      TO  SC07-SRYYM (IDX1)(1:2)
-             MOVE  WRK-SRYYM (5:2)      TO  SC07-SRYYM (IDX1)(3:2)
+      *=== 診療年月に年号を追加 by Yoshikawa(2014/04/11) start
+      *       MOVE  WRK-SRYYM (2:2)      TO  SC07-SRYYM (IDX1)(1:2)
+      *       MOVE  WRK-SRYYM (5:2)      TO  SC07-SRYYM (IDX1)(3:2)
+      *       IF  WRK-SRYYM(5:1)  =  SPACE
+      *         MOVE  ZERO               TO  SC07-SRYYM(IDX1)(3:1)
+      *       END-IF
+             EVALUATE  WRK-SRYYM (1:1)
+               WHEN  "M"
+                 MOVE    "1"            TO  SC07-SRYYM (IDX1)(1:1)
+               WHEN  "T"
+                 MOVE    "2"            TO  SC07-SRYYM (IDX1)(1:1)
+               WHEN  "S"
+                 MOVE    "3"            TO  SC07-SRYYM (IDX1)(1:1)
+               WHEN  "H"
+                 MOVE    "4"            TO  SC07-SRYYM (IDX1)(1:1)
+             END-EVALUATE
+             MOVE  WRK-SRYYM (2:2)      TO  SC07-SRYYM (IDX1)(2:2)
+             MOVE  WRK-SRYYM (5:2)      TO  SC07-SRYYM (IDX1)(4:2)
              IF  WRK-SRYYM(5:1)  =  SPACE
-               MOVE  ZERO               TO  SC07-SRYYM(IDX1)(3:1)
+               MOVE  ZERO               TO  SC07-SRYYM (IDX1)(4:1)
              END-IF
+      *=== 診療年月に年号を追加 by Yoshikawa(2014/04/11) end
       *
       *    給付割合
              MOVE  MF100-KYURATE(2:1)   TO  SC07-RATE (IDX1)
