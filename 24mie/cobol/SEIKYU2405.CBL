@@ -33,6 +33,7 @@
       *  01.00.02    吉川    10/11/24    open-cobol1.0対応
       *  01.00.03    吉川    13/01/10    医療機関情報編集対応
       *  01.00.04    吉川    14/03/05    帳票様式の変更に伴う修正
+      *  01.00.05    吉川    14/04/11    件数は領収証明書内の件数を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -739,9 +740,11 @@
            PERFORM  UNTIL  KEY-N-CITYNUM  NOT =  KEY-O-CITYNUM
                     OR     FLG-PRINT          =  1 
       *
+      *=== 件数は枚数ではなく証明書件数 by Yoshikawa(2014/04/11) start
       *      領収証明書枚数カウント
-             IF  FLG-FIRST      =  1
-             OR  KEY-NEW    NOT =  KEY-OLD
+      *       IF  FLG-FIRST      =  1
+      *       OR  KEY-NEW    NOT =  KEY-OLD
+      *=== 件数は枚数ではなく証明書件数 by Yoshikawa(2014/04/11) end
       *
       *        公費件数
                EVALUATE  MF100-KBN
@@ -766,7 +769,9 @@
                  MOVE  ZERO                TO  FLG-FIRST
                END-IF
       *
-             END-IF
+      *=== 件数は枚数ではなく証明書件数 by Yoshikawa(2014/04/11) start
+      *       END-IF
+      *=== 件数は枚数ではなく証明書件数 by Yoshikawa(2014/04/11) end
       *
              MOVE  KEY-NEW                 TO  KEY-OLD
       *
