@@ -39,6 +39,8 @@
       *                                  公費点数欄に印字されない不具合を修正
       *  01.00.06    吉川    13/04/11    2日以上診療登録しても、1日分の
       *                                  負担金額しか印字されない不具合を修正
+      *  01.00.07    吉川    14/05/12    帳票様式の変更に伴う修正
+      *                                  (70歳以上と70歳未満で帳票を分ける)
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -199,8 +201,14 @@
       *    キー用エリア
        01  KEY-AREA  VALUE  LOW-VALUE.
            03  KEY-NEW.
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) start
+               05  KEY-N-AGEKBN  PIC X(01).
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) end
                05  KEY-N-HKNKBN  PIC X(01).
            03  KEY-OLD.
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) start
+               05  KEY-O-AGEKBN  PIC X(01).
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) end
                05  KEY-O-HKNKBN  PIC X(01).
       *
       *    カウント領域
@@ -679,6 +687,14 @@
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
       *
       *    ソートKEY設定
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) start
+      *    70歳未満→70歳以上
+           IF    RECE02-AGE  <  70
+               MOVE    "1"          TO  MF100-AGEKBN
+           ELSE
+               MOVE    "2"          TO  MF100-AGEKBN
+           END-IF
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) end
       *    健保本人→健保家族→市町村国保→国保組合
            IF    RECE02-HKNNUM     =    "060"
                IF  RECE02-HKNJANUM(3:1) = "3"
@@ -790,6 +806,15 @@
       *    電話番号
            MOVE    WRK-HOSPTEL             TO  SC09-TEL
       *=== 帳票様式の変更 by Yoshikawa(2012/10/09) end
+      *
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) start
+      *    年齢区分
+           IF  MF100-AGEKBN  =  "1"
+               MOVE    "○"                TO  SC09-AGEKBN(1)
+           ELSE
+               MOVE    "○"                TO  SC09-AGEKBN(2)
+           END-IF
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) end
       *
            .
        310-HEAD-HEN-EXT.
@@ -1221,6 +1246,9 @@
                    MOVE  1  TO  FLG-PRINT
                NOT AT  END
                    MOVE    MF100-HKNKBN-KEY    TO  KEY-N-HKNKBN
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) start
+                   MOVE    MF100-AGEKBN        TO  KEY-N-AGEKBN
+      *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) end
            END-READ
            .
        900-TMP-READ-EXT.
