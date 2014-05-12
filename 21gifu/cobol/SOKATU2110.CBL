@@ -48,6 +48,7 @@
       *  01.00.13       吉川     13/01/09    プラグイン対応
       *                                      医療機関情報編集対応
       *  01.00.14       吉川     13/07/08    プログラムオプション対応
+      *  01.00.15       吉川     14/05/12    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1009,11 +1010,25 @@
       *             MOVE  4  TO  IDX1
       *         END-EVALUATE
                IF  RECE10-AGE  >=  70
-                   IF  RECE10-KYURATE  =  7
-                       MOVE    2     TO    IDX1
-                   ELSE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) start
+      *             IF  RECE10-KYURATE  =  7
+      *                 MOVE    2     TO    IDX1
+      *             ELSE
+      *                 MOVE    1     TO    IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
                        MOVE    1     TO    IDX1
-                   END-IF
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) end
                ELSE
                    IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
                    AND  (RECE10-FLG (1)   =  1)

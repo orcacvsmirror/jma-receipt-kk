@@ -51,6 +51,7 @@
       *                                  達した場合の患者負担額の計算修正
       *  01.00.10    吉川    13/07/08    全国公費＋高額で高額の限度額を超えた場合
       *                                  福祉助成分を患者負担額欄に印字する
+      *  01.00.11    吉川    14/05/12    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -239,6 +240,13 @@
                05  TBL-PARA-PTID        PIC 9(10).
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) start
+      *    固定項目
+       01  WRK-CONS-AREA.
+           03  CONS-SRYYM-201405       PIC X(06)  VALUE  "201405".
+           03  CONS-BIRTHDAY-19440402  PIC 9(08)  VALUE  19440402.
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) end
       *
       *    DB参照用
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -1086,12 +1094,29 @@
                END-EVALUATE
       *
       *    前期高齢者
-               IF  MF100-AGE           >=  70  AND
-                   MF100-RJNHKNNUM     =   SPACE
-      *---(01.00.03) LINE ADD START ------------------------------------
-               AND  MF100-HKNNUM  NOT =  "039"
-      *---(01.00.03) LINE ADD END   ------------------------------------
-                   MOVE    "1"         TO  SC03-KOREI (IDX)
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) start
+      *         IF  MF100-AGE           >=  70  AND
+      *             MF100-RJNHKNNUM     =   SPACE
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *         AND  MF100-HKNNUM  NOT =  "039"
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *             MOVE    "1"         TO  SC03-KOREI (IDX)
+               IF  LNK-PRTKANRI-SRYYM  >=  CONS-SRYYM-201405
+                 IF  MF100-AGE        >=  70
+                 AND MF100-HKNNUM  NOT =  "039"
+      *            平成26年4月2日以降に70歳を迎える人は「2」とする
+                   IF  MF100-BIRTHDAY  >=  CONS-BIRTHDAY-19440402
+                       MOVE    "2"         TO  SC03-KOREI (IDX)
+                   ELSE
+                       MOVE    "1"         TO  SC03-KOREI (IDX)
+                   END-IF
+                 END-IF
+               ELSE
+                 IF  MF100-AGE           >=  70
+                 AND MF100-HKNNUM     NOT =  "039"
+                     MOVE    "1"           TO  SC03-KOREI (IDX)
+                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) end
                END-IF
       *
       *    長期
