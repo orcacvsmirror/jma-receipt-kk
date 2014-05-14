@@ -44,6 +44,8 @@
       *                                    医療機関情報編集対応
       *  02.00.04      吉川    14/01/08    在宅の対象とする診療コード追加
       *                                    プログラムオプション対応
+      *  02.00.05      吉川    14/05/14    前期高齢者２割対応
+      *                                    在宅の対象とする診療コード変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -304,35 +306,116 @@
       *     COPY    "ORCA-DBPATH".
             COPY    "COMMON-SPA".
       *
-      *=== 在宅は70歳未満でも別集計 by Yoshikawa(2010/05/19) start
+      *=== 在宅コード変更 by Yoshikawa(2014/05/14) start
+      **=== 在宅は70歳未満でも別集計 by Yoshikawa(2010/05/19) start
+      **    固定項目
+      * 01  WRK-CONS-AREA.
+      **    在宅総合・在宅末期（在医総）
+      *     03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+      *     03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+      *     03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+      *     03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+      *     03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+      *     03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      **=== 在宅は70歳未満でも別集計 by Yoshikawa(2010/05/19) end
+      **=== 在宅コード追加 by Yoshikawa(2014/01/08) start
+      *     03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114018710".
+      *     03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114018810".
+      *     03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114018910".
+      *     03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114019010".
+      *     03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114019510".
+      *     03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114019610".
+      *     03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114019710".
+      *     03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019810".
+      *     03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114013010".
+      *     03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114013110".
+      *     03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114013210".
+      *     03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114013310".
+      *     03  WRK-CONS-ZAITAKU19      PIC X(09) VALUE "114019110".
+      *     03  WRK-CONS-ZAITAKU20      PIC X(09) VALUE "114019210".
+      *     03  WRK-CONS-ZAITAKU21      PIC X(09) VALUE "114019310".
+      *     03  WRK-CONS-ZAITAKU22      PIC X(09) VALUE "114019410".
+      **=== 在宅コード追加 by Yoshikawa(2014/01/08) end
       *    固定項目
        01  WRK-CONS-AREA.
-      *    在宅総合・在宅末期（在医総）
-           03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
-           03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
-           03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
-           03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
-           03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
-           03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
-      *=== 在宅は70歳未満でも別集計 by Yoshikawa(2010/05/19) end
-      *=== 在宅コード追加 by Yoshikawa(2014/01/08) start
-           03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114018710".
-           03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114018810".
-           03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114018910".
-           03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114019010".
-           03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114019510".
-           03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114019610".
-           03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114019710".
-           03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019810".
-           03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114013010".
-           03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114013110".
-           03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114013210".
-           03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114013310".
-           03  WRK-CONS-ZAITAKU19      PIC X(09) VALUE "114019110".
-           03  WRK-CONS-ZAITAKU20      PIC X(09) VALUE "114019210".
-           03  WRK-CONS-ZAITAKU21      PIC X(09) VALUE "114019310".
-           03  WRK-CONS-ZAITAKU22      PIC X(09) VALUE "114019410".
-      *=== 在宅コード追加 by Yoshikawa(2014/01/08) end
+           03  WRK-CONS-SRYYM-201404   PIC X(06) VALUE "201404".
+      *
+      *在総診テーブル
+       01  TBL-ZAITAKU-AREA.
+           03  FILLER                  PIC X(09) VALUE "114007610".
+           03  FILLER                  PIC X(09) VALUE "114007710".
+           03  FILLER                  PIC X(09) VALUE "114007510".
+           03  FILLER                  PIC X(09) VALUE "114012210".
+           03  FILLER                  PIC X(09) VALUE "114012310".
+           03  FILLER                  PIC X(09) VALUE "114012410".
+           03  FILLER                  PIC X(09) VALUE "114018710".
+           03  FILLER                  PIC X(09) VALUE "114018810".
+           03  FILLER                  PIC X(09) VALUE "114018910".
+           03  FILLER                  PIC X(09) VALUE "114019010".
+           03  FILLER                  PIC X(09) VALUE "114019510".
+           03  FILLER                  PIC X(09) VALUE "114019610".
+           03  FILLER                  PIC X(09) VALUE "114019710".
+           03  FILLER                  PIC X(09) VALUE "114019810".
+           03  FILLER                  PIC X(09) VALUE "114013010".
+           03  FILLER                  PIC X(09) VALUE "114013110".
+           03  FILLER                  PIC X(09) VALUE "114013210".
+           03  FILLER                  PIC X(09) VALUE "114013310".
+           03  FILLER                  PIC X(09) VALUE "114019110".
+           03  FILLER                  PIC X(09) VALUE "114019210".
+           03  FILLER                  PIC X(09) VALUE "114019310".
+           03  FILLER                  PIC X(09) VALUE "114019410".
+      *
+       01  TBL-ZAITAKU-R  REDEFINES   TBL-ZAITAKU-AREA.
+           03  TBL-ZAITAKU             PIC X(09) OCCURS  22.
+      *
+       01  TBL-ZAITAKU-MAX             PIC 9(02) VALUE   22.
+      *
+      *在総診テーブル（２０１４年４月診療分〜）
+       01  TBL-ZAITAKU2-AREA.
+           03  FILLER                  PIC X(09) VALUE "114007610".
+           03  FILLER                  PIC X(09) VALUE "114007710".
+           03  FILLER                  PIC X(09) VALUE "114019510".
+           03  FILLER                  PIC X(09) VALUE "114019610".
+           03  FILLER                  PIC X(09) VALUE "114019710".
+           03  FILLER                  PIC X(09) VALUE "114019810".
+           03  FILLER                  PIC X(09) VALUE "114023110".
+           03  FILLER                  PIC X(09) VALUE "114023210".
+           03  FILLER                  PIC X(09) VALUE "114023310".
+           03  FILLER                  PIC X(09) VALUE "114023410".
+           03  FILLER                  PIC X(09) VALUE "114023510".
+           03  FILLER                  PIC X(09) VALUE "114023610".
+           03  FILLER                  PIC X(09) VALUE "114023710".
+           03  FILLER                  PIC X(09) VALUE "114023810".
+           03  FILLER                  PIC X(09) VALUE "114023910".
+           03  FILLER                  PIC X(09) VALUE "114024010".
+           03  FILLER                  PIC X(09) VALUE "114024110".
+           03  FILLER                  PIC X(09) VALUE "114024210".
+           03  FILLER                  PIC X(09) VALUE "114024310".
+           03  FILLER                  PIC X(09) VALUE "114024410".
+           03  FILLER                  PIC X(09) VALUE "114024510".
+           03  FILLER                  PIC X(09) VALUE "114024610".
+           03  FILLER                  PIC X(09) VALUE "114024910".
+           03  FILLER                  PIC X(09) VALUE "114025010".
+           03  FILLER                  PIC X(09) VALUE "114025110".
+           03  FILLER                  PIC X(09) VALUE "114025210".
+           03  FILLER                  PIC X(09) VALUE "114025310".
+           03  FILLER                  PIC X(09) VALUE "114025410".
+           03  FILLER                  PIC X(09) VALUE "114025510".
+           03  FILLER                  PIC X(09) VALUE "114025610".
+           03  FILLER                  PIC X(09) VALUE "114025710".
+           03  FILLER                  PIC X(09) VALUE "114025810".
+           03  FILLER                  PIC X(09) VALUE "114025910".
+           03  FILLER                  PIC X(09) VALUE "114026010".
+           03  FILLER                  PIC X(09) VALUE "114026110".
+           03  FILLER                  PIC X(09) VALUE "114026210".
+           03  FILLER                  PIC X(09) VALUE "114026310".
+           03  FILLER                  PIC X(09) VALUE "114026410".
+      *
+       01  TBL-ZAITAKU2-R  REDEFINES   TBL-ZAITAKU2-AREA.
+           03  TBL-ZAITAKU2            PIC X(09) OCCURS  38.
+      *
+       01  TBL-ZAITAKU2-MAX            PIC 9(02) VALUE   38.
+      *=== 在宅コード変更 by Yoshikawa(2014/05/14) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -960,11 +1043,25 @@
                IF  RECE10-HKNNUM  =  "060" OR "068"
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/08) end
                  IF  RECE10-AGE  >= 70
-                   IF  RECE10-KYURATE  =  9
-                     MOVE    1     TO    IDX1
-                   ELSE
-                     MOVE    2     TO    IDX1
-                   END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/14) start
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE    1     TO    IDX1
+      *             ELSE
+      *               MOVE    2     TO    IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    1     TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/14) end
                  ELSE
                    IF  RECE10-AGE  >= 3
                      MOVE    3     TO    IDX1
@@ -1010,11 +1107,25 @@
                IF  RECE10-HKNNUM  =  "060" OR "068"
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/08) end
                  IF  RECE10-AGE  >= 70
-                   IF  RECE10-KYURATE  =  9
-                     MOVE    1     TO    IDX1
-                   ELSE
-                     MOVE    2     TO    IDX1
-                   END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/14) start
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE    1     TO    IDX1
+      *             ELSE
+      *               MOVE    2     TO    IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    1     TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/14) end
                  ELSE
                    IF  RECE10-FLG (1)  NOT = 1
                      MOVE    3     TO    IDX1
@@ -2260,41 +2371,60 @@
                     UNTIL   (IDX4  >     5) OR
                             (SRY-SRYCD(IDX4)  =  SPACE)
              IF  SRY-SRYKBN  =  "14"
-      *=== 在宅コード追加 by Yoshikawa(2014/01/08) start
-      *         IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
-      *                                 WRK-CONS-ZAITAKU2  OR
-      *                                 WRK-CONS-ZAITAKU3  OR
-      *                                 WRK-CONS-ZAITAKU4  OR
-      *                                 WRK-CONS-ZAITAKU5  OR
-      *                                 WRK-CONS-ZAITAKU6
-               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
-                                   OR  WRK-CONS-ZAITAKU2
-                                   OR  WRK-CONS-ZAITAKU3
-                                   OR  WRK-CONS-ZAITAKU4
-                                   OR  WRK-CONS-ZAITAKU5
-                                   OR  WRK-CONS-ZAITAKU6
-                                   OR  WRK-CONS-ZAITAKU7
-                                   OR  WRK-CONS-ZAITAKU8
-                                   OR  WRK-CONS-ZAITAKU9
-                                   OR  WRK-CONS-ZAITAKU10
-                                   OR  WRK-CONS-ZAITAKU11
-                                   OR  WRK-CONS-ZAITAKU12
-                                   OR  WRK-CONS-ZAITAKU13
-                                   OR  WRK-CONS-ZAITAKU14
-                                   OR  WRK-CONS-ZAITAKU15
-                                   OR  WRK-CONS-ZAITAKU16
-                                   OR  WRK-CONS-ZAITAKU17
-                                   OR  WRK-CONS-ZAITAKU18
-                                   OR  WRK-CONS-ZAITAKU19
-                                   OR  WRK-CONS-ZAITAKU20
-                                   OR  WRK-CONS-ZAITAKU21
-                                   OR  WRK-CONS-ZAITAKU22
-      *=== 在宅コード追加 by Yoshikawa(2014/01/08) end
-      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
-      *           MOVE  1  TO  SKT3000TMP-ZAITAKU
-                 MOVE  "1"   TO  SKT3000TMP-ZAITAKU
-      *=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
+      *=== 在宅コード変更 by Yoshikawa(2014/05/14) start
+      **=== 在宅コード追加 by Yoshikawa(2014/01/08) start
+      **         IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1  OR
+      **                                 WRK-CONS-ZAITAKU2  OR
+      **                                 WRK-CONS-ZAITAKU3  OR
+      **                                 WRK-CONS-ZAITAKU4  OR
+      **                                 WRK-CONS-ZAITAKU5  OR
+      **                                 WRK-CONS-ZAITAKU6
+      *         IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
+      *                             OR  WRK-CONS-ZAITAKU2
+      *                             OR  WRK-CONS-ZAITAKU3
+      *                             OR  WRK-CONS-ZAITAKU4
+      *                             OR  WRK-CONS-ZAITAKU5
+      *                             OR  WRK-CONS-ZAITAKU6
+      *                             OR  WRK-CONS-ZAITAKU7
+      *                             OR  WRK-CONS-ZAITAKU8
+      *                             OR  WRK-CONS-ZAITAKU9
+      *                             OR  WRK-CONS-ZAITAKU10
+      *                             OR  WRK-CONS-ZAITAKU11
+      *                             OR  WRK-CONS-ZAITAKU12
+      *                             OR  WRK-CONS-ZAITAKU13
+      *                             OR  WRK-CONS-ZAITAKU14
+      *                             OR  WRK-CONS-ZAITAKU15
+      *                             OR  WRK-CONS-ZAITAKU16
+      *                             OR  WRK-CONS-ZAITAKU17
+      *                             OR  WRK-CONS-ZAITAKU18
+      *                             OR  WRK-CONS-ZAITAKU19
+      *                             OR  WRK-CONS-ZAITAKU20
+      *                             OR  WRK-CONS-ZAITAKU21
+      *                             OR  WRK-CONS-ZAITAKU22
+      **=== 在宅コード追加 by Yoshikawa(2014/01/08) end
+      **=== open-cobol1.0対応 by Yoshikawa(2010/12/08) start
+      **           MOVE  1  TO  SKT3000TMP-ZAITAKU
+      *           MOVE  "1"   TO  SKT3000TMP-ZAITAKU
+      **=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
+      *         END-IF
+               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201404
+                 PERFORM  VARYING  IDX5  FROM  1  BY  1
+                          UNTIL   (IDX5  >  TBL-ZAITAKU2-MAX)
+                          OR      (SKT3000TMP-ZAITAKU  =  "1")
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU2(IDX5)
+                       MOVE    "1"            TO  SKT3000TMP-ZAITAKU
+                   END-IF
+                 END-PERFORM
+               ELSE
+                 PERFORM  VARYING  IDX5  FROM  1  BY  1
+                          UNTIL   (IDX5  >  TBL-ZAITAKU-MAX)
+                          OR      (SKT3000TMP-ZAITAKU  =  "1")
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU(IDX5)
+                       MOVE    "1"            TO  SKT3000TMP-ZAITAKU
+                   END-IF
+                 END-PERFORM
                END-IF
+      *=== 在宅コード変更 by Yoshikawa(2014/05/14) end
              END-IF
            END-PERFORM
       *
