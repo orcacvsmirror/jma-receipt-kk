@@ -47,6 +47,7 @@
       *  01.00.11    µÈÀî    10/05/13    ¥ª¥ó¥é¥¤¥óÊÖÌáÂÐ±þ
       *  01.00.12    µÈÀî    11/01/11    ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
       *  01.00.13    µÈÀî    13/02/06    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
+      *  01.00.14    µÈÀî    14/05/14    Á°´ü¹âÎð¼Ô£²³äÂÐ±þ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -781,11 +782,25 @@
                IF      RECE10-HKNNUM   =   "060" OR "068"
       *=== ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ by Yoshikawa(2011/01/11) end
                    IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    1       TO  IDX2
-                       ELSE
-                           MOVE    2       TO  IDX2
-                       END-IF
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2014/05/14) start
+      *                 IF      RECE10-KYURATE  =   9
+      *                     MOVE    1       TO  IDX2
+      *                 ELSE
+      *                     MOVE    2       TO  IDX2
+      *                 END-IF
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  9
+                         MOVE    1     TO    IDX2
+                       WHEN  8
+                         IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                             MOVE    1    TO    IDX2
+                         ELSE
+                             MOVE    2    TO    IDX2
+                         END-IF
+                       WHEN  7
+                         MOVE    2     TO    IDX2
+                     END-EVALUATE
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2014/05/14) end
                    ELSE
       *---(01.00.06) LINE ADD START ------------------------------------
                      IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)

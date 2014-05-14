@@ -53,6 +53,7 @@
       *  01.00.18    µÈÀî      12/05/21    °ìÈÌÅù¤Î£·£°ºÐÌ¤Ëþ¤Î
       *                                    °ìÉôÉéÃ´¶âÍó¤Ï°õ»ú¤¹¤ë
       *  01.00.19    µÈÀî      13/02/07    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
+      *  01.00.20    µÈÀî      14/05/14    Á°´ü¹âÎð¼Ô£²³äÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -863,6 +864,14 @@
                IF  RECE10-AGE  >=  70
                  EVALUATE  RECE10-KYURATE
                    WHEN  9       MOVE  1  TO  IDX1
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2104/05/14) start
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    1    TO    IDX1
+                     ELSE
+                         MOVE    2    TO    IDX1
+                     END-IF
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2104/05/14) end
                    WHEN  OTHER   MOVE  2  TO  IDX1
                  END-EVALUATE
                ELSE
