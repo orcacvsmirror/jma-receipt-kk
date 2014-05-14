@@ -41,6 +41,7 @@
       *  01.00.10    吉川     13/01/11    プラグイン対応
       *                                   医療機関情報編集対応
       *  01.00.11    吉川     13/10/11    プログラムオプション対応
+      *  01.00.12    吉川     14/05/13    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -872,11 +873,25 @@
       *                 ELSE
       *                     MOVE    2       TO  IDX1
       *                 END-IF
-                       IF  RECE10-KYURATE  =  7
-                           MOVE    2     TO    IDX1
-                       ELSE
-                           MOVE    1     TO    IDX1
-                       END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/13) start
+      *                 IF  RECE10-KYURATE  =  7
+      *                     MOVE    2     TO    IDX1
+      *                 ELSE
+      *                     MOVE    1     TO    IDX1
+      *                 END-IF
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  9
+                         MOVE    1   TO    IDX1
+                       WHEN  8
+                         IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                             MOVE    1   TO    IDX1
+                         ELSE
+                             MOVE    2   TO    IDX1
+                         END-IF
+                       WHEN  7
+                         MOVE    2   TO    IDX1
+                     END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/13) end
       *---(01.00.03) LINE ADD END   ------------------------------------
                    ELSE
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -898,11 +913,25 @@
       *        退職国保
                ELSE
                    IF      RECE10-AGE  >=  70
-                       IF      RECE10-KYURATE  =   9
-                           MOVE    6       TO  IDX1
-                       ELSE
-                           MOVE    7       TO  IDX1
-                       END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/13) start
+      *                 IF      RECE10-KYURATE  =   9
+      *                     MOVE    6       TO  IDX1
+      *                 ELSE
+      *                     MOVE    7       TO  IDX1
+      *                 END-IF
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  9
+                         MOVE    6   TO  IDX1
+                       WHEN  8
+                         IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                             MOVE    6     TO  IDX1
+                         ELSE
+                             MOVE    7     TO  IDX1
+                         END-IF
+                       WHEN  7
+                         MOVE    7   TO  IDX1
+                     END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/13) end
                    ELSE
                        IF      RECE10-HONKZKKBN    =   "1"
                            MOVE    5       TO  IDX1

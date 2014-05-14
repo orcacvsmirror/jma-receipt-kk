@@ -45,6 +45,7 @@
       *  01.00.10    µÈÀî    10/11/24    open-cobol1.0ÂÐ±þ
       *  01.00.11    µÈÀî    11/02/02    À¯Îá»ØÄêÅÔ»Ô¤â¶èËè¤Ë½¸·×¤¹¤ë
       *  01.00.12    µÈÀî    13/01/11    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
+      *  01.00.13    µÈÀî    14/05/13    Á°´ü¹âÎð¼Ô£²³äÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -792,11 +793,25 @@
       *           WHEN  OTHER             MOVE  3  TO  IDX1
       *         END-EVALUATE
                IF  RECE10-AGE  >=  70
-                   IF  RECE10-KYURATE  =  9
-                     MOVE    1     TO    IDX1
-                   ELSE
-                     MOVE    2     TO    IDX1
-                   END-IF
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2014/05/13) start
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE    1     TO    IDX1
+      *             ELSE
+      *               MOVE    2     TO    IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    1     TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2014/05/13) end
                ELSE
                    IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
                    AND  (RECE10-FLG (1)   =  1)
