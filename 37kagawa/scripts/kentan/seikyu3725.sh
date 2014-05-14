@@ -5,8 +5,6 @@ PREFNAME=kagawa
 PROGRAMID=SEIKYU3725
 LOG_FILE="/var/log/jma-receipt/${14}seikyu3725"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='KINYU';"
-INIFILE="/tmp/${14}${PROGRAMID}KINYU.INI"
 #-------------------------------------------#
 #    ÃÏÊý¸øÈñºîÀ®¡Ê±§Â¿ÄÅÄ®¡¦Êì»Ò²ÈÄíÅù°åÎÅÈñÀÁµá½ñ¡Ë
 #        $1-${11}
@@ -25,9 +23,6 @@ INIFILE="/tmp/${14}${PROGRAMID}KINYU.INI"
             rm  ${15}
         fi
 
-##      INI¥Õ¥¡¥¤¥ë ºîÀ®
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
@@ -35,9 +30,6 @@ INIFILE="/tmp/${14}${PROGRAMID}KINYU.INI"
             if  [ -e ${15} ]; then
                 exit
             fi
-
-##      INI¥Õ¥¡¥¤¥ë ºï½ü
-        rm -f ${INIFILE}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
