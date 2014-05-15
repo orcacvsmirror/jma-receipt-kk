@@ -31,6 +31,7 @@
       *  01.00.02    吉川     13/01/22    医療機関情報編集対応
       *  01.00.03    吉川     13/02/07    プラグイン対応
       *  01.00.04    吉川     13/09/04    プログラムオプション対応
+      *  01.00.05    吉川     14/05/15    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -754,11 +755,25 @@
            IF  RECE10-HKNNUM  =  "068"
       *      ７０歳以上か
              IF  RECE10-AGE  >=  70
-               IF  RECE10-KYURATE  =  9
-                 MOVE    1     TO  IDX1
-               ELSE
-                 MOVE    2     TO  IDX1
-               END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/15) start
+      *         IF  RECE10-KYURATE  =  9
+      *           MOVE    1     TO  IDX1
+      *         ELSE
+      *           MOVE    2     TO  IDX1
+      *         END-IF
+               EVALUATE  RECE10-KYURATE
+                 WHEN  9
+                   MOVE    1     TO    IDX1
+                 WHEN  8
+                   IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                       MOVE    1    TO    IDX1
+                   ELSE
+                       MOVE    2    TO    IDX1
+                   END-IF
+                 WHEN  7
+                   MOVE    2     TO    IDX1
+               END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/15) end
              ELSE
                MOVE    3       TO  IDX1
              END-IF

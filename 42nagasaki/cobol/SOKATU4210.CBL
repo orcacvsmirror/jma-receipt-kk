@@ -55,6 +55,7 @@
       *  01.00.14    吉川    13/03/25    プラグイン対応
       *  01.00.15    萩野    14/01/10    長期分を一般分に合算するよう修正
       *                                  プログラムオプション対応
+      *  01.00.16    吉川    14/05/15    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -983,11 +984,25 @@
       *           ELSE
       *             MOVE    2     TO    IDX1
       *           END-IF
-                 IF  RECE10-KYURATE  =  7
-                   MOVE    2     TO    IDX1
-                 ELSE
-                   MOVE    1     TO    IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/15) start
+      *           IF  RECE10-KYURATE  =  7
+      *             MOVE    2     TO    IDX1
+      *           ELSE
+      *             MOVE    1     TO    IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    1     TO    IDX1
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    1    TO    IDX1
+                     ELSE
+                         MOVE    2    TO    IDX1
+                     END-IF
+                   WHEN  7
+                     MOVE    2     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/15) end
       *---(01.00.06) LINE ADD END   ------------------------------------
                ELSE
       *---(01.00.06) LINE ADD START ------------------------------------
