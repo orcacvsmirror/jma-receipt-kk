@@ -1015,11 +1015,25 @@
                IF  RECE10-HKNNUM  =  "060" OR "068"
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/10) end
                  IF  RECE10-AGE  >= 70
-                   IF  RECE10-KYURATE  =  9
-                     MOVE    1     TO    IDX1
-                   ELSE
-                     MOVE    2     TO    IDX1
-                   END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/15) start
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE    1     TO    IDX1
+      *             ELSE
+      *               MOVE    2     TO    IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    1     TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/15) end
                  ELSE
                    IF  RECE10-FLG (1)   =  1
                      MOVE    4     TO    IDX1
