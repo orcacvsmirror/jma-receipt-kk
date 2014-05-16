@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev       修正者    日付          内容
       * 01.00.01          吉川      09/09/02      帳票様式の変更に伴う修正
+      * 01.00.02          萩野      14/05/09      帳票様式の変更に伴う修正
       ********************************************************************
        01  SC03.
       *印刷年月
@@ -47,6 +48,13 @@
          03  SC03-NAME-TBL   OCCURS  25.
       *=== 帳票様式の変更 by Yoshikawa(2009/09/02) end
              05  SC03-NAME         PIC  X(20).
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/09) start
+      *生年月日
+            03  SC03-BIRTHDAY-TBL    OCCURS 25 TIMES.
+              05  SC03-BIRTHDAY-D      PIC X(2).
+              05  SC03-BIRTHDAY-M      PIC X(2).
+              05  SC03-BIRTHDAY-Y      PIC X(2).
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/09) end
       *保険種別１
       *=== 帳票様式の変更 by Yoshikawa(2009/09/02) start
       *   03  SC03-HKNKBN-TBL   OCCURS  20.

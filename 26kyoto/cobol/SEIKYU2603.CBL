@@ -64,6 +64,7 @@
       *                                  医療機関情報編集対応
       *  01.00.20    吉川    13/01/16    テーブルのprimary key変更対応
       *  01.00.21    吉川    13/08/08    プログラムオプション対応
+      *  01.00.22    萩野    14/05/14    帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -230,6 +231,15 @@
            03  WRK-Z79               PIC ZZZ,ZZ9.
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
            03  WRK-Z99               PIC Z,ZZZ,ZZ9.
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/14) start
+           03  WRK-BIRTHDAY.
+               05  WRK-BIRTH-G       PIC X(01).
+               05  WRK-BIRTH-YY      PIC Z9.
+               05  WRK-BIRTH-P1      PIC X(01).
+               05  WRK-BIRTH-MM      PIC Z9.
+               05  WRK-BIRTH-P2      PIC X(01).
+               05  WRK-BIRTH-DD      PIC Z9.
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/14) end
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
            03  WRK-HENYMDG           PIC X(22).
@@ -1455,6 +1465,17 @@
                MOVE    MF100-NAME          TO  SC03-NAME(IDX1)
                MOVE    MF100-KANANAME      TO  SC03-KANANAME(IDX1)
       *
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/14) start
+               IF  ( MF100-RECESYUBETU(4:1)  =  7  OR  8 )
+      *          生年月日
+                 MOVE    MF100-BIRTHDAY      TO  WRK-SYMD
+                 PERFORM 31012-SEIWA-HEN-SEC
+                 MOVE    WRK-BIRTH-YY        TO  SC03-BIRTHDAY-Y(IDX1)
+                 MOVE    WRK-BIRTH-MM        TO  SC03-BIRTHDAY-M(IDX1)
+                 MOVE    WRK-BIRTH-DD        TO  SC03-BIRTHDAY-D(IDX1)
+               END-IF
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/14) end
+      *
       *    保険種別
                EVALUATE    MF100-HKNNUM
                    WHEN    "001"
@@ -1763,6 +1784,9 @@
                                                LNK-DAY2-AREA
            MOVE    LNK-DAY2-EDTYMD3    TO  WRK-HENYMDG
            INSPECT WRK-HENYMDG    REPLACING  ALL "  "  BY  "　"
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/14) start
+           MOVE    LNK-DAY2-EDTYMD1    TO  WRK-BIRTHDAY
+      *=== 帳票様式の変更に伴う修正 by hagino(2014/05/14) end
            .
        31012-SEIWA-HEN-EXT.
            EXIT.
