@@ -36,6 +36,10 @@ for f in ${COBMEM}; do
          -I ${COPYDIR} \
          -I ${SITESRCDIR}/cobol/copy \
         ${SITESRCDIR}/cobol/${f}
+    if [ $? -ne 0 ]; then
+      ./preunlink
+      exit 1
+    fi
   fi
 done
 
@@ -47,6 +51,10 @@ for f in ${SCRIPTMEM}; do
     sed -e 's,\@jma-receipt-env\@,/etc/jma-receipt/jma-receipt.env,g' \
         < "${SITESRCDIR}/${f}" > "${SITEDIR}/${f}"
 	chmod +x "${SITEDIR}/${f}"
+    if [ $? -ne 0 ]; then
+      ./preunlink
+      exit 1
+    fi
   fi
 done
 echo "done"
@@ -57,6 +65,10 @@ for f in ${LDDEFMEM}; do
   if test -f "${SITESRCDIR}/${f}"; then
     echo -n "Copying ${SITESRCDIR}/${f}..." | logger
     $CPP -I"${LDDEFDIR}" -x c "${SITESRCDIR}/${f}" > "${SITEDIR}/${f}"
+    if [ $? -ne 0 ]; then
+      ./preunlink
+      exit 1
+    fi
   fi
 done
 echo "done"
@@ -68,6 +80,10 @@ for d in data doc form init record screen ; do
     if test -f "${SITESRCDIR}/${f}"; then
       echo -n "Copying ${SITESRCDIR}/${f}..." | logger
       cp -p "${SITESRCDIR}/${f}" "${SITEDIR}/${d}"
+      if [ $? -ne 0 ]; then
+        ./preunlink
+        exit 1
+      fi
     fi
   done
 done
@@ -81,5 +97,9 @@ if test -f ./kentan.inc; then
   sed "/${PREF}/d" /tmp/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
   rm -rf /tmp/kentan.inc.bak
   echo -e "\t${PREF};" >> ${SYSCONFDIR}/kentan.inc
+  if [ $? -ne 0 ]; then
+    ./preunlink
+    exit 1
+  fi
   echo "done"
 fi
