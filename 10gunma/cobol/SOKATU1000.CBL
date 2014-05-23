@@ -46,6 +46,7 @@
       * 01.00.15     吉川    2011/10/17    県内災害分は県内とする
       * 01.00.16     吉川    2012/04/27    在宅はまとめて集計するように修正
       * 01.00.17     吉川    2012/12/21    医療機関情報編集対応
+      * 01.00.18     吉川    2014/05/21    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -737,23 +738,61 @@
       *
       *     本家入外区分
              IF    RECE10-AGE    >=  70
-               IF  RECE10-KYURATE  =  9
-                 IF  RECE10-NYUGAIKBN  =  1
-                   MOVE    "7"           TO  SKT1000TMP-KBN
-                   MOVE    1             TO  SKT1000TMP-JYUNJO
-                 ELSE
-                   MOVE    "8"           TO  SKT1000TMP-KBN
-                   MOVE    2             TO  SKT1000TMP-JYUNJO
-                 END-IF
-               ELSE
-                 IF  RECE10-NYUGAIKBN  =  1
-                   MOVE    "9"           TO  SKT1000TMP-KBN
-                   MOVE    3             TO  SKT1000TMP-JYUNJO
-                 ELSE
-                   MOVE    "0"           TO  SKT1000TMP-KBN
-                   MOVE    4             TO  SKT1000TMP-JYUNJO
-                 END-IF
-               END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *         IF  RECE10-KYURATE  =  9
+      *           IF  RECE10-NYUGAIKBN  =  1
+      *             MOVE    "7"           TO  SKT1000TMP-KBN
+      *             MOVE    1             TO  SKT1000TMP-JYUNJO
+      *           ELSE
+      *             MOVE    "8"           TO  SKT1000TMP-KBN
+      *             MOVE    2             TO  SKT1000TMP-JYUNJO
+      *           END-IF
+      *         ELSE
+      *           IF  RECE10-NYUGAIKBN  =  1
+      *             MOVE    "9"           TO  SKT1000TMP-KBN
+      *             MOVE    3             TO  SKT1000TMP-JYUNJO
+      *           ELSE
+      *             MOVE    "0"           TO  SKT1000TMP-KBN
+      *             MOVE    4             TO  SKT1000TMP-JYUNJO
+      *           END-IF
+      *         END-IF
+               EVALUATE  RECE10-KYURATE
+                 WHEN  9
+                   IF  RECE10-NYUGAIKBN  =  1
+                     MOVE    "7"           TO  SKT1000TMP-KBN
+                     MOVE    1             TO  SKT1000TMP-JYUNJO
+                   ELSE
+                     MOVE    "8"           TO  SKT1000TMP-KBN
+                     MOVE    2             TO  SKT1000TMP-JYUNJO
+                   END-IF
+                 WHEN  8
+                   IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                     IF  RECE10-NYUGAIKBN  =  1
+                       MOVE    "7"         TO  SKT1000TMP-KBN
+                       MOVE    1           TO  SKT1000TMP-JYUNJO
+                     ELSE
+                       MOVE    "8"         TO  SKT1000TMP-KBN
+                       MOVE    2           TO  SKT1000TMP-JYUNJO
+                     END-IF
+                   ELSE
+                     IF  RECE10-NYUGAIKBN  =  1
+                       MOVE    "9"         TO  SKT1000TMP-KBN
+                       MOVE    3           TO  SKT1000TMP-JYUNJO
+                     ELSE
+                       MOVE    "0"         TO  SKT1000TMP-KBN
+                       MOVE    4           TO  SKT1000TMP-JYUNJO
+                     END-IF
+                   END-IF
+                 WHEN  7
+                   IF  RECE10-NYUGAIKBN  =  1
+                     MOVE    "9"           TO  SKT1000TMP-KBN
+                     MOVE    3             TO  SKT1000TMP-JYUNJO
+                   ELSE
+                     MOVE    "0"           TO  SKT1000TMP-KBN
+                     MOVE    4             TO  SKT1000TMP-JYUNJO
+                   END-IF
+               END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
              ELSE
       *---(01.00.07) LINE ADD START ------------------------------------
                IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
@@ -868,10 +907,8 @@
       *     END-IF
       *---(01.00.08) LINE ADD START ------------------------------------
       *     MOVE  RECE10-KYURATE    TO  SKT1000TMP-KYURATE
-         DISPLAY  "CHK  :  "  RECE10-FLG (2)
             IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
             AND  (RECE10-FLG (2)   =  1)
-         DISPLAY  "HIT"
                 MOVE  8                 TO  SKT1000TMP-KYURATE
             ELSE
                 MOVE  RECE10-KYURATE    TO  SKT1000TMP-KYURATE

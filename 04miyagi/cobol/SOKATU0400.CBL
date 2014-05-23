@@ -43,6 +43,7 @@
       *  01.00.09    吉川   2012/06/12   電話番号を印字するように修正
       *  01.00.10    吉川   2012/12/19   医療機関情報編集対応
       *  01.00.11    吉川   2013/10/03   後期高齢者の公費も集計する
+      *  01.00.12    吉川   2014/05/21   前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -787,11 +788,25 @@
       *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) end
       *    年齢チェック
                IF  RECE10-AGE  >= 70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE   1   TO   IDX1
-                 ELSE
-                   MOVE   2   TO   IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE   1   TO   IDX1
+      *           ELSE
+      *             MOVE   2   TO   IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    1     TO    IDX1
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    1    TO    IDX1
+                     ELSE
+                         MOVE    2    TO    IDX1
+                     END-IF
+                   WHEN  7
+                     MOVE    2     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
                ELSE
       *---(01.00.02) LINE ADD START ------------------------------------
                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
@@ -826,11 +841,25 @@
              ELSE
       *    家族区分チェック
                IF  RECE10-AGE  >= 70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  9   TO   IDX1
-                 ELSE
-                   MOVE  10  TO   IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE  9   TO   IDX1
+      *           ELSE
+      *             MOVE  10  TO   IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    9     TO    IDX1
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    9    TO    IDX1
+                     ELSE
+                         MOVE    10   TO    IDX1
+                     END-IF
+                   WHEN  7
+                     MOVE    10    TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
                ELSE
       *---(01.00.02) LINE ADD START ------------------------------------
                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)

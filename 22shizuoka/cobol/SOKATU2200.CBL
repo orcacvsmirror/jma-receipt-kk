@@ -57,6 +57,7 @@
       *  01.00.15    吉川    2012/05/14   全国土木、全国建設、中央建設は
       *                                   県外とするように修正
       *  01.00.16    吉川    2013/01/10   医療機関情報編集対応
+      *  01.00.17    吉川    2014/05/19   前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -905,11 +906,25 @@
       *           ELSE
       *             MOVE  3   TO  IDX1
       *           END-IF
-                 IF  RECE10-KYURATE  =  7
-                   MOVE  3   TO  IDX1
-                 ELSE
-                   MOVE  1   TO  IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/19) start
+      *           IF  RECE10-KYURATE  =  7
+      *             MOVE  3   TO  IDX1
+      *           ELSE
+      *             MOVE  1   TO  IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    1     TO    IDX1
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    1    TO    IDX1
+                     ELSE
+                         MOVE    3    TO    IDX1
+                     END-IF
+                   WHEN  7
+                     MOVE    3     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/19) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *---(01.00.01) LINE ADD END   ------------------------------------
                WHEN  RECE10-AGE  >  2

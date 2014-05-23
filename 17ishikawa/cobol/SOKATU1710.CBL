@@ -44,6 +44,8 @@
       *  01.00.08      吉川     12/05/23    帳票様式の変更に伴う修正
       *  01.00.09      吉川     13/01/09    プラグイン対応
       *                                     医療機関情報編集対応
+      *  01.00.10      吉川     14/05/19    前期高齢者２割対応
+      *                                     プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -67,11 +69,13 @@
 006900*    エラーファイル
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
-      *    優先保険者番号ファイル
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-YUSEN.
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      **    優先保険者番号ファイル
+      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-YUSEN.
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -89,9 +93,11 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *    優先保険者番号ファイル
-       FD  YUSEN-FILE.
-       01  YUSEN-HKNJANUM             PIC X(06). 
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      **    優先保険者番号ファイル
+      * FD  YUSEN-FILE.
+      * 01  YUSEN-HKNJANUM             PIC X(06). 
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -143,6 +149,10 @@
            03  FLG-SEIKYU          PIC 9(01).
            03  FLG-PTINF           PIC 9(01).
            03  FLG-PRINT           PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -151,6 +161,10 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+           03  IDX                 PIC 9(05).
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
       *##  パラメタ領域（地方公費仕様）
        01  WRK-PARA.
@@ -168,14 +182,16 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/19) end
       *
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU1710".
-           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU1710".
+      *     03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -216,6 +232,15 @@
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/19) start
            03  WRK-PATH2           PIC X(50).
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/19) end
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+           03  WRK-YUSEN           PIC X(06).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
            03  WRK-HOSPNAME-R      REDEFINES   WRK-HOSPNAME.
@@ -281,6 +306,12 @@
       *    全角チェックパラメタ
            COPY    "CPORCSKANACHK.INC".
       * 
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -490,7 +521,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-           PERFORM  110-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      *     PERFORM  110-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
            OPEN    OUTPUT  UPD-FILE
       *
@@ -529,40 +564,102 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/01/09) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   YUSEN-HKNJANUM
+      **
+      *     OPEN  INPUT  YUSEN-FILE
+      **
+      *     READ YUSEN-FILE
+      *       AT END
+      *         INITIALIZE        YUSEN-HKNJANUM
+      *       DISPLAY "読み込み失敗"  
+      *     END-READ
+      **
+      *     DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
+      **
+      *     CLOSE YUSEN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
       *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
+           MOVE    "SOKATU1710"              TO  WRK-PRGID
       *
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/01/09) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   YUSEN-HKNJANUM
-      *
-           OPEN  INPUT  YUSEN-FILE
-      *
-           READ YUSEN-FILE
-             AT END
-               INITIALIZE        YUSEN-HKNJANUM
-             DISPLAY "読み込み失敗"  
-           END-READ
-      *
-           DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
-      *
-           CLOSE YUSEN-FILE
+      *    プログラムオプション取得
+      *    優先保険者番号
+           MOVE    "YUSEN"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:6)        TO  WRK-YUSEN
+           DISPLAY "優先保険者番号="  WRK-YUSEN
       *
            .
-       110-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *
       *****************************************************************
       *    主　　処理
@@ -647,7 +744,10 @@
       *    出力順設定
       *    県外保険者→県内市町村→県内国保組合→県内扱い国保組合→
       *    →YUSEN.INIに登録されている保険者(医療機関所在地保険者)
-           IF  YUSEN-HKNJANUM       =    SKT1710TMP-HKNJANUM
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      *     IF  YUSEN-HKNJANUM       =    SKT1710TMP-HKNJANUM
+           IF  WRK-YUSEN       =    SKT1710TMP-HKNJANUM
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
              MOVE  9                     TO  SKT1710TMP-SYUTURYOKU
            ELSE
              IF  RECE10-PREFKBN     =    "2"
@@ -721,13 +821,31 @@
       *=== 特別療養費国保対応 by Yoshikawa(2010/08/19) end
       *    年齢チェック
                IF  RECE10-AGE  >=  70
-                 IF  RECE10-KYURATE  =  9
-                    MOVE   1    TO    IDX1
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/19) start
+      *           IF  RECE10-KYURATE  =  9
+      *              MOVE   1    TO    IDX1
+      *                                IDX3
+      *           ELSE
+      *              MOVE   2    TO    IDX1
+      *                                IDX3
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    1   TO   IDX1
                                       IDX3
-                 ELSE
-                    MOVE   2    TO    IDX1
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    1    TO    IDX1
+                                            IDX3
+                     ELSE
+                         MOVE    2    TO    IDX1
+                                            IDX3
+                     END-IF
+                   WHEN  7
+                     MOVE    2   TO   IDX1
                                       IDX3
-                 END-IF
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/19) end
                ELSE
       *---(01.00.03) LINE ADD START ------------------------------------
                 IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
@@ -753,13 +871,31 @@
                END-IF
              ELSE
                IF  RECE10-AGE  >=  70
-                 IF  RECE10-KYURATE  =  9
-                   MOVE  7        TO  IDX1
-                   MOVE  3        TO  IDX3
-                 ELSE
-                   MOVE  8        TO  IDX1
-                   MOVE  4        TO  IDX3
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/19) start
+      *           IF  RECE10-KYURATE  =  9
+      *             MOVE  7        TO  IDX1
+      *             MOVE  3        TO  IDX3
+      *           ELSE
+      *             MOVE  8        TO  IDX1
+      *             MOVE  4        TO  IDX3
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    7   TO   IDX1
+                     MOVE    3   TO   IDX3
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    7    TO    IDX1
+                         MOVE    3    TO    IDX3
+                     ELSE
+                         MOVE    8    TO    IDX1
+                         MOVE    4    TO    IDX3
+                     END-IF
+                   WHEN  7
+                     MOVE    8   TO   IDX1
+                     MOVE    4   TO   IDX3
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/19) end
                ELSE
                  IF  RECE10-HONKZKKBN  =  "1"
                    MOVE   9    TO  IDX1
@@ -1897,6 +2033,54 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/19) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************

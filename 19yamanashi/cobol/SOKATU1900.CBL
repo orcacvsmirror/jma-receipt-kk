@@ -49,6 +49,7 @@
       *                                    ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ
       *  01.00.17       µÈÀî     11/03/10  open-cobol1.0ÂÐ±þ
       *  01.00.18       µÈÀî     13/01/09  °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
+      *  01.00.19       µÈÀî     14/05/19  Á°´ü¹âÎð¼Ô£²³äÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -917,11 +918,25 @@
                IF  RECE10-HKNNUM  =  "060" OR "068"
       *=== ÆÃÊÌÎÅÍÜÈñ¹ñÊÝÂÐ±þ by Yoshikawa(2010/10/01) end
                  IF  RECE10-AGE  >=  70
-                   IF  RECE10-KYURATE  = 9
-                     MOVE  1    TO  IDX1
-                   ELSE
-                     MOVE  2    TO  IDX1
-                   END-IF
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2014/05/19) start
+      *             IF  RECE10-KYURATE  = 9
+      *               MOVE  1    TO  IDX1
+      *             ELSE
+      *               MOVE  2    TO  IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    1     TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== Á°´ü¹âÎð¼Ô£²³äÂÐ±þ by Yoshikawa(2014/05/19) end
                  ELSE
       *---(01.00.07) LINE ADD START ------------------------------------
                    IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)

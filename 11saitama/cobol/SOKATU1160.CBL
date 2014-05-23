@@ -70,6 +70,7 @@
       *  01.02.18    吉川       11/12/06  後期高齢非該当対応
       *  01.02.19    吉川       12/11/14  平成２４年４月改正以降は
       *                                   在宅をまとめて集計するように修正
+      *  01.02.20    吉川       14/05/16  前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -930,6 +931,14 @@
                                    WHEN    "D"
                                    WHEN    "E"
                                    WHEN    "F"
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) start
+                                       IF  RECE10-RECESYUBETU(4:1)
+                                                   =  "7"  OR  "8"
+                                           MOVE    1           TO  IDY1
+                                       ELSE
+                                           MOVE    2           TO  IDY1
+                                       END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) end
       *---(01.02.06) LINE ADD START ------------------------------------
                                    WHEN    "7"    
                                    WHEN    "G"
@@ -948,6 +957,14 @@
                                            MOVE    1           TO  IDY1
                                        WHEN    "8"
                                        WHEN    "E"
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) start
+                                         IF  RECE10-RECESYUBETU(4:1)
+                                                     =  "7"  OR  "8"
+                                           MOVE    1           TO  IDY1
+                                         ELSE
+                                           MOVE    2           TO  IDY1
+                                         END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) end
       *---(01.02.05) LINE ADD START ------------------------------------
                                        WHEN    "7"
                                        WHEN    "H"
@@ -959,6 +976,14 @@
                                        WHEN    9
                                            MOVE    1           TO  IDY1
                                        WHEN    8
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) start
+                                         IF  RECE10-RECESYUBETU(4:1)
+                                                     =  "7"  OR  "8"
+                                           MOVE    1           TO  IDY1
+                                         ELSE
+                                           MOVE    2           TO  IDY1
+                                         END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) end
       *---(01.02.05) LINE ADD START ------------------------------------
                                        WHEN    7
       *---(01.02.05) LINE ADD END   ------------------------------------
@@ -1008,6 +1033,14 @@
                                            MOVE    3       TO  IDY2
                                        WHEN    "9"
                                            MOVE    4       TO  IDY2
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) start
+                                       WHEN    "D"
+                                       WHEN    "E"
+                                       WHEN    "F"
+                                           MOVE    3       TO  IDY2
+                                       WHEN    "8"
+                                           MOVE    4       TO  IDY2
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) end
                                    END-EVALUATE        
                                WHEN    "003"
                                    MOVE    5               TO  IDY2
@@ -1016,6 +1049,9 @@
                                WHEN    "031"  THRU  "034"
                                    EVALUATE    RECE10-HOJOKBN
                                        WHEN    "B"
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) start
+                                       WHEN    "E"
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/16) end
                                            MOVE    7       TO  IDY2
                                        WHEN    OTHER
                                            MOVE    8       TO  IDY2

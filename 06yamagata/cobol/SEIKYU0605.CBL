@@ -38,6 +38,7 @@
       *  01.00.04    内田    08/06/10    帳票様式に伴う修正
       *                                  SPA-AREA初期化
       *  01.00.05    吉川    12/12/21    医療機関情報編集対応
+      *  01.00.06    吉川    14/05/21    前期高齢者２割対応
       ********************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -675,11 +676,25 @@
                ELSE
       *    高齢者かどうか
                  IF  RECE02-AGE      >=  70
-                   IF  RECE02-KYURATE  =  10
-                     MOVE  1           TO  IDX
-                   ELSE
-                     MOVE  2           TO  IDX
-                   END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *             IF  RECE02-KYURATE  =  10
+      *               MOVE  1           TO  IDX
+      *             ELSE
+      *               MOVE  2           TO  IDX
+      *             END-IF
+                   EVALUATE  RECE02-KYURATE
+                     WHEN  10
+                       MOVE    1       TO  IDX
+                     WHEN  20
+                       IF  RECE02-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1   TO  IDX
+                       ELSE
+                           MOVE    2   TO  IDX
+                       END-IF
+                     WHEN  30
+                       MOVE    2       TO  IDX
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
                  ELSE
       *    ３歳未満かどうか
       *---(01.00.04) LINE ADD START ------------------------------------
