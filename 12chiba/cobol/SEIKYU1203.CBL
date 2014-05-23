@@ -38,6 +38,7 @@
       *  01.00.04     吉川     08/10/10    SPA-AREA初期化
       *  01.00.05     吉川     12/12/21    プラグイン対応
       *                                    医療機関情報編集対応
+      *  01.00.06     吉川     14/05/16    プログラムオプション対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -56,13 +57,15 @@
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *    口座情報ファイル
-           SELECT  KOUZA-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-KOUZA.
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **    口座情報ファイル
+      *     SELECT  KOUZA-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-KOUZA.
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *
        DATA  DIVISION.
        FILE  SECTION.
@@ -75,13 +78,15 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-      *    口座情報ファイル
-       FD  KOUZA-FILE.
-       01  KOUZA-REC.
-           03  FILLER           PIC  X(09).
-           03  KOUZA-DATA       PIC  X(30).
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      **    口座情報ファイル
+      * FD  KOUZA-FILE.
+      * 01  KOUZA-REC.
+      *     03  FILLER           PIC  X(09).
+      *     03  KOUZA-DATA       PIC  X(30).
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *
        WORKING-STORAGE  SECTION.
       *
@@ -127,10 +132,17 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+           03  FLG-PRGOPTION  PIC 9(01).
+           03  FLG-OK         PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      *     03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
@@ -150,14 +162,16 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU1203".
-           03  FILLER              PIC X(09)  VALUE "KOUZA.INI".
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU1203".
+      *     03  FILLER              PIC X(09)  VALUE "KOUZA.INI".
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -202,6 +216,14 @@
       *         05  FILLER            PIC S9(09)  BINARY.
       *         05  FILLER            PIC S9(09)  BINARY.
            03  WRK-PATH              PIC X(50).
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -308,6 +330,12 @@
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -496,9 +524,13 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-      *---(01.00.03) LINE ADD START ------------------------------------
-           PERFORM  110-INI-FILE-SEC
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *     PERFORM  110-INI-FILE-SEC
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
@@ -508,46 +540,118 @@
            .
        100-INIT-EXT.
            EXIT.
-      *---(01.00.03) LINE ADD START ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      **---(01.00.03) LINE ADD START ------------------------------------
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理  
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/KOUZA.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   KOUZA-REC
+      **
+      *     OPEN  INPUT  KOUZA-FILE
+      **
+      *     READ KOUZA-FILE
+      *       AT END
+      *         INITIALIZE        KOUZA-DATA
+      *     END-READ
+      **
+      *     IF  KOUZA-DATA(1:1)  =  "1"
+      *         PERFORM  VARYING  IDX  FROM  1  BY  1
+      *                  UNTIL    IDX  >     5
+      *             READ  KOUZA-FILE
+      *             MOVE  KOUZA-DATA  TO  WRK-KOUZA-DATA (IDX)
+      *         END-PERFORM
+      *     END-IF
+      **
+      *     CLOSE KOUZA-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **---(01.00.03) LINE ADD END   ------------------------------------
       *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理  
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/KOUZA.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+           MOVE    "SEIKYU1203"              TO  WRK-PRGID
       *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   KOUZA-REC
-      *
-           OPEN  INPUT  KOUZA-FILE
-      *
-           READ KOUZA-FILE
-             AT END
-               INITIALIZE        KOUZA-DATA
-           END-READ
-      *
-           IF  KOUZA-DATA(1:1)  =  "1"
-               PERFORM  VARYING  IDX  FROM  1  BY  1
-                        UNTIL    IDX  >     5
-                   READ  KOUZA-FILE
-                   MOVE  KOUZA-DATA  TO  WRK-KOUZA-DATA (IDX)
-               END-PERFORM
+      *    プログラムオプション取得
+      *    口座情報
+           MOVE    "KOUZA"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(10:1)  =  "1"
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >  5
+               MOVE    WRK-OPTION(IDX)(10:30) TO  WRK-KOUZA-DATA(IDX)
+             END-PERFORM
            END-IF
-      *
-           CLOSE KOUZA-FILE
+           DISPLAY "印字 ="  WRK-OPTION(1)(10:1)
+           DISPLAY "銀行名 ="  WRK-KOUZA-DATA(1)
+           DISPLAY "支店名 ="  WRK-KOUZA-DATA(2)
+           DISPLAY "code ="  WRK-KOUZA-DATA(3)
+           DISPLAY "口座番号 =" WRK-KOUZA-DATA(4)
+           DISPLAY "名義人 =" WRK-KOUZA-DATA(5)
       *
            .
-       110-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *****************************************************************
       *    パラメタ編集処理
       *****************************************************************
@@ -1921,6 +2025,54 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************
