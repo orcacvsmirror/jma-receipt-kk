@@ -55,6 +55,8 @@
       *  01.00.18    吉川    2012/12/19  プラグイン対応
       *                                  医療機関情報編集修正
       *  01.00.19    萩野    2014/03/07  プログラムオプション対応
+      *  01.00.20    吉川    2014/05/20  前期高齢者２割対応
+      *                                  在宅の対象とする診療コード変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -165,6 +167,9 @@
            03  FLG-PRGOPTION       PIC 9(01).
            03  FLG-OK              PIC 9(01).
       *=== プログラムオプション対応 by hagino(2014/03/07) end
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+           03  FLG-ZAISOSIN        PIC 9(01).
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -291,15 +296,68 @@
            03  WRK-2007-MAX        PIC 9(03).
       *=== シス管「2007」対応 by Yoshikawa(2008/09/11) end
       *
-      *    固定値
-       01  CONST-AREA.
-      *    在宅総合・在宅末期（在医総）
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+      * 01  CONST-AREA.
+      **    在宅総合・在宅末期（在医総）
+      *     03  CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+      *     03  CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+      *     03  CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+      *     03  CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+      *     03  CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+      *     03  CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *在総診テーブル
+       01  TBL-ZAITAKU-AREA.
+      *    在宅総合・在宅末期
            03  CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
            03  CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
            03  CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
            03  CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
            03  CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
            03  CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      *
+      *在総診テーブル（２０１４年４月診療分〜）
+       01  TBL-ZAISOSIN-AREA.
+      *    在がん医総（在支診等）
+           03  FILLER                  PIC X(09) VALUE "114007610".
+           03  FILLER                  PIC X(09) VALUE "114007710".
+      *    在がん医総（機能強化した在支診等）
+           03  FILLER                  PIC X(09) VALUE "114019510".
+           03  FILLER                  PIC X(09) VALUE "114019610".
+           03  FILLER                  PIC X(09) VALUE "114019710".
+           03  FILLER                  PIC X(09) VALUE "114019810".
+      *
+       01  TBL-ZAISOSIN-R  REDEFINES   TBL-ZAISOSIN-AREA.
+           03  TBL-ZAISOSIN            PIC X(09) OCCURS  6.
+      *
+       01  TBL-ZAISOSIN-MAX            PIC 9(02) VALUE   6.
+      *
+      *在医総テーブル（２０１４年４月診療分〜）
+       01  TBL-ZAIISO-AREA.
+      *    在医総管（機能強化在支診等）
+           03  FILLER                  PIC X(09) VALUE "114023110".
+           03  FILLER                  PIC X(09) VALUE "114023210".
+           03  FILLER                  PIC X(09) VALUE "114023310".
+           03  FILLER                  PIC X(09) VALUE "114023410".
+           03  FILLER                  PIC X(09) VALUE "114023510".
+           03  FILLER                  PIC X(09) VALUE "114023610".
+           03  FILLER                  PIC X(09) VALUE "114023710".
+           03  FILLER                  PIC X(09) VALUE "114023810".
+      *    在医総管（在支診等）
+           03  FILLER                  PIC X(09) VALUE "114023910".
+           03  FILLER                  PIC X(09) VALUE "114024010".
+           03  FILLER                  PIC X(09) VALUE "114024110".
+           03  FILLER                  PIC X(09) VALUE "114024210".
+      *    在医総管（在支診等以外）
+           03  FILLER                  PIC X(09) VALUE "114024310".
+           03  FILLER                  PIC X(09) VALUE "114024410".
+           03  FILLER                  PIC X(09) VALUE "114024510".
+           03  FILLER                  PIC X(09) VALUE "114024610".
+      *
+       01  TBL-ZAIISO-R  REDEFINES   TBL-ZAIISO-AREA.
+           03  TBL-ZAIISO              PIC X(09) OCCURS  16.
+      *
+       01  TBL-ZAIISO-MAX              PIC 9(02) VALUE   16.
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".
@@ -310,6 +368,9 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+           03  WRK-CONS-SRYYM-201404   PIC X(06)   VALUE   "201404".
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -968,11 +1029,25 @@
       *            END-IF
       *    組合でも前期高齢者は７０歳以上に集計
                  IF  RECE10-AGE  >= 70
-                   IF  RECE10-KYURATE = 9
-                     MOVE    1    TO    IDX1
-                   ELSE
-                     MOVE    2    TO    IDX1
-                   END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/20) start
+      *             IF  RECE10-KYURATE = 9
+      *               MOVE    1    TO    IDX1
+      *             ELSE
+      *               MOVE    2    TO    IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    1     TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    2     TO    IDX1
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/20) end
                  ELSE
       *---(01.00.06) LINE ADD START ------------------------------------
                   IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
@@ -1025,6 +1100,14 @@
       *               WHEN  8       MOVE  2  TO  IDX1
       *               WHEN  OTHER   MOVE  1  TO  IDX1
                      WHEN  9       MOVE  1  TO  IDX1
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/20) start
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1    TO    IDX1
+                       ELSE
+                           MOVE    2    TO    IDX1
+                       END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/20) end
                      WHEN  OTHER   MOVE  2  TO  IDX1
       *---(01.00.02) LINE ADD END   ------------------------------------
                    END-EVALUATE
@@ -1103,7 +1186,10 @@
            IF  RECE10-ZAITAKU  NOT = SPACE
              PERFORM  960-SRYACT-SET-SEC
       *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) start
-             IF  FLG-ZAIISO2 NOT = ZERO
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+      *       IF  FLG-ZAIISO2 NOT = ZERO
+             IF  FLG-ZAIISO NOT = ZERO
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
       *在医総 １、一般在宅 ３、退職在宅
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
       *         EVALUATE  TRUE
@@ -1119,7 +1205,10 @@
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
              END-IF
       *=== 在総診と在医総がある場合は在総診 by Yoshikawa(2009/07/03) end
-             IF  FLG-ZAIISO  NOT = ZERO
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+      *       IF  FLG-ZAIISO  NOT = ZERO
+             IF  FLG-ZAISOSIN  NOT = ZERO
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
       *在総診 ２、一般在宅 ４、退職在宅
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
       *         EVALUATE  TRUE
@@ -2238,7 +2327,10 @@
       *
              INITIALIZE  SRYACT-REC
              INITIALIZE  FLG-ZAIISO
-             INITIALIZE  FLG-ZAIISO2
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+      *       INITIALIZE  FLG-ZAIISO2
+             INITIALIZE  FLG-ZAISOSIN
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
       *---(01.00.05) LINE ADD START ------------------------------------
       *       MOVE  RECE10-HOSPID         TO  SRY-HOSPID
              MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
@@ -2337,19 +2429,53 @@
                     UNTIL   (IDX4  >     5) OR
                             (SRY-SRYCD(IDX4)  =  SPACE)
              IF  SRY-SRYKBN  =  "14"
-               IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
-                                       CONS-ZAITAKU2
-                 MOVE  1  TO  FLG-ZAIISO
-      *=== 在総診以外は在医総 by Yoshikawa(2008/10/22) start
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
+      *         IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
+      *                                 CONS-ZAITAKU2
+      *           MOVE  1  TO  FLG-ZAIISO
+      **=== 在総診以外は在医総 by Yoshikawa(2008/10/22) start
+      **         END-IF
+      **         IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
+      **                                 CONS-ZAITAKU4  OR
+      **                                 CONS-ZAITAKU5  OR
+      **                                 CONS-ZAITAKU6
+      *         ELSE
+      **=== 在総診以外は在医総 by Yoshikawa(2008/10/22) end
+      *           MOVE  1  TO  FLG-ZAIISO2
       *         END-IF
-      *         IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU3  OR
-      *                                 CONS-ZAITAKU4  OR
-      *                                 CONS-ZAITAKU5  OR
-      *                                 CONS-ZAITAKU6
+               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201404
+      *          在総診判定
+                 PERFORM  VARYING  IDX5  FROM  1  BY  1
+                          UNTIL   (IDX5  >  TBL-ZAISOSIN-MAX)
+                          OR      (FLG-ZAISOSIN  =  1)
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAISOSIN(IDX5)
+                       MOVE    1            TO  FLG-ZAISOSIN
+                   END-IF
+                 END-PERFORM
+      *          現状、在総診以外（特医総など）は全部在医総とする
+                 IF  FLG-ZAISOSIN  =  ZERO
+                     MOVE    1              TO  FLG-ZAIISO
+                 END-IF
+      *          在医総だけ集計するのであれば上記をコメント化し
+      *          以下のコメントを外して下さい
+      *          在管医総判定
+      *           PERFORM  VARYING  IDX5  FROM  1  BY  1
+      *                    UNTIL   (IDX5  >  TBL-ZAIISO-MAX)
+      *                    OR      (FLG-ZAIISO  =  1)
+      *             IF  SRY-SRYCD(IDX4)  =  TBL-ZAIISO(IDX5)
+      *                 MOVE    1            TO  FLG-ZAIISO
+      *             END-IF
+      *           END-PERFORM
+      *          在管医総判定
                ELSE
-      *=== 在総診以外は在医総 by Yoshikawa(2008/10/22) end
-                 MOVE  1  TO  FLG-ZAIISO2
+                 IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
+                                         CONS-ZAITAKU2
+                   MOVE    1      TO  FLG-ZAISOSIN
+                 ELSE
+                   MOVE    1      TO  FLG-ZAIISO
+                 END-IF
                END-IF
+      *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
              END-IF
            END-PERFORM
       *
