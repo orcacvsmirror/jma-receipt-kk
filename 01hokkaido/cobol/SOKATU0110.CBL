@@ -62,6 +62,7 @@
       *  01.00.20    吉川   13/03/27    プラグイン対応
       *  01.00.21    吉川   13/06/14    プログラムオプション対応
       *  01.00.22    萩野   13/12/05    在宅はまとめて集計するように修正
+      *  01.00.23    吉川   14/05/20    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1019,16 +1020,35 @@
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *    年齢チェック
                IF  RECE10-AGE  >=  70
-                 IF  RECE10-KYURATE  =  9
-                   IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
-                      MOVE  1099  TO    IDX1
-                      DISPLAY "月遅れ"IDX1
-                   ELSE
-                      MOVE   1    TO    IDX1
-                   END-IF
-                 ELSE
-                    MOVE   2    TO    IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/20) start
+      *           IF  RECE10-KYURATE  =  9
+      *             IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+      *                MOVE  1099  TO    IDX1
+      *                DISPLAY "月遅れ"IDX1
+      *             ELSE
+      *                MOVE   1    TO    IDX1
+      *             END-IF
+      *           ELSE
+      *              MOVE   2    TO    IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     IF  (RECE10-SRYYM  <  WRK-CONS-SRYYM-200804)
+                        MOVE  1099    TO    IDX1
+                        DISPLAY "月遅れ"IDX1
+                     ELSE
+                        MOVE   1      TO    IDX1
+                     END-IF
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    1    TO    IDX1
+                     ELSE
+                         MOVE    2    TO    IDX1
+                     END-IF
+                   WHEN  7
+                     MOVE    2     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/20) end
                ELSE
       *---(01.00.08) LINE ADD START ------------------------------------
                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)

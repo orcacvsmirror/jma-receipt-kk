@@ -67,6 +67,7 @@
       *                                  医療機関情報編集対応
       *  01.00.23    吉川    13/08/06    プログラムオプション対応
       *                                  MCPDATA-RECへの移行漏れ
+      *  01.00.24    吉川    14/05/21    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1161,11 +1162,25 @@
       **---(01.00.05) LINE ADD END   ------------------------------------
       *       END-EVALUATE
              IF  RECE10-AGE  >=  70
-                 IF  RECE10-KYURATE  =  9
-                     MOVE  5  TO  IDX1
-                 ELSE
-                     MOVE  4  TO  IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *           IF  RECE10-KYURATE  =  9
+      *               MOVE  5  TO  IDX1
+      *           ELSE
+      *               MOVE  4  TO  IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                     MOVE    5     TO    IDX1
+                   WHEN  8
+                     IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                         MOVE    5    TO    IDX1
+                     ELSE
+                         MOVE    4    TO    IDX1
+                     END-IF
+                   WHEN  7
+                     MOVE    4     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
              ELSE
                  IF  (RECE10-SRYYM  >=  WRK-CONS-SRYYM-200804)
                  AND  (RECE10-FLG (1)   =  1)
@@ -1221,11 +1236,25 @@
       *             ELSE
       *               MOVE  14  TO  IDX1
       *             END-IF
-                   IF  RECE10-KYURATE  =  9
-                     MOVE  10  TO  IDX1
-                   ELSE
-                     MOVE  9   TO  IDX1
-                   END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *             IF  RECE10-KYURATE  =  9
+      *               MOVE  10  TO  IDX1
+      *             ELSE
+      *               MOVE  9   TO  IDX1
+      *             END-IF
+                   EVALUATE  RECE10-KYURATE
+                     WHEN  9
+                       MOVE    10    TO    IDX1
+                     WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    10   TO    IDX1
+                       ELSE
+                           MOVE    9    TO    IDX1
+                       END-IF
+                     WHEN  7
+                       MOVE    9     TO    IDX1
+                   END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
       *---(01.00.04) LINE ADD END   ------------------------------------
                  WHEN  OTHER
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -1283,11 +1312,25 @@
       *             ELSE
       *               MOVE  14  TO  IDX1
       *             END-IF
-                     IF  RECE10-KYURATE  =  9
-                       MOVE  10  TO  IDX1
-                     ELSE
-                       MOVE  9   TO  IDX1
-                     END-IF
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) start
+      *               IF  RECE10-KYURATE  =  9
+      *                 MOVE  10  TO  IDX1
+      *               ELSE
+      *                 MOVE  9   TO  IDX1
+      *               END-IF
+                     EVALUATE  RECE10-KYURATE
+                       WHEN  9
+                         MOVE    10    TO    IDX1
+                       WHEN  8
+                         IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                             MOVE    10   TO    IDX1
+                         ELSE
+                             MOVE    9    TO    IDX1
+                         END-IF
+                       WHEN  7
+                         MOVE    9     TO    IDX1
+                     END-EVALUATE
+      *=== 前期高齢者２割対応 by Yoshikawa(2014/05/21) end
       *---(01.00.04) LINE ADD END   ------------------------------------
                    ELSE
       *---(01.00.05) LINE ADD START ------------------------------------
