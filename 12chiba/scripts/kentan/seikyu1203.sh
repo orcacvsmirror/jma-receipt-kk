@@ -23,9 +23,6 @@ RENNUM=0
             rm  ${15}
         fi
 
-##      INIファイル 作成
-        echo "${PRGOPT}" | psql -At ${DBNAME} > ${INIFILE}
-
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
