@@ -5,8 +5,6 @@ PREFNAME=chiba
 PROGRAMID=SEIKYU1203
 LOG_FILE="/var/log/jma-receipt/${14}seikyu1203"
 RENNUM=0
-PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='KOUZA';"
-INIFILE="/tmp/${14}${PROGRAMID}KOUZA.INI"
 #-------------------------------------------#
 #    地方公費作成（千葉・母子家庭）
 #        $1-${11}
@@ -35,9 +33,6 @@ INIFILE="/tmp/${14}${PROGRAMID}KOUZA.INI"
             if  [ -e ${15} ]; then
                 exit
             fi
-
-##      INIファイル 削除
-        rm -f ${INIFILE}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 
