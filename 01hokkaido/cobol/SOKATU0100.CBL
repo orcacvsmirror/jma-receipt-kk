@@ -100,6 +100,7 @@
       *  01.00.39    µÈÀî   13/07/26    ¾ã³²¼Ô¤Î¸ÂÅÙ³ÛÍó¤Ë¤ª¤¤¤Æ
       *                                 ºßÂð¤Ï70ºÐÌ¤Ëþ¤Î¾ì¹ç¤Ç¤â°õ»ú¤¹¤ë
       *  01.00.40    ÇëÌî   13/12/05    ºßÂð¤Ï¤Þ¤È¤á¤Æ½¸·×¤¹¤ë¤è¤¦¤Ë½¤Àµ
+      *  01.00.41    µÈÀî   14/05/20    ºßÂð¤ÎÂÐ¾Ý¤È¤¹¤ë¿ÇÎÅ¥³¡¼¥ÉÊÑ¹¹
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -370,32 +371,114 @@
       *    ¸ÇÄê¹àÌÜ
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *=== ºßÂð¥³¡¼¥ÉÊÑ¹¹ by Yoshikawa(2014/05/20) start
+           03  WRK-CONS-SRYYM-201404   PIC X(06)   VALUE   "201404".
+      *=== ºßÂð¥³¡¼¥ÉÊÑ¹¹ by Yoshikawa(2014/05/20) end
+      *
       *---(01.00.14) LINE ADD END   ------------------------------------
+      *=== ºßÂð¥³¡¼¥ÉÊÑ¹¹ by Yoshikawa(2014/05/20) start
       *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) start
-      *    ºßÂðÁí¹ç¡¦ºßÂðËö´ü¡Êºß°åÁí¡Ë
-           03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
-           03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
-           03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
-           03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
-           03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
-           03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
-      *    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù¡Ë
-           03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114013010".
-           03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114013110".
-      *    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù°Ê³°¡Ë
-           03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114013210".
-           03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114013310".
-      *    ºß°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
-           03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114018710".
-           03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114018810".
-           03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114018910".
-           03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019010".
-      *    ÆÃ°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
-           03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114019110".
-           03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114019210".
-           03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114019310".
-           03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114019410".
-      *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
+      **    ºßÂðÁí¹ç¡¦ºßÂðËö´ü¡Êºß°åÁí¡Ë
+      *     03  WRK-CONS-ZAITAKU1       PIC X(09) VALUE "114007610".
+      *     03  WRK-CONS-ZAITAKU2       PIC X(09) VALUE "114007710".
+      *     03  WRK-CONS-ZAITAKU3       PIC X(09) VALUE "114007510".
+      *     03  WRK-CONS-ZAITAKU4       PIC X(09) VALUE "114012210".
+      *     03  WRK-CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
+      *     03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
+      **    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù¡Ë
+      *     03  WRK-CONS-ZAITAKU7       PIC X(09) VALUE "114013010".
+      *     03  WRK-CONS-ZAITAKU8       PIC X(09) VALUE "114013110".
+      **    ÆÃ°åÁí´É¡Êºß»Ù¿ÇÅù°Ê³°¡Ë
+      *     03  WRK-CONS-ZAITAKU9       PIC X(09) VALUE "114013210".
+      *     03  WRK-CONS-ZAITAKU10      PIC X(09) VALUE "114013310".
+      **    ºß°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
+      *     03  WRK-CONS-ZAITAKU11      PIC X(09) VALUE "114018710".
+      *     03  WRK-CONS-ZAITAKU12      PIC X(09) VALUE "114018810".
+      *     03  WRK-CONS-ZAITAKU13      PIC X(09) VALUE "114018910".
+      *     03  WRK-CONS-ZAITAKU14      PIC X(09) VALUE "114019010".
+      **    ÆÃ°åÁí´É¡Êµ¡Ç½¶¯²½¤·¤¿ºß»Ù¿ÇÅù¡Ë
+      *     03  WRK-CONS-ZAITAKU15      PIC X(09) VALUE "114019110".
+      *     03  WRK-CONS-ZAITAKU16      PIC X(09) VALUE "114019210".
+      *     03  WRK-CONS-ZAITAKU17      PIC X(09) VALUE "114019310".
+      *     03  WRK-CONS-ZAITAKU18      PIC X(09) VALUE "114019410".
+      **=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2013/07/26) end
+      *ºßÁí¿Ç¥Æ¡¼¥Ö¥ë
+       01  TBL-ZAITAKU-AREA.
+           03  FILLER                  PIC X(09) VALUE "114007610".
+           03  FILLER                  PIC X(09) VALUE "114007710".
+           03  FILLER                  PIC X(09) VALUE "114007510".
+           03  FILLER                  PIC X(09) VALUE "114012210".
+           03  FILLER                  PIC X(09) VALUE "114012310".
+           03  FILLER                  PIC X(09) VALUE "114012410".
+           03  FILLER                  PIC X(09) VALUE "114018710".
+           03  FILLER                  PIC X(09) VALUE "114018810".
+           03  FILLER                  PIC X(09) VALUE "114018910".
+           03  FILLER                  PIC X(09) VALUE "114019010".
+           03  FILLER                  PIC X(09) VALUE "114019510".
+           03  FILLER                  PIC X(09) VALUE "114019610".
+           03  FILLER                  PIC X(09) VALUE "114019710".
+           03  FILLER                  PIC X(09) VALUE "114019810".
+           03  FILLER                  PIC X(09) VALUE "114013010".
+           03  FILLER                  PIC X(09) VALUE "114013110".
+           03  FILLER                  PIC X(09) VALUE "114013210".
+           03  FILLER                  PIC X(09) VALUE "114013310".
+           03  FILLER                  PIC X(09) VALUE "114019110".
+           03  FILLER                  PIC X(09) VALUE "114019210".
+           03  FILLER                  PIC X(09) VALUE "114019310".
+           03  FILLER                  PIC X(09) VALUE "114019410".
+      *
+       01  TBL-ZAITAKU-R  REDEFINES   TBL-ZAITAKU-AREA.
+           03  TBL-ZAITAKU             PIC X(09) OCCURS  22.
+      *
+       01  TBL-ZAITAKU-MAX             PIC 9(02) VALUE   22.
+      *
+      *ºßÁí¿Ç¥Æ¡¼¥Ö¥ë¡Ê£²£°£±£´Ç¯£´·î¿ÇÎÅÊ¬¡Á¡Ë
+       01  TBL-ZAITAKU2-AREA.
+           03  FILLER                  PIC X(09) VALUE "114007610".
+           03  FILLER                  PIC X(09) VALUE "114007710".
+           03  FILLER                  PIC X(09) VALUE "114019510".
+           03  FILLER                  PIC X(09) VALUE "114019610".
+           03  FILLER                  PIC X(09) VALUE "114019710".
+           03  FILLER                  PIC X(09) VALUE "114019810".
+           03  FILLER                  PIC X(09) VALUE "114023110".
+           03  FILLER                  PIC X(09) VALUE "114023210".
+           03  FILLER                  PIC X(09) VALUE "114023310".
+           03  FILLER                  PIC X(09) VALUE "114023410".
+           03  FILLER                  PIC X(09) VALUE "114023510".
+           03  FILLER                  PIC X(09) VALUE "114023610".
+           03  FILLER                  PIC X(09) VALUE "114023710".
+           03  FILLER                  PIC X(09) VALUE "114023810".
+           03  FILLER                  PIC X(09) VALUE "114023910".
+           03  FILLER                  PIC X(09) VALUE "114024010".
+           03  FILLER                  PIC X(09) VALUE "114024110".
+           03  FILLER                  PIC X(09) VALUE "114024210".
+           03  FILLER                  PIC X(09) VALUE "114024310".
+           03  FILLER                  PIC X(09) VALUE "114024410".
+           03  FILLER                  PIC X(09) VALUE "114024510".
+           03  FILLER                  PIC X(09) VALUE "114024610".
+           03  FILLER                  PIC X(09) VALUE "114024910".
+           03  FILLER                  PIC X(09) VALUE "114025010".
+           03  FILLER                  PIC X(09) VALUE "114025110".
+           03  FILLER                  PIC X(09) VALUE "114025210".
+           03  FILLER                  PIC X(09) VALUE "114025310".
+           03  FILLER                  PIC X(09) VALUE "114025410".
+           03  FILLER                  PIC X(09) VALUE "114025510".
+           03  FILLER                  PIC X(09) VALUE "114025610".
+           03  FILLER                  PIC X(09) VALUE "114025710".
+           03  FILLER                  PIC X(09) VALUE "114025810".
+           03  FILLER                  PIC X(09) VALUE "114025910".
+           03  FILLER                  PIC X(09) VALUE "114026010".
+           03  FILLER                  PIC X(09) VALUE "114026110".
+           03  FILLER                  PIC X(09) VALUE "114026210".
+           03  FILLER                  PIC X(09) VALUE "114026310".
+           03  FILLER                  PIC X(09) VALUE "114026410".
+      *
+       01  TBL-ZAITAKU2-R  REDEFINES   TBL-ZAITAKU2-AREA.
+           03  TBL-ZAITAKU2            PIC X(09) OCCURS  38.
+      *
+       01  TBL-ZAITAKU2-MAX            PIC 9(02) VALUE   38.
+      *=== ºßÂð¥³¡¼¥ÉÊÑ¹¹ by Yoshikawa(2014/05/20) end
+      *
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È
       *****************************************************************
@@ -2880,26 +2963,45 @@
                     UNTIL   (IDX4  >     5) OR
                             (SRY-SRYCD(IDX4)  =  SPACE)
              IF  SRY-SRYKBN  =  "14"
-               IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
-                                   OR  WRK-CONS-ZAITAKU2
-                                   OR  WRK-CONS-ZAITAKU3
-                                   OR  WRK-CONS-ZAITAKU4
-                                   OR  WRK-CONS-ZAITAKU5
-                                   OR  WRK-CONS-ZAITAKU6
-                                   OR  WRK-CONS-ZAITAKU7
-                                   OR  WRK-CONS-ZAITAKU8
-                                   OR  WRK-CONS-ZAITAKU9
-                                   OR  WRK-CONS-ZAITAKU10
-                                   OR  WRK-CONS-ZAITAKU11
-                                   OR  WRK-CONS-ZAITAKU12
-                                   OR  WRK-CONS-ZAITAKU13
-                                   OR  WRK-CONS-ZAITAKU14
-                                   OR  WRK-CONS-ZAITAKU15
-                                   OR  WRK-CONS-ZAITAKU16
-                                   OR  WRK-CONS-ZAITAKU17
-                                   OR  WRK-CONS-ZAITAKU18
-                 MOVE    1             TO  FLG-ZAITAKU
+      *=== ºßÂð¥³¡¼¥ÉÊÑ¹¹ by Yoshikawa(2014/05/20) start
+      *         IF  SRY-SRYCD(IDX4)  =  WRK-CONS-ZAITAKU1
+      *                             OR  WRK-CONS-ZAITAKU2
+      *                             OR  WRK-CONS-ZAITAKU3
+      *                             OR  WRK-CONS-ZAITAKU4
+      *                             OR  WRK-CONS-ZAITAKU5
+      *                             OR  WRK-CONS-ZAITAKU6
+      *                             OR  WRK-CONS-ZAITAKU7
+      *                             OR  WRK-CONS-ZAITAKU8
+      *                             OR  WRK-CONS-ZAITAKU9
+      *                             OR  WRK-CONS-ZAITAKU10
+      *                             OR  WRK-CONS-ZAITAKU11
+      *                             OR  WRK-CONS-ZAITAKU12
+      *                             OR  WRK-CONS-ZAITAKU13
+      *                             OR  WRK-CONS-ZAITAKU14
+      *                             OR  WRK-CONS-ZAITAKU15
+      *                             OR  WRK-CONS-ZAITAKU16
+      *                             OR  WRK-CONS-ZAITAKU17
+      *                             OR  WRK-CONS-ZAITAKU18
+      *           MOVE    1             TO  FLG-ZAITAKU
+      *         END-IF
+               IF  RECE02-SRYYM  >=  WRK-CONS-SRYYM-201404
+                 PERFORM  VARYING  IDX5  FROM  1  BY  1
+                          UNTIL   (IDX5  >  TBL-ZAITAKU2-MAX)
+                          OR      (FLG-ZAITAKU  =  1)
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU2(IDX5)
+                       MOVE    1       TO  FLG-ZAITAKU
+                   END-IF
+                 END-PERFORM
+               ELSE
+                 PERFORM  VARYING  IDX5  FROM  1  BY  1
+                          UNTIL   (IDX5  >  TBL-ZAITAKU-MAX)
+                          OR      (FLG-ZAITAKU  =  1)
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU(IDX5)
+                       MOVE    1       TO  FLG-ZAITAKU
+                   END-IF
+                 END-PERFORM
                END-IF
+      *=== ºßÂð¥³¡¼¥ÉÊÑ¹¹ by Yoshikawa(2014/05/20) end
              END-IF
            END-PERFORM
       *
