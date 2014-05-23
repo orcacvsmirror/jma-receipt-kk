@@ -46,6 +46,8 @@
       *  01.00.11    吉川     12/02/16    主病名が一つのみの場合
       *                                   区切り線の次の番号を正しくする
       *  01.00.12    吉川     12/12/25    医療機関情報編集対応
+      *  01.00.13    吉川     14/05/21    保険＋全国公費と保険＋福祉を
+      *                                   使用した場合の一部負担金欄の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -889,6 +891,17 @@
            IF    WRK-FTNMONEY          >    RECE02-FTNMONEY(1)
                MOVE    RECE02-FTNMONEY(1)   TO  WRK-FTNMONEY
            END-IF
+      *
+      *=== 一部負担金欄の修正 by Yoshikawa(2014/05/21) start
+      *    高額療養費がある場合、高額給付分を負担金に設定する
+           IF  (RECE02-ZAITAKU  NOT =  SPACE)
+           AND (RECE02-ZAITAKU  NOT =  "1")
+               IF  RECE02-FTNMONEY(1)  NOT  =  ZERO
+                   MOVE    RECE02-FTNMONEY(1)   TO  WRK-FTNMONEY
+               END-IF
+           END-IF
+      *=== 一部負担金欄の修正 by Yoshikawa(2014/05/21) end
+      *
            MOVE    WRK-FTNMONEY      TO  MF101-FTNMONEY
       *
            IF      WRK-ETC-KOHNUM  NOT =   SPACE
