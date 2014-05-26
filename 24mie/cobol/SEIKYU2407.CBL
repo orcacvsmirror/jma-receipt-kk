@@ -45,6 +45,7 @@
       *                                  反映されないのを修正
       *  01.00.09    吉川    14/03/05    帳票様式の変更に伴う修正
       *  01.00.10    吉川    14/04/11    診療年月に年号を追加
+      *  01.00.11    萩野    14/05/15    処方せん発行区分対応（診療行為コード追加）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -314,6 +315,26 @@
            03  CONS-SYOHOKOFU10      PIC X(09) VALUE "114013210".
            03  CONS-SYOHOKOFU11      PIC X(09) VALUE "160082810".
       *=== 処方せん発行区分の判定方法変更 by Yoshikawa(2010/08/05) end
+      *=== 処方せん発行区分対応 by hagino(2014/05/15) start
+           03  CONS-SYOHOKOFU12      PIC X(09) VALUE "114019510".
+           03  CONS-SYOHOKOFU13      PIC X(09) VALUE "114019710".
+           03  CONS-SYOHOKOFU14      PIC X(09) VALUE "114023110".
+           03  CONS-SYOHOKOFU15      PIC X(09) VALUE "114023210".
+           03  CONS-SYOHOKOFU16      PIC X(09) VALUE "114023510".
+           03  CONS-SYOHOKOFU17      PIC X(09) VALUE "114023610".
+           03  CONS-SYOHOKOFU18      PIC X(09) VALUE "114023910".
+           03  CONS-SYOHOKOFU19      PIC X(09) VALUE "114024010".
+           03  CONS-SYOHOKOFU20      PIC X(09) VALUE "114024310".
+           03  CONS-SYOHOKOFU21      PIC X(09) VALUE "114024410".
+           03  CONS-SYOHOKOFU22      PIC X(09) VALUE "114024910".
+           03  CONS-SYOHOKOFU23      PIC X(09) VALUE "114025010".
+           03  CONS-SYOHOKOFU24      PIC X(09) VALUE "114025310".
+           03  CONS-SYOHOKOFU25      PIC X(09) VALUE "114025410".
+           03  CONS-SYOHOKOFU26      PIC X(09) VALUE "114025710".
+           03  CONS-SYOHOKOFU27      PIC X(09) VALUE "114025810".
+           03  CONS-SYOHOKOFU28      PIC X(09) VALUE "114026110".
+           03  CONS-SYOHOKOFU29      PIC X(09) VALUE "114026210".
+      *=== 処方せん発行区分対応 by hagino(2014/05/15) end
       *
            COPY  "CPSHELLTBL.INC".
       *
@@ -1888,6 +1909,17 @@
                                  OR  CONS-SYOHOKOFU7 OR CONS-SYOHOKOFU8
                                  OR  CONS-SYOHOKOFU9 OR CONS-SYOHOKOFU10
                                  OR  CONS-SYOHOKOFU11
+      *=== 処方せん発行区分対応 by hagino(2014/05/15) start
+                                OR  CONS-SYOHOKOFU12 OR CONS-SYOHOKOFU13
+                                OR  CONS-SYOHOKOFU14 OR CONS-SYOHOKOFU15
+                                OR  CONS-SYOHOKOFU16 OR CONS-SYOHOKOFU17
+                                OR  CONS-SYOHOKOFU18 OR CONS-SYOHOKOFU19
+                                OR  CONS-SYOHOKOFU20 OR CONS-SYOHOKOFU21
+                                OR  CONS-SYOHOKOFU22 OR CONS-SYOHOKOFU23
+                                OR  CONS-SYOHOKOFU24 OR CONS-SYOHOKOFU25
+                                OR  CONS-SYOHOKOFU26 OR CONS-SYOHOKOFU27
+                                OR  CONS-SYOHOKOFU28 OR CONS-SYOHOKOFU29
+      *=== 処方せん発行区分対応 by hagino(2014/05/15) end
                  MOVE  1  TO  FLG-SYOHOKOFU
              END-IF
            END-PERFORM
