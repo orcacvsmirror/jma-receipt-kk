@@ -40,6 +40,7 @@
       *  01.00.08    吉川    13/11/07    プログラムオプション対応
       *  01.00.09    吉川    13/12/05    優先保険者番号で設定された
       *                                  保険者番号は最初に印字する
+      *  01.00.10    萩野    14/05/15    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -835,11 +836,25 @@
       *           ELSE
       *             MOVE    2     TO    IDX1
       *           END-IF
-                 IF  RECE10-KYURATE  =  7
-                   MOVE    2     TO    IDX1
-                 ELSE
-                   MOVE    1     TO    IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by hagino(2014/05/15) start
+      *           IF  RECE10-KYURATE  =  7
+      *             MOVE    2     TO    IDX1
+      *           ELSE
+      *             MOVE    1     TO    IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                       MOVE    1     TO    IDX1
+                   WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1     TO    IDX1
+                       ELSE
+                           MOVE    2     TO    IDX1
+                       END-IF
+                   WHEN  7
+                       MOVE    2     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by hagino(2014/05/15) end
       *---(01.00.02) LINE ADD END   ------------------------------------
                ELSE
       *---(01.00.02) LINE ADD START ------------------------------------

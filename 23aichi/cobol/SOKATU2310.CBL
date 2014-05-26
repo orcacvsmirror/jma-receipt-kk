@@ -55,6 +55,7 @@
       *  01.00.15    吉川     13/07/08    プログラムオプション対応
       *  01.00.16    吉川     13/11/05    月遅れ件数、長期件数追加
       *  01.00.17    萩野     14/04/03    一部負担金欄は保険分のみの金額を集計する
+      *  01.00.18    萩野     14/05/15    前期高齢者２割対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -885,11 +886,26 @@
       *             WHEN  9       MOVE  1  TO  IDX1
       *             WHEN  OTHER   MOVE  2  TO  IDX1
       *           END-EVALUATE
-                 IF  RECE10-KYURATE  =  7
-                   MOVE    2     TO    IDX1
-                 ELSE
-                   MOVE    1     TO    IDX1
-                 END-IF
+      *=== 前期高齢者２割対応 by hagino(2014/05/15) start
+      *           IF  RECE10-KYURATE  =  7
+      *             MOVE    2     TO    IDX1
+      *           ELSE
+      *             MOVE    1     TO    IDX1
+      *           END-IF
+                 EVALUATE  RECE10-KYURATE
+                   WHEN  9
+                       MOVE    1     TO    IDX1
+                   WHEN  8
+                       IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+                           MOVE    1     TO    IDX1
+                       ELSE
+                           MOVE    2     TO    IDX1
+                       END-IF
+                   WHEN  7
+                       MOVE    2     TO    IDX1
+                 END-EVALUATE
+      *=== 前期高齢者２割対応 by hagino(2014/05/15) end
+      *
       *---(01.00.04) LINE ADD END   ------------------------------------
                ELSE
       *---(01.00.04) LINE ADD START ------------------------------------
