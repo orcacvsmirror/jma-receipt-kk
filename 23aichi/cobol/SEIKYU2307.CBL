@@ -63,6 +63,7 @@
       *  01.00.17    吉川    14/02/06    月途中で市町村が変わった場合
       *                                  備考にそれぞれの市の点数を記載
       *  01.00.18    吉川    14/02/13    長期の判定不具合修正
+      *  01.00.19    萩野    14/05/15    長期の判定不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1058,24 +1059,41 @@
            END-IF  
       *
       *    長期
-           IF    FLG-TYOKI    =    1  AND
-      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) start
-      *           WRK-SEIKYUGK-G2    >  10000
-                 WRK-SEIKYUGK-G2    >=  10000
-      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) end
-               MOVE    10000          TO    WRK-SEIKYUGK-G2
+      *=== 長期の判定不具合修正 by hagino(2014/05/15) start
+      *     IF    FLG-TYOKI    =    1  AND
+      **=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) start
+      **           WRK-SEIKYUGK-G2    >  10000
+      *           WRK-SEIKYUGK-G2    >=  10000
+      **=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) end
+      *         MOVE    10000          TO    WRK-SEIKYUGK-G2
+      *         MOVE    1              TO    MF100-TYOKI
+      *     END-IF
+           IF    FLG-TYOKI    =    1
                MOVE    1              TO    MF100-TYOKI
+               IF    WRK-SEIKYUGK-G2    >=  10000
+                   MOVE    10000          TO    WRK-SEIKYUGK-G2
+               END-IF
            END-IF
+      *=== 長期の判定不具合修正 by hagino(2014/05/15) end
+      *
       *---(01.00.02) LINE ADD START ------------------------------------
       *    長期上位
-           IF    FLG-TYOKI    =    2  AND
-      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) start
-      *           WRK-SEIKYUGK-G2   >  20000
-                 WRK-SEIKYUGK-G2   >=  20000
-      *=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) end
-               MOVE    20000          TO    WRK-SEIKYUGK-G2
+      *=== 長期の判定不具合修正 by hagino(2014/05/15) start
+      *     IF    FLG-TYOKI    =    2  AND
+      **=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) start
+      **           WRK-SEIKYUGK-G2   >  20000
+      *           WRK-SEIKYUGK-G2   >=  20000
+      **=== 長期の判定不具合修正 by Yoshikawa(2014/02/13) end
+      *         MOVE    20000          TO    WRK-SEIKYUGK-G2
+      *         MOVE    1              TO    MF100-TYOKI
+      *     END-IF
+           IF    FLG-TYOKI    =    2
                MOVE    1              TO    MF100-TYOKI
+               IF    WRK-SEIKYUGK-G2   >=  20000
+                   MOVE    20000          TO    WRK-SEIKYUGK-G2
+               END-IF
            END-IF
+      *=== 長期の判定不具合修正 by hagino(2014/05/15) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
       *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) start
