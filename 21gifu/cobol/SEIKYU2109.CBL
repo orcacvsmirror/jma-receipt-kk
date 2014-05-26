@@ -41,6 +41,7 @@
       *                                  …È√¥∂‚≥€§∑§´∞ıª˙§µ§Ï§ §§…‘∂ÒπÁ§ÚΩ§¿µ
       *  01.00.07    µ»¿Ó    14/05/12    ƒ¢…ºÕÕº∞§Œ —ππ§À»º§¶Ω§¿µ
       *                                  (70∫–∞ æÂ§»70∫–Ã§À˛§«ƒ¢…º§Ú ¨§±§Î)
+      *  01.00.08    µ»¿Ó    14/05/26    »˜πÕÕÛ§Œ…È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -869,11 +870,20 @@
                IF      MF100-HKNKBN-KEY    =   "4"
                    EVALUATE    MF100-KYURATE
                        WHEN    30
-                           MOVE    "£≥≥‰"  TO  SC09-BIKO(IDX)
+      *=== …È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ by Yoshikawa(2014/05/26) start
+      *                     MOVE    "£≥≥‰"  TO  SC09-BIKO(IDX)
+                           MOVE    "£∑≥‰"  TO  SC09-BIKO(IDX)
+      *=== …È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ by Yoshikawa(2014/05/26) end
                        WHEN    20
-                           MOVE    "£≤≥‰"  TO  SC09-BIKO(IDX)
+      *=== …È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ by Yoshikawa(2014/05/26) start
+      *                     MOVE    "£≤≥‰"  TO  SC09-BIKO(IDX)
+                           MOVE    "£∏≥‰"  TO  SC09-BIKO(IDX)
+      *=== …È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ by Yoshikawa(2014/05/26) end
                        WHEN    10
-                           MOVE    "£±≥‰"  TO  SC09-BIKO(IDX)
+      *=== …È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ by Yoshikawa(2014/05/26) start
+      *                     MOVE    "£±≥‰"  TO  SC09-BIKO(IDX)
+                           MOVE    "£π≥‰"  TO  SC09-BIKO(IDX)
+      *=== …È√¥≥‰πÁ§Œ…Ωµ≠Ω§¿µ by Yoshikawa(2014/05/26) end
                        WHEN    OTHER
                            MOVE    "≥‰"    TO  SC09-BIKO(IDX)
                    END-EVALUATE
