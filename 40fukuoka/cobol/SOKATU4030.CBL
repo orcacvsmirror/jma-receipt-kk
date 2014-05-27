@@ -32,6 +32,8 @@
       *  01.00.03    吉川     13/02/07    プラグイン対応
       *  01.00.04    吉川     13/09/04    プログラムオプション対応
       *  01.00.05    吉川     14/05/15    前期高齢者２割対応
+      *  01.00.06    吉川     14/05/27    特別療養費の前期２割は
+      *                                   70歳一般・低所得に集計
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -765,11 +767,14 @@
                  WHEN  9
                    MOVE    1     TO    IDX1
                  WHEN  8
-                   IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
-                       MOVE    1    TO    IDX1
-                   ELSE
-                       MOVE    2    TO    IDX1
-                   END-IF
+      *=== 特療費の前期2割はは70歳一般へ by Yoshikawa(2014/05/27) start
+      *             IF  RECE10-RECESYUBETU(4:1)  =  "7" OR "8"
+      *                 MOVE    1    TO    IDX1
+      *             ELSE
+      *                 MOVE    2    TO    IDX1
+      *             END-IF
+      *=== 特療費の前期2割はは70歳一般へ by Yoshikawa(2014/05/27) end
+                   MOVE    1     TO    IDX1
                  WHEN  7
                    MOVE    2     TO    IDX1
                END-EVALUATE
