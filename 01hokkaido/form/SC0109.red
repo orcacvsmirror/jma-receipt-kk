@@ -1,103 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
   <dia:dictionarydata>
-    <dia:element name="HOSPCD" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="7"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="ADRS" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="100"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="HOSPNAME" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="100"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="KAISETU" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="40"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="TEL" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="15"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="SRYYM" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="16"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="SEIYMD" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="22"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="SRYKANAME" occurs="1">
-      <dia:appinfo>
-        <dia:embed object="string" length="20"/>
-      </dia:appinfo>
-    </dia:element>
-    <dia:element name="SEIKYU-TBL" occurs="6">
-      <dia:element name="KENSU" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="5"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="TENSU" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="9"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="JIKOFTN" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="9"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="KAISU" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="5"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="ITBFTN" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="9"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="SEIKYUGK" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="9"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="TESURYO" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="7"/>
-        </dia:appinfo>
-      </dia:element>
-      <dia:element name="GOKEI" occurs="1">
-        <dia:appinfo>
-          <dia:embed object="string" length="9"/>
-        </dia:appinfo>
-      </dia:element>
-    </dia:element>
+    <element name="HOSPCD" occurs="1">
+      <appinfo>
+        <embed object="text" length="7"/>
+      </appinfo>
+    </element>
+    <element name="ADRS" occurs="1">
+      <appinfo>
+        <embed object="text" length="100"/>
+      </appinfo>
+    </element>
+    <element name="HOSPNAME" occurs="1">
+      <appinfo>
+        <embed object="text" length="100"/>
+      </appinfo>
+    </element>
+    <element name="KAISETU" occurs="1">
+      <appinfo>
+        <embed object="text" length="40"/>
+      </appinfo>
+    </element>
+    <element name="TEL" occurs="1">
+      <appinfo>
+        <embed object="text" length="15"/>
+      </appinfo>
+    </element>
+    <element name="SRYYM" occurs="1">
+      <appinfo>
+        <embed object="text" length="16"/>
+      </appinfo>
+    </element>
+    <element name="SEIYMD" occurs="1">
+      <appinfo>
+        <embed object="text" length="22"/>
+      </appinfo>
+    </element>
+    <element name="SRYKANAME" occurs="1">
+      <appinfo>
+        <embed object="text" length="20"/>
+      </appinfo>
+    </element>
+    <element name="SEIKYU-TBL" occurs="6">
+      <element name="KENSU" occurs="1">
+        <appinfo>
+          <embed object="text" length="5"/>
+        </appinfo>
+      </element>
+      <element name="TENSU" occurs="1">
+        <appinfo>
+          <embed object="text" length="9"/>
+        </appinfo>
+      </element>
+      <element name="JIKOFTN" occurs="1">
+        <appinfo>
+          <embed object="text" length="9"/>
+        </appinfo>
+      </element>
+      <element name="KAISU" occurs="1">
+        <appinfo>
+          <embed object="text" length="5"/>
+        </appinfo>
+      </element>
+      <element name="ITBFTN" occurs="1">
+        <appinfo>
+          <embed object="text" length="9"/>
+        </appinfo>
+      </element>
+      <element name="SEIKYUGK" occurs="1">
+        <appinfo>
+          <embed object="text" length="9"/>
+        </appinfo>
+      </element>
+      <element name="TESURYO" occurs="1">
+        <appinfo>
+          <embed object="text" length="7"/>
+        </appinfo>
+      </element>
+      <element name="GOKEI" occurs="1">
+        <appinfo>
+          <embed object="text" length="9"/>
+        </appinfo>
+      </element>
+    </element>
   </dia:dictionarydata>
   <dia:diagramdata>
     <dia:attribute name="background">
       <dia:color val="#ffffff"/>
     </dia:attribute>
+    <dia:attribute name="pagebreak">
+      <dia:color val="#000099"/>
+    </dia:attribute>
     <dia:attribute name="paper">
       <dia:composite type="paper">
         <dia:attribute name="name">
           <dia:string>#A4#</dia:string>
-        </dia:attribute>
-        <dia:attribute name="pswidth">
-          <dia:real val="21"/>
-        </dia:attribute>
-        <dia:attribute name="psheight">
-          <dia:real val="29.7"/>
         </dia:attribute>
         <dia:attribute name="tmargin">
           <dia:real val="0"/>
@@ -120,6 +117,38 @@
         <dia:attribute name="fitto">
           <dia:boolean val="false"/>
         </dia:attribute>
+        <dia:attribute name="custom_width">
+          <dia:real val="10"/>
+        </dia:attribute>
+        <dia:attribute name="custom_height">
+          <dia:real val="10"/>
+        </dia:attribute>
+      </dia:composite>
+    </dia:attribute>
+    <dia:attribute name="grid">
+      <dia:composite type="grid">
+        <dia:attribute name="width_x">
+          <dia:real val="1"/>
+        </dia:attribute>
+        <dia:attribute name="width_y">
+          <dia:real val="1"/>
+        </dia:attribute>
+        <dia:attribute name="visible_x">
+          <dia:int val="1"/>
+        </dia:attribute>
+        <dia:attribute name="visible_y">
+          <dia:int val="1"/>
+        </dia:attribute>
+        <dia:composite type="color"/>
+      </dia:composite>
+    </dia:attribute>
+    <dia:attribute name="color">
+      <dia:color val="#d8e5e5"/>
+    </dia:attribute>
+    <dia:attribute name="guides">
+      <dia:composite type="guides">
+        <dia:attribute name="hguides"/>
+        <dia:attribute name="vguides"/>
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
@@ -138,10 +167,10 @@
         <dia:real val="27"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="9.51251"/>
+        <dia:real val="9.5125100000000007"/>
       </dia:attribute>
       <dia:attribute name="border_width">
-        <dia:real val="0.04"/>
+        <dia:real val="0.040000000000000001"/>
       </dia:attribute>
       <dia:attribute name="show_background">
         <dia:boolean val="false"/>
@@ -152,7 +181,7 @@
         <dia:point val="5,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.98001,5.89;5.01,15.4225"/>
+        <dia:rectangle val="4.98,5.88999;5.01001,15.4225"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="5,5.9"/>
@@ -182,7 +211,7 @@
         <dia:real val="1.2"/>
       </dia:attribute>
       <dia:attribute name="border_width">
-        <dia:real val="0.04"/>
+        <dia:real val="0.040000000000000001"/>
       </dia:attribute>
       <dia:attribute name="show_background">
         <dia:boolean val="false"/>
@@ -193,7 +222,7 @@
         <dia:point val="6.8,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.78001,5.89;6.81,15.4475"/>
+        <dia:rectangle val="6.78,5.88999;6.81001,15.4475"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="6.8,5.9"/>
@@ -211,7 +240,7 @@
         <dia:point val="9.7,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.68001,5.89;9.71,15.4225"/>
+        <dia:rectangle val="9.68,5.88999;9.71001,15.4225"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="9.7,5.9"/>
@@ -229,7 +258,7 @@
         <dia:point val="12.8,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.78,5.89;12.81,15.4225"/>
+        <dia:rectangle val="12.78,5.88999;12.81,15.4225"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="12.8,5.9"/>
@@ -247,7 +276,7 @@
         <dia:point val="14.4,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.38,5.89;14.41,15.4225"/>
+        <dia:rectangle val="14.38,5.88999;14.41,15.4225"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="14.4,5.9"/>
@@ -277,7 +306,7 @@
         <dia:real val="13.9"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2.2"/>
+        <dia:real val="2.2000000000000002"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -372,7 +401,7 @@
         <dia:real val="27"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="0.1"/>
+        <dia:real val="0.10000000000000001"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -386,7 +415,7 @@
         <dia:point val="2.2,7.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.18001,7.79;2.21,15.4475"/>
+        <dia:rectangle val="2.18,7.78999;2.21001,15.4475"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="2.2,7.8"/>
@@ -482,10 +511,10 @@
         <dia:point val="2.2,13"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="26.1"/>
+        <dia:real val="26.100000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="0.1"/>
+        <dia:real val="0.10000000000000001"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -526,7 +555,7 @@
         <dia:real val="1.3"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="0.4"/>
+        <dia:real val="0.40000000000000002"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -549,7 +578,7 @@
         <dia:real val="1.3"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="0.4"/>
+        <dia:real val="0.40000000000000002"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -572,7 +601,7 @@
         <dia:real val="1.3"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="0.4"/>
+        <dia:real val="0.40000000000000002"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -595,7 +624,7 @@
         <dia:real val="1.3"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="0.4"/>
+        <dia:real val="0.40000000000000002"/>
       </dia:attribute>
       <dia:attribute name="border_width">
         <dia:real val="0.02"/>
@@ -645,18 +674,12 @@
         <dia:real val="0.02"/>
       </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O26">
+    <dia:object type="Embed - Text" version="1" id="O26">
       <dia:attribute name="obj_pos">
         <dia:point val="17.0479,3.561"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.0479,3.16285;22.0979,3.66285"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SRYKANAME#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="17.0479,3.121;22.0479,3.6235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -664,10 +687,10 @@
             <dia:string>#ああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.0479,3.561"/>
@@ -678,22 +701,19 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SRYKANAME#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="20"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O27">
@@ -715,13 +735,13 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true">
-    <dia:object type="Standard - Text" version="0" id="O28">
+  <dia:layer name="文字" visible="true" active="true">
+    <dia:object type="Standard - Text" version="1" id="O28">
       <dia:attribute name="obj_pos">
-        <dia:point val="25.4,2.2"/>
+        <dia:point val="25.425,2.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="23.4729,1.91333;27.3271,2.27333"/>
+        <dia:rectangle val="23.625,1.9325;27.225,2.295"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -729,13 +749,13 @@
             <dia:string>#医 療 機 関 コ ー ド#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="25.4,2.2"/>
+            <dia:point val="25.425,2.25"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -743,21 +763,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O29">
+    <dia:object type="Standard - Text" version="1" id="O29">
       <dia:attribute name="obj_pos">
         <dia:point val="15.9,4.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.8092,3.91333;16.9908,4.27333"/>
+        <dia:rectangle val="14.82,3.8825;16.98,4.245"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -765,10 +782,10 @@
             <dia:string>#医療機関等の#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="15.9,4.2"/>
@@ -779,21 +796,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O30">
+    <dia:object type="Standard - Text" version="1" id="O30">
       <dia:attribute name="obj_pos">
         <dia:point val="15.9,4.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.1364,4.41333;16.6636,4.77333"/>
+        <dia:rectangle val="15.18,4.3825;16.62,4.745"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -801,10 +815,10 @@
             <dia:string>#所 在 地#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="15.9,4.7"/>
@@ -815,21 +829,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O31">
+    <dia:object type="Standard - Text" version="1" id="O31">
       <dia:attribute name="obj_pos">
         <dia:point val="15.9,5.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.1001,4.91333;16.6999,5.27333"/>
+        <dia:rectangle val="15.18,4.8825;16.62,5.245"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -837,10 +848,10 @@
             <dia:string>#名    称#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="15.9,5.2"/>
@@ -851,21 +862,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O32">
+    <dia:object type="Standard - Text" version="1" id="O32">
       <dia:attribute name="obj_pos">
         <dia:point val="15.9,5.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.991,5.41333;16.809,5.77333"/>
+        <dia:rectangle val="15,5.3825;16.8,5.745"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -873,10 +881,10 @@
             <dia:string>#開設者氏名#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="15.9,5.7"/>
@@ -887,21 +895,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O33">
+    <dia:object type="Standard - Text" version="1" id="O33">
       <dia:attribute name="obj_pos">
         <dia:point val="3.2,7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.54754,6.72926;3.85246,7.06926"/>
+        <dia:rectangle val="2.605,6.7;3.795,7.0425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -909,10 +914,10 @@
             <dia:string>#区   分#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3.2,7"/>
@@ -923,21 +928,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O34">
+    <dia:object type="Standard - Text" version="1" id="O34">
       <dia:attribute name="obj_pos">
         <dia:point val="5.9,7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.35056,6.72926;6.44944,7.06926"/>
+        <dia:rectangle val="5.39,6.7;6.41,7.0425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -945,10 +947,10 @@
             <dia:string>#件  数#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="5.9,7"/>
@@ -959,21 +961,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O35">
+    <dia:object type="Standard - Text" version="1" id="O35">
       <dia:attribute name="obj_pos">
         <dia:point val="8.3,6.99435"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.37282,6.72361;9.22718,7.06361"/>
+        <dia:rectangle val="7.45,6.69435;9.15,7.03685"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -981,10 +980,10 @@
             <dia:string>#総  点  数#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="8.3,6.99435"/>
@@ -995,21 +994,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O36">
+    <dia:object type="Standard - Text" version="1" id="O36">
       <dia:attribute name="obj_pos">
         <dia:point val="11.3,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.8758,5.97704;11.7242,6.25704"/>
+        <dia:rectangle val="10.88,5.9525;11.72,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1017,10 +1013,10 @@
             <dia:string>#（Ａ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="11.3,6.2"/>
@@ -1031,21 +1027,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O37">
+    <dia:object type="Standard - Text" version="1" id="O37">
       <dia:attribute name="obj_pos">
         <dia:point val="13.6,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="13.1758,5.97704;14.0242,6.25704"/>
+        <dia:rectangle val="13.18,5.9525;14.02,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1053,10 +1046,10 @@
             <dia:string>#（Ｂ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="13.6,6.2"/>
@@ -1067,21 +1060,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O38">
+    <dia:object type="Standard - Text" version="1" id="O38">
       <dia:attribute name="obj_pos">
         <dia:point val="16,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.5758,5.97704;16.4242,6.25704"/>
+        <dia:rectangle val="15.58,5.9525;16.42,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1089,10 +1079,10 @@
             <dia:string>#（Ｃ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="16,6.2"/>
@@ -1103,21 +1093,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O39">
+    <dia:object type="Standard - Text" version="1" id="O39">
       <dia:attribute name="obj_pos">
         <dia:point val="18.3,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.8758,5.97704;18.7242,6.25704"/>
+        <dia:rectangle val="17.88,5.9525;18.72,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1125,10 +1112,10 @@
             <dia:string>#（Ａ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="18.3,6.2"/>
@@ -1139,21 +1126,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O40">
+    <dia:object type="Standard - Text" version="1" id="O40">
       <dia:attribute name="obj_pos">
         <dia:point val="19.5,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.0758,5.97704;19.9242,6.25704"/>
+        <dia:rectangle val="19.08,5.9525;19.92,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1161,10 +1145,10 @@
             <dia:string>#（Ｃ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="19.5,6.2"/>
@@ -1175,21 +1159,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O41">
+    <dia:object type="Standard - Text" version="1" id="O41">
       <dia:attribute name="obj_pos">
         <dia:point val="20.7,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="20.2758,5.97704;21.1242,6.25704"/>
+        <dia:rectangle val="20.28,5.9525;21.12,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1197,10 +1178,10 @@
             <dia:string>#（Ｄ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.7,6.2"/>
@@ -1211,21 +1192,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O42">
+    <dia:object type="Standard - Text" version="1" id="O42">
       <dia:attribute name="obj_pos">
         <dia:point val="20.1,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.9586,5.97704;20.2414,6.25704"/>
+        <dia:rectangle val="19.96,5.9525;20.24,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1233,10 +1211,10 @@
             <dia:string>#＝#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.1,6.2"/>
@@ -1247,21 +1225,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O43">
+    <dia:object type="Standard - Text" version="1" id="O43">
       <dia:attribute name="obj_pos">
         <dia:point val="18.9,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.7586,5.97704;19.0414,6.25704"/>
+        <dia:rectangle val="18.76,5.9525;19.04,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1269,10 +1244,10 @@
             <dia:string>#－#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="18.9,6.2"/>
@@ -1283,21 +1258,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O44">
+    <dia:object type="Standard - Text" version="1" id="O44">
       <dia:attribute name="obj_pos">
         <dia:point val="22.7,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.2758,5.97704;23.1242,6.25704"/>
+        <dia:rectangle val="22.28,5.9525;23.12,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1305,10 +1277,10 @@
             <dia:string>#（Ｅ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="22.7,6.2"/>
@@ -1319,21 +1291,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O45">
+    <dia:object type="Standard - Text" version="1" id="O45">
       <dia:attribute name="obj_pos">
         <dia:point val="26.2,6.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="25.2102,5.97704;27.1898,6.25704"/>
+        <dia:rectangle val="25.22,5.9525;27.18,6.235"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1341,10 +1310,10 @@
             <dia:string>#（Ｄ）＋（Ｅ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="26.2,6.2"/>
@@ -1355,21 +1324,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O46">
+    <dia:object type="Standard - Text" version="1" id="O46">
       <dia:attribute name="obj_pos">
         <dia:point val="11.3,7.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.4415,6.82926;12.1585,7.16926"/>
+        <dia:rectangle val="10.45,6.8;12.15,7.1425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1377,10 +1343,10 @@
             <dia:string>#自己負担額#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="11.3,7.1"/>
@@ -1391,21 +1357,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O47">
+    <dia:object type="Standard - Text" version="1" id="O47">
       <dia:attribute name="obj_pos">
         <dia:point val="13.6,7.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.9132,6.82926;14.2868,7.16926"/>
+        <dia:rectangle val="12.92,6.8;14.28,7.1425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1413,10 +1376,10 @@
             <dia:string>#初診回数#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="13.6,7.1"/>
@@ -1427,21 +1390,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O48">
+    <dia:object type="Standard - Text" version="1" id="O48">
       <dia:attribute name="obj_pos">
         <dia:point val="16,7.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.1415,6.82926;16.8585,7.16926"/>
+        <dia:rectangle val="15.15,6.8;16.85,7.1425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1449,10 +1409,10 @@
             <dia:string>#一部負担金#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="16,7.1"/>
@@ -1463,21 +1423,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O49">
+    <dia:object type="Standard - Text" version="1" id="O49">
       <dia:attribute name="obj_pos">
         <dia:point val="19.5,7.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.7445,6.82926;20.2555,7.16926"/>
+        <dia:rectangle val="18.82,6.8;20.18,7.1425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1485,10 +1442,10 @@
             <dia:string>#金    額#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="19.5,7.1"/>
@@ -1499,21 +1456,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O50">
+    <dia:object type="Standard - Text" version="1" id="O50">
       <dia:attribute name="obj_pos">
         <dia:point val="22.7,6.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.7728,6.62926;23.6272,6.96926"/>
+        <dia:rectangle val="21.85,6.6;23.55,6.9425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1521,10 +1475,10 @@
             <dia:string>#手  数  料#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="22.7,6.9"/>
@@ -1535,35 +1489,32 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O51">
+    <dia:object type="Standard - Text" version="1" id="O51">
       <dia:attribute name="obj_pos">
-        <dia:point val="22.7,7.3"/>
+        <dia:point val="22.7,7.325"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.3365,7.06111;24.0635,7.36111"/>
+        <dia:rectangle val="21.51,7.025;23.89,7.3675"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#（２１０円×件数）#</dia:string>
+            <dia:string>#（単価×件数）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.375000"/>
+            <dia:real val="0.42439165971984238"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="22.7,7.3"/>
+            <dia:point val="22.7,7.325"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -1571,21 +1522,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1515"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O52">
+    <dia:object type="Standard - Text" version="1" id="O52">
       <dia:attribute name="obj_pos">
         <dia:point val="26.2,7.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="25.4445,6.82926;26.9555,7.16926"/>
+        <dia:rectangle val="25.52,6.8;26.88,7.1425"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1593,10 +1541,10 @@
             <dia:string>#合    計#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="26.2,7.1"/>
@@ -1607,21 +1555,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O53">
+    <dia:object type="Standard - Text" version="1" id="O53">
       <dia:attribute name="obj_pos">
         <dia:point val="6.6,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.4586,7.87704;6.7414,8.15704"/>
+        <dia:rectangle val="6.46,7.8525;6.74,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1629,10 +1574,10 @@
             <dia:string>#件#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.6,8.1"/>
@@ -1643,21 +1588,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O54">
+    <dia:object type="Standard - Text" version="1" id="O54">
       <dia:attribute name="obj_pos">
         <dia:point val="9.5,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.3586,7.87704;9.6414,8.15704"/>
+        <dia:rectangle val="9.36,7.8525;9.64,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1665,10 +1607,10 @@
             <dia:string>#点#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.5,8.1"/>
@@ -1679,21 +1621,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O55">
+    <dia:object type="Standard - Text" version="1" id="O55">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.6,7.87704;11.014,8.15704"/>
+        <dia:rectangle val="9.6,7.8525;11,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1701,10 +1640,10 @@
             <dia:string>#（Ｆ）×３#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,8.1"/>
@@ -1715,21 +1654,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O56">
+    <dia:object type="Standard - Text" version="1" id="O56">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,9.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.6,9.17704;11.014,9.45704"/>
+        <dia:rectangle val="9.6,9.1525;11,9.435"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1737,10 +1673,10 @@
             <dia:string>#（Ｇ）×２#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,9.4"/>
@@ -1751,21 +1687,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O57">
+    <dia:object type="Standard - Text" version="1" id="O57">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,10.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.6,10.477;11.014,10.757"/>
+        <dia:rectangle val="9.6,10.4525;11,10.735"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1773,10 +1706,10 @@
             <dia:string>#（Ｈ）×３#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,10.7"/>
@@ -1787,21 +1720,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O58">
+    <dia:object type="Standard - Text" version="1" id="O58">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,12"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.6,11.777;11.014,12.057"/>
+        <dia:rectangle val="9.6,11.7525;11,12.035"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1809,10 +1739,10 @@
             <dia:string>#（Ｉ）×２#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,12"/>
@@ -1823,21 +1753,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O59">
+    <dia:object type="Standard - Text" version="1" id="O59">
       <dia:attribute name="obj_pos">
         <dia:point val="7.1,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.6758,7.87704;7.5242,8.15704"/>
+        <dia:rectangle val="6.68,7.8525;7.52,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1845,10 +1772,10 @@
             <dia:string>#（Ｆ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="7.1,8.1"/>
@@ -1859,21 +1786,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O60">
+    <dia:object type="Standard - Text" version="1" id="O60">
       <dia:attribute name="obj_pos">
         <dia:point val="7.1,9.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.6758,9.17704;7.5242,9.45704"/>
+        <dia:rectangle val="6.68,9.1525;7.52,9.435"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1881,10 +1805,10 @@
             <dia:string>#（Ｇ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="7.1,9.4"/>
@@ -1895,21 +1819,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O61">
+    <dia:object type="Standard - Text" version="1" id="O61">
       <dia:attribute name="obj_pos">
         <dia:point val="7.1,10.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.6758,10.477;7.5242,10.757"/>
+        <dia:rectangle val="6.68,10.4525;7.52,10.735"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1917,10 +1838,10 @@
             <dia:string>#（Ｈ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="7.1,10.7"/>
@@ -1931,21 +1852,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O62">
+    <dia:object type="Standard - Text" version="1" id="O62">
       <dia:attribute name="obj_pos">
         <dia:point val="7.1,12"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.6758,11.777;7.5242,12.057"/>
+        <dia:rectangle val="6.68,11.7525;7.52,12.035"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1953,10 +1871,10 @@
             <dia:string>#（Ｉ）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="7.1,12"/>
@@ -1967,21 +1885,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O63">
+    <dia:object type="Standard - Text" version="1" id="O63">
       <dia:attribute name="obj_pos">
         <dia:point val="12.6,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.4586,7.87704;12.7414,8.15704"/>
+        <dia:rectangle val="12.46,7.8525;12.74,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1989,10 +1904,10 @@
             <dia:string>#円#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.6,8.1"/>
@@ -2003,21 +1918,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O64">
+    <dia:object type="Standard - Text" version="1" id="O64">
       <dia:attribute name="obj_pos">
         <dia:point val="14.2,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.0586,7.87704;14.3414,8.15704"/>
+        <dia:rectangle val="14.06,7.8525;14.34,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2025,10 +1937,10 @@
             <dia:string>#回#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.2,8.1"/>
@@ -2039,21 +1951,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O65">
+    <dia:object type="Standard - Text" version="1" id="O65">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.1586,7.87704;17.4414,8.15704"/>
+        <dia:rectangle val="17.16,7.8525;17.44,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2061,10 +1970,10 @@
             <dia:string>#円#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3,8.1"/>
@@ -2075,21 +1984,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O66">
+    <dia:object type="Standard - Text" version="1" id="O66">
       <dia:attribute name="obj_pos">
         <dia:point val="21,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="20.8586,7.87704;21.1414,8.15704"/>
+        <dia:rectangle val="20.86,7.8525;21.14,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2097,10 +2003,10 @@
             <dia:string>#円#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="21,8.1"/>
@@ -2111,21 +2017,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O67">
+    <dia:object type="Standard - Text" version="1" id="O67">
       <dia:attribute name="obj_pos">
         <dia:point val="24,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="23.8586,7.87704;24.1414,8.15704"/>
+        <dia:rectangle val="23.86,7.8525;24.14,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2133,10 +2036,10 @@
             <dia:string>#円#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="24,8.1"/>
@@ -2147,21 +2050,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O68">
+    <dia:object type="Standard - Text" version="1" id="O68">
       <dia:attribute name="obj_pos">
         <dia:point val="28.1,8.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="27.9586,7.87704;28.2414,8.15704"/>
+        <dia:rectangle val="27.96,7.8525;28.24,8.135"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2169,10 +2069,10 @@
             <dia:string>#円#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.350000"/>
+            <dia:real val="0.34999999999999998"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="28.1,8.1"/>
@@ -2183,21 +2083,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.16968"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1414"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O69">
+    <dia:object type="Standard - Text" version="1" id="O69">
       <dia:attribute name="obj_pos">
         <dia:point val="1.8,9.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.6182,8.91333;1.9818,12.8733"/>
+        <dia:rectangle val="1.62,8.8825;1.98,13.745"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2215,10 +2112,10 @@
 求#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="1.8,9.2"/>
@@ -2229,21 +2126,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O70">
+    <dia:object type="Standard - Text" version="1" id="O70">
       <dia:attribute name="obj_pos">
         <dia:point val="3,9.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.52732,8.91333;3.47268,9.27333"/>
+        <dia:rectangle val="2.55,8.8825;3.45,9.245"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2251,10 +2145,10 @@
             <dia:string>#通 院#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3,9.2"/>
@@ -2265,21 +2159,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O71">
+    <dia:object type="Standard - Text" version="1" id="O71">
       <dia:attribute name="obj_pos">
         <dia:point val="3,11.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.52732,11.5133;3.47268,11.8733"/>
+        <dia:rectangle val="2.55,11.4825;3.45,11.845"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2287,10 +2178,10 @@
             <dia:string>#入 院#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3,11.8"/>
@@ -2301,21 +2192,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O72">
+    <dia:object type="Standard - Text" version="1" id="O72">
       <dia:attribute name="obj_pos">
         <dia:point val="4,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4,8.31333;4.7272,8.67333"/>
+        <dia:rectangle val="4,8.2825;4.72,8.645"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2323,10 +2211,10 @@
             <dia:string>#３割#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="4,8.6"/>
@@ -2337,21 +2225,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O73">
+    <dia:object type="Standard - Text" version="1" id="O73">
       <dia:attribute name="obj_pos">
         <dia:point val="4,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4,9.61333;4.7272,9.97333"/>
+        <dia:rectangle val="4,9.5825;4.72,9.945"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2359,10 +2244,10 @@
             <dia:string>#２割#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="4,9.9"/>
@@ -2373,21 +2258,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O74">
+    <dia:object type="Standard - Text" version="1" id="O74">
       <dia:attribute name="obj_pos">
         <dia:point val="4,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4,10.9133;4.7272,11.2733"/>
+        <dia:rectangle val="4,10.8825;4.72,11.245"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2395,10 +2277,10 @@
             <dia:string>#３割#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="4,11.2"/>
@@ -2409,21 +2291,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O75">
+    <dia:object type="Standard - Text" version="1" id="O75">
       <dia:attribute name="obj_pos">
         <dia:point val="4,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4,12.2133;4.7272,12.5733"/>
+        <dia:rectangle val="4,12.1825;4.72,12.545"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2431,10 +2310,10 @@
             <dia:string>#２割#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="4,12.5"/>
@@ -2445,21 +2324,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O76">
+    <dia:object type="Standard - Text" version="1" id="O76">
       <dia:attribute name="obj_pos">
         <dia:point val="3.6,15.025"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.4182,14.7383;3.7818,15.0983"/>
+        <dia:rectangle val="3.42,14.7075;3.78,15.07"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2467,10 +2343,10 @@
             <dia:string>#計#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3.6,15.025"/>
@@ -2481,21 +2357,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O77">
+    <dia:object type="Standard - Text" version="1" id="O77">
       <dia:attribute name="obj_pos">
         <dia:point val="3.1,17.975"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.9284,17.6565;4.2716,18.0565"/>
+        <dia:rectangle val="2,17.6225;4.2,18.025"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2503,10 +2376,10 @@
             <dia:string>#交 付 決 定#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3.1,17.975"/>
@@ -2517,21 +2390,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O78">
+    <dia:object type="Standard - Text" version="1" id="O78">
       <dia:attribute name="obj_pos">
         <dia:point val="6,17.975"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6,17.6565;13.5144,18.0565"/>
+        <dia:rectangle val="6,17.6225;12.8,18.025"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2539,10 +2409,10 @@
             <dia:string>#別  紙  内  訳  書  の  と  お  り#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6,17.975"/>
@@ -2553,21 +2423,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O79">
+    <dia:object type="Standard - Text" version="1" id="O79">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5,1.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.1975,1.14259;17.8025,1.84259"/>
+        <dia:rectangle val="7.25,1.0825;17.75,1.785"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2575,10 +2442,10 @@
             <dia:string>#子ども医療費・事務手数料請求書#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.875000"/>
+            <dia:real val="0.875"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5,1.7"/>
@@ -2589,21 +2456,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.4242"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.3535"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O80">
+    <dia:object type="Standard - Text" version="1" id="O80">
       <dia:attribute name="obj_pos">
         <dia:point val="19.1,1.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.1,1.30185;24.352,1.80185"/>
+        <dia:rectangle val="19.1,1.26;23.85,1.7625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2611,10 +2475,10 @@
             <dia:string>#（         提出用）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="19.1,1.7"/>
@@ -2625,21 +2489,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O81">
+    <dia:object type="Standard - Text" version="1" id="O81">
       <dia:attribute name="obj_pos">
         <dia:point val="2.8,5.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.8,5.08148;4.82,5.48148"/>
+        <dia:rectangle val="2.8,5.0475;4.8,5.45"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2647,10 +2508,10 @@
             <dia:string>#（あて先）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="2.8,5.4"/>
@@ -2661,21 +2522,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O82">
+    <dia:object type="Standard - Text" version="1" id="O82">
       <dia:attribute name="obj_pos">
         <dia:point val="6.4,2.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.4,2.28148;14.884,2.68148"/>
+        <dia:rectangle val="6.4,2.2475;14.8,2.65"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2683,10 +2541,10 @@
             <dia:string>#分を下記（別紙明細書）のとおり請求します。#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.4,2.6"/>
@@ -2697,21 +2555,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O83">
+    <dia:object type="Standard - Text" version="1" id="O83">
       <dia:attribute name="obj_pos">
         <dia:point val="28,5.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="28,5.48148;28.404,5.88148"/>
+        <dia:rectangle val="28,5.4475;28.4,5.85"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2719,10 +2574,10 @@
             <dia:string>#）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="28,5.8"/>
@@ -2733,21 +2588,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O84">
+    <dia:object type="Standard - Text" version="1" id="O84">
       <dia:attribute name="obj_pos">
         <dia:point val="21,5.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21,5.48148;21.404,5.88148"/>
+        <dia:rectangle val="21,5.4475;21.4,5.85"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2755,10 +2607,10 @@
             <dia:string>#（#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="21,5.8"/>
@@ -2769,21 +2621,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O85">
+    <dia:object type="Standard - Text" version="1" id="O85">
       <dia:attribute name="obj_pos">
         <dia:point val="21.4,5.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.4,5.48148;22.1272,5.88148"/>
+        <dia:rectangle val="21.4,5.4475;22,5.85"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2791,10 +2640,10 @@
             <dia:string>#Tel#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="21.4,5.8"/>
@@ -2805,21 +2654,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O86">
+    <dia:object type="Standard - Text" version="1" id="O86">
       <dia:attribute name="obj_pos">
         <dia:point val="3.6368,13.6641"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.7278,13.3774;4.5458,13.7374"/>
+        <dia:rectangle val="2.7368,13.3466;4.5368,13.7091"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2827,10 +2673,10 @@
             <dia:string>#高額療養費#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3.6368,13.6641"/>
@@ -2841,21 +2687,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O87">
+    <dia:object type="Standard - Text" version="1" id="O87">
       <dia:attribute name="obj_pos">
         <dia:point val="3.6368,14.0641"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.87324,13.7774;4.40036,14.1374"/>
+        <dia:rectangle val="2.9168,13.7466;4.3568,14.1091"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2863,10 +2706,10 @@
             <dia:string>#限 度 額#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3.6368,14.0641"/>
@@ -2877,21 +2720,18 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
       </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Standard - Text" version="0" id="O88">
+    <dia:object type="Standard - Text" version="1" id="O88">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7034,4.40387"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="27.5317,4.13313;27.8751,4.47313"/>
+        <dia:rectangle val="27.5334,4.10387;27.8734,4.44637"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2899,10 +2739,10 @@
             <dia:string>#印#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.425000"/>
+            <dia:real val="0.42499999999999999"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7034,4.40387"/>
@@ -2913,29 +2753,20 @@
           <dia:attribute name="alignment">
             <dia:enum val="1"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.20604"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1717"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
     </dia:object>
   </dia:layer>
   <dia:layer name="差し込み" visible="true">
-    <dia:object type="Embed - Text" version="0" id="O89">
+    <dia:object type="Embed - Text" version="1" id="O89">
       <dia:attribute name="obj_pos">
         <dia:point val="23.6,3.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="23.6,2.56296;26.9936,3.36296"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#HOSPCD#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="23.6,2.495;26.4,3.2975"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2943,10 +2774,10 @@
             <dia:string>#1234567#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="1.000000"/>
+            <dia:real val="1"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.6,3.2"/>
@@ -2957,39 +2788,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.4848"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.404"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#HOSPCD#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O90">
+    <dia:object type="Embed - Text" version="1" id="O90">
       <dia:attribute name="obj_pos">
         <dia:point val="17.6,4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.6,3.71333;26.69,4.43333"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#ADRS#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_column">
-        <dia:int val="50"/>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="17.6,3.6825;26.6,4.495"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -2998,10 +2817,10 @@
 ああああああああああああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.6,4"/>
@@ -3012,39 +2831,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#ADRS#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="100"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="25"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O91">
+    <dia:object type="Embed - Text" version="1" id="O91">
       <dia:attribute name="obj_pos">
         <dia:point val="17.6,4.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.6,4.41333;24.872,5.13333"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#HOSPNAME#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_column">
-        <dia:int val="50"/>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="17.6,4.3825;24.8,5.195"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3053,10 +2860,10 @@
 あああああああああああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.6,4.7"/>
@@ -3067,36 +2874,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#HOSPNAME#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="100"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="25"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O92">
+    <dia:object type="Embed - Text" version="1" id="O92">
       <dia:attribute name="obj_pos">
         <dia:point val="17.6,5.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.6,5.11333;24.872,5.47333"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#KAISETU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="17.6,5.0825;24.8,5.445"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3104,10 +2902,10 @@
             <dia:string>#ああああああああああああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.450000"/>
+            <dia:real val="0.45000000000000001"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.6,5.4"/>
@@ -3118,36 +2916,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.21816"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.1818"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#KAISETU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="40"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O93">
+    <dia:object type="Embed - Text" version="1" id="O93">
       <dia:attribute name="obj_pos">
         <dia:point val="22.4,5.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.4,5.48148;26.036,5.88148"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#TEL#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.4,5.4475;25.4,5.85"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3155,10 +2944,10 @@
             <dia:string>#123456789012345#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="22.4,5.8"/>
@@ -3169,36 +2958,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#TEL#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="15"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O94">
+    <dia:object type="Embed - Text" version="1" id="O94">
       <dia:attribute name="obj_pos">
         <dia:point val="6.3,2.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.068,2.28148;6.3,2.68148"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SRYYM#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="3.1,2.2475;6.3,2.65"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3206,10 +2986,10 @@
             <dia:string>#平成９９年９９月#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.3,2.6"/>
@@ -3220,36 +3000,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SRYYM#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="16"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O95">
+    <dia:object type="Embed - Text" version="1" id="O95">
       <dia:attribute name="obj_pos">
         <dia:point val="3.1,3.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.1,3.08148;7.544,3.48148"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIYMD#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="3.1,3.0475;7.5,3.45"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3257,10 +3028,10 @@
             <dia:string>#平成９９年９９月９９日#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.500000"/>
+            <dia:real val="0.5"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="3.1,3.4"/>
@@ -3271,36 +3042,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.2424"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.202"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIYMD#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="22"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O96">
+    <dia:object type="Embed - Text" version="1" id="O96">
       <dia:attribute name="obj_pos">
         <dia:point val="6.7,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.185,8.20185;6.7,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].KENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="5.45,8.16;6.7,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3308,10 +3070,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.7,8.6"/>
@@ -3322,36 +3084,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].KENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O97">
+    <dia:object type="Embed - Text" version="1" id="O97">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.873,8.20185;9.6,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].TENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="7.35,8.16;9.6,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3359,10 +3112,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,8.6"/>
@@ -3373,36 +3126,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].TENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O98">
+    <dia:object type="Embed - Text" version="1" id="O98">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.773,8.20185;12.5,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].JIKOFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="10.25,8.16;12.5,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3410,10 +3154,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5,8.6"/>
@@ -3424,36 +3168,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].JIKOFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O99">
+    <dia:object type="Embed - Text" version="1" id="O99">
       <dia:attribute name="obj_pos">
         <dia:point val="14.4,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.885,8.20185;14.4,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].KAISU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="13.15,8.16;14.4,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3461,10 +3196,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.4,8.6"/>
@@ -3475,36 +3210,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].KAISU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O100">
+    <dia:object type="Embed - Text" version="1" id="O100">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.573,8.20185;17.3,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].ITBFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="15.05,8.16;17.3,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3512,10 +3238,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3,8.6"/>
@@ -3526,36 +3252,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].ITBFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O101">
+    <dia:object type="Embed - Text" version="1" id="O101">
       <dia:attribute name="obj_pos">
         <dia:point val="20.8,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.073,8.20185;20.8,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].SEIKYUGK#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="18.55,8.16;20.8,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3563,10 +3280,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.8,8.6"/>
@@ -3577,36 +3294,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].SEIKYUGK#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O102">
+    <dia:object type="Embed - Text" version="1" id="O102">
       <dia:attribute name="obj_pos">
         <dia:point val="23.8,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.679,8.20185;23.8,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].TESURYO#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.05,8.16;23.8,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3614,10 +3322,10 @@
             <dia:string>#999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.8,8.6"/>
@@ -3628,36 +3336,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].TESURYO#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O103">
+    <dia:object type="Embed - Text" version="1" id="O103">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7,8.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.973,8.20185;27.7,8.70185"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[0].GOKEI#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="25.45,8.16;27.7,8.6625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3665,10 +3364,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7,8.6"/>
@@ -3679,36 +3378,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[0].GOKEI#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O104">
+    <dia:object type="Embed - Text" version="1" id="O104">
       <dia:attribute name="obj_pos">
         <dia:point val="6.7,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.185,9.50185;6.7,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].KENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="5.45,9.46;6.7,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3716,10 +3406,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.7,9.9"/>
@@ -3730,36 +3420,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].KENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O105">
+    <dia:object type="Embed - Text" version="1" id="O105">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.873,9.50185;9.6,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].TENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="7.35,9.46;9.6,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3767,10 +3448,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,9.9"/>
@@ -3781,36 +3462,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].TENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O106">
+    <dia:object type="Embed - Text" version="1" id="O106">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.773,9.50185;12.5,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].JIKOFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="10.25,9.46;12.5,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3818,10 +3490,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5,9.9"/>
@@ -3832,36 +3504,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].JIKOFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O107">
+    <dia:object type="Embed - Text" version="1" id="O107">
       <dia:attribute name="obj_pos">
         <dia:point val="14.4,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.885,9.50185;14.4,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].KAISU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="13.15,9.46;14.4,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3869,10 +3532,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.4,9.9"/>
@@ -3883,36 +3546,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].KAISU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O108">
+    <dia:object type="Embed - Text" version="1" id="O108">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.573,9.50185;17.3,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].ITBFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="15.05,9.46;17.3,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3920,10 +3574,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3,9.9"/>
@@ -3934,36 +3588,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].ITBFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O109">
+    <dia:object type="Embed - Text" version="1" id="O109">
       <dia:attribute name="obj_pos">
         <dia:point val="20.8,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.073,9.50185;20.8,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].SEIKYUGK#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="18.55,9.46;20.8,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3971,10 +3616,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.8,9.9"/>
@@ -3985,36 +3630,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].SEIKYUGK#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O110">
+    <dia:object type="Embed - Text" version="1" id="O110">
       <dia:attribute name="obj_pos">
         <dia:point val="23.8,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.679,9.50185;23.8,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].TESURYO#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.05,9.46;23.8,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4022,10 +3658,10 @@
             <dia:string>#999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.8,9.9"/>
@@ -4036,36 +3672,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].TESURYO#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O111">
+    <dia:object type="Embed - Text" version="1" id="O111">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7,9.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.973,9.50185;27.7,10.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[1].GOKEI#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="25.45,9.46;27.7,9.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4073,10 +3700,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7,9.9"/>
@@ -4087,36 +3714,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[1].GOKEI#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O112">
+    <dia:object type="Embed - Text" version="1" id="O112">
       <dia:attribute name="obj_pos">
         <dia:point val="6.7,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.185,10.8019;6.7,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].KENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="5.45,10.76;6.7,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4124,10 +3742,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.7,11.2"/>
@@ -4138,36 +3756,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].KENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O113">
+    <dia:object type="Embed - Text" version="1" id="O113">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.873,10.8019;9.6,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].TENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="7.35,10.76;9.6,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4175,10 +3784,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,11.2"/>
@@ -4189,36 +3798,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].TENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O114">
+    <dia:object type="Embed - Text" version="1" id="O114">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.773,10.8019;12.5,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].JIKOFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="10.25,10.76;12.5,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4226,10 +3826,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5,11.2"/>
@@ -4240,36 +3840,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].JIKOFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O115">
+    <dia:object type="Embed - Text" version="1" id="O115">
       <dia:attribute name="obj_pos">
         <dia:point val="14.4,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.885,10.8019;14.4,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].KAISU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="13.15,10.76;14.4,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4277,10 +3868,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.4,11.2"/>
@@ -4291,36 +3882,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].KAISU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O116">
+    <dia:object type="Embed - Text" version="1" id="O116">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.573,10.8019;17.3,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].ITBFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="15.05,10.76;17.3,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4328,10 +3910,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3,11.2"/>
@@ -4342,36 +3924,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].ITBFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O117">
+    <dia:object type="Embed - Text" version="1" id="O117">
       <dia:attribute name="obj_pos">
         <dia:point val="20.8,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.073,10.8019;20.8,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].SEIKYUGK#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="18.55,10.76;20.8,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4379,10 +3952,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.8,11.2"/>
@@ -4393,36 +3966,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].SEIKYUGK#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O118">
+    <dia:object type="Embed - Text" version="1" id="O118">
       <dia:attribute name="obj_pos">
         <dia:point val="23.8,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.679,10.8019;23.8,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].TESURYO#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.05,10.76;23.8,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4430,10 +3994,10 @@
             <dia:string>#999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.8,11.2"/>
@@ -4444,36 +4008,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].TESURYO#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O119">
+    <dia:object type="Embed - Text" version="1" id="O119">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7,11.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.973,10.8019;27.7,11.3019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[2].GOKEI#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="25.45,10.76;27.7,11.2625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4481,10 +4036,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7,11.2"/>
@@ -4495,36 +4050,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[2].GOKEI#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O120">
+    <dia:object type="Embed - Text" version="1" id="O120">
       <dia:attribute name="obj_pos">
         <dia:point val="6.7,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.185,12.1019;6.7,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].KENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="5.45,12.06;6.7,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4532,10 +4078,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.7,12.5"/>
@@ -4546,36 +4092,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].KENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O121">
+    <dia:object type="Embed - Text" version="1" id="O121">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.873,12.1019;9.6,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].TENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="7.35,12.06;9.6,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4583,10 +4120,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,12.5"/>
@@ -4597,36 +4134,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].TENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O122">
+    <dia:object type="Embed - Text" version="1" id="O122">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.773,12.1019;12.5,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].JIKOFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="10.25,12.06;12.5,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4634,10 +4162,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5,12.5"/>
@@ -4648,36 +4176,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].JIKOFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O123">
+    <dia:object type="Embed - Text" version="1" id="O123">
       <dia:attribute name="obj_pos">
         <dia:point val="14.4,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.885,12.1019;14.4,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].KAISU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="13.15,12.06;14.4,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4685,10 +4204,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.4,12.5"/>
@@ -4699,36 +4218,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].KAISU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O124">
+    <dia:object type="Embed - Text" version="1" id="O124">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.573,12.1019;17.3,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].ITBFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="15.05,12.06;17.3,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4736,10 +4246,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3,12.5"/>
@@ -4750,36 +4260,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].ITBFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O125">
+    <dia:object type="Embed - Text" version="1" id="O125">
       <dia:attribute name="obj_pos">
         <dia:point val="20.8,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.073,12.1019;20.8,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].SEIKYUGK#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="18.55,12.06;20.8,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4787,10 +4288,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.8,12.5"/>
@@ -4801,36 +4302,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].SEIKYUGK#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O126">
+    <dia:object type="Embed - Text" version="1" id="O126">
       <dia:attribute name="obj_pos">
         <dia:point val="23.8,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.679,12.1019;23.8,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].TESURYO#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.05,12.06;23.8,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4838,10 +4330,10 @@
             <dia:string>#999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.8,12.5"/>
@@ -4852,36 +4344,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].TESURYO#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O127">
+    <dia:object type="Embed - Text" version="1" id="O127">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.973,12.1019;27.7,12.6019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[3].GOKEI#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="25.45,12.06;27.7,12.5625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4889,10 +4372,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7,12.5"/>
@@ -4903,36 +4386,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[3].GOKEI#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O128">
+    <dia:object type="Embed - Text" version="1" id="O128">
       <dia:attribute name="obj_pos">
         <dia:point val="6.7,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.185,13.5019;6.7,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].KENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="5.45,13.46;6.7,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4940,10 +4414,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.7,13.9"/>
@@ -4954,36 +4428,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].KENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O129">
+    <dia:object type="Embed - Text" version="1" id="O129">
       <dia:attribute name="obj_pos">
         <dia:point val="9.6,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.873,13.5019;9.6,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].TENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="7.35,13.46;9.6,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -4991,10 +4456,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.6,13.9"/>
@@ -5005,36 +4470,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].TENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O130">
+    <dia:object type="Embed - Text" version="1" id="O130">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.773,13.5019;12.5,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].JIKOFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="10.25,13.46;12.5,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5042,10 +4498,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5,13.9"/>
@@ -5056,36 +4512,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].JIKOFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O131">
+    <dia:object type="Embed - Text" version="1" id="O131">
       <dia:attribute name="obj_pos">
         <dia:point val="14.4,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.885,13.5019;14.4,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].KAISU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="13.15,13.46;14.4,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5093,10 +4540,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.4,13.9"/>
@@ -5107,36 +4554,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].KAISU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O132">
+    <dia:object type="Embed - Text" version="1" id="O132">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.573,13.5019;17.3,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].ITBFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="15.05,13.46;17.3,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5144,10 +4582,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3,13.9"/>
@@ -5158,36 +4596,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].ITBFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O133">
+    <dia:object type="Embed - Text" version="1" id="O133">
       <dia:attribute name="obj_pos">
         <dia:point val="20.8,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.073,13.5019;20.8,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].SEIKYUGK#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="18.55,13.46;20.8,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5195,10 +4624,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.8,13.9"/>
@@ -5209,36 +4638,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].SEIKYUGK#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O134">
+    <dia:object type="Embed - Text" version="1" id="O134">
       <dia:attribute name="obj_pos">
         <dia:point val="23.8,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.679,13.5019;23.8,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].TESURYO#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.05,13.46;23.8,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5246,10 +4666,10 @@
             <dia:string>#999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.8,13.9"/>
@@ -5260,36 +4680,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].TESURYO#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O135">
+    <dia:object type="Embed - Text" version="1" id="O135">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7,13.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.973,13.5019;27.7,14.0019"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[4].GOKEI#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="25.45,13.46;27.7,13.9625"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5297,10 +4708,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7,13.9"/>
@@ -5311,36 +4722,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[4].GOKEI#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O136">
+    <dia:object type="Embed - Text" version="1" id="O136">
       <dia:attribute name="obj_pos">
         <dia:point val="6.70331,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.18831,14.6216;6.70331,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].KENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="5.45331,14.5797;6.70331,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5348,10 +4750,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="6.70331,15.0197"/>
@@ -5362,36 +4764,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].KENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O137">
+    <dia:object type="Embed - Text" version="1" id="O137">
       <dia:attribute name="obj_pos">
         <dia:point val="9.60331,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.87631,14.6216;9.60331,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].TENSU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="7.35331,14.5797;9.60331,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5399,10 +4792,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="9.60331,15.0197"/>
@@ -5413,36 +4806,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].TENSU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O138">
+    <dia:object type="Embed - Text" version="1" id="O138">
       <dia:attribute name="obj_pos">
         <dia:point val="12.5033,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.7763,14.6216;12.5033,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].JIKOFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="10.2533,14.5797;12.5033,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5450,10 +4834,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="12.5033,15.0197"/>
@@ -5464,36 +4848,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].JIKOFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O139">
+    <dia:object type="Embed - Text" version="1" id="O139">
       <dia:attribute name="obj_pos">
         <dia:point val="14.4033,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.8883,14.6216;14.4033,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].KAISU#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="13.1533,14.5797;14.4033,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5501,10 +4876,10 @@
             <dia:string>#9,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="14.4033,15.0197"/>
@@ -5515,36 +4890,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].KAISU#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="5"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O140">
+    <dia:object type="Embed - Text" version="1" id="O140">
       <dia:attribute name="obj_pos">
         <dia:point val="17.3033,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.5763,14.6216;17.3033,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].ITBFTN#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="15.0533,14.5797;17.3033,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5552,10 +4918,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="17.3033,15.0197"/>
@@ -5566,36 +4932,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].ITBFTN#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O141">
+    <dia:object type="Embed - Text" version="1" id="O141">
       <dia:attribute name="obj_pos">
         <dia:point val="20.8033,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.0763,14.6216;20.8033,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].SEIKYUGK#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="18.5533,14.5797;20.8033,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5603,10 +4960,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="20.8033,15.0197"/>
@@ -5617,36 +4974,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].SEIKYUGK#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O142">
+    <dia:object type="Embed - Text" version="1" id="O142">
       <dia:attribute name="obj_pos">
         <dia:point val="23.8033,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.6823,14.6216;23.8033,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].TESURYO#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="22.0533,14.5797;23.8033,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5654,10 +5002,10 @@
             <dia:string>#999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="23.8033,15.0197"/>
@@ -5668,36 +5016,27 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].TESURYO#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="7"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
       </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
     </dia:object>
-    <dia:object type="Embed - Text" version="0" id="O143">
+    <dia:object type="Embed - Text" version="1" id="O143">
       <dia:attribute name="obj_pos">
         <dia:point val="27.7033,15.0197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.9763,14.6216;27.7033,15.1216"/>
-      </dia:attribute>
-      <dia:attribute name="dnode_path">
-        <dia:string>#SEIKYU-TBL[5].GOKEI#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="embed_text_string">
-        <dia:enum val="0"/>
+        <dia:rectangle val="25.4533,14.5797;27.7033,15.0822"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5705,10 +5044,10 @@
             <dia:string>#9,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
-            <dia:font name="Courier" family="Takao明朝" style="0"/>
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625000"/>
+            <dia:real val="0.625"/>
           </dia:attribute>
           <dia:attribute name="pos">
             <dia:point val="27.7033,15.0197"/>
@@ -5719,22 +5058,19 @@
           <dia:attribute name="alignment">
             <dia:enum val="2"/>
           </dia:attribute>
-          <dia:attribute name="single">
-            <dia:real val="0.303"/>
-          </dia:attribute>
-          <dia:attribute name="multi">
-            <dia:real val="0.2525"/>
-          </dia:attribute>
         </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#SEIKYU-TBL[5].GOKEI#</dia:string>
       </dia:attribute>
-      <dia:attribute name="embed_text_size">
-        <dia:int val="9"/>
-      </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
       </dia:attribute>
     </dia:object>
   </dia:layer>
