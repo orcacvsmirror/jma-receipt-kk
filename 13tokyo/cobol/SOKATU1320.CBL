@@ -45,6 +45,7 @@
       *  01.00.08    吉川    2012/05/16  H24年4月に新設された在総診対応
       *  01.00.09    吉川    2012/12/21  医療機関情報編集対応
       *  01.00.10    吉川    2013/07/26  在宅の対象とする診療コード追加
+      *  01.00.11    萩野    2014/06/06  在宅の対象とする診療コード追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -242,6 +243,40 @@
            03  WRK-CONS-ZAITAKU21      PIC X(09) VALUE "114019310".
            03  WRK-CONS-ZAITAKU22      PIC X(09) VALUE "114019410".
       *=== 在宅コード追加 by Yoshikawa(2013/07/26) end
+      *=== 在宅コード追加 by hagino(2014/06/06) start
+           03  WRK-CONS-ZAITAKU23      PIC X(09) VALUE "114023110".
+           03  WRK-CONS-ZAITAKU24      PIC X(09) VALUE "114023210".
+           03  WRK-CONS-ZAITAKU25      PIC X(09) VALUE "114023310".
+           03  WRK-CONS-ZAITAKU26      PIC X(09) VALUE "114023410".
+           03  WRK-CONS-ZAITAKU27      PIC X(09) VALUE "114023510".
+           03  WRK-CONS-ZAITAKU28      PIC X(09) VALUE "114023610".
+           03  WRK-CONS-ZAITAKU29      PIC X(09) VALUE "114023710".
+           03  WRK-CONS-ZAITAKU30      PIC X(09) VALUE "114023810".
+           03  WRK-CONS-ZAITAKU31      PIC X(09) VALUE "114023910".
+           03  WRK-CONS-ZAITAKU32      PIC X(09) VALUE "114024010".
+           03  WRK-CONS-ZAITAKU33      PIC X(09) VALUE "114024110".
+           03  WRK-CONS-ZAITAKU34      PIC X(09) VALUE "114024210".
+           03  WRK-CONS-ZAITAKU35      PIC X(09) VALUE "114024310".
+           03  WRK-CONS-ZAITAKU36      PIC X(09) VALUE "114024410".
+           03  WRK-CONS-ZAITAKU37      PIC X(09) VALUE "114024510".
+           03  WRK-CONS-ZAITAKU38      PIC X(09) VALUE "114024610".
+           03  WRK-CONS-ZAITAKU39      PIC X(09) VALUE "114024910".
+           03  WRK-CONS-ZAITAKU40      PIC X(09) VALUE "114025010".
+           03  WRK-CONS-ZAITAKU41      PIC X(09) VALUE "114025110".
+           03  WRK-CONS-ZAITAKU42      PIC X(09) VALUE "114025210".
+           03  WRK-CONS-ZAITAKU43      PIC X(09) VALUE "114025310".
+           03  WRK-CONS-ZAITAKU44      PIC X(09) VALUE "114025410".
+           03  WRK-CONS-ZAITAKU45      PIC X(09) VALUE "114025510".
+           03  WRK-CONS-ZAITAKU46      PIC X(09) VALUE "114025610".
+           03  WRK-CONS-ZAITAKU47      PIC X(09) VALUE "114025710".
+           03  WRK-CONS-ZAITAKU48      PIC X(09) VALUE "114025810".
+           03  WRK-CONS-ZAITAKU49      PIC X(09) VALUE "114025910".
+           03  WRK-CONS-ZAITAKU50      PIC X(09) VALUE "114026010".
+           03  WRK-CONS-ZAITAKU51      PIC X(09) VALUE "114026110".
+           03  WRK-CONS-ZAITAKU52      PIC X(09) VALUE "114026210".
+           03  WRK-CONS-ZAITAKU53      PIC X(09) VALUE "114026310".
+           03  WRK-CONS-ZAITAKU54      PIC X(09) VALUE "114026410".
+      *=== 在宅コード追加 by hagino(2014/06/06) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ファイルレイアウト
@@ -1592,6 +1627,40 @@
                                    OR  WRK-CONS-ZAITAKU21
                                    OR  WRK-CONS-ZAITAKU22
       *=== 在宅コード追加 by Yoshikawa(2013/07/26) end
+      *=== 在宅コード追加 by hagino(2014/06/06) start
+                                   OR  WRK-CONS-ZAITAKU23
+                                   OR  WRK-CONS-ZAITAKU24
+                                   OR  WRK-CONS-ZAITAKU25
+                                   OR  WRK-CONS-ZAITAKU26
+                                   OR  WRK-CONS-ZAITAKU27
+                                   OR  WRK-CONS-ZAITAKU28
+                                   OR  WRK-CONS-ZAITAKU29
+                                   OR  WRK-CONS-ZAITAKU30
+                                   OR  WRK-CONS-ZAITAKU31
+                                   OR  WRK-CONS-ZAITAKU32
+                                   OR  WRK-CONS-ZAITAKU33
+                                   OR  WRK-CONS-ZAITAKU34
+                                   OR  WRK-CONS-ZAITAKU35
+                                   OR  WRK-CONS-ZAITAKU36
+                                   OR  WRK-CONS-ZAITAKU37
+                                   OR  WRK-CONS-ZAITAKU38
+                                   OR  WRK-CONS-ZAITAKU39
+                                   OR  WRK-CONS-ZAITAKU40
+                                   OR  WRK-CONS-ZAITAKU41
+                                   OR  WRK-CONS-ZAITAKU42
+                                   OR  WRK-CONS-ZAITAKU43
+                                   OR  WRK-CONS-ZAITAKU44
+                                   OR  WRK-CONS-ZAITAKU45
+                                   OR  WRK-CONS-ZAITAKU46
+                                   OR  WRK-CONS-ZAITAKU47
+                                   OR  WRK-CONS-ZAITAKU48
+                                   OR  WRK-CONS-ZAITAKU49
+                                   OR  WRK-CONS-ZAITAKU50
+                                   OR  WRK-CONS-ZAITAKU51
+                                   OR  WRK-CONS-ZAITAKU52
+                                   OR  WRK-CONS-ZAITAKU53
+                                   OR  WRK-CONS-ZAITAKU54
+      *=== 在宅コード追加 by hagino(2014/06/06) end
       *=== 在宅判定修正 by Yoshikawa(2009/03/27) start
                  MOVE  1  TO  SKT1320TMP-SYUTURYOKU
       *=== 在宅判定修正 by Yoshikawa(2009/03/27) end

@@ -49,6 +49,7 @@
       *                                      医療機関情報編集対応
       *  01.00.14       吉川     13/07/08    プログラムオプション対応
       *  01.00.15       吉川     14/05/12    前期高齢者２割対応
+      *  01.00.16       萩野     14/06/09    在宅の対象とする診療コード追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -327,6 +328,40 @@
            03  CONS-ZAITAKU5       PIC X(09) VALUE "114012310".
            03  CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 在宅コード追加 by hagino(2014/06/09) start
+           03  CONS-ZAITAKU7       PIC X(09) VALUE "114023110".
+           03  CONS-ZAITAKU8       PIC X(09) VALUE "114023210".
+           03  CONS-ZAITAKU9       PIC X(09) VALUE "114023310".
+           03  CONS-ZAITAKU10      PIC X(09) VALUE "114023410".
+           03  CONS-ZAITAKU11      PIC X(09) VALUE "114023510".
+           03  CONS-ZAITAKU12      PIC X(09) VALUE "114023610".
+           03  CONS-ZAITAKU13      PIC X(09) VALUE "114023710".
+           03  CONS-ZAITAKU14      PIC X(09) VALUE "114023810".
+           03  CONS-ZAITAKU15      PIC X(09) VALUE "114023910".
+           03  CONS-ZAITAKU16      PIC X(09) VALUE "114024010".
+           03  CONS-ZAITAKU17      PIC X(09) VALUE "114024110".
+           03  CONS-ZAITAKU18      PIC X(09) VALUE "114024210".
+           03  CONS-ZAITAKU19      PIC X(09) VALUE "114024310".
+           03  CONS-ZAITAKU20      PIC X(09) VALUE "114024410".
+           03  CONS-ZAITAKU21      PIC X(09) VALUE "114024510".
+           03  CONS-ZAITAKU22      PIC X(09) VALUE "114024610".
+           03  CONS-ZAITAKU23      PIC X(09) VALUE "114024910".
+           03  CONS-ZAITAKU24      PIC X(09) VALUE "114025010".
+           03  CONS-ZAITAKU25      PIC X(09) VALUE "114025110".
+           03  CONS-ZAITAKU26      PIC X(09) VALUE "114025210".
+           03  CONS-ZAITAKU27      PIC X(09) VALUE "114025310".
+           03  CONS-ZAITAKU28      PIC X(09) VALUE "114025410".
+           03  CONS-ZAITAKU29      PIC X(09) VALUE "114025510".
+           03  CONS-ZAITAKU30      PIC X(09) VALUE "114025610".
+           03  CONS-ZAITAKU31      PIC X(09) VALUE "114025710".
+           03  CONS-ZAITAKU32      PIC X(09) VALUE "114025810".
+           03  CONS-ZAITAKU33      PIC X(09) VALUE "114025910".
+           03  CONS-ZAITAKU34      PIC X(09) VALUE "114026010".
+           03  CONS-ZAITAKU35      PIC X(09) VALUE "114026110".
+           03  CONS-ZAITAKU36      PIC X(09) VALUE "114026210".
+           03  CONS-ZAITAKU37      PIC X(09) VALUE "114026310".
+           03  CONS-ZAITAKU38      PIC X(09) VALUE "114026410".
+      *=== 在宅コード追加 by hagino(2014/06/09) end
       *
            COPY    "CPSHELLTBL.INC".
       *     
@@ -2473,7 +2508,43 @@
                                        CONS-ZAITAKU3  OR
                                        CONS-ZAITAKU4  OR
                                        CONS-ZAITAKU5  OR
-                                       CONS-ZAITAKU6
+      *=== 在宅コード追加 by hagino(2014/06/09) start
+      *                                 CONS-ZAITAKU6
+                                       CONS-ZAITAKU6  OR
+                                       CONS-ZAITAKU7  OR
+                                       CONS-ZAITAKU8  OR
+                                       CONS-ZAITAKU9  OR
+                                       CONS-ZAITAKU10 OR
+                                       CONS-ZAITAKU11 OR
+                                       CONS-ZAITAKU12 OR
+                                       CONS-ZAITAKU13 OR
+                                       CONS-ZAITAKU14 OR
+                                       CONS-ZAITAKU15 OR
+                                       CONS-ZAITAKU16 OR
+                                       CONS-ZAITAKU17 OR
+                                       CONS-ZAITAKU18 OR
+                                       CONS-ZAITAKU19 OR
+                                       CONS-ZAITAKU20 OR
+                                       CONS-ZAITAKU21 OR
+                                       CONS-ZAITAKU22 OR
+                                       CONS-ZAITAKU23 OR
+                                       CONS-ZAITAKU24 OR
+                                       CONS-ZAITAKU25 OR
+                                       CONS-ZAITAKU26 OR
+                                       CONS-ZAITAKU27 OR
+                                       CONS-ZAITAKU28 OR
+                                       CONS-ZAITAKU29 OR
+                                       CONS-ZAITAKU30 OR
+                                       CONS-ZAITAKU31 OR
+                                       CONS-ZAITAKU32 OR
+                                       CONS-ZAITAKU33 OR
+                                       CONS-ZAITAKU34 OR
+                                       CONS-ZAITAKU35 OR
+                                       CONS-ZAITAKU36 OR
+                                       CONS-ZAITAKU37 OR
+                                       CONS-ZAITAKU38
+      *=== 在宅コード追加 by hagino(2014/06/09) end
+      *
       *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
       *           MOVE  1  TO  SKT2110TMP-ZAITAKU
                  MOVE  "1"  TO  SKT2110TMP-ZAITAKU
