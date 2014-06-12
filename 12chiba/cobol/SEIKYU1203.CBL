@@ -39,6 +39,8 @@
       *  01.00.05     吉川     12/12/21    プラグイン対応
       *                                    医療機関情報編集対応
       *  01.00.06     吉川     14/05/16    プログラムオプション対応
+      *  01.00.07     吉川     14/06/12    口座情報の印字位置が
+      *                                    １つずつずれているのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -595,7 +597,11 @@
            IF  WRK-OPTION(1)(10:1)  =  "1"
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >  5
-               MOVE    WRK-OPTION(IDX)(10:30) TO  WRK-KOUZA-DATA(IDX)
+      *=== 口座情報の印字不具合修正 by Yoshikawa(2014/06/12) start
+      *         MOVE    WRK-OPTION(IDX)(10:30) TO  WRK-KOUZA-DATA(IDX)
+               MOVE    WRK-OPTION(IDX + 1)(10:30)
+                                             TO  WRK-KOUZA-DATA(IDX)
+      *=== 口座情報の印字不具合修正 by Yoshikawa(2014/06/12) end
              END-PERFORM
            END-IF
            DISPLAY "印字 ="  WRK-OPTION(1)(10:1)
