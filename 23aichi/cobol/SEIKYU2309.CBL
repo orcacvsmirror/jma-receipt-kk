@@ -64,6 +64,7 @@
       *                                  備考にそれぞれの市の点数を記載
       *  01.00.18    吉川    14/02/13    長期の判定不具合修正
       *  01.00.19    萩野    14/05/14    長期の判定不具合修正
+      *  01.00.20    萩野    14/06/16    長期は上限額を超えた時に記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -260,6 +261,9 @@
                 05   WRK-SEIKYUGK-G       PIC 9(08)V9(01).
                 05   WRK-SEIKYUGK-G2      PIC 9(08).
                 05   WRK-SEIKYUGK         PIC 9(08)V9(01).
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+               05  WRK-TYOKIFTNGK   PIC 9(08).
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
            03  WRK-KYURATE                PIC 9(02).
@@ -1069,7 +1073,12 @@
       *         MOVE    1              TO    MF100-TYOKI
       *     END-IF
            IF    FLG-TYOKI    =    1
-               MOVE    1              TO    MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+      *         MOVE    1              TO    MF100-TYOKI
+               IF    WRK-TYOKIFTNGK  >=  10000
+                   MOVE    1              TO    MF100-TYOKI
+               END-IF
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
                IF  WRK-SEIKYUGK-G2    >=  10000
                    MOVE    10000          TO    WRK-SEIKYUGK-G2
                END-IF
@@ -1088,7 +1097,12 @@
       *         MOVE    1              TO    MF100-TYOKI
       *     END-IF
            IF    FLG-TYOKI    =    2
-               MOVE    1              TO    MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+      *         MOVE    1              TO    MF100-TYOKI
+               IF    WRK-TYOKIFTNGK  >=  20000
+                   MOVE    1              TO    MF100-TYOKI
+               END-IF
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
                IF  WRK-SEIKYUGK-G2   >=  20000
                    MOVE    20000          TO    WRK-SEIKYUGK-G2
                END-IF
@@ -1791,6 +1805,9 @@
       *
            MOVE    ZERO     TO     FLG-HEIYOU
                                    WRK-SEIKYUGK
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+                                   WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4 OR
@@ -1827,11 +1844,17 @@
       *
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
                MOVE    1     TO    FLG-TYOKI
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+               MOVE    SYU-KOH-COMPFTN(IDX)  TO  WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
              END-IF
       *
       *---(01.00.02) LINE ADD START ------------------------------------
              IF    SYU-KOH-HKNNUM(IDX)   =   "974"
                MOVE    2     TO    FLG-TYOKI
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+               MOVE    SYU-KOH-COMPFTN(IDX)  TO  WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
              END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -1884,7 +1907,6 @@
       *=== 市町村負担額修正 by Yoshikawa(2012/04/18) end
       *
            ADD    WRK-SEIKYUGK                  TO    WRK-SEIKYUGK-G
-      *
       *
            .
        800-SEIKYU-SEC-EXT.
