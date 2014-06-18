@@ -78,12 +78,18 @@
                05  SC03-TENKI2   PIC X(04)   OCCURS  5 TIMES.
                05  SC03-TENKI3   PIC X(04)   OCCURS  5 TIMES.
                05  SC03-TEKIYO   PIC X(52)   OCCURS  35 TIMES.
+      *減免テーブル
+           03  SC03-GENMEN-TBL OCCURS 3.
+               05  SC03-GENMEN         PIC  X(02).
+      *低所得テーブル
+           03  SC03-TEISHO-TBL OCCURS 3.
+               05  SC03-TEISHO         PIC  X(02).
       *診療実日数
-           03  SC03-NISSU             PIC  X(02) OCCURS 3.
+           03  SC03-NISSU              PIC  X(02) OCCURS 3.
       *請求点数
-           03  SC03-TENSU             PIC  X(09) OCCURS 3.
+           03  SC03-TENSU              PIC  X(09) OCCURS 3.
       *一部負担金
-           03  SC03-KOHFTN            PIC  X(09) OCCURS 3.
+           03  SC03-KOHFTN             PIC  X(09) OCCURS 3.
       *食事療養
            03  SC03-SHOKUJI-TBL OCCURS 3.
       *食事日数

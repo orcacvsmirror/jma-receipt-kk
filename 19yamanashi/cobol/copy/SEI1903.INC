@@ -141,6 +141,10 @@
                05  MF101-FLG             PIC  9(01).
       *摘要
            03  MF101-TEKIYO              PIC  X(52).
+      *減免区分
+           03  MF101-GENMEN              PIC  9(01).
+      *低所得・低年金
+           03  MF101-TEISHO              PIC  9(01).
       *その他の公費情報
            03  MF101-ETCKOHINF  OCCURS  2.
                05  MF101-E-KOHNUM          PIC  X(03).

@@ -148,6 +148,9 @@
                05  WRK-TDD           PIC 9(02).
            03  WRK-HKNJANUM          PIC X(06).
            03  WRK-SRYCD             PIC X(09).
+           03  WRK-GENMEN            PIC X(10).
+           03  WRK-TEISHO            PIC X(20).
+           03  WRK-TEKIYO            PIC X(52).
            03  WRK-TEKIYOCD          PIC X(09).
            03  WRK-INPUTCOMENT       PIC X(80).
            03  WRK-INPUTCOMENT2      PIC X(14).
@@ -868,6 +871,18 @@
              PERFORM  200112-TEKIYO-HENSYU-SEC
            END-IF
       *
+      *    ¸ºÌÈ¶èÊ¬¥Á¥§¥Ã¥¯
+           PERFORM 200113-GENMEN-CHK-SEC
+      *
+      *    Äã½êÆÀ¡¦ÄãÇ¯¶â¥Á¥§¥Ã¥¯¡Ê£±¡§Äã½ê¡¢£²¡§Äã½ê£³·îÄ¶¡¢£³¡§ÄãÇ¯¶â¡Ë
+           IF  RECE02-NYUGAIKBN  =  "1"
+             MOVE    RECE02-SHOKUJIFTNKBN      TO  MF101-TEISHO
+           ELSE
+             IF  RECE02-FTNMONEY(1)  >  ZERO
+               MOVE    RECE02-SHOKUJIFTNKBN    TO  MF101-TEISHO
+             END-IF
+           END-IF
+      *
       *    ÊÝ¸±¼ÔÈÖ¹æ¥Á¥§¥Ã¥¯½èÍý
            MOVE    ZERO                    TO  FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -941,6 +956,61 @@
            .
        200112-TEKIYO-HENSYU-EXT.
            EXIT.
+      *****************************************************************
+      *    ¸ºÌÈ¶èÊ¬¥Á¥§¥Ã¥¯½èÍý
+      *****************************************************************
+       200113-GENMEN-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      PTKOHINF-REC
+                                           FLG-PTKOHINF
+           MOVE    SPA-HOSPNUM             TO  PTKOH-HOSPNUM
+           MOVE    RECE02-PTID             TO  PTKOH-PTID
+           MOVE    PTKOHINF-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      FLG-PTKOHINF        =   ZERO
+               PERFORM  800-PTKOHINF-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-PTKOHINF  =  1
+                 IF  RECE02-SRYYM  >=  PTKOH-TEKSTYMD(1:6)  AND
+                     RECE02-SRYYM  <=  PTKOH-TEKEDYMD(1:6)
+                   IF  PTKOH-KOHNUM  =  "960" OR "961" OR "962" OR "963"
+                     MOVE    1             TO  FLG-PTKOHINF
+                     EVALUATE  PTKOH-KOHNUM
+                       WHEN  "960"
+                       WHEN  "961"
+      *                  ¸ºÌÈ
+                         MOVE    1         TO  MF101-GENMEN
+                       WHEN  "962"
+      *                  ÌÈ½ü
+                         MOVE    2         TO  MF101-GENMEN
+                       WHEN  "963"
+      *                  Í±Í½
+                         MOVE    3         TO  MF101-GENMEN
+                     END-EVALUATE
+                   END-IF
+                 END-IF
+                 PERFORM  800-PTKOHINF-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       200113-GENMEN-CHK-EXT.
+           EXIT.
+      *
       *****************************************************************
       *    Ä¢É¼¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
@@ -1164,6 +1234,45 @@
              END-PERFORM
            END-PERFORM
       *
+           INITIALIZE                          WRK-GENMEN
+                                               WRK-TEISHO
+      *    ¸ºÌÈ¶èÊ¬
+           EVALUATE  MF101-GENMEN
+               WHEN  1
+      *            ¸ºÌÈ
+                   MOVE    "¸ºÌÈ"          TO  WRK-GENMEN
+               WHEN  2
+      *            ÌÈ½ü
+                   MOVE    "ÌÈ½ü"          TO  WRK-GENMEN
+               WHEN  3
+      *            Í±Í½
+                   MOVE    "Í±Í½"          TO  WRK-GENMEN
+           END-EVALUATE
+      *
+      *    Äã½êÆÀ¡¦ÄãÇ¯¶â
+           EVALUATE  MF101-TEISHO
+               WHEN  1
+      *            Äã½êÆÀ
+                   MOVE    "Äã½êÆÀ£²"      TO  WRK-TEISHO
+               WHEN  2
+      *            Äã½êÆÀ£³·îÄ¶
+                   MOVE    "Äã½êÆÀ£²¡Ê£³·îÄ¶¡Ë"
+                                           TO  WRK-TEISHO
+               WHEN  3
+      *            ÄãÇ¯¶â
+                   MOVE    "Äã½êÆÀ£±"      TO  WRK-TEISHO
+           END-EVALUATE
+      *    Å¦Í×¤Ø°õ»ú
+           IF  WRK-GENMEN  =  SPACE
+               MOVE    WRK-TEISHO          TO  SC03-TEKIYO(1)
+           ELSE
+               STRING  WRK-GENMEN          DELIMITED BY SPACE
+                       "¡¢"                DELIMITED BY SIZE
+                       WRK-TEISHO          DELIMITED BY SPACE
+                       INTO                SC03-TEKIYO(1)
+               END-STRING
+           END-IF
+      *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE    MF101-JNISSU            TO  WRK-Z2
            MOVE    WRK-Z2                  TO  SC03-NISSU(1)
@@ -1201,7 +1310,12 @@
            MOVE    WRK-Z9                  TO  SC03-KOHFTN(3)
       *
       *    Å¦Í×
-           MOVE    MF101-TEKIYO            TO  SC03-TEKIYO(1)
+           IF  SC03-TEKIYO(1)  NOT =  SPACE
+               MOVE ALL    "¡½"            TO  SC03-TEKIYO(2)
+               MOVE    MF101-TEKIYO        TO  SC03-TEKIYO(3)
+           ELSE
+               MOVE    MF101-TEKIYO        TO  SC03-TEKIYO(1)
+           END-IF
       *
            .
        320-BODY-HEN-EXT.
@@ -1428,6 +1542,32 @@
                END-IF
              END-PERFORM
            END-PERFORM
+      *
+      *    ¸ºÌÈ¶èÊ¬
+           EVALUATE  MF101-GENMEN
+               WHEN  1
+      *            ¸ºÌÈ
+                   MOVE    "¡û"            TO  SC03-GENMEN(1)
+               WHEN  2
+      *            ÌÈ½ü
+                   MOVE    "¡û"            TO  SC03-GENMEN(2)
+               WHEN  3
+      *            Í±Í½
+                   MOVE    "¡û"            TO  SC03-GENMEN(3)
+           END-EVALUATE
+      *
+      *    Äã½êÆÀ¡¦ÄãÇ¯¶â
+           EVALUATE  MF101-TEISHO
+               WHEN  1
+      *            Äã½êÆÀ
+                   MOVE    "¡û"            TO  SC03-TEISHO(2)
+               WHEN  2
+      *            Äã½êÆÀ£³·îÄ¶
+                   MOVE    "¡û"            TO  SC03-TEISHO(3)
+               WHEN  3
+      *            ÄãÇ¯¶â
+                   MOVE    "¡û"            TO  SC03-TEISHO(1)
+           END-EVALUATE
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE    MF101-JNISSU            TO  WRK-Z2
@@ -1787,6 +1927,30 @@
       *
            .
        800-PTINF-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ´µ¼Ô¸øÈñ¾ðÊóÆÉ¤ß¹þ¤ß
+      *****************************************************************
+       800-PTKOHINF-FETCH-SEC  SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO                TO  FLG-PTKOHINF
+               MOVE    MCPDATA-REC         TO  PTKOHINF-REC
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHINF
+               INITIALIZE                  PTKOHINF-REC
+           END-IF
+      *
+           .
+       800-PTKOHINF-FETCH-EXT.
            EXIT.
       *
       *****************************************************************

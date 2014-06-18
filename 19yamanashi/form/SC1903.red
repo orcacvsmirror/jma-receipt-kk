@@ -172,6 +172,20 @@
         </appinfo>
       </element>
     </element>
+    <element name="GENMEN-TBL" occurs="3">
+      <element name="GENMEN" occurs="1">
+        <appinfo>
+          <embed object="text" length="2"/>
+        </appinfo>
+      </element>
+    </element>
+    <element name="TEISHO-TBL" occurs="3">
+      <element name="TEISHO" occurs="1">
+        <appinfo>
+          <embed object="text" length="2"/>
+        </appinfo>
+      </element>
+    </element>
     <element name="NISSU" occurs="3">
       <appinfo>
         <embed object="text" length="2"/>
