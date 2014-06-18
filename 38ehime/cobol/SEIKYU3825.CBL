@@ -53,6 +53,8 @@
       *                                  それぞれの入院期間を印字する
       *  01.00.11    吉川    14/04/09    一部負担金が印字されない場合がある
       *                                  現象を修正（FLG-HEIYOU2初期化漏れ）
+      *  01.00.12    吉川    14/06/18    月末以降も入院中の場合
+      *                                  退院日が正しく印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1262,7 +1264,14 @@
            ELSE
                MOVE    WRK-MINTYMD(2)  TO  MF100-TAIINYMD(2)
            END-IF
-           MOVE    WRK-MINTYMD(1)      TO  MF100-TAIINYMD(1)
+      *=== 入院中データの退院日修正 by Yoshikawa(2014/06/18) start
+      *     MOVE    WRK-MINTYMD(1)      TO  MF100-TAIINYMD(1)
+           IF  WRK-NYMD  <  WRK-MINTYMD(1)
+               MOVE    WRK-NYMD        TO  MF100-TAIINYMD(1)
+           ELSE
+               MOVE    WRK-MINTYMD(1)  TO  MF100-TAIINYMD(1)
+           END-IF
+      *=== 入院中データの退院日修正 by Yoshikawa(2014/06/18) end
       *
       *    備考３（複数入院期間）
            IF  MF100-NYUINYMD(2)  NOT =  ZERO
