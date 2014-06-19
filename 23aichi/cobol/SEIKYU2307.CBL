@@ -264,6 +264,7 @@
                05   WRK-SEIKYUGK         PIC 9(08)V9(01).
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
                05  WRK-TYOKIFTNGK   PIC 9(08).
+               05  WRK-TYOKIFTNGK-G PIC 9(08).
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
@@ -1032,6 +1033,9 @@
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+           INITIALIZE       WRK-KASAN-TBL
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *    請求金額集計
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -1075,7 +1079,7 @@
            IF    FLG-TYOKI    =    1
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
-               IF    WRK-TYOKIFTNGK  >=  10000
+               IF    WRK-TYOKIFTNGK-G  >=  10000
                    MOVE    1              TO    MF100-TYOKI
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
@@ -1099,7 +1103,7 @@
            IF    FLG-TYOKI    =    2
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
-               IF    WRK-TYOKIFTNGK  >=  20000
+               IF    WRK-TYOKIFTNGK-G  >=  20000
                    MOVE    1              TO    MF100-TYOKI
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
@@ -1914,6 +1918,9 @@
       *=== 市町村負担額修正 by Yoshikawa(2012/04/18) end
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+           ADD    WRK-TYOKIFTNGK             TO  WRK-TYOKIFTNGK-G
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *
            .
        800-SEIKYU-SEC-EXT.
