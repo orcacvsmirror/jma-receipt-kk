@@ -1234,45 +1234,6 @@
              END-PERFORM
            END-PERFORM
       *
-           INITIALIZE                          WRK-GENMEN
-                                               WRK-TEISHO
-      *    ¸ºÌÈ¶èÊ¬
-           EVALUATE  MF101-GENMEN
-               WHEN  1
-      *            ¸ºÌÈ
-                   MOVE    "¸ºÌÈ"          TO  WRK-GENMEN
-               WHEN  2
-      *            ÌÈ½ü
-                   MOVE    "ÌÈ½ü"          TO  WRK-GENMEN
-               WHEN  3
-      *            Í±Í½
-                   MOVE    "Í±Í½"          TO  WRK-GENMEN
-           END-EVALUATE
-      *
-      *    Äã½êÆÀ¡¦ÄãÇ¯¶â
-           EVALUATE  MF101-TEISHO
-               WHEN  1
-      *            Äã½êÆÀ
-                   MOVE    "Äã½êÆÀ£²"      TO  WRK-TEISHO
-               WHEN  2
-      *            Äã½êÆÀ£³·îÄ¶
-                   MOVE    "Äã½êÆÀ£²¡Ê£³·îÄ¶¡Ë"
-                                           TO  WRK-TEISHO
-               WHEN  3
-      *            ÄãÇ¯¶â
-                   MOVE    "Äã½êÆÀ£±"      TO  WRK-TEISHO
-           END-EVALUATE
-      *    Å¦Í×¤Ø°õ»ú
-           IF  WRK-GENMEN  =  SPACE
-               MOVE    WRK-TEISHO          TO  SC03-TEKIYO(1)
-           ELSE
-               STRING  WRK-GENMEN          DELIMITED BY SPACE
-                       "¡¢"                DELIMITED BY SIZE
-                       WRK-TEISHO          DELIMITED BY SPACE
-                       INTO                SC03-TEKIYO(1)
-               END-STRING
-           END-IF
-      *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE    MF101-JNISSU            TO  WRK-Z2
            MOVE    WRK-Z2                  TO  SC03-NISSU(1)
@@ -1309,12 +1270,97 @@
            MOVE    MF101-E-FTNMONEY(2)     TO  WRK-Z9
            MOVE    WRK-Z9                  TO  SC03-KOHFTN(3)
       *
-      *    Å¦Í×
-           IF  SC03-TEKIYO(1)  NOT =  SPACE
-               MOVE ALL    "¡½"            TO  SC03-TEKIYO(2)
-               MOVE    MF101-TEKIYO        TO  SC03-TEKIYO(3)
+      *    Å¦Í×Íó
+           INITIALIZE                          WRK-TEKIYO
+      *    ¸ºÌÈ¶èÊ¬
+           EVALUATE  MF101-GENMEN
+               WHEN  1
+      *            ¸ºÌÈ
+                   MOVE    "¸ºÌÈ"          TO  WRK-GENMEN
+               WHEN  2
+      *            ÌÈ½ü
+                   MOVE    "ÌÈ½ü"          TO  WRK-GENMEN
+               WHEN  3
+      *            Í±Í½
+                   MOVE    "Í±Í½"          TO  WRK-GENMEN
+               WHEN  OTHER
+                   MOVE    SPACE           TO  WRK-GENMEN
+           END-EVALUATE
+           MOVE    WRK-GENMEN              TO  WRK-TEKIYO
+      *
+      *    Äã½êÆÀ¡¦ÄãÇ¯¶â
+           EVALUATE  MF101-TEISHO
+               WHEN  1
+      *            Äã½êÆÀ
+                   MOVE    "Äã½êÆÀ£²"      TO  WRK-TEISHO
+               WHEN  2
+      *            Äã½êÆÀ£³·îÄ¶
+                   MOVE    "Äã½êÆÀ£²¡Ê£³·îÄ¶¡Ë"
+                                           TO  WRK-TEISHO
+               WHEN  3
+      *            ÄãÇ¯¶â
+                   MOVE    "Äã½êÆÀ£±"      TO  WRK-TEISHO
+               WHEN  OTHER
+                   MOVE    SPACE           TO  WRK-TEISHO
+           END-EVALUATE
+           IF  WRK-TEKIYO  NOT =  SPACE
+               STRING  WRK-TEKIYO          DELIMITED BY SPACE
+                       "¡¢"                DELIMITED BY SIZE
+                       WRK-TEISHO          DELIMITED BY SPACE
+                       INTO                WRK-TEKIYO
+               END-STRING
            ELSE
+               MOVE    WRK-TEISHO          TO  WRK-TEKIYO
+           END-IF
+      *    Å¦Í×¤Ø°õ»ú
+           IF  WRK-TEKIYO  NOT =  SPACE
+               MOVE    WRK-TEKIYO          TO  SC03-TEKIYO(1)
+               MOVE    ALL "¡½"            TO  SC03-TEKIYO(2)
+           END-IF
+      *
+      *    Âè£³¸øÈñ¤¬¤¢¤ì¤ÐÅ¦Í×Íó¤Ø
+           IF  MF101-E-KOHNUM(3)  NOT =  SPACE
+               IF  SC03-TEKIYO(1)  =  SPACE
+                   MOVE    1               TO  IDX1
+               ELSE
+                   MOVE    3               TO  IDX1
+               END-IF
+               MOVE    "Âè£³¸øÈñ"          TO  SC03-TEKIYO(IDX1)
+      *    ÉéÃ´¼ÔÈÖ¹æ(¸øÈñ£³)
+               STRING  "¸ø£³¡Ê"            DELIMITED BY SIZE
+                       MF101-E-KOHFTNJANUM(3)
+                                           DELIMITED BY SPACE
+                       "¡Ë"                DELIMITED BY SIZE
+                       INTO                SC03-TEKIYO(IDX1 + 1)
+               END-STRING
+      *    ¼õµë¼ÔÈÖ¹æ(¸øÈñ£³)
+               STRING  "¼õ¡¡¡Ê"            DELIMITED BY SIZE
+                       MF101-E-KOHJKYSNUM(3)
+                                           DELIMITED BY SPACE
+                       "¡Ë"                DELIMITED BY SIZE
+                       INTO                SC03-TEKIYO(IDX1 + 2)
+               END-STRING
+      *    ¿ÇÎÅ¼ÂÆü¿ô(¸øÈñ£³)
+               MOVE    MF101-E-JNISSU(3)   TO  WRK-Z2
+               STRING  "¼Â¡¡¡Ê"            DELIMITED BY SIZE
+                       WRK-Z2              DELIMITED BY SIZE
+                       "¡Ë"                DELIMITED BY SIZE
+                       INTO                SC03-TEKIYO(IDX1 + 3)
+               END-STRING
+               MOVE    ALL "¡½"            TO  SC03-TEKIYO(IDX1 + 4)
+           END-IF
+      *
+      *    »³Íü¸©¼«Æ°´ÔÉÕ¥³¥á¥ó¥È
+           IF  SC03-TEKIYO(1)  =  SPACE
                MOVE    MF101-TEKIYO        TO  SC03-TEKIYO(1)
+           ELSE
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >  35
+                 IF  SC03-TEKIYO(IDX2)  =  SPACE
+                     MOVE    MF101-TEKIYO  TO  SC03-TEKIYO(IDX2)
+                     MOVE    35            TO  IDX2
+                 END-IF
+               END-PERFORM
            END-IF
       *
            .
@@ -1543,32 +1589,6 @@
              END-PERFORM
            END-PERFORM
       *
-      *    ¸ºÌÈ¶èÊ¬
-           EVALUATE  MF101-GENMEN
-               WHEN  1
-      *            ¸ºÌÈ
-                   MOVE    "¡û"            TO  SC03-GENMEN(1)
-               WHEN  2
-      *            ÌÈ½ü
-                   MOVE    "¡û"            TO  SC03-GENMEN(2)
-               WHEN  3
-      *            Í±Í½
-                   MOVE    "¡û"            TO  SC03-GENMEN(3)
-           END-EVALUATE
-      *
-      *    Äã½êÆÀ¡¦ÄãÇ¯¶â
-           EVALUATE  MF101-TEISHO
-               WHEN  1
-      *            Äã½êÆÀ
-                   MOVE    "¡û"            TO  SC03-TEISHO(2)
-               WHEN  2
-      *            Äã½êÆÀ£³·îÄ¶
-                   MOVE    "¡û"            TO  SC03-TEISHO(3)
-               WHEN  3
-      *            ÄãÇ¯¶â
-                   MOVE    "¡û"            TO  SC03-TEISHO(1)
-           END-EVALUATE
-      *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE    MF101-JNISSU            TO  WRK-Z2
            MOVE    WRK-Z2                  TO  SC03-NISSU(1)
@@ -1645,7 +1665,33 @@
            MOVE    MF101-E-SHOKUJIFTN(2)   TO  WRK-Z9
            MOVE    WRK-Z9                  TO  SC03-SFTNGK(3)
       *
-      *    Å¦Í×
+      *    ¸ºÌÈ¶èÊ¬
+           EVALUATE  MF101-GENMEN
+               WHEN  1
+      *            ¸ºÌÈ
+                   MOVE    "¡û"            TO  SC03-GENMEN(1)
+               WHEN  2
+      *            ÌÈ½ü
+                   MOVE    "¡û"            TO  SC03-GENMEN(2)
+               WHEN  3
+      *            Í±Í½
+                   MOVE    "¡û"            TO  SC03-GENMEN(3)
+           END-EVALUATE
+      *
+      *    Äã½êÆÀ¡¦ÄãÇ¯¶â
+           EVALUATE  MF101-TEISHO
+               WHEN  1
+      *            Äã½êÆÀ
+                   MOVE    "¡û"            TO  SC03-TEISHO(2)
+               WHEN  2
+      *            Äã½êÆÀ£³·îÄ¶
+                   MOVE    "¡û"            TO  SC03-TEISHO(3)
+               WHEN  3
+      *            ÄãÇ¯¶â
+                   MOVE    "¡û"            TO  SC03-TEISHO(1)
+           END-EVALUATE
+      *
+      *    »³Íü¸©¼«Æ°´ÔÉÕ¥³¥á¥ó¥È
            MOVE    MF101-TEKIYO            TO  SC03-TEKIYO(1)
       *
            .
