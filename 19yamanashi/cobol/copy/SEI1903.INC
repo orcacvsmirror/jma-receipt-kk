@@ -146,7 +146,7 @@
       *低所得・低年金
            03  MF101-TEISHO              PIC  9(01).
       *その他の公費情報
-           03  MF101-ETCKOHINF  OCCURS  2.
+           03  MF101-ETCKOHINF  OCCURS  3.
                05  MF101-E-KOHNUM          PIC  X(03).
                05  MF101-E-KOHFTNJANUM     PIC  X(08).
                05  MF101-E-KOHJKYSNUM      PIC  X(07).
