@@ -159,16 +159,8 @@
            03  WRK-KOHID             PIC 9(10).
            03  WRK-KOBETUCITYNUM     PIC X(03).
            03  WRK-FTNMONEY-G        PIC 9(08).
-           03  WRK-ETC-TBL.
-               05  WRK-ETC-KOHNUM    PIC X(03) OCCURS 2.
-               05  WRK-ETC-KOHID     PIC 9(10) OCCURS 2.
-               05  WRK-ETC-TENSU     PIC 9(07) OCCURS 2.
-               05  WRK-ETC-ITBFTN    PIC 9(07) OCCURS 2.
-               05  WRK-ETC-S-NISSU   PIC 9(02) OCCURS 2.
-               05  WRK-ETC-S-KINGK   PIC 9(08) OCCURS 2.
-               05  WRK-ETC-S-FTNGK   PIC 9(08) OCCURS 2.
-               05  WRK-ETC-FTNJANUM  PIC X(20).
-               05  WRK-ETC-JKYSNUM   PIC X(20).
+           03  WRK-ETC-FTNJANUM      PIC X(20).
+           03  WRK-ETC-JKYSNUM       PIC X(20).
       *
       *    Ê¸»úÊÑ´¹
            03  WRK-MAE-INPUT         PIC X(200).
@@ -192,6 +184,27 @@
                05  WRK-OPTION        PIC X(100)  OCCURS 100.
            03  WRK-PRGID             PIC X(25).
            03  WRK-KBNCD             PIC X(16).
+      *
+      *    ¤½¤ÎÂ¾¸øÈñ¾ðÊóÎÎ°è
+       01  WRK-ETC-TBL.
+           03  WRK-ETC-KOHINFO OCCURS 3.
+               05  WRK-ETC-KOHNUM    PIC X(03).
+               05  WRK-ETC-KOHID     PIC 9(10).
+               05  WRK-ETC-TENSU     PIC 9(07).
+               05  WRK-ETC-ITBFTN    PIC 9(07).
+               05  WRK-ETC-S-NISSU   PIC 9(02).
+               05  WRK-ETC-S-KINGK   PIC 9(08).
+               05  WRK-ETC-S-FTNGK   PIC 9(08).
+      *
+      *    ¤½¤ÎÂ¾¸øÈñ¾ðÊó°ì»þÊÝÂ¸ÎÎ°è
+           03  WRK-HOZON-KOHINFO.
+               05  WRK-HOZON-KOHNUM  PIC X(03).
+               05  WRK-HOZON-KOHID   PIC 9(10).
+               05  WRK-HOZON-TENSU   PIC 9(07).
+               05  WRK-HOZON-ITBFTN  PIC 9(07).
+               05  WRK-HOZON-S-NISSU PIC 9(02).
+               05  WRK-HOZON-S-KINGK PIC 9(08).
+               05  WRK-HOZON-S-FTNGK PIC 9(08).
       *
       *    ¥«¥¦¥ó¥ÈÎÎ°è
        01  CNT-AREA.
@@ -734,7 +747,7 @@
              MOVE  RECE10-SHOKUJIINF(1)        TO  MF101-SHOKUJIINF
       *
              PERFORM  VARYING  IDX  FROM  1  BY  1
-                      UNTIL    IDX  >     2  OR
+                      UNTIL    IDX  >     3  OR
                       RECE10-KOHNUM(IDX)  =  SPACE
                IF  RECE10-KOHNUM(IDX)  NOT =  "012"
       *          ¸øÈñÈÖ¹æ
@@ -808,46 +821,46 @@
                IF  WRK-ETC-KOHNUM(1)     NOT  =  SPACE
                  DISPLAY "¤½¤ÎÂ¾¸øÈñÈÖ¹æ=" WRK-ETC-KOHNUM(1)
                          ","               WRK-ETC-KOHNUM(2)
-                 IF      WRK-ETC-KOHNUM(2)    =  SPACE  OR
-                         WRK-ETC-KOHNUM(2)    >  WRK-ETC-KOHNUM(1)
-                   MOVE  1                   TO  IDX
-                   MOVE  2                   TO  IDY
-                 ELSE
-                   MOVE  2                   TO  IDX
-                   MOVE  1                   TO  IDY
-                 END-IF
-      *          Âè£±¸øÈñ
-                 MOVE    WRK-ETC-KOHNUM(1)   TO  WRK-KOHNUM
-                 PERFORM 930-PTKOHINF-SET-SEC
-                 MOVE    WRK-ETC-TENSU(1)    TO  MF101-E-TOTALTEN(IDX)
-                 MOVE    WRK-ETC-ITBFTN(1)   TO  MF101-E-FTNMONEY(IDX)
-                 MOVE    WRK-ETC-FTNJANUM   
-                                 TO  MF101-E-KOHFTNJANUM(IDX)
-                 MOVE    WRK-ETC-JKYSNUM    
-                                 TO  MF101-E-KOHJKYSNUM(IDX)
-                 MOVE    WRK-ETC-S-NISSU(1)
-                                 TO  MF101-E-SHOKUJINISSU(IDX)
-                 MOVE    WRK-ETC-S-KINGK(1)
-                                 TO  MF101-E-SHOKUJIRYOYOHI(IDX)
-                 MOVE    WRK-ETC-S-FTNGK(1)
-                                 TO  MF101-E-SHOKUJIFTN(IDX)
-      *          Âè£²¸øÈñ
-                 IF      WRK-ETC-KOHNUM(2)  NOT  =  SPACE
-                   MOVE    WRK-ETC-KOHNUM(2)   TO  WRK-KOHNUM
+                         ","               WRK-ETC-KOHNUM(3)
+      *          ¸øÈñÈÖ¹æ½ç¤Ë¥½¡¼¥È
+                 PERFORM  VARYING  IDX  FROM  1  BY  1
+                          UNTIL    IDX  >  2
+                          OR       WRK-ETC-KOHNUM(IDX)  =  SPACE
+                   COMPUTE  IDX1  =  IDX  +  1
+                   PERFORM  VARYING  IDY  FROM  IDX1  BY  1
+                            UNTIL    IDY  >  3
+                            OR       WRK-ETC-KOHNUM(IDY)  =  SPACE
+                     IF  WRK-ETC-KOHNUM(IDX)  >  WRK-ETC-KOHNUM(IDY)
+                        MOVE    WRK-ETC-KOHINFO(IDX) 
+                                   TO  WRK-HOZON-KOHINFO
+                        MOVE    WRK-ETC-KOHINFO(IDY) 
+                                   TO  WRK-ETC-KOHINFO(IDX)
+                        MOVE    WRK-HOZON-KOHINFO   
+                                   TO  WRK-ETC-KOHINFO(IDY)
+                     END-IF
+                   END-PERFORM
+                 END-PERFORM
+      *
+                 PERFORM  VARYING  IDX  FROM  1  BY  1
+                          UNTIL    IDX  >  3
+                          OR       WRK-ETC-KOHNUM(IDX)  =  SPACE
+                   MOVE    WRK-ETC-KOHNUM(IDX)    TO  WRK-KOHNUM
                    PERFORM 930-PTKOHINF-SET-SEC
-                   MOVE    WRK-ETC-TENSU(2)  TO  MF101-E-TOTALTEN(IDY)
-                   MOVE    WRK-ETC-ITBFTN(2) TO  MF101-E-FTNMONEY(IDY)
-                   MOVE    WRK-ETC-FTNJANUM  
-                                 TO  MF101-E-KOHFTNJANUM(IDY)
-                   MOVE    WRK-ETC-JKYSNUM  
-                                 TO  MF101-E-KOHJKYSNUM(IDY)
-                   MOVE    WRK-ETC-S-NISSU(2)
-                                 TO  MF101-E-SHOKUJINISSU(IDY)
-                   MOVE    WRK-ETC-S-KINGK(2)
-                                 TO  MF101-E-SHOKUJIRYOYOHI(IDY)
-                   MOVE    WRK-ETC-S-FTNGK(2)
-                                 TO  MF101-E-SHOKUJIFTN(IDY)
-                 END-IF
+                   MOVE    WRK-ETC-TENSU(IDX)   
+                                   TO  MF101-E-TOTALTEN(IDX)
+                   MOVE    WRK-ETC-ITBFTN(IDX)   
+                                   TO  MF101-E-FTNMONEY(IDX)
+                   MOVE    WRK-ETC-FTNJANUM   
+                                   TO  MF101-E-KOHFTNJANUM(IDX)
+                   MOVE    WRK-ETC-JKYSNUM    
+                                   TO  MF101-E-KOHJKYSNUM(IDX)
+                   MOVE    WRK-ETC-S-NISSU(IDX)
+                                   TO  MF101-E-SHOKUJINISSU(IDX)
+                   MOVE    WRK-ETC-S-KINGK(IDX)
+                                   TO  MF101-E-SHOKUJIRYOYOHI(IDX)
+                   MOVE    WRK-ETC-S-FTNGK(IDX)
+                                   TO  MF101-E-SHOKUJIFTN(IDX)
+                 END-PERFORM
                END-IF
            END-IF
       *
@@ -2109,7 +2122,12 @@
                    OR                             SYU-KOH-HKNNUM(IDX)
                      MOVE  1                    TO  IDY
                    ELSE
-                     MOVE  2                    TO  IDY
+                     IF  WRK-ETC-KOHNUM(2)     =  SPACE
+                     OR                           SYU-KOH-HKNNUM(IDX)
+                       MOVE  2                  TO  IDY
+                     ELSE
+                       MOVE  3                  TO  IDY
+                     END-IF
                    END-IF
                    MOVE  SYU-KOH-HKNNUM(IDX)   TO  WRK-ETC-KOHNUM(IDY)
                    MOVE  COMB-KOHID    (IDX)   TO  WRK-ETC-KOHID(IDY)
