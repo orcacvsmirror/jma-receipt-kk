@@ -54,6 +54,12 @@
       *
            COPY    "SC1907.INC".
       *
+      *    対象公費領域
+       01  TAISYO-DAT.
+           03  TAISYO-TBL  OCCURS  100.
+               05  TAISYO-KOHNUM     PIC X(03).
+               05  TAISYO-KAIGYO     PIC X(01).
+      *
       *    スパ領域
        01  STS-AREA.
            03  STS-RECEERR    PIC X(02).
@@ -77,6 +83,8 @@
            03  FLG-ERR               PIC 9(01).
            03  FLG-PRGOPTION         PIC 9(01).
            03  FLG-OK                PIC 9(01).
+           03  FLG-TAISYOKOHI        PIC 9(01).
+           03  FLG-TAISYO            PIC 9(01).
       *
       *    添字領域
        01  IDX-AREA.
@@ -169,6 +177,10 @@
            03  TBL-PARA-OCC    OCCURS  100.
                05  TBL-PARA-HKNJANUM    PIC X(08).
                05  TBL-PARA-PTID        PIC 9(10).
+      *
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI.
+           03  TBL-HKOHNUM           PIC X(03)  OCCURS  4.
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
@@ -280,6 +292,7 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
+           INITIALIZE  TAISYO-DAT
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -388,7 +401,7 @@
            PERFORM 1001-PARA-HENSYU-SEC
       *
       *    プログラムオプション取込み
-      *     PERFORM 100-OPTION-SELECT-SEC
+           PERFORM 100-OPTION-SELECT-SEC
       *
       *    公費請求テーブル読み込み
            PERFORM 900-KOHSKY-START-SEC
@@ -405,6 +418,16 @@
            MOVE    "SEIKYU1907"              TO  WRK-PRGID
       *
       *    プログラムオプション取得
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *
       *
            .
        100-OPTION-SELECT-EXT.
@@ -546,7 +569,11 @@
       *
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
-             IF  RECE02-KOHNUM (IDZ) = "143"
+             INITIALIZE                          TBL-HIKAKU-KOHI
+             MOVE    RECE02-KOHNUM(IDZ)      TO  TBL-HKOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -841,6 +868,28 @@
            EXIT.
       *
       *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       TAISYO-KOHNUM(IDXX)  =  SPACE
+             IF  TBL-HKOHNUM(1)  =  TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(2)  =  TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(3)  =  TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(4)  =  TAISYO-KOHNUM(IDXX)
+               MOVE     1                   TO  FLG-TAISYO
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
        900-KOHSKY-START-SEC            SECTION.
@@ -883,10 +932,14 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-             IF  RECE02-KOHNUM (1) = "143"
-             OR  RECE02-KOHNUM (2) = "143"
-             OR  RECE02-KOHNUM (3) = "143"
-             OR  RECE02-KOHNUM (4) = "143"
+               INITIALIZE                            TBL-HIKAKU-KOHI
+               MOVE    RECE02-KOHNUM(1)          TO  TBL-HKOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)          TO  TBL-HKOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)          TO  TBL-HKOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)          TO  TBL-HKOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
       *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
