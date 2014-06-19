@@ -890,6 +890,13 @@
       *****************************************************************
        200211-EDIT-IR-SEC  SECTION.
       *
+      *    審査支払機関(社保=7、国保=8に変更)
+           IF  TBL-RECEDATA2  =  "1"
+               MOVE    "7"             TO  RECEDI-REC(4:1)
+           ELSE
+               MOVE    "8"             TO  RECEDI-REC(4:1)
+           END-IF
+      *
            PERFORM 2002111-RECORD-MAKE-SEC
       *
            MOVE    TBL-RECEDATA2       TO  WRK-TEISYUTUSAKI
