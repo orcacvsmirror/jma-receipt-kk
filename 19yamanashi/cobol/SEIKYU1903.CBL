@@ -1326,7 +1326,6 @@
                WHEN  OTHER
                    MOVE    SPACE           TO  WRK-GENMEN
            END-EVALUATE
-           MOVE    WRK-GENMEN              TO  WRK-TEKIYO
       *
       *    低所得・低年金
            EVALUATE  MF101-TEISHO
@@ -1343,15 +1342,21 @@
                WHEN  OTHER
                    MOVE    SPACE           TO  WRK-TEISHO
            END-EVALUATE
-           IF  WRK-TEKIYO  NOT =  SPACE
-               STRING  WRK-TEKIYO          DELIMITED BY SPACE
-                       "、"                DELIMITED BY SIZE
-                       WRK-TEISHO          DELIMITED BY SPACE
-                       INTO                WRK-TEKIYO
-               END-STRING
+      *
+           IF  WRK-GENMEN  NOT =  SPACE
+               IF  WRK-TEISHO  NOT =  SPACE
+                   STRING  WRK-GENMEN      DELIMITED BY SPACE
+                           "、"            DELIMITED BY SIZE
+                           WRK-TEISHO      DELIMITED BY SPACE
+                           INTO            WRK-TEKIYO
+                   END-STRING
+               ELSE
+                   MOVE    WRK-GENMEN      TO  WRK-TEKIYO
+               END-IF
            ELSE
                MOVE    WRK-TEISHO          TO  WRK-TEKIYO
            END-IF
+      *
       *    摘要へ印字
            IF  WRK-TEKIYO  NOT =  SPACE
                MOVE    WRK-TEKIYO          TO  SC03-TEKIYO(1)
