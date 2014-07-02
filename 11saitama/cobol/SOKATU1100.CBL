@@ -70,6 +70,7 @@
       *  01.00.26    吉川    12/12/21   プラグイン対応
       *                                 医療機関情報編集対応
       *  01.00.27    吉川    14/05/16   プログラムオプション対応
+      *  01.00.28    吉川    14/07/02   再印刷のタイトル修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2348,7 +2349,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1100.red"        TO  SPRT-PRTID
-           MOVE    "総括表"            TO  SPRT-TITLE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) start
+      *     MOVE    "総括表"            TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE    "国保総括表"    TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE    "国保総括表［返戻分］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) end
            MOVE    SKT1100             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

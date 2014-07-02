@@ -54,6 +54,7 @@
       *  01.00.19    吉川    12/12/21   医療機関情報編集対応
       *  01.00.20    吉川    14/05/16   前期高齢者２割対応
       *                                 プログラムオプション対応
+      *  01.00.21    吉川    14/07/02   再印刷時の帳票タイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1634,7 +1635,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1110.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE    "国保請求書"    TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE    "国保請求書［返戻分］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) end
            MOVE    SKT1110             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1847,7 +1857,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1120.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE    "国保請求書"    TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE    "国保請求書［返戻分］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) end
            MOVE    SKT1120             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
