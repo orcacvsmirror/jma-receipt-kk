@@ -52,6 +52,7 @@
       *                                  医療機関情報編集対応
       *  01.00.15    吉川    14/01/10    プログラムオプション対応
       *  01.00.16    吉川    14/05/14    前期高齢者２割対応
+      *  01.00.17    吉川    14/07/04    再印刷時のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1873,7 +1874,17 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT3410.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"  TO  SPRT-TITLE
+      *
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) start
+      *     MOVE    "国保請求書"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE    "国保請求書"    TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE    "国保請求書［返戻分］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) end
            MOVE    SKT3410             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2348,7 +2359,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT3420.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE    "国保請求書"    TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE    "国保請求書［返戻分］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) end
            MOVE    SKT3420             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2566,7 +2586,16 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT3430.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"  TO  SPRT-TITLE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) start
+      *     MOVE    "国保請求書"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE    "国保請求書"    TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE    "国保請求書［返戻分］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/07/02) end
            MOVE    SKT3430             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
