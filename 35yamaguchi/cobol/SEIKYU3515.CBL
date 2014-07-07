@@ -57,6 +57,8 @@
       *                                  円単位で記載するように修正
       *                                  保険番号781の福祉医療費請求額と
       *                                  一部負担金欄の計算修正
+      *  01.00.17    吉川    14/07/07    自費のみの診療の場合、帳票に
+      *                                  記載しないように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -916,6 +918,12 @@
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
+      *
+      *=== 自費診療のみは記載対象外 by Yoshikawa(2014/07/07) start
+           IF  MF101-TENSU  =  ZERO
+               MOVE    1              TO  FLG-ERR
+           END-IF
+      *=== 自費診療のみは記載対象外 by Yoshikawa(2014/07/07) end
       *
            IF  FLG-ERR    =    ZERO
              WRITE    MF101-REC
