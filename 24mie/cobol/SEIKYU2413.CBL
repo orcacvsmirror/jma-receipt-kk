@@ -28,12 +28,23 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2014/07/08  月途中で保険を変更した場合でも
+      *                                  件数は1件とカウントする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
        CONFIGURATION SECTION.
        INPUT-OUTPUT  SECTION.
        FILE-CONTROL.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      *    請求書用ファイル
+           SELECT  MF100-FILE   ASSIGN    MF100PARA
+                               ORGANIZATION    IS  INDEXED
+                               ACCESS  MODE    IS  DYNAMIC
+                               RECORD  KEY     IS  MF100-KEY
+                               FILE    STATUS  IS  STS-MF100.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
       *    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
@@ -42,11 +53,24 @@
        DATA  DIVISION.
        FILE  SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      *    集計ファイル
+       FD  MF100-FILE.
+       01  MF100-REC.
+           COPY  "SEI2405.INC".
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *
       *    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
        WORKING-STORAGE  SECTION.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           COPY  "CPCOMMONDAT2.INC"
+                   REPLACING  //RECE01//
+                   BY         //MF100//.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
       *    エラーファイル 名称領域
            COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
@@ -57,6 +81,9 @@
       *    スパ領域
        01  STS-AREA.
            03  STS-RECEERR    PIC X(02).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           03  STS-MF100      PIC X(02).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
       *    システム領域
        01  SYS-AREA.
@@ -76,6 +103,9 @@
            03  FLG-ERR               PIC 9(01).
            03  FLG-PRGOPTION         PIC 9(01).
            03  FLG-OK                PIC 9(01).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           03  FLG-MF100             PIC 9(01).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -311,6 +341,14 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      *    請求書TMP
+           MOVE    "MF106ZZ"           TO  MF100PARA-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID(1:16)
+                                       TO  MF100PARA-TERMID
+           MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *
       *    対象年月最終日取得
            INITIALIZE  WRK-SYMD
            MOVE    LNK-PRTKANRI-SRYYM  TO    WRK-SYMD(1:6)
@@ -522,10 +560,20 @@
       *****************************************************************
        200-MAIN-SEC  SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           OPEN    OUTPUT  MF100-FILE
+           CLOSE           MF100-FILE
+           OPEN    I-O     MF100-FILE
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *
            MOVE    ZERO    TO  FLG-END
       *
            PERFORM 2001-SYUKEI-SEC
                    UNTIL   FLG-END =   1
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           CLOSE   MF100-FILE
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
            IF      CNT-RECE02  >   0
                 PERFORM 2002-PRINT-SEC
@@ -563,82 +611,113 @@
            INITIALIZE                            IDX1
                                                  FLG-ERR
       *
-      *    市町村コード別に件数集計
-           EVALUATE  RECE02-KOHFTNJANUM(IDZ)(1:3)
-      *      津市
-             WHEN  "001"    MOVE    1        TO  IDX1
-      *      四日市市
-             WHEN  "002"    MOVE    2        TO  IDX1
-      *      伊勢市
-             WHEN  "003"    MOVE    3        TO  IDX1
-      *      松阪市
-             WHEN  "004"    MOVE    4        TO  IDX1
-      *      桑名市
-             WHEN  "005"    MOVE    5        TO  IDX1
-      *      鈴鹿市
-             WHEN  "007"    MOVE    6        TO  IDX1
-      *      名張市
-             WHEN  "008"    MOVE    7        TO  IDX1
-      *      尾鷲市
-             WHEN  "009"    MOVE    8        TO  IDX1
-      *      亀山市
-             WHEN  "010"    MOVE    9        TO  IDX1
-      *      鳥羽市
-             WHEN  "011"    MOVE    10       TO  IDX1
-      *      熊野市
-             WHEN  "012"    MOVE    11       TO  IDX1
-      *      いなべ市
-             WHEN  "014"    MOVE    12       TO  IDX1
-      *      志摩市
-             WHEN  "015"    MOVE    13       TO  IDX1
-      *      伊賀市
-             WHEN  "016"    MOVE    14       TO  IDX1
-      *      木曽岬町
-             WHEN  "053"    MOVE    15       TO  IDX1
-      *      東員町
-             WHEN  "056"    MOVE    16       TO  IDX1
-      *      菰野町
-             WHEN  "059"    MOVE    17       TO  IDX1
-      *      朝日町
-             WHEN  "061"    MOVE    18       TO  IDX1
-      *      川越町
-             WHEN  "062"    MOVE    19       TO  IDX1
-      *      多気町
-             WHEN  "076"    MOVE    20       TO  IDX1
-      *      明和町
-             WHEN  "077"    MOVE    21       TO  IDX1
-      *      大台町
-             WHEN  "078"    MOVE    22       TO  IDX1
-      *      玉城町
-             WHEN  "081"    MOVE    23       TO  IDX1
-      *      渡会町
-             WHEN  "090"    MOVE    24       TO  IDX1
-      *      御浜町
-             WHEN  "103"    MOVE    25       TO  IDX1
-      *      紀宝町
-             WHEN  "104"    MOVE    26       TO  IDX1
-      *      大紀町
-             WHEN  "107"    MOVE    27       TO  IDX1
-      *      南伊勢町
-             WHEN  "108"    MOVE    28       TO  IDX1
-      *      紀北町
-             WHEN  "109"    MOVE    29       TO  IDX1
-      *      その他（不正な番号）
-             WHEN  OTHER    MOVE    99       TO  IDX1
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      **    市町村コード別に件数集計
+      *     EVALUATE  RECE02-KOHFTNJANUM(IDZ)(1:3)
+      **      津市
+      *       WHEN  "001"    MOVE    1        TO  IDX1
+      **      四日市市
+      *       WHEN  "002"    MOVE    2        TO  IDX1
+      **      伊勢市
+      *       WHEN  "003"    MOVE    3        TO  IDX1
+      **      松阪市
+      *       WHEN  "004"    MOVE    4        TO  IDX1
+      **      桑名市
+      *       WHEN  "005"    MOVE    5        TO  IDX1
+      **      鈴鹿市
+      *       WHEN  "007"    MOVE    6        TO  IDX1
+      **      名張市
+      *       WHEN  "008"    MOVE    7        TO  IDX1
+      **      尾鷲市
+      *       WHEN  "009"    MOVE    8        TO  IDX1
+      **      亀山市
+      *       WHEN  "010"    MOVE    9        TO  IDX1
+      **      鳥羽市
+      *       WHEN  "011"    MOVE    10       TO  IDX1
+      **      熊野市
+      *       WHEN  "012"    MOVE    11       TO  IDX1
+      **      いなべ市
+      *       WHEN  "014"    MOVE    12       TO  IDX1
+      **      志摩市
+      *       WHEN  "015"    MOVE    13       TO  IDX1
+      **      伊賀市
+      *       WHEN  "016"    MOVE    14       TO  IDX1
+      **      木曽岬町
+      *       WHEN  "053"    MOVE    15       TO  IDX1
+      **      東員町
+      *       WHEN  "056"    MOVE    16       TO  IDX1
+      **      菰野町
+      *       WHEN  "059"    MOVE    17       TO  IDX1
+      **      朝日町
+      *       WHEN  "061"    MOVE    18       TO  IDX1
+      **      川越町
+      *       WHEN  "062"    MOVE    19       TO  IDX1
+      **      多気町
+      *       WHEN  "076"    MOVE    20       TO  IDX1
+      **      明和町
+      *       WHEN  "077"    MOVE    21       TO  IDX1
+      **      大台町
+      *       WHEN  "078"    MOVE    22       TO  IDX1
+      **      玉城町
+      *       WHEN  "081"    MOVE    23       TO  IDX1
+      **      渡会町
+      *       WHEN  "090"    MOVE    24       TO  IDX1
+      **      御浜町
+      *       WHEN  "103"    MOVE    25       TO  IDX1
+      **      紀宝町
+      *       WHEN  "104"    MOVE    26       TO  IDX1
+      **      大紀町
+      *       WHEN  "107"    MOVE    27       TO  IDX1
+      **      南伊勢町
+      *       WHEN  "108"    MOVE    28       TO  IDX1
+      **      紀北町
+      *       WHEN  "109"    MOVE    29       TO  IDX1
+      **      その他（不正な番号）
+      *       WHEN  OTHER    MOVE    99       TO  IDX1
+      *     END-EVALUATE
+      **    
+      **    件数加算
+      *     IF  IDX1  =  99
+      *         MOVE    1                     TO  FLG-ERR
+      *     ELSE
+      *         ADD    1                      TO  WRK-KENSU(IDX1)
+      *                                           WRK-GKENSU
+      *     END-IF
+      *    
+      *    TMP-FILE キーセット
+           INITIALIZE                            MF100-REC
+      *
+           MOVE  SPA-HOSPNUM                 TO  MF100-HOSPNUM
+           MOVE  RECE02-PTNUM                TO  MF100-PTNUM
+           MOVE  RECE02-RECEKA               TO  MF100-SRYKA
+           MOVE  RECE02-NYUGAIKBN            TO  MF100-NYUGAIKBN
+           MOVE  RECE02-SRYYM                TO  MF100-SRYYM
+      *
+      *    公費区分
+           EVALUATE RECE02-KOHNUM(IDZ)
+             WHEN  "161"
+               MOVE  "1"                     TO   MF100-KBN
+             WHEN  "162"
+               MOVE  "2"                     TO   MF100-KBN
+             WHEN  "163"
+               MOVE  "3"                     TO   MF100-KBN
+             WHEN  "164"
+               MOVE  "4"                     TO   MF100-KBN
+             WHEN  "165"
+               MOVE  "5"                     TO   MF100-KBN
            END-EVALUATE
-      *    
-      *    件数加算
-           IF  IDX1  =  99
-               MOVE    1                     TO  FLG-ERR
-           ELSE
-               ADD    1                      TO  WRK-KENSU(IDX1)
-                                                 WRK-GKENSU
-           END-IF
-      *    
+      *
+      *    市町村コード
+           MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)    TO  MF100-CITYNUM
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR             =    ZERO
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+               WRITE    MF100-REC 
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
                ADD      1                 TO    CNT-MF100
            ELSE
              DISPLAY  "処理対象外患者 =" RECE02-PTNUM
@@ -685,11 +764,28 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           INITIALIZE  MF100-REC
+      *
+           OPEN    INPUT   MF100-FILE
+      *
+           MOVE    ZERO    TO  FLG-PRINT
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *
       *    帳票編集<見出し>処理
            PERFORM  310-HEAD-HEN-SEC
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      *    帳票編集<明細>処理
+           PERFORM  320-BODY-HEN-SEC
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *
       *    帳票印刷処理
            PERFORM  330-PRINT-OUT-SEC
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+           CLOSE    MF100-FILE
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
            .
        2002-PRINT-EXT.
@@ -759,20 +855,124 @@
                    MOVE    "○"            TO  SC13-TEISYUTU(2)
            END-EVALUATE
       *    
-      *    件数
-           PERFORM VARYING  IDX  FROM  1  BY  1
-                   UNTIL    IDX  >  CONST-CITYCNT
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      **    件数
+      *     PERFORM VARYING  IDX  FROM  1  BY  1
+      *             UNTIL    IDX  >  CONST-CITYCNT
+      *         MOVE    WRK-KENSU(IDX)      TO  WRK-Z5
+      *         MOVE    WRK-Z5              TO  SC13-KENSU(IDX)
+      *     END-PERFORM
+      **
+      **    合計件数
+      *     MOVE    WRK-GKENSU              TO  WRK-Z6
+      *     MOVE    WRK-Z6                  TO  SC13-GKENSU
+      **=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
+      *    
+           .
+       310-HEAD-HEN-EXT.
+           EXIT.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      *****************************************************************
+      *    帳票編集<明細行>処理
+      *****************************************************************
+       320-BODY-HEN-SEC      SECTION.
+      *
+      *    一時ファイル読込
+           PERFORM 900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL  FLG-PRINT  =  1 
+      *
+      *        市町村コード別に件数集計
+               EVALUATE  MF100-CITYNUM
+      *          津市
+                 WHEN  "001"  MOVE    1    TO  IDX1
+      *          四日市市
+                 WHEN  "002"  MOVE    2    TO  IDX1
+      *          伊勢市
+                 WHEN  "003"  MOVE    3    TO  IDX1
+      *          松阪市
+                 WHEN  "004"  MOVE    4    TO  IDX1
+      *          桑名市
+                 WHEN  "005"  MOVE    5    TO  IDX1
+      *          鈴鹿市
+                 WHEN  "007"  MOVE    6    TO  IDX1
+      *          名張市
+                 WHEN  "008"  MOVE    7    TO  IDX1
+      *          尾鷲市
+                 WHEN  "009"  MOVE    8    TO  IDX1
+      *          亀山市
+                 WHEN  "010"  MOVE    9    TO  IDX1
+      *          鳥羽市
+                 WHEN  "011"  MOVE    10   TO  IDX1
+      *          熊野市
+                 WHEN  "012"  MOVE    11   TO  IDX1
+      *          いなべ市
+                 WHEN  "014"  MOVE    12   TO  IDX1
+      *          志摩市
+                 WHEN  "015"  MOVE    13   TO  IDX1
+      *          伊賀市
+                 WHEN  "016"  MOVE    14   TO  IDX1
+      *          木曽岬町
+                 WHEN  "053"  MOVE    15   TO  IDX1
+      *          東員町
+                 WHEN  "056"  MOVE    16   TO  IDX1
+      *          菰野町
+                 WHEN  "059"  MOVE    17   TO  IDX1
+      *          朝日町
+                 WHEN  "061"  MOVE    18   TO  IDX1
+      *          川越町
+                 WHEN  "062"  MOVE    19   TO  IDX1
+      *          多気町
+                 WHEN  "076"  MOVE    20   TO  IDX1
+      *          明和町
+                 WHEN  "077"  MOVE    21   TO  IDX1
+      *          大台町
+                 WHEN  "078"  MOVE    22   TO  IDX1
+      *          玉城町
+                 WHEN  "081"  MOVE    23   TO  IDX1
+      *          渡会町
+                 WHEN  "090"  MOVE    24   TO  IDX1
+      *          御浜町
+                 WHEN  "103"  MOVE    25   TO  IDX1
+      *          紀宝町
+                 WHEN  "104"  MOVE    26   TO  IDX1
+      *          大紀町
+                 WHEN  "107"  MOVE    27   TO  IDX1
+      *          南伊勢町
+                 WHEN  "108"  MOVE    28   TO  IDX1
+      *          紀北町
+                 WHEN  "109"  MOVE    29   TO  IDX1
+      *          その他（不正な番号）
+                 WHEN  OTHER  MOVE    99   TO  IDX1
+               END-EVALUATE
+      *        件数加算
+               IF  IDX1  NOT =  99
+                   ADD    1                TO  WRK-KENSU(IDX1)
+                                               WRK-GKENSU
+               END-IF
+      *
+      *      一時ファイル読み込み
+             PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+      *    件数印字
+           PERFORM VARYING IDX    FROM    1   BY  1
+                   UNTIL   IDX    >       CONST-CITYCNT
+      *
                MOVE    WRK-KENSU(IDX)      TO  WRK-Z5
                MOVE    WRK-Z5              TO  SC13-KENSU(IDX)
+      *
            END-PERFORM
       *
       *    合計件数
            MOVE    WRK-GKENSU              TO  WRK-Z6
            MOVE    WRK-Z6                  TO  SC13-GKENSU
-      *    
+      *
            .
-       310-HEAD-HEN-EXT.
+       320-BODY-HEN-EXT.
            EXIT.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
       *****************************************************************
       *    帳票印刷処理
@@ -884,6 +1084,37 @@
            .
        300-END-EXT.
            EXIT.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    MF100-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-MF100
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-MF100
+           END-READ
+      *
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  MF100-FILE  NEXT
+              AT  END
+                 MOVE  1                   TO  FLG-PRINT
+           END-READ
+      *
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/07/08) end
       *
       *****************************************************************
       *    公費請求書マスタ読込
