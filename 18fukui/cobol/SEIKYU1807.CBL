@@ -36,6 +36,8 @@
       *                                      患者カナ氏名欄は半角で記録するように修正
       *  01.00.04       萩野    2014/04/09   数字項目について、桁数に達しない場合は
       *                                      先頭に０を付加するよう修正
+      *  01.00.05       萩野    2014/07/09   受給資格者番号の先頭の値が
+      *                                      「０」になる不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -231,7 +233,10 @@
            03  WRK-MOJIHEN             PIC 9(10).
            03  WRK-HENSYU-AREA.
                05  WRK-DATA            PIC X(100).
-               05  WRK-NUM             PIC ZZZZZZZZZZ.
+      *=== 受給資格者番号の不具合を修正 by hagino(2014/07/09) start
+      *         05  WRK-NUM             PIC ZZZZZZZZZZ.
+               05  WRK-NUM             PIC ZZZZZZZZZZZ.
+      *=== 受給資格者番号の不具合を修正 by hagino(2014/07/09) end
                05  WRK-NUM1            PIC ZZZZZZZZ.Z.
       *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
                05  WRK-NUM9            PIC 99999999999.
@@ -1009,6 +1014,10 @@
            MOVE    MF110-KOHJKYSNUM        TO  WRK-NUM
       *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
            MOVE    11                      TO  WRK-NAGASA
+           
+           DISPLAY "***  KOHJKYSNUM 1="MF110-KOHJKYSNUM
+           DISPLAY "***  KOHJKYSNUM 2="WRK-NUM
+           
       *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
       *     PERFORM 5004-MOJI-HENSYU-SEC
            PERFORM 5005-NUM-HENSYU-SEC
@@ -1801,6 +1810,7 @@
       *     ELSE
       *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) end
            MOVE    WRK-NUM                 TO  WRK-NUM9
+           DISPLAY "***  NUM-HENSYU 3="WRK-NUM9
       *      開始位置
       *=== 指定桁数に達しない場合はゼロ埋めする by hagino(2014/04/09) start
       *       COMPUTE WRK-ST  =   11      -   WRK-NAGASA
