@@ -81,7 +81,7 @@
       </element>
       <element name="S-NISSU" occurs="1">
         <appinfo>
-          <embed object="text" length="5"/>
+          <embed object="text" length="6"/>
         </appinfo>
       </element>
       <element name="S-KINGK" occurs="1">
@@ -130,7 +130,7 @@
       </element>
       <element name="S-KNISSU" occurs="1">
         <appinfo>
-          <embed object="text" length="5"/>
+          <embed object="text" length="6"/>
         </appinfo>
       </element>
       <element name="S-KKINGK" occurs="1">

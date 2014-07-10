@@ -39,6 +39,8 @@
       *                                  印字されるように修正
       *  01.00.07    吉川    2012/11/19  PERFORMをGOTOに修正
       *  01.00.08    吉川    2013/02/08  医療機関情報編集対応
+      *  01.00.09    萩野    2014/07/10  食事療養・生活療養の回数欄で１万の位が
+      *                                  記載されるよう修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -155,6 +157,9 @@
       *
            03  WRK-Z4              PIC ZZZZ.
            03  WRK-Z5              PIC Z,ZZZ.
+      *=== １万の位が記載されるよう修正 by hagino(2014/07/10) start
+           03  WRK-Z6              PIC ZZ,ZZZ.
+      *=== １万の位が記載されるよう修正 by hagino(2014/07/10) end
            03  WRK-Z7              PIC ZZZ,ZZZ.
            03  WRK-Z9              PIC Z,ZZZ,ZZZ.
       *=== 桁数増加 by Yoshikawa(2012/03/14) start
@@ -1115,9 +1120,15 @@
       *    食事療養：件数
              MOVE  SUM-S-KENSU(IDX)      TO  WRK-Z5
              MOVE  WRK-Z5                TO  SKT4325-S-KENSU(IDZ)
+      *
       *    食事療養：日数
-             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
-             MOVE  WRK-Z5                TO  SKT4325-S-NISSU(IDZ)
+      *=== １万の位が記載されるよう修正 by hagino(2014/07/10) start
+      *       MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z5
+      *       MOVE  WRK-Z5                TO  SKT4325-S-NISSU(IDZ)
+             MOVE  SUM-S-NISSU(IDX)      TO  WRK-Z6
+             MOVE  WRK-Z6                TO  SKT4325-S-NISSU(IDZ)
+      *=== １万の位が記載されるよう修正 by hagino(2014/07/10) end
+      *
       *    食事療養：金額
       *=== 桁数増加 by Yoshikawa(2012/03/14) start
       *       MOVE  SUM-S-KINGK(IDX)      TO  WRK-Z9
@@ -1176,9 +1187,15 @@
       *    公費再掲欄：食事療養：件数
                MOVE  SUM-S-KKENSU(IDX2)    TO  WRK-Z5
                MOVE  WRK-Z5                TO  SKT4325-S-KKENSU(IDY)
+      *
       *    公費再掲欄：食事療養：日数
-               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
-               MOVE  WRK-Z5                TO  SKT4325-S-KNISSU(IDY)
+      *=== １万の位が記載されるよう修正 by hagino(2014/07/10) start
+      *         MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z5
+      *         MOVE  WRK-Z5                TO  SKT4325-S-KNISSU(IDY)
+               MOVE  SUM-S-KNISSU(IDX2)    TO  WRK-Z6
+               MOVE  WRK-Z6                TO  SKT4325-S-KNISSU(IDY)
+      *=== １万の位が記載されるよう修正 by hagino(2014/07/10) end
+      *
       *    公費再掲欄：食事療養：金額
       *=== 桁数増加 by Yoshikawa(2012/03/14) start
       *         MOVE  SUM-S-KKINGK(IDX2)    TO  WRK-Z9

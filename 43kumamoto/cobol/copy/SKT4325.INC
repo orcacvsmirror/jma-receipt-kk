@@ -24,6 +24,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         12/03/14  点数と金額の桁数増加
+      *  01.00.02    萩野         14/07/10  食事日数の桁数増加
       ********************************************************************
        01  SKT4325.
       *    ページ番号
@@ -63,7 +64,10 @@
       *    食事件数
                05  SKT4325-S-KENSU         PIC  X(05).
       *    食事日数
-               05  SKT4325-S-NISSU         PIC  X(05).
+      *=== 桁数増加 by hagino(2014/07/10) start
+      *         05  SKT4325-S-NISSU         PIC  X(05).
+               05  SKT4325-S-NISSU         PIC  X(06).
+      *=== 桁数増加 by hagino(2014/07/10) end
       *    食事療養費
       *=== 桁数増加 by Yoshikawa(2012/03/14) start
       *         05  SKT4325-S-KINGK         PIC  X(09).
@@ -91,7 +95,10 @@
       *    食事件数
                05  SKT4325-S-KKENSU        PIC  X(05).
       *    食事日数
-               05  SKT4325-S-KNISSU        PIC  X(05).
+      *=== 桁数増加 by hagino(2014/07/10) start
+      *         05  SKT4325-S-KNISSU        PIC  X(05).
+               05  SKT4325-S-KNISSU        PIC  X(06).
+      *=== 桁数増加 by hagino(2014/07/10) end
       *    食事療養費
       *=== 桁数増加 by Yoshikawa(2012/03/14) start
       *         05  SKT4325-S-KKINGK        PIC  X(09).
