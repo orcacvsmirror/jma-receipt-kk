@@ -29,6 +29,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       * 01.00.01     吉川    13/12/02    「請求年月」は請求年月日から取得
+      * 01.00.02     萩野    14/07/11    項目「食事療養費」は標準負担額を記録する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -903,7 +904,10 @@
              PERFORM 5005-NUM-HENSYU-SEC
       *
       *    １７．食事療養費
-             MOVE    MF100-SHOKUJIRYOYOHI    TO  WRK-NUM
+      *=== 標準負担額を記録する by hagino(2014/07/10) start
+      *       MOVE    MF100-SHOKUJIRYOYOHI    TO  WRK-NUM
+             MOVE    MF100-SHOKUJIFTN        TO  WRK-NUM
+      *=== 標準負担額を記録する by hagino(2014/07/10) end
              MOVE    10                      TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
       *
