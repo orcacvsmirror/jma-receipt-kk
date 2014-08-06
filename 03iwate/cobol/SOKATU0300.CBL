@@ -49,6 +49,7 @@
       *  01.00.16     吉川   2012/12/19  医療機関情報編集修正
       *  01.00.17     吉川   2014/05/20  前期高齢者２割対応
       *                                  在宅の対象とする診療コード変更
+      *  01.00.18     吉川   2014/08/06  再印刷時のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1562,15 +1563,30 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT0300.red"           TO  SPRT-PRTID
-      *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) start
-      *     MOVE    "国保総括表"        TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/08/06) start
+      **=== 特別療養費国保対応 by Yoshikawa(2011/06/15) start
+      **     MOVE    "国保総括表"        TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保総括表"      TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2011/06/15) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
                MOVE  "国保総括表"      TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保総括表［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保総括表［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保総括表［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2011/06/15) end
+      *=== 再印刷時のタイトル修正 by Yoshikawa(2014/08/06) end
            MOVE    SKT0300             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
