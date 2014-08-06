@@ -38,6 +38,7 @@
       *  01.00.05    吉川    10/06/01    オンライン返戻対応
       *  01.00.06    吉川    11/02/10    特別療養費国保対応
       *  01.00.07    吉川    13/02/08    医療機関情報編集対応
+      *  01.00.08    吉川    14/08/06    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -881,15 +882,30 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT4400.red"        TO  SPRT-PRTID
-      *=== 特別療養費国保対応 by Yoshikawa(2011/02/10) start
-      *     MOVE    "診療報酬総括票"    TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/08/06) start
+      **=== 特別療養費国保対応 by Yoshikawa(2011/02/10) start
+      **     MOVE    "診療報酬総括票"    TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "診療報酬総括票"  TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "診療報酬総括票［特別療養費］"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2011/02/10) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
                MOVE  "診療報酬総括票"  TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "診療報酬総括票［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "診療報酬総括票［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "診療報酬総括票［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "診療報酬総括票［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2011/02/10) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/08/06) end
            MOVE    SKT4400             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
