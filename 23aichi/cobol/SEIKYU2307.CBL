@@ -267,6 +267,7 @@
                05   WRK-SEIKYUGK         PIC 9(08)V9(01).
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
                05  WRK-TYOKIFTNGK   PIC 9(08).
+               05  WRK-TYOKIFTNGK-G PIC 9(08).
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
@@ -373,11 +374,11 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-ICHINOMIYA1    PIC X(03)  VALUE  "304".
            03  WRK-CONS-ICHINOMIYA2    PIC X(03)  VALUE  "404".
+      *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) end
       *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) start
            03  WRK-CONS-KITANAGOYA1    PIC X(03)  VALUE  "337".
            03  WRK-CONS-KITANAGOYA2    PIC X(03)  VALUE  "437".
       *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) end
-      *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) end
       *
       *    DB参照用
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -1042,6 +1043,9 @@
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+           INITIALIZE       WRK-KASAN-TBL
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *    請求金額集計
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -1085,7 +1089,7 @@
            IF    FLG-TYOKI    =    1
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
-               IF    WRK-TYOKIFTNGK  >=  10000
+               IF    WRK-TYOKIFTNGK-G  >=  10000
                    MOVE    1              TO    MF100-TYOKI
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
@@ -1109,7 +1113,7 @@
            IF    FLG-TYOKI    =    2
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
-               IF    WRK-TYOKIFTNGK  >=  20000
+               IF    WRK-TYOKIFTNGK-G  >=  20000
                    MOVE    1              TO    MF100-TYOKI
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
@@ -1935,6 +1939,9 @@
       *=== 市町村負担額修正 by Yoshikawa(2012/04/18) end
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
+           ADD    WRK-TYOKIFTNGK             TO  WRK-TYOKIFTNGK-G
+      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *
            .
        800-SEIKYU-SEC-EXT.
