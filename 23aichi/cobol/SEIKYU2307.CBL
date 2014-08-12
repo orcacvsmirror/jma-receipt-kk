@@ -65,6 +65,9 @@
       *  01.00.18    吉川    14/02/13    長期の判定不具合修正
       *  01.00.19    萩野    14/05/15    長期の判定不具合修正
       *  01.00.20    萩野    14/06/16    長期は上限額を超えた時に記載する
+      *  01.00.21    吉川    14/08/12    北名古屋市こども医療対応
+      *                                  福祉併用分と単独がある場合
+      *                                  市町村請求額は記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -264,7 +267,6 @@
                05   WRK-SEIKYUGK         PIC 9(08)V9(01).
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
                05  WRK-TYOKIFTNGK   PIC 9(08).
-               05  WRK-TYOKIFTNGK-G PIC 9(08).
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
@@ -371,6 +373,10 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-ICHINOMIYA1    PIC X(03)  VALUE  "304".
            03  WRK-CONS-ICHINOMIYA2    PIC X(03)  VALUE  "404".
+      *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) start
+           03  WRK-CONS-KITANAGOYA1    PIC X(03)  VALUE  "337".
+           03  WRK-CONS-KITANAGOYA2    PIC X(03)  VALUE  "437".
+      *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) end
       *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) end
       *
       *    DB参照用
@@ -989,6 +995,9 @@
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
+      *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) start
+           MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-FUKUSITEN
+      *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) end
       *
       *    市町村番号設定
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
@@ -1033,9 +1042,6 @@
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
-      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
-           INITIALIZE       WRK-KASAN-TBL
-      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *    請求金額集計
            MOVE    MF100-KOHNUM       TO    WRK-KOHNUM
            MOVE    MF100-KOHID        TO    WRK-KOHID
@@ -1079,7 +1085,7 @@
            IF    FLG-TYOKI    =    1
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
-               IF    WRK-TYOKIFTNGK-G  >=  10000
+               IF    WRK-TYOKIFTNGK  >=  10000
                    MOVE    1              TO    MF100-TYOKI
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
@@ -1103,7 +1109,7 @@
            IF    FLG-TYOKI    =    2
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
-               IF    WRK-TYOKIFTNGK-G  >=  20000
+               IF    WRK-TYOKIFTNGK  >=  20000
                    MOVE    1              TO    MF100-TYOKI
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
@@ -1440,9 +1446,20 @@
       *       MOVE  WRK-Z7           TO  SC07-KOHFTN(IDX)
            DISPLAY "PTNUM =" MF100-PTNUM
            DISPLAY "市町村負担額 =" MF100-SEIKYUGK
+           DISPLAY "総点数 =" MF100-TOTALTEN
+           DISPLAY "福祉点数 =" MF100-FUKUSITEN
+      *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) start
+      *     IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
+      *                             OR  WRK-CONS-ICHINOMIYA2)
            IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
-                                   OR  WRK-CONS-ICHINOMIYA2)
+                                   OR  WRK-CONS-ICHINOMIYA2
+                                   OR  WRK-CONS-KITANAGOYA1
+                                   OR  WRK-CONS-KITANAGOYA2)
+      *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) end
            AND (MF100-FTNMONEY  =  ZERO)
+      *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) start
+           AND (MF100-TOTALTEN  =  MF100-FUKUSITEN)
+      *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) end
              MOVE  ZERO              TO  WRK-KOHFTN
              MOVE  SPACE             TO  SC07-KOHFTN(IDX)
            ELSE
@@ -1918,9 +1935,6 @@
       *=== 市町村負担額修正 by Yoshikawa(2012/04/18) end
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
-      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
-           ADD    WRK-TYOKIFTNGK             TO  WRK-TYOKIFTNGK-G
-      *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
       *
            .
        800-SEIKYU-SEC-EXT.
