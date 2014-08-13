@@ -29,6 +29,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev	修正者	日付		内容
       * 01.00.01    吉川    13/12/02    機関区分にマルを印字する
+      * 01.00.02    萩野    14/08/13    食事療養費欄は標準負担額を記録するよう修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -903,7 +904,10 @@
              MOVE    WRK-Z7                  TO  SC11-ITBFTN(IDX1)
       *
       *      食事療養費
-             MOVE    MF100-SHOKUJIRYOYOHI    TO  WRK-Z7
+      *=== 標準負担額を記録する by hagino(2014/08/13) start
+      *       MOVE    MF100-SHOKUJIRYOYOHI    TO  WRK-Z7
+             MOVE    MF100-SHOKUJIFTN        TO  WRK-Z7
+      *=== 標準負担額を記録する by hagino(2014/08/13) end
              MOVE    WRK-Z7                  TO  SC11-SKINGK(IDX1)
       *
              PERFORM   900-TMP-READ-SEC
