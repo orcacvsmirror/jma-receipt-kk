@@ -28,6 +28,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    14/08/13    コメントレコードへのコメントの記載は
+      *                                  自動で行うように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -177,6 +179,12 @@
            03  WRK-GTENSU            PIC 9(10).
            03  WRK-GKENSU            PIC 9(06).
            03  WRK-FILEPATH          PIC X(50).
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+           03  WRK-FTNJANUM          PIC X(20).
+           03  WRK-JKYSNUM           PIC X(20).
+           03  WRK-SIKIBETU          PIC X(02).
+           03  WRK-TEKIYO            PIC X(76).
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -282,6 +290,10 @@
            03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
       *    改行コード（ＥＵＣ）
            03  WRK-KAIGYO-LF          PIC X(01)   VALUE   X"0A".
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+      *    山梨コメント
+           03  WRK-CONS-COMMENT PIC X(16) VALUE  "●山梨県自動還付".
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
       *****************************************************************
       *    ファイルレイアウト　領域
@@ -865,6 +877,18 @@
                    MOVE    ZERO                TO  FLG-WRITE
                END-IF
       *
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+             WHEN  "SI"
+             WHEN  "CO"
+      *        前の行が傷病名レコード（ない場合は保険か公費レコード）
+      *        の場合山梨コメントを挿入する
+               IF  WRK-SIKIBETU  =  "HO" OR "KO" OR "SY"
+                   PERFORM 200213-EDIT-CO-SEC
+               ELSE
+                   PERFORM 2002111-RECORD-MAKE-SEC
+               END-IF
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
+      *
       *      合計レコード
              WHEN  "GO"
                PERFORM 200218-EDIT-GO-SEC
@@ -880,6 +904,11 @@
            IF  FLG-WRITE  =  1
                PERFORM 500-CSVINFO-SEC
            END-IF
+      *
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+      *    識別コードを保存
+           MOVE    TBL-RECEDATA1               TO  WRK-SIKIBETU
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
            .
        20021-RECED-EDIT-EXT.
@@ -1010,6 +1039,73 @@
            .
        200212-EDIT-RE-EXT.
            EXIT.
+      *
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+      *****************************************************************
+      *    山梨県自動還付コメント挿入処理
+      *****************************************************************
+       200213-EDIT-CO-SEC  SECTION.
+      *
+      *    負担者番号と受給者番号を全角に変換
+           INITIALIZE                          WRK-MAE-INPUT
+                                               WRK-OUT-INPUT
+                                               WRK-TEKIYO
+           MOVE    MF101-KOHFTNJANUM       TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  WRK-FTNJANUM
+           MOVE    MF101-KOHJKYSNUM        TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  WRK-JKYSNUM
+      *
+      *    識別コード
+           MOVE    "CO,"                   TO  WRK-REC
+           MOVE    3                       TO  WRK-REC-LENGTH
+      *
+      *    診療識別コード
+           MOVE    "01"                    TO  WRK-DATA
+           MOVE    2                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *
+      *    負担区分（現在のレコードから取得）
+           MOVE    TBL-RECEDATA3(1:2)      TO  WRK-DATA
+           MOVE    2                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *
+      *    コメントコード
+           MOVE    "810000001"             TO  WRK-DATA
+           MOVE    9                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *
+      *    コメント内容
+           STRING  WRK-CONS-COMMENT        DELIMITED BY SIZE
+                   WRK-FTNJANUM            DELIMITED BY SPACE
+                   WRK-JKYSNUM             DELIMITED BY SPACE
+                   INTO                    WRK-TEKIYO
+           END-STRING
+           MOVE    WRK-TEKIYO              TO  WRK-DATA
+           MOVE    76                      TO  WRK-NAGASA
+           MOVE    1                       TO  WRK-END
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *
+      *    改行コード編集
+           STRING  WRK-REC(1:WRK-REC-LENGTH) 
+                                           DELIMITED BY SIZE
+                   WRK-KAIGYO              DELIMITED BY SIZE
+                   INTO                    WRK-REC
+           END-STRING
+           IF  FLG-WRITE  =  1
+             PERFORM 500-CSVINFO-SEC
+           END-IF
+      *
+      *    山梨コメント挿入後、現在の行を書き込む
+           INITIALIZE                      WRK-REC
+                                           WRK-REC-LENGTH
+           PERFORM 2002111-RECORD-MAKE-SEC
+      *
+           .
+       200213-EDIT-CO-EXT.
+           EXIT.
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
       *****************************************************************
       *    合計レコード編集処理

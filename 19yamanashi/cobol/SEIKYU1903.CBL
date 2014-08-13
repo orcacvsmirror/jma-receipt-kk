@@ -28,6 +28,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    14/08/13    摘要欄へのコメントの記載は
+      *                                  自動で行うように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -167,6 +169,10 @@
            03  WRK-KOHID             PIC 9(10).
            03  WRK-KOBETUCITYNUM     PIC X(03).
            03  WRK-FTNMONEY-G        PIC 9(08).
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+           03  WRK-FTNJANUM          PIC X(20).
+           03  WRK-JKYSNUM           PIC X(20).
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
            03  WRK-ETC-FTNJANUM      PIC X(20).
            03  WRK-ETC-JKYSNUM       PIC X(20).
       *
@@ -289,6 +295,11 @@
       *    固定項目
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
+      *
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+      *    山梨コメント
+           03  WRK-CONS-COMMENT PIC X(16) VALUE  "●山梨県自動還付".
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
       *****************************************************************
       *    ファイルレイアウト　領域
@@ -548,15 +559,17 @@
              DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
            END-PERFORM
       *
-      *    摘要コメント設定
-           MOVE    "TEKIYO"                  TO  WRK-KBNCD
-           PERFORM 1001-OPTION-SET-SEC
-           IF  WRK-OPTION(1)(1:2)  =  "※"
-             MOVE    SPACE                   TO  WRK-TEKIYOCD
-           ELSE
-             MOVE    WRK-OPTION(1)(1:9)      TO  WRK-TEKIYOCD
-           END-IF
-           DISPLAY "摘要コメントコード =" WRK-TEKIYOCD
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+      **    摘要コメント設定
+      *     MOVE    "TEKIYO"                  TO  WRK-KBNCD
+      *     PERFORM 1001-OPTION-SET-SEC
+      *     IF  WRK-OPTION(1)(1:2)  =  "※"
+      *       MOVE    SPACE                   TO  WRK-TEKIYOCD
+      *     ELSE
+      *       MOVE    WRK-OPTION(1)(1:9)      TO  WRK-TEKIYOCD
+      *     END-IF
+      *     DISPLAY "摘要コメントコード =" WRK-TEKIYOCD
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
            .
        100-OPTION-SELECT-EXT.
@@ -903,13 +916,31 @@
            MOVE    RECE02-FLG (1)          TO  MF101-FLG (1)
            MOVE    RECE02-FLG (2)          TO  MF101-FLG (2)
       *
-      *    摘要に記載する福祉情報をコメントから取得
-           MOVE    WRK-TEKIYOCD            TO  WRK-SRYCD
-           PERFORM 940-SRYACT-SET-SEC
-           IF  FLG-SRYACT  =  ZERO
-      *      摘要コメント取得
-             PERFORM  200112-TEKIYO-HENSYU-SEC
-           END-IF
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
+      **    摘要に記載する福祉情報をコメントから取得
+      *     MOVE    WRK-TEKIYOCD            TO  WRK-SRYCD
+      *     PERFORM 940-SRYACT-SET-SEC
+      *     IF  FLG-SRYACT  =  ZERO
+      **      摘要コメント取得
+      *       PERFORM  200112-TEKIYO-HENSYU-SEC
+      *     END-IF
+      *    山梨コメント作成
+           INITIALIZE                          WRK-MAE-INPUT
+                                               WRK-OUT-INPUT
+           MOVE    MF101-FTNJANUM          TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  WRK-FTNJANUM
+      *
+           MOVE    MF101-JKYSNUM           TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  WRK-JKYSNUM
+      *
+           STRING  WRK-CONS-COMMENT        DELIMITED BY SIZE
+                   WRK-FTNJANUM            DELIMITED BY SPACE
+                   WRK-JKYSNUM             DELIMITED BY SPACE
+                   INTO                    MF101-TEKIYO
+           END-STRING
+      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
       *    減免区分チェック
            PERFORM 200113-GENMEN-CHK-SEC
