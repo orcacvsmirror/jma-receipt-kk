@@ -61,8 +61,9 @@
       *  01.00.18       吉川      11/03/10     open-cobol1.0対応
       *  01.00.19       吉川      13/01/09     プラグイン対応
       *                                        医療機関情報編集対応
-      *  01.00.20       吉川      14/1/05/19   前期高齢者２割対応
+      *  01.00.20       吉川      14/05/19     前期高齢者２割対応
       *                                        プログラムオプション対応
+      *  01.00.21       吉川      14/08/06     返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1875,15 +1876,30 @@
            END-IF
       *=== 帳票様式変更 by Yoshikawa(2008/05/26) end
       *****
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
-      *     MOVE    "国保請求書"  TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保請求書"               TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/08/13) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      **     MOVE    "国保請求書"  TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書"               TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/08/13) end
            MOVE    SKT1920             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2077,16 +2093,32 @@
       *     MOVE   "SKT1930"            TO  SPRT-PRTID
            MOVE   "SKT1930.red"        TO  SPRT-PRTID
       *****
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
-      *     MOVE    "国保請求書（他府県用）"  TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保請求書（他府県用）"  TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書（他府県用） [特別療養費]"  
-                                               TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/08/13) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
+      **     MOVE    "国保請求書（他府県用）"  TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書（他府県用）"  TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書（他府県用） [特別療養費]"  
+      *                                         TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書（他府県用）"  
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書（他府県用）［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書（他府県用）［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書（他府県用）［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/08/13) end
            MOVE    SKT1930             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
