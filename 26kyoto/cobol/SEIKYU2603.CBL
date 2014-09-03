@@ -65,6 +65,8 @@
       *  01.00.20    吉川    13/01/16    テーブルのprimary key変更対応
       *  01.00.21    吉川    13/08/08    プログラムオプション対応
       *  01.00.22    萩野    14/05/14    帳票様式の変更に伴う修正
+      *  01.00.23    吉川    14/09/03    月途中で同じ保険種別の保険に
+      *                                  変更した場合はまとめて印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -923,7 +925,9 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
            MOVE  RECE02-PTNUM        TO  MF100-PTNUM
            MOVE  RECE02-RECEKA       TO  MF100-SRYKA
-           MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *     MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
            MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
            MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBN
       *
@@ -939,14 +943,52 @@
            MOVE  RECE02-ZAITAKU      TO  MF100-ZAITAKU
            MOVE  RECE02-RECESYUBETU  TO  MF100-RECESYUBETU
       *
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *    負担者番号
+           MOVE  RECE02-KOHFTNJANUM(IDZ)   TO  MF100-FTNJANUM
+      *    受給者番号
+           MOVE  RECE02-KOHJKYSNUM(IDZ)    TO  MF100-JKYSNUM
+      *    保険種別
+           EVALUATE    RECE02-HKNNUM
+               WHEN    "001"
+               WHEN    "009"
+                   MOVE    "1"       TO  MF100-HKNKBN
+               WHEN    "002"
+                   MOVE    "2"       TO  MF100-HKNKBN
+               WHEN    "003"
+               WHEN    "004" 
+                   MOVE    "3"       TO  MF100-HKNKBN
+               WHEN    "006"
+               WHEN    "063"
+                   MOVE    "5"       TO  MF100-HKNKBN
+               WHEN    "007"
+                   MOVE    "6"       TO  MF100-HKNKBN
+               WHEN    OTHER
+                   MOVE    "4"       TO  MF100-HKNKBN
+           END-EVALUATE
+           MOVE    1                 TO  MF100-IPANCD
+      *
+      *    集計ファイル読込
+           PERFORM  900-SKTTMP-READ-SEC
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
+      *
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF100-KOHINF
-           MOVE  MF100-KOHFTNJANUM         TO  MF100-FTNJANUM
-           MOVE  MF100-KOHJKYSNUM          TO  MF100-JKYSNUM
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *     MOVE  MF100-KOHFTNJANUM         TO  MF100-FTNJANUM
+      *     MOVE  MF100-KOHJKYSNUM          TO  MF100-JKYSNUM
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
            COMPUTE IDY     =       IDZ     +   1
-           MOVE  RECE02-JNISSU      (IDY)  TO  MF100-JNISSU
-           MOVE  RECE02-TOTALTEN    (IDY)  TO  MF100-TOTALTEN
-           MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
-           MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *     MOVE  RECE02-JNISSU      (IDY)  TO  MF100-JNISSU
+      *     MOVE  RECE02-TOTALTEN    (IDY)  TO  MF100-TOTALTEN
+      *     MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
+      *     MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
+           ADD  RECE02-JNISSU       (IDY)  TO  MF100-JNISSU
+           ADD  RECE02-TOTALTEN     (IDY)  TO  MF100-TOTALTEN
+           ADD  RECE02-SHOKUJINISSU (IDY)  TO  MF100-SHOKUJINISSU
+           ADD  RECE02-SHOKUJIRYOYOHI(IDY) TO  MF100-SHOKUJIRYOYOHI
+           ADD  RECE02-SHOKUJIFTN   (IDY)  TO  MF100-SHOKUJIFTN
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
       *
       *    個別発行用市町村番号
            MOVE  MF100-KOHFTNJANUM(5:3)     TO  WRK-KOBETUCITYNUM
@@ -1024,7 +1066,10 @@
       *---(01.00.06) LINE ADD END   ------------------------------------
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) start
       *    自己負担額
-           MOVE    WRK-SEIKYUGK-G          TO  MF100-FTNMONEY
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *     MOVE    WRK-SEIKYUGK-G          TO  MF100-FTNMONEY
+           ADD    WRK-SEIKYUGK-G           TO  MF100-FTNMONEY
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) end
       *
       *    公費を併用している場合、公費用ファイルを書き出す
@@ -1165,8 +1210,17 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
            IF  FLG-ERR    =    ZERO
-             WRITE   MF100-REC
-             ADD     1   TO  CNT-MF100
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *       WRITE   MF100-REC
+      *       ADD     1   TO  CNT-MF100
+             IF  FLG-MF100  =  1
+                 WRITE   MF100-REC
+                 ADD     1       TO  CNT-MF100
+             ELSE
+                 DISPLAY "上書き"
+                 REWRITE  MF100-REC
+             END-IF
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
            ELSE
              DISPLAY "助成対象外患者番号="  RECE02-PTNUM
                      "公費番号="            MF100-KOHNUM
@@ -1999,6 +2053,23 @@
        900-TMP-READ-EXT.
            EXIT.
       *      
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       900-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    MF100-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-MF100
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-MF100
+           END-READ
+           .
+       900-SKTTMP-READ-EXT.
+           EXIT.
+      *=== 同保険種別への変更はまとめる by Yoshikawa(2014/09/03) end
+      *
       *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
