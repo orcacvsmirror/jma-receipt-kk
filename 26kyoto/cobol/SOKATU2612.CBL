@@ -47,6 +47,7 @@
       *  01.00.13       吉川    12/04/23   帳票様式の変更に伴う修正
       *  01.00.14       吉川    13/01/10   プラグイン対応
       *                                    医療機関情報編集対応
+      *  01.00.15       吉川    14/09/03   返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1461,8 +1462,18 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT2650.red"        TO  SPRT-PRTID
-           MOVE    "国保総括表（府外分）"
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/09/03) start
+      *     MOVE    "国保総括表（府外分）"
+      *                                 TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE  "国保総括表（府外分）"   
                                        TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括表（府外分）［返戻分］" 
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/09/03) end
            MOVE    SKT2650             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

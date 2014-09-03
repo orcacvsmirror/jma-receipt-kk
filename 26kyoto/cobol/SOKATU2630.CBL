@@ -48,6 +48,7 @@
       *  01.00.14    吉川    11/04/22    東北地方太平洋沖地震対応
       *  01.00.15    吉川    12/04/27    在宅はまとめて集計するように修正
       *  01.00.16    吉川    13/01/10    医療機関情報編集対応
+      *  01.00.17    吉川    14/09/03    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1516,18 +1517,34 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT2630.red"        TO  SPRT-PRTID
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
-      *     MOVE    "国保請求書（他府県用）"
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/09/03) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      **     MOVE    "国保請求書（他府県用）"
+      **                                 TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書（他府県用）"  
       *                                 TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保請求書（他府県用）"  
+      *       WHEN  "2"
+      *         MOVE  "国保請求書（他府県用） [特別療養費]"  
+      *                                 TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書（他府県用）"
                                        TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書（他府県用） [特別療養費]"  
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書（他府県用）［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書（他府県用）［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書（他府県用）［返戻分］［特別療養費］"
                                        TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/09/03) end
            MOVE    SKT2630             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
