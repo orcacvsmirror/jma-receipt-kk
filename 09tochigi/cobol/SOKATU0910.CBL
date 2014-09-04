@@ -43,6 +43,8 @@
       *  01.00.08      吉川   11/03/24    東北地方太平洋沖地震対応（対象者別集計）
       *  01.00.09      吉川   12/12/21    プラグイン対応
       *                                   医療機関情報編集対応
+      *  01.00.10      吉川   14/09/04    プログラムオプション対応
+      *                                   返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -66,11 +68,13 @@
 006900*    エラーファイル
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
-      *    優先保険者指定用ファイル
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-YUSEN.
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      **    優先保険者指定用ファイル
+      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-YUSEN.
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -88,9 +92,11 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *    優先保険者番号ファイル
-       FD  YUSEN-FILE.
-       01  YUSEN-HKNJANUM             PIC X(06). 
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      **    優先保険者番号ファイル
+      * FD  YUSEN-FILE.
+      * 01  YUSEN-HKNJANUM             PIC X(06). 
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -145,6 +151,10 @@
            03  FLG-PRINT           PIC 9(01).
            03  FLG-PASS            PIC 9(01).
            03  FLG-PTKOHINF        PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -162,6 +172,10 @@
            03  IDZ1                PIC 9(04).
            03  IDZ2                PIC 9(04).
       *=== シス管「2007」対応 by Yoshikawa(2008/10/09) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+           03  IDX                 PIC 9(05).
+           03  IDY                 PIC 9(04).
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
       *##  パラメタ領域
        01  WRK-PARA.
@@ -176,14 +190,16 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/02/03) end
       *
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU0910".
-           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU0910".
+      *     03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -234,6 +250,15 @@
            03  WRK-OUT-INPUT       PIC X(200).
       *
            03  WRK-PATH              PIC X(50).
+      *
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+           03  WRK-YUSEN           PIC X(06).
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -349,6 +374,11 @@
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
       *
       ******************************************************************
@@ -590,7 +620,11 @@
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
       *
-           PERFORM  110-INI-FILE-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      *     PERFORM  110-INI-FILE-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
            OPEN    OUTPUT  UPD-FILE
       *  
@@ -620,38 +654,100 @@
        100-INIT-EXT.
            EXIT.
       *
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理  
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2012/12/21) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   YUSEN-HKNJANUM
+      **
+      *     OPEN  INPUT  YUSEN-FILE
+      **
+      *     READ YUSEN-FILE
+      *       AT END
+      *         INITIALIZE        YUSEN-HKNJANUM
+      *     END-READ
+      **
+      **
+      *     CLOSE YUSEN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
       *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理  
+      *    プログラムオプション取込み処理
       *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+       100-OPTION-SELECT-SEC             SECTION.
       *
+           MOVE    "SOKATU0910"              TO  WRK-PRGID
       *
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2012/12/21) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   YUSEN-HKNJANUM
-      *
-           OPEN  INPUT  YUSEN-FILE
-      *
-           READ YUSEN-FILE
-             AT END
-               INITIALIZE        YUSEN-HKNJANUM
-           END-READ
-      *
-      *
-           CLOSE YUSEN-FILE
+      *    プログラムオプション取得
+      *    優先保険者番号
+           MOVE    "YUSEN"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:6)        TO  WRK-YUSEN
+           DISPLAY "優先保険者番号="  WRK-YUSEN
       *
            .
-       110-INI-FILE-EXT.
+       100-OPTION-SELECT-EXT.
            EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *
       *****************************************************************
       *    主　　処理
@@ -759,7 +855,10 @@
            MOVE    RECE10-ZAITAKU      TO  SKT0910TMP-ZAITAKU
       *
       *    印刷順設定
-           IF    YUSEN-HKNJANUM   =  SKT0910TMP-HKNJANUM1
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      *     IF    YUSEN-HKNJANUM   =  SKT0910TMP-HKNJANUM1
+           IF    WRK-YUSEN  =  SKT0910TMP-HKNJANUM1
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
                MOVE    1   TO  SKT0910TMP-SYUTURYOKU
            ELSE
                IF      RECE10-PREFKBN  =   "1"
@@ -2300,6 +2399,54 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== プログラムオプション対応 by Yoshikawa(2014/09/04) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************
