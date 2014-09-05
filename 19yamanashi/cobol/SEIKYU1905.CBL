@@ -30,6 +30,8 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    14/08/13    コメントレコードへのコメントの記載は
       *                                  自動で行うように修正
+      *  01.00.02    吉川    14/09/05    社保用と国保用の複写レセ電を
+      *                                  同時に出力する処理追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -42,6 +44,19 @@
                                    ORGANIZATION    IS  LINE
                                                        SEQUENTIAL
                                    FILE    STATUS  IS  STS-RECEDI.
+      *
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *    社保レセプト電算ファイル
+           SELECT  SYARECED-FILE   ASSIGN  SYARECED-PATH
+                                   ORGANIZATION    IS  LINE
+                                                       SEQUENTIAL
+                                   FILE    STATUS  IS  STS-SYARECED.
+      *    国保レセプト電算ファイル
+           SELECT  KORECED-FILE    ASSIGN  KORECED-PATH
+                                   ORGANIZATION    IS  LINE
+                                                       SEQUENTIAL
+                                   FILE    STATUS  IS  STS-KORECED.
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    請求書用ファイル
            SELECT  MF101-FILE      ASSIGN    MF101PARA
@@ -60,6 +75,16 @@
        FD  RECEDI-FILE.
        01  RECEDI-REC         PIC X(2500).
       *     
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *    社保レセプト電算ファイル
+       FD  SYARECED-FILE.
+       01  SYARECED-REC         PIC X(2500).
+      *
+      *    国保レセプト電算ファイル
+       FD  KORECED-FILE.
+       01  KORECED-REC          PIC X(2500).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *
       *    集計ファイル
        FD  MF101-FILE.
        01  MF101-REC.
@@ -87,6 +112,20 @@
            03  FILE-HOSPNUM          PIC 9(02).
            03  FILLER                PIC X(15) VALUE "RECEDEN-TMP.CSV".
       *
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *    社保レセプト電算ファイル
+       01  SYARECED-PATH.
+           03  FILLER              PIC X(09) VALUE "/var/tmp/".
+           03  SYARECED-HOSPNUM    PIC 9(02).
+           03  FILLER              PIC X(18) VALUE "SYARECEDEN-TMP.CSV".
+      *
+      *    国保レセプト電算ファイル
+       01  KORECED-PATH.
+           03  FILLER              PIC X(09) VALUE "/var/tmp/".
+           03  KORECED-HOSPNUM     PIC 9(02).
+           03  FILLER              PIC X(17) VALUE "KORECEDEN-TMP.CSV".
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *
       *    対象公費領域
        01  TAISYO-DAT.
            03  TAISYO-TBL  OCCURS  100.
@@ -100,6 +139,10 @@
            03  STS-MF101             PIC X(02).
            03  STS-RECEERR           PIC X(02).
            03  STS-RECE              PIC X(02).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+           03  STS-SYARECED          PIC X(02).
+           03  STS-KORECED           PIC X(02).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    フラグ領域
        01  FLG-AREA.
@@ -120,6 +163,11 @@
            03  FLG-BTPARA            PIC 9(01).
            03  FLG-SYORI             PIC 9(01).
            03  FLG-EDIT              PIC 9(01).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+           03  FLG-SYARECED          PIC 9(01).
+           03  FLG-KORECED           PIC 9(01).
+           03  FLG-OUTPUT            PIC 9(01).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -176,8 +224,13 @@
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-TEISYUTUSAKI      PIC 9(01).
            03  WRK-CHARCNT           PIC 9(02).
-           03  WRK-GTENSU            PIC 9(10).
-           03  WRK-GKENSU            PIC 9(06).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     03  WRK-GTENSU            PIC 9(10).
+      *     03  WRK-GKENSU            PIC 9(06).
+           03  WRK-GOKEI-TBL.
+               05  WRK-GTENSU        PIC 9(10).
+               05  WRK-GKENSU        PIC 9(06).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            03  WRK-FILEPATH          PIC X(50).
       *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
            03  WRK-FTNJANUM          PIC X(20).
@@ -185,6 +238,11 @@
            03  WRK-SIKIBETU          PIC X(02).
            03  WRK-TEKIYO            PIC X(76).
       *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+           03  WRK-SITEI             PIC X(01).
+           03  WRK-SYORI             PIC 9(01).
+           03  WRK-INPUTREC          PIC X(2500).
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -539,6 +597,14 @@
              DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
            END-PERFORM
       *
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *    レセ電指定区分
+           MOVE    "SITEIKBN"                TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:1)        TO  WRK-SITEI
+           DISPLAY "レセ電指定区分 =" WRK-SITEI
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -676,6 +742,10 @@
       
              CLOSE   MF101-FILE
                      RECEDI-FILE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+                     SYARECED-FILE
+                     KORECED-FILE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            END-IF
            
            MOVE    1       TO   FLG-END
@@ -802,36 +872,150 @@
       *
            INITIALIZE                          RECEDI-REC
                                                WRK-RECENUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+                                               SYARECED-REC
+                                               KORECED-REC
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
            MOVE    SPA-HOSPNUM             TO  FILE-HOSPNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+           MOVE    SPA-HOSPNUM             TO  SYARECED-HOSPNUM
+           MOVE    SPA-HOSPNUM             TO  KORECED-HOSPNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *    
            OPEN  INPUT  RECEDI-FILE
                         MF101-FILE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+                        SYARECED-FILE
+                        KORECED-FILE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
-      *    複写元レセ電が存在しない場合はエラー
-           IF  STS-RECEDI  =  "35"
-               MOVE    SPACE               TO  WRK-RECEERR
-               STRING "複写元レセ電が存在しません　" 
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      **    複写元レセ電が存在しない場合はエラー
+      *     IF  STS-RECEDI  =  "35"
+      *         MOVE    SPACE             TO  WRK-RECEERR
+      *         STRING "複写元レセ電が存在しません　" 
+      *                                           DELIMITED  BY  SIZE
+      *                 WRK-FILEPATH              DELIMITED  BY  SPACE
+      *                                   INTO    WRK-RECEERR
+      *         END-STRING                                
+      *         PERFORM 500-ERR-HENSYU-SEC
+      *         MOVE    1                 TO  FLG-END
+      *                                       FLG-RECEDI
+      *     END-IF
+      **
+      *     PERFORM  UNTIL  FLG-RECEDI  =  1
+      *       READ  RECEDI-FILE
+      *         AT END
+      *           INITIALIZE                  RECEDI-REC
+      *           MOVE    1               TO  FLG-RECEDI
+      *         NOT AT END
+      *           DISPLAY "RECEDEN READ =" RECEDI-REC(1:70)
+      **          レセ電編集
+      *           PERFORM 20021-RECED-EDIT-SEC
+      *       END-READ
+      *     END-PERFORM
+      *
+           IF  WRK-SITEI  =  1
+      *
+             IF  STS-RECEDI  =  "35"
+                 MOVE    SPACE               TO  WRK-RECEERR
+                 STRING "複写元レセ電が存在しません　" 
                                                    DELIMITED  BY  SIZE
-                       WRK-FILEPATH                DELIMITED  BY  SPACE
-                                           INTO    WRK-RECEERR
-               END-STRING                                
-               PERFORM 500-ERR-HENSYU-SEC
-               MOVE    1                   TO  FLG-END
-                                               FLG-RECEDI
-           END-IF
+                         WRK-FILEPATH              DELIMITED  BY  SPACE
+                                             INTO  WRK-RECEERR
+                 END-STRING                                
+                 PERFORM 500-ERR-HENSYU-SEC
+                 MOVE    1                   TO  FLG-END
+             ELSE
+                 MOVE    1                   TO  WRK-SYORI
+                 MOVE    ZERO                TO  FLG-OUTPUT
+                                                 WRK-GOKEI-TBL
+                 PERFORM  UNTIL  FLG-RECEDI  =  1
+                   READ  RECEDI-FILE
+                     AT END
+                       INITIALIZE                RECEDI-REC
+                       MOVE    1             TO  FLG-RECEDI
+                     NOT AT END
+                       MOVE    RECEDI-REC    TO  WRK-INPUTREC
+                       DISPLAY "RECEDEN READ =" RECEDI-REC(1:70)
+      *                レセ電編集
+                       PERFORM 20021-RECED-EDIT-SEC
+                   END-READ
+                 END-PERFORM
+                 IF  FLG-OUTPUT  =  1
+      *            ファイル保存情報更新
+                   PERFORM 3001-FILE-INFO-INSERT-SEC 
+                 END-IF
+             END-IF
       *
-           PERFORM  UNTIL  FLG-RECEDI  =  1
-             READ  RECEDI-FILE
-               AT END
-                 INITIALIZE                    RECEDI-REC
-                 MOVE    1                 TO  FLG-RECEDI
-               NOT AT END
-                 DISPLAY "RECEDEN READ =" RECEDI-REC(1:70)
-      *          レセ電編集
-                 PERFORM 20021-RECED-EDIT-SEC
-             END-READ
-           END-PERFORM
+           ELSE
+      *
+      *      複写元社保レセ電存在チェック
+             IF  STS-SYARECED  =  "35"
+                 DISPLAY "社保レセ電なし"
+             ELSE
+      *        社保複写レセ電作成
+               MOVE    1                     TO  WRK-SYORI
+               MOVE    ZERO                  TO  FLG-OUTPUT
+                                                 WRK-GOKEI-TBL
+               PERFORM  UNTIL  FLG-SYARECED  =  1
+                 READ  SYARECED-FILE
+                   AT END
+                     INITIALIZE                  SYARECED-REC
+                     MOVE    1               TO  FLG-SYARECED
+                   NOT AT END
+                     MOVE    SYARECED-REC    TO  WRK-INPUTREC
+                     DISPLAY "SYAHO RECEDEN READ =" SYARECED-REC(1:70)
+      *              レセ電編集
+                     PERFORM 20021-RECED-EDIT-SEC
+                 END-READ
+               END-PERFORM
+               IF  FLG-OUTPUT  =  1
+      *          ファイル保存情報更新
+                 PERFORM 3001-FILE-INFO-INSERT-SEC 
+               END-IF
+             END-IF
+      *
+      *      複写元国保レセ電存在チェック
+             IF  STS-KORECED  =  "35"
+               IF  STS-SYARECED  =  "35"
+      *          どちらも存在しなかったらエラーメッセージ表示
+                 MOVE    SPACE               TO  WRK-RECEERR
+                 STRING "複写元レセ電が存在しません　" 
+                                             DELIMITED  BY  SIZE
+                         WRK-FILEPATH        DELIMITED  BY  SPACE
+                                             INTO  WRK-RECEERR
+                 END-STRING
+                 PERFORM 500-ERR-HENSYU-SEC
+                 MOVE    1                   TO  FLG-END
+               ELSE
+                 DISPLAY "国保レセ電なし"
+               END-IF
+             ELSE
+      *        国保複写レセ電作成
+               MOVE    2                     TO  WRK-SYORI
+               MOVE    ZERO                  TO  FLG-OUTPUT
+                                                 WRK-GOKEI-TBL
+               PERFORM  UNTIL  FLG-KORECED  =  1
+                 READ  KORECED-FILE
+                   AT END
+                     INITIALIZE                  KORECED-REC
+                     MOVE    1               TO  FLG-KORECED
+                   NOT AT END
+                     MOVE    KORECED-REC     TO  WRK-INPUTREC
+                     DISPLAY "KOKUHO RECEDEN READ =" KORECED-REC(1:70)
+      *              レセ電編集
+                     PERFORM 20021-RECED-EDIT-SEC
+                 END-READ
+               END-PERFORM
+               IF  FLG-OUTPUT  =  1
+      *          ファイル保存情報更新
+                 PERFORM 3001-FILE-INFO-INSERT-SEC 
+               END-IF
+             END-IF
+           END-IF
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
            .
        2002-RECED-READ-EXT.
@@ -903,6 +1087,9 @@
       *    書き込み
            IF  FLG-WRITE  =  1
                PERFORM 500-CSVINFO-SEC
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+               MOVE    1                       TO  FLG-OUTPUT
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            END-IF
       *
       *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
@@ -921,9 +1108,15 @@
       *
       *    審査支払機関(社保=7、国保=8に変更)
            IF  TBL-RECEDATA2  =  "1"
-               MOVE    "7"             TO  RECEDI-REC(4:1)
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *         MOVE    "7"             TO  RECEDI-REC(4:1)
+               MOVE    "7"             TO  WRK-INPUTREC(4:1)
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            ELSE
-               MOVE    "8"             TO  RECEDI-REC(4:1)
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *         MOVE    "8"             TO  RECEDI-REC(4:1)
+               MOVE    "8"             TO  WRK-INPUTREC(4:1)
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            END-IF
       *
            PERFORM 2002111-RECORD-MAKE-SEC
@@ -1155,15 +1348,24 @@
                     UNTIL   (IDX1  >  2500)
                     OR      (FLG-CSVEND  =  1)
       *
-             IF  RECEDI-REC(IDX1:1)  =  ","
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *       IF  RECEDI-REC(IDX1:1)  =  ","
+             IF  WRK-INPUTREC(IDX1:1)  =  ","
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                MOVE    ZERO            TO  WRK-CHARCNT
-               INSPECT  RECEDI-REC(IDX1 + 1:)
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *         INSPECT  RECEDI-REC(IDX1 + 1:)
+               INSPECT  WRK-INPUTREC(IDX1 + 1:)
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                         TALLYING  WRK-CHARCNT  FOR  ALL  ","
              END-IF
       *
       *      最後のカンマ以降の半角スペースがループを抜ける条件
              IF  WRK-CHARCNT  =  ZERO
-               IF  RECEDI-REC(IDX1:1)  =  SPACE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *         IF  RECEDI-REC(IDX1:1)  =  SPACE
+               IF  WRK-INPUTREC(IDX1:1)  =  SPACE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                  MOVE    1             TO  FLG-CSVEND
                END-IF
              END-IF
@@ -1171,7 +1373,10 @@
            END-PERFORM
       *
       *    改行コード編集
-           STRING  RECEDI-REC(1:IDY - 1)   DELIMITED BY SIZE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     STRING  RECEDI-REC(1:IDY - 1)   DELIMITED BY SIZE
+           STRING  WRK-INPUTREC(1:IDY - 1) DELIMITED BY SIZE
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                    WRK-KAIGYO              DELIMITED BY SIZE
                    INTO                    WRK-REC
            END-STRING
@@ -1194,7 +1399,10 @@
                                        TO  SCSVINFO-SHELLID
            MOVE    LNK-PRTKANRI-SHORI-RENNUM
                                        TO  SCSVINFO-SHORI-RENNUM
-           MOVE    LNK-PRTKANRI-RENNUM TO  SCSVINFO-RENNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     MOVE    LNK-PRTKANRI-RENNUM TO  SCSVINFO-RENNUM
+           MOVE    WRK-SYORI           TO  SCSVINFO-RENNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            MOVE    LNK-PRTKANRI-SRYYM  TO  SCSVINFO-SRYYM
            MOVE    LNK-PRTKANRI-SKYYMD TO  SCSVINFO-SKYYMD
            MOVE    WRK-SCSVINFO-SEQ-NO TO  SCSVINFO-SEQ-NO
@@ -1286,7 +1494,9 @@
            END-IF
       *
       *    ファイル保存情報更新
-           PERFORM 3001-FILE-INFO-INSERT-SEC
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     PERFORM 3001-FILE-INFO-INSERT-SEC
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    ステップ終了処理
            MOVE    "STE"           TO  SJOBKANRI-MODE
@@ -1320,7 +1530,10 @@
            MOVE    LNK-PRTKANRI-SHORI-RENNUM
                                    TO  SFILESV-SHORI-RENNUM
                                                         (1)
-           MOVE    LNK-PRTKANRI-RENNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     MOVE    LNK-PRTKANRI-RENNUM
+           MOVE    WRK-SYORI
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                                    TO  SFILESV-RENNUM   (1)
            MOVE    LNK-PRTKANRI-SRYYM
                                    TO  SFILESV-SRYYM    (1)
@@ -1337,8 +1550,17 @@
                                    TO  SFILESV-TO-DATA  (1)
            END-IF
            MOVE    WRK-GKENSU      TO  SFILESV-CNT-ALL  (1)
-           MOVE    "複写式電子レセプト"   
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     MOVE    "複写式電子レセプト"   
+      *                             TO  SFILESV-TITLE    (1)
+           IF  WRK-TEISYUTUSAKI  =  1
+               MOVE    "複写式電子レセプト（社保）"   
                                    TO  SFILESV-TITLE    (1)
+           ELSE
+               MOVE    "複写式電子レセプト（国保）"   
+                                   TO  SFILESV-TITLE    (1)
+           END-IF
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            IF      WRK-GKENSU   >   ZERO
                MOVE    "1"         TO  SFILESV-DATA-TYPE(1)
            END-IF 
@@ -1399,7 +1621,10 @@
            INITIALIZE                          TBL-RECEDATA-AREA
                                                TBL-RECEDATA-R
       *
-           UNSTRING   RECEDI-REC       DELIMITED  BY  ","
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     UNSTRING   RECEDI-REC       DELIMITED  BY  ","
+           UNSTRING   WRK-INPUTREC     DELIMITED  BY  ","
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                                        INTO    TBL-RECEDATA1
                                                TBL-RECEDATA2
                                                TBL-RECEDATA3
