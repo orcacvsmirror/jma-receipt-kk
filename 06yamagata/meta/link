@@ -55,3 +55,5 @@
  - [scripts/syskanri/sys3004.data , scripts/syskanri/]
  - [scripts/syskanri/Sys3004.rb , scripts/syskanri/]
  - [scripts/syskanri/sys3004.sh , scripts/syskanri/]
+ - [scripts/syskanri/Sys3004del.rb , scripts/syskanri/]
+ - [scripts/syskanri/sys3004del.sh , scripts/syskanri/]
