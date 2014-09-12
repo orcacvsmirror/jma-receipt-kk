@@ -66,6 +66,9 @@
       *  01.00.24    吉川     13/09/04    TAISYOKOHIで設定した公費を持つ
       *                                   患者の病名を印字するように修正
       *                                   プログラムオプション対応
+      *  01.00.25    萩野     14/09/12    同月内に長期の上限額に達した場合において
+      *                                   該当公費と長期の併用があった場合、
+      *                                   特記事項に長期を印字する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -227,6 +230,9 @@
            03  FLG-TAISYOKOHI  PIC 9(01).
            03  FLG-TAISYO      PIC 9(01).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+           03  FLG-TYOKI       PIC 9(01).
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -359,7 +365,7 @@
       *         05  FILLER          PIC S9(09)  BINARY.
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH              PIC X(50).
-      *     
+      *
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
            03  WRK-OPTION-TBL.
                05  WRK-OPTION        PIC X(100)  OCCURS 100.
@@ -392,6 +398,11 @@
                05  WRK-TAIHI-TENKIYMD PIC X(06) OCCURS 5.
                05  WRK-TAIHI-TEKIYO   PIC X(52) OCCURS 35.
       *
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+           03  WRK-TYOKI-TBL.
+               05  WRK-TYOKIFTNGK   PIC 9(08).
+               05  WRK-TYOKIFTNGK-G PIC 9(08).
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
       *
        01  WRK-HENSYU-AREA.
            03  WRK-HENYMDG         PIC X(22).
@@ -1402,6 +1413,10 @@
            END-PERFORM
       *=== 特記事項追加 by Yoshikawa(2009/05/14) end
       *
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+           INITIALIZE                  WRK-TYOKI-TBL
+           MOVE    ZERO                TO    FLG-TYOKI
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
            MOVE    ZERO                TO  WRK-KYUFUGAI
                                            WRK-FTNMONEY-G
            MOVE    MF100-KOHNUM        TO  WRK-KOHNUM
@@ -1435,6 +1450,32 @@
                MOVE    WRK-FTNMONEY-G          TO  MF100-FTNMONEY
            END-IF
       *
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+           IF    FLG-TYOKI    =    1
+               IF    WRK-TYOKIFTNGK-G  >=  10000
+                   MOVE    1              TO    MF100-TYOKI
+               END-IF
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     4
+                   IF  ( MF100-TOKKI(IDX2)    =   "02" )
+                       MOVE    1              TO    MF100-TYOKI
+                   END-IF
+               END-PERFORM
+           END-IF
+      *
+           IF    FLG-TYOKI    =    2
+               IF    WRK-TYOKIFTNGK-G  >=  20000
+                   MOVE    1              TO    MF100-TYOKI
+               END-IF
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >     4
+                   IF  ( MF100-TOKKI(IDX2)    =   "16" )
+                       MOVE    1              TO    MF100-TYOKI
+                   END-IF
+               END-PERFORM
+           END-IF
+      *
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
       *
       *      出力順設定
       *      保険者番号順
@@ -1781,7 +1822,16 @@
              PERFORM  VARYING  IDY2  FROM  1  BY  1
                       UNTIL    IDY2  >   TBL-TOKKI-MAX
                IF  MF100-TOKKI(IDX2)  =  TBL-TOKKICD(IDY2)
-                 MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+      *             MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                 IF  ( MF100-TOKKI(IDX2)    =   "02" OR "16" )
+                   IF  ( MF100-TYOKI  =  1 )
+                     MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                   END-IF
+                 ELSE
+                   MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                 END-IF
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
       *           MOVE  19  TO  IDY2
                  MOVE  TBL-TOKKI-MAX  TO  IDY2
@@ -2121,7 +2171,16 @@
              PERFORM  VARYING  IDY2  FROM  1  BY  1
                       UNTIL    IDY2  >   TBL-TOKKI-MAX
                IF  MF100-TOKKI(IDX2)  =  TBL-TOKKICD(IDY2)
-                 MOVE  TBL-TOKKINAME(IDY2)   TO  HCN06-TOKKI(IDX2)
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+      *           MOVE  TBL-TOKKINAME(IDY2)   TO  HCN06-TOKKI(IDX2)
+                 IF  ( MF100-TOKKI(IDX2)    =   "02" OR "16" )
+                   IF  ( MF100-TYOKI  =  1 )
+                     MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                   END-IF
+                 ELSE
+                   MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                 END-IF
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
       *           MOVE  19  TO  IDY2
                  MOVE  TBL-TOKKI-MAX  TO  IDY2
@@ -3984,6 +4043,10 @@
       *****************************************************************
        800-SEIKYU-SEC  SECTION.
       *
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+           MOVE    ZERO                TO     WRK-TYOKIFTNGK
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
+      *
            PERFORM  VARYING  IDX3  FROM  1  BY  1
                     UNTIL    IDX3  >     4  OR
                     SYU-KOH-HKNNUM(IDX3)  =  SPACE
@@ -4001,7 +4064,26 @@
                  END-IF
                END-IF
              END-IF
+      *
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+             IF    SYU-KOH-HKNNUM(IDX3)   =   "972"
+               MOVE    1                      TO  FLG-TYOKI
+               MOVE    SYU-KOH-COMPFTN(IDX3)  TO  WRK-TYOKIFTNGK
+             END-IF
+      *
+             IF    SYU-KOH-HKNNUM(IDX3)   =   "974"
+               MOVE    2                      TO  FLG-TYOKI
+               MOVE    SYU-KOH-COMPFTN(IDX3)  TO  WRK-TYOKIFTNGK
+             END-IF
+             
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
+      *
            END-PERFORM
+      *    
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
+           ADD    WRK-TYOKIFTNGK             TO  WRK-TYOKIFTNGK-G
+      *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
+      *
            .
        800-SEIKYU-SEC-EXT.
            EXIT.
