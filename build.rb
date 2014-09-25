@@ -94,7 +94,6 @@ def make_list
   end
   listfile = File.join(@opts[:distdir],@opts[:list])
   File.open(listfile,"w") do|io| io.puts str end
-  exec("nkf -w --overwrite listfile")
   sign(listfile)
   list
 end
