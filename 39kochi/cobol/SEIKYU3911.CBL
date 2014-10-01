@@ -54,6 +54,9 @@
       *                                   備考欄に記載し、点数はゼロを印字
       *  01.00.13     吉川    13/08/05    高額療養費の現物給付該当者は
       *                                   備考欄に「高額該当」を印字する
+      *  01.00.14     吉川    14/10/01    保険総点数＞全国公費点数の場合
+      *                                   総点数から公費点数を引いた値を
+      *                                   点数欄に記載するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -180,6 +183,10 @@
                05   WRK-SEIKYUGK-G        PIC 9(08)V9(01).
                05   WRK-SEIKYUGK-G2       PIC 9(08).
                05   WRK-SEIKYUGK          PIC 9(08)V9(01).
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) start
+               05   WRK-TAHOUTEN          PIC 9(08).
+               05   WRK-TAHOUTEN-G        PIC 9(08).
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
            03  WRK-KOBETUCITYNUM          PIC X(03).
@@ -753,6 +760,11 @@
            MOVE    WRK-TAHOUFTN-G           TO  MF100-TAHOUFTN
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
       *
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) start
+      *    全国公費点数
+           MOVE    WRK-TAHOUTEN-G           TO  MF100-TAHOUTEN
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
+      *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -1003,8 +1015,20 @@
       *                INTO                        SC11-TAHOUFTN
       *       END-STRING
       *    点数はゼロを印字
-             MOVE    ZERO                    TO   WRK-Z9
-             MOVE    WRK-Z9                  TO   WRK-MAE-INPUT
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) start
+      *       MOVE    ZERO                    TO   WRK-Z9
+      *       MOVE    WRK-Z9                  TO   WRK-MAE-INPUT
+             IF  MF100-TOTALTEN  NOT =  MF100-TAHOUTEN
+      *          総点数＞全国公費点数の場合、差額を点数欄に記載
+                 COMPUTE WRK-TAHOUTEN  =  
+                         MF100-TOTALTEN  -  MF100-TAHOUTEN
+                 MOVE    WRK-TAHOUTEN        TO   WRK-Z6
+                 MOVE    WRK-Z6              TO   WRK-MAE-INPUT
+             ELSE
+                 MOVE    ZERO                TO   WRK-Z9
+                 MOVE    WRK-Z9              TO   WRK-MAE-INPUT
+             END-IF
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT           TO   SC11-TENSU
       *
@@ -1153,8 +1177,12 @@
       *        保険番号マスタから法別番号取得
                MOVE     SYU-KOH-HKNNUM(IDX)       TO  WRK-KOHNUM2
                PERFORM  930-HKNNUM-SET-SEC
-      *
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) start
+      *        全国公費の点数集計
+               MOVE    SYU-TOTAL-HKNTEN           TO  WRK-TAHOUTEN
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
       *
              END-IF
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
@@ -1187,7 +1215,9 @@
            END-IF
       *
            ADD        WRK-SEIKYUGK     TO    WRK-SEIKYUGK-G
-      *
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) start
+           ADD        WRK-TAHOUTEN     TO    WRK-TAHOUTEN-G
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
       *
            .
        800-SEIKYU-SEC-EXT.
