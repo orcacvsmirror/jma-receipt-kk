@@ -42,6 +42,7 @@
       *  01.00.09    吉川    11/04/25    県外でも高知県単独公費等は印字しない
       *  01.00.10    吉川    13/02/07    医療機関情報編集対応
       *  01.00.11    吉川    14/05/13    前期高齢者２割対応
+      *  01.00.12    吉川    14/10/01    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1146,15 +1147,30 @@
              MOVE  "SKT3920.red"       TO  SPRT-PRTID
            END-IF
       *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
-      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/10/01) start
+      **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書"      TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書［特別療養費］" TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
                MOVE  "国保請求書"      TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書［特別療養費］" TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/10/01) end
            MOVE    SKT3920             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1389,15 +1405,30 @@
              MOVE  "SKT3930.red"       TO  SPRT-PRTID
            END-IF
       *=== 帳票様式の変更 by Yoshikawa(2008/07/09) start
-      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/10/01) start
+      **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書"      TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書［特別療養費］" TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
                MOVE  "国保請求書"      TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書［特別療養費］" TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/10/01) end
            MOVE    SKT3930             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
