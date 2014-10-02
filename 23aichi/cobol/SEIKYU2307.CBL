@@ -68,6 +68,8 @@
       *  01.00.21    吉川    14/08/12    北名古屋市こども医療対応
       *                                  福祉併用分と単独がある場合
       *                                  市町村請求額は記載する
+      *  01.00.22    吉川    14/10/02    一宮市、北名古屋市は市町村負担額が
+      *                                  空白の分も合計に集計する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1712,7 +1714,10 @@
       *     MOVE    WRK-Z11            TO  WRK-MAE-INPUT
       *     PERFORM  2009-HENKAN-SEC
       *     MOVE     WRK-OUT-INPUT     TO  SC07-GKINGAKU
-           MOVE    WRK-S-KOHFTN       TO  WRK-Z9
+      *=== 一宮市、北名古屋市の記載修正 by Yoshikawa(2014/10/02) start
+      *     MOVE    WRK-S-KOHFTN       TO  WRK-Z9
+           MOVE    WRK-S-SEIKYUGK     TO  WRK-Z9
+      *=== 一宮市、北名古屋市の記載修正 by Yoshikawa(2014/10/02) end
            MOVE    WRK-Z9             TO  SC07-GKOHFTN
       *    合計金額
            MOVE    WRK-S-SEIKYUGK     TO  WRK-Z11
