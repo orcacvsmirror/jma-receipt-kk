@@ -1146,6 +1146,9 @@
       *
            MOVE    ZERO     TO     FLG-HEIYOU
                                    WRK-SEIKYUGK
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) start
+                                   WRK-TAHOUTEN
+      *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4 OR
