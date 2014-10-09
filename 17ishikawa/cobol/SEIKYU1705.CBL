@@ -20,8 +20,8 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 石川・乳幼児医療費支払明細書（ＦＤ請求）
-      *                      (399)
+      *  コンポーネント名  : 石川・子ども医療費支払明細書（ＦＤ請求）
+      *                      (399,499)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  08/09/17    吉川          新規作成
@@ -32,6 +32,9 @@
       *  01.00.02    吉川    2008/10/28  ファイル名に県番号と点数表追加
       *  01.00.03    吉川    2011/02/17  open-cobol1.0対応
       *  01.00.04    吉川    2011/10/07  Lucid4.6で出力されないのを修正
+      *  01.00.05    吉川    2014/10/09  乳幼児から子どもへ制度名変更
+      *                                  児童(499)は平成２６年９月以前の
+      *                                  診療分のみ対象とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -200,6 +203,10 @@
            03  WRK-KUGIRI             PIC X(01)   VALUE   ",".
       *    改行コード
            03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) start
+      *    平成２６年９月診療
+           03  WRK-CONS-SRYYM-201409  PIC X(06)   VALUE   "201409".
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) end
       *
       *****************************************************************
       *    ファイルレイアウト　領域
@@ -334,8 +341,12 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU1705"    TO  JOB-PGID
-           MOVE    "乳幼児ＣＳＶ処理" 
+      *=== 制度名変更 by Yoshikawa(2014/10/09) start
+      *     MOVE    "乳幼児ＣＳＶ処理" 
+      *                             TO  JOB-SHELLMSG
+           MOVE    "子どもＣＳＶ処理" 
                                    TO  JOB-SHELLMSG
+      *=== 制度名変更 by Yoshikawa(2014/10/09) end
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
                                    JOBKANRI-REC
@@ -515,6 +526,9 @@
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
              IF  RECE02-KOHNUM (IDZ) = "399"
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) start
+                                    OR "499"
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1050,7 +1064,10 @@
            END-STRING
            MOVE    WRK-FILENAME    TO  SFILESV-TO-DATA  (1)
            MOVE    WRK-SOUGOKEIKENSU   TO  SFILESV-CNT-ALL  (1)
-           MOVE    "乳幼児ＣＳＶ"    TO  SFILESV-TITLE    (1)
+      *=== 制度名変更 by Yoshikawa(2014/10/09) start
+      *     MOVE    "乳幼児ＣＳＶ"    TO  SFILESV-TITLE    (1)
+           MOVE    "子どもＣＳＶ"    TO  SFILESV-TITLE    (1)
+      *=== 制度名変更 by Yoshikawa(2014/10/09) end
            IF      WRK-SOUGOKEIKENSU   >   ZERO
                MOVE    "1"         TO  SFILESV-DATA-TYPE(1)
            END-IF 
@@ -1121,10 +1138,16 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "399"
-               OR  RECE02-KOHNUM(2) = "399"
-               OR  RECE02-KOHNUM(3) = "399"
-               OR  RECE02-KOHNUM(4) = "399"
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) start
+      *         IF  RECE02-KOHNUM(1) = "399"
+      *         OR  RECE02-KOHNUM(2) = "399"
+      *         OR  RECE02-KOHNUM(3) = "399"
+      *         OR  RECE02-KOHNUM(4) = "399"
+               IF  RECE02-KOHNUM(1) = "399" OR "499"
+               OR  RECE02-KOHNUM(2) = "399" OR "499"
+               OR  RECE02-KOHNUM(3) = "399" OR "499"
+               OR  RECE02-KOHNUM(4) = "399" OR "499"
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) end
       *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
@@ -1156,6 +1179,17 @@
                    IF      FLG-ERR           =   1
                      GO  TO  900-KOHSKY-READ-SEC
                    END-IF
+      *
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) start
+      *        児童医療は平成２６年９月以前の診療分のみ対象とする
+                   IF  ( RECE02-KOHNUM(1) = "499" OR
+                         RECE02-KOHNUM(2) = "499" OR
+                         RECE02-KOHNUM(3) = "499" OR
+                         RECE02-KOHNUM(4) = "499" )
+                   AND ( RECE02-SRYYM  >  WRK-CONS-SRYYM-201409 )
+                       GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *=== 児童は返戻・月遅れのみ対象 by Yoshikawa(2014/10/09) end
       *
                    ADD  1  TO  CNT-RECE02
                ELSE
