@@ -11,6 +11,7 @@ handler "RubyExec" {
 };
 
 bind "Sys3004" "RubyExec";
+bind "Sys3004del" "RubyExec";
 
 db {
         tbl_syskanri;
