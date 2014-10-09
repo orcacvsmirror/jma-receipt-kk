@@ -16,7 +16,7 @@ PREFNAME=sys3004
 PROGRAMID=SYS3004
 LOG_FILE="/var/log/jma-receipt/hokkaido-plugin"
 
-cd ${SITESRCDIR}/scripts/syskanri
+cd ../scripts/syskanri
 ###export APS_EXEC_PATH=`pwd`
 #cd  ${ORCA_DIR}
 
