@@ -35,6 +35,7 @@
       *  01.00.03    萩野    13/11/11    前期高齢者で特例措置該当者の
       *                                  給付割合を「80」と記録する
       *  01.00.04    吉川    13/11/14    プログラムオプション対応
+      *  01.00.05    吉川    14/10/03    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -91,8 +92,11 @@
                    BY         //MF101//.
       *
       *    エラーファイル 名称領域
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -505,6 +509,11 @@
       *    ＣＳＶ管理ＤＢ制御サブ
            COPY    "CPORCSCSVINFO.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -538,6 +547,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -599,9 +611,23 @@
            END-IF
       *
       *
-           MOVE  "MF101ZZ"        TO  MF101PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF101PARA-TERMID
-           MOVE  WRK-PARA-HOSPNUM           TO  MF101PARA-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) start
+      *     MOVE  "MF101ZZ"        TO  MF101PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF101PARA-TERMID
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF101PARA-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF101PARA-HOSPNUM
+           MOVE  "MF101ZZ"            TO  MF101PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF101PARA-TERMID
+      *
+           MOVE  MF101PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF101PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/03) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
