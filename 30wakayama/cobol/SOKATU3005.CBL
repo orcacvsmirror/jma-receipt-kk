@@ -37,6 +37,7 @@
       *  04.03.02    吉川       10/12/08  open-cobol1.0対応
       *  04.07.01    吉川       12/11/07  PERFORMをGOTOに修正
       *  04.07.02    吉川       13/01/11  医療機関情報編集対応
+      *  04.08.01    吉川       14/10/24  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -74,11 +75,16 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *    エラーファイル 名称領域 
-           COPY    "CPERRFL.INC"   REPLACING  //ERRFLPARA//
-                                   BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            COPY    "SKT3005.INC".
       *
@@ -321,6 +327,11 @@
       *
            COPY    "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -367,6 +378,9 @@
            INITIALIZE                  CNT-AREA
            INITIALIZE                  SUM-AREA
                                        SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -400,11 +414,24 @@
                                    TO  JOB-SHELLMSG
            PERFORM 900-CALL-ORCSJOB-SEC
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            MOVE    "RECEUPD"       TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID
                                    TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM
                                    TO  RECEUPD-HOSPNUM
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            MOVE    LNK-PRTKANRI-SRYYM
                                    TO  WRK-SRYYMD (1:6)

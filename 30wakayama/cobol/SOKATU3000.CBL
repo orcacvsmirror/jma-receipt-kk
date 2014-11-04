@@ -47,6 +47,7 @@
       *  02.00.05      吉川    14/05/14    前期高齢者２割対応
       *                                    在宅の対象とする診療コード変更
       *  02.00.06      吉川    14/08/06    返戻時、再印刷画面のタイトル修正
+      *  02.00.07      吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -114,13 +115,18 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *    エラーファイル 名称領域 
-           COPY    "CPCOMMONDAT2.INC"
-                                   REPLACING  //RECE01PARA//
-                                   BY         //RECEERR//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY    "CPCOMMONDAT2.INC"
+      *                             REPLACING  //RECE01PARA//
+      *                             BY         //RECEERR//.
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *     
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
@@ -502,6 +508,11 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -537,6 +548,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2010/05/19) start
            INITIALIZE                  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2010/05/19) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            DISPLAY  "START"
       *
@@ -583,6 +597,10 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            MOVE    "SKT3000"         TO  SKT3000TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT3000TP-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  SKT3000TP-HOSPNUM
@@ -593,6 +611,17 @@
       *
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           MOVE  SKT3000TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT3000TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)

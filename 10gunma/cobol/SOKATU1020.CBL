@@ -31,6 +31,7 @@
       *  01.00.02    吉川    2012/12/21  プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.03    吉川    2013/07/09  プログラムオプション対応
+      *  01.00.04    吉川    2014/10/06  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -72,19 +73,24 @@
        WORKING-STORAGE             SECTION.
       *
       *    請求書一時ファイル 名称領域 
-           COPY    "CPCOMMONDAT2.INC"
-                                   REPLACING  //RECE01PARA//
-                                   BY         //SKT1020TP//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     COPY    "CPCOMMONDAT2.INC"
+      *                             REPLACING  //RECE01PARA//
+      *                             BY         //SKT1020TP//.
       *
 006900*    請求ＤＢ更新用ファイル 名称領域 
-           COPY    "CPCOMMONDAT2.INC"
-                                   REPLACING  //RECE01PARA//
-                                   BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *     COPY    "CPCOMMONDAT2.INC"
+      *                             REPLACING  //RECE01PARA//
+      *                             BY         //RECEUPD//.
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
       *    エラーファイル 名称領域 
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *     
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
@@ -269,6 +275,11 @@
            COPY    "CPMKPASS.INC".
       *=== 媒体種類欄追加 by Yoshikawa(2009/08/25) end
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -300,6 +311,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            DISPLAY  "START"
       *
@@ -340,13 +354,21 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
-           MOVE    "SKT1020"           TO  SKT1020TP-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID TO  SKT1020TP-TERMID
-           MOVE    WRK-PARA-HOSPNUM    TO  SKT1020TP-HOSPNUM
-      *
-           MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
-           MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     MOVE    "SKT1020"           TO  SKT1020TP-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID TO  SKT1020TP-TERMID
+      *     MOVE    WRK-PARA-HOSPNUM    TO  SKT1020TP-HOSPNUM
+      **
+      *     MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
+      *     MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (1)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
            MOVE    "01"                TO  WRK-SRYYMD (7:2)

@@ -8,9 +8,9 @@ LOG_FILE="/var/log/jma-receipt/${14}seikyu1905"
 RENNUM=0
 PRGOPT="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='RECEDENPATH';"
 PRGOPT2="select option from tbl_prgoption where hospnum=${14} and prgid='${PROGRAMID}' and kbncd='SITEIKBN';"
-RECEDENTMP=/var/tmp/${14}RECEDEN-TMP.CSV
-SYARECEDENTMP=/var/tmp/${14}SYARECEDEN-TMP.CSV
-KORECEDENTMP=/var/tmp/${14}KORECEDEN-TMP.CSV
+RECEDENTMP=${14}RECEDEN-TMP.CSV
+SYARECEDENTMP=${14}SYARECEDEN-TMP.CSV
+KORECEDENTMP=${14}KORECEDEN-TMP.CSV
 #-------------------------------------------#
 #    地方公費作成 複写式電子レセプト
 #        $1-${11}
@@ -24,9 +24,9 @@ KORECEDENTMP=/var/tmp/${14}KORECEDEN-TMP.CSV
 #
 ##      エラーファイル削除
 	echo $#
-	echo "echo " ${15}
-        if  [ -e ${15} ]; then
-            rm  ${15}
+	echo "echo " ${MCP_TEMPDIR}/${15}
+        if  [ -e ${MCP_TEMPDIR}/${15} ]; then
+            rm  ${MCP_TEMPDIR}/${15}
         fi
 
         cd  ${ORCA_DIR}
@@ -35,27 +35,27 @@ KORECEDENTMP=/var/tmp/${14}KORECEDEN-TMP.CSV
             RECEDENPATH=`echo "${PRGOPT}" | psql -At ${DBNAME}`
             SITEIKBN=`echo "${PRGOPT2}" | psql -At ${DBNAME}`
             if [ $SITEIKBN = 1 ]; then
-                cp ${RECEDENPATH} ${RECEDENTMP}
+                cp ${RECEDENPATH} ${MCP_TEMPDIR}/${RECEDENTMP}
 #               文字コードをEUCに変換
-                nkf -Se --overwrite ${RECEDENTMP}
+                nkf -Se --overwrite ${MCP_TEMPDIR}/${RECEDENTMP}
             else
-                cp ${RECEDENPATH}/${14}_Shaho_${5}/RECEIPTC.UKE  ${SYARECEDENTMP}
-                cp ${RECEDENPATH}/${14}_Kokuho_${5}/RECEIPTC.UKE ${KORECEDENTMP}
+                cp ${RECEDENPATH}/${14}_Shaho_${5}/RECEIPTC.UKE  ${MCP_TEMPDIR}/${SYARECEDENTMP}
+                cp ${RECEDENPATH}/${14}_Kokuho_${5}/RECEIPTC.UKE ${MCP_TEMPDIR}/${KORECEDENTMP}
 #               文字コードをEUCに変換
-                nkf -Se --overwrite ${SYARECEDENTMP}
-                nkf -Se --overwrite ${KORECEDENTMP}
+                nkf -Se --overwrite ${MCP_TEMPDIR}/${SYARECEDENTMP}
+                nkf -Se --overwrite ${MCP_TEMPDIR}/${KORECEDENTMP}
             fi
 
             RENNUM=$(expr ${RENNUM} + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
-            if  [ -e ${15} ]; then
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15},${RECEDENTMP},${SYARECEDENTMP},${KORECEDENTMP} > ${LOG_FILE}.log 2>&1
+            if  [ -e ${MCP_TEMPDIR}/${15} ]; then
                 exit
             fi
 
 ##          TMPファイル削除
-            rm -rf ${RECEDENTMP}
-            rm -rf ${SYARECEDENTMP}
-            rm -rf ${KORECEDENTMP}
+            rm -rf ${MCP_TEMPDIR}/${RECEDENTMP}
+            rm -rf ${MCP_TEMPDIR}/${SYARECEDENTMP}
+            rm -rf ${MCP_TEMPDIR}/${KORECEDENTMP}
 
         $DBSTUB  -dir $LDDIRECTORY -bd orcabt ORCBJOB -parameter JBE${12}${13},${14}
 

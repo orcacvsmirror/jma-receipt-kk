@@ -74,6 +74,7 @@
       *  01.00.32    吉川    13/02/07    プラグイン対応
       *  01.00.33    吉川    13/06/18    プログラムオプション対応
       *  01.00.34    萩野    14/09/11    返戻時、再印刷画面のタイトル修正
+      *  01.00.35    吉川    14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -107,30 +108,32 @@
                                    FILE    STATUS  IS  STS-RECEERR.
       *
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME3
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-YUSEN.
-      *
-      *
-           SELECT  SRYKA-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-SRYKA.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-TAISYOKOHI.
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME3
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-YUSEN.
+      **
+      **
+      *     SELECT  SRYKA-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-SRYKA.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-TAISYOKOHI.
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -152,27 +155,29 @@
 006900*    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
-      *    優先保険者番号ファイル
-       FD  YUSEN-FILE.
-       01  YUSEN-HKNJANUM             PIC X(06). 
-      * 
-      *    診療科CDファイル
-       FD  SRYKA-FILE.
-       01  SRYKA-REC.
-           03  SRYKA-SRYKANAME           PIC X(20).
-           03  FILLER                    PIC X(01).
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *    印字対象公費番号ファイル
-       FD  TAISYOKOHI-FILE.
-       01  TAISYOKOHI-REC.
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     03  TAISYO-DAT-CHOHYO   PIC X(01).
-      *     03  FILLER              PIC X(01).
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-           03  TAISYO-DAT-KOHNUM   PIC X(03). 
-           03  TAISYO-DAT-KAIGYO   PIC X(01). 
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **    優先保険者番号ファイル
+      * FD  YUSEN-FILE.
+      * 01  YUSEN-HKNJANUM             PIC X(06). 
+      ** 
+      **    診療科CDファイル
+      * FD  SRYKA-FILE.
+      * 01  SRYKA-REC.
+      *     03  SRYKA-SRYKANAME           PIC X(20).
+      *     03  FILLER                    PIC X(01).
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      **    印字対象公費番号ファイル
+      * FD  TAISYOKOHI-FILE.
+      * 01  TAISYOKOHI-REC.
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     03  TAISYO-DAT-CHOHYO   PIC X(01).
+      **     03  FILLER              PIC X(01).
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
+      *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -192,7 +197,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.09) LINE ADD START ------------------------------------
@@ -200,8 +207,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *     
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
@@ -263,7 +273,7 @@
       *    添字領域
        01  IDX-AREA.
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDXX                PIC 9(04).
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
            03  IDX1                PIC 9(04).
@@ -295,24 +305,26 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) end
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU4000".
-           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
-       01  FILE-NAME2.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM2       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU4000".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-       01  FILE-NAME3.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM3       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU4000".
-           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU4000".
+      *     03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      * 01  FILE-NAME2.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM2       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU4000".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      * 01  FILE-NAME3.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM3       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU4000".
+      *     03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -573,6 +585,11 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -610,6 +627,10 @@
       *---(01.00.10) LINE ADD START ------------------------------------
            INITIALIZE                  SPA-AREA
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                  TAISYO-DAT
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            DISPLAY  "START"
       *
@@ -673,6 +694,10 @@
                                    SPA-AREA
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
            MOVE    "SKT4000"         TO  SKT4000TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4000TP-TERMID
       *---(01.00.09) LINE ADD START ------------------------------------
@@ -695,6 +720,19 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           MOVE  SKT4000TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  SKT4005TP-BASENAME      TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (3)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (4)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT4000TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  SKT4005TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (4)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)
@@ -949,145 +987,148 @@
            .
        1001-OPTION-SET-EXT.
            EXIT.
-      *=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
-      *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理   
-      *****************************************************************
-       110-INI-FILE-SEC                SECTION.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **=== プログラムオプション対応 by Yoshikawa(2013/06/18) end
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理   
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名3="  FILE-NAME3
+      **
+      *     INITIALIZE   YUSEN-HKNJANUM
+      **
+      *     OPEN  INPUT  YUSEN-FILE
+      **
+      *     READ YUSEN-FILE
+      *       AT END
+      *         INITIALIZE        YUSEN-HKNJANUM
+      *       DISPLAY "読み込み失敗"  
+      *     END-READ
+      **
+      *     DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
+      **
+      *     CLOSE YUSEN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理  
+      ******************************************************************
+      * 111-INI-FILE-SEC                SECTION.
+      **
+      **    診療科名取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   SRYKA-REC
+      **
+      *     OPEN  INPUT  SRYKA-FILE
+      **
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     3
+      *       READ SRYKA-FILE
+      *         AT END
+      *           INITIALIZE        SRYKA-REC
+      *       END-READ
+      **
+      *       DISPLAY "診療科名取得=" SRYKA-SRYKANAME
+      *       IF    SRYKA-SRYKANAME(1:2)  =  "※"
+      *         MOVE   SPACE             TO  WRK-SRYKANAME(IDX1)
+      *       ELSE
+      *         MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME(IDX1)
+      *       END-IF
+      *     END-PERFORM
+      **
+      *     CLOSE SRYKA-FILE
+      **
+      *     DISPLAY "診療科１="  WRK-SRYKANAME(1)
+      *     DISPLAY "診療科２="  WRK-SRYKANAME(2)
+      *     DISPLAY "診療科３="  WRK-SRYKANAME(3)
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 112-INI-FILE-SEC         SECTION.
+      **
+      **    印字対象公費番号ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名2="  FILE-NAME2
+      **
+      *     INITIALIZE   TAISYOKOHI-REC
+      **
+      *     OPEN  INPUT  TAISYOKOHI-FILE
+      **
+      *     MOVE  ZERO  TO  IDX
+      *                     FLG-TAISYOKOHI
+      **
+      *     PERFORM UNTIL    FLG-TAISYOKOHI = 1
+      *       READ TAISYOKOHI-FILE NEXT
+      *         AT END
+      *           MOVE  1                 TO  FLG-TAISYOKOHI
+      *         NOT AT END
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
+      *           IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *             CONTINUE
+      *           ELSE
+      **            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **             IF  TAISYO-DAT-CHOHYO  =  "1"
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *               ADD   1               TO  IDX
+      *               MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **             END-IF
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *             DISPLAY "読み込みレコード=" TAISYOKOHI-REC
+      *           END-IF
+      *       END-READ
+      *     END-PERFORM
+      **
+      *     CLOSE TAISYOKOHI-FILE
+      **
+      *     .
+      * 112-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
-      *
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM3
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名3="  FILE-NAME3
-      *
-           INITIALIZE   YUSEN-HKNJANUM
-      *
-           OPEN  INPUT  YUSEN-FILE
-      *
-           READ YUSEN-FILE
-             AT END
-               INITIALIZE        YUSEN-HKNJANUM
-             DISPLAY "読み込み失敗"  
-           END-READ
-      *
-           DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
-      *
-           CLOSE YUSEN-FILE
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
-      *
-      *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理  
-      *****************************************************************
-       111-INI-FILE-SEC                SECTION.
-      *
-      *    診療科名取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   SRYKA-REC
-      *
-           OPEN  INPUT  SRYKA-FILE
-      *
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     3
-             READ SRYKA-FILE
-               AT END
-                 INITIALIZE        SRYKA-REC
-             END-READ
-      *
-             DISPLAY "診療科名取得=" SRYKA-SRYKANAME
-             IF    SRYKA-SRYKANAME(1:2)  =  "※"
-               MOVE   SPACE             TO  WRK-SRYKANAME(IDX1)
-             ELSE
-               MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME(IDX1)
-             END-IF
-           END-PERFORM
-      *
-           CLOSE SRYKA-FILE
-      *
-           DISPLAY "診療科１="  WRK-SRYKANAME(1)
-           DISPLAY "診療科２="  WRK-SRYKANAME(2)
-           DISPLAY "診療科３="  WRK-SRYKANAME(3)
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
-      *****************************************************************
-      *    INIファイル読み込み
-      *****************************************************************
-       112-INI-FILE-SEC         SECTION.
-      *
-      *    印字対象公費番号ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名2="  FILE-NAME2
-      *
-           INITIALIZE   TAISYOKOHI-REC
-      *
-           OPEN  INPUT  TAISYOKOHI-FILE
-      *
-           MOVE  ZERO  TO  IDX
-                           FLG-TAISYOKOHI
-      *
-           PERFORM UNTIL    FLG-TAISYOKOHI = 1
-             READ TAISYOKOHI-FILE NEXT
-               AT END
-                 MOVE  1                 TO  FLG-TAISYOKOHI
-               NOT AT END
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *           IF  TAISYO-DAT-CHOHYO = "*" OR SPACE
-                 IF  TAISYO-DAT-KOHNUM(1:1) = "*" OR SPACE
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                   CONTINUE
-                 ELSE
-      *            1=複写式レセ、乳障母医療費請求書、国保総括表（右下）
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *             IF  TAISYO-DAT-CHOHYO  =  "1"
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                     ADD   1               TO  IDX
-                     MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *             END-IF
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                   DISPLAY "読み込みレコード=" TAISYOKOHI-REC
-                 END-IF
-             END-READ
-           END-PERFORM
-      *
-           CLOSE TAISYOKOHI-FILE
-      *
-           .
-       112-INI-FILE-EXT.
-           EXIT.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) end
       *****************************************************************
       *    主　　処理
       *****************************************************************

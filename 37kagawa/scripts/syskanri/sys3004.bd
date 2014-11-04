@@ -1,16 +1,10 @@
-name sys3004;
+name	sys3004;
 
-arraysize 20;
-textsize 400;
+arraysize	20;
+textsize	400;
 
-handler "RubyExec" {
-        class "Exec";
-        serialize "CGI";
-        start "/usr/bin/ruby -Ke %p/%m.rb %a";
-        locale "euc-jp";
-};
-
-bind "Sys3004" "RubyExec";
+bind	"SYS3004"		"OpenCOBOL";
+bind	"SYS3004DEL"	"OpenCOBOL";
 
 db {
         tbl_syskanri;

@@ -12,15 +12,70 @@ fi
 HOSPNUM="01"
 POST=`pwd`
 
-# program option set
-cd ${SITESRCDIR}/scripts/prgoption
-export APS_EXEC_PATH=`pwd`
+PREFNAME=prgoption
+PROGRAMID=PRGOPTIONSET
+
+cd ../scripts/prgoption
+
+# compile COBOL programs
+MODULES=${PROGRAMID}.CBL
+for f in $MODULES; do
+  if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
+    m=`echo $f | sed 's/CBL$/so/'`
+    echo -n "Building ${m}..."
+    ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+         -I ${PATCHCOPYDIR} \
+         -I ${COPYDIR} \
+         -I ${SITESRCDIR}/cobol/copy \
+        ${f}
+    echo "done"
+  fi
+done
+
+#------------------------------------------------------
+#     シス管「1910」登録
+#     NOWYMD     現在日付
+#     NOWHMS     現在時間
+#     NOWDIR     現在ディレクトリ
+#     KAKUNASHI  拡張子なしファイル名
+#                拡張子（exp or opt）
+#------------------------------------------------------
+NOWYMD=$(date +"%Y%m%d")
+NOWHMS=$(date +"%H%M%S")
+NOWDIR=$(pwd)
+
+FILENAME=(`ls | grep exp$`)
+COUNT=(`ls | grep exp$ | wc -w`)
+SU=0
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-$DBSTUB -bd prgoption Prgoption -parameter $HOSPNUM
+#ファイルの数だけ登録プログラムを実行する
+while test ${SU} -lt ${COUNT}
+do
+    KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.exp//'`
+    $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"exp"
 
-#rm dbgroup.inc
+    SU=$(expr ${SU} + 1)
+done
+
+#optファイルも同様に行う
+FILENAME=(`ls | grep opt$`)
+COUNT=(`ls | grep opt$ | wc -w`)
+SU=0
+
+while test ${SU} -lt ${COUNT}
+do
+    KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.opt//'`
+    $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"opt"
+
+    SU=$(expr ${SU} + 1)
+done
+
+# so del
+rm ${SITEDIR}/${PROGRAMID}.so
+rm dbgroup.inc
+
 cd $POST
 
 exit 0

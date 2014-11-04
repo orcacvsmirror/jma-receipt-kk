@@ -39,6 +39,7 @@
       *                                          かつらぎ町は未就学で帳票を分ける
       *  02.00.02       吉川    10/06/09         個別発行の処理方法変更
       *  02.00.03       吉川    10/12/08         open-cobol1.0対応
+      *  02.00.04       吉川    14/10/24         ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -64,6 +65,10 @@
            COPY  "CPCOMMONDAT2.INC"
                    REPLACING  //RECE01//
                    BY         //MF100//.
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *    スパ領域
        01  STS-AREA.
@@ -156,6 +161,11 @@
            COPY  "MCPDATA.INC".
       *     COPY  "CPORCMCP.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -191,6 +201,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) start
            INITIALIZE  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2010/06/02) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -210,6 +223,9 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-HOSPNUM
                                                WRK-PARA-SYORIFLG
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+                                               RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM   TO  SPA-HOSPNUM
       *
@@ -228,9 +244,23 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
-           MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
-           MOVE    WRK-PARA-HOSPNUM    TO  MF100PARA-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
+      *     MOVE    WRK-PARA-HOSPNUM    TO  MF100PARA-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            OPEN  OUTPUT MF100-FILE
       *
@@ -456,6 +486,9 @@
       *
            IF  CNT-MF100  >  0
              CALL  "SEIKYU3004"  USING  WRK-PARA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+                                        RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            ELSE
              DISPLAY "DATA NOT FOUND. PRINT JOB CANCEL!!"
            END-IF

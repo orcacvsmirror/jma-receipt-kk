@@ -43,6 +43,7 @@
       *  01.00.04    吉川         11/01/12  open-cobol1.0対応
       *  01.00.05    吉川         11/06/16  レセプト病名記載順対応
       *                                     補足コメント対応
+      *  01.00.06    吉川         14/10/27  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
 001200*
 001300 ENVIRONMENT             DIVISION.
@@ -101,8 +102,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
 018000*    フラグ領域
@@ -217,6 +221,10 @@
       ***** 05/05/06 DEL
       *     COPY    "CPORCMCP.INC". 
       *****
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -250,6 +258,9 @@
       *---(2008/11/20) LINE ADD START MONMA ----------------------------
                                        SPA-AREA
       *---(2008/11/20) LINE ADD END   MONMA ----------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            MOVE    ZERO                TO  FLG-END
       *
@@ -275,6 +286,10 @@
                                    SPA-AREA
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
            MOVE    "RECE030"           TO  RECE03PARA-FILE-ID
            MOVE    WRK-PARA-TERMID     TO  RECE03PARA-TERMID
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -291,6 +306,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    WRK-PARA-TERMID     TO  RECEERR-TERMID
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           MOVE  RECE03PARA-BASENAME     TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECE031PARA-BASENAME    TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECE03PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECE031PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            OPEN    INPUT               RECE03-FILE
       *

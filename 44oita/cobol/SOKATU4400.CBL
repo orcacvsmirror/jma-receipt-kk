@@ -39,6 +39,7 @@
       *  01.00.06    吉川    11/02/10    特別療養費国保対応
       *  01.00.07    吉川    13/02/08    医療機関情報編集対応
       *  01.00.08    吉川    14/08/06    返戻時、再印刷画面のタイトル修正
+      *  01.00.09    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -91,7 +92,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -99,8 +102,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *     
       *    シェル用領域
@@ -272,6 +278,10 @@
       *    全角チェックパラメタ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -313,6 +323,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/11/20) start
            INITIALIZE                   SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/11/20) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE                   RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            ACCEPT     SYS-TIME          FROM    TIME     
       *
@@ -365,6 +378,10 @@
                                    SPA-AREA
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
            MOVE    "SKT4400"           TO  SKT4400TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4400TP-TERMID
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -381,6 +398,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.01) LINE ADD START ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           MOVE  SKT4400TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT4400TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)

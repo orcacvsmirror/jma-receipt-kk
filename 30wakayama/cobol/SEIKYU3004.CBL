@@ -55,6 +55,7 @@
       *  02.00.03       吉川    10/12/08        open-cobol1.0対応
       *  02.00.04       吉川    11/05/30        ver4.6.0での印字不具合対応
       *  02.00.05       吉川    13/01/11        医療機関情報編集対応
+      *  02.00.06       吉川    14/10/24        ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -95,10 +96,12 @@
                    BY         //MF100//.
       *
       *    エラーファイル 名称領域
-           COPY  "CPCOMMONDAT2.INC"
-                   REPLACING  //RECE01PARA//
-                   BY         //RECEERR//.
-           03      PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY  "CPCOMMONDAT2.INC"
+      *             REPLACING  //RECE01PARA//
+      *             BY         //RECEERR//.
+      *     03      PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            COPY  "SC3003.INC".
       *
@@ -413,6 +416,11 @@
       *    印刷ＤＢ制御サブ
            COPY  "CPORCSPRT.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       *    口座取得サブ
        01  KOUZA-PARA.
            03  KOUZA-GINKO           PIC X(80).
@@ -436,11 +444,19 @@
            03  WRK-PARA-HOSPNUM    PIC 9(02).
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       ******************************************************************
       *
        PROCEDURE  DIVISION
-                  USING   WRK-PARA.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *            USING   WRK-PARA.
+                  USING   WRK-PARA
+                          RECEERR
+           .
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *****************************************************************
       *    主　　処理
@@ -464,7 +480,9 @@
            INITIALIZE  STS-AREA
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
-           INITIALIZE  KOUZA-PARA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     INITIALIZE  KOUZA-PARA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            INITIALIZE  WRK-KAIP
            INITIALIZE  SUM-AREA
            INITIALIZE  WRK-KEY-AREA
@@ -481,15 +499,27 @@
            MOVE  WRK-HENYMDG(1:16)   TO  WRK-DENPPRTYMWH
            MOVE  WRK-HENYMDG1        TO  WRK-SRYYM 
       *
-           MOVE  "MF100ZZ"         TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)
-                                   TO  MF100PARA-TERMID
-           MOVE  WRK-PARA-HOSPNUM    TO  MF100PARA-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     MOVE  "MF100ZZ"         TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)
+      *                             TO  MF100PARA-TERMID
+      *     MOVE  WRK-PARA-HOSPNUM    TO  MF100PARA-HOSPNUM
+      **
+      *     MOVE  "RECEERR"         TO  RECEERR-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)
+      *                             TO  RECEERR-TERMID
+      *     MOVE  WRK-PARA-HOSPNUM    TO  RECEERR-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
       *
-           MOVE  "RECEERR"         TO  RECEERR-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)
-                                   TO  RECEERR-TERMID
-           MOVE  WRK-PARA-HOSPNUM    TO  RECEERR-HOSPNUM
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAME
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAME    TO  MF100PARA-FULLNAME
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            OPEN  INPUT  MF100-FILE
       *

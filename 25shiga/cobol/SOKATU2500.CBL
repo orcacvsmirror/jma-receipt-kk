@@ -50,6 +50,7 @@
       *                                    地方公費を２つ以上所持しても
       *                                    福祉件数欄は1件でカウントする
       *  01.00.14    吉川    2013/10/04    プログラムオプション対応
+      *  01.00.15    吉川    2014/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -105,7 +106,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -113,8 +116,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *     
       *    シェル用領域
@@ -425,6 +431,11 @@
            COPY    "CPMKPASS.INC".
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2013/06/17) end
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -466,6 +477,9 @@
       *=== プログラムオプション対応 by Yoshikawa(2013/10/04) start
            INITIALIZE                  TAISYO-DAT
       *=== プログラムオプション対応 by Yoshikawa(2013/10/04) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY  "START"
       *
@@ -492,9 +506,9 @@
       *                                         WRK-PARA-HOSPID
                                                WRK-PARA-HOSPNUM
       *---(01.00.03) LINE ADD END   ------------------------------------
-					       WRK-PARA-JOBID
-					       WRK-PARA-SHELLID
-					       WRK-PARA-SYOKBN
+                                               WRK-PARA-JOBID
+                                               WRK-PARA-SHELLID
+                                               WRK-PARA-SYOKBN
       ****
       *---(01.00.03) LINE ADD START ------------------------------------
                                                RECEERR
@@ -525,6 +539,10 @@
                                    SPA-AREA
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -535,6 +553,15 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
            MOVE    "01"                TO  WRK-SRYYMD (7:2)

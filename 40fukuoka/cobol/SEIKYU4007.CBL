@@ -69,6 +69,7 @@
       *  01.00.25    萩野     14/09/12    同月内に長期の上限額に達した場合において
       *                                   該当公費と長期の併用があった場合、
       *                                   特記事項に長期を印字する
+      *  01.00.26    吉川     14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -170,8 +171,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03                      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
@@ -721,6 +725,11 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
+      *
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -764,6 +773,10 @@
            INITIALIZE                  SPA-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                  TAISYO-DAT
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            UNSTRING   COMMAND-PARAM    DELIMITED  BY  ","
                                        INTO    LNK-PRTKANRI-RENNUM
@@ -1036,12 +1049,19 @@
       *****************************************************************
        110-FILE-OPEN-SEC          SECTION.
       *
-           MOVE    "MF100ZZ"           TO  MF100PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16) 
-                                       TO  MF100PARA-TERMID
-      *---(01.00.09) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
-      *---(01.00.09) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     MOVE    "MF100ZZ"           TO  MF100PARA-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID(1:16) 
+      *                                 TO  MF100PARA-TERMID
+      **---(01.00.09) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
+      **---(01.00.09) LINE ADD END   ------------------------------------
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            MOVE    "RECE031"           TO  RECE031PARA-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID        TO  RECE031PARA-TERMID
@@ -1053,6 +1073,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID(1:16)  TO  RECEERR-TERMID
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECE031PARA-BASENAME TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECE031PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            OPEN    INPUT               RECE031-FILE
            IF  STS-RECE            NOT =   ZERO

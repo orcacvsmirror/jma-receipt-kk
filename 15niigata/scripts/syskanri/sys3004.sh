@@ -12,13 +12,46 @@ fi
 HOSPNUM="01"
 POST=`pwd`
 
-# syskanri 3004 set
-cd ${SITESRCDIR}/scripts/syskanri
-export APS_EXEC_PATH=`pwd`
+PREFNAME=sys3004
+PROGRAMID=SYS3004
+
+cd ../scripts/syskanri
+
+# compile COBOL programs
+MODULES=${PROGRAMID}.CBL
+for f in $MODULES; do
+  if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
+    m=`echo $f | sed 's/CBL$/so/'`
+    echo -n "Building ${m}..."
+    ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+         -I ${PATCHCOPYDIR} \
+         -I ${COPYDIR} \
+         -I ${SITESRCDIR}/cobol/copy \
+        ${f}
+    echo "done"
+  fi
+done
+
+#------------------------------------------------------
+#     シス管「3004」登録
+#     NOWYMD    現在日付
+#     NOWHMS    現在時間
+#     NOWDIR    現在ディレクトリ
+#     FILENAME  ファイル名
+#------------------------------------------------------
+NOWYMD=$(date +"%Y%m%d")
+NOWHMS=$(date +"%H%M%S")
+NOWDIR=$(pwd)
+FILENAME=sys3004.data
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-$DBSTUB -bd sys3004 Sys3004 -parameter $HOSPNUM
+# syskanri 3004 set
+$DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
+
+# so del
+rm ${SITEDIR}/${PROGRAMID}.so
+rm dbgroup.inc
 
 cd $POST
 

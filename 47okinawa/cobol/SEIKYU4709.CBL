@@ -27,7 +27,8 @@
       *  13/10/09    吉川          新規作成
       *****************************************************************
       *  プログラム修正履歴
-      * Maj/Min/Rev	修正者	日付		内容
+      * Maj/Min/Rev  修正者  日付      内容
+      *  01.00.01    吉川    14/10/28  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -49,8 +50,11 @@
        WORKING-STORAGE  SECTION.
       *
       *    エラーファイル 名称領域
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            COPY  "SC4709.INC".
       *
@@ -207,6 +211,11 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -241,6 +250,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -300,6 +312,14 @@
            IF      STS-DAY-RC1         =   ZERO 
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE                     SGETTEMP-AREA
+           MOVE  RECEERR              TO  SGETTEMP-BASENAME
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAME    TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC

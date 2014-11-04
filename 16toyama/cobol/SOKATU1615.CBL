@@ -33,6 +33,7 @@
       *  01.00.04    吉川    2010/08/04  オンライン返戻対応
       *  01.00.05    吉川    2012/11/07  PERFORMをGOTOに修正
       *  01.00.06    吉川    2012/12/25  医療機関情報編集対応
+      *  01.00.07    吉川    2014/10/09  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -68,11 +69,16 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
       *    エラーファイル 名称領域 
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *     
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
@@ -312,6 +318,11 @@
       *   半角チェックサブ
            COPY  "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -344,6 +355,9 @@
            INITIALIZE                  WRK-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
            DISPLAY  "START"
       *
@@ -386,9 +400,22 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
            MOVE    "01"                TO  WRK-SRYYMD (7:2)

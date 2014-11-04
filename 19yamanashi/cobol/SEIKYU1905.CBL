@@ -34,6 +34,7 @@
       *                                  同時に出力する処理追加
       *  01.00.03    吉川    14/09/18    医薬品レコードがある場合、
       *                                  福祉コメントが記録されないのを修正
+      *  01.00.04    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -105,27 +106,39 @@
                    BY         //MF101//.
       *
       *    エラーファイル 名称領域
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    レセプト電算ファイル
-       01  RECEDI-PATH.
-           03  FILLER                PIC X(09) VALUE "/var/tmp/".
-           03  FILE-HOSPNUM          PIC 9(02).
-           03  FILLER                PIC X(15) VALUE "RECEDEN-TMP.CSV".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      * 01  RECEDI-PATH.
+      *     03  FILLER                PIC X(09) VALUE "/var/tmp/".
+      *     03  FILE-HOSPNUM          PIC 9(02).
+      *     03  FILLER                PIC X(15) VALUE "RECEDEN-TMP.CSV".
+       01  RECEDI-PATH               PIC X(1024).
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
       *    社保レセプト電算ファイル
-       01  SYARECED-PATH.
-           03  FILLER              PIC X(09) VALUE "/var/tmp/".
-           03  SYARECED-HOSPNUM    PIC 9(02).
-           03  FILLER              PIC X(18) VALUE "SYARECEDEN-TMP.CSV".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      * 01  SYARECED-PATH.
+      *     03  FILLER              PIC X(09) VALUE "/var/tmp/".
+      *     03  SYARECED-HOSPNUM    PIC 9(02).
+      *     03  FILLER              PIC X(18) VALUE "SYARECEDEN-TMP.CSV".
+       01  SYARECED-PATH             PIC X(1024).
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    国保レセプト電算ファイル
-       01  KORECED-PATH.
-           03  FILLER              PIC X(09) VALUE "/var/tmp/".
-           03  KORECED-HOSPNUM     PIC 9(02).
-           03  FILLER              PIC X(17) VALUE "KORECEDEN-TMP.CSV".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      * 01  KORECED-PATH.
+      *     03  FILLER              PIC X(09) VALUE "/var/tmp/".
+      *     03  KORECED-HOSPNUM     PIC 9(02).
+      *     03  FILLER              PIC X(17) VALUE "KORECEDEN-TMP.CSV".
+       01  KORECED-PATH              PIC X(1024).
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    対象公費領域
@@ -423,6 +436,11 @@
       *    ＣＳＶ管理ＤＢ制御サブ
            COPY    "CPORCSCSVINFO.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -458,6 +476,12 @@
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
            INITIALIZE  TAISYO-DAT
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           INITIALIZE  RECEERR
+           INITIALIZE  RECEDI-PATH
+           INITIALIZE  SYARECED-PATH
+           INITIALIZE  KORECED-PATH
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -479,6 +503,11 @@
                                                WRK-PARA-HOSPNUM
                                                WRK-PARA-SYORIFLG
                                                RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+                                               RECEDI-PATH
+                                               SYARECED-PATH
+                                               KORECED-PATH
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
       *
@@ -518,9 +547,29 @@
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
       *
-           MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
-           MOVE    WRK-PARA-HOSPNUM            TO  MF101PARA-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
+      *     MOVE    WRK-PARA-HOSPNUM            TO  MF101PARA-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF101PARA-HOSPNUM
+           MOVE  "MF101ZZ"            TO  MF101PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF101PARA-TERMID
+      *
+           MOVE  MF101PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEDI-PATH          TO  SGETTEMP-BASENAMES (3)
+           MOVE  SYARECED-PATH        TO  SGETTEMP-BASENAMES (4)
+           MOVE  KORECED-PATH         TO  SGETTEMP-BASENAMES (5)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF101PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEDI-PATH
+           MOVE  SGETTEMP-FULLNAMES (4)  TO  SYARECED-PATH
+           MOVE  SGETTEMP-FULLNAMES (5)  TO  KORECED-PATH
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
@@ -879,11 +928,13 @@
                                                KORECED-REC
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
-           MOVE    SPA-HOSPNUM             TO  FILE-HOSPNUM
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-           MOVE    SPA-HOSPNUM             TO  SYARECED-HOSPNUM
-           MOVE    SPA-HOSPNUM             TO  KORECED-HOSPNUM
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     MOVE    SPA-HOSPNUM             TO  FILE-HOSPNUM
+      **=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+      *     MOVE    SPA-HOSPNUM             TO  SYARECED-HOSPNUM
+      *     MOVE    SPA-HOSPNUM             TO  KORECED-HOSPNUM
+      **=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *    
            OPEN  INPUT  RECEDI-FILE
                         MF101-FILE

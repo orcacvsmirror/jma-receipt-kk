@@ -37,6 +37,7 @@
       *  01.00.03    内田     08/01/27    公費の負担者番号で市の判定をする
       *  01.00.04    内田     08/10/04    SPA-AREA初期化
       *  01.00.05    吉川     13/01/22    医療機関情報編集対応
+      *  01.00.06    吉川     14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -66,8 +67,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            COPY  "SC4013.INC".
@@ -266,6 +270,11 @@
       *
            COPY  "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -303,6 +312,9 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            INITIALIZE  SPA-AREA
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -352,6 +364,14 @@
       *---(01.00.02) LINE ADD START ------------------------------------
                                    SPA-AREA
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                     SGETTEMP-AREA
+           MOVE  RECEERR              TO  SGETTEMP-BASENAME
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAME    TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    対象年月最終日取得
            INITIALIZE  WRK-SYMD

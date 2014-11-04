@@ -62,6 +62,7 @@
       *                                      請求点数と実日数はそれぞれの
       *                                      公費で診療した値を印字する
       *  01.00.17       吉川    2013/01/09   医療機関情報編集対応
+      *  01.00.18       吉川    2014/10/09   ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -109,8 +110,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY  "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                  BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
       *
       *    印刷用データ
@@ -441,6 +445,11 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -477,6 +486,9 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
            INITIALIZE  SPA-AREA
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -555,11 +567,26 @@
       *
            MOVE  WRK-HENYMDG(1:16)          TO  WRK-DENPPRTYMWH
            MOVE  WRK-HENYMDG1               TO  WRK-SRYYM
-           MOVE  "MF110ZZ"        TO  MF110PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF110PARA-TERMID
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
-           MOVE  WRK-PARA-HOSPNUM           TO  MF110PARA-HOSPNUM
-      *=== Ver4.0対応 By Yoshikawa(2007/10/05) end
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
+      *     MOVE  "MF110ZZ"        TO  MF110PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF110PARA-TERMID
+      **=== Ver4.0対応 By Yoshikawa(2007/10/05) start
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF110PARA-HOSPNUM
+      **=== Ver4.0対応 By Yoshikawa(2007/10/05) end
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF110PARA-HOSPNUM
+           MOVE  "MF110ZZ"            TO  MF110PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF110PARA-TERMID
+      *
+           MOVE  MF110PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF110PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
       *=== Ver4.0対応 By Yoshikawa(2007/10/05) start
       *     MOVE  "RECEERR"        TO  RECEERR-FILE-ID

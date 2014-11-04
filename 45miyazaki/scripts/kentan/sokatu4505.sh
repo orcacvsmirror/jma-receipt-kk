@@ -21,14 +21,14 @@ RENNUM=0
 #
 ##      エラーファイル削除
 	echo $#
-	echo "echo " ${16}
-        if  [ -e ${16} ]; then
-            rm  ${16}
+	echo "echo " ${MCP_TEMPDIR}/${16}
+        if  [ -e ${MCP_TEMPDIR}/${16} ]; then
+            rm  ${MCP_TEMPDIR}/${16}
         fi
 
         RENNUM=$(expr $RENNUM + 1) 
         $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,${16} > ${LOG_FILE}-1.log 2>&1
-        if  [ -e ${16} ]; then
+        if  [ -e ${MCP_TEMPDIR}/${16} ]; then
             exit
         fi
         

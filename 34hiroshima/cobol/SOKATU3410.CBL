@@ -53,6 +53,7 @@
       *  01.00.15    吉川    14/01/10    プログラムオプション対応
       *  01.00.16    吉川    14/05/14    前期高齢者２割対応
       *  01.00.17    吉川    14/07/04    再印刷時のタイトル修正
+      *  01.00.18    吉川    14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -117,7 +118,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -125,8 +128,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *     
       *    シェル用領域
@@ -425,6 +431,10 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -463,6 +473,9 @@
       *---(01.00.09) LINE ADD START ------------------------------------
            INITIALIZE                  SPA-AREA
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            DISPLAY  "START"
       *
@@ -519,6 +532,10 @@
                                    SPA-AREA
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
            MOVE    "SKT3410"           TO  SKT3410TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT3410TP-TERMID
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -535,6 +552,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           MOVE  SKT3410TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT3410TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)

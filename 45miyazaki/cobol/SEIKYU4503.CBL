@@ -60,6 +60,7 @@
       *  01.00.19    吉川    13/06/18    プログラムオプション対応
       *  01.00.20    吉川    13/08/09    併用した全国公費の負担者番号と
       *                                  受給者番号が印字されないのを修正
+      *  01.00.21    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -74,22 +75,24 @@
                                RECORD  KEY     IS  MF100-KEY
                                FILE    STATUS  IS  STS-MF100.
       *
-      *    レセプト印刷順ファイル
-           SELECT  SYUTURYOKU-FILE ASSIGN FILE-NAME
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-SYUTURYOKU.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
-      *    印字対象公費番号ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
-      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-TAISYOKOHI.
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **    レセプト印刷順ファイル
+      *     SELECT  SYUTURYOKU-FILE ASSIGN FILE-NAME
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-SYUTURYOKU.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
+      **    印字対象公費番号ファイル
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      **     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME2
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-TAISYOKOHI.
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
@@ -104,19 +107,21 @@
        01  MF100-REC.
            COPY  "SEI4503.INC".
       *
-      *    レセプト印刷順ファイル
-       FD  SYUTURYOKU-FILE.
-       01  STU-REC.
-           03  FILLER              PIC X(21).
-           03  STU-NUM             PIC X(02). 
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
-      *    印字対象公費番号ファイル
-       FD  TAISYOKOHI-FILE.
-       01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-KOHNUM   PIC X(03). 
-           03  TAISYO-DAT-KAIGYO   PIC X(01). 
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **    レセプト印刷順ファイル
+      * FD  SYUTURYOKU-FILE.
+      * 01  STU-REC.
+      *     03  FILLER              PIC X(21).
+      *     03  STU-NUM             PIC X(02). 
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
+      **    印字対象公費番号ファイル
+      * FD  TAISYOKOHI-FILE.
+      * 01  TAISYOKOHI-REC.
+      *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
+      *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
 006900*    エラーファイル
        FD  RECEERR-FILE.
@@ -139,8 +144,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
            COPY  "SC4503.INC"  REPLACING  //HCM09V02//
@@ -186,7 +194,7 @@
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
@@ -209,19 +217,21 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4503".
-           03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
-       01  FILE-NAME2.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM2       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4503".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4503".
+      *     03  FILLER             PIC X(18)  VALUE "RECESYUTURYOKU.INI".
+      * 01  FILE-NAME2.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM2       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4503".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -491,6 +501,11 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -527,6 +542,10 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) start
            INITIALIZE  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE  TAISYO-DAT
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -599,11 +618,25 @@
            END-IF
       *
       *
-           MOVE    "MF100ZZ"                   TO  MF100PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF100PARA-TERMID
-      *---(01.00.06) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM              TO  MF100PARA-HOSPNUM
-      *---(01.00.06) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     MOVE    "MF100ZZ"                   TO  MF100PARA-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF100PARA-TERMID
+      **---(01.00.06) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM              TO  MF100PARA-HOSPNUM
+      **---(01.00.06) LINE ADD END   ------------------------------------
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *---(01.00.06) LINE ADD START ------------------------------------
       *     MOVE    "RECEERR"                   TO  RECEERR-FILE-ID
@@ -868,76 +901,78 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
-      *****************************************************************
-      *    INIファイル読み込み
-      *****************************************************************
-       110-INI-FILE-SEC         SECTION.
-      *
-      *    出力順設定ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   STU-REC
-      *
-           OPEN  INPUT  SYUTURYOKU-FILE
-      *
-           READ SYUTURYOKU-FILE
-             AT END
-               INITIALIZE        STU-REC
-           END-READ
-      *
-           DISPLAY "出力番号=" STU-NUM
-      *
-      *    正しいデータでは無い時は０１に置き換える
-           IF     STU-NUM  NOT  =  "01" AND "02" AND "03" AND "04"
-             MOVE     "01"     TO  STU-NUM
-             DISPLAY  "出力順変換=" STU-NUM
-           END-IF
-      *
-           CLOSE  SYUTURYOKU-FILE
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
-      *    印字対象公費番号ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
-      *
-           DISPLAY "ファイル名2="  FILE-NAME2
-      *
-           INITIALIZE   TAISYOKOHI-REC
-      *
-           OPEN  INPUT  TAISYOKOHI-FILE
-      *
-           MOVE  ZERO   TO  FLG-TAISYOKOHI
-           PERFORM VARYING  IDX  FROM  1  BY  1 
-                   UNTIL    FLG-TAISYOKOHI = 1
-             READ TAISYOKOHI-FILE NEXT
-               AT END
-                 MOVE  1               TO  FLG-TAISYOKOHI
-               NOT AT END
-                 MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-             END-READ
-           END-PERFORM
-      *
-           CLOSE TAISYOKOHI-FILE
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 110-INI-FILE-SEC         SECTION.
+      **
+      **    出力順設定ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/RECESYUTURYOKU.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   STU-REC
+      **
+      *     OPEN  INPUT  SYUTURYOKU-FILE
+      **
+      *     READ SYUTURYOKU-FILE
+      *       AT END
+      *         INITIALIZE        STU-REC
+      *     END-READ
+      **
+      *     DISPLAY "出力番号=" STU-NUM
+      **
+      **    正しいデータでは無い時は０１に置き換える
+      *     IF     STU-NUM  NOT  =  "01" AND "02" AND "03" AND "04"
+      *       MOVE     "01"     TO  STU-NUM
+      *       DISPLAY  "出力順変換=" STU-NUM
+      *     END-IF
+      **
+      *     CLOSE  SYUTURYOKU-FILE
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
+      **    印字対象公費番号ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      **
+      *     DISPLAY "ファイル名2="  FILE-NAME2
+      **
+      *     INITIALIZE   TAISYOKOHI-REC
+      **
+      *     OPEN  INPUT  TAISYOKOHI-FILE
+      **
+      *     MOVE  ZERO   TO  FLG-TAISYOKOHI
+      *     PERFORM VARYING  IDX  FROM  1  BY  1 
+      *             UNTIL    FLG-TAISYOKOHI = 1
+      *       READ TAISYOKOHI-FILE NEXT
+      *         AT END
+      *           MOVE  1               TO  FLG-TAISYOKOHI
+      *         NOT AT END
+      *           MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+      *       END-READ
+      *     END-PERFORM
+      **
+      *     CLOSE TAISYOKOHI-FILE
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *****************************************************************
       *    主　　処理

@@ -44,6 +44,7 @@
       *  01.00.09    吉川    13/02/06    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.10    吉川    13/09/19    プログラムオプション対応
+      *  01.00.11    吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -92,7 +93,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
 
       *    エラーファイル 名称領域 
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -100,8 +103,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    印刷用領域
@@ -147,7 +153,7 @@
            03  IDX3                PIC 9(04).
            03  IDX4                PIC 9(04). 
       *=== プログラムオプション対応 by Yoshikawa(2013/09/19) start
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDY                 PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/09/19) end
       *
@@ -332,6 +338,10 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -371,6 +381,9 @@
       *---(01.00.02) LINE ADD START ------------------------------------
            INITIALIZE  SPA-AREA
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *     
            PERFORM    100-DBOPEN-SEC
       *
@@ -421,6 +434,10 @@
                                    SPA-AREA
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID     TO  RECEUPD-TERMID
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -431,6 +448,15 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID     TO  RECEERR-TERMID
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)

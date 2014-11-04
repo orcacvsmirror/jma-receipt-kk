@@ -40,6 +40,7 @@
       *  01.00.05     吉川     11/06/14    高額療養費を持っている場合の
       *                                    医療費請求額の計算を修正
       *  01.00.06     吉川     12/12/21    医療機関情報編集対応
+      *  01.00.07     吉川     14/10/06    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -82,8 +83,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
            COPY  "SC1011.INC".
@@ -283,6 +287,11 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -318,6 +327,9 @@
       *---(01.00.03) LINE ADD START ------------------------------------
            INITIALIZE  SPA-AREA
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -388,11 +400,25 @@
            END-IF
       *
       *
-           MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
-      *---(01.00.02) LINE ADD START ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
+      **---(01.00.02) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+      **---(01.00.02) LINE ADD END   ------------------------------------
+           INITIALIZE                     SGETTEMP-AREA
+      *
            MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
-      *---(01.00.02) LINE ADD END   ------------------------------------
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
       *---(01.00.02) LINE ADD START ------------------------------------
       *     MOVE  "RECEERR"        TO  RECEERR-FILE-ID

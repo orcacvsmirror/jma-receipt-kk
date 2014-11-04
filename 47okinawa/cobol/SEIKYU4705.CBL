@@ -44,6 +44,7 @@
       *                                  医療機関情報編集対応
       *  01.00.10    吉川    2013/02/12  プラグイン対応
       *  01.00.11    吉川    2013/10/09  プログラムオプション対応
+      *  01.00.12    吉川    2014/10/28  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -113,8 +114,11 @@
                                    BY         //RECE031//.
       *
       *    エラーファイル 名称領域 
-           COPY    "CPERRFL.INC"   REPLACING  //ERRFLPARA//
-                                   BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *    レセプト印刷データ用領域
       *=== ver4.2でのコンパイルエラー修正 by Yoshikawa(2009/08/10) start
@@ -191,7 +195,7 @@
       *    添字領域
        01  IDX-AREA.
            03  IDW             PIC 9(04).
-           03  IDX             PIC 9(04).
+           03  IDX             PIC 9(05).
            03  IDXX            PIC 9(04).
            03  IDY             PIC 9(04).
            03  IDZ             PIC 9(04).
@@ -560,6 +564,11 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+      *
       *****************************************************************
       *    ファイルレイアウト
       *****************************************************************
@@ -603,6 +612,9 @@
            INITIALIZE                  SPA-AREA
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            UNSTRING   COMMAND-PARAM    DELIMITED  BY  ","
                                        INTO    LNK-PRTKANRI-RENNUM
@@ -801,14 +813,33 @@
       *****************************************************************
        110-FILE-OPEN-SEC          SECTION.
       *
-           MOVE    "MF100ZZ"           TO  MF100PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16) 
-                                       TO  MF100PARA-TERMID
-           MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     MOVE    "MF100ZZ"           TO  MF100PARA-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID(1:16) 
+      *                                 TO  MF100PARA-TERMID
+      *     MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            MOVE    "RECE031"           TO  RECE031PARA-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID        TO  RECE031PARA-TERMID
            MOVE  WRK-PARA-HOSPNUM      TO  RECE031PARA-HOSPNUM
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECE031PARA-BASENAME TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECE031PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            OPEN    INPUT               RECE031-FILE
            IF  STS-RECE            NOT =   ZERO

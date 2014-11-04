@@ -32,6 +32,7 @@
       ************************    SEIKYU47BYOMEI2修正履歴    **********
       * 01.00.01     吉川         11/07/25  レセプト病名記載順対応
       *                                     補足コメント対応
+      * 01.00.02     吉川         14/10/28  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
 001200*
 001300 ENVIRONMENT             DIVISION.
@@ -85,8 +86,11 @@
                                    BY         //RECE031//.
       *
       *    エラーファイル 名称領域 
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
 018000*    フラグ領域
        01  STS-AREA.
@@ -181,6 +185,11 @@
       *
            COPY    "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -210,6 +219,9 @@
       *
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            MOVE    ZERO                TO  FLG-END
       *
@@ -229,6 +241,10 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
            MOVE    "RECE030"           TO  RECE03PARA-FILE-ID
            MOVE    WRK-PARA-TERMID     TO  RECE03PARA-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECE03PARA-HOSPNUM
@@ -236,6 +252,17 @@
            MOVE    "RECE031"           TO  RECE031PARA-FILE-ID
            MOVE    WRK-PARA-TERMID     TO  RECE031PARA-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECE031PARA-HOSPNUM
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           MOVE  RECE03PARA-BASENAME     TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECE031PARA-BASENAME    TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECE03PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECE031PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            OPEN    INPUT               RECE03-FILE
       *

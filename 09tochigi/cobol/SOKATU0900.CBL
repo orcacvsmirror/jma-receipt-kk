@@ -32,6 +32,7 @@
       *                                  医療機関情報を参照
       *  01.00.02    吉川    08/10/09    SPA-AREA初期化
       *  01.00.03    吉川    12/12/21    医療機関情報編集対応
+      *  01.00.04    吉川    14/10/06    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -57,8 +58,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
            COPY    "SKT0900.INC".
@@ -188,6 +192,10 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -224,6 +232,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/09) start
            INITIALIZE                  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/09) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            DISPLAY  "START"
       *
@@ -277,6 +288,15 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (1)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
            MOVE    "01"                TO  WRK-SRYYMD (7:2)

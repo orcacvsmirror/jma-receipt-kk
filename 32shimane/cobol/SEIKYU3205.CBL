@@ -46,6 +46,7 @@
       *  01.00.07    吉川    13/01/11    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.08    吉川    14/05/14    プログラムオプション対応
+      *  01.00.09    吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -112,8 +113,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/19) start
@@ -337,18 +341,18 @@
            03  SUM-TABLE	OCCURS  2.
       ****2006/03/16 @@@@-BRAND  END
       ****2006/01/07 @@@@-BRAND  START
-      *         05  SUM-KENSU	PIC  9(03).
-               05  SUM-KENSU	PIC  9(05).
-      *         05  SUM-NISSU	PIC  9(03).
-               05  SUM-NISSU	PIC  9(05).
-      *         05  SUM-TENSU	PIC  9(07).
-               05  SUM-TENSU	PIC  9(09).
-               05  SUM-YKZFTN	PIC  9(07).
-      *         05  SUM-KYUFU	PIC  9(07).
-               05  SUM-KYUFU	PIC  9(09).
-               05  SUM-KOUJO	PIC  9(09).
-      *         05  SUM-TYOKI	PIC  9(02).
-               05  SUM-TYOKI	PIC  9(03).
+      *         05  SUM-KENSU   PIC  9(03).
+               05  SUM-KENSU    PIC  9(05).
+      *         05  SUM-NISSU   PIC  9(03).
+               05  SUM-NISSU    PIC  9(05).
+      *         05  SUM-TENSU   PIC  9(07).
+               05  SUM-TENSU    PIC  9(09).
+               05  SUM-YKZFTN   PIC  9(07).
+      *         05  SUM-KYUFU   PIC  9(07).
+               05  SUM-KYUFU    PIC  9(09).
+               05  SUM-KOUJO    PIC  9(09).
+      *         05  SUM-TYOKI   PIC  9(02).
+               05  SUM-TYOKI    PIC  9(03).
       *
       ****2006/03/16 @@@@-BRAND  START
        01 SUM-AREA2              VALUE ZERO.
@@ -502,6 +506,11 @@
            COPY    "CPMKPASS.INC".
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/19) end
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -545,6 +554,9 @@
       *--- (2008/12/16) line add start monma ---------------------------
            INITIALIZE  SPA-AREA
       *--- (2008/12/16) line add end   monma ---------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -623,11 +635,25 @@
            END-IF
       *
       *
-           MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
-      *---(01.00.04) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
-      *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
+      **---(01.00.04) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
+      **---(01.00.04) LINE ADD END   ------------------------------------
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     MOVE  "RECEERR"        TO  RECEERR-FILE-ID

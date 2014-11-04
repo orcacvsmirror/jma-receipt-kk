@@ -52,6 +52,7 @@
       *                                医療機関情報編集対応
       *  01.00.16    吉川    13/09/19  プログラムオプション対応
       *  01.00.17    吉川    14/05/13  前期高齢者２割対応
+      *  01.00.18    吉川    14/10/24  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -116,7 +117,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -124,8 +127,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
            COPY    "SKT3310.INC".
@@ -173,7 +179,7 @@
            03  IDZ2                PIC 9(04).
       *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
       *=== プログラムオプション対応 by Yoshikawa(2013/09/19) start
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDY                 PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/09/19) end
       *
@@ -436,6 +442,11 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -471,6 +482,9 @@
       *---(01.00.08) LINE ADD START ------------------------------------
            INITIALIZE  SPA-AREA
       *---(01.00.08) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            DISPLAY  "START"
       *
@@ -527,6 +541,10 @@
                                    SPA-AREA
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            MOVE    "SKT3310"           TO  SKT3310TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT3310TP-TERMID
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -543,6 +561,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           MOVE  SKT3310TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT3310TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)

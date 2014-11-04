@@ -50,6 +50,7 @@
       *  01.00.13    吉川       13/02/07    プラグイン対応
       *                                     医療機関情報編集対応
       *  01.00.14    吉川       13/06/17    プログラムオプション対応
+      *  01.00.15    吉川       14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -73,20 +74,22 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-      *    優先ファイル
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-YUSEN.
-      *
-      *    診療科設定ファイル
-           SELECT  SRYKA-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-SRYKA.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **    優先ファイル
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-YUSEN.
+      **
+      **    診療科設定ファイル
+      *     SELECT  SRYKA-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-SRYKA.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *
        DATA                        DIVISION.
@@ -105,15 +108,17 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *    優先保険者番号ファイル
-       FD  YUSEN-FILE.
-       01  YUSEN-HKNJANUM             PIC X(06). 
-      *
-      *    診療科番号ファイル
-       FD  SRYKA-FILE.
-       01  SRYKA-REC.
-           03  SRYKA-SRYKANAME           PIC X(20).
-           03  FILLER                    PIC X(01).
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **    優先保険者番号ファイル
+      * FD  YUSEN-FILE.
+      * 01  YUSEN-HKNJANUM             PIC X(06). 
+      **
+      **    診療科番号ファイル
+      * FD  SRYKA-FILE.
+      * 01  SRYKA-REC.
+      *     03  SRYKA-SRYKANAME           PIC X(20).
+      *     03  FILLER                    PIC X(01).
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -126,7 +131,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -134,8 +141,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *     
       *    シェル用領域
@@ -181,7 +191,7 @@
            03  IDX4                PIC 9(04).
            03  IDX5                PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDY                 PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
@@ -202,19 +212,21 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2008/12/24) end
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU4100".
-           03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
-       01  FILE-NAME2.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM2       PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU4100".
-           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU4100".
+      *     03  FILLER              PIC X(09)  VALUE "SRYKA.INI".
+      * 01  FILE-NAME2.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM2       PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU4100".
+      *     03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -390,6 +402,10 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -428,6 +444,9 @@
       *---(01.00.04) LINE ADD START ------------------------------------
            INITIALIZE                  SPA-AREA
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            DISPLAY  "START"
       *
@@ -478,6 +497,10 @@
                                    SPA-AREA
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *##（地方公費仕様：LNK-PRTKANRI-TERMID)
            MOVE    "SKT4100"         TO  SKT4100TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4100TP-TERMID
@@ -495,6 +518,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           MOVE  SKT4100TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT4100TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *###（地方公費仕様)
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
@@ -633,86 +667,88 @@
        100-INIT-EXT.
            EXIT.
       *
-      *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理 
-      *****************************************************************
-       110-INI-FILE-SEC                SECTION.
-      *
-      *
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名2="  FILE-NAME2
-      *
-           INITIALIZE   YUSEN-HKNJANUM
-      *
-           OPEN  INPUT  YUSEN-FILE
-      *
-           READ YUSEN-FILE
-             AT END
-               INITIALIZE        YUSEN-HKNJANUM
-             DISPLAY "読み込み失敗"  
-           END-READ
-      *
-           DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
-      *
-           CLOSE YUSEN-FILE
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
-      *
-      *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理  
-      *****************************************************************
-       111-INI-FILE-SEC                SECTION.
-      *
-      *    診療科名取得
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   SRYKA-REC
-      *
-           OPEN  INPUT  SRYKA-FILE
-      *
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     3
-             READ SRYKA-FILE
-               AT END
-                 INITIALIZE        SRYKA-REC
-             END-READ
-      *
-             DISPLAY "診療科名取得=" SRYKA-SRYKANAME
-             IF    SRYKA-SRYKANAME(1:2)  =  "※"
-               MOVE   SPACE             TO  WRK-SRYKANAME(IDX1)
-             ELSE
-               MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME(IDX1)
-             END-IF
-           END-PERFORM
-      *
-           CLOSE SRYKA-FILE
-      *
-           DISPLAY "診療科１="  WRK-SRYKANAME(1)
-           DISPLAY "診療科２="  WRK-SRYKANAME(2)
-           DISPLAY "診療科３="  WRK-SRYKANAME(3)
-      *
-           .
-       111-INI-FILE-EXT.
-           EXIT.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理 
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM2
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名2="  FILE-NAME2
+      **
+      *     INITIALIZE   YUSEN-HKNJANUM
+      **
+      *     OPEN  INPUT  YUSEN-FILE
+      **
+      *     READ YUSEN-FILE
+      *       AT END
+      *         INITIALIZE        YUSEN-HKNJANUM
+      *       DISPLAY "読み込み失敗"  
+      *     END-READ
+      **
+      *     DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
+      **
+      *     CLOSE YUSEN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理  
+      ******************************************************************
+      * 111-INI-FILE-SEC                SECTION.
+      **
+      **    診療科名取得
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/SRYKA.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/07) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   SRYKA-REC
+      **
+      *     OPEN  INPUT  SRYKA-FILE
+      **
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     3
+      *       READ SRYKA-FILE
+      *         AT END
+      *           INITIALIZE        SRYKA-REC
+      *       END-READ
+      **
+      *       DISPLAY "診療科名取得=" SRYKA-SRYKANAME
+      *       IF    SRYKA-SRYKANAME(1:2)  =  "※"
+      *         MOVE   SPACE             TO  WRK-SRYKANAME(IDX1)
+      *       ELSE
+      *         MOVE   SRYKA-SRYKANAME   TO  WRK-SRYKANAME(IDX1)
+      *       END-IF
+      *     END-PERFORM
+      **
+      *     CLOSE SRYKA-FILE
+      **
+      *     DISPLAY "診療科１="  WRK-SRYKANAME(1)
+      *     DISPLAY "診療科２="  WRK-SRYKANAME(2)
+      *     DISPLAY "診療科３="  WRK-SRYKANAME(3)
+      **
+      *     .
+      * 111-INI-FILE-EXT.
+      *     EXIT.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
       *****************************************************************

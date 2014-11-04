@@ -59,6 +59,7 @@
       *                                  一部負担金欄の計算修正
       *  01.00.17    吉川    14/07/07    自費のみの診療の場合、帳票に
       *                                  記載しないように修正
+      *  01.00.18    吉川    14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -103,8 +104,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
            COPY  "SC3515.INC".
@@ -337,6 +341,11 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -372,6 +381,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2009/02/25) start
            INITIALIZE  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2009/02/25) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -446,11 +458,25 @@
            END-IF
       *
       *
-           MOVE  "MF101ZZ"        TO  MF101PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF101PARA-TERMID
-      *---(01.00.05) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM           TO  MF101PARA-HOSPNUM
-      *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     MOVE  "MF101ZZ"        TO  MF101PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF101PARA-TERMID
+      **---(01.00.05) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF101PARA-HOSPNUM
+      **---(01.00.05) LINE ADD END   ------------------------------------
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF101PARA-HOSPNUM
+           MOVE  "MF101ZZ"            TO  MF101PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF101PARA-TERMID
+      *
+           MOVE  MF101PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF101PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *     MOVE  "RECEERR"        TO  RECEERR-FILE-ID

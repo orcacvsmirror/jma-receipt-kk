@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -49,8 +50,11 @@
        WORKING-STORAGE  SECTION.
       *
       *    エラーファイル 名称領域
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            COPY    "SC1909.INC".
       *
@@ -266,6 +270,11 @@
       *
            COPY    "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -301,6 +310,9 @@
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
            INITIALIZE  TAISYO-DAT
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -360,6 +372,13 @@
            IF      STS-DAY-RC1         =   ZERO 
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           MOVE  RECEERR              TO  SGETTEMP-BASENAME
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAME    TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC

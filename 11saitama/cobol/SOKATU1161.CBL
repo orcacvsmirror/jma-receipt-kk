@@ -55,6 +55,7 @@
       *                                     在宅をまとめて集計するように修正
       *                                     一部負担金の記載対応
       *  01.00.10    吉川         12/12/21  医療機関情報編集対応
+      *  01.02.11    吉川         14/10/08  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -81,8 +82,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *---(01.01.03) LINE ADD START ------------------------------------
       *
       *****COPY    "HCM2K.INC".
@@ -269,6 +273,10 @@
       ***** 05/06/09 DEL
       *     COPY    "CPORCMCP.INC".
       *****
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *
       *****************************************************************
       *    連絡　領域
@@ -401,6 +409,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) start
            INITIALIZE                  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *
       *---(01.01.03) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -417,6 +428,14 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.01.03) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAME
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAME       TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *
       *    システム管理マスタ（医療機関情報）
            DISPLAY "120 STR"

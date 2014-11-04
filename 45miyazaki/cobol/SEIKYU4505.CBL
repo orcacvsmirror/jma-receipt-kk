@@ -47,6 +47,7 @@
       *  01.00.12    吉川    12/12/20    医療機関情報編集対応
       *  01.00.13    吉川    13/02/08    プラグイン対応
       *  01.00.14    吉川    13/06/18    プログラムオプション対応
+      *  01.00.15    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -61,13 +62,15 @@
                                RECORD  KEY     IS  MF100-KEY
                                FILE    STATUS  IS  STS-MF100.
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
-      *    印字対象公費番号ファイル
-           SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
-                                   ORGANIZATION   IS  LINE SEQUENTIAL
-                                   ACCESS MODE    IS  SEQUENTIAL
-                                   FILE   STATUS  IS  STS-TAISYOKOHI.
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
+      **    印字対象公費番号ファイル
+      *     SELECT  TAISYOKOHI-FILE ASSIGN FILE-NAME
+      *                             ORGANIZATION   IS  LINE SEQUENTIAL
+      *                             ACCESS MODE    IS  SEQUENTIAL
+      *                             FILE   STATUS  IS  STS-TAISYOKOHI.
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
@@ -82,13 +85,15 @@
        01  MF100-REC.
            COPY  "SEI4505.INC".
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
-      *    印字対象公費番号ファイル
-       FD  TAISYOKOHI-FILE.
-       01  TAISYOKOHI-REC.
-           03  TAISYO-DAT-KOHNUM   PIC X(03). 
-           03  TAISYO-DAT-KAIGYO   PIC X(01). 
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
+      **    印字対象公費番号ファイル
+      * FD  TAISYOKOHI-FILE.
+      * 01  TAISYOKOHI-REC.
+      *     03  TAISYO-DAT-KOHNUM   PIC X(03). 
+      *     03  TAISYO-DAT-KAIGYO   PIC X(01). 
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
 006900*    エラーファイル
        FD  RECEERR-FILE.
@@ -112,8 +117,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    
@@ -157,7 +165,7 @@
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
@@ -180,14 +188,16 @@
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
       *
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SEIKYU4505".
-           03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SEIKYU4505".
+      *     03  FILLER              PIC X(14)  VALUE "TAISYOKOHI.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -380,6 +390,11 @@
       *
            COPY  "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -417,6 +432,10 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) start
            INITIALIZE  SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/27) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+           INITIALIZE  TAISYO-DAT
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -489,11 +508,25 @@
            END-IF
       *
       *
-           MOVE  "MF101ZZ"        TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
-      *---(01.00.03) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
-      *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     MOVE  "MF101ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
+      **---(01.00.03) LINE ADD END   ------------------------------------
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF101ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *
       *---(01.00.03) LINE ADD START ------------------------------------
       *     MOVE  "RECEERR"        TO  RECEERR-FILE-ID
@@ -727,46 +760,48 @@
        1001-PARA-HENSYU-EXT.
            EXIT.
       *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
-      *****************************************************************
-      *    INIファイル読み込み
-      *****************************************************************
-       110-INI-FILE-SEC         SECTION.
-      *
-      *    印字対象公費番号ファイル読み込み
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/02/08) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   TAISYOKOHI-REC
-      *
-           OPEN  INPUT  TAISYOKOHI-FILE
-      *
-           MOVE  ZERO   TO  FLG-TAISYOKOHI
-           PERFORM VARYING  IDX  FROM  1  BY  1 
-                   UNTIL    FLG-TAISYOKOHI = 1
-             READ TAISYOKOHI-FILE NEXT
-               AT END
-                 MOVE  1               TO  FLG-TAISYOKOHI
-               NOT AT END
-                 MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
-             END-READ
-           END-PERFORM
-      *
-           CLOSE TAISYOKOHI-FILE
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
-      *
-      *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) start
+      ******************************************************************
+      **    INIファイル読み込み
+      ******************************************************************
+      * 110-INI-FILE-SEC         SECTION.
+      **
+      **    印字対象公費番号ファイル読み込み
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/TAISYOKOHI.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/02/08) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   TAISYOKOHI-REC
+      **
+      *     OPEN  INPUT  TAISYOKOHI-FILE
+      **
+      *     MOVE  ZERO   TO  FLG-TAISYOKOHI
+      *     PERFORM VARYING  IDX  FROM  1  BY  1 
+      *             UNTIL    FLG-TAISYOKOHI = 1
+      *       READ TAISYOKOHI-FILE NEXT
+      *         AT END
+      *           MOVE  1               TO  FLG-TAISYOKOHI
+      *         NOT AT END
+      *           MOVE  TAISYOKOHI-REC  TO  TAISYO-TBL(IDX)
+      *       END-READ
+      *     END-PERFORM
+      **
+      *     CLOSE TAISYOKOHI-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      **
+      **=== 対象公費をINIファイルから取得 by Yoshikawa(2010/06/15) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
       *****************************************************************
       *    主　　処理
       *****************************************************************

@@ -47,6 +47,7 @@
       *  01.00.12    吉川    13/06/17    プログラムオプション対応
       *  01.00.13    吉川    13/09/03    優先保険者番号を設定した場合
       *                                  最初に印字するように修正
+      *  01.00.14    吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -71,10 +72,12 @@
            SELECT  RECEERR-FILE    ASSIGN  RECEERR
                                    FILE    STATUS  IS  STS-RECEERR.
       *
-           SELECT  YUSEN-FILE    ASSIGN FILE-NAME
-                                 ORGANIZATION   IS  LINE SEQUENTIAL
-                                 ACCESS MODE    IS  SEQUENTIAL
-                                 FILE   STATUS  IS  STS-YUSEN.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     SELECT  YUSEN-FILE    ASSIGN FILE-NAME
+      *                           ORGANIZATION   IS  LINE SEQUENTIAL
+      *                           ACCESS MODE    IS  SEQUENTIAL
+      *                           FILE   STATUS  IS  STS-YUSEN.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
        DATA                        DIVISION.
        FILE                        SECTION.
@@ -92,9 +95,11 @@
        FD  RECEERR-FILE.
        01  RECEERR-REC             PIC X(200). 
       *
-      *    優先保険者番号ファイル
-       FD  YUSEN-FILE.
-       01  YUSEN-HKNJANUM             PIC X(06). 
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      **    優先保険者番号ファイル
+      * FD  YUSEN-FILE.
+      * 01  YUSEN-HKNJANUM             PIC X(06). 
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
        WORKING-STORAGE             SECTION.
       *
@@ -108,7 +113,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *    エラーファイル 名称領域 
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -116,8 +123,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *     
       *    シェル用領域
@@ -159,7 +169,7 @@
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDY                 PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) end
       *
@@ -178,14 +188,16 @@
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
       *
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *    ファイル名称用エリア
-       01  FILE-NAME.
-           03  FILLER              PIC X(05)  VALUE "/tmp/".
-           03  FILE-HOSPNUM        PIC 9(02).
-           03  FILLER              PIC X(10)  VALUE "SOKATU2810".
-           03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **    ファイル名称用エリア
+      * 01  FILE-NAME.
+      *     03  FILLER              PIC X(05)  VALUE "/tmp/".
+      *     03  FILE-HOSPNUM        PIC 9(02).
+      *     03  FILLER              PIC X(10)  VALUE "SOKATU2810".
+      *     03  FILLER              PIC X(09)  VALUE "YUSEN.INI".
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -356,6 +368,11 @@
       *    全角チェックパラメタ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -390,6 +407,9 @@
       *---(01.00.05) LINE ADD START ------------------------------------
            INITIALIZE                  SPA-AREA
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            DISPLAY  "START"
       *
@@ -444,6 +464,10 @@
                                    SPA-AREA
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
            MOVE    "SKT2810"         TO  SKT2810TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT2810TP-TERMID
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -460,6 +484,17 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+           MOVE  SKT2810TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT2810TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
            MOVE    "01"                TO  WRK-SRYYMD (7:2)
@@ -584,40 +619,42 @@
        100-INIT-EXT.
            EXIT.
       *
-      *****************************************************************
-      *    優先保険者番号INIファイル読み込み処理
-      *****************************************************************
-       110-INI-FILE-SEC                SECTION.
-      *
-      *
-      *    ファイルディレクトリ位置指定
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) start
-      *     INITIALIZE           ORCSMKPASSAREA
-      *     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
-      *     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
-      *     MOVE  MKPASS-OT-01  TO  FILE-NAME
-           MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
-      *=== プラグイン対応 by Yoshikawa(2013/01/11) end
-      *
-           DISPLAY "ファイル名="  FILE-NAME
-      *
-           INITIALIZE   YUSEN-HKNJANUM
-      *
-           OPEN  INPUT  YUSEN-FILE
-      *
-           READ YUSEN-FILE
-             AT END
-               INITIALIZE        YUSEN-HKNJANUM
-             DISPLAY "読み込み失敗"  
-           END-READ
-      *
-           DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
-      *
-           CLOSE YUSEN-FILE
-      *
-           .
-       110-INI-FILE-EXT.
-           EXIT.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) start
+      ******************************************************************
+      **    優先保険者番号INIファイル読み込み処理
+      ******************************************************************
+      * 110-INI-FILE-SEC                SECTION.
+      **
+      **
+      **    ファイルディレクトリ位置指定
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) start
+      **     INITIALIZE           ORCSMKPASSAREA
+      **     MOVE  "data/YUSEN.INI"     TO  MKPASS-IN-01
+      **     CALL  "ORCSMKPASSSITE"  USING  ORCSMKPASSAREA
+      **     MOVE  MKPASS-OT-01  TO  FILE-NAME
+      *     MOVE  SPA-HOSPNUM   TO  FILE-HOSPNUM
+      **=== プラグイン対応 by Yoshikawa(2013/01/11) end
+      **
+      *     DISPLAY "ファイル名="  FILE-NAME
+      **
+      *     INITIALIZE   YUSEN-HKNJANUM
+      **
+      *     OPEN  INPUT  YUSEN-FILE
+      **
+      *     READ YUSEN-FILE
+      *       AT END
+      *         INITIALIZE        YUSEN-HKNJANUM
+      *       DISPLAY "読み込み失敗"  
+      *     END-READ
+      **
+      *     DISPLAY "優先保険者番号="  YUSEN-HKNJANUM
+      **
+      *     CLOSE YUSEN-FILE
+      **
+      *     .
+      * 110-INI-FILE-EXT.
+      *     EXIT.
+      *=== ver4.8対応 by Yoshikawa(2014/10/24) end
       *
       *=== プログラムオプション対応 by Yoshikawa(2013/06/17) start
       *****************************************************************

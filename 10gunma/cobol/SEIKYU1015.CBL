@@ -32,6 +32,7 @@
       *  01.00.02    吉川    2012/12/21  プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.03    吉川    2013/07/09  プログラムオプション対応
+      *  01.00.04    吉川    2014/10/06   ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -40,11 +41,13 @@
        FILE-CONTROL.
       *
       *    請求書用ファイル
-           SELECT  MF100-FILE     ASSIGN    MF100PARA
-                                 ORGANIZATION    IS  INDEXED
-                                 ACCESS  MODE    IS  DYNAMIC
-                                 RECORD  KEY     IS  MF100-KEY
-                                 FILE    STATUS  IS  STS-MF100.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     SELECT  MF100-FILE     ASSIGN    MF100PARA
+      *                           ORGANIZATION    IS  INDEXED
+      *                           ACCESS  MODE    IS  DYNAMIC
+      *                           RECORD  KEY     IS  MF100-KEY
+      *                           FILE    STATUS  IS  STS-MF100.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
@@ -63,9 +66,11 @@
       *
       *
       *    集計ファイル
-       FD  MF100-FILE.
-       01  MF100-REC. 
-           COPY  "SEI1009.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      * FD  MF100-FILE.
+      * 01  MF100-REC. 
+      *     COPY  "SEI1009.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
 006900*    エラーファイル
        FD  RECEERR-FILE.
@@ -81,13 +86,18 @@
       *
        WORKING-STORAGE  SECTION.
       *
-           COPY  "CPCOMMONDAT2.INC"
-                   REPLACING  //RECE01//
-                   BY         //MF100//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     COPY  "CPCOMMONDAT2.INC"
+      *             REPLACING  //RECE01//
+      *             BY         //MF100//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
       *    エラーファイル 名称領域
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            COPY  "SC1015.INC".
       *
@@ -295,6 +305,11 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -328,6 +343,9 @@
            INITIALIZE  WRK-AREA
            INITIALIZE  CNT-AREA
            INITIALIZE  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -387,10 +405,18 @@
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
       *
-           MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)
-                                  TO  MF100PARA-TERMID
-           MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)
+      *                            TO  MF100PARA-TERMID
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (1)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
@@ -785,7 +811,9 @@
        300-END-SEC   SECTION.
       *
       *
-           CLOSE  MF100-FILE
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) start
+      *     CLOSE  MF100-FILE
+      *=== ver4.8対応 by Yoshikawa(2014/10/06) end
            MOVE  CNT-PAGE  TO  WRK-PARA-PAGE
       *
            DISPLAY "*** SEIKYU1015 IN  "  CNT-RECE02

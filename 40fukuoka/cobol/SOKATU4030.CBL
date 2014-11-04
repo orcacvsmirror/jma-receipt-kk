@@ -34,6 +34,7 @@
       *  01.00.05    吉川     14/05/15    前期高齢者２割対応
       *  01.00.06    吉川     14/05/27    特別療養費の前期２割は
       *                                   70歳一般・低所得に集計
+      *  01.00.07    吉川     14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -98,11 +99,16 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    エラーファイル 名称領域 
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       *    シェル用領域
            COPY    "CPCOMMONSHELL.INC".
@@ -147,7 +153,7 @@
            03  IDZ1                PIC 9(04).
            03  IDZ2                PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDY                 PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
       *
@@ -332,6 +338,10 @@
       *    ファイルディレクトリ位置指定サブ
            COPY    "CPMKPASS.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
       ****************************************************************
        LINKAGE                 SECTION.
@@ -366,6 +376,9 @@
            INITIALIZE                  CNT-AREA
            INITIALIZE                  IDX-AREA
            INITIALIZE                  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           INITIALIZE                  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            DISPLAY  "START"
       *
@@ -408,6 +421,10 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
            MOVE    "SKT4030"           TO  SKT4030TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT4030TP-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  SKT4030TP-HOSPNUM
@@ -415,6 +432,17 @@
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) start
+           MOVE  SKT4030TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT4030TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/27) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SYMD (1:6)
            MOVE    "01"                TO  WRK-SYMD (7:2)

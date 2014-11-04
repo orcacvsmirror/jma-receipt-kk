@@ -54,6 +54,7 @@
       *  02.05.12    吉川    13/01/09    医療機関情報編集対応
       *  02.05.13    萩野    14/02/13    実日数、点数ともに福祉使用分のみの
       *                                  記載に修正
+      *  02.05.14    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -129,8 +130,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *---(02.05.05) LINE ADD END   ------------------------------------
       *
            COPY  "SC2003.INC".
@@ -510,6 +514,11 @@
       *
            COPY  "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -547,6 +556,9 @@
            INITIALIZE  SPA-AREA
       *---(02.05.08) LINE ADD END   ------------------------------------
            INITIALIZE  OCR-HENSYU-TBL
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -622,23 +634,45 @@
            END-IF
       *
       *
-           MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
-      *---(02.05.05) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM              TO  MF101PARA-HOSPNUM
-      *---(02.05.05) LINE ADD END   ------------------------------------
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
+      **---(02.05.05) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM              TO  MF101PARA-HOSPNUM
+      **---(02.05.05) LINE ADD END   ------------------------------------
+      **
+      *     MOVE    "MF102ZZ"                   TO  MF102PARA-FILE-ID
+      *     MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF102PARA-TERMID
+      **---(02.05.05) LINE ADD START ------------------------------------
+      *     MOVE  WRK-PARA-HOSPNUM              TO  MF102PARA-HOSPNUM
+      **---(02.05.05) LINE ADD END   ------------------------------------
+           MOVE  WRK-PARA-HOSPNUM     TO  MF101PARA-HOSPNUM
+           MOVE  "MF101ZZ"            TO  MF101PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF101PARA-TERMID
       *
-           MOVE    "MF102ZZ"                   TO  MF102PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF102PARA-TERMID
-      *---(02.05.05) LINE ADD START ------------------------------------
-           MOVE  WRK-PARA-HOSPNUM              TO  MF102PARA-HOSPNUM
-      *---(02.05.05) LINE ADD END   ------------------------------------
+           MOVE  WRK-PARA-HOSPNUM     TO  MF102PARA-HOSPNUM
+           MOVE  "MF102ZZ"            TO  MF102PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF102PARA-TERMID
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            MOVE    "RECE031"                   TO  RECE031PARA-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID         TO  RECE031PARA-TERMID
       *---(02.05.05) LINE ADD START ------------------------------------
            MOVE  WRK-PARA-HOSPNUM              TO  RECE031PARA-HOSPNUM
       *---(02.05.05) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           MOVE  MF101PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  MF102PARA-BASENAME   TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECE031PARA-BASENAME TO  SGETTEMP-BASENAMES (3)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (4)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF101PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  MF102PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECE031PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (4)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC

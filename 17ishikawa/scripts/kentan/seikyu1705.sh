@@ -6,7 +6,7 @@ PROGRAMID=SEIKYU1705
 LOG_FILE="/var/log/jma-receipt/${14}seikyu1705"
 RENNUM=0
 #-------------------------------------------#
-#    ÆýÍÄ»ù»ÙÊ§ÌÀºÙ½ñ£Æ£ÄºîÀ®¡ÊÀÐÀî¡Ë
+#    ¤³¤É¤â»ÙÊ§ÌÀºÙ½ñ£Æ£ÄºîÀ®¡ÊÀÐÀî¡Ë
 #        $1-${11}
 #              °õºþ£Ä£ÂÍÑÄê¸ÇÄê°ú¿ô(CPORCSRTLNK.INC)
 #        ${12} ¥¸¥ç¥Ö£É£Ä
@@ -18,16 +18,16 @@ RENNUM=0
 #
 ##      ¥¨¥é¡¼¥Õ¥¡¥¤¥ëºï½ü
 	echo $#
-	echo "echo " ${15}
-        if  [ -e ${15} ]; then
-            rm  ${15}
+	echo "echo " ${MCP_TEMPDIR}/${15}
+        if  [ -e ${MCP_TEMPDIR}/${15} ]; then
+            rm  ${MCP_TEMPDIR}/${15}
         fi
 
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
             $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
-            if  [ -e ${15} ]; then
+            if  [ -e ${MCP_TEMPDIR}/${15} ]; then
                 exit
             fi
 

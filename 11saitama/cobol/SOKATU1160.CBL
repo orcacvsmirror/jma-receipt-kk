@@ -71,6 +71,7 @@
       *  01.02.19    吉川       12/11/14  平成２４年４月改正以降は
       *                                   在宅をまとめて集計するように修正
       *  01.02.20    吉川       14/05/16  前期高齢者２割対応
+      *  01.02.21    吉川       14/10/08  ver4.8.0対応（一時ディレクトリ変更）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -106,7 +107,9 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-           03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *     03  FILLER              PIC X(04)   VALUE   ".dat".
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *
       *    エラーファイル 名称領域 
       *---(01.02.07) LINE ADD START ------------------------------------
@@ -114,8 +117,11 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY    "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *---(01.02.07) LINE ADD END   ------------------------------------
       *
       *    スパ領域
@@ -349,6 +355,11 @@
       *    ＤＢ検索
            COPY    "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
+      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -386,6 +397,9 @@
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) start
            INITIALIZE              SPA-AREA
       *=== SPA-AREA初期化 by Yoshikawa(2008/10/08) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+           INITIALIZE              RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *
            PERFORM 100-DBOPEN-SEC
       *
@@ -455,11 +469,24 @@
                                    SPA-AREA
       *---(01.02.07) LINE ADD END   ------------------------------------
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+      *    サブプログラムより一時ファイル名編集
+           INITIALIZE                      SGETTEMP-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
       *---(01.02.07) LINE ADD START ------------------------------------
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
       *---(01.02.07) LINE ADD END   ------------------------------------
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) start
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"           USING
+                                         SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/08) end
       *
       *---(01.02.07) LINE ADD START ------------------------------------
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
