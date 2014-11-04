@@ -13,6 +13,12 @@ fi
 
 umask 022
 
+# syskanri 3004 del
+if ! test $3 = "upgrade" ; then
+  bash ../scripts/syskanri/sys3004del.sh
+  echo -n "syskanri 3004 del......done" | logger
+fi
+
 PATH=.:${PATH}
 
 # remove .so
