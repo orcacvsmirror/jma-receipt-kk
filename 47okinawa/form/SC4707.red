@@ -125,7 +125,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="背景" visible="true" active="true">
+  <dia:layer name="背景" visible="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="4.8,17.4"/>
@@ -154,7 +154,7 @@
         <dia:point val="8.425,19.1625"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.40997,19.1475;8.45353,26.3057"/>
+        <dia:rectangle val="8.40997,19.1475;8.45353,26.3056"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="8.425,19.1625"/>
@@ -317,7 +317,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true">
+  <dia:layer name="文字" visible="true" active="true">
     <dia:object type="Standard - Text" version="1" id="O10">
       <dia:attribute name="obj_pos">
         <dia:point val="5.06538,3.17604"/>
@@ -749,24 +749,24 @@
     </dia:object>
     <dia:object type="Standard - Text" version="1" id="O23">
       <dia:attribute name="obj_pos">
-        <dia:point val="7.63581,15.1185"/>
+        <dia:point val="7.71081,15.181"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.63581,14.6785;8.13581,15.181"/>
+        <dia:rectangle val="7.71081,14.6335;8.02081,15.256"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#￥#</dia:string>
+            <dia:string>#\#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.625"/>
+            <dia:real val="0.77681668734284692"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="7.63581,15.1185"/>
+            <dia:point val="7.71081,15.181"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
