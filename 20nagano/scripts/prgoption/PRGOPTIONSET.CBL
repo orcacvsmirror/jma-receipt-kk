@@ -28,6 +28,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  04.08.01    吉川         14/11/06  WRK-DATAのバイト数増加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -104,7 +105,7 @@
            03  WRK-FILENAME            PIC X(40).
            03  WRK-PRGID               PIC X(20).
            03  WRK-KBNCD               PIC X(20).
-           03  WRK-DATA                PIC X(1000).
+           03  WRK-DATA                PIC X(4000).
       *
        01  LNK-AREA.
            03  LNK-HOSPNUM             PIC  X(02).
