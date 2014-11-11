@@ -28,7 +28,8 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
-      *  01.00.01    吉川    2014/11/10  月途中で保険を変更した場合でも
+      *  01.00.01    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.02    吉川    14/11/10    月途中で保険を変更した場合でも
       *                                  件数は1件とカウントする
       *****************************************************************
       *
@@ -73,8 +74,11 @@
       *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
       *    エラーファイル 名称領域
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            COPY  "SC2411.INC".
       *
@@ -250,6 +254,11 @@
       *
            COPY  "MCPDATA.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -284,6 +293,9 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -323,14 +335,6 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
-      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
-      *    請求書TMP
-           MOVE    "MF100ZZ"           TO  MF100PARA-FILE-ID
-           MOVE    LNK-PRTKANRI-TERMID(1:16)
-                                       TO  MF100PARA-TERMID
-           MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
-      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
-      *
       *    対象年月最終日取得
            INITIALIZE  WRK-SYMD
            MOVE    LNK-PRTKANRI-SRYYM  TO    WRK-SYMD(1:6)
@@ -351,6 +355,28 @@
            IF      STS-DAY-RC1         =   ZERO 
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
+      *
+      *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
+           INITIALIZE                     SGETTEMP-AREA
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+      *     MOVE  RECEERR              TO  SGETTEMP-BASENAME
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+      *     MOVE  SGETTEMP-FULLNAME    TO  RECEERR
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
