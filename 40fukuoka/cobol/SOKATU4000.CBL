@@ -74,6 +74,9 @@
       *  01.00.32    吉川    13/02/07    プラグイン対応
       *  01.00.33    吉川    13/06/18    プログラムオプション対応
       *  01.00.34    萩野    14/09/11    返戻時、再印刷画面のタイトル修正
+      *  01.00.35    吉川    14/11/11    標榜科名欄の文字数と行数追加
+      *                                  乳障親分の帳票には「返戻」と
+      *                                  表示しないように修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -324,7 +327,10 @@
       *=== プラグイン対応 by Yoshikawa(2013/02/07) start
       *     03  FILE-NAME           PIC X(512).
       *=== プラグイン対応 by Yoshikawa(2013/02/07) end
-           03  WRK-SRYKANAME       PIC X(20) OCCURS 3.
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) start
+      *     03  WRK-SRYKANAME       PIC X(20) OCCURS 3.
+           03  WRK-SRYKANAME       PIC X(22) OCCURS 4.
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) end
       *  
            03  WRK-SYMD.
                05  WRK-SYY         PIC 9(04).
@@ -876,16 +882,23 @@
            MOVE    "SRYKA"                   TO  WRK-KBNCD
            PERFORM 1001-OPTION-SET-SEC
            PERFORM  VARYING  IDX  FROM  1  BY  1
-                    UNTIL    IDX  >  3
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) start
+      *              UNTIL    IDX  >  3
+                    UNTIL    IDX  >  4
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) end
              IF  WRK-OPTION(IDX)(1:2)  =  "※"
                MOVE    SPACE                 TO  WRK-SRYKANAME(IDX)
              ELSE
-               MOVE    WRK-OPTION(IDX)(1:20) TO  WRK-SRYKANAME(IDX)
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) start
+      *         MOVE    WRK-OPTION(IDX)(1:20) TO  WRK-SRYKANAME(IDX)
+               MOVE    WRK-OPTION(IDX)(1:22) TO  WRK-SRYKANAME(IDX)
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) end
              END-IF
            END-PERFORM
            DISPLAY "診療科１="  WRK-SRYKANAME(1)
            DISPLAY "診療科２="  WRK-SRYKANAME(2)
            DISPLAY "診療科３="  WRK-SRYKANAME(3)
+           DISPLAY "診療科４="  WRK-SRYKANAME(4)
       *
       *    対象公費番号
            MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
@@ -1167,6 +1180,7 @@
       *=== 乳障親を別に作成 by Yoshikawa(2011/06/07) end
       *=== 特療費の余分作成を修正 by Yoshikawa(2011/07/07) start
       *       PERFORM  2001-KOHI-SYUKEI-SEC
+      *--- test
            IF  WRK-PARA-TOKUBETU  =  "1"
              PERFORM  2001-KOHI-SYUKEI-SEC
            END-IF
@@ -1175,7 +1189,6 @@
       *     END-IF
       *=== 乳障親を別に作成 by Yoshikawa(2011/06/07) end
       *=== 乳障親＋特疾無は乳障親に集計しない by Yoshikawa(2011/05/17) end
-      *
       *
            CLOSE   UPD-FILE
            CLOSE   SKT4000TMP-FILE
@@ -1869,6 +1882,10 @@
            MOVE    WRK-SRYKANAME(1)      TO  SKT4000-SRYKA(1)
            MOVE    WRK-SRYKANAME(2)      TO  SKT4000-SRYKA(2)
            MOVE    WRK-SRYKANAME(3)      TO  SKT4000-SRYKA(3)
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) start
+           MOVE    WRK-SRYKANAME(4)      TO  SKT4000-SRYKA(4)
+      *=== 標榜科名欄の文字数と行数追加 by Yoshikawa(2014/11/11) end
+      *
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
       *    特別療養費
            IF  WRK-PARA-TOKUBETU  =  "2"
@@ -2187,6 +2204,12 @@
                MOVE  "国保総括表［返戻分］［特別療養費］" TO  SPRT-TITLE
            END-EVALUATE
       *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/09/11) end
+      *=== 乳障親分帳票の再印刷タイトル修正 by Yoshikawa(2014/11/11) start
+           IF  WRK-PARA-SYOKBN  =  "2"
+           AND FLG-UPD  =  0
+               MOVE  "国保総括表"                TO  SPRT-TITLE
+           END-IF
+      *=== 乳障親分帳票の再印刷タイトル修正 by Yoshikawa(2014/11/11) end
            MOVE    SKT4000             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
