@@ -28,13 +28,23 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
-      *  01.00.01    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.01    吉川    2014/11/10  月途中で保険を変更した場合でも
+      *                                  件数は1件とカウントする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
        CONFIGURATION SECTION.
        INPUT-OUTPUT  SECTION.
        FILE-CONTROL.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      *    請求書用ファイル
+           SELECT  MF100-FILE   ASSIGN    MF100PARA
+                               ORGANIZATION    IS  INDEXED
+                               ACCESS  MODE    IS  DYNAMIC
+                               RECORD  KEY     IS  MF100-KEY
+                               FILE    STATUS  IS  STS-MF100.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
@@ -43,24 +53,37 @@
        DATA  DIVISION.
        FILE  SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      *    集計ファイル
+       FD  MF100-FILE.
+       01  MF100-REC.
+           COPY  "SEI2405.INC".
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *
       *    エラーファイル
        FD  RECEERR-FILE.
        01  RECEERR-REC  PIC X(200).
       *
        WORKING-STORAGE  SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           COPY  "CPCOMMONDAT2.INC"
+                   REPLACING  //RECE01//
+                   BY         //MF100//.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *
       *    エラーファイル 名称領域
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-      *                              BY         //RECEERR//.
-           COPY  "CPRECEERR.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+                                    BY         //RECEERR//.
       *
            COPY  "SC2411.INC".
       *
       *    スパ領域
        01  STS-AREA.
            03  STS-RECEERR    PIC X(02).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           03  STS-MF100      PIC X(02).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
       *    システム領域
        01  SYS-AREA.
@@ -79,6 +102,9 @@
            03  FLG-SYORI      PIC 9(01).
            03  FLG-ERR        PIC 9(01).
            03  FLG-FIRST      PIC 9(01).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           03  FLG-MF100      PIC 9(01).
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -224,11 +250,6 @@
       *
            COPY  "MCPDATA.INC".
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *    一時ファイル名編集
-           COPY    "CPORCSGETTEMP.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -263,9 +284,6 @@
            INITIALIZE  CNT-AREA
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-           INITIALIZE  RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -305,6 +323,14 @@
                                    JOBKANRI-REC
                                    SPA-AREA
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      *    請求書TMP
+           MOVE    "MF100ZZ"           TO  MF100PARA-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID(1:16)
+                                       TO  MF100PARA-TERMID
+           MOVE  WRK-PARA-HOSPNUM      TO  MF100PARA-HOSPNUM
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *
       *    対象年月最終日取得
            INITIALIZE  WRK-SYMD
            MOVE    LNK-PRTKANRI-SRYYM  TO    WRK-SYMD(1:6)
@@ -325,17 +351,6 @@
            IF      STS-DAY-RC1         =   ZERO 
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
-      *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     MOVE  "MF100ZZ"        TO  MF100PARA-FILE-ID
-      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
-      *     MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
-           INITIALIZE                     SGETTEMP-AREA
-           MOVE  RECEERR              TO  SGETTEMP-BASENAME
-           CALL  "ORCSGETTEMP"        USING
-                                      SGETTEMP-AREA
-           MOVE  SGETTEMP-FULLNAME    TO  RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
@@ -464,10 +479,20 @@
       *****************************************************************
        200-MAIN-SEC  SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           OPEN    OUTPUT  MF100-FILE
+           CLOSE           MF100-FILE
+           OPEN    I-O     MF100-FILE
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *
            MOVE    ZERO    TO  FLG-END
       *
            PERFORM 2001-SYUKEI-SEC
                    UNTIL   FLG-END =   1
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           CLOSE   MF100-FILE
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
            IF      CNT-RECE02  >   0
                 PERFORM 2002-PRINT-SEC
@@ -502,28 +527,58 @@
       *****************************************************************
        20011-SYUKEI-SEC  SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      **    公費区分
+      *     EVALUATE RECE02-KOHNUM(IDZ)
+      *       WHEN  "161"
+      *         ADD    1                      TO  WRK-KENSU(1)
+      *       WHEN  "162"
+      *         ADD    1                      TO  WRK-KENSU(2)
+      *       WHEN  "163"
+      *         ADD    1                      TO  WRK-KENSU(3)
+      *       WHEN  "164"
+      *         ADD    1                      TO  WRK-KENSU(4)
+      *       WHEN  "165"
+      *         ADD    1                      TO  WRK-KENSU(5)
+      *     END-EVALUATE
+      **
+      **    合計件数加算
+      *     ADD    1                          TO  WRK-KENSU(6)
+      *    TMP-FILE キーセット
+           INITIALIZE                            MF100-REC
+      *
+           MOVE  SPA-HOSPNUM                 TO  MF100-HOSPNUM
+           MOVE  RECE02-PTNUM                TO  MF100-PTNUM
+           MOVE  RECE02-RECEKA               TO  MF100-SRYKA
+           MOVE  RECE02-NYUGAIKBN            TO  MF100-NYUGAIKBN
+           MOVE  RECE02-SRYYM                TO  MF100-SRYYM
+      *
       *    公費区分
            EVALUATE RECE02-KOHNUM(IDZ)
              WHEN  "161"
-               ADD    1                      TO  WRK-KENSU(1)
+               MOVE  "1"                     TO   MF100-KBN
              WHEN  "162"
-               ADD    1                      TO  WRK-KENSU(2)
+               MOVE  "2"                     TO   MF100-KBN
              WHEN  "163"
-               ADD    1                      TO  WRK-KENSU(3)
+               MOVE  "3"                     TO   MF100-KBN
              WHEN  "164"
-               ADD    1                      TO  WRK-KENSU(4)
+               MOVE  "4"                     TO   MF100-KBN
              WHEN  "165"
-               ADD    1                      TO  WRK-KENSU(5)
+               MOVE  "5"                     TO   MF100-KBN
            END-EVALUATE
       *
-      *    合計件数加算
-           ADD    1                          TO  WRK-KENSU(6)
+      *    市町村コード
+           MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)    TO  MF100-CITYNUM
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *    
       *    保険者番号チェック処理
            MOVE    ZERO                      TO  FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR             =    ZERO
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+               WRITE    MF100-REC 
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
                ADD      1                 TO    CNT-MF100
            ELSE
              DISPLAY  "個別発行対象外 =" RECE02-PTNUM
@@ -569,11 +624,28 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           INITIALIZE  MF100-REC
+      *
+           OPEN    INPUT   MF100-FILE
+      *
+           MOVE    ZERO    TO  FLG-PRINT
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *
       *    帳票編集<見出し>処理
            PERFORM  310-HEAD-HEN-SEC
       *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      *    帳票編集<明細>処理
+           PERFORM  320-BODY-HEN-SEC
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
+      *
       *    帳票印刷処理
            PERFORM  330-PRINT-OUT-SEC
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+           CLOSE    MF100-FILE
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
            .
        2002-PRINT-EXT.
@@ -627,16 +699,64 @@
                    MOVE    "○"            TO  SC11-TENHYOKBN(4)
            END-EVALUATE
       *
-      *    件数
-           PERFORM VARYING  IDX1  FROM  1  BY  1
-                   UNTIL    IDX1  >  6
-               MOVE    WRK-KENSU(IDX1)     TO  WRK-Z7
-               MOVE    WRK-Z7              TO  SC11-KENSU(IDX1)
-           END-PERFORM
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      **    件数
+      *     PERFORM VARYING  IDX1  FROM  1  BY  1
+      *             UNTIL    IDX1  >  6
+      *         MOVE    WRK-KENSU(IDX1)     TO  WRK-Z7
+      *         MOVE    WRK-Z7              TO  SC11-KENSU(IDX1)
+      *     END-PERFORM
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
            .
        310-HEAD-HEN-EXT.
            EXIT.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      *****************************************************************
+      *    帳票編集<明細行>処理
+      *****************************************************************
+       320-BODY-HEN-SEC      SECTION.
+      *
+      *    一時ファイル読込
+           PERFORM 900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL  FLG-PRINT  =  1 
+      *
+      *        公費件数
+               EVALUATE  MF100-KBN
+               WHEN "1"
+                 ADD    1                  TO  WRK-KENSU(1)
+               WHEN "2"
+                 ADD    1                  TO  WRK-KENSU(2)
+               WHEN "3"
+                 ADD    1                  TO  WRK-KENSU(3)
+               WHEN "4"
+                 ADD    1                  TO  WRK-KENSU(4)
+               WHEN "5"
+                 ADD    1                  TO  WRK-KENSU(5)
+               END-EVALUATE
+      *
+      *        合計件数加算
+               ADD    1                    TO  WRK-KENSU(6)
+      *
+      *        一時ファイル読み込み
+               PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+           PERFORM VARYING IDX1    FROM    1   BY  1
+                   UNTIL   IDX1    >       6
+      *
+      *        件数印字
+               MOVE    WRK-KENSU(IDX1)     TO  WRK-Z7
+               MOVE    WRK-Z7              TO  SC11-KENSU(IDX1)
+      *
+           END-PERFORM
+      *
+           .
+       320-BODY-HEN-EXT.
+           EXIT.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
       *****************************************************************
       *    帳票印刷処理
@@ -748,6 +868,37 @@
            .
        300-END-EXT.
            EXIT.
+      *
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    MF100-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-MF100
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-MF100
+           END-READ
+      *
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  MF100-FILE  NEXT
+              AT  END
+                 MOVE  1                   TO  FLG-PRINT
+           END-READ
+      *
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *=== 件数のカウント方法修正 by Yoshikawa(2014/11/10) end
       *
       *****************************************************************
       *    公費請求書マスタ読込
