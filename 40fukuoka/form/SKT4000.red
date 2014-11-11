@@ -6,9 +6,9 @@
         <embed object="text" length="6"/>
       </appinfo>
     </element>
-    <element name="SRYKA" occurs="3">
+    <element name="SRYKA" occurs="4">
       <appinfo>
-        <embed object="text" length="20"/>
+        <embed object="text" length="22"/>
       </appinfo>
     </element>
     <element name="POST" occurs="1">
@@ -1671,7 +1671,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true" active="true">
+  <dia:layer name="文字" visible="true">
     <dia:object type="Standard - Text" version="1" id="O71">
       <dia:attribute name="obj_pos">
         <dia:point val="7.5,1.5"/>
@@ -5466,7 +5466,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true">
+  <dia:layer name="差し込み" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O187">
       <dia:attribute name="obj_pos">
         <dia:point val="6.1,1.5"/>
@@ -5511,24 +5511,24 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O188">
       <dia:attribute name="obj_pos">
-        <dia:point val="4.2,2.6"/>
+        <dia:point val="4.025,2.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.2,2.38;6.7,2.6325"/>
+        <dia:rectangle val="4.025,2.285;6.6925,2.53"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#ああああああああああ#</dia:string>
+            <dia:string>#あああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.3125"/>
+            <dia:real val="0.30197779434085198"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="4.2,2.6"/>
+            <dia:point val="4.025,2.5"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -5553,24 +5553,24 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O189">
       <dia:attribute name="obj_pos">
-        <dia:point val="4.2,2.95"/>
+        <dia:point val="4.025,2.85687"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.2,2.73;6.7,2.9825"/>
+        <dia:rectangle val="4.025,2.64187;6.6925,2.88687"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#ああああああああああ#</dia:string>
+            <dia:string>#あああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.3125"/>
+            <dia:real val="0.30197779434085198"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="4.2,2.95"/>
+            <dia:point val="4.025,2.85687"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -5595,24 +5595,24 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O190">
       <dia:attribute name="obj_pos">
-        <dia:point val="4.2,3.3"/>
+        <dia:point val="4.025,3.21375"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.2,3.08;6.7,3.3325"/>
+        <dia:rectangle val="4.025,2.99875;6.6925,3.24375"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#ああああああああああ#</dia:string>
+            <dia:string>#あああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
           </dia:attribute>
           <dia:attribute name="height">
-            <dia:real val="0.3125"/>
+            <dia:real val="0.30197779434085198"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="4.2,3.3"/>
+            <dia:point val="4.025,3.21375"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -13149,6 +13149,48 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#TOKUBETU#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O370">
+      <dia:attribute name="obj_pos">
+        <dia:point val="4.025,3.57062"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="4.025,3.35562;6.6925,3.60062"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#あああああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.30197779434085198"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="4.025,3.57062"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#SRYKA[3]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
