@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川      2010/11/02   特別療養費国保対応
+      *  01.00.02    吉川      2014/11/12   県外保険者名のバイト数増加
       ********************************************************************
         01  SKT2800.
             02  SKT2800-SRYYM   PIC X(16).
@@ -41,9 +42,9 @@
               03  SKT2800-SEIKYUSYO   PIC X(6).
             02  SKT2800-SYAHOSEIKYU PIC X(6).
             02  SKT2800-KGIHKNJANAME-TBL        OCCURS  12 TIMES.
-              03  SKT2800-KGIHKNJANAME    PIC X(20).
+              03  SKT2800-KGIHKNJANAME    PIC X(24).
             02  SKT2800-KGIKOUKINAME-TBL        OCCURS  12 TIMES.
-              03  SKT2800-KGIKOUKINAME    PIC X(20).
+              03  SKT2800-KGIKOUKINAME    PIC X(24).
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
             02  SKT2800-TOKUBETU     PIC  X(10).
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
