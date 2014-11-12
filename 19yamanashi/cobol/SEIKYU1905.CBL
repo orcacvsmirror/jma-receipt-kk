@@ -34,6 +34,8 @@
       *                                  同時に出力する処理追加
       *  01.00.03    吉川    14/09/18    医薬品レコードがある場合、
       *                                  福祉コメントが記録されないのを修正
+      *  01.00.04    吉川    14/11/12    レセプト順序番号が社保と国保を
+      *                                  通しての連番となるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -873,7 +875,9 @@
        2002-RECED-READ-SEC  SECTION.
       *
            INITIALIZE                          RECEDI-REC
-                                               WRK-RECENUM
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
+      *                                         WRK-RECENUM
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
                                                SYARECED-REC
                                                KORECED-REC
@@ -933,6 +937,9 @@
                  MOVE    1                   TO  WRK-SYORI
                  MOVE    ZERO                TO  FLG-OUTPUT
                                                  WRK-GOKEI-TBL
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
+                                                 WRK-RECENUM
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
                  PERFORM  UNTIL  FLG-RECEDI  =  1
                    READ  RECEDI-FILE
                      AT END
@@ -961,6 +968,9 @@
                MOVE    1                     TO  WRK-SYORI
                MOVE    ZERO                  TO  FLG-OUTPUT
                                                  WRK-GOKEI-TBL
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
+                                                 WRK-RECENUM
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
                PERFORM  UNTIL  FLG-SYARECED  =  1
                  READ  SYARECED-FILE
                    AT END
@@ -999,6 +1009,9 @@
                MOVE    2                     TO  WRK-SYORI
                MOVE    ZERO                  TO  FLG-OUTPUT
                                                  WRK-GOKEI-TBL
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
+                                                 WRK-RECENUM
+      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
                PERFORM  UNTIL  FLG-KORECED  =  1
                  READ  KORECED-FILE
                    AT END
