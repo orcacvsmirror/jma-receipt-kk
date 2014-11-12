@@ -64,6 +64,10 @@
       *                                  医療機関情報編集対応
       *  01.00.22    吉川    13/06/17    プログラムオプション対応
       *  01.00.23    吉川    13/09/03    医療機関区分の設定不具合修正
+      *  01.00.24    吉川    14/11/12    県外保険者名は１２文字まで印字
+      *                                  社保福祉医療費請求件数欄は
+      *                                  ０件の場合はゼロを印字する
+      *                                  返戻時、再印刷画面のタイトル修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -289,12 +293,18 @@
            03  WRK-SRYKANAME    PIC X(34) OCCURS 3.
       *
            03  WRK-Z3            PIC ZZZ.
+      *=== 福祉件数が０の場合はゼロ印字 by Yoshikawa(2014/11/12) start
+           03  WRK-Z3-9          PIC ZZ9.
+      *=== 福祉件数が０の場合はゼロ印字 by Yoshikawa(2014/11/12) end
            03  WRK-Z6            PIC ZZZZZZ.
            03  WRK-Z9            PIC ZZZZZZZZZ.
            03  WRK-HKNJANUM      PIC X(06).
            03  WRK-CNT           PIC 9(03).
            03  WRK-KENNAME       PIC X(10).
-           03  WRK-HKNJANAME     PIC X(20).
+      *=== 県外保険者名の印字数増加 by Yoshikawa(2014/11/12) start
+      *     03  WRK-HKNJANAME     PIC X(20).
+           03  WRK-HKNJANAME     PIC X(24).
+      *=== 県外保険者名の印字数増加 by Yoshikawa(2014/11/12) end
       *---(01.00.06) LINE ADD START ------------------------------------
            03  WRK-MAISU         PIC 9(03).
            03  WRK-AMARI         PIC 9(02).
@@ -1893,8 +1903,12 @@
       *---(01.00.09) LINE ADD END   ------------------------------------
       *
       *    社保福祉医療費請求件数データ移行
-             MOVE      SUM-SYAHOSEIKYU    TO  WRK-Z3
-             MOVE      WRK-Z3             TO  WRK-MAE-INPUT
+      *=== 福祉件数が０の場合はゼロ印字 by Yoshikawa(2014/11/12) start
+      *       MOVE      SUM-SYAHOSEIKYU    TO  WRK-Z3
+      *       MOVE      WRK-Z3             TO  WRK-MAE-INPUT
+             MOVE      SUM-SYAHOSEIKYU    TO  WRK-Z3-9
+             MOVE      WRK-Z3-9           TO  WRK-MAE-INPUT
+      *=== 福祉件数が０の場合はゼロ印字 by Yoshikawa(2014/11/12) end
              PERFORM   2009-HENKAN-SEC
              MOVE      WRK-OUT-INPUT      TO  SKT2800-SYAHOSEIKYU
       *---(01.00.09) LINE ADD START ------------------------------------
@@ -1973,15 +1987,30 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT2800.red"        TO  SPRT-PRTID
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
-      *     MOVE    "総括表"            TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保総括表"               TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/11/12) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      **     MOVE    "総括表"            TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保総括表"               TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保総括表［返戻分］"
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保総括表［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保総括表［返戻分］［特別療養費］" 
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/11/12) end
            MOVE    SKT2800             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
