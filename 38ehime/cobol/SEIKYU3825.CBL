@@ -55,6 +55,9 @@
       *                                  現象を修正（FLG-HEIYOU2初期化漏れ）
       *  01.00.12    吉川    14/06/18    月末以降も入院中の場合
       *                                  退院日が正しく印字されないのを修正
+      *  01.00.13    萩野    14/11/11    項目「傷病名及び期間」への記録が
+      *                                  ２０文字を超える場合、項目「備考」へ
+      *                                  記録するよう修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -292,6 +295,9 @@
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
            03  WRK-BIKO5             PIC X(110).
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄に印字 by hagino(2014/11/11) start
+           03  WRK-BIKO6             PIC X(93).
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄に印字 by hagino(2014/11/11) end
       *=== プラグイン対応 by Yoshikawa(2013/02/07) start
       *     03  FILE-NAME             PIC X(512).
       *=== プラグイン対応 by Yoshikawa(2013/02/07) end
@@ -1576,6 +1582,9 @@
       *    ２３．傷病名および期間
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) start
       *     MOVE    SPACE                     TO  WRK-DATA
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄に印字 by hagino(2014/11/11) start
+             MOVE    SPACE                     TO  WRK-BIKO6
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄に印字 by hagino(2014/11/11) end
       *    傷病名及び期間
            IF  MF100-BYOMEI  NOT =  SPACE
              MOVE    MF100-BYOYMD          TO  WRK-SYMD
@@ -1590,6 +1599,22 @@
                      MF100-BYOMEI          DELIMITED  BY  SPACE
                      INTO                  WRK-DATA
              END-STRING
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄 by hagino(2014/11/11) start
+             IF  WRK-DATA(41:1)         NOT =   SPACE
+                 STRING  LNK-DAY1-GENKIGO      DELIMITED  BY  SIZE
+                         LNK-DAY1-WYMD(2:2)    DELIMITED  BY  SIZE
+                         "."                   DELIMITED  BY  SIZE
+                         LNK-DAY1-WYMD(4:2)    DELIMITED  BY  SIZE
+                         "."                   DELIMITED  BY  SIZE
+                         LNK-DAY1-WYMD(6:2)    DELIMITED  BY  SIZE
+                         "　"                  DELIMITED  BY  SIZE
+                         MF100-BYOMEI          DELIMITED  BY  SPACE
+                         "　"                  DELIMITED  BY  SIZE
+                         INTO                  WRK-BIKO6
+                 END-STRING
+                 MOVE    SPACE                     TO  WRK-DATA
+             END-IF
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄 by hagino(2014/11/11) end
            ELSE
              MOVE    SPACE                   TO  WRK-DATA
            END-IF
@@ -1741,6 +1766,9 @@
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
                      WRK-BIKO5               DELIMITED  BY  SPACE
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) end
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄に印字 by hagino(2014/11/11) start
+                     WRK-BIKO6               DELIMITED  BY  SPACE
+      *=== 傷病名及び期間が２０文字を超える場合は備考欄に印字 by hagino(2014/11/11) end
                      WRK-BIKO3               DELIMITED  BY  SIZE
                      INTO                    WRK-DATA
            END-STRING
