@@ -48,6 +48,7 @@
       *  01.00.12    吉川    13/08/06    総括表をもう1枚印刷する
       *                                  プログラムオプション対応
       *  01.00.13    吉川    13/10/10    2枚目の帳票様式変更に伴う修正
+      *  01.00.14    吉川    14/12/04    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1509,7 +1510,22 @@
                MOVE    "SKT1400.red"   TO  SPRT-PRTID
            END-EVALUATE
       *=== 2枚目の帳票様式変更 by Yoshikawa(2013/10/10) end
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) start
+      *     MOVE    "国保総括表"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保総括表［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保総括表［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保総括表［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) end
            MOVE    SKT1400             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1555,7 +1571,22 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1401.red"        TO  SPRT-PRTID
-           MOVE    "国保総括表"        TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) start
+      *     MOVE    "国保総括表"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保総括表［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保総括表［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保総括表［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) end
            MOVE    SKT1400             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
