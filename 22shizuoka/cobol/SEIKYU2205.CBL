@@ -118,7 +118,7 @@
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
