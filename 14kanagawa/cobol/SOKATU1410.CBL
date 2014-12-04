@@ -68,7 +68,7 @@
       *  01.00.23    吉川    13/08/06    プログラムオプション対応
       *                                  MCPDATA-RECへの移行漏れ
       *  01.00.24    吉川    14/05/21    前期高齢者２割対応
-      *  01.00.25    吉川    14/10/09    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.25    吉川    14/12/04    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -154,9 +154,7 @@
            COPY    "CPCOMMONDAT2.INC"
                                    REPLACING  //RECE01PARA//
                                    BY         //RECEUPD//.
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
-      *     03  FILLER              PIC X(04)   VALUE   ".dat".
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
+           03  FILLER              PIC X(04)   VALUE   ".dat".
       *
       *    エラーファイル 名称領域 
       *---(01.00.10) LINE ADD START ------------------------------------
@@ -164,11 +162,8 @@
       *                             REPLACING  //RECE01PARA//
       *                             BY         //RECEERR//.
       *     03  FILLER              PIC X(04)   VALUE   ".dat".
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
-      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-      *                              BY         //RECEERR//.
-           COPY    "CPRECEERR.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
+           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+                                    BY         //RECEERR//.
       *---(01.00.10) LINE ADD END   ------------------------------------
       *     
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2012/09/18) start
@@ -487,11 +482,6 @@
       *    半角チェックサブ
            COPY    "CPORCSKANACHK.INC".
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
-      *    一時ファイル名編集
-           COPY    "CPORCSGETTEMP.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
-      *
       ****************************************************************
        LINKAGE                 SECTION.
        01  COMMAND-PARAM.
@@ -526,9 +516,6 @@
       *---(01.00.11) LINE ADD START ------------------------------------
            INITIALIZE                  SPA-AREA
       *---(01.00.11) LINE ADD END   ------------------------------------
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
-           INITIALIZE                  RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
            DISPLAY  "START"
       *
@@ -585,10 +572,6 @@
                                    SPA-AREA
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
-      *    サブプログラムより一時ファイル名編集
-           INITIALIZE                      SGETTEMP-AREA
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *##（地方公費仕様：LNK-PRTKANRI-TERMID)
            MOVE    "SKT1410"           TO  SKT1410TP-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  SKT1410TP-TERMID
@@ -606,17 +589,6 @@
       *     MOVE    "RECEERR"           TO  RECEERR-FILE-ID
       *     MOVE    LNK-PRTKANRI-TERMID TO  RECEERR-TERMID
       *---(01.00.10) LINE ADD END   ------------------------------------
-      *
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) start
-           MOVE  SKT1410TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
-           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
-           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
-           CALL  "ORCSGETTEMP"           USING
-                                         SGETTEMP-AREA
-           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT1410TP-FULLNAME
-           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
-           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/09) end
       *
       *###（地方公費仕様)
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
@@ -2108,7 +2080,22 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1410.red"        TO  SPRT-PRTID
-           MOVE    "国保請求書"        TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) start
+      *     MOVE    "国保請求書"        TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) end
            MOVE    SKT1410             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
