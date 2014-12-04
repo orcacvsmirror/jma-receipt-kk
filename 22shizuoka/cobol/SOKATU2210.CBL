@@ -49,6 +49,7 @@
       *  01.00.15    吉川    14/05/19    前期高齢者２割対応
       *                                  プログラムオプション対応
       *  01.00.16    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.17    吉川    14/12/04    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1778,15 +1779,30 @@
              MOVE   "SKT2210o.red"        TO  SPRT-PRTID
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保請求書"               TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書"               TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) end
            MOVE    SKT2210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2034,15 +2050,30 @@
       *     MOVE   "SKT2220.red"        TO  SPRT-PRTID
            MOVE   "SKT2220o.red"        TO  SPRT-PRTID
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
-      *     MOVE    "国保請求書"        TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保請求書"               TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      **     MOVE    "国保請求書"        TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書"               TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書 [特別療養費]"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) end
            MOVE    SKT2220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
