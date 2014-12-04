@@ -52,6 +52,7 @@
       *                                  医療機関情報編集対応
       *  01.00.18    吉川    14/05/16    前期高齢者２割対応
       *                                  プログラムオプション対応
+      *  01.00.19    萩野    14/12/04    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2067,7 +2068,20 @@
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
       *
-           MOVE    "国保請求書・入院用"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/04) start
+      *     MOVE    "国保請求書・入院用"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書・入院用"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書・入院用［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書・入院用［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書・入院用［返戻分］［特別療養費］"
+                                                         TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/04) end
            MOVE    SKT1210             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -2447,7 +2461,20 @@
                MOVE   "SKT1220o.red"   TO  SPRT-PRTID
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
-           MOVE    "国保請求書・外来用"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/04) start
+      *     MOVE    "国保請求書・外来用"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書・外来用"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書・外来用［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書・外来用［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書・外来用［返戻分］［特別療養費］"
+                                                         TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/04) end
            MOVE    SKT1220             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

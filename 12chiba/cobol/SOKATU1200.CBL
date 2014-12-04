@@ -43,6 +43,7 @@
       *  01.00.11    吉川     11/04/20    東北地方太平洋沖地震対応（仕様変更）
       *  01.00.12    吉川     12/05/14    レセ電の場合災害分は帳票を分けない
       *  01.00.13    吉川     12/12/21    医療機関情報編集対応
+      *  01.00.14    萩野     14/12/04    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1037,7 +1038,19 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1200.red"        TO  SPRT-PRTID
-           MOVE    "総括表"            TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/04) start
+      *     MOVE    "総括表"            TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "総括表"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "総括表［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "総括表［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "総括表［返戻分］［特別療養費］" TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/04) end
            MOVE    SKT1200             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
