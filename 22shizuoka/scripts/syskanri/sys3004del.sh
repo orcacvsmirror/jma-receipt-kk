@@ -13,7 +13,7 @@ HOSPNUM="01"
 POST=`pwd`
 
 PREFNAME=sys3004
-PROGRAMID=SYS3004
+PROGRAMID=SYS3004DEL
 
 cd ../scripts/syskanri
 
@@ -33,7 +33,7 @@ for f in $MODULES; do
 done
 
 #------------------------------------------------------
-#     シス管「3004」登録
+#     シス管「3004」削除
 #     NOWYMD    現在日付
 #     NOWHMS    現在時間
 #     NOWDIR    現在ディレクトリ
@@ -46,10 +46,10 @@ FILENAME=sys3004.data
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-# syskanri 3004 set
+# syskanri 3004 del
 $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
 
-# so del
+#so del
 rm ${SITEDIR}/${PROGRAMID}.so
 rm dbgroup.inc
 
