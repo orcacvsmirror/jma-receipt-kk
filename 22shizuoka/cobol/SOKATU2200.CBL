@@ -58,6 +58,7 @@
       *                                   県外とするように修正
       *  01.00.16    吉川    2013/01/10   医療機関情報編集対応
       *  01.00.17    吉川    2014/05/19   前期高齢者２割対応
+      *  01.00.18    吉川    2014/12/04   返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1830,15 +1831,30 @@
                MOVE   "SKT2200o.red"   TO  SPRT-PRTID
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
-      *     MOVE    "国保総括表"  TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保総括表"               TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/13) start
+      **     MOVE    "国保総括表"  TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保総括表"               TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保総括表 [特別療養費]"  TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保総括表"      TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保総括表［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保総括表［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保総括表［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/10/13) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/12/04) end
            MOVE    SKT2200             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
