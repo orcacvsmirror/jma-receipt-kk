@@ -47,6 +47,7 @@
       *  01.00.10    吉川    2013/07/26  在宅の対象とする診療コード追加
       *  01.00.11    萩野    2014/06/06  在宅の対象とする診療コード追加
       *  01.00.12    吉川    2014/10/08  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.13    萩野    2014/12/05  返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1050,16 +1051,29 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE    "SKT1330.red"       TO  SPRT-PRTID
-      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
-      *     MOVE    "レセ電用国保総括表"    TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "レセ電用国保総括表"       TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "レセ電用国保総括表 [特別療養費]"
-                                                TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/05) start
+      **=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
+      **     MOVE    "レセ電用国保総括表"    TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "レセ電用国保総括表"       TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "レセ電用国保総括表 [特別療養費]"
+      *                                          TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "レセ電用国保総括表"                TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "レセ電用国保総括表［返戻分］"      TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "レセ電用国保総括表［特別療養費］"  TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "レセ電用国保総括表［返戻分］［特別療養費］"
+                                                         TO  SPRT-TITLE
            END-EVALUATE
-      *=== 再印刷時の帳票タイトル修正 by Yoshikawa(2010/10/08) start
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/05) end
            MOVE    SKT1330             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
