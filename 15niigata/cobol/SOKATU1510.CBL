@@ -45,6 +45,7 @@
       *                                  医療機関情報編集対応
       *  01.00.12    吉川    14/05/19    前期高齢者２割対応
       *                                  プログラムオプション対応
+      *  01.00.13    萩野    14/12/05    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1375,7 +1376,23 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1510.red"            TO  SPRT-PRTID
-           MOVE    "入院・入院外併用国保請求書"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/05) start
+      *     MOVE    "入院・入院外併用国保請求書"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+           WHEN  "1"  ALSO  "1"
+             MOVE  "入院・入院外併用国保請求書"
+                                               TO  SPRT-TITLE
+           WHEN  "2"  ALSO  "1"
+             MOVE  "入院・入院外併用国保請求書［返戻分］"
+                                               TO  SPRT-TITLE
+           WHEN  "1"  ALSO  "2"
+             MOVE  "入院・入院外併用国保請求書［特別療養費］"
+                                               TO  SPRT-TITLE
+           WHEN  "2"  ALSO  "2"
+             MOVE  "入院・入院外併用国保請求書［返戻分］［特別療養費］"
+                                               TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/05) end
            MOVE    SKT1510             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
@@ -1565,7 +1582,23 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SKT1520.red"            TO  SPRT-PRTID
-           MOVE    "入院・入院外併用国保請求書"  TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/05) start
+      *     MOVE    "入院・入院外併用国保請求書"  TO  SPRT-TITLE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+           WHEN  "1"  ALSO  "1"
+             MOVE  "入院・入院外併用国保請求書"
+                                               TO  SPRT-TITLE
+           WHEN  "2"  ALSO  "1"
+             MOVE  "入院・入院外併用国保請求書［返戻分］"
+                                               TO  SPRT-TITLE
+           WHEN  "1"  ALSO  "2"
+             MOVE  "入院・入院外併用国保請求書［特別療養費］"
+                                               TO  SPRT-TITLE
+           WHEN  "2"  ALSO  "2"
+             MOVE  "入院・入院外併用国保請求書［返戻分］［特別療養費］"
+                                               TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by hagino(2014/12/05) end
            MOVE    SKT1520             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
