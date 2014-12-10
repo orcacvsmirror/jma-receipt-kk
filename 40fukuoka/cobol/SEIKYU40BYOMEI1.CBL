@@ -624,25 +624,27 @@
                END-IF
            END-IF        
       *
-      *    診療開始日
-           IF      PTBYO-SRYYMD(1:6)    =   RECE02-SRYYM
-               CONTINUE
-           ELSE
-               IF      PTBYO-SRYYMD(1:6)    <   RECE02-SRYYM 
-                   IF      PTBYO-TENKIKBN       =   SPACE
-                       CONTINUE
-                   ELSE
-      **************** IF      PTBYO-TENKIYMD(1:6)  =   RECE02-SRYYM
-                       IF      PTBYO-TENKIYMD(1:6)  >=  RECE02-SRYYM
-                           CONTINUE
-                       ELSE
-                           GO  TO  2001-PTBYO-CHK-EXT
-                       END-IF
-                   END-IF       
-               ELSE
-                   GO  TO  2001-PTBYO-CHK-EXT
-               END-IF
-           END-IF
+      *=== レセプト表示期間対応 by Yoshikawa(2014/12/10) start
+      **    診療開始日
+      *     IF      PTBYO-SRYYMD(1:6)    =   RECE02-SRYYM
+      *         CONTINUE
+      *     ELSE
+      *         IF      PTBYO-SRYYMD(1:6)    <   RECE02-SRYYM 
+      *             IF      PTBYO-TENKIKBN       =   SPACE
+      *                 CONTINUE
+      *             ELSE
+      ***************** IF      PTBYO-TENKIYMD(1:6)  =   RECE02-SRYYM
+      *                 IF      PTBYO-TENKIYMD(1:6)  >=  RECE02-SRYYM
+      *                     CONTINUE
+      *                 ELSE
+      *                     GO  TO  2001-PTBYO-CHK-EXT
+      *                 END-IF
+      *             END-IF       
+      *         ELSE
+      *             GO  TO  2001-PTBYO-CHK-EXT
+      *         END-IF
+      *     END-IF
+      *=== レセプト表示期間対応 by Yoshikawa(2014/12/10) end
       *
       *    入外区分
            IF      PTBYO-NYUGAIKBN      =   SPACE
@@ -677,7 +679,7 @@
                END-IF
            END-IF
       *
-      *    レセプト表示月
+      *    レセプト表示
            IF      PTBYO-REZEFLG          =   "1"
               GO  TO  2001-PTBYO-CHK-EXT
            END-IF
