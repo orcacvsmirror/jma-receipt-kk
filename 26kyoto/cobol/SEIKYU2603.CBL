@@ -68,6 +68,8 @@
       *  01.00.23    吉川    14/09/03    月途中で同じ保険種別の保険に
       *                                  変更した場合はまとめて印字する
       *  01.00.24    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.25    萩野    14/12/09    「公費分患者負担額」欄を1円単位で
+      *                                  記載するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1057,6 +1059,15 @@
                    ADD 10              TO  WRK-ETCKOHFTN-G2
                END-IF
            END-IF
+      *
+      *=== 1円単位で記載するように修正 by hagino(2014/12/09) start
+      *    保険に限度額が有る場合の対応
+           IF  RECE02-FTNMONEY(1)  >   ZERO  AND
+               RECE02-FTNMONEY(1)  <   WRK-ETCKOHFTN-G2
+             MOVE  RECE02-FTNMONEY(1)      TO  WRK-ETCKOHFTN-G2
+           END-IF
+      *=== 1円単位で記載するように修正 by hagino(2014/12/09) end
+      *
       *---(01.00.06) LINE ADD START ------------------------------------
       *    前期高齢者軽減特例措置は患者負担額印字
            IF  WRK-ETCKOHFTN-G2  =  ZERO
@@ -1172,13 +1183,15 @@
                MOVE    1                   TO  MF100-IPANCD
            END-IF
       *
-      *=== 負担額の上限額チェック by Yoshikawa(2008/10/17) start
-      *    保険に限度額が有る場合の対応
-           IF  RECE02-FTNMONEY(1)  >   ZERO  AND
-               RECE02-FTNMONEY(1)  <   MF100-ETCKOHFTN
-             MOVE  RECE02-FTNMONEY(1)      TO  MF100-ETCKOHFTN
-           END-IF
-      *=== 負担額の上限額チェック by Yoshikawa(2008/10/17) end
+      *=== 1円単位で記載するように修正 by hagino(2014/12/09) start
+      **=== 負担額の上限額チェック by Yoshikawa(2008/10/17) start
+      **    保険に限度額が有る場合の対応
+      *     IF  RECE02-FTNMONEY(1)  >   ZERO  AND
+      *         RECE02-FTNMONEY(1)  <   MF100-ETCKOHFTN
+      *       MOVE  RECE02-FTNMONEY(1)      TO  MF100-ETCKOHFTN
+      *     END-IF
+      **=== 負担額の上限額チェック by Yoshikawa(2008/10/17) end
+      *=== 1円単位で記載するように修正 by hagino(2014/12/09) end
       *
       *---(01.00.11) LINE ADD START ------------------------------------
       *   ７５歳到達月の自己負担限度額の対応
