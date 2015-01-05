@@ -36,6 +36,10 @@
       *                                  福祉コメントが記録されないのを修正
       *  01.00.04    吉川    14/11/12    レセプト順序番号が社保と国保を
       *                                  通しての連番となるのを修正
+      *  01.00.05    吉川    15/01/05    該当公費を使用していない月遅れの
+      *                                  データが記録されないように修正
+      *                                  処置材料のみの診療の場合、
+      *                                  コメントが記録されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1061,7 +1065,15 @@
                INITIALIZE                      MF101-KEY
                MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
                MOVE    TBL-RECEDATA14          TO  MF101-PTNUM
-               MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
+      *         MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
+      *        和暦を西暦に変換
+               MOVE    "0"                     TO  WRK-SYMD(1:1)
+               MOVE    TBL-RECEDATA4(1:5)      TO  WRK-SYMD(2:5)
+               MOVE    "01"                    TO  WRK-SYMD(7:2)
+               PERFORM 31013-WASEI-HEN-SEC
+               MOVE    LNK-DAY1-YMD(1:6)       TO  MF101-SRYYM
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
                MOVE    WRK-TEISYUTUSAKI        TO  MF101-TEISYUTUSAKI
                MOVE    TBL-RECEDATA3           TO  MF101-RECESYUBETU
       *
@@ -1082,6 +1094,9 @@
       *=== IYレコードによる不具合対応 by Yoshikawa(2014/09/18) start
              WHEN  "IY"
       *=== IYレコードによる不具合対応 by Yoshikawa(2014/09/18) end
+      *=== 処置材料対応 by Yoshikawa(2015/01/05) start
+             WHEN  "TO"
+      *=== 処置材料対応 by Yoshikawa(2015/01/05) end
       *        前の行が傷病名レコード（ない場合は保険か公費レコード）
       *        の場合山梨コメントを挿入する
                IF  WRK-SIKIBETU  =  "HO" OR "KO" OR "SY"
@@ -1494,6 +1509,23 @@
            .
        31012-SEIWA-HEN-EXT.
            EXIT.
+      *
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
+      *****************************************************************
+      *    和暦変換処理
+      *****************************************************************
+       31013-WASEI-HEN-SEC        SECTION.
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY1-AREA
+           MOVE    "12"                TO  LNK-DAY1-IRAI
+           MOVE    WRK-SYMD            TO  LNK-DAY1-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY1-AREA
+           .
+       31013-WASEI-HEN-EXT.
+           EXIT.
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
       *
       *****************************************************************
       *    終了　　処理
