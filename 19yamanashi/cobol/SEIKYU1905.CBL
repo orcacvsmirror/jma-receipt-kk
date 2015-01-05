@@ -34,9 +34,12 @@
       *                                  同時に出力する処理追加
       *  01.00.03    吉川    14/09/18    医薬品レコードがある場合、
       *                                  福祉コメントが記録されないのを修正
-      *  01.00.04    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
-      *  01.00.05    吉川    14/11/12    レセプト順序番号が社保と国保を
+      *  01.00.04    吉川    14/11/12    レセプト順序番号が社保と国保を
       *                                  通しての連番となるのを修正
+      *  01.00.05    吉川    15/01/05    該当公費を使用していない月遅れの
+      *                                  データが記録されないように修正
+      *                                  処置材料のみの診療の場合、
+      *                                  コメントが記録されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -108,39 +111,27 @@
                    BY         //MF101//.
       *
       *    エラーファイル 名称領域
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-      *                              BY         //RECEERR//.
-           COPY  "CPRECEERR.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+                                    BY         //RECEERR//.
       *
       *    レセプト電算ファイル
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      * 01  RECEDI-PATH.
-      *     03  FILLER                PIC X(09) VALUE "/var/tmp/".
-      *     03  FILE-HOSPNUM          PIC 9(02).
-      *     03  FILLER                PIC X(15) VALUE "RECEDEN-TMP.CSV".
-       01  RECEDI-PATH               PIC X(1024).
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+       01  RECEDI-PATH.
+           03  FILLER                PIC X(09) VALUE "/var/tmp/".
+           03  FILE-HOSPNUM          PIC 9(02).
+           03  FILLER                PIC X(15) VALUE "RECEDEN-TMP.CSV".
       *
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
       *    社保レセプト電算ファイル
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      * 01  SYARECED-PATH.
-      *     03  FILLER              PIC X(09) VALUE "/var/tmp/".
-      *     03  SYARECED-HOSPNUM    PIC 9(02).
-      *     03  FILLER              PIC X(18) VALUE "SYARECEDEN-TMP.CSV".
-       01  SYARECED-PATH             PIC X(1024).
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+       01  SYARECED-PATH.
+           03  FILLER              PIC X(09) VALUE "/var/tmp/".
+           03  SYARECED-HOSPNUM    PIC 9(02).
+           03  FILLER              PIC X(18) VALUE "SYARECEDEN-TMP.CSV".
       *
       *    国保レセプト電算ファイル
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      * 01  KORECED-PATH.
-      *     03  FILLER              PIC X(09) VALUE "/var/tmp/".
-      *     03  KORECED-HOSPNUM     PIC 9(02).
-      *     03  FILLER              PIC X(17) VALUE "KORECEDEN-TMP.CSV".
-       01  KORECED-PATH              PIC X(1024).
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+       01  KORECED-PATH.
+           03  FILLER              PIC X(09) VALUE "/var/tmp/".
+           03  KORECED-HOSPNUM     PIC 9(02).
+           03  FILLER              PIC X(17) VALUE "KORECEDEN-TMP.CSV".
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    対象公費領域
@@ -438,11 +429,6 @@
       *    ＣＳＶ管理ＤＢ制御サブ
            COPY    "CPORCSCSVINFO.INC".
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *    一時ファイル名編集
-           COPY    "CPORCSGETTEMP.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -478,12 +464,6 @@
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
            INITIALIZE  TAISYO-DAT
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-           INITIALIZE  RECEERR
-           INITIALIZE  RECEDI-PATH
-           INITIALIZE  SYARECED-PATH
-           INITIALIZE  KORECED-PATH
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -505,11 +485,6 @@
                                                WRK-PARA-HOSPNUM
                                                WRK-PARA-SYORIFLG
                                                RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-                                               RECEDI-PATH
-                                               SYARECED-PATH
-                                               KORECED-PATH
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
       *
@@ -549,29 +524,9 @@
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
-      *     MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
-      *     MOVE    WRK-PARA-HOSPNUM            TO  MF101PARA-HOSPNUM
-           INITIALIZE                     SGETTEMP-AREA
-      *
-           MOVE  WRK-PARA-HOSPNUM     TO  MF101PARA-HOSPNUM
-           MOVE  "MF101ZZ"            TO  MF101PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID  TO  MF101PARA-TERMID
-      *
-           MOVE  MF101PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
-           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
-           MOVE  RECEDI-PATH          TO  SGETTEMP-BASENAMES (3)
-           MOVE  SYARECED-PATH        TO  SGETTEMP-BASENAMES (4)
-           MOVE  KORECED-PATH         TO  SGETTEMP-BASENAMES (5)
-           CALL  "ORCSGETTEMP"        USING
-                                      SGETTEMP-AREA
-           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF101PARA-FULLNAME
-           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
-           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEDI-PATH
-           MOVE  SGETTEMP-FULLNAMES (4)  TO  SYARECED-PATH
-           MOVE  SGETTEMP-FULLNAMES (5)  TO  KORECED-PATH
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+           MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
+           MOVE    WRK-PARA-HOSPNUM            TO  MF101PARA-HOSPNUM
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
@@ -932,13 +887,11 @@
                                                KORECED-REC
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     MOVE    SPA-HOSPNUM             TO  FILE-HOSPNUM
-      **=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     MOVE    SPA-HOSPNUM             TO  SYARECED-HOSPNUM
-      *     MOVE    SPA-HOSPNUM             TO  KORECED-HOSPNUM
-      **=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+           MOVE    SPA-HOSPNUM             TO  FILE-HOSPNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
+           MOVE    SPA-HOSPNUM             TO  SYARECED-HOSPNUM
+           MOVE    SPA-HOSPNUM             TO  KORECED-HOSPNUM
+      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *    
            OPEN  INPUT  RECEDI-FILE
                         MF101-FILE
@@ -1112,7 +1065,15 @@
                INITIALIZE                      MF101-KEY
                MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
                MOVE    TBL-RECEDATA14          TO  MF101-PTNUM
-               MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
+      *         MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
+      *        和暦を西暦に変換
+               MOVE    "0"                     TO  WRK-SYMD(1:1)
+               MOVE    TBL-RECEDATA4(1:5)      TO  WRK-SYMD(2:5)
+               MOVE    "01"                    TO  WRK-SYMD(7:2)
+               PERFORM 31013-WASEI-HEN-SEC
+               MOVE    LNK-DAY1-YMD(1:6)       TO  MF101-SRYYM
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
                MOVE    WRK-TEISYUTUSAKI        TO  MF101-TEISYUTUSAKI
                MOVE    TBL-RECEDATA3           TO  MF101-RECESYUBETU
       *
@@ -1133,6 +1094,9 @@
       *=== IYレコードによる不具合対応 by Yoshikawa(2014/09/18) start
              WHEN  "IY"
       *=== IYレコードによる不具合対応 by Yoshikawa(2014/09/18) end
+      *=== 処置材料対応 by Yoshikawa(2015/01/05) start
+             WHEN  "TO"
+      *=== 処置材料対応 by Yoshikawa(2015/01/05) end
       *        前の行が傷病名レコード（ない場合は保険か公費レコード）
       *        の場合山梨コメントを挿入する
                IF  WRK-SIKIBETU  =  "HO" OR "KO" OR "SY"
@@ -1545,6 +1509,23 @@
            .
        31012-SEIWA-HEN-EXT.
            EXIT.
+      *
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
+      *****************************************************************
+      *    和暦変換処理
+      *****************************************************************
+       31013-WASEI-HEN-SEC        SECTION.
+      *
+           INITIALIZE                      STS-AREA-DAY
+           INITIALIZE                      LNK-DAY1-AREA
+           MOVE    "12"                TO  LNK-DAY1-IRAI
+           MOVE    WRK-SYMD            TO  LNK-DAY1-YMD
+           CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                               LNK-DAY1-AREA
+           .
+       31013-WASEI-HEN-EXT.
+           EXIT.
+      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
       *
       *****************************************************************
       *    終了　　処理
