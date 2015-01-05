@@ -29,6 +29,7 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.02    吉川    15/01/05    担当者欄はPGオプションで設定
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -142,6 +143,10 @@
            03  WRK-HKNJANAME         PIC X(20).
            03  WRK-HOSPCD            PIC X(10).
            03  WRK-TEISYUTU          PIC X(01).
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) start
+           03  WRK-TANTOU            PIC X(40).
+           03  WRK-TANTOU-TEL        PIC X(15).
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) end
       *
       *    集計テーブル
            03  WRK-SEIKYU-TBL   OCCURS 100.
@@ -455,6 +460,21 @@
              DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
            END-PERFORM
       *
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) start
+      *    担当者
+           MOVE    "TANTOU"                  TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:40)       TO  WRK-TANTOU
+           IF  WRK-TANTOU(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-TANTOU
+           END-IF
+           MOVE    WRK-OPTION(2)(1:15)       TO  WRK-TANTOU-TEL
+           IF  WRK-TANTOU-TEL(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-TANTOU-TEL
+           END-IF
+           DISPLAY "担当者 =" WRK-TANTOU
+           DISPLAY "担当者電話番号 =" WRK-TANTOU-TEL
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) end
       *
            .
        100-OPTION-SELECT-EXT.
@@ -747,7 +767,9 @@
            MOVE     SYS-1001-KAISETUNAME   TO  SC09-KAISETUNAME
       *    
       *    電話番号
-           MOVE     WRK-HOSPTEL            TO  SC09-TEL
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) start
+      *     MOVE     WRK-HOSPTEL            TO  SC09-TEL
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) end
       *
       *    医療機関コード
            STRING  "19"                     DELIMITED  BY  SIZE
@@ -758,6 +780,14 @@
            MOVE    WRK-HOSPCD              TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  SC09-HOSPCD
+      *
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) start
+      *    担当者
+           MOVE    WRK-TANTOU              TO  SC09-TANTOU
+      *
+      *    担当者電話番号
+           MOVE    WRK-TANTOU-TEL          TO  SC09-TEL
+      *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) start
       *
            .
        310-HEAD-HEN-EXT.

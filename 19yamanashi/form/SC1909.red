@@ -78,6 +78,11 @@
         <embed object="text" length="10"/>
       </appinfo>
     </element>
+    <element name="TANTOU" occurs="1">
+      <appinfo>
+        <embed object="text" length="40"/>
+      </appinfo>
+    </element>
   </dia:dictionarydata>
   <dia:diagramdata>
     <dia:attribute name="background">
@@ -4243,16 +4248,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O146">
       <dia:attribute name="obj_pos">
-        <dia:point val="11.3235,12.1602"/>
+        <dia:point val="10.4375,10.3102"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.3235,11.8477;14.8735,12.649"/>
+        <dia:rectangle val="10.4375,9.9977;17.5375,10.3552"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#ああああああああああ
-ああああああああああ#</dia:string>
+            <dia:string>#ああああああああああああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -4261,7 +4265,7 @@
             <dia:real val="0.44379444433940191"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="11.3235,12.1602"/>
+            <dia:point val="10.4375,10.3102"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -4278,7 +4282,7 @@
         <dia:string>#KAISETUNAME#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
-        <dia:int val="10"/>
+        <dia:int val="0"/>
       </dia:attribute>
       <dia:attribute name="embed_char_type">
         <dia:enum val="0"/>
@@ -8857,6 +8861,49 @@
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O256">
+      <dia:attribute name="obj_pos">
+        <dia:point val="11.3252,12.15"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="11.3252,11.8275;15.0002,12.6529"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああああ
+ああああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.45790554207534839"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="11.3252,12.15"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#TANTOU#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="10"/>
       </dia:attribute>
       <dia:attribute name="embed_char_type">
         <dia:enum val="0"/>
