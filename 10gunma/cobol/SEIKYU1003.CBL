@@ -84,6 +84,7 @@
       *  01.00.25    吉川    13/04/08    「特」欄対象に024,038,079追加
       *  01.00.26    吉川    13/07/09    全国公費と高額療養費の場合
       *                                  全国公費を「特」とするように修正
+      *  01.00.27    吉川    15/01/06    平成２７年１月改正対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -904,26 +905,54 @@
       *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
            IF  RECE02-FLG(4)  =  ZERO
              IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+                                OR  "5"  OR  "6"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                MOVE  "98"                TO  MF100-COMBIKBN
       *        高額療養費４回目以降
-               IF  RECE02-FTNMONEY (1)  =  44400
-               OR  RECE02-FTNMONEY (1)  =  24600
-               OR  RECE02-FTNMONEY (1)  =  83400
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *         IF  RECE02-FTNMONEY (1)  =  44400
+      *         OR  RECE02-FTNMONEY (1)  =  24600
+      *         OR  RECE02-FTNMONEY (1)  =  83400
+               IF  RECE02-FTNMONEY (1)  =  24600
+               OR  RECE02-FTNMONEY (1)  =  44400
+               OR  RECE02-FTNMONEY (1)  =  93000
+               OR  RECE02-FTNMONEY (1)  =  140100
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                  MOVE    1               TO  MF100-KOGAKU4
                ELSE
                  EVALUATE  RECE02-ZAITAKU
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *             WHEN  "2"
+      *               IF  RECE02-FTNMONEY(1)  <  83400
+      *                 MOVE  SPACE       TO  MF100-COMBIKBN
+      *               END-IF
+      *             WHEN  "3"
+      *               IF  RECE02-FTNMONEY(1)  <  44400
+      *                 MOVE  SPACE       TO  MF100-COMBIKBN
+      *               END-IF
+      *             WHEN  "4"
+      *               IF  RECE02-FTNMONEY(1)  <  24600
+      *                 MOVE  SPACE       TO  MF100-COMBIKBN
+      *               END-IF
                    WHEN  "2"
-                     IF  RECE02-FTNMONEY(1)  <  83400
+                     IF  RECE02-FTNMONEY(1)  <  140100
                        MOVE  SPACE       TO  MF100-COMBIKBN
                      END-IF
                    WHEN  "3"
-                     IF  RECE02-FTNMONEY(1)  <  44400
+                     IF  RECE02-FTNMONEY(1)  <  93000
                        MOVE  SPACE       TO  MF100-COMBIKBN
                      END-IF
                    WHEN  "4"
+                   WHEN  "5"
+                     IF  RECE02-FTNMONEY(1)  <  44400
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "6"
                      IF  RECE02-FTNMONEY(1)  <  24600
                        MOVE  SPACE       TO  MF100-COMBIKBN
                      END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                  END-EVALUATE
                END-IF
              END-IF
@@ -972,6 +1001,9 @@
       *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) start
                                         OR "024" OR "038" OR "079"
       *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) end
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+                                        OR "054"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
       *
                   MOVE  WRK-H-KOHNUM(IDX1)(2:2)  TO  MF100-COMBIKBN
       *
@@ -1200,20 +1232,55 @@
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
       *    高額該当者で限度額認定証無しの請求額計算
            IF  FLG-KOGAKU  =  1
-             IF  MF100-SEIKYUGK  =  83400
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *       IF  MF100-SEIKYUGK  =  83400
+      *       OR  MF100-SEIKYUGK  =  44400
+      *       OR  MF100-SEIKYUGK  =  24600
+             IF  MF100-SEIKYUGK  =  140100
+             OR  MF100-SEIKYUGK  =  93000
              OR  MF100-SEIKYUGK  =  44400
              OR  MF100-SEIKYUGK  =  24600
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                MOVE    1               TO  MF100-KOGAKU4
              ELSE
-               IF   RECE02-NYUGAIKBN  =  "2"
-               AND  MF100-SEIKYUGK  NOT =  35400
-                   PERFORM  900-SEIKYU-SELECT-SEC
-                   COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
-                            ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *         IF   RECE02-NYUGAIKBN  =  "2"
+      *         AND  MF100-SEIKYUGK  NOT =  35400
+      *             PERFORM  900-SEIKYU-SELECT-SEC
+      *             COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
+      *                      ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
+      *         END-IF
+               IF  MF100-SEIKYUGK  >  57600
+                   MOVE    57600       TO  MF100-SEIKYUGK
                END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              END-IF
            END-IF
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *    ７０歳２割で低所の高額療養費現物給付該当者
+           IF  (RECE02-AGE  >=  70)
+           AND (RECE02-KYURATE  =  20)
+           AND (RECE02-FTNMONEY(1)  NOT =  ZERO)
+               EVALUATE  RECE02-SHOKUJIFTNKBN
+                 WHEN  "1"
+                 WHEN  "2"
+      *            低所得２
+                   MOVE    2           TO  MF100-GENBUTU
+                 WHEN  "3"
+      *            低所得１
+                   MOVE    1           TO  MF100-GENBUTU
+               END-EVALUATE
+           END-IF
+      *
+      *    高額療養費
+           IF  (RECE02-ZAITAKU  NOT =  SPACE)
+           AND (RECE02-ZAITAKU  NOT =  "1")
+           AND (RECE02-FLG(4)  =  ZERO)
+               MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+           END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
       *
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
@@ -1793,6 +1860,14 @@
                END-IF
              END-IF
       *---(01.00.01) LINE ADD START ------------------------------------
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+             EVALUATE  MF100-GENBUTU
+               WHEN  1
+                 MOVE    "Ｉ"          TO  WRK-BIKO2
+               WHEN  2
+                 MOVE    "ＩＩ"        TO  WRK-BIKO2
+             END-EVALUATE
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              IF  MF100-TYOKI  =  2
                IF  WRK-BIKO2  =  SPACE
                  MOVE  "長２"          TO  WRK-BIKO2
@@ -1824,6 +1899,30 @@
                MOVE  "高半"          TO  SC03-BIKO3(IDX)
              END-IF
       *---(01.00.11) LINE ADD END   ------------------------------------
+      *
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *    高額療養費
+             IF  MF100-KOGAKU4  =  1
+               EVALUATE  MF100-KOGAKU
+                 WHEN  "2"
+                   MOVE    "多・ア"    TO  SC03-BIKO4(IDX)
+                 WHEN  "3"
+                   MOVE    "多・イ"    TO  SC03-BIKO4(IDX)
+                 WHEN  "4"
+                   MOVE    "多・ウ"    TO  SC03-BIKO4(IDX)
+               END-EVALUATE
+             ELSE
+               EVALUATE  MF100-KOGAKU
+                 WHEN  "2"
+                   MOVE    "ア"        TO  SC03-BIKO4(IDX)
+                 WHEN  "3"
+                   MOVE    "イ"        TO  SC03-BIKO4(IDX)
+                 WHEN  "4"
+                   MOVE    "ウ"        TO  SC03-BIKO4(IDX)
+               END-EVALUATE
+             END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
+      *
       *    小計
       *    公費分点数
              IF  MF100-COMBIKBN  NOT =   SPACE
@@ -2198,6 +2297,14 @@
                END-IF
              END-IF
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+             EVALUATE  MF100-GENBUTU
+               WHEN  1
+                 MOVE    "Ｉ"          TO  WRK-BIKO2
+               WHEN  2
+                 MOVE    "ＩＩ"        TO  WRK-BIKO2
+             END-EVALUATE
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              IF  MF100-TYOKI  =  2
                IF  WRK-BIKO2  =  SPACE
                  MOVE  "長２"          TO  WRK-BIKO2
@@ -2229,6 +2336,29 @@
                MOVE  "高半"          TO  SC04-BIKO3(IDX)
              END-IF
       *---(01.00.11) LINE ADD END   ------------------------------------
+      *
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *    高額療養費
+             IF  MF100-KOGAKU4  =  1
+               EVALUATE  MF100-KOGAKU
+                 WHEN  "2"
+                   MOVE    "多・ア"    TO  SC04-BIKO4(IDX)
+                 WHEN  "3"
+                   MOVE    "多・イ"    TO  SC04-BIKO4(IDX)
+                 WHEN  "4"
+                   MOVE    "多・ウ"    TO  SC04-BIKO4(IDX)
+               END-EVALUATE
+             ELSE
+               EVALUATE  MF100-KOGAKU
+                 WHEN  "2"
+                   MOVE    "ア"        TO  SC04-BIKO4(IDX)
+                 WHEN  "3"
+                   MOVE    "イ"        TO  SC04-BIKO4(IDX)
+                 WHEN  "4"
+                   MOVE    "ウ"        TO  SC04-BIKO4(IDX)
+               END-EVALUATE
+             END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
       *
       *    小計
       *    公費分点数
@@ -3060,6 +3190,9 @@
       *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) start
                                       OR "024"  OR  "038"  OR  "079"
       *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) end
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+                                      OR "054"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
       *
                MOVE  SYU-KOH-HKNNUM(IDX)(2:2)  TO  MF100-COMBIKBN
              END-IF

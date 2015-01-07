@@ -84,6 +84,10 @@
                05  SC03-BIKO2           PIC  X(10).
       *    È÷¹Í£³
                05  SC03-BIKO3           PIC  X(06).
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/06) start
+      *    È÷¹Í£´
+               05  SC03-BIKO4           PIC  X(14).
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/06) end
       *    È÷¹Í¡ÊÀÇ¡¢Â¿¡Ë
                05  SC03-TEI-TBL        OCCURS 2.
                    07  SC03-TEI         PIC  X(02).

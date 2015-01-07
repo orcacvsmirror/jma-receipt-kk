@@ -72,6 +72,7 @@
       *                                  全国公費を「特」とするように修正
       *  01.00.23    吉川    15/01/06    「特」は種類に関わらず、一括して
       *                                  集計するように修正
+      *                                  平成２７年１月改正対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -845,20 +846,42 @@
       *    特疾＋957等も高額認定されてしまうので、FLG4を判断して回避
            IF  RECE02-FLG(4)  =  ZERO
              IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR "4"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+                                OR  "5"  OR  "6"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                MOVE  "98"                TO  MF100-COMBIKBN
                EVALUATE  RECE02-ZAITAKU
-                 WHEN  "2"
-                   IF  RECE02-FTNMONEY(1)  <  83400
-                     MOVE  SPACE         TO  MF100-COMBIKBN
-                   END-IF
-                 WHEN  "3"
-                   IF  RECE02-FTNMONEY(1)  <  44400
-                     MOVE  SPACE         TO  MF100-COMBIKBN
-                   END-IF
-                 WHEN  "4"
-                   IF  RECE02-FTNMONEY(1)  <  24600
-                     MOVE  SPACE         TO  MF100-COMBIKBN
-                   END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *           WHEN  "2"
+      *             IF  RECE02-FTNMONEY(1)  <  83400
+      *               MOVE  SPACE         TO  MF100-COMBIKBN
+      *             END-IF
+      *           WHEN  "3"
+      *             IF  RECE02-FTNMONEY(1)  <  44400
+      *               MOVE  SPACE         TO  MF100-COMBIKBN
+      *             END-IF
+      *           WHEN  "4"
+      *             IF  RECE02-FTNMONEY(1)  <  24600
+      *               MOVE  SPACE         TO  MF100-COMBIKBN
+      *             END-IF
+                   WHEN  "2"
+                     IF  RECE02-FTNMONEY(1)  <  140100
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "3"
+                     IF  RECE02-FTNMONEY(1)  <  93000
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "4"
+                   WHEN  "5"
+                     IF  RECE02-FTNMONEY(1)  <  44400
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+                   WHEN  "6"
+                     IF  RECE02-FTNMONEY(1)  <  24600
+                       MOVE  SPACE       TO  MF100-COMBIKBN
+                     END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                END-EVALUATE
              END-IF
            END-IF
@@ -897,6 +920,9 @@
       *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) start
                                         OR "024" OR "038" OR "079"
       *=== 「特」欄の対象公費追加 by Yoshikawa(2013/04/08) end
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+                                        OR "054"
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
       *
                   MOVE  WRK-H-KOHNUM(IDX1)(2:2)  TO  MF100-COMBIKBN
       *
@@ -1054,17 +1080,28 @@
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
       *    高額該当者で限度額認定証無しの請求額計算
            IF  FLG-KOGAKU  =  1
-             IF  MF100-SEIKYUGK  =  83400
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *       IF  MF100-SEIKYUGK  =  83400
+      *       OR  MF100-SEIKYUGK  =  44400
+      *       OR  MF100-SEIKYUGK  =  24600
+             IF  MF100-SEIKYUGK  =  140100
+             OR  MF100-SEIKYUGK  =  93000
              OR  MF100-SEIKYUGK  =  44400
              OR  MF100-SEIKYUGK  =  24600
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                CONTINUE
              ELSE
-               IF   RECE02-NYUGAIKBN  =  "2"
-               AND  MF100-SEIKYUGK  NOT =  35400
-                   PERFORM  900-SEIKYU-SELECT-SEC
-                   COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
-                            ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
+      *         IF   RECE02-NYUGAIKBN  =  "2"
+      *         AND  MF100-SEIKYUGK  NOT =  35400
+      *             PERFORM  900-SEIKYU-SELECT-SEC
+      *             COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
+      *                      ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
+      *         END-IF
+               IF  MF100-SEIKYUGK  >  57600
+                   MOVE    57600       TO  MF100-SEIKYUGK
                END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              END-IF
            END-IF
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
