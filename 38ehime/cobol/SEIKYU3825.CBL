@@ -56,9 +56,10 @@
       *  01.00.12    吉川    14/06/18    月末以降も入院中の場合
       *                                  退院日が正しく印字されないのを修正
       *  01.00.13    吉川    14/10/27    ver4.8.0対応（一時ディレクトリ変更）
-      *  01.00.13    萩野    14/11/11    項目「傷病名及び期間」への記録が
+      *  01.00.14    萩野    14/11/11    項目「傷病名及び期間」への記録が
       *                                  ２０文字を超える場合、項目「備考」へ
       *                                  記録するよう修正
+      *  01.00.15    吉川    15/01/07    平成２７年１月改正対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -410,6 +411,10 @@
            03  WRK-CONS-ZAITAKU5      PIC X(09) VALUE "114012310".
            03  WRK-CONS-ZAITAKU6      PIC X(09) VALUE "114012410".
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
+      *
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) start
+           03  WRK-CONS-SRYYM-201501  PIC X(06) VALUE "201501".
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
       *
       *****************************************************************
       *    ファイルレイアウト　領域
@@ -1032,11 +1037,28 @@
       *
       *=== 特疾欄は限度額が低い方を記載 by Yoshikawa(2012/10/15) start
       *    高額療養費チェック
-             EVALUATE  RECE02-ZAITAKU
-               WHEN  "2"    MOVE  3      TO  MF100-TYOKI
-               WHEN  "3"    MOVE  4      TO  MF100-TYOKI
-               WHEN  "4"    MOVE  5      TO  MF100-TYOKI
-             END-EVALUATE
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) start
+      *       EVALUATE  RECE02-ZAITAKU
+      *         WHEN  "2"    MOVE  3      TO  MF100-TYOKI
+      *         WHEN  "3"    MOVE  4      TO  MF100-TYOKI
+      *         WHEN  "4"    MOVE  5      TO  MF100-TYOKI
+      *       END-EVALUATE
+             IF  RECE02-SRYYM  >=  WRK-CONS-SRYYM-201501
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"    MOVE  6      TO  MF100-TYOKI
+                   WHEN  "3"    MOVE  7      TO  MF100-TYOKI
+                   WHEN  "4"    MOVE  8      TO  MF100-TYOKI
+                   WHEN  "5"    MOVE  9      TO  MF100-TYOKI
+                   WHEN  "6"    MOVE  10     TO  MF100-TYOKI
+                 END-EVALUATE
+             ELSE
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"    MOVE  3      TO  MF100-TYOKI
+                   WHEN  "3"    MOVE  4      TO  MF100-TYOKI
+                   WHEN  "4"    MOVE  5      TO  MF100-TYOKI
+                 END-EVALUATE
+             END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
       *=== 特疾欄は限度額が低い方を記載 by Yoshikawa(2012/10/15) end
       *
              IF  FLG-TYOKI       =   1
@@ -1121,14 +1143,37 @@
       *    特疾・小児の使用判定（６月末のパッチで判定不要となる予定）
            IF  WRK-TOKUTEI  =  1
       *    特定疾患等での特記事項編集
-           EVALUATE  RECE02-FLG (4)
-             WHEN  "1"  MOVE  3            TO  MF100-TYOKI
-             WHEN  "2"  MOVE  4            TO  MF100-TYOKI
-             WHEN  "3"  MOVE  5            TO  MF100-TYOKI
-             WHEN  "4"  MOVE  "「22」"     TO  MF100-BIKO
-             WHEN  "5"  MOVE  "「23」"     TO  MF100-BIKO
-             WHEN  "6"  MOVE  "「24」"     TO  MF100-BIKO
-           END-EVALUATE
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) start
+      *     EVALUATE  RECE02-FLG (4)
+      *       WHEN  "1"  MOVE  3            TO  MF100-TYOKI
+      *       WHEN  "2"  MOVE  4            TO  MF100-TYOKI
+      *       WHEN  "3"  MOVE  5            TO  MF100-TYOKI
+      *       WHEN  "4"  MOVE  "「22」"     TO  MF100-BIKO
+      *       WHEN  "5"  MOVE  "「23」"     TO  MF100-BIKO
+      *       WHEN  "6"  MOVE  "「24」"     TO  MF100-BIKO
+      *     END-EVALUATE
+           IF  RECE02-FLG (4)  =  "1"
+      *      請求管理から特記事項参照
+             PERFORM  900-SEIKYU-SELECT-SEC
+      *
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1  >  5
+               EVALUATE  RECE10-TOKKI(IDX1)
+                 WHEN  "17"    MOVE  3            TO  MF100-TYOKI
+                 WHEN  "18"    MOVE  4            TO  MF100-TYOKI
+                 WHEN  "19"    MOVE  5            TO  MF100-TYOKI
+                 WHEN  "22"    MOVE  "「２２」"   TO  MF100-BIKO
+                 WHEN  "23"    MOVE  "「２３」"   TO  MF100-BIKO
+                 WHEN  "24"    MOVE  "「２４」"   TO  MF100-BIKO
+                 WHEN  "31"    MOVE  "「３１」"   TO  MF100-BIKO
+                 WHEN  "32"    MOVE  "「３２」"   TO  MF100-BIKO
+                 WHEN  "33"    MOVE  "「３３」"   TO  MF100-BIKO
+                 WHEN  "34"    MOVE  "「３４」"   TO  MF100-BIKO
+                 WHEN  "35"    MOVE  "「３５」"   TO  MF100-BIKO
+               END-EVALUATE
+             END-PERFORM
+           END-IF
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
            END-IF
       *
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) start
@@ -1696,6 +1741,53 @@
            MOVE    1                         TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *    
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) start
+      *    ２４−６．特定疾病等(26)
+           IF  MF100-TYOKI  =  6
+             MOVE    "1"                     TO  WRK-DATA
+           ELSE
+             MOVE    ZERO                    TO  WRK-DATA
+           END-IF
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
+      *    ２４−７．特定疾病等(27)
+           IF  MF100-TYOKI  =  7
+             MOVE    "1"                     TO  WRK-DATA
+           ELSE
+             MOVE    ZERO                    TO  WRK-DATA
+           END-IF
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
+      *    ２４−８．特定疾病等(28)
+           IF  MF100-TYOKI  =  8
+             MOVE    "1"                     TO  WRK-DATA
+           ELSE
+             MOVE    ZERO                    TO  WRK-DATA
+           END-IF
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
+      *    ２４−９．特定疾病等(29)
+           IF  MF100-TYOKI  =  9
+             MOVE    "1"                     TO  WRK-DATA
+           ELSE
+             MOVE    ZERO                    TO  WRK-DATA
+           END-IF
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *    
+      *    ２４−１０．特定疾病等(30)
+           IF  MF100-TYOKI  =  10
+             MOVE    "1"                     TO  WRK-DATA
+           ELSE
+             MOVE    ZERO                    TO  WRK-DATA
+           END-IF
+           MOVE    1                         TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
+      *
       *    ２５．総診療報酬点数
            MOVE    MF100-TOTALTEN            TO  WRK-NUM
            MOVE    7                         TO  WRK-NAGASA
@@ -2169,6 +2261,41 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) start
+      *****************************************************************
+      *   請求管理情報読込
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC  SECTION.
+      *
+           INITIALIZE  RECE10-REC
+           MOVE  RECE02-KEY            TO  RECE10-KEY
+           MOVE  RECE10-REC            TO  MCPDATA-REC
+           MOVE  "DBSELECT"            TO  MCP-FUNC
+           MOVE  "tbl_seikyu"          TO  MCP-TABLE
+           MOVE  "key"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF  MCP-RC  =  ZERO
+             PERFORM  900-SEIKYU-READ-SEC
+           ELSE
+             DISPLAY  "SEIKYU SELECT ERR"
+           END-IF
+      *
+           MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE  "tbl_seikyu"          TO  MCP-TABLE
+           MOVE  "key"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
+      *
       *****************************************************************
       *    患者マスタ読込
       *****************************************************************

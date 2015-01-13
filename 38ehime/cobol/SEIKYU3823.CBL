@@ -73,6 +73,7 @@
       *  01.00.24    µÈÀî    14/06/18  ·îËö°Ê¹ß¤âÆþ±¡Ãæ¤Î¾ì¹ç
       *                                Âà±¡Æü¤¬Àµ¤·¤¯°õ»ú¤µ¤ì¤Ê¤¤¤Î¤ò½¤Àµ
       *  01.00.25    µÈÀî    14/10/27  ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
+      *  01.00.26    µÈÀî    15/01/07  Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -195,6 +196,9 @@
            03  FLG-PRGOPTION       PIC 9(01).
            03  FLG-OK              PIC 9(01).
       *=== ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ by Yoshikawa(2014/01/15) end
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+           03  FLG-RECE10     PIC 9(01).
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -396,6 +400,10 @@
            03  WRK-CONS-ZAITAKU6       PIC X(09) VALUE "114012410".
       *=== 70ºÐÌ¤Ëþ¤Ç¤âºßÂð¤òµ­ºÜ by Yoshikawa(2011/07/13) end
       *
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+           03  WRK-CONS-SRYYM-201501   PIC X(06) VALUE "201501".
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
+      *
       *    DB»²¾ÈÍÑ
       *---(01.00.04) LINE ADD START ------------------------------------
       *     COPY    "ORCA-DBPATH".
@@ -480,6 +488,11 @@
        01  PRGOPTION-REC.
            COPY    "CPPRGOPTION.INC".
       *=== ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ by Yoshikawa(2014/01/15) end
+      *
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+      *    ÀÁµá´ÉÍý
+           COPY    "CPRCF010.INC".
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
       *
       *****************************************************************
       *    ¥µ¥Ö¥×¥íÍÑ¡¡ÎÎ°è
@@ -1081,11 +1094,28 @@
       *
       *=== ÆÃ¼ÀÍó¤Ï¸ÂÅÙ³Û¤¬Äã¤¤Êý¤òµ­ºÜ by Yoshikawa(2012/10/15) start
       *    ¹â³ÛÎÅÍÜÈñ¥Á¥§¥Ã¥¯
-             EVALUATE  RECE02-ZAITAKU
-               WHEN  "2"    MOVE  3      TO  MF100-TYOKI
-               WHEN  "3"    MOVE  4      TO  MF100-TYOKI
-               WHEN  "4"    MOVE  5      TO  MF100-TYOKI
-             END-EVALUATE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+      *       EVALUATE  RECE02-ZAITAKU
+      *         WHEN  "2"    MOVE  3      TO  MF100-TYOKI
+      *         WHEN  "3"    MOVE  4      TO  MF100-TYOKI
+      *         WHEN  "4"    MOVE  5      TO  MF100-TYOKI
+      *       END-EVALUATE
+             IF  RECE02-SRYYM  >=  WRK-CONS-SRYYM-201501
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"    MOVE  6      TO  MF100-TYOKI
+                   WHEN  "3"    MOVE  7      TO  MF100-TYOKI
+                   WHEN  "4"    MOVE  8      TO  MF100-TYOKI
+                   WHEN  "5"    MOVE  9      TO  MF100-TYOKI
+                   WHEN  "6"    MOVE  10     TO  MF100-TYOKI
+                 END-EVALUATE
+             ELSE
+                 EVALUATE  RECE02-ZAITAKU
+                   WHEN  "2"    MOVE  3      TO  MF100-TYOKI
+                   WHEN  "3"    MOVE  4      TO  MF100-TYOKI
+                   WHEN  "4"    MOVE  5      TO  MF100-TYOKI
+                 END-EVALUATE
+             END-IF
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
       *=== ÆÃ¼ÀÍó¤Ï¸ÂÅÙ³Û¤¬Äã¤¤Êý¤òµ­ºÜ by Yoshikawa(2012/10/15) end
       *
              IF  FLG-TYOKI       =   1
@@ -1178,14 +1208,37 @@
            IF  WRK-TOKUTEI  =  1
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/29) end
       *    ÆÃÄê¼À´µÅù¤Ç¤ÎÆÃµ­»ö¹àÊÔ½¸
-           EVALUATE  RECE02-FLG (4)
-             WHEN  "1"  MOVE  3            TO  MF100-TYOKI
-             WHEN  "2"  MOVE  4            TO  MF100-TYOKI
-             WHEN  "3"  MOVE  5            TO  MF100-TYOKI
-             WHEN  "4"  MOVE  "¡Ö£²£²¡×"   TO  MF100-BIKO
-             WHEN  "5"  MOVE  "¡Ö£²£³¡×"   TO  MF100-BIKO
-             WHEN  "6"  MOVE  "¡Ö£²£´¡×"   TO  MF100-BIKO
-           END-EVALUATE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+      *     EVALUATE  RECE02-FLG (4)
+      *       WHEN  "1"  MOVE  3            TO  MF100-TYOKI
+      *       WHEN  "2"  MOVE  4            TO  MF100-TYOKI
+      *       WHEN  "3"  MOVE  5            TO  MF100-TYOKI
+      *       WHEN  "4"  MOVE  "¡Ö£²£²¡×"   TO  MF100-BIKO
+      *       WHEN  "5"  MOVE  "¡Ö£²£³¡×"   TO  MF100-BIKO
+      *       WHEN  "6"  MOVE  "¡Ö£²£´¡×"   TO  MF100-BIKO
+      *     END-EVALUATE
+           IF  RECE02-FLG (4)  =  "1"
+      *      ÀÁµá´ÉÍý¤«¤éÆÃµ­»ö¹à»²¾È
+             PERFORM  900-SEIKYU-SELECT-SEC
+      *
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1  >  5
+               EVALUATE  RECE10-TOKKI(IDX1)
+                 WHEN  "17"    MOVE  3            TO  MF100-TYOKI
+                 WHEN  "18"    MOVE  4            TO  MF100-TYOKI
+                 WHEN  "19"    MOVE  5            TO  MF100-TYOKI
+                 WHEN  "22"    MOVE  "¡Ö£²£²¡×"   TO  MF100-BIKO
+                 WHEN  "23"    MOVE  "¡Ö£²£³¡×"   TO  MF100-BIKO
+                 WHEN  "24"    MOVE  "¡Ö£²£´¡×"   TO  MF100-BIKO
+                 WHEN  "31"    MOVE  "¡Ö£³£±¡×"   TO  MF100-BIKO
+                 WHEN  "32"    MOVE  "¡Ö£³£²¡×"   TO  MF100-BIKO
+                 WHEN  "33"    MOVE  "¡Ö£³£³¡×"   TO  MF100-BIKO
+                 WHEN  "34"    MOVE  "¡Ö£³£´¡×"   TO  MF100-BIKO
+                 WHEN  "35"    MOVE  "¡Ö£³£µ¡×"   TO  MF100-BIKO
+               END-EVALUATE
+             END-PERFORM
+           END-IF
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/26) end
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/29) start
            END-IF
@@ -1767,13 +1820,27 @@
       *         MOVE    "£²"    TO  SC23-TOKUTEI
       *     END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
-           EVALUATE  MF100-TYOKI
-             WHEN  "1"  MOVE  "£±"   TO  SC23-TOKUTEI
-             WHEN  "2"  MOVE  "£²"   TO  SC23-TOKUTEI
-             WHEN  "3"  MOVE  "£³"   TO  SC23-TOKUTEI
-             WHEN  "4"  MOVE  "£´"   TO  SC23-TOKUTEI
-             WHEN  "5"  MOVE  "£µ"   TO  SC23-TOKUTEI
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+      *     EVALUATE  MF100-TYOKI
+      *       WHEN  "1"  MOVE  "£±"   TO  SC23-TOKUTEI
+      *       WHEN  "2"  MOVE  "£²"   TO  SC23-TOKUTEI
+      *       WHEN  "3"  MOVE  "£³"   TO  SC23-TOKUTEI
+      *       WHEN  "4"  MOVE  "£´"   TO  SC23-TOKUTEI
+      *       WHEN  "5"  MOVE  "£µ"   TO  SC23-TOKUTEI
+      *     END-EVALUATE
+             EVALUATE  MF100-TYOKI
+             WHEN  1    MOVE  "02"   TO  SC23-TOKUTEI
+             WHEN  2    MOVE  "16"   TO  SC23-TOKUTEI
+             WHEN  3    MOVE  "17"   TO  SC23-TOKUTEI
+             WHEN  4    MOVE  "18"   TO  SC23-TOKUTEI
+             WHEN  5    MOVE  "19"   TO  SC23-TOKUTEI
+             WHEN  6    MOVE  "26"   TO  SC23-TOKUTEI
+             WHEN  7    MOVE  "27"   TO  SC23-TOKUTEI
+             WHEN  8    MOVE  "28"   TO  SC23-TOKUTEI
+             WHEN  9    MOVE  "29"   TO  SC23-TOKUTEI
+             WHEN  10   MOVE  "30"   TO  SC23-TOKUTEI
            END-EVALUATE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *=== Ê¿À®£²£±Ç¯£µ·îÆÃÄê¼À´µ²þÀµ¤ÎÂÐ±þ by Uchida(2009/05/26) start
@@ -2085,6 +2152,41 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) start
+      *****************************************************************
+      *   ÀÁµá´ÉÍý¾ðÊóÆÉ¹þ
+      *****************************************************************
+       900-SEIKYU-SELECT-SEC  SECTION.
+      *
+           INITIALIZE  RECE10-REC
+           MOVE  RECE02-KEY            TO  RECE10-KEY
+           MOVE  RECE10-REC            TO  MCPDATA-REC
+           MOVE  "DBSELECT"            TO  MCP-FUNC
+           MOVE  "tbl_seikyu"          TO  MCP-TABLE
+           MOVE  "key"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF  MCP-RC  =  ZERO
+             PERFORM  900-SEIKYU-READ-SEC
+           ELSE
+             DISPLAY  "SEIKYU SELECT ERR"
+           END-IF
+      *
+           MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE  "tbl_seikyu"          TO  MCP-TABLE
+           MOVE  "key"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-SELECT-EXT.
+           EXIT.
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
+      *
       *****************************************************************
       *    ´µ¼Ô¥Þ¥¹¥¿ÆÉ¹þ
       *****************************************************************
