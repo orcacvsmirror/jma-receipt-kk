@@ -1154,7 +1154,7 @@
       *     END-EVALUATE
            IF  RECE02-FLG (4)  =  "1"
       *      ÀÁµá´ÉÍý¤«¤éÆÃµ­»ö¹à»²¾È
-             PERFORM  900-SEIKYU-SELECT-SEC
+             PERFORM  900-SEIKYU-READ-SEC
       *
              PERFORM  VARYING  IDX1  FROM  1  BY  1
                       UNTIL    IDX1  >  5
@@ -2265,7 +2265,7 @@
       *****************************************************************
       *   ÀÁµá´ÉÍý¾ðÊóÆÉ¹þ
       *****************************************************************
-       900-SEIKYU-SELECT-SEC  SECTION.
+       900-SEIKYU-READ-SEC  SECTION.
       *
            INITIALIZE  RECE10-REC
            MOVE  RECE02-KEY            TO  RECE10-KEY
@@ -2278,7 +2278,19 @@
                                        MCPDATA-REC
                                        SPA-AREA
            IF  MCP-RC  =  ZERO
-             PERFORM  900-SEIKYU-READ-SEC
+             MOVE    "tbl_seikyu"      TO  MCP-TABLE
+             MOVE    "key"             TO  MCP-PATHNAME
+             MOVE    "DBFETCH"         TO  MCP-FUNC
+             CALL    "ORCDBMAIN"       USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+             IF  MCP-RC  =  ZERO
+                 MOVE    ZERO          TO  FLG-RECE10
+                 MOVE    MCPDATA-REC   TO  RECE10-REC
+             ELSE
+                 MOVE    1             TO  FLG-RECE10
+             END-IF
            ELSE
              DISPLAY  "SEIKYU SELECT ERR"
            END-IF
@@ -2292,7 +2304,7 @@
                                        SPA-AREA
       *
            .
-       900-SEIKYU-SELECT-EXT.
+       900-SEIKYU-READ-EXT.
            EXIT.
       *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/07) end
       *
