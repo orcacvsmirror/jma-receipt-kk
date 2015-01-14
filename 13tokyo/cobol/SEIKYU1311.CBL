@@ -37,6 +37,7 @@
       *  01.00.03    吉川    12/02/22    印字対象番号の追加（382,482,285,286,287)
       *  01.00.04    吉川    12/12/21    医療機関情報編集対応
       *  01.00.05    吉川    14/10/08    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.06    吉川    15/01/14    印字対象番号の追加（682）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -613,6 +614,9 @@
                                       OR "285" OR "286" OR "287"
                                       OR "382" OR "482"
       *=== 印字対象番号の追加 by Yoshikawa(2012/02/22) end
+      *=== 印字対象番号の追加 by Yoshikawa(2015/01/14) start
+                                      OR "682"
+      *=== 印字対象番号の追加 by Yoshikawa(2015/01/14) end
                    PERFORM 20011-SYUKEI-SEC
                END-IF
            END-PERFORM
@@ -1177,14 +1181,24 @@
       *         OR  RECE02-KOHNUM(2) = "300"
       *         OR  RECE02-KOHNUM(3) = "300"
       *         OR  RECE02-KOHNUM(4) = "300"
+      *=== 印字対象番号の追加 by Yoshikawa(2015/01/14) start
+      *         IF  RECE02-KOHNUM(1) = "300" OR "382" OR "482" 
+      *                             OR "285" OR "286" OR "287"
+      *         OR  RECE02-KOHNUM(2) = "300" OR "382" OR "482"
+      *                             OR "285" OR "286" OR "287"
+      *         OR  RECE02-KOHNUM(3) = "300" OR "382" OR "482"
+      *                             OR "285" OR "286" OR "287"
+      *         OR  RECE02-KOHNUM(4) = "300" OR "382" OR "482"
+      *                             OR "285" OR "286" OR "287"
                IF  RECE02-KOHNUM(1) = "300" OR "382" OR "482" 
-                                   OR "285" OR "286" OR "287"
+                                   OR "285" OR "286" OR "287" OR "682"
                OR  RECE02-KOHNUM(2) = "300" OR "382" OR "482"
-                                   OR "285" OR "286" OR "287"
+                                   OR "285" OR "286" OR "287" OR "682"
                OR  RECE02-KOHNUM(3) = "300" OR "382" OR "482"
-                                   OR "285" OR "286" OR "287"
+                                   OR "285" OR "286" OR "287" OR "682"
                OR  RECE02-KOHNUM(4) = "300" OR "382" OR "482"
-                                   OR "285" OR "286" OR "287"
+                                   OR "285" OR "286" OR "287" OR "682"
+      *=== 印字対象番号の追加 by Yoshikawa(2015/01/14) end
       *=== 印字対象番号の追加 by Yoshikawa(2012/02/22) end
       *            テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
