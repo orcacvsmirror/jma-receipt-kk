@@ -34,7 +34,7 @@
       *電話番号
            03  SC13-TEL                PIC X(15).
       *開設者名
-           03  SC13-KANRINAME          PIC X(40).
+           03  SC13-KAISETUNAME        PIC X(40).
       *NO
            03  SC13-NO                 PIC X(03).
       *負担者番号
@@ -59,7 +59,7 @@
       *入院・外来
            03  SC13-NYUGAI-TBL.
                05  SC13-NYUGAI-G OCCURS 10.
-                   07  SC13-NYUGAI     PIC X(02) OCCURS 2.
+                   07  SC13-NYUGAIKBN  PIC X(02) OCCURS 2.
       *診療日数
            03  SC13-NISSU-TBL.
                05  SC13-NISSU          PIC X(02) OCCURS 10.

@@ -36,7 +36,7 @@
         <embed object="text" length="15"/>
       </appinfo>
     </element>
-    <element name="KANRINAME" occurs="1">
+    <element name="KAISETUNAME" occurs="1">
       <appinfo>
         <embed object="text" length="40"/>
       </appinfo>
@@ -92,7 +92,7 @@
     </element>
     <element name="NYUGAI-TBL" occurs="1">
       <element name="NYUGAI-G" occurs="10">
-        <element name="NYUGAI" occurs="2">
+        <element name="NYUGAIKBN" occurs="2">
           <appinfo>
             <embed object="text" length="2"/>
           </appinfo>
@@ -8629,7 +8629,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#KANRINAME#</dia:string>
+        <dia:string>#KAISETUNAME#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -9511,7 +9511,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[0].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[0].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -9553,7 +9553,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[0].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[0].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -10267,7 +10267,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[1].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[1].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -10309,7 +10309,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[1].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[1].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -11023,7 +11023,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[2].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[2].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -11065,7 +11065,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[2].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[2].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -11779,7 +11779,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[3].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[3].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -11821,7 +11821,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[3].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[3].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -12535,7 +12535,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[4].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[4].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -12577,7 +12577,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[4].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[4].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -13291,7 +13291,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[5].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[5].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -13333,7 +13333,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[5].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[5].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -14047,7 +14047,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[6].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[6].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -14089,7 +14089,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[6].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[6].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -14803,7 +14803,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[7].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[7].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -14845,7 +14845,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[7].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[7].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -15559,7 +15559,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[8].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[8].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -15601,7 +15601,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[8].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[8].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -16315,7 +16315,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[9].NYUGAI[0]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[9].NYUGAIKBN[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -16357,7 +16357,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#NYUGAI-TBL.NYUGAI-G[9].NYUGAI[1]#</dia:string>
+        <dia:string>#NYUGAI-TBL.NYUGAI-G[9].NYUGAIKBN[1]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
