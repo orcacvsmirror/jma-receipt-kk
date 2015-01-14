@@ -8,6 +8,7 @@ bind	"SEIKYU1305"	"OpenCOBOL";
 bind	"SEIKYU1307"	"OpenCOBOL";
 bind	"SEIKYU1309"	"OpenCOBOL";
 bind	"SEIKYU1311"	"OpenCOBOL";
+bind	"SEIKYU1313"	"OpenCOBOL";
 bind	"SOKATU1300"	"OpenCOBOL";
 bind	"SOKATU1310"	"OpenCOBOL";
 bind	"SOKATU1315"	"OpenCOBOL";
