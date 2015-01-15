@@ -54,6 +54,8 @@
       *  01.00.11    吉川    14/05/12    前期高齢者２割対応
       *  01.00.12    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.13    萩野    15/01/15    平成２７年１月改正対応（長期欄の難病対応）
+      *                                  前期高齢者欄にて負担割合３割の場合
+      *                                  「１」と印字するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1136,7 +1138,15 @@
                  AND MF100-HKNNUM  NOT =  "039"
       *            平成26年4月2日以降に70歳を迎える人は「2」とする
                    IF  MF100-BIRTHDAY  >=  CONS-BIRTHDAY-19440402
-                       MOVE    "2"         TO  SC03-KOREI (IDX)
+      *=== 負担割合３割の場合、「１」と印字 by hagino(2015/01/15) start
+      *                 MOVE    "2"         TO  SC03-KOREI (IDX)
+                       EVALUATE    MF100-KYURATE
+                           WHEN    30
+                               MOVE    "1"         TO  SC03-KOREI (IDX)
+                           WHEN    20
+                               MOVE    "2"         TO  SC03-KOREI (IDX)
+                       END-EVALUATE
+      *=== 負担割合３割の場合、「１」と印字 by hagino(2015/01/15) end
                    ELSE
                        MOVE    "1"         TO  SC03-KOREI (IDX)
                    END-IF
