@@ -53,6 +53,7 @@
       *                                  福祉助成分を患者負担額欄に印字する
       *  01.00.11    吉川    14/05/12    前期高齢者２割対応
       *  01.00.12    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.13    萩野    15/01/15    平成２７年１月改正対応（長期欄の難病対応）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -787,7 +788,10 @@
       *    特定疾患併用判定
       *---(01.00.02) LINE ADD START ------------------------------------
       *         IF  MF100-TYOKI         =   3
-               IF  MF100-TYOKI         =   2  OR  3  OR  4
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) start
+      *         IF  MF100-TYOKI         =   2  OR  3  OR  4
+               IF  MF100-TYOKI         =   2  OR  3  OR  4  OR  5
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) end
       *---(01.00.02) LINE ADD END   ------------------------------------
                    MOVE    MF100-TOKUTEIFTN
                                        TO  MF100-ITBFTN
@@ -1377,6 +1381,14 @@
                            ADD SYU-KOH-COMPFTN(IDX)
                                                TO  MF100-TOKUTEIFTN
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) start
+                       WHEN "054"
+                           ADD      SYU-TOTAL-HKNTEN
+                                               TO  MF100-KOHTENSU
+                           MOVE   5            TO  MF100-TYOKI
+                           ADD SYU-KOH-COMPFTN(IDX)
+                                               TO  MF100-TOKUTEIFTN
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) end
                    END-EVALUATE
       *
                END-IF
