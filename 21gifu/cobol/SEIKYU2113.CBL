@@ -30,6 +30,7 @@
       *  01.00.01    吉川    13/04/11    前期高齢者で高額療養費に
       *                                  達した場合の患者負担額の計算修正
       *  01.00.02    吉川    14/05/12    前期高齢者２割対応
+      *  01.00.03    萩野    15/01/15    平成２７年１月改正対応（長期欄の難病対応）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -696,7 +697,10 @@
                MOVE    WRK-SEIKYUGK-G  TO  MF100-ITBFTN
       *
       *    特定疾患併用判定
-               IF  MF100-TYOKI         =   2  OR  3  OR  4
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) start
+      *         IF  MF100-TYOKI         =   2  OR  3  OR  4
+               IF  MF100-TYOKI         =   2  OR  3  OR  4  OR  5
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) end
                    MOVE    MF100-TOKUTEIFTN
                                        TO  MF100-ITBFTN
                    IF  MF100-KOHTENSU  =   MF100-TOTALTEN
@@ -1844,6 +1848,14 @@
                            MOVE   4            TO  MF100-TYOKI
                            ADD SYU-KOH-COMPFTN(IDX)
                                                TO  MF100-TOKUTEIFTN
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) start
+                       WHEN "054"
+                           ADD      SYU-TOTAL-HKNTEN
+                                               TO  MF100-KOHTENSU
+                           MOVE   5            TO  MF100-TYOKI
+                           ADD SYU-KOH-COMPFTN(IDX)
+                                               TO  MF100-TOKUTEIFTN
+      *=== 平成２７年１月改正対応 by hagino(2015/01/15) end
                    END-EVALUATE
       *
                END-IF
