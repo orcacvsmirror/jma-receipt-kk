@@ -30,6 +30,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.02    吉川    15/01/05    担当者欄はPGオプションで設定
+      *  01.00.03    吉川    15/01/15    返戻分は集計対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1003,6 +1004,14 @@
                    AND     PTINF-TSTPTNUMKBN   =   "1"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF   
+      *
+      *=== 返戻は集計対象外 by Yoshikawa(2015/01/15) start
+      *            返戻分は読み飛ばす
+                   IF      RECE02-SRYYM     NOT =  LNK-PRTKANRI-SRYYM
+                   AND     RECE02-HENREIYM  NOT =  "000000"
+                       GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *=== 返戻は集計対象外 by Yoshikawa(2015/01/15) end
       *
       *            個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
