@@ -40,6 +40,10 @@
       *                                  データが記録されないように修正
       *                                  処置材料のみの診療の場合、
       *                                  コメントが記録されないのを修正
+      *  01.00.06    吉川    15/01/15    返戻分は集計対象外とする
+      *                                  同月内に患者負担がある保険組合せと
+      *                                  患者負担がない保険組合せがある場合
+      *                                  患者負担がない分も集計されるのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -187,6 +191,7 @@
            03  IDY                   PIC 9(04).
            03  IDZ                   PIC 9(04).
            03  IDW                   PIC 9(04).
+           03  IDR                   PIC 9(04).
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -251,6 +256,15 @@
            03  WRK-SYORI             PIC 9(01).
            03  WRK-INPUTREC          PIC X(2500).
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
+           03  WRK-PTNUM             PIC X(20).
+           03  WRK-SRYYM             PIC X(06).
+           03  WRK-HKNJANUM-KEY      PIC X(08).
+           03  WRK-RECESYUBETU       PIC X(04).
+      *
+           03  WRK-RE-RECORD.
+               05  WRK-RE-KOUMOKU    PIC X(100) OCCURS 45.
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -808,6 +822,9 @@
            MOVE    RECE02-AGE                  TO  MF101-AGE
            MOVE    RECE02-HKN                  TO  MF101-HKN
            MOVE    RECE02-KOHINF      (IDZ)    TO  MF101-KOHINF
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
+           MOVE    RECE02-HKNJANUM             TO  MF101-HKNJANUM-KEY
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
       *
       *    広域連合は審査支払機関を「2」にする（国保と同様）
            IF  RECE02-HKNNUM  =  "039"
@@ -1062,20 +1079,66 @@
       *      レセプト共通レコード
              WHEN  "RE"
       *        TMPKEYセット
-               INITIALIZE                      MF101-KEY
-               MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
-               MOVE    TBL-RECEDATA14          TO  MF101-PTNUM
-      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
-      *         MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
+      *         INITIALIZE                      MF101-KEY
+      *         MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
+      *         MOVE    TBL-RECEDATA14          TO  MF101-PTNUM
+      **=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
+      **         MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
+      **        和暦を西暦に変換
+      *         MOVE    "0"                     TO  WRK-SYMD(1:1)
+      *         MOVE    TBL-RECEDATA4(1:5)      TO  WRK-SYMD(2:5)
+      *         MOVE    "01"                    TO  WRK-SYMD(7:2)
+      *         PERFORM 31013-WASEI-HEN-SEC
+      *         MOVE    LNK-DAY1-YMD(1:6)       TO  MF101-SRYYM
+      **=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
+      *         MOVE    WRK-TEISYUTUSAKI        TO  MF101-TEISYUTUSAKI
+      *         MOVE    TBL-RECEDATA3           TO  MF101-RECESYUBETU
+      *         
+      **        レセ電の患者データが一時ファイルに存在するか
+      *         PERFORM  900-TMP-READ-SEC
+      *         IF  FLG-MF101  =  ZERO
+      **            編集
+      *             PERFORM 200212-EDIT-RE-SEC
+      *             MOVE    1                   TO  FLG-WRITE
+      *         ELSE
+      **            対象外
+      *             MOVE    ZERO                TO  FLG-WRITE
+      *         END-IF
+      *
+      *        TMP用キー保存の為、まだREレコードは作成しない
+               MOVE    TBL-RECEDATA14          TO  WRK-PTNUM
       *        和暦を西暦に変換
                MOVE    "0"                     TO  WRK-SYMD(1:1)
                MOVE    TBL-RECEDATA4(1:5)      TO  WRK-SYMD(2:5)
                MOVE    "01"                    TO  WRK-SYMD(7:2)
                PERFORM 31013-WASEI-HEN-SEC
-               MOVE    LNK-DAY1-YMD(1:6)       TO  MF101-SRYYM
-      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
+               MOVE    LNK-DAY1-YMD(1:6)       TO  WRK-SRYYM
+               MOVE    TBL-RECEDATA3           TO  WRK-RECESYUBETU
+      *
+      *        REレコードごと保存
+               MOVE    TBL-RECEDATA-AREA       TO  WRK-RE-RECORD
+      *
+               MOVE    ZERO                    TO  FLG-WRITE
+      *
+             WHEN  "HO"
+      *        HOレコードから保険者番号が取得できるので、TMPキーが揃う
+      *        これらを元に一時ファイル読込
+               INITIALIZE                      MF101-KEY
+               MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
+               MOVE    WRK-PTNUM               TO  MF101-PTNUM
+               MOVE    WRK-SRYYM               TO  MF101-SRYYM
                MOVE    WRK-TEISYUTUSAKI        TO  MF101-TEISYUTUSAKI
-               MOVE    TBL-RECEDATA3           TO  MF101-RECESYUBETU
+               MOVE    WRK-RECESYUBETU         TO  MF101-RECESYUBETU
+      *        保険者番号を左詰めに
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >  8
+                   IF  TBL-RECEDATA2(IDX2:1)  NOT =  SPACE
+                       MOVE    TBL-RECEDATA2(IDX2:)
+                                               TO  MF101-HKNJANUM-KEY
+                       MOVE    8               TO  IDX2
+                   END-IF
+               END-PERFORM
       *
       *        レセ電の患者データが一時ファイルに存在するか
                PERFORM  900-TMP-READ-SEC
@@ -1087,6 +1150,7 @@
       *            対象外
                    MOVE    ZERO                TO  FLG-WRITE
                END-IF
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
       *
       *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
              WHEN  "SI"
@@ -1174,78 +1238,104 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    レコード作成
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
+      *     STRING  WRK-REC(1:WRK-REC-LENGTH) 
+      *                                     DELIMITED BY SIZE
+      *             TBL-RECEDATA3           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA4           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA5           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA6           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA7           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA8           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA9           DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA10          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA11          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA12          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA13          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA14          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA15          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA16          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA17          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA18          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA19          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA20          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA21          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA22          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA23          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA24          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA25          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA26          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA27          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA28          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA29          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA30          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA31          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA32          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA33          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA34          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA35          DELIMITED BY SPACE
+      *             ","                     DELIMITED BY SPACE
+      *             TBL-RECEDATA36          DELIMITED BY SPACE
+      *             WRK-KAIGYO              DELIMITED BY SIZE
+      *             INTO                    WRK-REC
+      *     END-STRING
+           PERFORM  VARYING  IDR  FROM  3  BY  1
+                    UNTIL    IDR  >  36
+             MOVE    WRK-RE-KOUMOKU(IDR)   TO  WRK-DATA
+             MOVE    100                   TO  WRK-NAGASA
+             IF  IDR  =  36
+                 MOVE    1                 TO  WRK-END
+             END-IF
+             PERFORM 5004-MOJI-HENSYU-SEC
+           END-PERFORM
+      *
+      *    改行コード編集
            STRING  WRK-REC(1:WRK-REC-LENGTH) 
                                            DELIMITED BY SIZE
-                   TBL-RECEDATA3           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA4           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA5           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA6           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA7           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA8           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA9           DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA10          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA11          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA12          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA13          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA14          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA15          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA16          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA17          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA18          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA19          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA20          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA21          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA22          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA23          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA24          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA25          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA26          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA27          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA28          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA29          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA30          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA31          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA32          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA33          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA34          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA35          DELIMITED BY SPACE
-                   ","                     DELIMITED BY SPACE
-                   TBL-RECEDATA36          DELIMITED BY SPACE
                    WRK-KAIGYO              DELIMITED BY SIZE
                    INTO                    WRK-REC
            END-STRING
+      *
+      *    CSV書き込み
+           PERFORM 500-CSVINFO-SEC
+      *
+      *    REレコード書き込み後、現在のHOレコードを書き込む
+           INITIALIZE                      WRK-REC
+                                           WRK-REC-LENGTH
+           PERFORM 2002111-RECORD-MAKE-SEC
+      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
       *
       *    レセプト件数集計
            EVALUATE  MF101-RECESYUBETU(3:1)
@@ -1599,7 +1689,10 @@
                MOVE    "JUDOC8.CSV"
                                    TO  SFILESV-TO-DATA  (1)
            END-IF
-           MOVE    WRK-GKENSU      TO  SFILESV-CNT-ALL  (1)
+      *=== 画面表示件数修正 by Yoshikawa(2015/01/15) start
+      *     MOVE    WRK-GKENSU      TO  SFILESV-CNT-ALL  (1)
+           MOVE    WRK-RECENUM     TO  SFILESV-CNT-ALL  (1)
+      *=== 画面表示件数修正 by Yoshikawa(2015/01/15) end
       *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
       *     MOVE    "複写式電子レセプト"   
       *                             TO  SFILESV-TITLE    (1)
@@ -1788,6 +1881,14 @@
                    AND     PTINF-TSTPTNUMKBN   =   "1"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF   
+      *
+      *=== 返戻は集計対象外 by Yoshikawa(2015/01/15) start
+      *            返戻分は読み飛ばす
+                   IF      RECE02-SRYYM     NOT =  LNK-PRTKANRI-SRYYM
+                   AND     RECE02-HENREIYM  NOT =  "000000"
+                       GO  TO  900-KOHSKY-READ-SEC
+                   END-IF
+      *=== 返戻は集計対象外 by Yoshikawa(2015/01/15) end
       *
       *        個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
