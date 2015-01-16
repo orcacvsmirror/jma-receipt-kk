@@ -4320,12 +4320,12 @@
         <dia:point val="3.78516,1.76804"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.78516,1.50304;5.13516,1.80554"/>
+        <dia:rectangle val="3.78516,1.49548;5.74272,1.82066"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#母子 家庭#</dia:string>
+            <dia:string>#母子 父子家庭#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
