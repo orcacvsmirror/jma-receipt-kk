@@ -204,6 +204,7 @@
            03  IDY                   PIC 9(04).
            03  IDZ                   PIC 9(04).
            03  IDW                   PIC 9(04).
+           03  IDR                   PIC 9(04).
       *
       *    ¥Ñ¥é¥á¥¿ÎÎ°è
        01  WRK-PARA.
