@@ -52,6 +52,7 @@
       *  01.00.16    ÇëÌî    14/09/09    Æþ±¡¤Ç¤Î°åÎÅµ¡´Ø¤Î³«Àß¼ÔÌ¾¤¬°õ»ú¤µ¤ì¤Ê¤¤
       *                                  ÉÔ¶ñ¹ç¤ò½¤Àµ
       *  01.00.17    µÈÀî    14/10/03    ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
+      *  01.00.18    µÈÀî    15/01/19    Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -441,12 +442,44 @@
            03  FILLER          PIC X(10)   VALUE   "£²£³Â¿°ì".
            03  FILLER          PIC X(02)   VALUE   "24".
            03  FILLER          PIC X(10)   VALUE   "£²£´Â¿Äã".
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/19) start
+           03  FILLER          PIC X(02)   VALUE   "25".
+           03  FILLER          PIC X(10)   VALUE   "£²£µ½Ð»º".
+           03  FILLER          PIC X(02)   VALUE   "26".
+           03  FILLER          PIC X(10)   VALUE   "£²£¶¶è¥¢".
+           03  FILLER          PIC X(02)   VALUE   "27".
+           03  FILLER          PIC X(10)   VALUE   "£²£·¶è¥¤".
+           03  FILLER          PIC X(02)   VALUE   "28".
+           03  FILLER          PIC X(10)   VALUE   "£²£¸¶è¥¦".
+           03  FILLER          PIC X(02)   VALUE   "29".
+           03  FILLER          PIC X(10)   VALUE   "£²£¹¶è¥¨".
+           03  FILLER          PIC X(02)   VALUE   "30".
+           03  FILLER          PIC X(10)   VALUE   "£³£°¶è¥ª".
+           03  FILLER          PIC X(02)   VALUE   "31".
+           03  FILLER          PIC X(10)   VALUE   "£³£±Â¿¥¢".
+           03  FILLER          PIC X(02)   VALUE   "32".
+           03  FILLER          PIC X(10)   VALUE   "£³£²Â¿¥¤".
+           03  FILLER          PIC X(02)   VALUE   "33".
+           03  FILLER          PIC X(10)   VALUE   "£³£³Â¿¥¦".
+           03  FILLER          PIC X(02)   VALUE   "34".
+           03  FILLER          PIC X(10)   VALUE   "£³£´Â¿¥¨".
+           03  FILLER          PIC X(02)   VALUE   "35".
+           03  FILLER          PIC X(10)   VALUE   "£³£µÂ¿¥ª".
+           03  FILLER          PIC X(02)   VALUE   "36".
+           03  FILLER          PIC X(10)   VALUE   "£³£¶²Ã¼£".
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/19) end
       *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
-           03  TBL-TOKKI       OCCURS   22.
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/19) start
+      *     03  TBL-TOKKI       OCCURS   22.
+           03  TBL-TOKKI       OCCURS   34.
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/19) end
                05  TBL-TOKKICD             PIC X(02).
                05  TBL-TOKKINAME           PIC X(10).
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/19) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/19) end
       *
       *=== ÆÃµ­»ö¹à°õ»úÄÉ²Ã by Hagino(2012/09/19) end
       *
