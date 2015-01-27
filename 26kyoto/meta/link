@@ -34,6 +34,7 @@
  - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
  - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
  - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
+ - [scripts/prgoption/prgoption-sryka-del.sh , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU2603.exp , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU2607.exp , scripts/prgoption/]
  - [scripts/prgoption/SEIKYU2603-TAISYOKOHI.opt , scripts/prgoption/]
