@@ -13,6 +13,9 @@ fi
 
 umask 022
 
+# disused program option delete
+bash ${SITESRCDIR}/scripts/prgoption/prgoption-sryka-del.sh
+
 # program option set
 bash ${SITESRCDIR}/scripts/prgoption/prgoption.sh
 rm -r ${SITESRCDIR}/scripts/prgoption
