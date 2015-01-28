@@ -326,11 +326,11 @@
       *=== ·îÅÓÃæ¤Î»ÔÄ®Â¼ÊÑ¹¹ÂÐ±þ by Yoshikawa(2014/02/06) end
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
            03  WRK-TAISYONAME             PIC X(06).
-           03  WRK-TAISYOTENSU            PIC 9(09).
            03  WRK-TAISYOTENSU2           PIC X(09).
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
            03  WRK-TANSEIDO               PIC X(06).
+           03  WRK-KESE                   PIC 9(07).
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
            03  WRK-MAE-INPUT              PIC X(200).
@@ -1482,7 +1482,15 @@
              MOVE  MF100-TOTALTEN    TO  WRK-Z7
              MOVE  WRK-Z7            TO  SC07-TENSU (IDX)
       *    ·ë³ËÀº¿ÀÅÀ¿ô
-             MOVE  MF100-KESE        TO  WRK-Z7
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *       MOVE  MF100-KESE        TO  WRK-Z7
+             IF  MF100-ZENKOHNUM          =   "021"
+               MOVE  MF100-ZENKOHTENSU TO  WRK-KESE
+             ELSE
+               MOVE  0                 TO  WRK-KESE
+             END-IF
+             MOVE  WRK-KESE            TO  WRK-Z7
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
              MOVE  WRK-Z7            TO  SC07-KESE(IDX)
       *    µëÉÕ³ä¹ç
              EVALUATE  MF100-KYURATE
@@ -1695,16 +1703,30 @@
                END-IF
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
-               IF  SC07-BIKO3(IDX)  =  SPACE
-                 MOVE  WRK-BIKO2         TO  SC07-BIKO3(IDX)
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *         IF  SC07-BIKO3(IDX)  =  SPACE
+      *           MOVE  WRK-BIKO2         TO  SC07-BIKO3(IDX)
+      *         ELSE
+      *           MOVE  SC07-BIKO3(IDX)   TO  WRK-BIKO
+      *           STRING    WRK-BIKO     DELIMITED BY SPACE
+      *                     ","          DELIMITED BY SIZE
+      *                     WRK-BIKO2    DELIMITED BY SPACE
+      *                     INTO         SC07-BIKO3(IDX)
+      *           END-STRING
+      *         END-IF
+               IF  SC07-BIKO1(IDX)  =  SPACE
+                 MOVE  WRK-BIKO2        TO  SC07-BIKO1(IDX)
                ELSE
-                 MOVE  SC07-BIKO3(IDX)   TO  WRK-BIKO
-                 STRING    WRK-BIKO     DELIMITED BY SPACE
-                           ","          DELIMITED BY SIZE
-                           WRK-BIKO2    DELIMITED BY SPACE
-                           INTO         SC07-BIKO3(IDX)
-                 END-STRING
+                 IF  SC07-BIKO2(IDX)  =  SPACE
+                   MOVE  WRK-BIKO2      TO  SC07-BIKO2(IDX)
+                 ELSE
+                   IF  SC07-BIKO3(IDX)  =  SPACE
+                     MOVE  WRK-BIKO2      TO  SC07-BIKO3(IDX)
+                   END-IF
+                 END-IF
                END-IF
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
+      *
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
@@ -1807,7 +1829,10 @@
       *    ¾®·×²Ã»»
              ADD  1                  TO  WRK-S-KENSU
              ADD  MF100-TOTALTEN     TO  WRK-S-TENSU
-             ADD  MF100-KESE         TO  WRK-S-KESE
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *       ADD  MF100-KESE         TO  WRK-S-KESE
+             ADD  WRK-KESE           TO  WRK-S-KESE
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
              ADD  MF100-SEIKYUGK     TO  WRK-S-SEIKYUGK
       *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) start
              ADD  WRK-KOHFTN         TO  WRK-S-KOHFTN
@@ -2056,12 +2081,12 @@
       *          END-IF
       *=== »ÔÄ®Â¼ÉéÃ´³Û½¤Àµ by Yoshikawa(2012/04/18) end
       *
-               EVALUATE  SYU-KOH-HKNNUM(IDX)
-                 WHEN "010"
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *         EVALUATE  SYU-KOH-HKNNUM(IDX)
+      *           WHEN "010"
       *    Àº¿À¤Ï½ü³°¡¡ADD  UCHI  06/07/20
       *           WHEN "021"
-                   ADD    SYU-TOTAL-HKNTEN     TO    MF100-KESE
-      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *             ADD    SYU-TOTAL-HKNTEN     TO    MF100-KESE
       *           WHEN "051"
       *             MOVE    1                   TO    MF100-TOKUTEI
       *    ¼«Î©»Ù±ç¥Á¥§¥Ã¥¯ÄÉ²Ã  ADD  UCHI  06/07/20
@@ -2074,10 +2099,7 @@
       *           WHEN "054"
       *               MOVE   5                  TO    MF100-TYOKI
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
-      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
-               END-EVALUATE
-      *
-      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *         END-EVALUATE
                MOVE    SYU-KOH-HKNNUM(IDX) TO    MF100-ZENKOHNUM
                ADD     SYU-TOTAL-HKNTEN    TO    MF100-ZENKOHTENSU
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
