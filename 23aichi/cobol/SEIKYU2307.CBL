@@ -1647,7 +1647,6 @@
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
       *             MOVE  "£±£·¡¦¾å°Ì"  TO  WRK-BIKO2
                      MOVE  "£²£¶¶è¥¢"    TO  WRK-BIKO2
-           DISPLAY "MF100-SRYYM 2 ="MF100-SRYYM
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
       *---(01.00.04) LINE ADD END   ------------------------------------
                    WHEN  3
