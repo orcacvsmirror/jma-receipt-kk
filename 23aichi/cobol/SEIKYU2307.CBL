@@ -74,6 +74,10 @@
       *                                  È÷¹ÍÍó¤Ø³ºÅö¸øÈñ¤ÈÂÐ¾ÝÅÀ¿ô¤òµ­ºÜ¤¹¤ë
       *                                  Ê¿À®£²£·Ç¯£±·î¤è¤êÄÉ²Ã¤µ¤ì¤¿ÆÃµ­»ö¹àÍó¤Ø¤Î
       *                                  µ­ºÜ¡Ö£²£¶¶è¥¢¡×Åù¤òÈ÷¹ÍÍó¤Øµ­ºÜ¤¹¤ë
+      *  01.00.24    ÇëÌî    15/01/28    Á´¹ñ¸øÈñ¤¬¤¢¤Ã¤¿¾ì¹ç¡¢È÷¹ÍÍó¤Ø
+      *                                  ¸øÈñ¤ÈÂÐ¾ÝÅÀ¿ô¤òµ­ºÜ¤¹¤ë
+      *                                  ÆÃµ­»ö¹àÍó¤ÎÂ¿¿ô²ó³ºÅö¡Ö£³£±Â¿¥¢¡×Åù¤ò
+      *                                  È÷¹ÍÍó¤Øµ­ºÜ¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -199,6 +203,9 @@
            03  FLG-PRGOPTION    PIC 9(01).
            03  FLG-OK           PIC 9(01).
       *=== ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ by Yoshikawa(2013/07/08) end
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+           03  FLG-HKNNUM          PIC 9(01).
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -322,6 +329,9 @@
            03  WRK-TAISYOTENSU            PIC 9(09).
            03  WRK-TAISYOTENSU2           PIC X(09).
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+           03  WRK-TANSEIDO               PIC X(06).
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
            03  WRK-MAE-INPUT              PIC X(200).
            03  WRK-OUT-INPUT              PIC X(200).
@@ -396,6 +406,10 @@
            03  WRK-CONS-KITANAGOYA1    PIC X(03)  VALUE  "337".
            03  WRK-CONS-KITANAGOYA2    PIC X(03)  VALUE  "437".
       *=== ËÌÌ¾¸Å²°»Ô¤³¤É¤â°åÎÅÂÐ±þ by Yoshikawa(2014/08/12) end
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *    Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
+           03  WRK-CONS-SRYYM-201501   PIC X(06) VALUE "201501".
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -459,6 +473,12 @@
       *    ÀÁµá´ÉÍý
            COPY    "CPRCF010.INC".
       *=== ÁíÅÀ¿ôÍó¤ÏÊÝ¸±ÅÀ¿ô¤òµ­ºÜ by Yoshikawa(2013/03/11) end
+      *
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *    ÊÝ¸±¥Þ¥¹¥¿
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
       *    ¥Ñ¥é¥á¥¿
        01  BTPARA-REC.
@@ -1060,6 +1080,19 @@
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *    Â¿¿ô²ó³ºÅö¥Á¥§¥Ã¥¯
+           IF  RECE02-FLG(4)      =  1
+               PERFORM  VARYING  IDX  FROM  1  BY  1
+                        UNTIL    IDX  >     5
+                   IF  RECE10-TOKKI(IDX)  =  "31" OR "32" OR "33" OR
+                                             "34" OR "35"
+                       MOVE    RECE10-TOKKI(IDX)      TO  MF100-TOKKI
+                   END-IF
+               END-PERFORM
+           END-IF
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
+      *
       *=== Ä¹´ü¤Ï¾å¸Â¤òÄ¶¤¨¤¿»þ¤Ëµ­ºÜ by hagino(2014/06/16) start
            INITIALIZE       WRK-KASAN-TBL
       *=== Ä¹´ü¤Ï¾å¸Â¤òÄ¶¤¨¤¿»þ¤Ëµ­ºÜ by hagino(2014/06/16) end
@@ -1496,7 +1529,10 @@
                MOVE    "Ä¹"       TO  SC07-BIKO1(IDX)
              END-IF
       *
-             IF    MF100-JIRITU     =   1
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *       IF    MF100-JIRITU     =   1
+             IF    MF100-ZENKOHNUM    NOT =  SPACE
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
                IF  SC07-BIKO1(IDX)  NOT =  SPACE
                  MOVE    SC07-BIKO1(IDX) TO  WRK-BIKO
                  STRING    WRK-BIKO     DELIMITED BY SPACE
@@ -1504,17 +1540,53 @@
                            INTO         SC07-BIKO1(IDX)
                  END-STRING
                END-IF
-               MOVE    MF100-JIRITUTENSU   TO  WRK-JTENSU
-               MOVE    SC07-BIKO1(IDX)     TO  WRK-BIKO
-               STRING    WRK-BIKO     DELIMITED BY SPACE
-                         "¼«Î©"       DELIMITED BY SIZE
-                         WRK-JTENSU   DELIMITED BY SIZE
-                         "ÅÀ"         DELIMITED BY SIZE
-                         INTO         SC07-BIKO1(IDX)
-               END-STRING
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *         MOVE    MF100-JIRITUTENSU   TO  WRK-JTENSU
+               IF    MF100-ZENKOHNUM  =   "015"
+                                      OR  "016"
+                                      OR  "021"
+                 MOVE    MF100-ZENKOHTENSU   TO  WRK-JTENSU
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
+                 MOVE    SC07-BIKO1(IDX)     TO  WRK-BIKO
+                 STRING    WRK-BIKO     DELIMITED BY SPACE
+                           "¼«Î©"       DELIMITED BY SIZE
+                           WRK-JTENSU   DELIMITED BY SIZE
+                           "ÅÀ"         DELIMITED BY SIZE
+                           INTO         SC07-BIKO1(IDX)
+                 END-STRING
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+               ELSE
+      *          ÊÝ¸±ÈÖ¹æ¥Þ¥¹¥¿¡¼¸¡º÷
+                 INITIALIZE                  HKNNUM-REC
+                 MOVE    MF100-HOSPNUM       TO  HKN-HOSPNUM
+                 MOVE    MF100-ZENKOHNUM     TO  HKN-HKNNUM
+                 MOVE    MF100-TEKSTYMD      TO  HKN-TEKSTYMD
+                 MOVE    MF100-TEKSTYMD      TO  HKN-TEKEDYMD
+                 MOVE    "00"                TO  HKN-PAYKBN
+                 PERFORM 930-HKNNUM-READ-SEC
+                 IF      FLG-HKNNUM      NOT =   ZERO
+                     INITIALIZE              HKNNUM-REC
+                 END-IF
+                 MOVE    HKN-TANSEIDONAME(1:6)  TO  WRK-TANSEIDO
+                 IF    MF100-ZENKOHNUM    NOT =   "051"
+                   MOVE    MF100-ZENKOHTENSU   TO  WRK-JTENSU
+                   MOVE    SC07-BIKO1(IDX)     TO  WRK-BIKO
+                   STRING    WRK-BIKO      DELIMITED BY SPACE
+                             WRK-TANSEIDO  DELIMITED BY SPACE
+                             " "           DELIMITED BY SIZE
+                             WRK-JTENSU    DELIMITED BY SIZE
+                             "ÅÀ"          DELIMITED BY SIZE
+                             INTO          SC07-BIKO1(IDX)
+                   END-STRING
+                 END-IF
+               END-IF
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
              END-IF
       *
-             IF    MF100-TOKUTEI     =   1
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *       IF    MF100-TOKUTEI     =   1
+             IF    MF100-ZENKOHNUM   =   "051"
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
                MOVE    "ÆÃ¼À"     TO  SC07-BIKO2(IDX)
              END-IF
       *
@@ -1565,35 +1637,64 @@
       *---(01.00.03) LINE ADD START ------------------------------------
              IF  MF100-KOGAKU  NOT =  ZERO
                INITIALIZE  WRK-BIKO2
-               EVALUATE  MF100-KOGAKU
-                 WHEN  2
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+               IF  MF100-SRYYM  >=  WRK-CONS-SRYYM-201501
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
+                 EVALUATE  MF100-KOGAKU
+                   WHEN  2
       *---(01.00.04) LINE ADD START ------------------------------------
       *             MOVE  "£±£¹¡¦¾å°Ì"  TO  WRK-BIKO2
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
       *             MOVE  "£±£·¡¦¾å°Ì"  TO  WRK-BIKO2
-                   MOVE  "£²£¶¶è¥¢"    TO  WRK-BIKO2
+                     MOVE  "£²£¶¶è¥¢"    TO  WRK-BIKO2
+           DISPLAY "MF100-SRYYM 2 ="MF100-SRYYM
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
       *---(01.00.04) LINE ADD END   ------------------------------------
-                 WHEN  3
+                   WHEN  3
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
       *             MOVE  "£±£¸¡¦°ìÈÌ"  TO  WRK-BIKO2
-                   MOVE  "£²£·¶è¥¤"    TO  WRK-BIKO2
+                     MOVE  "£²£·¶è¥¤"    TO  WRK-BIKO2
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
-                 WHEN  4
+                   WHEN  4
       *---(01.00.04) LINE ADD START ------------------------------------
       *             MOVE  "£±£·¡¦Äã½ê"  TO  WRK-BIKO2
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
       *             MOVE  "£±£¹¡¦Äã½ê"  TO  WRK-BIKO2
-                   MOVE  "£²£¸¶è¥¦"    TO  WRK-BIKO2
+                     MOVE  "£²£¸¶è¥¦"    TO  WRK-BIKO2
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
       *---(01.00.04) LINE ADD END   ------------------------------------
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
-                 WHEN  5
-                   MOVE  "£²£¹¶è¥¨"    TO  WRK-BIKO2
-                 WHEN  6
-                   MOVE  "£³£°¶è¥ª"    TO  WRK-BIKO2
+                   WHEN  5
+                     MOVE  "£²£¹¶è¥¨"    TO  WRK-BIKO2
+                   WHEN  6
+                     MOVE  "£³£°¶è¥ª"    TO  WRK-BIKO2
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
-               END-EVALUATE
+                 END-EVALUATE
+      *
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+                 EVALUATE  MF100-TOKKI
+                   WHEN  "31"
+                     MOVE  "£³£±Â¿¥¢"    TO  WRK-BIKO2
+                   WHEN  "32"
+                     MOVE  "£³£²Â¿¥¤"    TO  WRK-BIKO2
+                   WHEN  "33"
+                     MOVE  "£³£³Â¿¥¦"    TO  WRK-BIKO2
+                   WHEN  "34"
+                     MOVE  "£³£´Â¿¥¨"    TO  WRK-BIKO2
+                   WHEN  "35"
+                     MOVE  "£³£µÂ¿¥ª"    TO  WRK-BIKO2
+                 END-EVALUATE
+               ELSE
+                 EVALUATE  MF100-KOGAKU
+                   WHEN  2
+                     MOVE  "£±£·¡¦¾å°Ì"    TO  WRK-BIKO2
+                   WHEN  3
+                     MOVE  "£±£¸¡¦°ìÈÌ"    TO  WRK-BIKO2
+                   WHEN  4
+                     MOVE  "£±£¹¡¦Äã½ê"    TO  WRK-BIKO2
+                 END-EVALUATE
+               END-IF
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
                IF  SC07-BIKO3(IDX)  =  SPACE
                  MOVE  WRK-BIKO2         TO  SC07-BIKO3(IDX)
@@ -1641,21 +1742,24 @@
       *=== ·îÅÓÃæ¤Î»ÔÄ®Â¼ÊÑ¹¹ÂÐ±þ by Yoshikawa(2014/02/06) end
       *
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
-             IF    MF100-TYOKI      =   5
-               INITIALIZE                   WRK-BIKO
-               MOVE    "54ÆñÉÂ"             TO  WRK-BIKO
-               IF  SC07-BIKO1(IDX)  =  SPACE
-                 MOVE  WRK-BIKO         TO  SC07-BIKO1(IDX)
-               ELSE
-                 IF  SC07-BIKO2(IDX)  =  SPACE
-                   MOVE  WRK-BIKO       TO  SC07-BIKO2(IDX)
-                 ELSE
-                   IF  SC07-BIKO3(IDX)  =  SPACE
-                     MOVE  WRK-BIKO       TO  SC07-BIKO3(IDX)
-                   END-IF
-                 END-IF
-               END-IF
-             END-IF
+      *
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *       IF    MF100-TYOKI      =   5
+      *         INITIALIZE                   WRK-BIKO
+      *         MOVE    "54ÆñÉÂ"             TO  WRK-BIKO
+      *         IF  SC07-BIKO1(IDX)  =  SPACE
+      *           MOVE  WRK-BIKO         TO  SC07-BIKO1(IDX)
+      *         ELSE
+      *           IF  SC07-BIKO2(IDX)  =  SPACE
+      *             MOVE  WRK-BIKO       TO  SC07-BIKO2(IDX)
+      *           ELSE
+      *             IF  SC07-BIKO3(IDX)  =  SPACE
+      *               MOVE  WRK-BIKO       TO  SC07-BIKO3(IDX)
+      *             END-IF
+      *           END-IF
+      *         END-IF
+      *       END-IF
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
              IF (MF100-TOTALTEN  >  MF100-FUKUSITEN)
                INITIALIZE                           WRK-BIKO
@@ -1958,19 +2062,26 @@
       *    Àº¿À¤Ï½ü³°¡¡ADD  UCHI  06/07/20
       *           WHEN "021"
                    ADD    SYU-TOTAL-HKNTEN     TO    MF100-KESE
-                 WHEN "051"
-                   MOVE    1                   TO    MF100-TOKUTEI
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *           WHEN "051"
+      *             MOVE    1                   TO    MF100-TOKUTEI
       *    ¼«Î©»Ù±ç¥Á¥§¥Ã¥¯ÄÉ²Ã  ADD  UCHI  06/07/20
-                 WHEN "015"
-                 WHEN "016"
-                 WHEN "021"
-                   MOVE    1                   TO    MF100-JIRITU
-                   ADD     SYU-TOTAL-HKNTEN    TO    MF100-JIRITUTENSU
+      *           WHEN "015"
+      *           WHEN "016"
+      *           WHEN "021"
+      *             MOVE    1                   TO    MF100-JIRITU
+      *             ADD     SYU-TOTAL-HKNTEN    TO    MF100-JIRITUTENSU
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) start
-                 WHEN "054"
-                     MOVE   5                  TO    MF100-TYOKI
+      *           WHEN "054"
+      *               MOVE   5                  TO    MF100-TYOKI
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/16) end
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
                END-EVALUATE
+      *
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+               MOVE    SYU-KOH-HKNNUM(IDX) TO    MF100-ZENKOHNUM
+               ADD     SYU-TOTAL-HKNTEN    TO    MF100-ZENKOHTENSU
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
              END-IF
       *
@@ -2776,6 +2887,50 @@
        2009-HENKAN-EXT.
            EXIT.
       *---(01.00.05) LINE ADD START ------------------------------------
+      *
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
+      *****************************************************************
+      *    ÊÝ¸±ÈÖ¹æ¥Þ¥¹¥¿¡¼ÆÉ¤ß¹þ¤ß
+      *****************************************************************
+       930-HKNNUM-READ-SEC         SECTION.
+      *
+           MOVE    HKNNUM-REC          TO  MCPDATA-REC
+           MOVE    "tbl_hknnum"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_hknnum"        TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+grpsys         CALL    "ORCDBMAIN"         USING   MCPAREA
+                                                   MCPDATA-REC
+                                                   SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  HKNNUM-REC
+                   MOVE    ZERO            TO  FLG-HKNNUM
+               ELSE
+                   MOVE    1               TO  FLG-HKNNUM
+               END-IF
+           ELSE
+               MOVE    1               TO  FLG-HKNNUM
+           END-IF
+      *
+           MOVE    "tbl_hknnum"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       930-HKNNUM-READ-EXT.
+           EXIT.
+      *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
+      *
       *****************************************************************
       *    °åÎÅµ¡´ØÊÔ½¸¾ðÊóÆÉ¤ß¹þ¤ß
       *****************************************************************
