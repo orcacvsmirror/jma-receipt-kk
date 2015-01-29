@@ -1576,7 +1576,6 @@
                  AND (PTKOH-SAKJOKBN  =  SPACE)
                      MOVE    1             TO  FLG-NINTEI
                      MOVE    1             TO  FLG-PTKOHINF
-                   END-IF
                  END-IF
                  PERFORM  800-PTKOHINF-FETCH-SEC
                END-PERFORM
