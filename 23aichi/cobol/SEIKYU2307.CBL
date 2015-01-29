@@ -1592,12 +1592,6 @@
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
                ELSE
       *          ÊÝ¸±ÈÖ¹æ¥Þ¥¹¥¿¡¼¸¡º÷
-                 INITIALIZE                  HKNNUM-REC
-                 MOVE    MF100-HOSPNUM       TO  HKN-HOSPNUM
-                 MOVE    MF100-ZENKOHNUM     TO  HKN-HKNNUM
-                 MOVE    MF100-TEKSTYMD      TO  HKN-TEKSTYMD
-                 MOVE    MF100-TEKSTYMD      TO  HKN-TEKEDYMD
-                 MOVE    "00"                TO  HKN-PAYKBN
                  PERFORM 930-HKNNUM-READ-SEC
                  IF      FLG-HKNNUM      NOT =   ZERO
                      INITIALIZE              HKNNUM-REC
@@ -2940,10 +2934,18 @@
       *****************************************************************
        930-HKNNUM-READ-SEC         SECTION.
       *
+           INITIALIZE                  HKNNUM-REC
+           MOVE    MF100-HOSPNUM       TO  HKN-HOSPNUM
+           MOVE    MF100-ZENKOHNUM     TO  HKN-HKNNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  HKN-TEKSTYMD
+           MOVE    "01"                TO  HKN-TEKSTYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  HKN-TEKEDYMD
+           MOVE    "01"                TO  HKN-TEKEDYMD(7:2)
+           MOVE    "00"                TO  HKN-PAYKBN
+      *
            MOVE    HKNNUM-REC          TO  MCPDATA-REC
            MOVE    "tbl_hknnum"        TO  MCP-TABLE
            MOVE    "key"               TO  MCP-PATHNAME
-           
            MOVE    "DBSELECT"          TO  MCP-FUNC
            CALL    "ORCDBMAIN"         USING   MCPAREA
                                                MCPDATA-REC
