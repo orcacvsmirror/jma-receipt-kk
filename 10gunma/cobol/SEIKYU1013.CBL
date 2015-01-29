@@ -3593,6 +3593,31 @@
        935-PTKOHINF-READ-EXT.
            EXIT.
       *
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) start
+      *****************************************************************
+      *    患者公費情報マスタ読込
+      *****************************************************************
+       800-PTKOHINF-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO                TO  FLG-PTKOHINF
+               MOVE    MCPDATA-REC         TO  PTKOHINF-REC
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHINF
+               INITIALIZE                  PTKOHINF-REC
+           END-IF
+      *
+           .
+       800-PTKOHINF-FETCH-EXT.
+           EXIT.
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) end
       *****************************************************************
       *    出力レコード処理（文字）
       *****************************************************************
