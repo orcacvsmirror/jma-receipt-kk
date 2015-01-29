@@ -85,6 +85,8 @@
       *  01.00.26    µÈÀî    13/07/09    Á´¹ñ¸øÈñ¤È¹â³ÛÎÅÍÜÈñ¤Î¾ì¹ç
       *                                  Á´¹ñ¸øÈñ¤ò¡ÖÆÃ¡×¤È¤¹¤ë¤è¤¦¤Ë½¤Àµ
       *  01.00.27    µÈÀî    15/01/06    Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
+      *  01.00.28    µÈÀî    15/01/29    ÆñÉÂ¡Ü¹â³Û¤Î¾ì¹ç¡¢È÷¹ÍÍó¤Ë
+      *                                  ¹â³Û¶èÊ¬¤¬°õ»ú¤µ¤ì¤Ê¤¤¤Î¤ò½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -193,6 +195,9 @@
       *=== ¸ÂÅÙ³ÛÇ§Äê¾ÚÌµ¤·¤Ç¤â¹â³ÛÇ§Äê by Yoshikawa(2012/03/19) start
            03  FLG-KOGAKU     PIC 9(01).
       *=== ¸ÂÅÙ³ÛÇ§Äê¾ÚÌµ¤·¤Ç¤â¹â³ÛÇ§Äê by Yoshikawa(2012/03/19) end
+      *=== ÆñÉÂ¡Ü¹â³Û¤Î½¤Àµ by Yoshikawa(2015/01/29) start
+           03  FLG-NINTEI     PIC 9(01).
+      *=== ÆñÉÂ¡Ü¹â³Û¤Î½¤Àµ by Yoshikawa(2015/01/29) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -1277,8 +1282,15 @@
       *    ¹â³ÛÎÅÍÜÈñ
            IF  (RECE02-ZAITAKU  NOT =  SPACE)
            AND (RECE02-ZAITAKU  NOT =  "1")
-           AND (RECE02-FLG(4)  =  ZERO)
-               MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+      *=== ÆñÉÂ¡Ü¹â³Û¤Î½¤Àµ by Yoshikawa(2015/01/29) start
+      *     AND (RECE02-FLG(4)  =  ZERO)
+      *         MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+      *        ¸ÂÅÙ³ÛÇ§Äê¾Ú½ê»ý¥Á¥§¥Ã¥¯
+               PERFORM 200118-KOGAKU-CHK-SEC
+               IF  FLG-NINTEI  =  1
+                    MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+               END-IF
+      *=== ÆñÉÂ¡Ü¹â³Û¤Î½¤Àµ by Yoshikawa(2015/01/29) end
            END-IF
       *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/06) end
       *
@@ -1508,6 +1520,55 @@
        200114-TEINEN-CHK-EXT.
            EXIT.
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== ÆñÉÂ¡Ü¹â³Û¤Î½¤Àµ by Yoshikawa(2015/01/29) start
+      *****************************************************************
+      *    ¸ÂÅÙ³ÛÇ§Äê¾Ú½ê»ý¥Á¥§¥Ã¥¯½èÍý
+      *****************************************************************
+       200118-KOGAKU-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      PTKOHINF-REC
+                                           FLG-PTKOHINF
+                                           FLG-NINTEI
+      *
+           MOVE    SPA-HOSPNUM             TO  PTKOH-HOSPNUM
+           MOVE    RECE02-PTID             TO  PTKOH-PTID
+           MOVE    PTKOHINF-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      FLG-PTKOHINF        =   ZERO
+               PERFORM  800-PTKOHINF-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-PTKOHINF  =  1
+                 IF  (PTKOH-KOHNUM  =  "966"  OR  "967")
+                 AND (RECE02-SRYYM  >=  PTKOH-TEKSTYMD(1:6))
+                 AND (RECE02-SRYYM  <=  PTKOH-TEKEDYMD(1:6))
+                 AND (PTKOH-SAKJOKBN  =  SPACE)
+                     MOVE    1             TO  FLG-NINTEI
+                     MOVE    1             TO  FLG-PTKOHINF
+                   END-IF
+                 END-IF
+                 PERFORM  800-PTKOHINF-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       200118-KOGAKU-CHK-EXT.
+           EXIT.
+      *=== ÆñÉÂ¡Ü¹â³Û¤Î½¤Àµ by Yoshikawa(2015/01/29) end
+      *
       *****************************************************************
       *    Ä¢É¼¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
