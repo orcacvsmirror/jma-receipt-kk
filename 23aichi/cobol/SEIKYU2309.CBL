@@ -1577,6 +1577,16 @@
                              "ÅÀ"          DELIMITED BY SIZE
                              INTO          SC09-BIKO1(IDX)
                    END-STRING
+                 ELSE
+                   MOVE    MF100-ZENKOHTENSU   TO  WRK-JTENSU
+                   MOVE    SC09-BIKO1(IDX)     TO  WRK-BIKO
+                   STRING    WRK-BIKO      DELIMITED BY SPACE
+                             "ÆÃ¼À"        DELIMITED BY SPACE
+                             " "           DELIMITED BY SIZE
+                             WRK-JTENSU    DELIMITED BY SIZE
+                             "ÅÀ"          DELIMITED BY SIZE
+                             INTO          SC09-BIKO1(IDX)
+                   END-STRING
                  END-IF
                END-IF
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
@@ -1584,10 +1594,9 @@
       *
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) start
       *       IF    MF100-TOKUTEI     =   1
-             IF    MF100-ZENKOHNUM   =   "051"
+      *         MOVE    "ÆÃ¼À"     TO  SC09-BIKO2(IDX)
+      *       END-IF
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
-               MOVE    "ÆÃ¼À"     TO  SC09-BIKO2(IDX)
-             END-IF
       *
              IF    LNK-PRTKANRI-SRYYM  NOT  =  MF100-SRYYM
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) start
