@@ -86,6 +86,8 @@
       *                                  全国公費を「特」とするように修正
       *  01.00.27    吉川    14/10/06    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.28    吉川    15/01/06    平成２７年１月改正対応
+      *  01.00.29    吉川    15/01/29    難病＋高額の場合、備考欄に
+      *                                  高額区分が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -197,6 +199,9 @@
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
            03  FLG-KOGAKU     PIC 9(01).
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) start
+           03  FLG-NINTEI     PIC 9(01).
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -1303,8 +1308,15 @@
       *    高額療養費
            IF  (RECE02-ZAITAKU  NOT =  SPACE)
            AND (RECE02-ZAITAKU  NOT =  "1")
-           AND (RECE02-FLG(4)  =  ZERO)
-               MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) start
+      *     AND (RECE02-FLG(4)  =  ZERO)
+      *         MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+      *        限度額認定証所持チェック
+               PERFORM 200118-KOGAKU-CHK-SEC
+               IF  FLG-NINTEI  =  1
+                    MOVE    RECE02-ZAITAKU  TO  MF100-KOGAKU
+               END-IF
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) end
            END-IF
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
       *
@@ -1534,6 +1546,55 @@
        200114-TEINEN-CHK-EXT.
            EXIT.
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) start
+      *****************************************************************
+      *    限度額認定証所持チェック処理
+      *****************************************************************
+       200118-KOGAKU-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      PTKOHINF-REC
+                                           FLG-PTKOHINF
+                                           FLG-NINTEI
+      *
+           MOVE    SPA-HOSPNUM             TO  PTKOH-HOSPNUM
+           MOVE    RECE02-PTID             TO  PTKOH-PTID
+           MOVE    PTKOHINF-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      FLG-PTKOHINF        =   ZERO
+               PERFORM  800-PTKOHINF-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-PTKOHINF  =  1
+                 IF  (PTKOH-KOHNUM  =  "966"  OR  "967")
+                 AND (RECE02-SRYYM  >=  PTKOH-TEKSTYMD(1:6))
+                 AND (RECE02-SRYYM  <=  PTKOH-TEKEDYMD(1:6))
+                 AND (PTKOH-SAKJOKBN  =  SPACE)
+                     MOVE    1             TO  FLG-NINTEI
+                     MOVE    1             TO  FLG-PTKOHINF
+                   END-IF
+                 END-IF
+                 PERFORM  800-PTKOHINF-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       200118-KOGAKU-CHK-EXT.
+           EXIT.
+      *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) end
+      *
       *****************************************************************
       *    帳票ファイル出力処理
       *****************************************************************
