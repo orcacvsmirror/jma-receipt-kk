@@ -49,6 +49,8 @@
       *  01.00.15    吉川    12/04/27    在宅はまとめて集計するように修正
       *  01.00.16    吉川    13/01/10    医療機関情報編集対応
       *  01.00.17    吉川    14/09/03    返戻時、再印刷画面のタイトル修正
+      *  01.00.18    吉川    15/01/29    有効年月日が診療年月と同月の
+      *                                  公費名称が取得できないのを修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1694,9 +1696,15 @@
            MOVE  SKT2630TMP-KOHNUM (WRK-CNT)    TO  HKN-HKNNUM
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE  LNK-PRTKANRI-SRYYM             TO  HKN-TEKSTYMD
-           MOVE  "00"                           TO  HKN-TEKSTYMD(7:2)
+      *=== 公費名称取得方法の修正 by Yoshikawa(2015/01/29) start
+      *     MOVE  "00"                           TO  HKN-TEKSTYMD(7:2)
+           MOVE  "01"                           TO  HKN-TEKSTYMD(7:2)
+      *=== 公費名称取得方法の修正 by Yoshikawa(2015/01/29) end
            MOVE  LNK-PRTKANRI-SRYYM             TO  HKN-TEKEDYMD
-           MOVE  "00"                           TO  HKN-TEKEDYMD(7:2)
+      *=== 公費名称取得方法の修正 by Yoshikawa(2015/01/29) start
+      *     MOVE  "00"                           TO  HKN-TEKEDYMD(7:2)
+           MOVE  "01"                           TO  HKN-TEKEDYMD(7:2)
+      *=== 公費名称取得方法の修正 by Yoshikawa(2015/01/29) end
       *---(01.00.03) LINE ADD END   ------------------------------------
            MOVE  HKNNUM-REC                     TO  MCPDATA-REC
            MOVE  "DBSELECT"                     TO  MCP-FUNC
