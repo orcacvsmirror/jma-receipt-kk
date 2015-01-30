@@ -54,6 +54,7 @@
       *                                    °ìÉôÉéÃ´¶âÍó¤Îµ­ºÜ¤ò½¤Àµ
       *  01.00.12     µÈÀî     13/02/08    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
       *  01.00.13     µÈÀî     14/10/28    ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
+      *  01.00.14     µÈÀî     15/01/30    Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -317,6 +318,9 @@
            03  CONS-FTNJANUM.
                05  CONS-SAIKI-SYOGAKU  PIC X(08)  VALUE  "83448050".
       *=== º´Çì»Ô¤ÎÉéÃ´¶âµ­ºÜ¾ò·ïÊÑ¹¹ by Yoshikawa(2011/06/21) end
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+           03  WRK-CONS-SRYYM-201501   PIC X(06)  VALUE  "201501".
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -954,22 +958,40 @@
       *
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2010/10/12) start
       *    Å¬ÍÑ¶èÊ¬¡Ê¹â³ÛÎÅÍÜÈñ¡Ë
-           IF  RECE02-NYUGAIKBN  =  "1"
-             EVALUATE  RECE02-ZAITAKU
-               WHEN  "2"
-                 MOVE      1                   TO  MF100-KOGAKU
-               WHEN  "3"
-                 MOVE      2                   TO  MF100-KOGAKU
-               WHEN  "4"
-                 MOVE      3                   TO  MF100-KOGAKU
-             END-EVALUATE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+           IF  MF100-SRYYM  >=  WRK-CONS-SRYYM-201501
+               EVALUATE  RECE02-ZAITAKU
+                 WHEN  "2"      MOVE     5     TO  MF100-KOGAKU
+                 WHEN  "3"      MOVE     6     TO  MF100-KOGAKU
+                 WHEN  "4"      MOVE     7     TO  MF100-KOGAKU
+                 WHEN  "5"      MOVE     8     TO  MF100-KOGAKU
+                 WHEN  "6"      MOVE     9     TO  MF100-KOGAKU
+               END-EVALUATE
+               IF  FLG-TEKIYOD  =  1
+                 MOVE      4                   TO  MF100-KOGAKU
+               END-IF
+           ELSE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
+             IF  RECE02-NYUGAIKBN  =  "1"
+             
+               EVALUATE  RECE02-ZAITAKU
+                 WHEN  "2"
+                   MOVE      1                 TO  MF100-KOGAKU
+                 WHEN  "3"
+                   MOVE      2                 TO  MF100-KOGAKU
+                 WHEN  "4"
+                   MOVE      3                 TO  MF100-KOGAKU
+               END-EVALUATE
       *=== Å¬ÍÑ¶èÊ¬¤Î½¤Àµ by Yoshikawa(2011/02/01) start
-             IF  FLG-TEKIYOD  =  1
-               MOVE      4                     TO  MF100-KOGAKU
-             END-IF
+               IF  FLG-TEKIYOD  =  1
+                 MOVE      4                   TO  MF100-KOGAKU
+               END-IF
       *=== Å¬ÍÑ¶èÊ¬¤Î½¤Àµ by Yoshikawa(2011/02/01) end
-           END-IF
+             END-IF
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2010/10/12) end
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+           END-IF
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
       *
       *=== º´Çì»ÔÅù¤Ï°ìÉôÉéÃ´¶â¤Ï0 by Yoshikawa(2011/03/14) start
       *    º´Çì»Ô¡¢É±ÅçÂ¼¤Ï¼«¸ÊÉéÃ´¤Ï¥¼¥í
@@ -1291,21 +1313,42 @@
       *
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2010/10/12) start
       *        Å¬ÍÑ¶èÊ¬
-               IF  MF100-NYUGAIKBN  =  "1"
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+               IF  MF100-SRYYM  >=  WRK-CONS-SRYYM-201501
                  EVALUATE  MF100-KOGAKU
-                   WHEN  1
-                     MOVE    "£Á"          TO  SC01-KOGAKU(IDX)
-                   WHEN  2
-                     MOVE    "£Â"          TO  SC01-KOGAKU(IDX)
-                   WHEN  3
-                     MOVE    "£Ã"          TO  SC01-KOGAKU(IDX)
-      *=== Å¬ÍÑ¶èÊ¬¤Î½¤Àµ by Yoshikawa(2011/02/01) start
+                   WHEN  5
+                     MOVE    "¥¢"          TO  SC01-KOGAKU(IDX)
+                   WHEN  6
+                     MOVE    "¥¤"          TO  SC01-KOGAKU(IDX)
+                   WHEN  7
+                     MOVE    "¥¦"          TO  SC01-KOGAKU(IDX)
+                   WHEN  8
+                     MOVE    "¥¨"          TO  SC01-KOGAKU(IDX)
+                   WHEN  9
+                     MOVE    "¥ª"          TO  SC01-KOGAKU(IDX)
                    WHEN  4
-                     MOVE    "£Ä"          TO  SC01-KOGAKU(IDX)
-      *=== Å¬ÍÑ¶èÊ¬¤Î½¤Àµ by Yoshikawa(2011/02/01) end
+                     MOVE    "¥«"          TO  SC01-KOGAKU(IDX)
                  END-EVALUATE
-               END-IF
+               ELSE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
+                 IF  MF100-NYUGAIKBN  =  "1"
+                   EVALUATE  MF100-KOGAKU
+                     WHEN  1
+                       MOVE    "£Á"        TO  SC01-KOGAKU(IDX)
+                     WHEN  2
+                       MOVE    "£Â"        TO  SC01-KOGAKU(IDX)
+                     WHEN  3
+                       MOVE    "£Ã"        TO  SC01-KOGAKU(IDX)
+      *=== Å¬ÍÑ¶èÊ¬¤Î½¤Àµ by Yoshikawa(2011/02/01) start
+                     WHEN  4
+                       MOVE    "£Ä"        TO  SC01-KOGAKU(IDX)
+      *=== Å¬ÍÑ¶èÊ¬¤Î½¤Àµ by Yoshikawa(2011/02/01) end
+                   END-EVALUATE
+                 END-IF
       *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹¤ËÈ¼¤¦½¤Àµ by Yoshikawa(2010/10/12) end
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+               END-IF
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
       *
       *        ¾®·×²Ã»»
                ADD     MF100-JNISSU            TO  SUM-SNISSU
