@@ -19,6 +19,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    田中      2008/04/26   新規作成(後期高齢者対応)
+      *  01.00.02    吉川      2015/01/30   平成２７年１月改正対応
       ************************************************************
         01  SKT1415.
             03  SKT1415-SRYYM           PIC X(16).
@@ -41,5 +42,5 @@
               05  SKT1415-S-NISSU       PIC X(5).
               05  SKT1415-S-KINGK       PIC X(9).
               05  SKT1415-S-FTNGK       PIC X(9).
-            03  SKT1415-KOUHI-TBL       OCCURS  24 TIMES.
+            03  SKT1415-KOUHI-TBL       OCCURS  25 TIMES.
               05  SKT1415-KKENSU        PIC X(5).
