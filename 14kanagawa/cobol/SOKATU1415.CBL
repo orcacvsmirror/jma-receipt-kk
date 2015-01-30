@@ -38,6 +38,7 @@
       *  01.00.07    吉川    12/05/16    在宅はまとめて集計するように修正
       *                                  PERFORM→GOTOに修正
       *  01.00.08    吉川    12/12/25    医療機関情報編集対応
+      *  01.00.09    吉川    15/01/30    平成２７年１月改正対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1174,6 +1175,10 @@
                WHEN  "091"   MOVE  12  TO  IDXX
       *        児福
                WHEN  "053"   MOVE  13  TO  IDXX
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+      *        難病
+               WHEN  "054"   MOVE  25  TO  IDXX
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *        石綿
                WHEN  "066"   MOVE  14  TO  IDXX
       *        障施
@@ -1420,7 +1425,10 @@
       *     
       *    公費件数
            PERFORM  VARYING  IDX3  FROM  1  BY  1
-                    UNTIL    IDX3  >     24
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+      *              UNTIL    IDX3  >     24
+                    UNTIL    IDX3  >     25
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *    療養の給付：件数
       *=== 災害対応 by Yoshikawa(2011/06/23) start
       *       MOVE  SUM-KKENSU(IDX3)      TO  WRK-Z5

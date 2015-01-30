@@ -21,6 +21,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  01.00.01    吉川         11/06/23  東北地方太平洋沖地震対応
+      *  01.00.02    吉川         15/01/30  平成２７年１月改正対応
       ************************************************************
        01  SKT1410TMP-REC.
            03  SKT1410TMP-KEY.
@@ -41,10 +42,7 @@
                05  SKT1410TMP-S-NISSU              PIC  9(06).
                05  SKT1410TMP-S-KINGAKU            PIC  9(10).
                05  SKT1410TMP-S-FTNGAKU            PIC  9(10).
-      ****2006/01/13 @@@@-BRAND  START
-      *     03  SKT1410TMP-KOH-TBL      OCCURS  24.
-           03  SKT1410TMP-KOH-TBL      OCCURS  33.
-      ****2006/01/13 @@@@-BRAND  END
+           03  SKT1410TMP-KOH-TBL      OCCURS  34.
                05  SKT1410TMP-K-KENSU              PIC  9(06).
       *         05  SKT1410TMP-K-TENSU              PIC  9(10).
       *         05  SKT1410TMP-K-YKZFTN             PIC  9(10).

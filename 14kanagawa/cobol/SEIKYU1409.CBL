@@ -50,6 +50,7 @@
       *                                   »ÈÍÑ¤·¤¿¾ì¹ç¤Î°ìÉôÉéÃ´¶âÍó¤Î½¤Àµ
       *  01.00.14    µÈÀî     14/12/04    ÂÐ¾Ý¸øÈñ¤Ï¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥ó
       *                                   ¤«¤é¼èÆÀ¤¹¤ë¤è¤¦¤Ë¤¹¤ë
+      *  01.00.15    µÈÀî     15/01/30    Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -369,6 +370,12 @@
       *=== ÂÐ¾Ý¸øÈñ¤òPG¥ª¥×¥·¥ç¥ó¤«¤é¼èÆÀ by Yoshikawa(2014/12/04) end
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
+      *
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+      *    ¸ÇÄêÎÎ°è
+       01  CONS-AREA.
+           03  WRK-CONS-SRYYM-201501   PIC X(06)  VALUE  "201501".
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
       *
       *    DB»²¾ÈÍÑ
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -1245,15 +1252,34 @@
       *
       *=== ÆÃµ­»ö¹à¤Ë¹â³ÛÎÅÍÜÈñ¤ò°õ»ú¤¹¤ë by Yoshikawa(2011/01/25) start
       *    ¹â³ÛÎÅÍÜÈñ
-           EVALUATE  MF101-ZAITAKU 
-             WHEN  "2"
-               MOVE    "£±£·¾å°Ì"  TO  SC09-TOKKI
-             WHEN  "3"
-               MOVE    "£±£¸°ìÈÌ"  TO  SC09-TOKKI
-             WHEN  "4"
-               MOVE    "£±£¹Äã½ê"  TO  SC09-TOKKI
-           END-EVALUATE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+           IF  MF101-SRYYM  >=  WRK-CONS-SRYYM-201501
+             EVALUATE  MF101-ZAITAKU 
+               WHEN  "2"
+                 MOVE    "£²£¶¶è¥¢"  TO  SC09-TOKKI
+               WHEN  "3"
+                 MOVE    "£²£·¶è¥¤"  TO  SC09-TOKKI
+               WHEN  "4"
+                 MOVE    "£²£¸¶è¥¦"  TO  SC09-TOKKI
+               WHEN  "5"
+                 MOVE    "£²£¹¶è¥¨"  TO  SC09-TOKKI
+               WHEN  "6"
+                 MOVE    "£³£°¶è¥ª"  TO  SC09-TOKKI
+             END-EVALUATE
+           ELSE
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
+             EVALUATE  MF101-ZAITAKU 
+               WHEN  "2"
+                 MOVE    "£±£·¾å°Ì"  TO  SC09-TOKKI
+               WHEN  "3"
+                 MOVE    "£±£¸°ìÈÌ"  TO  SC09-TOKKI
+               WHEN  "4"
+                 MOVE    "£±£¹Äã½ê"  TO  SC09-TOKKI
+             END-EVALUATE
       *=== ÆÃµ­»ö¹à¤Ë¹â³ÛÎÅÍÜÈñ¤ò°õ»ú¤¹¤ë by Yoshikawa(2011/01/25) end
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) start
+           END-IF
+      *=== Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ by Yoshikawa(2015/01/30) end
       *
            IF      MF101-ZAITAKU   =  "1"
                MOVE    "£·£°"      TO  SC09-ZAISOU
