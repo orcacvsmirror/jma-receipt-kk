@@ -69,6 +69,7 @@
       *  01.00.25    萩野     14/09/12    同月内に長期の上限額に達した場合において
       *                                   該当公費と長期の併用があった場合、
       *                                   特記事項に長期を印字する
+      *  01.00.26    吉川     15/01/30    平成２７年１月改正対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -598,16 +599,48 @@
            03  FILLER              PIC X(02)   VALUE   "24".
            03  FILLER              PIC X(10)   VALUE   "２４多低".
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+           03  FILLER              PIC X(02)   VALUE   "25".
+           03  FILLER              PIC X(10)   VALUE   "２５出産".
+           03  FILLER              PIC X(02)   VALUE   "26".
+           03  FILLER              PIC X(10)   VALUE   "２６区ア".
+           03  FILLER              PIC X(02)   VALUE   "27".
+           03  FILLER              PIC X(10)   VALUE   "２７区イ".
+           03  FILLER              PIC X(02)   VALUE   "28".
+           03  FILLER              PIC X(10)   VALUE   "２８区ウ".
+           03  FILLER              PIC X(02)   VALUE   "29".
+           03  FILLER              PIC X(10)   VALUE   "２９区エ".
+           03  FILLER              PIC X(02)   VALUE   "30".
+           03  FILLER              PIC X(10)   VALUE   "３０区オ".
+           03  FILLER              PIC X(02)   VALUE   "31".
+           03  FILLER              PIC X(10)   VALUE   "３１多ア".
+           03  FILLER              PIC X(02)   VALUE   "32".
+           03  FILLER              PIC X(10)   VALUE   "３２多イ".
+           03  FILLER              PIC X(02)   VALUE   "33".
+           03  FILLER              PIC X(10)   VALUE   "３３多ウ".
+           03  FILLER              PIC X(02)   VALUE   "34".
+           03  FILLER              PIC X(10)   VALUE   "３４多エ".
+           03  FILLER              PIC X(02)   VALUE   "35".
+           03  FILLER              PIC X(10)   VALUE   "３５多オ".
+           03  FILLER              PIC X(02)   VALUE   "36".
+           03  FILLER              PIC X(10)   VALUE   "３６加治".
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
       *     03  TBL-TOKKI       OCCURS   18.
-           03  TBL-TOKKI       OCCURS   22.
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+      *     03  TBL-TOKKI       OCCURS   22.
+           03  TBL-TOKKI       OCCURS   34.
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
                05  TBL-TOKKICD     PIC X(02).
                05  TBL-TOKKINAME   PIC X(10).
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   18.
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+      * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   34.
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
       *=== 特記事項印字 by Yoshikawa(2009/05/14) end
       *
