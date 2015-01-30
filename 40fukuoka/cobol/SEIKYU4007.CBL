@@ -2208,10 +2208,16 @@
       *           MOVE  TBL-TOKKINAME(IDY2)   TO  HCN06-TOKKI(IDX2)
                  IF  ( MF100-TOKKI(IDX2)    =   "02" OR "16" )
                    IF  ( MF100-TYOKI  =  1 )
-                     MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+      *=== Æþ±¡ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2015/01/30) start
+      *               MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                     MOVE  TBL-TOKKINAME(IDY2)   TO  HCN06-TOKKI(IDX2)
+      *=== Æþ±¡ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2015/01/30) end
                    END-IF
                  ELSE
-                   MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+      *=== Æþ±¡ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2015/01/30) start
+      *             MOVE  TBL-TOKKINAME(IDY2)   TO  HC06-TOKKI(IDX2)
+                   MOVE  TBL-TOKKINAME(IDY2)   TO  HCN06-TOKKI(IDX2)
+      *=== Æþ±¡ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2015/01/30) end
                  END-IF
       *=== Ä¹´ü¤ÎÆÃµ­»ö¹à¤Î°õ»ú½¤Àµ by hagino(2014/09/12) end
       *=== H21Ç¯5·îÆÃÄê¼À´µ²þÀµÂÐ±þ by Yoshikawa(2009/05/27) start
