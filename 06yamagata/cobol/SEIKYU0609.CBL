@@ -52,6 +52,7 @@
       *  01.00.16    萩野    14/09/09    入院での医療機関の開設者名が印字されない
       *                                  不具合を修正
       *  01.00.17    吉川    15/01/19    平成２７年１月改正対応
+      *  01.00.18    吉川    15/02/10    分点時は公費２欄に日数、点数を記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1127,7 +1128,10 @@
       *=== 保険点数欄は公費合計点数を印字 by Yoshikawa(2010/03/08) start
               IF  RECE10-KOHNUM(1)  NOT =  SPACE
               OR  RECE10-KOHNUM(2)  NOT =  SPACE
-                MOVE   RECE10-TOTALTEN(1)         TO  MF101-TOTALTEN
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *          MOVE   RECE10-TOTALTEN(1)         TO  MF101-TOTALTEN
+                MOVE   RECE10-TOTALTEN(1)         TO  MF101-TOTALTEN-G
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
               END-IF
       *=== 保険点数欄は公費合計点数を印字 by Yoshikawa(2010/03/08) end
              PERFORM  VARYING  IDX  FROM  1  BY  1
@@ -1148,13 +1152,15 @@
                PERFORM 930-PTKOHINF-SET-SEC
                MOVE    WRK-ETC-FTNJANUM    TO  MF101-EKOHFTNJANUM(IDX)
                MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
-      *    点数と日数は地方公費と同じ値の時は記載を省略する
-               IF      MF101-ENISSU(IDX)           =  MF101-JNISSU
-                 MOVE  ZERO                       TO  MF101-ENISSU(IDX)
-               END-IF
-               IF      MF101-ETENSU(IDX)           =  MF101-TOTALTEN
-                 MOVE  ZERO                       TO  MF101-ETENSU(IDX)
-               END-IF
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      **    点数と日数は地方公費と同じ値の時は記載を省略する
+      *         IF      MF101-ENISSU(IDX)           =  MF101-JNISSU
+      *           MOVE  ZERO                       TO  MF101-ENISSU(IDX)
+      *         END-IF
+      *         IF      MF101-ETENSU(IDX)           =  MF101-TOTALTEN
+      *           MOVE  ZERO                       TO  MF101-ETENSU(IDX)
+      *         END-IF
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
              END-PERFORM
       *=== 特記事項印字追加 by Hagino(2012/09/19) start
       *      特記事項
@@ -1795,6 +1801,13 @@
              MOVE     WRK-Z2           TO  WRK-MAE-INPUT
              PERFORM  2009-HENKAN-SEC
              MOVE     WRK-OUT-INPUT    TO  SC06-SNISSU2
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *    診療実日数(公費２)
+             MOVE     MF101-JNISSU     TO  WRK-Z2
+             MOVE     WRK-Z2           TO  WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             MOVE     WRK-OUT-INPUT    TO  SC06-SNISSU3
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            END-IF
       *****
       *
@@ -1831,7 +1844,10 @@
       ***** 
       *
       *    点数
-           MOVE  MF101-TOTALTEN      TO  WRK-Z7
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *     MOVE  MF101-TOTALTEN      TO  WRK-Z7
+           MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            MOVE  WRK-Z7              TO  SC06-STENSU1
       ***** 05/12/19 yamaguchi DEL
       **    点数（公費１）
@@ -1845,6 +1861,11 @@
       *    点数（公費１）
              MOVE  MF101-ETENSU(1)     TO  WRK-Z7
              MOVE  WRK-Z7              TO  SC06-STENSU2
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *    点数（公費２）
+             MOVE  MF101-TOTALTEN      TO  WRK-Z7
+             MOVE  WRK-Z7              TO  SC06-STENSU3
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            END-IF
       *****
       *    一部負担金額
@@ -2643,15 +2664,30 @@
              MOVE     WRK-Z2           TO  WRK-MAE-INPUT
              PERFORM  2009-HENKAN-SEC
              MOVE     WRK-OUT-INPUT    TO  SC10-SNISSU2
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *    診療実日数(公費２)
+             MOVE     MF101-JNISSU     TO  WRK-Z2
+             MOVE     WRK-Z2           TO  WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             MOVE     WRK-OUT-INPUT    TO  SC10-SNISSU3
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            END-IF
       *
       *    点数
-           MOVE  MF101-TOTALTEN      TO  WRK-Z7
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *     MOVE  MF101-TOTALTEN      TO  WRK-Z7
+           MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            MOVE  WRK-Z7              TO  SC10-STENSU1
            IF  MF101-EKOHFTNJANUM (1) NOT = SPACE
       *    点数（公費１）
              MOVE  MF101-ETENSU(1)     TO  WRK-Z7
              MOVE  WRK-Z7              TO  SC10-STENSU2
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
+      *    点数（公費２）
+             MOVE  MF101-TOTALTEN      TO  WRK-Z7
+             MOVE  WRK-Z7              TO  SC10-STENSU3
+      *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            END-IF
       *    一部負担金額
            MOVE  MF101-FTNMONEY      TO  WRK-Z7
