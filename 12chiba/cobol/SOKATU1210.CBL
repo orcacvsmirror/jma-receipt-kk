@@ -53,6 +53,7 @@
       *  01.00.18    吉川    14/05/16    前期高齢者２割対応
       *                                  プログラムオプション対応
       *  01.00.19    萩野    14/12/04    返戻時、再印刷画面のタイトル修正
+      *  01.00.20    吉川    15/02/13    公費再掲欄への長期の記載は不要
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1133,33 +1134,35 @@
              ELSE
                PERFORM 220-KOH-SYUKEI-SEC
              END-IF
-           ELSE
-      *---(01.00.02) LINE ADD START ------------------------------------
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *     ELSE
+      **---(01.00.02) LINE ADD START ------------------------------------
+      **       IF  RECE10-ETC-KOHNUM(1)  =  "972" OR
+      **           RECE10-ETC-KOHNUM(2)  =  "972" OR
+      **           RECE10-ETC-KOHNUM(3)  =  "972" OR
+      **           RECE10-ETC-KOHNUM(4)  =  "972"
       *       IF  RECE10-ETC-KOHNUM(1)  =  "972" OR
       *           RECE10-ETC-KOHNUM(2)  =  "972" OR
       *           RECE10-ETC-KOHNUM(3)  =  "972" OR
-      *           RECE10-ETC-KOHNUM(4)  =  "972"
-             IF  RECE10-ETC-KOHNUM(1)  =  "972" OR
-                 RECE10-ETC-KOHNUM(2)  =  "972" OR
-                 RECE10-ETC-KOHNUM(3)  =  "972" OR
-                 RECE10-ETC-KOHNUM(4)  =  "972" OR
-                 RECE10-ETC-KOHNUM(1)  =  "974" OR
-                 RECE10-ETC-KOHNUM(2)  =  "974" OR
-                 RECE10-ETC-KOHNUM(3)  =  "974" OR
-                 RECE10-ETC-KOHNUM(4)  =  "974"
-      *---(01.00.02) LINE ADD END   ------------------------------------
-               MOVE  "972"     TO    RECE10-KOHNUM(1)
-               MOVE  SPACE     TO    RECE10-KOHNUM(2)
-               IF  RECE10-RJNHKNNUM  NOT =   SPACE
-                 PERFORM 220-RKOH-SYUKEI-SEC
-               ELSE
-                 PERFORM 220-KOH-SYUKEI-SEC
-               END-IF  
-      *---(01.00.07) LINE ADD START ------------------------------------
-      *       ELSE
-      *         PERFORM  2101-SYUKEI-SEC 
-      *---(01.00.07) LINE ADD END   ------------------------------------
-             END-IF
+      *           RECE10-ETC-KOHNUM(4)  =  "972" OR
+      *           RECE10-ETC-KOHNUM(1)  =  "974" OR
+      *           RECE10-ETC-KOHNUM(2)  =  "974" OR
+      *           RECE10-ETC-KOHNUM(3)  =  "974" OR
+      *           RECE10-ETC-KOHNUM(4)  =  "974"
+      **---(01.00.02) LINE ADD END   ------------------------------------
+      *         MOVE  "972"     TO    RECE10-KOHNUM(1)
+      *         MOVE  SPACE     TO    RECE10-KOHNUM(2)
+      *         IF  RECE10-RJNHKNNUM  NOT =   SPACE
+      *           PERFORM 220-RKOH-SYUKEI-SEC
+      *         ELSE
+      *           PERFORM 220-KOH-SYUKEI-SEC
+      *         END-IF  
+      **---(01.00.07) LINE ADD START ------------------------------------
+      **       ELSE
+      **         PERFORM  2101-SYUKEI-SEC 
+      **---(01.00.07) LINE ADD END   ------------------------------------
+      *       END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
            END-IF
       *
       *
@@ -1313,18 +1316,20 @@
       *    療養の給付：公費分点数
                ADD  RECE10-TOTALTEN(IDX3 + 1)   TO
                                SKT1210TMP-K-KOHTENSU(CNT-KOH)
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
-             ELSE
-      *    療養の給付:診療実日数
-               ADD  RECE10-ETC-JNISSU(IDX3)    TO
-                               SKT1210TMP-K-NISSU(CNT-KOH)
-      *    療養の給付：点数
-               ADD  RECE10-ETC-TOTALTEN(IDX3)  TO
-                               SKT1210TMP-K-TENSU(CNT-KOH)
-      *    療養の給付：一部負担金
-               ADD  RECE10-ETC-FTNMONEY(IDX3)  TO
-                               SKT1210TMP-K-ITBFTN(CNT-KOH)
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+      *       ELSE
+      **    療養の給付:診療実日数
+      *         ADD  RECE10-ETC-JNISSU(IDX3)    TO
+      *                         SKT1210TMP-K-NISSU(CNT-KOH)
+      **    療養の給付：点数
+      *         ADD  RECE10-ETC-TOTALTEN(IDX3)  TO
+      *                         SKT1210TMP-K-TENSU(CNT-KOH)
+      **    療養の給付：一部負担金
+      *         ADD  RECE10-ETC-FTNMONEY(IDX3)  TO
+      *                         SKT1210TMP-K-ITBFTN(CNT-KOH)
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
              END-IF
       *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) start
       *       IF  RECE10-SHOKUJINISSU(1)  >  ZERO
@@ -1358,19 +1363,21 @@
       *    食事療養：標準負担額
                ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
                                  SKT1210TMP-K-SFTNGK(CNT-KOH)
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
-             ELSE
-      *    食事療養:日数
-               ADD  RECE10-ETC-SHOKUJINISSU(IDX3)    TO
-                                 SKT1210TMP-K-SNISSU(CNT-KOH)
-      *    食事療養：金額
-               ADD  RECE10-ETC-SHOKUJIRYOYOHI(IDX3)  TO
-                                 SKT1210TMP-K-SKINGK(CNT-KOH)
-      *    食事療養：標準負担額
-               ADD  RECE10-ETC-SHOKUJIFTN(IDX3)      TO
-                                 SKT1210TMP-K-SFTNGK(CNT-KOH)
-             END-IF
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+      *       ELSE
+      **    食事療養:日数
+      *         ADD  RECE10-ETC-SHOKUJINISSU(IDX3)    TO
+      *                           SKT1210TMP-K-SNISSU(CNT-KOH)
+      **    食事療養：金額
+      *         ADD  RECE10-ETC-SHOKUJIRYOYOHI(IDX3)  TO
+      *                           SKT1210TMP-K-SKINGK(CNT-KOH)
+      **    食事療養：標準負担額
+      *         ADD  RECE10-ETC-SHOKUJIFTN(IDX3)      TO
+      *                           SKT1210TMP-K-SFTNGK(CNT-KOH)
+      *       END-IF
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
       *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) end
            END-PERFORM
       *
@@ -1480,18 +1487,20 @@
       *    療養の給付：公費分点数
                ADD  RECE10-TOTALTEN(IDX3 + 1)   TO
                                SKT1210TMP-K-RKOHTENSU(CNT-KOH)
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
-             ELSE
-      *    療養の給付:診療実日数
-               ADD  RECE10-ETC-JNISSU(IDX3)    TO
-                               SKT1210TMP-K-RNISSU(CNT-KOH)
-      *    療養の給付：点数
-               ADD  RECE10-ETC-TOTALTEN(IDX3)  TO
-                               SKT1210TMP-K-RTENSU(CNT-KOH)
-      *    療養の給付：一部負担金
-               ADD  RECE10-ETC-FTNMONEY(IDX3)  TO
-                               SKT1210TMP-K-RITBFTN(CNT-KOH)
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+      *       ELSE
+      **    療養の給付:診療実日数
+      *         ADD  RECE10-ETC-JNISSU(IDX3)    TO
+      *                         SKT1210TMP-K-RNISSU(CNT-KOH)
+      **    療養の給付：点数
+      *         ADD  RECE10-ETC-TOTALTEN(IDX3)  TO
+      *                         SKT1210TMP-K-RTENSU(CNT-KOH)
+      **    療養の給付：一部負担金
+      *         ADD  RECE10-ETC-FTNMONEY(IDX3)  TO
+      *                         SKT1210TMP-K-RITBFTN(CNT-KOH)
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
              END-IF
       *
              IF  RECE10-SHOKUJINISSU(1)  >  ZERO
@@ -1512,19 +1521,21 @@
       *    食事療養：標準負担額
                ADD  RECE10-SHOKUJIFTN(1)  TO
                                  SKT1210TMP-K-RSFTNGK(CNT-KOH)
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
-             ELSE
-      *    食事療養:日数
-               ADD  RECE10-ETC-SHOKUJINISSU(IDX3)    TO
-                                 SKT1210TMP-K-RSNISSU(CNT-KOH)
-      *    食事療養：金額
-               ADD  RECE10-ETC-SHOKUJIRYOYOHI(IDX3)  TO
-                                 SKT1210TMP-K-RSKINGK(CNT-KOH)
-      *    食事療養：標準負担額
-               ADD  RECE10-ETC-SHOKUJIFTN(IDX3)      TO
-                                 SKT1210TMP-K-RSFTNGK(CNT-KOH)
-             END-IF
-      *=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) start
+      *       ELSE
+      **    食事療養:日数
+      *         ADD  RECE10-ETC-SHOKUJINISSU(IDX3)    TO
+      *                           SKT1210TMP-K-RSNISSU(CNT-KOH)
+      **    食事療養：金額
+      *         ADD  RECE10-ETC-SHOKUJIRYOYOHI(IDX3)  TO
+      *                           SKT1210TMP-K-RSKINGK(CNT-KOH)
+      **    食事療養：標準負担額
+      *         ADD  RECE10-ETC-SHOKUJIFTN(IDX3)      TO
+      *                           SKT1210TMP-K-RSFTNGK(CNT-KOH)
+      *       END-IF
+      **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
            END-PERFORM
       *
            .
@@ -1933,13 +1944,17 @@
       *       END-EVALUATE
       ******
       *    公費名
-             IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
                MOVE  SKT1210TMP-KOHNUM1(WRK-CNT)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
                MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
-             ELSE
-               MOVE  "61"            TO    WRK-KOHNAME
-             END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       ELSE
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
              MOVE    WRK-KOHNAME     TO    SKT1210-KOHNAME(IDX3)
       *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
@@ -2018,13 +2033,17 @@
       **---(01.00.03) LINE ADD END   ------------------------------------
       *       END-IF
       ******
-             IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
                MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
                MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
-             ELSE
-               MOVE  "61"            TO    WRK-KOHNAME
-             END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       ELSE
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
              MOVE    WRK-KOHNAME     TO    SKT1210-KOHNAME(IDX3)
       *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
@@ -2337,13 +2356,17 @@
       *       END-EVALUATE
       ******
       *    公費名
-             IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       IF  SKT1210TMP-KOHNUM1(WRK-CNT)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
                MOVE  SKT1210TMP-KOHNUM1(WRK-CNT)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
                MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
-             ELSE
-               MOVE  "61"            TO    WRK-KOHNAME
-             END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       ELSE
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
              MOVE    WRK-KOHNAME     TO    SKT1220-KOHNAME(IDX3)
       *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
@@ -2413,13 +2436,17 @@
       **---(01.00.03) LINE ADD END   ------------------------------------
       *       END-IF
       ******
-             IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       IF  SKT1210TMP-RKOHNUM1(WRK-CNT2)  NOT  =  "972"
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
                MOVE  SKT1210TMP-RKOHNUM1(WRK-CNT2)  TO  WRK-KOHNUM
                PERFORM  950-HKNNUM-SET-SEC
                MOVE  HKN-HBTNUM      TO    WRK-KOHNAME
-             ELSE
-               MOVE  "61"            TO    WRK-KOHNAME
-             END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) start
+      *       ELSE
+      *         MOVE  "61"            TO    WRK-KOHNAME
+      *       END-IF
+      *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
              MOVE    WRK-KOHNAME     TO    SKT1220-KOHNAME(IDX3)
       *=== 公費欄集計方法変更 by Yoshikawa(2008/11/27) end
       *
