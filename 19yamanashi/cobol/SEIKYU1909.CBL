@@ -30,6 +30,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    15/01/05    担当者欄はPGオプションで設定
       *  01.00.02    吉川    15/01/15    返戻分は集計対象外とする
+      *  01.00.03    吉川    15/02/13    負担者番号順に印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -144,6 +145,13 @@
            03  WRK-TANTOU            PIC X(40).
            03  WRK-TANTOU-TEL        PIC X(15).
       *=== 担当者欄はPGオプションで設定 by Yoshikawa(2015/01/05) end
+      *=== 負担者番号順に印字する by Yoshikawa(2015/02/13) start
+           03  WRK-ST                PIC 9(03).
+           03  WRK-SEIKYU-TMP.
+               05  WRK-TMP-FTNJANUM  PIC X(08).
+               05  WRK-TMP-TENSU     PIC 9(09).
+               05  WRK-TMP-KENSU     PIC 9(06).
+      *=== 負担者番号順に印字する by Yoshikawa(2015/02/13) end
       *
       *    集計テーブル
            03  WRK-SEIKYU-TBL   OCCURS 100.
@@ -702,6 +710,11 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
+      *=== 負担者番号順に印字する by Yoshikawa(2015/02/13) start
+      *    ソート処理
+           PERFORM  20021-SORT-SEC
+      *=== 負担者番号順に印字する by Yoshikawa(2015/02/13) end
+      *
       *    帳票編集<見出し>処理
            PERFORM  310-HEAD-HEN-SEC
       *
@@ -714,6 +727,45 @@
            .
        2002-PRINT-EXT.
            EXIT.
+      *
+      *=== 負担者番号順に印字する by Yoshikawa(2015/02/13) start
+      *****************************************************************
+      *    ソート処理
+      *****************************************************************
+       20021-SORT-SEC                SECTION.
+      *
+           DISPLAY "ソート前 : " WRK-FTNJANUM(1)
+                   "　"          WRK-FTNJANUM(2)
+                   "　"          WRK-FTNJANUM(3)
+                   "　"          WRK-FTNJANUM(4)
+                   "　"          WRK-FTNJANUM(5)
+      *
+      *    バブルソートで負担者番号の昇順にソート
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    IDX1  >  99
+                    OR       WRK-FTNJANUM(IDX1)  =  SPACE
+             COMPUTE  WRK-ST  =  IDX1  +  1
+             PERFORM  VARYING  IDX2  FROM  WRK-ST  BY  1
+                      UNTIL    IDX2  >  100
+                      OR       WRK-FTNJANUM(IDX2)  =  SPACE
+               IF  WRK-FTNJANUM(IDX1)  >  WRK-FTNJANUM(IDX2)
+                 MOVE    WRK-SEIKYU-TBL(IDX1)  TO  WRK-SEIKYU-TMP
+                 MOVE    WRK-SEIKYU-TBL(IDX2)  TO  WRK-SEIKYU-TBL(IDX1)
+                 MOVE    WRK-SEIKYU-TMP        TO  WRK-SEIKYU-TBL(IDX2)
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      * 
+           DISPLAY "ソート後 : " WRK-FTNJANUM(1)
+                   "　"          WRK-FTNJANUM(2)
+                   "　"          WRK-FTNJANUM(3)
+                   "　"          WRK-FTNJANUM(4)
+                   "　"          WRK-FTNJANUM(5)
+      *
+           .
+       20021-SORT-EXT.
+           EXIT.
+      *=== 負担者番号順に印字する by Yoshikawa(2015/02/13) end
       *
       *****************************************************************
       *    帳票編集処理
