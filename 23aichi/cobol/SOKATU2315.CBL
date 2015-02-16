@@ -39,6 +39,7 @@
       *  01.00.08    等李    2013/01/10  板闻怠簇攫鼠试礁滦炳
       *  01.00.09    等李    2013/11/05  奉觅れ凤眶、墓袋凤眶纳裁
       *                                  泼侍闻蛙锐を磅机する
+      *  01.00.10    等李    2015/02/16  ５４岂陕を给锐浩非腕に礁纷する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -744,6 +745,9 @@
              OR  RECE10-KOHNUM(IDXX)  =  "051"
              OR  RECE10-KOHNUM(IDXX)  =  "052"
              OR  RECE10-KOHNUM(IDXX)  =  "053"
+      *=== 滦据给锐纳裁 by Yoshikawa(2015/02/16) start
+             OR  RECE10-KOHNUM(IDXX)  =  "054"
+      *=== 滦据给锐纳裁 by Yoshikawa(2015/02/16) end
              OR  RECE10-KOHNUM(IDXX)  =  "091"
              OR  RECE10-KOHNUM(IDXX)  =  "189"
       *=== 滦据给锐(188)纳裁 by Yoshikawa(2008/08/14) start
