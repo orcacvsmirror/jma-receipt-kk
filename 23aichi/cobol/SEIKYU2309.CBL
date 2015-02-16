@@ -79,6 +79,7 @@
       *                                  公費と対象点数を記載する
       *                                  特記事項欄の多数回該当「３１多ア」等を
       *                                  備考欄へ記載する
+      *  01.00.26    吉川    15/02/16    結精点数欄の対象公費修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1512,7 +1513,10 @@
       *    結核精神点数
       *=== 備考欄の記載修正 by hagino(2015/01/28) start
       *       MOVE  MF100-KESE        TO  WRK-Z7
-             IF  MF100-ZENKOHNUM          =   "021"
+      *=== 結精点数の対象公費修正 by Yoshikawa(2015/02/16) start
+      *       IF  MF100-ZENKOHNUM          =   "021"
+             IF  MF100-ZENKOHNUM          =   "010"
+      *=== 結精点数の対象公費修正 by Yoshikawa(2015/02/16) end
                MOVE  MF100-ZENKOHTENSU TO  WRK-KESE
              ELSE
                MOVE  0                 TO  WRK-KESE
