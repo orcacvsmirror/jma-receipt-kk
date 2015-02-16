@@ -1405,6 +1405,7 @@
       *                           SKT1210TMP-K-SFTNGK(CNT-KOH)
       *       END-IF
       **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+             END-IF
       *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
       *=== 公費欄は保険の分を含めない by Yoshikawa(2010/03/18) end
            END-PERFORM
@@ -1563,6 +1564,7 @@
       *                           SKT1210TMP-K-RSFTNGK(CNT-KOH)
       *       END-IF
       **=== 長期の点数と負担金を記載する by Yoshikawa(2010/09/10) end
+             END-IF
       *=== 長期の記載は不要 by Yoshikawa(2015/02/13) end
            END-PERFORM
       *
