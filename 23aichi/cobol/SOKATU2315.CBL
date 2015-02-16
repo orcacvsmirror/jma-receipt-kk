@@ -40,6 +40,7 @@
       *  01.00.09    吉川    2013/11/05  月遅れ件数、長期件数追加
       *                                  特別療養費を印字する
       *  01.00.10    吉川    2014/10/23  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.11    吉川    2015/02/16  ５４難病を公費再掲欄に集計する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -771,6 +772,9 @@
              OR  RECE10-KOHNUM(IDXX)  =  "051"
              OR  RECE10-KOHNUM(IDXX)  =  "052"
              OR  RECE10-KOHNUM(IDXX)  =  "053"
+      *=== 対象公費追加 by Yoshikawa(2015/02/16) start
+             OR  RECE10-KOHNUM(IDXX)  =  "054"
+      *=== 対象公費追加 by Yoshikawa(2015/02/16) end
              OR  RECE10-KOHNUM(IDXX)  =  "091"
              OR  RECE10-KOHNUM(IDXX)  =  "189"
       *=== 対象公費(188)追加 by Yoshikawa(2008/08/14) start
