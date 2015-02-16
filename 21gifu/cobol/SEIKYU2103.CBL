@@ -55,6 +55,7 @@
       *  01.00.12    萩野    15/01/15    平成２７年１月改正対応（長期欄の難病対応）
       *                                  前期高齢者欄にて負担割合３割の場合
       *                                  「１」と印字するように修正
+      *  01.00.13    吉川    15/02/16    患者負担額の印字桁数増加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1154,8 +1155,12 @@
                MOVE    WRK-Z7              TO  SC03-KOHTENSU(IDX)
       *
       *    患者負担額
-               MOVE  MF100-ITBFTN          TO  WRK-Z6
-               MOVE  WRK-Z6                TO  SC03-ITBFTN(IDX)
+      *=== 患者負担額の印字桁数増加 by Yoshikawa(2015/02/16) start
+      *         MOVE  MF100-ITBFTN          TO  WRK-Z6
+      *         MOVE  WRK-Z6                TO  SC03-ITBFTN(IDX)
+               MOVE  MF100-ITBFTN          TO  WRK-Z7
+               MOVE  WRK-Z7                TO  SC03-ITBFTN(IDX)
+      *=== 患者負担額の印字桁数増加 by Yoshikawa(2015/02/16) end
       *
       *    食事療養基準額
                MOVE  MF100-SHOKUJIRYOYOHI  TO  WRK-Z6
@@ -1209,8 +1214,12 @@
            MOVE  SUM-KOHTENSU          TO  WRK-Z7
            MOVE  WRK-Z7                TO  SC03-GKOHTENSU
       *
-           MOVE  SUM-ITBFTN            TO  WRK-Z7
-           MOVE  WRK-Z7                TO  SC03-GITBFTN
+      *=== 患者負担額の印字桁数増加 by Yoshikawa(2015/02/16) start
+      *     MOVE  SUM-ITBFTN            TO  WRK-Z7
+      *     MOVE  WRK-Z7                TO  SC03-GITBFTN
+           MOVE  SUM-ITBFTN            TO  WRK-Z9
+           MOVE  WRK-Z9                TO  SC03-GITBFTN
+      *=== 患者負担額の印字桁数増加 by Yoshikawa(2015/02/16) end
       *
            MOVE  SUM-SKENSU            TO  WRK-Z2
            MOVE  WRK-Z2                TO  SC03-GSKENSU
