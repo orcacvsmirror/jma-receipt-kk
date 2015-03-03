@@ -54,6 +54,7 @@
       *  01.00.17    吉川    14/10/03    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.18    吉川    15/01/19    平成２７年１月改正対応
       *  01.00.19    吉川    15/02/10    分点時は公費２欄に日数、点数を記載
+      *  01.00.20    吉川    15/03/03    保険点数が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1876,7 +1877,14 @@
       *    点数
       *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
       *     MOVE  MF101-TOTALTEN      TO  WRK-Z7
-           MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+      *=== 点数の不具合の修正 by Yoshikawa(2015/03/03) start
+      *     MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+           IF  MF101-TOTALTEN-G  NOT =  ZERO
+             MOVE  MF101-TOTALTEN-G   TO  WRK-Z7
+           ELSE
+             MOVE  MF101-TOTALTEN     TO  WRK-Z7
+           END-IF
+      *=== 点数の不具合の修正 by Yoshikawa(2015/03/03) end
       *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            MOVE  WRK-Z7              TO  SC06-STENSU1
       ***** 05/12/19 yamaguchi DEL
@@ -2706,7 +2714,14 @@
       *    点数
       *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) start
       *     MOVE  MF101-TOTALTEN      TO  WRK-Z7
-           MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+      *=== 点数の不具合の修正 by Yoshikawa(2015/03/03) start
+      *     MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+           IF  MF101-TOTALTEN-G  NOT =  ZERO
+             MOVE  MF101-TOTALTEN-G    TO  WRK-Z7
+           ELSE
+             MOVE  MF101-TOTALTEN      TO  WRK-Z7
+           END-IF
+      *=== 点数の不具合の修正 by Yoshikawa(2015/03/03) end
       *=== 分点時は公費２欄を印字 by Yoshikawa(2015/02/10) end
            MOVE  WRK-Z7              TO  SC10-STENSU1
            IF  MF101-EKOHFTNJANUM (1) NOT = SPACE
