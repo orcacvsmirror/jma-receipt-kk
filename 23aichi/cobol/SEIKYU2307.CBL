@@ -79,6 +79,7 @@
       *                                  特記事項欄の多数回該当「３１多ア」等を
       *                                  備考欄へ記載する
       *  01.00.25    吉川    15/02/16    結精点数欄の対象公費修正
+      *  01.00.26    吉川    15/03/05    公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1113,10 +1114,15 @@
                MOVE    "key25"        TO  WRK-PATH
       *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/03/05) start
+           MOVE    1                  TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/03/05) end
            PERFORM  920-SYUNOU-SET-SEC
       *
       *    保険者番号チェック処理
-           MOVE    ZERO                TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/03/05) start
+      *     MOVE    ZERO                TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/03/05) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            COMPUTE  WRK-SEIKYUGK-G2  ROUNDED = WRK-SEIKYUGK-G
@@ -2154,6 +2160,22 @@
              END-IF
       *=== 市町村負担額修正 by Yoshikawa(2012/04/18) end
       *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/03/05) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+               IF     IDX                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/03/05) end
            END-PERFORM
       *
       *=== 市町村負担額修正 by Yoshikawa(2012/04/18) start
