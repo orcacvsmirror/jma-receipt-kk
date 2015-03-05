@@ -58,6 +58,7 @@
       *  01.00.18    萩野     14/05/15    前期高齢者２割対応
       *  01.00.19    吉川     14/08/12    返戻時、再印刷画面のタイトル修正
       *  01.00.20    吉川     14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.21    吉川     15/03/05    「２６区ア」等を集計対象にする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -311,6 +312,9 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== ２６区ア等の集計対応 by Yoshikawa(2015/03/05) start
+           03  WRK-CONS-SRYYM-201501   PIC X(06)    VALUE  "201501".
+      *=== ２６区ア等の集計対応 by Yoshikawa(2015/03/05) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -1028,13 +1032,26 @@
       *       ADD  1            TO  SKT2310TMP-KOGAKU
       *     END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
-           IF  RECE10-TOKKI(1)  =  "17" OR "18" OR "19"
-           OR  RECE10-TOKKI(2)  =  "17" OR "18" OR "19"
-           OR  RECE10-TOKKI(3)  =  "17" OR "18" OR "19"
-           OR  RECE10-TOKKI(4)  =  "17" OR "18" OR "19"
-             ADD  1            TO  SKT2310TMP-KOGAKU
-           END-IF
+      *=== ２６区ア等の集計対応 by Yoshikawa(2015/03/05) start
+           IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201501
+             IF  RECE10-TOKKI(1) = "26" OR "27" OR "28" OR "29" OR "30"
+             OR  RECE10-TOKKI(2) = "26" OR "27" OR "28" OR "29" OR "30"
+             OR  RECE10-TOKKI(3) = "26" OR "27" OR "28" OR "29" OR "30"
+             OR  RECE10-TOKKI(4) = "26" OR "27" OR "28" OR "29" OR "30"
+               ADD  1            TO  SKT2310TMP-KOGAKU
+             END-IF
+           ELSE
+      *=== ２６区ア等の集計対応 by Yoshikawa(2015/03/05) end
+             IF  RECE10-TOKKI(1)  =  "17" OR "18" OR "19"
+             OR  RECE10-TOKKI(2)  =  "17" OR "18" OR "19"
+             OR  RECE10-TOKKI(3)  =  "17" OR "18" OR "19"
+             OR  RECE10-TOKKI(4)  =  "17" OR "18" OR "19"
+               ADD  1            TO  SKT2310TMP-KOGAKU
+             END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== ２６区ア等の集計対応 by Yoshikawa(2015/03/05) start
+           END-IF
+      *=== ２６区ア等の集計対応 by Yoshikawa(2015/03/05) end
       *
       *    公費併用チェック
            IF  RECE10-KOHNUM(1)  NOT =  SPACE OR
