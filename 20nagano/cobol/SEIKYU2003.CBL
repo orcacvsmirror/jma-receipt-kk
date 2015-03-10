@@ -54,6 +54,7 @@
       *  02.05.12    吉川    13/01/09    医療機関情報編集対応
       *  02.05.13    萩野    14/02/13    実日数、点数ともに福祉使用分のみの
       *                                  記載に修正
+      *  02.05.14    萩野    15/03/10    平成２７年１月改正対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -356,16 +357,35 @@
            03  FILLER          PIC X(02)   VALUE   "24".
            03  FILLER          PIC X(10)   VALUE   "２４多低".
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
+      *=== 平成２７年１月改正対応 by hagino(2015/03/10) start
+           03  FILLER          PIC X(02)   VALUE   "26".
+           03  FILLER          PIC X(10)   VALUE   "２６区ア".
+           03  FILLER          PIC X(02)   VALUE   "27".
+           03  FILLER          PIC X(10)   VALUE   "２７区イ".
+           03  FILLER          PIC X(02)   VALUE   "28".
+           03  FILLER          PIC X(10)   VALUE   "２８区ウ".
+           03  FILLER          PIC X(02)   VALUE   "29".
+           03  FILLER          PIC X(10)   VALUE   "２９区エ".
+           03  FILLER          PIC X(02)   VALUE   "30".
+           03  FILLER          PIC X(10)   VALUE   "３０区オ".
+      *=== 平成２７年１月改正対応 by hagino(2015/03/10) end
+      *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
       *     03  TBL-TOKKI       OCCURS   18.
-           03  TBL-TOKKI       OCCURS   22.
+      *=== 平成２７年１月改正対応 by hagino(2015/03/10) start
+      *     03  TBL-TOKKI       OCCURS   22.
+           03  TBL-TOKKI       OCCURS   27.
+      *=== 平成２７年１月改正対応 by hagino(2015/03/10) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
                05  TBL-TOKKICD             PIC X(02).
                05  TBL-TOKKINAME           PIC X(10).
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   18.
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
+      *=== 平成２７年１月改正対応 by hagino(2015/03/10) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   27.
+      *=== 平成２７年１月改正対応 by hagino(2015/03/10) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
       *=== 特記事項印字修正 by Yoshikawa(2008/06/03) end
       * OCR編集領域
