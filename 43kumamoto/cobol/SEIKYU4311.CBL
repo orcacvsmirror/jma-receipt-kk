@@ -49,6 +49,8 @@
       *                                  印字不具合の修正
       *  01.00.11    吉川    13/02/08    医療機関情報編集対応
       *  01.00.12    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.13    吉川    15/03/10    患者負担が乳幼児の上限額と同額の
+      *                                  場合は印字対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -736,6 +738,16 @@
                MOVE    ZERO               TO    FLG-ERR
              END-IF
            END-IF
+      *
+      *=== 患者負担と上限額が同額は対象外 by Yoshikawa(2015/03/10) start
+           IF  MF100-KOHNUM  =  "241"
+             IF  (MF100-TOTALTEN  =  250  AND  MF100-KYURATE  =  20) 
+             OR  ((MF100-TOTALTEN  =  167 OR 168)
+                  AND  MF100-KYURATE  =  30)
+                 MOVE    1                TO    FLG-ERR
+             END-IF
+           END-IF
+      *=== 患者負担と上限額が同額は対象外 by Yoshikawa(2015/03/10) end
       *
            IF      FLG-ERR            =     ZERO
                ADD    1                   TO    SUM-GKENSU
