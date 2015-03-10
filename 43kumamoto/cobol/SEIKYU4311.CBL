@@ -741,7 +741,8 @@
       *
       *=== ´µ¼ÔÉéÃ´¤È¾å¸Â³Û¤¬Æ±³Û¤ÏÂÐ¾Ý³° by Yoshikawa(2015/03/10) start
            IF  MF100-KOHNUM  =  "241"
-             IF  (MF100-TOTALTEN  =  250  AND  MF100-KYURATE  =  20) 
+             IF  ((MF100-TOTALTEN  =  250 OR 251 OR 252)
+                  AND  MF100-KYURATE  =  20) 
              OR  ((MF100-TOTALTEN  =  167 OR 168)
                   AND  MF100-KYURATE  =  30)
                  MOVE    1                TO    FLG-ERR
