@@ -34,6 +34,7 @@
       *  01.00.04    吉川      13/01/22  医療機関情報編集対応
       *  01.00.05    吉川      13/02/12  プラグイン対応
       *  01.00.06    吉川      13/10/09  プログラムオプション対応
+      *  01.00.07    吉川      15/03/11  法人名、役職名を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -202,6 +203,10 @@
            03  WRK-KBNCD           PIC X(16).
            03  WRK-YUSEN           PIC X(06).
       *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+           03  WRK-HOUJIN          PIC X(40).
+           03  WRK-YAKUSYOKU       PIC X(10).
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
@@ -552,6 +557,24 @@
            DISPLAY "口座番号   ="  WRK-KINYUDATA(4)
            DISPLAY "口座名義人 ="  WRK-KINYUDATA(5)
       *
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *    法人・役職
+           MOVE    "HOUJIN"                  TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-HOUJIN
+           ELSE
+             MOVE    WRK-OPTION(1)(1:40)     TO  WRK-HOUJIN
+           END-IF
+           DISPLAY "法人名 ="  WRK-HOUJIN
+           IF  WRK-OPTION(2)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-YAKUSYOKU
+           ELSE
+             MOVE    WRK-OPTION(2)(1:10)     TO  WRK-YAKUSYOKU
+           END-IF
+           DISPLAY "役職名 ="  WRK-YAKUSYOKU
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -895,7 +918,20 @@
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *
       *    開設者名
-           MOVE  SYS-1001-KAISETUNAME      TO  SC07-KAISETU
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *     MOVE  SYS-1001-KAISETUNAME      TO  SC07-KAISETU
+           IF  WRK-HOUJIN  =  SPACE  AND  WRK-YAKUSYOKU  =  SPACE
+             MOVE  SYS-1001-KAISETUNAME    TO  SC07-KAISETU
+           ELSE
+             STRING    WRK-HOUJIN              DELIMITED BY SPACE
+                       "　"                    DELIMITED BY SIZE
+                       WRK-YAKUSYOKU           DELIMITED BY SPACE
+                       "　"                    DELIMITED BY SIZE
+                       SYS-1001-KAISETUNAME    DELIMITED BY SPACE
+                       INTO                    SC07-KAISETU
+             END-STRING
+           END-IF
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
       *    請求金額
            MOVE  SUM-SEIKYUGK              TO  WRK-Z11

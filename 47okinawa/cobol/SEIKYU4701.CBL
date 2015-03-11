@@ -37,6 +37,7 @@
       *  01.00.03    吉川    10/10/25    金額は１０円未満を四捨五入する
       *                                  請求年月日は空欄のままにする
       *  01.00.04    吉川    13/01/22    医療機関情報編集対応
+      *  01.00.05    吉川    15/03/11    法人名、役職名を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -106,10 +107,14 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+           03  FLG-PRGOPTION  PIC 9(01).
+           03  FLG-OK         PIC 9(01).
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
@@ -170,6 +175,15 @@
       *         05  FILLER          PIC S9(09)  BINARY.
            03  WRK-PATH            PIC X(50).
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+           03  WRK-HOUJIN          PIC X(40).
+           03  WRK-YAKUSYOKU       PIC X(10).
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *    医療機関情報
@@ -259,6 +273,12 @@
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
+      *
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -451,6 +471,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
+      *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -458,6 +483,78 @@
            .
        100-INIT-EXT.
            EXIT.
+      *
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SEIKYU4701"              TO  WRK-PRGID
+      *
+      *    法人・役職
+           MOVE    "HOUJIN"                  TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-HOUJIN
+           ELSE
+             MOVE    WRK-OPTION(1)(1:40)     TO  WRK-HOUJIN
+           END-IF
+           DISPLAY "法人名 ="  WRK-HOUJIN
+           IF  WRK-OPTION(2)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-YAKUSYOKU
+           ELSE
+             MOVE    WRK-OPTION(2)(1:10)     TO  WRK-YAKUSYOKU
+           END-IF
+           DISPLAY "役職名 ="  WRK-YAKUSYOKU
+      *
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
       *****************************************************************
       *    パラメタ編集処理
@@ -809,8 +906,21 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
       *
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME    TO  SC01-KAISETU
-      
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *     MOVE  SYS-1001-KAISETUNAME      TO  SC01-KAISETU
+           IF  WRK-HOUJIN  =  SPACE  AND  WRK-YAKUSYOKU  =  SPACE
+             MOVE  SYS-1001-KAISETUNAME    TO  SC01-KAISETU
+           ELSE
+             STRING    WRK-HOUJIN              DELIMITED BY SPACE
+                       "　"                    DELIMITED BY SIZE
+                       WRK-YAKUSYOKU           DELIMITED BY SPACE
+                       "　"                    DELIMITED BY SIZE
+                       SYS-1001-KAISETUNAME    DELIMITED BY SPACE
+                       INTO                    SC01-KAISETU
+             END-STRING
+           END-IF
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
+      *
            .
        310-HEAD-HEN-EXT.
            EXIT.
@@ -1668,6 +1778,55 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
+      *
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************

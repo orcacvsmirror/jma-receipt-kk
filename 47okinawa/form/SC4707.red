@@ -18,7 +18,7 @@
     </element>
     <element name="KAISETU" occurs="1">
       <appinfo>
-        <embed object="text" length="40"/>
+        <embed object="text" length="80"/>
       </appinfo>
     </element>
     <element name="SRYMM" occurs="1">
@@ -125,7 +125,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="背景" visible="true" active="true">
+  <dia:layer name="背景" visible="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="4.8,17.4"/>
@@ -154,7 +154,7 @@
         <dia:point val="8.425,19.1625"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.40997,19.1475;8.45353,26.3057"/>
+        <dia:rectangle val="8.40997,19.1475;8.45353,26.3056"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="8.425,19.1625"/>
@@ -1540,7 +1540,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true">
+  <dia:layer name="差し込み" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O47">
       <dia:attribute name="obj_pos">
         <dia:point val="9.2717,9.77132"/>
@@ -1589,12 +1589,13 @@
         <dia:point val="9.2967,11.2713"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.2967,10.9188;17.2967,11.3213"/>
+        <dia:rectangle val="9.2967,10.9188;17.2967,11.8213"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#ああああああああああああああああああああ#</dia:string>
+            <dia:string>#ああああああああああああああああああああ
+ああああああああああああああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -1620,7 +1621,7 @@
         <dia:string>#KAISETU#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
-        <dia:int val="0"/>
+        <dia:int val="20"/>
       </dia:attribute>
       <dia:attribute name="embed_char_type">
         <dia:enum val="0"/>
