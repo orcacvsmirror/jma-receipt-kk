@@ -1,6 +1,6 @@
       *******************************************************************
       * Project code name "ORCA"
-      * “úˆã•W€ƒŒƒZƒvƒgƒ\ƒtƒgiJMA standard receipt softwarej
+      * Æü°åÉ¸½à¥ì¥»¥×¥È¥½¥Õ¥È¡ÊJMA standard receipt software¡Ë
       * Copyright(C) 2002 JMA (Japan Medical Association)
       *
       * This program is part of "JMA standard receipt software".
@@ -15,15 +15,16 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
-      *  ƒRƒs[‹åC³—š—ğ
-      * Maj/Min/Rev  C³Ò  “ú•t        “à—e
-      *  01.00.01    ‹gì    2009/06/04  V‹Kì¬
+      *  ¥³¥Ô¡¼¶ç½¤ÀµÍúÎò
+      * Maj/Min/Rev  ½¤Àµ¼Ô  ÆüÉÕ        ÆâÍÆ
+      *  01.00.01    µÈÀî    2009/06/04  ¿·µ¬ºîÀ®
+      *  01.00.02    µÈÀî    2015/03/11  ³«Àß¼Ô»áÌ¾¤Î¥Ğ¥¤¥È¿ôÁı²Ã
       ******************************************************************
        01  SC07.
            03  SC07-SEIYMD                  PIC  X(22).
            03  SC07-ADRS                    PIC  X(100).
            03  SC07-HOSPNAME                PIC  X(100).
-           03  SC07-KAISETU                 PIC  X(40).
+           03  SC07-KAISETU                 PIC  X(80).
            03  SC07-SRYMM                   PIC  X(06).
            03  SC07-SEIKYUGK                PIC  X(11).
            03  SC07-KINYU                   PIC  X(20).

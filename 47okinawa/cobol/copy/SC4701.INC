@@ -15,12 +15,16 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者  日付        内容
+      *  01.00.01    吉川    2015/03/11  開設者氏名のバイト数増加
+      ******************************************************************
         01  SC01.
             03  SC01-SRYYM      PIC X(16).
             03  SC01-SEIYMD     PIC X(22).
             03  SC01-ADRS       PIC X(100).
             03  SC01-HOSPNAME   PIC X(100).
-            03  SC01-KAISETU    PIC X(60).
+            03  SC01-KAISETU    PIC X(80).
             03  SC01-NYUGAI-TBL         OCCURS  2 TIMES.
                 05  SC01-KENSU  PIC X(05).
                 05  SC01-NISSU  PIC X(05).
