@@ -70,6 +70,8 @@
       *  01.00.24    µÈÀî    14/10/23    ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
       *  01.00.25    ÇëÌî    14/12/09    ¡Ö¸øÈñÊ¬´µ¼ÔÉéÃ´³Û¡×Íó¤ò1±ßÃ±°Ì¤Ç
       *                                  µ­ºÜ¤¹¤ë¤è¤¦¤Ë½¤Àµ
+      *  01.00.26    µÈÀî    15/03/12    ¸øÈñÊ¬´µ¼ÔÉéÃ´³Û¤ÏÆþ±¡¤Î¾å¸Â³Û¤Ç
+      *                                  »ß¤Þ¤ë¤è¤¦¤Ë½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1099,6 +1101,12 @@
                  END-IF
                END-IF
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *=== Æþ±¡¾å¸Â³Û¹ÍÎ¸ by Yoshikawa(2015/03/12) start
+               IF  RECE02-FTNMONEY(1)  >   ZERO  
+               AND RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
+                   MOVE    RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
+               END-IF
+      *=== Æþ±¡¾å¸Â³Û¹ÍÎ¸ by Yoshikawa(2015/03/12) end
              END-IF
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1175,6 +1183,12 @@
                        END-IF
                      END-IF
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *=== Æþ±¡¾å¸Â³Û¹ÍÎ¸ by Yoshikawa(2015/03/12) start
+                     IF  RECE02-FTNMONEY(1)  >   ZERO  
+                     AND RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
+                         MOVE    RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
+                     END-IF
+      *=== Æþ±¡¾å¸Â³Û¹ÍÎ¸ by Yoshikawa(2015/03/12) end
                    END-IF
                    MOVE    SPACE           TO  MF100-ETCKOHNUM
       *---(01.00.06) LINE ADD END   ------------------------------------
