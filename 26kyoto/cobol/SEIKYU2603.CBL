@@ -69,6 +69,8 @@
       *                                  変更した場合はまとめて印字する
       *  01.00.24    萩野    14/12/09    「公費分患者負担額」欄を1円単位で
       *                                  記載するように修正
+      *  01.00.25    吉川    15/03/12    公費分患者負担額は入院の上限額で
+      *                                  止まるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1072,6 +1074,12 @@
                  END-IF
                END-IF
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *=== 入院上限額考慮 by Yoshikawa(2015/03/12) start
+               IF  RECE02-FTNMONEY(1)  >   ZERO  
+               AND RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
+                   MOVE    RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
+               END-IF
+      *=== 入院上限額考慮 by Yoshikawa(2015/03/12) end
              END-IF
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
@@ -1148,6 +1156,12 @@
                        END-IF
                      END-IF
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *=== 入院上限額考慮 by Yoshikawa(2015/03/12) start
+                     IF  RECE02-FTNMONEY(1)  >   ZERO  
+                     AND RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
+                         MOVE    RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
+                     END-IF
+      *=== 入院上限額考慮 by Yoshikawa(2015/03/12) end
                    END-IF
                    MOVE    SPACE           TO  MF100-ETCKOHNUM
       *---(01.00.06) LINE ADD END   ------------------------------------
