@@ -1141,6 +1141,7 @@
       *    £±£¹¡¥È÷¹Í¡ÊNULL¥»¥Ã¥È¡Ë
       *=== È÷¹ÍÍó¤Îµ­ºÜ by hagino(2015/03/16) start
       *       MOVE    SPACE                   TO  WRK-DATA
+      *       MOVE    255                     TO  WRK-NAGASA
              IF  MF100-ZENKOHNUM        =   "052"
                                        OR   "054"
       *        ÊÝ¸±ÈÖ¹æ¥Þ¥¹¥¿¡¼¸¡º÷
@@ -1149,11 +1150,12 @@
                    INITIALIZE              HKNNUM-REC
                END-IF
                MOVE     HKN-HBTNUM           TO  WRK-DATA
+             MOVE    2                       TO  WRK-NAGASA
              ELSE
                MOVE    SPACE                 TO  WRK-DATA
+               MOVE    255                   TO  WRK-NAGASA
              END-IF
       *=== È÷¹ÍÍó¤Îµ­ºÜ by hagino(2015/03/16) end
-             MOVE    255                     TO  WRK-NAGASA
              MOVE    1                       TO  WRK-END
              PERFORM 5004-MOJI-HENSYU-SEC
       *
