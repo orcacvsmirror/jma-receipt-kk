@@ -70,6 +70,10 @@
                 05  SC09-SRYYM.
                     07  SC09-SRYY                    PIC X(04).
                     07  SC09-SRYM                    PIC X(04).
+      *=== 備考欄の記載 by hagino(2015/03/16) start
+      *備考
+                05  SC09-BIKO                        PIC X(10).
+      *=== 備考欄の記載 by hagino(2015/03/16) end
       *合計テーブル
             03  SC09-GOKEI-AREA.
       *合計ー点数

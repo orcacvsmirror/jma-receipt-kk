@@ -52,6 +52,8 @@
       *                                記載する
       *  01.00.10    吉川    13/10/11  自己負担額がない場合は印字対象外
       *                                プログラムオプション対応
+      *  01.00.11    萩野    15/03/16  小児慢性、難病を併用した場合は備考欄に
+      *                                法別番号52,54を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -159,6 +161,9 @@
            03  FLG-PRGOPTION   PIC 9(01).
            03  FLG-OK          PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2013/10/11) end
+      *=== 備考欄の記載 by hagino(2015/03/16) start
+           03  FLG-HKNNUM          PIC 9(01).
+      *=== 備考欄の記載 by hagino(2015/03/16) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -348,6 +353,13 @@
       *    請求管理情報
            COPY    "CPRCF010.INC".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 備考欄の記載 by hagino(2015/03/16) start
+      *    保険マスタ
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *=== 備考欄の記載 by hagino(2015/03/16) end
+      *
       *    パラメタ
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
@@ -1263,6 +1275,19 @@
                MOVE     LNK-DAY2-EDTYMD2(11:4)  TO  SC09-SRYM(IDX1)
              END-IF
       *
+      *=== 備考欄の記載 by hagino(2015/03/16) start
+      *    備考
+             IF    MF100-ZENKOHNUM        =   "052"
+                                         OR   "054"
+      *        保険番号マスター検索
+               PERFORM 900-HKNNUM-READ-SEC
+               IF      FLG-HKNNUM      NOT =   ZERO
+                   INITIALIZE              HKNNUM-REC
+               END-IF
+               MOVE     HKN-HBTNUM              TO  SC09-BIKO(IDX1)
+             END-IF
+      *=== 備考欄の記載 by hagino(2015/03/16) end
+      *
       *    合計加算
              ADD    MF100-TOTALTEN            TO  SUM-GTENSU
              ADD    MF100-FTNMONEY            TO  SUM-GITBFTN
@@ -1410,6 +1435,13 @@
       *=== 自己負担がない場合は印字対象外 by Yoshikawa(2013/10/11) end
              END-IF
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2011/06/22) end
+      *
+      *=== 備考欄の記載 by hagino(2015/03/16) start
+             IF    SYU-KOH-HKNNUM(IDX)(1:1) =  "0"
+               MOVE    SYU-KOH-HKNNUM(IDX) TO    MF100-ZENKOHNUM
+             END-IF
+      *=== 備考欄の記載 by hagino(2015/03/16) end
+      *
              IF    SYU-KOH-HKNNUM(IDX)   =   "972"
                MOVE    1     TO    FLG-TYOKI
              END-IF
@@ -1597,7 +1629,58 @@
            .
        900-TMP-READ-EXT.
            EXIT.
-      *      
+      *
+      *=== 備考欄の記載 by hagino(2015/03/16) start
+      *****************************************************************
+      *    保険番号マスター読み込み
+      *****************************************************************
+       900-HKNNUM-READ-SEC         SECTION.
+      *
+           INITIALIZE                  HKNNUM-REC
+           MOVE    SPA-HOSPNUM         TO  HKN-HOSPNUM
+           MOVE    MF100-ZENKOHNUM     TO  HKN-HKNNUM
+           MOVE    LNK-PRTKANRI-SRYYM  TO  HKN-TEKSTYMD
+           MOVE    "01"                TO  HKN-TEKSTYMD(7:2)
+           MOVE    LNK-PRTKANRI-SRYYM  TO  HKN-TEKEDYMD
+           MOVE    "01"                TO  HKN-TEKEDYMD(7:2)
+           MOVE    "00"                TO  HKN-PAYKBN
+      *
+           MOVE    HKNNUM-REC          TO  MCPDATA-REC
+           MOVE    "tbl_hknnum"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_hknnum"        TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING   MCPAREA
+                                                   MCPDATA-REC
+                                                   SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  HKNNUM-REC
+                   MOVE    ZERO            TO  FLG-HKNNUM
+               ELSE
+                   MOVE    1               TO  FLG-HKNNUM
+               END-IF
+           ELSE
+               MOVE    1               TO  FLG-HKNNUM
+           END-IF
+      *
+           MOVE    "tbl_hknnum"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+      *
+           .
+       900-HKNNUM-READ-EXT.
+           EXIT.
+      *=== 備考欄の記載 by hagino(2015/03/16) end
+      *
       *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
