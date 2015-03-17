@@ -80,6 +80,7 @@
       *                                  È÷¹ÍÍó¤Øµ­ºÜ¤¹¤ë
       *  01.00.25    µÈÀî    15/02/16    ·ëÀºÅÀ¿ôÍó¤ÎÂÐ¾Ý¸øÈñ½¤Àµ
       *  01.00.26    µÈÀî    15/03/05    ¸øÈñ¤Î½õÀ®¤¬¤Ê¤¤¾ì¹ç¤Ï°õ»ú¤·¤Ê¤¤
+      *  01.00.27    µÈÀî    15/03/17    È÷¹Í£³¤¬µ­ºÜ¤µ¤ì¤Ê¤¯¤Ê¤ë¸½¾Ý½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1796,7 +1797,10 @@
       *=== È÷¹ÍÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/01/28) end
       *
              IF (MF100-TOTALTEN  >  MF100-FUKUSITEN)
-               INITIALIZE                           WRK-BIKO
+      *=== È÷¹Í£³¤ÎÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2015/03/17) start
+      *         INITIALIZE                           WRK-BIKO
+               INITIALIZE                           WRK-BIKO3
+      *=== È÷¹Í£³¤ÎÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2015/03/17) end
                MOVE    MF100-FUKUSITEN   TO  WRK-Z8
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2    >    9
