@@ -87,8 +87,7 @@
       *  01.00.27    µ»¿Ó    15/01/06     ø¿Æ£≤£∑«Ø£±∑Ó≤˛¿µ¬–±˛
       *  01.00.28    µ»¿Ó    15/01/29    ∆Ò…¬°‹π‚≥€§ŒæÏπÁ°¢»˜πÕÕÛ§À
       *                                  π‚≥€∂Ë ¨§¨∞ıª˙§µ§Ï§ §§§Œ§ÚΩ§¿µ
-      *  01.00.29    µ»¿Ó    15/03/16    ∆Ò…¬∑–≤·¡º√÷§ŒæÏπÁ°¢…∏Ω‡…È√¥≥€§œ
-      *                                  £±°ø£≤§Œ∂‚≥€§Úµ≠∫‹§π§Î§Ë§¶§ÀΩ§¿µ
+      *  01.00.29    µ»¿Ó    15/03/16    …∏Ω‡…È√¥≥€ÕÛ§œ °ª„§À∑∏§Î∂‚≥€§Úµ≠∫‹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -200,6 +199,9 @@
       *=== ∆Ò…¬°‹π‚≥€§ŒΩ§¿µ by Yoshikawa(2015/01/29) start
            03  FLG-NINTEI     PIC 9(01).
       *=== ∆Ò…¬°‹π‚≥€§ŒΩ§¿µ by Yoshikawa(2015/01/29) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+           03  FLG-KOHSKJ     PIC 9(01).
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
       *
       *    ≈∫ª˙ŒŒ∞Ë
        01  IDX-AREA.
@@ -254,10 +256,10 @@
                05   WRK-SEIKYUGK-G        PIC 9(08)V9(01).
                05   WRK-SEIKYUGK-G2       PIC 9(08).
                05   WRK-SEIKYUGK          PIC 9(08)V9(01).
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-               05   WRK-54-SKJFTN         PIC 9(08).
-               05   WRK-54-SKJFTN-G       PIC 9(08).
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+               05   WRK-KOH-SKJFTN        PIC 9(08).
+               05   WRK-KOH-SKJFTN-G      PIC 9(08).
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
            03  WRK-KOHID                  PIC 9(10).
            03  WRK-HKNJANUM               PIC X(06).
            03  WRK-HKNJANAME              PIC X(20).
@@ -980,9 +982,10 @@
       *=== ∏¬≈Ÿ≥€«ßƒÍæ⁄Ãµ§∑§«§‚π‚≥€«ßƒÍ by Yoshikawa(2012/03/19) start
                                             FLG-KOGAKU
       *=== ∏¬≈Ÿ≥€«ßƒÍæ⁄Ãµ§∑§«§‚π‚≥€«ßƒÍ by Yoshikawa(2012/03/19) end
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-                                            WRK-54-SKJFTN-G
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+                                            FLG-KOHSKJ
+                                            WRK-KOH-SKJFTN-G
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
       *
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -1303,12 +1306,12 @@
            END-IF
       *===  ø¿Æ£≤£∑«Ø£±∑Ó≤˛¿µ¬–±˛ by Yoshikawa(2015/01/06) end
       *
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-      *    £µ£¥∆Ò…¬§Œø©ªˆ…È√¥
-           IF  WRK-54-SKJFTN-G  NOT =  ZERO
-               MOVE    WRK-54-SKJFTN-G      TO  MF100-SHOKUJIFTN
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+      *    ø©ªˆ…È√¥
+           IF  FLG-KOHSKJ  =  1
+               MOVE    WRK-KOH-SKJFTN-G      TO  MF100-SHOKUJIFTN
            END-IF
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
       *
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
@@ -3230,9 +3233,9 @@
       *
            MOVE    ZERO     TO     FLG-HEIYOU
                                    WRK-SEIKYUGK
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-                                   WRK-54-SKJFTN
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+                                   WRK-KOH-SKJFTN
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4 OR
@@ -3259,6 +3262,11 @@
       *         END-IF
       **=== ¿¡µ·≥€∑◊ªª ˝À°§Œ —ππ by Yoshikawa(2010/07/26) end
       *=== ¿¡µ·≥€§Œ∑◊ªª ˝À° —ππ by Yoshikawa(2010/10/04) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+      *        º˝«º§À∑◊ªª§µ§Ï§øø©ªˆ…È√¥≥€§¨§¢§Î§Œ§«§Ω§Ï§Úª»Õ—
+               MOVE    SYU-SKJ-FTN(IDX)      TO  WRK-KOH-SKJFTN
+               MOVE    1                     TO  FLG-KOHSKJ
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
              END-IF
       *
              IF  SYU-KOH-HKNNUM(IDX)  =  "010"  OR  "011"  OR
@@ -3304,17 +3312,6 @@
              END-IF
       *=== ∏¬≈Ÿ≥€«ßƒÍæ⁄Ãµ§∑§«§‚π‚≥€«ßƒÍ by Yoshikawa(2012/03/19) end
       *
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-      *      ∆Ò…¬§«∑–≤·¡º√÷§´
-             IF  SYU-KOH-HKNNUM(IDX)  =  "054"
-               PERFORM 940-PTKOHINF-READ-SEC
-               IF  PTKOH-FTNJANUM(5:3)  =  "501"
-      *          º˝«º§À£±°ø£≤∑◊ªª§µ§Ï§øø©ªˆ…È√¥≥€§¨§¢§Î§Œ§«§Ω§Ï§Úª»Õ—
-                 MOVE    SYU-SKJ-FTN(IDX)      TO  WRK-54-SKJFTN
-               END-IF
-             END-IF
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
-      *
            END-PERFORM
       *
            IF    FLG-HEIYOU    =    ZERO
@@ -3338,9 +3335,9 @@
            END-IF
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-           ADD    WRK-54-SKJFTN              TO    WRK-54-SKJFTN-G
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
+           ADD    WRK-KOH-SKJFTN             TO    WRK-KOH-SKJFTN-G
+      *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
            DISPLAY "≤√ªª¿¡µ·≥€="  WRK-SEIKYUGK
       *
       *
@@ -4040,57 +4037,6 @@
            EXIT.
       *=== ∏¬≈Ÿ≥€Ã§À˛§œ°÷∆√°◊¬–æ›≥∞ by Yoshikawa(2010/07/26) end
       *
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
-      *****************************************************************
-      *    ¥µº‘∏¯»Òæ Û∆…§ﬂπ˛§ﬂ
-      *****************************************************************
-       940-PTKOHINF-READ-SEC         SECTION.
-      *
-           INITIALIZE                     PTKOHINF-REC
-           MOVE  SPA-HOSPNUM          TO  PTKOH-HOSPNUM
-           MOVE  SYU-PTID             TO  PTKOH-PTID
-           MOVE  "054"                TO  PTKOH-KOHNUM
-           MOVE  SYU-SKYSTYMD         TO  PTKOH-TEKEDYMD
-           MOVE  SYU-SKYEDYMD         TO  PTKOH-TEKSTYMD
-      *
-           MOVE  PTKOHINF-REC         TO  MCPDATA-REC
-           MOVE  "DBSELECT"           TO  MCP-FUNC
-           MOVE  "tbl_ptkohinf"       TO  MCP-TABLE
-           MOVE  "key6"               TO  MCP-PATHNAME
-           CALL  "ORCDBMAIN"          USING
-                                      MCPAREA
-                                      MCPDATA-REC
-                                      SPA-AREA
-           IF      MCP-RC              =   ZERO
-               MOVE  "DBFETCH"            TO  MCP-FUNC
-               MOVE  "tbl_ptkohinf"       TO  MCP-TABLE
-               MOVE  "key6"               TO  MCP-PATHNAME
-               CALL  "ORCDBMAIN"          USING
-                                          MCPAREA
-                                          MCPDATA-REC
-                                          SPA-AREA
-               IF      MCP-RC              =   ZERO
-                   MOVE    MCPDATA-REC    TO  PTKOHINF-REC
-                   MOVE    ZERO           TO  FLG-PTKOHINF
-               ELSE
-                   MOVE    1              TO  FLG-PTKOHINF
-               END-IF
-           ELSE
-               MOVE    1              TO  FLG-PTKOHINF
-           END-IF
-      *
-           MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
-           MOVE  "tbl_ptkohinf"       TO  MCP-TABLE
-           MOVE  "key6"               TO  MCP-PATHNAME
-           CALL  "ORCDBMAIN"          USING
-                                      MCPAREA
-                                      MCPDATA-REC
-                                      SPA-AREA
-      *
-           .
-       940-PTKOHINF-READ-EXT.
-           EXIT.
-      *=== ∆Ò…¬§œ…∏Ω‡…È√¥≥€§Œ£±°ø£≤§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
       *---(01.00.05) LINE ADD START ------------------------------------
       *****************************************************************
       *    ¿¡µ·¥…Õ˝∆…π˛
