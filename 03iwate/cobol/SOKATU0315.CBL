@@ -48,6 +48,7 @@
       *  01.00.10    吉川    2012/12/19  医療機関情報編集修正
       *  01.00.11    吉川    2014/05/20  在宅の対象とする診療コード変更
       *  01.00.12    吉川    2014/10/03  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.13    吉川    2015/04/01  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -894,6 +895,13 @@
       *           PERFORM 20013-KITEI-SYUKEI-SEC
       *       END-IF
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *      難病
+             IF  RECE10-KOHNUM(IDXX)      =  "054"
+                 MOVE      5                   TO  IDX4
+                 PERFORM 20013-KITEI-SYUKEI-SEC
+             END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
            END-PERFORM
       *
       *    公費負担分
@@ -1366,6 +1374,9 @@
       *=== 091は051と同じ所に集計 by Yoshikawa(2008/05/15) start
                                         OR "091"
       *=== 091は051と同じ所に集計 by Yoshikawa(2008/05/15) end
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+                                        OR "054"
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
                  CONTINUE
                ELSE
                  IF  SUM-KOHNUM (IDX2)   =   SPACE
@@ -1666,7 +1677,10 @@
            PERFORM VARYING IDY1     FROM    1   BY  1
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
       *             UNTIL   IDY1     >       5
-                   UNTIL   IDY1     >       4
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *             UNTIL   IDY1     >       4
+                   UNTIL   IDY1     >       5
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
              PERFORM VARYING IDY2   FROM    1   BY  1
                      UNTIL   IDY2   >       2
@@ -1702,7 +1716,10 @@
            PERFORM VARYING IDY     FROM    1   BY  1
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) start
       *             UNTIL   IDY     >       3         
-                   UNTIL   IDY     >       4         
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *             UNTIL   IDY     >       4         
+                   UNTIL   IDY     >       3
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
       *=== 帳票様式の変更 by Yoshikawa(2012/04/19) end
                    OR      FLG-KOH-END     =   1
              IF      SUM-KOHNUM (IDX2)   =   SPACE

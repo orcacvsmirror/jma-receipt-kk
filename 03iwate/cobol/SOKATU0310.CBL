@@ -59,6 +59,7 @@
       *                                  在宅の対象とする診療コード変更
       *  01.00.21    吉川    2014/08/06  返戻時、再印刷画面のタイトル修正
       *  01.00.22    吉川    2014/10/03  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.22    吉川    2015/04/01  帳票様式の変更に伴う修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1419,6 +1420,10 @@
                                 MOVE  18  TO  IDX4
                  WHEN  "053"    MOVE  6   TO  CNT-KOH
                                 MOVE  18  TO  IDX4
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+                 WHEN  "054"    MOVE  7   TO  CNT-KOH
+                                MOVE  18  TO  IDX4
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
                  WHEN  OTHER
       *
       **--- 01.00.08 シス管「2007」対応 LINE ADD START MONMA ------------
@@ -1451,7 +1456,10 @@
       *--- 01.00.08 シス管「2007」対応 LINE ADD END   MONMA ------------
       *
       *    公費判別
-                   PERFORM  VARYING  IDX4  FROM  7  BY  1
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *             PERFORM  VARYING  IDX4  FROM  7  BY  1
+                   PERFORM  VARYING  IDX4  FROM  8  BY  1
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
                             UNTIL    IDX4  >     18
                             OR       SKT0310TMP-KOHNUM (IDX4) = SPACE
                      IF  RECE10-KOHNUM(IDX3) = SKT0310TMP-KOHNUM(IDX4)
@@ -1902,7 +1910,10 @@
       *
       *    既定公費処理
              PERFORM  VARYING  IDX1  FROM  1  BY  1
-                      UNTIL    IDX1  >     6
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *                UNTIL    IDX1  >     6
+                      UNTIL    IDX1  >     7
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >     2
       *    療養の給付：件数
@@ -1938,11 +1949,17 @@
                MOVE  SKT0310TMP-S-KFTNGAKU (IDX1)      TO  WRK-Z9
                MOVE  WRK-Z9   TO  SKT0320-S-FTNGAKU(IDX1)
              END-PERFORM
-             MOVE  7  TO  WRK-CNT
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *       MOVE  7  TO  WRK-CNT
+             MOVE  8  TO  WRK-CNT
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
            END-IF
       *
       *    公費の印字
-           PERFORM  VARYING  IDX3  FROM  7  BY  1
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *     PERFORM  VARYING  IDX3  FROM  7  BY  1
+           PERFORM  VARYING  IDX3  FROM  8  BY  1
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
                     UNTIL    IDX3  >     10
                     OR  WRK-CNT    >     18
                     OR  SKT0310TMP-KOHNUM(WRK-CNT) = SPACE
@@ -1983,19 +2000,31 @@
       *
       *    公費番号
              MOVE  SKT0310TMP-KOHNUM (WRK-CNT)(2:2)
-                            TO  SKT0320-KOHNUM (IDX3 - 6)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *                      TO  SKT0320-KOHNUM (IDX3 - 6)
+                            TO  SKT0320-KOHNUM (IDX3 - 7)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
       *    公費名
              MOVE  SKT0310TMP-KOHNUM (WRK-CNT)  TO  WRK-KOHNUM
              PERFORM  950-HKNNUM-SET-SEC
-             MOVE  HKN-TANSEIDONAME   TO  SKT0320-KOHNAME (IDX3 - 6)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *       MOVE  HKN-TANSEIDONAME   TO  SKT0320-KOHNAME (IDX3 - 6)
+             MOVE  HKN-TANSEIDONAME   TO  SKT0320-KOHNAME (IDX3 - 7)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
       *
       *--- 01.00.08 シス管「2007」対応 LINE ADD START MONMA ------------
       *       MOVE  HKN-TANSEIDONAME   TO  SKT2210-KOHNAME(IDX3)      
              IF  SKT0310TMP-KOHNAME (WRK-CNT)  NOT =  SPACE
                MOVE  SKT0310TMP-KOHNAME (WRK-CNT)
-                                        TO  SKT0320-KOHNAME(IDX3 - 6)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *                                  TO  SKT0320-KOHNAME(IDX3 - 6)
+                                        TO  SKT0320-KOHNAME(IDX3 - 7)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
              ELSE
-               MOVE  HKN-TANSEIDONAME   TO  SKT0320-KOHNAME(IDX3 - 6)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) start
+      *         MOVE  HKN-TANSEIDONAME   TO  SKT0320-KOHNAME(IDX3 - 6)
+               MOVE  HKN-TANSEIDONAME   TO  SKT0320-KOHNAME(IDX3 - 7)
+      *=== 帳票様式の変更 by Yoshikawa(2015/04/01) end
              END-IF
       *--- 01.00.08 シス管「2007」対応 LINE ADD END   MONMA ------------
       *
