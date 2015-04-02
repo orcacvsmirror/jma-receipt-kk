@@ -7,6 +7,7 @@ bind	"SEIKYU0811"	"OpenCOBOL";
 bind	"SOKATU0800"	"OpenCOBOL";
 bind	"SOKATU0810"	"OpenCOBOL";
 bind	"SOKATU0815"	"OpenCOBOL";
+bind	"SOKATU0820"	"OpenCOBOL";
 
 
 #include "orcadb.inc"
