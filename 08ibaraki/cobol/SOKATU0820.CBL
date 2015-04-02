@@ -119,7 +119,6 @@
       *    カウント領域
        01  CNT-AREA.
            03  CNT-PAGE            PIC 9(03).
-           03  CNT-RECE10          PIC 9(06).
       *
            COPY    "COMMON-SPA".
       *
@@ -145,8 +144,6 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
-      *
-           COPY    "CPRCF010.INC".
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
