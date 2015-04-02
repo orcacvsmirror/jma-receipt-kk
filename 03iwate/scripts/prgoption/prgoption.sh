@@ -44,32 +44,41 @@ NOWYMD=$(date +"%Y%m%d")
 NOWHMS=$(date +"%H%M%S")
 NOWDIR=$(pwd)
 
-FILENAME=(`ls | grep exp$`)
-COUNT=(`ls | grep exp$ | wc -w`)
-SU=0
-
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-#ファイルの数だけ登録プログラムを実行する
-while test ${SU} -lt ${COUNT}
+#グループ診療対応（HOSPNUMの数だけ実行）
+SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+for HOSPNUM in $SYSBASE
 do
+  FILENAME=(`ls | grep exp$`)
+  COUNT=(`ls | grep exp$ | wc -w`)
+  SU=0
+#ファイルの数だけ登録プログラムを実行する
+  while test ${SU} -lt ${COUNT}
+  do
     KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.exp//'`
     $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"exp"
 
     SU=$(expr ${SU} + 1)
+  done
 done
 
 #optファイルも同様に行う
-FILENAME=(`ls | grep opt$`)
-COUNT=(`ls | grep opt$ | wc -w`)
-SU=0
-
-while test ${SU} -lt ${COUNT}
+#グループ診療対応（HOSPNUMの数だけ実行）
+SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+for HOSPNUM in $SYSBASE
 do
+  FILENAME=(`ls | grep opt$`)
+  COUNT=(`ls | grep opt$ | wc -w`)
+  SU=0
+
+  while test ${SU} -lt ${COUNT}
+  do
     KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.opt//'`
     $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"opt"
 
     SU=$(expr ${SU} + 1)
+  done
 done
 
 # so del
