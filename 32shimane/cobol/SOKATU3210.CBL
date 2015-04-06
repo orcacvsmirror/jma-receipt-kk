@@ -52,6 +52,8 @@
       *                                    ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ
       * 01.00.12     ÇëÌî       14/08/11   ÊÖÌá»þ¡¢ºÆ°õºþ²èÌÌ¤Î¥¿¥¤¥È¥ë½¤Àµ
       * 01.00.13     µÈÀî       14/10/24   ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
+      * 01.00.14     µÈÀî       15/04/06   Æý»ùÍó¡¢Ê¡»ãÍó¤ÎÂÐ¾Ý¸øÈñ¤Ï
+      *                                    ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥ó¤ò»²¾È¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -240,6 +242,14 @@
       ****2006/01/06  @@@@-BRAND  START
            03  WRK-ETC-FTNJANUM        PIC X(20).
       ****2006/01/06  @@@@-BRAND  END
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *    ÂÐ¾ÝÆý»ù¸øÈñÈÖ¹æ
+           03  WRK-NYJ-TBL.
+               05  WRK-NYJ         PIC X(03)   OCCURS 10.
+      *    ÂÐ¾ÝÊ¡»ã¸øÈñÈÖ¹æ
+           03  WRK-FKS-TBL.
+               05  WRK-FKS         PIC X(03)   OCCURS 10.
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
       *
       *--- (2008/12/16) line add start monma ---------------------------
            03  WRK-KOHNAME         PIC X(08).
@@ -763,6 +773,36 @@
            PERFORM 1001-OPTION-SET-SEC
            MOVE    WRK-OPTION(1)(1:6)        TO  WRK-YUSEN
            DISPLAY "Í¥ÀèÊÝ¸±¼ÔÈÖ¹æ="  WRK-YUSEN
+      *
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *    ÂÐ¾ÝÆý»ùÈÖ¹æ
+           MOVE    "SEIKYU3203"              TO  WRK-PRGID
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  10
+             IF  WRK-OPTION(IDX)  NOT =  SPACE
+               MOVE    WRK-OPTION(IDX)(1:3)  TO  WRK-NYJ(IDX)
+             ELSE
+               MOVE    "999"                 TO  WRK-NYJ(IDX)
+             END-IF
+             DISPLAY "ÂÐ¾ÝÆý»ù¸øÈñÈÖ¹æ=" WRK-NYJ(IDX)
+           END-PERFORM
+      *
+      *    ÂÐ¾ÝÊ¡»ãÈÖ¹æ
+           MOVE    "SEIKYU3205"              TO  WRK-PRGID
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  10
+             IF  WRK-OPTION(IDX)  NOT =  SPACE
+               MOVE    WRK-OPTION(IDX)(1:3)  TO  WRK-FKS(IDX)
+             ELSE
+               MOVE    "999"                 TO  WRK-FKS(IDX)
+             END-IF
+             DISPLAY "ÂÐ¾ÝÊ¡»ã¸øÈñÈÖ¹æ=" WRK-FKS(IDX)
+           END-PERFORM
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
       *
            .
        100-OPTION-SELECT-EXT.
@@ -1316,13 +1356,37 @@
                           MOVE    12  TO  CNT-KOH
                    WHEN  "079"
                           MOVE    13  TO  CNT-KOH
-                   WHEN  "190"
-                   WHEN  "290"
-                   WHEN  "390"
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *             WHEN  "190"
+      *             WHEN  "290"
+      *             WHEN  "390"
+                   WHEN  WRK-NYJ(1)
+                   WHEN  WRK-NYJ(2)
+                   WHEN  WRK-NYJ(3)
+                   WHEN  WRK-NYJ(4)
+                   WHEN  WRK-NYJ(5)
+                   WHEN  WRK-NYJ(6)
+                   WHEN  WRK-NYJ(7)
+                   WHEN  WRK-NYJ(8)
+                   WHEN  WRK-NYJ(9)
+                   WHEN  WRK-NYJ(10)
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
                           MOVE    14  TO  CNT-KOH
-                   WHEN  "191"
-                   WHEN  "291"
-                   WHEN  "391"
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *             WHEN  "191"
+      *             WHEN  "291"
+      *             WHEN  "391"
+                   WHEN  WRK-FKS(1)
+                   WHEN  WRK-FKS(2)
+                   WHEN  WRK-FKS(3)
+                   WHEN  WRK-FKS(4)
+                   WHEN  WRK-FKS(5)
+                   WHEN  WRK-FKS(6)
+                   WHEN  WRK-FKS(7)
+                   WHEN  WRK-FKS(8)
+                   WHEN  WRK-FKS(9)
+                   WHEN  WRK-FKS(10)
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
                           MOVE    15  TO  CNT-KOH
       *---(01.00.02) LINE ADD END   ------------------------------------
                END-EVALUATE 
