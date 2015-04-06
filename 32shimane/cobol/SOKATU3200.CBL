@@ -44,6 +44,8 @@
       *                                    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
       *  01.00.13    µÈÀî      14/05/14    ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ
       *  01.00.14    ÇëÌî      14/08/08    ÊÖÌá»þ¡¢ºÆ°õºþ²èÌÌ¤Î¥¿¥¤¥È¥ë½¤Àµ
+      *  01.00.15    µÈÀî      15/04/06    Æý»ùÍó¡¢Ê¡»ãÍó¤ÎÂÐ¾Ý¸øÈñ¤Ï
+      *                                    ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥ó¤ò»²¾È¤¹¤ë
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -250,6 +252,14 @@
            03  WRK-HKNNUM          PIC X(03).
            03  WRK-KENNAME         PIC X(10).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *    ÂÐ¾ÝÆý»ù¸øÈñÈÖ¹æ
+           03  WRK-NYJ-TBL.
+               05  WRK-NYJ         PIC X(03)   OCCURS 10.
+      *    ÂÐ¾ÝÊ¡»ã¸øÈñÈÖ¹æ
+           03  WRK-FKS-TBL.
+               05  WRK-FKS         PIC X(03)   OCCURS 10.
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
       *
       *=== ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ by Yoshikawa(2014/05/14) start
            03  WRK-OPTION-TBL.
@@ -728,6 +738,36 @@
            END-IF
            DISPLAY "ÀÁµáÀßÄê="  WRK-SEIKYUKBN
       *
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *    ÂÐ¾ÝÆý»ùÈÖ¹æ
+           MOVE    "SEIKYU3203"              TO  WRK-PRGID
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  10
+             IF  WRK-OPTION(IDX)  NOT =  SPACE
+               MOVE    WRK-OPTION(IDX)(1:3)  TO  WRK-NYJ(IDX)
+             ELSE
+               MOVE    "999"                 TO  WRK-NYJ(IDX)
+             END-IF
+             DISPLAY "ÂÐ¾ÝÆý»ù¸øÈñÈÖ¹æ=" WRK-NYJ(IDX)
+           END-PERFORM
+      *
+      *    ÂÐ¾ÝÊ¡»ãÈÖ¹æ
+           MOVE    "SEIKYU3205"              TO  WRK-PRGID
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  10
+             IF  WRK-OPTION(IDX)  NOT =  SPACE
+               MOVE    WRK-OPTION(IDX)(1:3)  TO  WRK-FKS(IDX)
+             ELSE
+               MOVE    "999"                 TO  WRK-FKS(IDX)
+             END-IF
+             DISPLAY "ÂÐ¾ÝÊ¡»ã¸øÈñÈÖ¹æ=" WRK-FKS(IDX)
+           END-PERFORM
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -1155,38 +1195,51 @@
                  PERFORM  920-SYUNOU-SET-SEC
                END-IF
       *
-      ***** 06/01/19 yamaguchi DEL
-      *         IF   RECE02-KOHNUM (IDZ) =   "191"
-      *         AND  RECE02-RJNHKNNUM  = "027"
-      ***** 06/01/19 yamaguchi INS
-               IF   (( RECE02-KOHNUM (IDZ) =   "191"
-               AND  RECE02-RJNHKNNUM  = "027" )
-               OR   ( RECE02-KOHNUM (IDZ) =   "391"
-               AND  RECE02-RJNHKNNUM  = "027" ))
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      ****** 06/01/19 yamaguchi DEL
+      **         IF   RECE02-KOHNUM (IDZ) =   "191"
+      **         AND  RECE02-RJNHKNNUM  = "027"
+      ****** 06/01/19 yamaguchi INS
+      *         IF   (( RECE02-KOHNUM (IDZ) =   "191"
+      *         AND  RECE02-RJNHKNNUM  = "027" )
+      *         OR   ( RECE02-KOHNUM (IDZ) =   "391"
+      *         AND  RECE02-RJNHKNNUM  = "027" ))
+      *         AND  FLG-ERR           =  ZERO
+      ******
+      **    Ê¡»ãÏ·¿Í·ï¿ô
+      *           IF   WRK-PARA-SYOKBN      =  "2"
+      *           AND  RECE02-HENREIYM  NOT =  "000000"
+      *             ADD    1     TO     SUM-FRKENSU
+      *           ELSE
+      *             IF   WRK-PARA-SYOKBN     =  "1"
+      *             AND  RECE02-HENREIYM     =  "000000"
+      *               ADD    1     TO     SUM-FRKENSU
+      *             END-IF
+      *           END-IF
+      *         END-IF
+      ****** 06/01/19 yamaguchi DEL
+      **           IF  RECE02-KOHNUM (IDZ) =   "191" OR "291"
+      ****** 06/01/19 yamaguchi INS
+      *         IF  (( RECE02-KOHNUM (IDZ) =   "191" 
+      *         AND  RECE02-RJNHKNNUM  NOT  = "027" )
+      *         OR  ( RECE02-KOHNUM (IDZ) =   "291" 
+      *         AND  RECE02-RJNHKNNUM  NOT  = "027" )
+      *         OR  ( RECE02-KOHNUM (IDZ) =   "391" 
+      *         AND  RECE02-RJNHKNNUM  NOT  = "027" ))
+      *         AND  FLG-ERR           =  ZERO
+      ****** 
+               IF  (RECE02-KOHNUM(IDZ) =  WRK-FKS(1)
+                                       OR WRK-FKS(2)
+                                       OR WRK-FKS(3)
+                                       OR WRK-FKS(4)
+                                       OR WRK-FKS(5)
+                                       OR WRK-FKS(6)
+                                       OR WRK-FKS(7)
+                                       OR WRK-FKS(8)
+                                       OR WRK-FKS(9)
+                                       OR WRK-FKS(10))
                AND  FLG-ERR           =  ZERO
-      *****
-      *    Ê¡»ãÏ·¿Í·ï¿ô
-                 IF   WRK-PARA-SYOKBN      =  "2"
-                 AND  RECE02-HENREIYM  NOT =  "000000"
-                   ADD    1     TO     SUM-FRKENSU
-                 ELSE
-                   IF   WRK-PARA-SYOKBN     =  "1"
-                   AND  RECE02-HENREIYM     =  "000000"
-                     ADD    1     TO     SUM-FRKENSU
-                   END-IF
-                 END-IF
-               END-IF
-      ***** 06/01/19 yamaguchi DEL
-      *           IF  RECE02-KOHNUM (IDZ) =   "191" OR "291"
-      ***** 06/01/19 yamaguchi INS
-               IF  (( RECE02-KOHNUM (IDZ) =   "191" 
-               AND  RECE02-RJNHKNNUM  NOT  = "027" )
-               OR  ( RECE02-KOHNUM (IDZ) =   "291" 
-               AND  RECE02-RJNHKNNUM  NOT  = "027" )
-               OR  ( RECE02-KOHNUM (IDZ) =   "391" 
-               AND  RECE02-RJNHKNNUM  NOT  = "027" ))
-               AND  FLG-ERR           =  ZERO
-      ***** 
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
       *    Ê¡»ã°åÎÅ·ï¿ô
                    IF   WRK-PARA-SYOKBN      =  "2"
                    AND  RECE02-HENREIYM  NOT =  "000000"
@@ -1199,13 +1252,26 @@
                    END-IF
                END-IF
       *
-      ***** 06/01/19 yamaguchi DEL
-      *         IF   RECE02-KOHNUM (IDZ) =   "190"
-      *         OR  (RECE02-KOHNUM (IDZ) =   "290"
-      *         AND  RECE02-NYUGAIKBN    =   "1")
-      ***** 06/01/19 yamaguchi INS
-               IF   RECE02-KOHNUM (IDZ) =   "190" OR "290" OR "390"
-      ***** 
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      ****** 06/01/19 yamaguchi DEL
+      **         IF   RECE02-KOHNUM (IDZ) =   "190"
+      **         OR  (RECE02-KOHNUM (IDZ) =   "290"
+      **         AND  RECE02-NYUGAIKBN    =   "1")
+      ****** 06/01/19 yamaguchi INS
+      *         IF   RECE02-KOHNUM (IDZ) =   "190" OR "290" OR "390"
+      ****** 
+               IF  (RECE02-KOHNUM(IDZ) =  WRK-NYJ(1)
+                                       OR WRK-NYJ(2)
+                                       OR WRK-NYJ(3)
+                                       OR WRK-NYJ(4)
+                                       OR WRK-NYJ(5)
+                                       OR WRK-NYJ(6)
+                                       OR WRK-NYJ(7)
+                                       OR WRK-NYJ(8)
+                                       OR WRK-NYJ(9)
+                                       OR WRK-NYJ(10))
+               AND  FLG-ERR           =  ZERO
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
       *    Æý»ù°åÎÅ·ï¿ô
                  IF   WRK-PARA-SYOKBN      =  "2"
                  AND  RECE02-HENREIYM  NOT =  "000000"
@@ -2002,14 +2068,56 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-KOHI
                MOVE    MCPDATA-REC         TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "190" OR "290" OR "390"
-                                   OR "191" OR "291" OR "391"
-                 OR RECE02-KOHNUM(2) = "190" OR "290" OR "390"
-                                   OR "191" OR "291" OR "391"
-                 OR RECE02-KOHNUM(3) = "190" OR "290" OR "390"
-                                   OR "191" OR "291" OR "391"
-                 OR RECE02-KOHNUM(4) = "190" OR "290" OR "390"
-                                   OR "191" OR "291" OR "391"
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) start
+      *         IF  RECE02-KOHNUM(1) = "190" OR "290" OR "390"
+      *                             OR "191" OR "291" OR "391"
+      *           OR RECE02-KOHNUM(2) = "190" OR "290" OR "390"
+      *                             OR "191" OR "291" OR "391"
+      *           OR RECE02-KOHNUM(3) = "190" OR "290" OR "390"
+      *                             OR "191" OR "291" OR "391"
+      *           OR RECE02-KOHNUM(4) = "190" OR "290" OR "390"
+      *                             OR "191" OR "291" OR "391"
+               IF  RECE02-KOHNUM(1)  =  WRK-NYJ(1) OR WRK-NYJ(2)
+                                    OR  WRK-NYJ(3) OR WRK-NYJ(4)
+                                    OR  WRK-NYJ(5) OR WRK-NYJ(6)
+                                    OR  WRK-NYJ(7) OR WRK-NYJ(8)
+                                    OR  WRK-NYJ(9) OR WRK-NYJ(10)
+                                    OR  WRK-FKS(1) OR WRK-FKS(2)
+                                    OR  WRK-FKS(3) OR WRK-FKS(4)
+                                    OR  WRK-FKS(5) OR WRK-FKS(6)
+                                    OR  WRK-FKS(7) OR WRK-FKS(8)
+                                    OR  WRK-FKS(9) OR WRK-FKS(10)
+               OR  RECE02-KOHNUM(2)  =  WRK-NYJ(1) OR WRK-NYJ(2)
+                                    OR  WRK-NYJ(3) OR WRK-NYJ(4)
+                                    OR  WRK-NYJ(5) OR WRK-NYJ(6)
+                                    OR  WRK-NYJ(7) OR WRK-NYJ(8)
+                                    OR  WRK-NYJ(9) OR WRK-NYJ(10)
+                                    OR  WRK-FKS(1) OR WRK-FKS(2)
+                                    OR  WRK-FKS(3) OR WRK-FKS(4)
+                                    OR  WRK-FKS(5) OR WRK-FKS(6)
+                                    OR  WRK-FKS(7) OR WRK-FKS(8)
+                                    OR  WRK-FKS(9) OR WRK-FKS(10)
+               OR  RECE02-KOHNUM(3)  =  WRK-NYJ(1) OR WRK-NYJ(2)
+                                    OR  WRK-NYJ(3) OR WRK-NYJ(4)
+                                    OR  WRK-NYJ(5) OR WRK-NYJ(6)
+                                    OR  WRK-NYJ(7) OR WRK-NYJ(8)
+                                    OR  WRK-NYJ(9) OR WRK-NYJ(10)
+                                    OR  WRK-FKS(1) OR WRK-FKS(2)
+                                    OR  WRK-FKS(3) OR WRK-FKS(4)
+                                    OR  WRK-FKS(5) OR WRK-FKS(6)
+                                    OR  WRK-FKS(7) OR WRK-FKS(8)
+                                    OR  WRK-FKS(9) OR WRK-FKS(10)
+               OR  RECE02-KOHNUM(4)  =  WRK-NYJ(1) OR WRK-NYJ(2)
+                                    OR  WRK-NYJ(3) OR WRK-NYJ(4)
+                                    OR  WRK-NYJ(5) OR WRK-NYJ(6)
+                                    OR  WRK-NYJ(7) OR WRK-NYJ(8)
+                                    OR  WRK-NYJ(9) OR WRK-NYJ(10)
+                                    OR  WRK-FKS(1) OR WRK-FKS(2)
+                                    OR  WRK-FKS(3) OR WRK-FKS(4)
+                                    OR  WRK-FKS(5) OR WRK-FKS(6)
+                                    OR  WRK-FKS(7) OR WRK-FKS(8)
+                                    OR  WRK-FKS(9) OR WRK-FKS(10)
+      *=== Æý»ù¡¢Ê¡»ãÍó¤ÏPG¥ª¥×¥·¥ç¥ó»²¾È by Yoshikawa(2015/04/06) end
       *        ¥Æ¥¹¥È´µ¼Ô¤Î¤È¤­¤ÏÆÉ¤ßÈô¤Ð¤¹
                  INITIALIZE                      PTINF-REC
       *---(01.00.03) LINE ADD START ------------------------------------
