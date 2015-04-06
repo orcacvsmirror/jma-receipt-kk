@@ -37,6 +37,8 @@
       *                                  印字されるように修正
       *                                  PERFORM→GOTOに修正
       *  01.00.06    吉川    2013/01/11  医療機関情報編集対応
+      *  01.00.07    吉川    2015/04/06  乳児欄、福祉欄の対象公費は
+      *                                  プログラムオプションを参照する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -102,12 +104,16 @@
            03  FLG-UPDFILE         PIC 9(01).
            03  FLG-SEIKYU          PIC 9(01). 
            03  FLG-PTINF           PIC 9(01).
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
       *     
            03  FLG-PRTKBN          PIC 9(01).
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
@@ -178,6 +184,17 @@
                05  WRK-KOHNUM        PIC X(03).
                05  WRK-HKNNAME       PIC X(20). 
            03  WRK-MEISYO          PIC X(44).
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *    対象福祉公費番号
+           03  WRK-FKS-TBL.
+               05  WRK-FKS         PIC X(03)   OCCURS 10.
+      *
+      *    プログラムオプション
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION      PIC X(100)  OCCURS 100.
+           03  WRK-PRGID           PIC X(25).
+           03  WRK-KBNCD           PIC X(16).
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME        PIC X(100).
@@ -305,6 +322,12 @@
        01  JOBKANRI-REC.
            COPY    "CPJOBKANRI.INC".
       * 
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -560,9 +583,83 @@
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/31) end
       *
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
+      *
            .
        100-INIT-EXT.
            EXIT.
+      *
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+      *    対象福祉番号
+           MOVE    "SEIKYU3205"              TO  WRK-PRGID
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  10
+             IF  WRK-OPTION(IDX)  NOT =  SPACE
+               MOVE    WRK-OPTION(IDX)(1:3)  TO  WRK-FKS(IDX)
+             ELSE
+               MOVE    "999"                 TO  WRK-FKS(IDX)
+             END-IF
+             DISPLAY "対象福祉公費番号=" WRK-FKS(IDX)
+           END-PERFORM
+      *
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+                                                 IDY
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
       *
       *****************************************************************
       *    主　　処理
@@ -750,9 +847,22 @@
       *        障施
                WHEN  "079"   MOVE  12  TO  IDX4
       *        福祉医療
-               WHEN  "191"  
-               WHEN  "291"
-               WHEN  "391"   MOVE  13  TO  IDX4
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *         WHEN  "191"  
+      *         WHEN  "291"
+      *         WHEN  "391"   MOVE  13  TO  IDX4
+               WHEN  WRK-FKS(1)
+               WHEN  WRK-FKS(2)
+               WHEN  WRK-FKS(3)
+               WHEN  WRK-FKS(4)
+               WHEN  WRK-FKS(5)
+               WHEN  WRK-FKS(6)
+               WHEN  WRK-FKS(7)
+               WHEN  WRK-FKS(8)
+               WHEN  WRK-FKS(9)
+               WHEN  WRK-FKS(10)
+                  MOVE  13  TO  IDX4
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
       *        該当無し  
                WHEN  OTHER   MOVE  99  TO  IDX4
              END-EVALUATE
@@ -989,8 +1099,16 @@
                                       OR "019" OR "020" OR "020"
                                       OR "021" OR "024" OR "038"
                                       OR "051" OR "053" OR "066"
-                                      OR "079" OR "191" OR "291"
-                                      OR "391"
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *                                OR "079" OR "191" OR "291"
+      *                                OR "391"
+                                      OR "079"
+                                      OR WRK-FKS(1) OR WRK-FKS(2)
+                                      OR WRK-FKS(3) OR WRK-FKS(4)
+                                      OR WRK-FKS(5) OR WRK-FKS(6)
+                                      OR WRK-FKS(7) OR WRK-FKS(8)
+                                      OR WRK-FKS(9) OR WRK-FKS(10)
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
                  CONTINUE
                ELSE
                  IF  SUM-KOHNUM (IDX2)   =   SPACE
@@ -1839,6 +1957,54 @@
        900-1902-READ-EXT.
            EXIT.
       *
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== 乳児、福祉欄はPGオプション参照 by Yoshikawa(2015/04/06) end
       *****************************************************************
       *    システム管理マスタ読込
       *****************************************************************
