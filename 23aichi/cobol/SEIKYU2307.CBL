@@ -81,6 +81,7 @@
       *  01.00.25    吉川    15/02/16    結精点数欄の対象公費修正
       *  01.00.26    吉川    15/03/05    公費の助成がない場合は印字しない
       *  01.00.27    吉川    15/03/17    備考３が記載されなくなる現象修正
+      *  01.00.28    吉川    15/04/13    江南市、犬山市子ども医療対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -409,6 +410,13 @@
            03  WRK-CONS-KITANAGOYA1    PIC X(03)  VALUE  "337".
            03  WRK-CONS-KITANAGOYA2    PIC X(03)  VALUE  "437".
       *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) end
+      *=== 江南市、犬山市子ども医療対応 by Yoshikawa(2015/04/13) start
+           03  WRK-CONS-KOUNAN1        PIC X(03)  VALUE  "318".
+           03  WRK-CONS-KOUNAN2        PIC X(03)  VALUE  "418".
+           03  WRK-CONS-INUYAMA1       PIC X(03)  VALUE  "316".
+           03  WRK-CONS-INUYAMA2       PIC X(03)  VALUE  "416".
+      *=== 江南市、犬山市子ども医療対応 by Yoshikawa(2015/04/13) end
+      *
       *=== 備考欄の記載修正 by hagino(2015/01/28) start
       *    平成２７年１月改正対応
            03  WRK-CONS-SRYYM-201501   PIC X(06) VALUE "201501".
@@ -1527,7 +1535,14 @@
            IF  (MF100-JKYSNUM(1:3)  =  WRK-CONS-ICHINOMIYA1
                                    OR  WRK-CONS-ICHINOMIYA2
                                    OR  WRK-CONS-KITANAGOYA1
-                                   OR  WRK-CONS-KITANAGOYA2)
+      *=== 江南市、犬山市子ども医療対応 by Yoshikawa(2015/04/13) start
+      *                             OR  WRK-CONS-KITANAGOYA2)
+                                   OR  WRK-CONS-KITANAGOYA2
+                                   OR  WRK-CONS-INUYAMA1
+                                   OR  WRK-CONS-INUYAMA2
+                                   OR  WRK-CONS-KOUNAN1
+                                   OR  WRK-CONS-KOUNAN2)
+      *=== 江南市、犬山市子ども医療対応 by Yoshikawa(2015/04/13) end
       *=== 北名古屋市こども医療対応 by Yoshikawa(2014/08/12) end
            AND (MF100-FTNMONEY  =  ZERO)
       *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) start
