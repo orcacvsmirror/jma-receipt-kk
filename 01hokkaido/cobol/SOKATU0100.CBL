@@ -103,6 +103,7 @@
       *  01.00.41    吉川   14/05/20    在宅の対象とする診療コード変更
       *  01.00.42    萩野   14/08/07    返戻時、再印刷画面のタイトル修正
       *  01.00.43    吉川   14/10/02    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.44    吉川   15/04/14    請求書の枚数欄は在宅分を加算する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1860,7 +1861,9 @@
                      UNTIL    IDX2  >     50
                      OR       SCNT-HKNJANUM (IDX1 IDX2)  =  SPACE
                IF   (SCNT-HKNJANUM (IDX1 IDX2)  =  WRK-HKNJANUM)
-               AND  (SCNT-ZAITAKU  (IDX1 IDX2)  =  RECE10-ZAITAKU)
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) start
+      *         AND  (SCNT-ZAITAKU  (IDX1 IDX2)  =  RECE10-ZAITAKU)
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) end
       *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
       *         AND  (SCNT-SRYYM    (IDX1 IDX2)  =  RECE10-HENREIYM)
                AND  (SCNT-SRYYM    (IDX1 IDX2)  =  WRK-HENREIYM)
@@ -1873,7 +1876,9 @@
            IF  IDX2  <  50
                MOVE  IDX2             TO  WRK-CNT
                MOVE  WRK-HKNJANUM     TO  SCNT-HKNJANUM (IDX1 WRK-CNT)
-               MOVE  RECE10-ZAITAKU   TO  SCNT-ZAITAKU (IDX1 WRK-CNT)
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) start
+      *         MOVE  RECE10-ZAITAKU   TO  SCNT-ZAITAKU (IDX1 WRK-CNT)
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) end
       *=== 返戻分の請求書枚数カウント修正 by Yoshikawa(2009/01/15) start
       *         MOVE  RECE10-HENREIYM  TO  SCNT-SRYYM (IDX1 WRK-CNT)
                MOVE  WRK-HENREIYM     TO  SCNT-SRYYM (IDX1 WRK-CNT)
@@ -2226,22 +2231,28 @@
       *                 ADD  1  TO  WRK-MAISU
       *             END-IF
       *           END-IF
-      *           在宅は別で出力される為、集計領域を分ける
-                  IF  SCNT-ZAITAKU(IDX1 IDX2)  =  "1"
-                    ADD  1  TO  WRK-ZAIMAISU
-                  ELSE
-                    ADD  1  TO  WRK-MAISU
-                  END-IF
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) start
+      **           在宅は別で出力される為、集計領域を分ける
+      *            IF  SCNT-ZAITAKU(IDX1 IDX2)  =  "1"
+      *              ADD  1  TO  WRK-ZAIMAISU
+      *            ELSE
+      *              ADD  1  TO  WRK-MAISU
+      *            END-IF
+                  ADD    1            TO  WRK-MAISU
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) end
       *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
                END-PERFORM
       *
       *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) start
       *         MOVE  WRK-MAISU        TO  WRK-Z5
-               IF  SKT0100TMP-ZAITAKU  =  "1"
-                 MOVE  WRK-ZAIMAISU   TO  WRK-Z5
-               ELSE
-                 MOVE  WRK-MAISU      TO  WRK-Z5
-               END-IF
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) start
+      *         IF  SKT0100TMP-ZAITAKU  =  "1"
+      *           MOVE  WRK-ZAIMAISU   TO  WRK-Z5
+      *         ELSE
+      *           MOVE  WRK-MAISU      TO  WRK-Z5
+      *         END-IF
+               MOVE  WRK-MAISU        TO  WRK-Z5
+      *=== 請求書の枚数欄の修正 by Yoshikawa(2015/04/14) end
       *=== 請求書の枚数欄は保険者数 by Yoshikawa(2008/09/22) end
                MOVE  WRK-Z5           TO  SKT0100-MAISU (IDX1)
            END-PERFORM
