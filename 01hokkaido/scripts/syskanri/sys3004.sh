@@ -14,11 +14,8 @@ POST=`pwd`
 
 PREFNAME=sys3004
 PROGRAMID=SYS3004
-LOG_FILE="/var/log/jma-receipt/hokkaido-plugin"
 
-cd ${SITESRCDIR}/scripts/syskanri
-###export APS_EXEC_PATH=`pwd`
-#cd  ${ORCA_DIR}
+cd ../scripts/syskanri
 
 # compile COBOL programs
 MODULES=${PROGRAMID}.CBL
@@ -46,18 +43,15 @@ NOWYMD=$(date +"%Y%m%d")
 NOWHMS=$(date +"%H%M%S")
 NOWDIR=$(pwd)
 FILENAME=sys3004.data
-echo  "NOWDIR  :  "  ${NOWDIR}
-
-#test
-#COB_LIBRARY_PATH="$SITELIBDIR":"$PATCHLIBDIR":"$ORCALIBDIR":"$PANDALIB"
-#export COB_LIBRARY_PATH
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
 # syskanri 3004 set
-$DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME -ddir ${NOWDIR} $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME} > ${LOG_FILE}.log 2>&1
-#so del
+$DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
+
+# so del
 rm ${SITEDIR}/${PROGRAMID}.so
+rm dbgroup.inc
 
 cd $POST
 
