@@ -71,6 +71,8 @@
       *                                 °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
       *  01.00.27    µÈÀî    14/05/16   ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ
       *  01.00.28    µÈÀî    14/07/02   ºÆ°õºþ¤Î¥¿¥¤¥È¥ë½¤Àµ
+      *  01.00.29    µÈÀî    15/05/12   ÀÁµáÊ§¤¤¶â³ÛÍó¤Ï¼çÊÝ¸±¾å¸Â³Û¤ò
+      *                                 ¹ÍÎ¸¤¹¤ë¤è¤¦¤Ë½¤Àµ
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1412,6 +1414,14 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
            PERFORM 920-SYUNOU-SET-SEC
+      *
+      *=== ÀÁµáÊ§¤¤¶â³ÛÍó¤Î½¤Àµ by Yoshikawa(2015/05/12) start
+      *    ÊÝ¸±¸ÂÅÙ³Û
+           IF   RECE10-FTNMONEY(1)  >  ZERO
+           AND  RECE10-FTNMONEY(1)  <  WRK-KEISAN1
+               MOVE    RECE10-FTNMONEY(1)  TO  WRK-KEISAN1
+           END-IF
+      *=== ÀÁµáÊ§¤¤¶â³ÛÍó¤Î½¤Àµ by Yoshikawa(2015/05/12) end
       *
            COMPUTE WRK-KEISAN1-G   ROUNDED =   WRK-KEISAN1
            COMPUTE WRK-KEISAN2-G   ROUNDED =   WRK-KEISAN2
