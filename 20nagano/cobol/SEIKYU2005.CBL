@@ -49,6 +49,8 @@
       *  01.00.11    萩野    2014/02/13    実日数、点数ともに福祉使用分のみの
       *                                    記載に修正
       *  01.00.12    吉川    2014/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.13    吉川    2015/05/12    保険変更時、それぞれの点数と日数を
+      *                                    印字するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -687,10 +689,16 @@
       *       MOVE  RECE10-TOTALTEN(1)      TO  MF101-TOTALTEN
       *       MOVE  RECE10-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
       *     END-IF
-           MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
-           MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
-           MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
-           MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+      *=== 保険変更時の点数等の修正 by Yoshikawa(2015/05/12) start
+      *     MOVE  RECE02-JNISSU(1)        TO  MF101-JNISSU
+      *     MOVE  RECE02-FTNMONEY(1)      TO  MF101-FTNMONEY2
+      *     MOVE  RECE02-TOTALTEN(1)      TO  MF101-TOTALTEN
+      *     MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+           MOVE  RECE02-JNISSU(IDY)      TO  MF101-JNISSU
+           MOVE  RECE02-FTNMONEY(IDY)    TO  MF101-FTNMONEY2
+           MOVE  RECE02-TOTALTEN(IDY)    TO  MF101-TOTALTEN
+           MOVE  RECE02-SHOKUJIINF(IDY)  TO  MF101-SHOKUJIINF
+      *=== 保険変更時の点数等の修正 by Yoshikawa(2015/05/12) end
       *=== 福祉使用分のみデータを取得 by hagino(2014/02/13) end
       *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) end
       *
