@@ -12,15 +12,79 @@ fi
 HOSPNUM="01"
 POST=`pwd`
 
-# program option set
-cd ${SITESRCDIR}/scripts/prgoption
-export APS_EXEC_PATH=`pwd`
+PREFNAME=prgoption
+PROGRAMID=PRGOPTIONSET
+
+cd ../scripts/prgoption
+
+# compile COBOL programs
+MODULES=${PROGRAMID}.CBL
+for f in $MODULES; do
+  if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
+    m=`echo $f | sed 's/CBL$/so/'`
+    echo -n "Building ${m}..."
+    ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+         -I ${PATCHCOPYDIR} \
+         -I ${COPYDIR} \
+         -I ${SITESRCDIR}/cobol/copy \
+        ${f}
+    echo "done"
+  fi
+done
+
+#------------------------------------------------------
+#     シス管「1910」登録
+#     NOWYMD     現在日付
+#     NOWHMS     現在時間
+#     NOWDIR     現在ディレクトリ
+#     KAKUNASHI  拡張子なしファイル名
+#                拡張子（exp or opt）
+#------------------------------------------------------
+NOWYMD=$(date +"%Y%m%d")
+NOWHMS=$(date +"%H%M%S")
+NOWDIR=$(pwd)
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-$DBSTUB -bd prgoption Prgoption -parameter $HOSPNUM
+#グループ診療対応（HOSPNUMの数だけ実行）
+SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+for HOSPNUM in $SYSBASE
+do
+  FILENAME=(`ls | grep exp$`)
+  COUNT=(`ls | grep exp$ | wc -w`)
+  SU=0
+#ファイルの数だけ登録プログラムを実行する
+  while test ${SU} -lt ${COUNT}
+  do
+    KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.exp//'`
+    $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"exp"
 
-#rm dbgroup.inc
+    SU=$(expr ${SU} + 1)
+  done
+done
+
+#optファイルも同様に行う
+#グループ診療対応（HOSPNUMの数だけ実行）
+SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+for HOSPNUM in $SYSBASE
+do
+  FILENAME=(`ls | grep opt$`)
+  COUNT=(`ls | grep opt$ | wc -w`)
+  SU=0
+
+  while test ${SU} -lt ${COUNT}
+  do
+    KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.opt//'`
+    $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"opt"
+
+    SU=$(expr ${SU} + 1)
+  done
+done
+
+# so del
+rm ${SITEDIR}/${PROGRAMID}.so
+rm dbgroup.inc
+
 cd $POST
 
 exit 0
