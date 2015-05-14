@@ -57,6 +57,8 @@
       *  01.00.14     吉川    14/10/01    保険総点数＞全国公費点数の場合
       *                                   総点数から公費点数を引いた値を
       *                                   点数欄に記載するように修正
+      *  01.00.15     吉川    15/05/13    全国公費との分点時、「金額」欄は
+      *                                   全国公費併用分の値を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -765,6 +767,13 @@
            MOVE    WRK-TAHOUTEN-G           TO  MF100-TAHOUTEN
       *=== 総点数＞公費点数の場合の対応 by Yoshikawa(2014/10/01) end
       *
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+      *    全国公費併用時は、公費に係る金額を記載
+           IF  MF100-TAHOUHBT  NOT =  SPACE
+               MOVE    WRK-KEISAN2-G        TO  MF100-SEIKYUGK
+           END-IF
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
+      *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -996,6 +1005,12 @@
            IF    MF100-TYOKI  =   1
              MOVE    "長"                    TO   SC01-TYOKI1
              MOVE    "◯"                    TO   SC01-TYOKI2
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+             MOVE    ZERO                    TO   WRK-Z9
+             MOVE    WRK-Z9                  TO   WRK-MAE-INPUT
+             PERFORM 2009-HENKAN-SEC
+             MOVE    WRK-OUT-INPUT           TO   SC01-TENSU(IDX)
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
            END-IF
       *
       *    備考

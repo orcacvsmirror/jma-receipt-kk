@@ -29,7 +29,9 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付        内容
-      *  01.00.11    吉川    13/02/07    医療機関情報編集対応
+      *  01.00.01    吉川    13/02/07    医療機関情報編集対応
+      *  01.00.02    吉川    15/05/13    全国公費との分点時、「金額」欄は
+      *                                  全国公費併用分の値を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -148,6 +150,11 @@
                05   WRK-FTNMONEY          PIC 9(08)V9(01).
                05   WRK-FTNMONEY-G        PIC 9(08)V9(01).
                05   WRK-FTNMONEY-G2       PIC 9(08).
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+               05   WRK-TAHOUFTN          PIC 9(08)V9(01).
+               05   WRK-TAHOUFTN-G        PIC 9(08)V9(01).
+               05   WRK-TAHOUFTN-G2       PIC 9(08).
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
       *
                05   WRK-TENSU             PIC 9(07).
                05   WRK-KOHTENSU          PIC 9(07).
@@ -572,6 +579,10 @@
                                                FLG-HEIYOU2
                                                WRK-FTNMONEY-G
                                                WRK-FTNMONEY-G2
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+                                               WRK-TAHOUFTN-G
+                                               WRK-TAHOUFTN-G2
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
            IF      RECE02-NYUGAIKBN    =   "1"
                MOVE    "key33"             TO  WRK-PATH
            ELSE
@@ -581,6 +592,9 @@
       *
            COMPUTE  WRK-SEIKYUGK-G2 ROUNDED = WRK-SEIKYUGK-G
            COMPUTE  WRK-FTNMONEY-G2 ROUNDED = WRK-FTNMONEY-G
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+           COMPUTE  WRK-TAHOUFTN-G2 ROUNDED = WRK-TAHOUFTN-G
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
       *
       *    限度額
            IF  RECE02-FTNMONEY(1)  NOT  =  ZERO
@@ -655,6 +669,13 @@
            ELSE
              MOVE     2                TO  IDX
            END-IF
+      *
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+      *    全国公費併用時は、公費に係る金額を記載
+           IF  WRK-TAHOUFTN-G2  NOT =  ZERO
+               MOVE    WRK-TAHOUFTN-G2      TO  WRK-SEIKYUGK-G2
+           END-IF
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
       *
       ***    データ加算
       *
@@ -947,6 +968,9 @@
            MOVE    ZERO     TO     FLG-HEIYOU
                                    WRK-SEIKYUGK
                                    WRK-FTNMONEY
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+                                   WRK-TAHOUFTN
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >    4 OR
@@ -962,6 +986,16 @@
                  MOVE   SYU-KOH-COMPFTN(IDX)
                                         TO    WRK-SEIKYUGK
                END-IF
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+      *        全国公費の負担額計算
+               IF  RECE02-FTNMONEY(1)  >  ZERO
+                 ADD  SYU-KOH-COMPFTN(IDX)
+                                        TO    WRK-TAHOUFTN
+               ELSE
+                 ADD  SYU-KOH-COMPFTN-ENTANI(IDX) 
+                                        TO    WRK-TAHOUFTN
+               END-IF
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
              END-IF
              IF    SYU-KOH-HKNNUM(IDX)     =     "972"
                MOVE   1                TO    FLG-TYOKI
@@ -1021,6 +1055,9 @@
       *
            ADD        WRK-SEIKYUGK         TO    WRK-SEIKYUGK-G
            ADD        WRK-FTNMONEY         TO    WRK-FTNMONEY-G
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) start
+           ADD        WRK-TAHOUFTN         TO    WRK-TAHOUFTN-G
+      *=== 全国公費分点時の金額欄修正 by Yoshikawa(2015/05/13) end
       *
            .
        800-SEIKYU-SEC-EXT.
