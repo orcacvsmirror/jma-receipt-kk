@@ -61,6 +61,8 @@
       *  01.00.21    吉川     13/09/04    乳障親欄に該当しない保険番号は
       *                                   乳幼児に集計するように修正
       *                                   プログラムオプション対応
+      *  01.00.22    吉川     15/05/14    シス管「2007」のまとめ公費を
+      *                                   集計対象とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -186,6 +188,10 @@
            03  IDX5            PIC 9(04).
            03  IDY             PIC 9(04).
            03  IDZ             PIC 9(04).
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+           03  IDZ1            PIC 9(04).
+           03  IDZ2            PIC 9(04).
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -249,6 +255,9 @@
                05  WRK-ITBFTN-G2    PIC 9(08).
                05  WRK-YKZFTN       PIC 9(08).
                05  WRK-GOKEI        PIC 9(08).
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+           03  WRK-HEN-KOHNUM       PIC X(03).
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
       *
       *    文字変換
            03  WRK-MAE-INPUT    PIC X(200).
@@ -298,6 +307,17 @@
            03  CNT-MF100        PIC 9(06).
            03  CNT-PAGE         PIC 9(03).
       *
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+      *    公費番号まとめエリア
+       01  WRK-2007-AREA.
+           03  WRK-2007-TBL        OCCURS  100.
+               05  WRK-2007-MEISYO PIC X(44).
+               05  WRK-2007-KOH-AREA.
+                   07  WRK-2007-KOHNUM
+                                   PIC X(03)   OCCURS  10.
+           03  WRK-2007-MAX        PIC 9(03).
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
+      *
        01  TABLE-AREA.
            03  TBL-PARA-OCC    OCCURS  100.
                05  TBL-PARA-HKNJANUM    PIC X(08).
@@ -337,6 +357,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+      *    公費番号まとめ情報
+           COPY    "CPSK2007.INC".
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -582,6 +607,53 @@
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+      *    公費番号まとめ情報
+           INITIALIZE                      WRK-2007-AREA
+                                           SYS-2007-REC
+           MOVE    "2007"              TO  SYS-2007-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-2007-STYUKYMD(1:6)
+                                           SYS-2007-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2007-STYUKYMD(7:2)
+                                           SYS-2007-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2007-HOSPNUM
+           MOVE    SYS-2007-REC        TO  MCPDATA-REC
+           MOVE    "tbl_syskanri"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           PERFORM 900-DBSELECT-SEC
+           IF      MCP-RC          =   ZERO
+               MOVE    "tbl_syskanri"  TO  MCP-TABLE
+               MOVE    "key2"          TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           ELSE
+               MOVE    1               TO  FLG-SYSKANRI
+           END-IF
+      *
+           PERFORM  VARYING  IDX1  FROM  1  BY  1
+                    UNTIL    FLG-SYSKANRI   =   1
+                    OR       IDX1           >=  100
+               MOVE    MCPDATA-REC         TO  SYS-2007-REC
+      *
+               MOVE    SYS-2007-MEISYO(1)  TO  WRK-2007-MEISYO(IDX1)
+               PERFORM VARYING IDX2 FROM    1   BY  1
+                       UNTIL   IDX2 >       10
+                       OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
+                   MOVE    SYS-2007-KOHNUM (IDX2)
+                                           TO WRK-2007-KOHNUM(IDX1 IDX2)
+               END-PERFORM
+      *
+               MOVE    "tbl_syskanri"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               PERFORM 900-SYSKANRI-READ-N-SEC
+           END-PERFORM
+      *
+           MOVE    "tbl_syskanri"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           PERFORM 900-DBCLOSE-SEC
+      *
+           COMPUTE  WRK-2007-MAX  =  IDX1  -  1
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
       *
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
       **=== 対象公費をINIファイルから取得 by Yoshikawa(2012/03/12) start
@@ -1075,9 +1147,38 @@
       *****************************************************************
        210-SYUKEI-SEC  SECTION.
       *
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+      *    公費番号まとめ情報があるとき
+           MOVE    SPACE                          TO  WRK-HEN-KOHNUM
+           IF  WRK-2007-MAX  >  ZERO
+             PERFORM VARYING IDZ1    FROM    1   BY  1
+                     UNTIL   IDZ1    >       WRK-2007-MAX
+               PERFORM VARYING IDZ2  FROM    1   BY  1
+                       UNTIL   IDZ2  >       10
+                       OR      WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
+                 IF  WRK-KOHNUM  =  WRK-2007-KOHNUM(IDZ1 IDZ2)
+                   MOVE    WRK-2007-KOHNUM(IDZ1 1)
+                                                  TO  WRK-HEN-KOHNUM
+                   MOVE    10                     TO  IDZ2
+                   MOVE    WRK-2007-MAX           TO  IDZ1
+                 END-IF
+               END-PERFORM
+             END-PERFORM
+      *      まとめ公費ではない場合
+             IF  WRK-HEN-KOHNUM  =  SPACE
+                 MOVE    WRK-KOHNUM               TO  WRK-HEN-KOHNUM
+             END-IF
+           ELSE
+               MOVE    WRK-KOHNUM                 TO  WRK-HEN-KOHNUM
+           END-IF
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
+      *
       *    集計場所設定
       *    公費判定
-           EVALUATE    WRK-KOHNUM
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+      *     EVALUATE    WRK-KOHNUM
+           EVALUATE    WRK-HEN-KOHNUM
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
                WHEN    "180"
       *---(01.00.11) LINE ADD START ------------------------------------
                WHEN    "280"
@@ -2347,6 +2448,77 @@
        2009-HENKAN-EXT.
            EXIT.
       * 
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) start
+      *****************************************************************
+      *    システム管理マスタ読込（ＮＥＸＴ）
+      *****************************************************************
+       900-SYSKANRI-READ-N-SEC         SECTION.
+      *
+           PERFORM 900-DBFETCH-SEC
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-SYSKANRI
+           ELSE
+               MOVE    1                   TO  FLG-SYSKANRI
+           END-IF
+           .
+       900-SYSKANRI-READ-N-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢＳＥＬＥＣＴ処理
+      *****************************************************************
+       900-DBSELECT-SEC                SECTION.
+      *
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+           IF      MCP-RC              =   ZERO
+               CONTINUE
+           ELSE
+               DISPLAY "SELECT ERR table=" MCP-TABLE
+                       " pathname="        MCP-PATHNAME
+           END-IF
+           .
+       900-DBSELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢＦＥＴＣＨ処理
+      *****************************************************************
+       900-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-DBFETCH-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    テーブルクローズ処理
+      *****************************************************************
+       900-DBCLOSE-SEC               SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           PERFORM 900-ORCDBMAIN-SEC
+      *
+           .
+       900-CLOSE-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    テーブルアクセス処理
+      *****************************************************************
+       900-ORCDBMAIN-SEC               SECTION.
+      *
+           CALL    "ORCDBMAIN"         USING   MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+           .
+      *
+       900-ORCDBMAIN-EXT.
+           EXIT.
+      *      
+      *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
       *****************************************************************
       *    ＤＢ　オープン処理
       *****************************************************************
