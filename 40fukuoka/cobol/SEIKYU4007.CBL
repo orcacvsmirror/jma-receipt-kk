@@ -70,6 +70,8 @@
       *                                   該当公費と長期の併用があった場合、
       *                                   特記事項に長期を印字する
       *  01.00.26    吉川     15/01/30    平成２７年１月改正対応
+      *  01.00.27    吉川     15/05/14    負担者番号順追加
+      *                                   通し番号を印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -355,6 +357,11 @@
       *---(01.00.09) LINE ADD END   ------------------------------------
            03  WRK-PTID            PIC 9(10).
            03  WRK-HKNCOMBI        PIC 9(04).
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) start
+           03  WRK-RENNUM          PIC 9(07).
+           03  WRK-Z7              PIC ZZZZZZ9.
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) end
+      *
       *    ファイル名称用エリア
       *=== プラグイン対応 by Yoshikawa(2013/02/07) start
       *     03  FILE-NAME        PIC X(512).
@@ -1551,15 +1558,30 @@
              END-PERFORM
            END-IF
       *
-      *      カナ氏名順・患者番号順
-      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
-      *     IF  STU-NUM  =  "01" OR "03"
-           IF  WRK-STUNUM  =  "01" OR "03"
-      *=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
-             MOVE  MF100-KANANAME  TO  MF100-KANANAME-KEY
-           ELSE
-             MOVE  MF100-PTNUM     TO  MF100-PTNUM-KEY
-           END-IF
+      *=== 負担者番号順追加 by Yoshikawa(2015/05/14) start
+      **      カナ氏名順・患者番号順
+      **=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
+      **     IF  STU-NUM  =  "01" OR "03"
+      *     IF  WRK-STUNUM  =  "01" OR "03"
+      **=== プログラムオプション対応 by Yoshikawa(2013/09/04) end
+      *       MOVE  MF100-KANANAME  TO  MF100-KANANAME-KEY
+      *     ELSE
+      *       MOVE  MF100-PTNUM     TO  MF100-PTNUM-KEY
+      *     END-IF
+           EVALUATE  WRK-STUNUM
+             WHEN  "01"
+             WHEN  "03"
+      *        カナ氏名順
+               MOVE  MF100-KANANAME     TO  MF100-KANANAME-KEY
+             WHEN  "04"
+      *        患者番号順
+               MOVE  MF100-PTNUM        TO  MF100-PTNUM-KEY
+             WHEN  "05"
+      *        負担者番号順（優先順位の関係で保険者番号KEYにセット）
+               MOVE  MF100-KOHFTNJANUM(1:8)
+                                        TO  MF100-HKNJANUM-KEY
+           END-EVALUATE
+      *=== 負担者番号順追加 by Yoshikawa(2015/05/14) end
       *
       *     老人＋障害は対象から外す
            IF      (RECE02-RJNHKNNUM    NOT =  SPACE)
@@ -1627,6 +1649,11 @@
       *    主　　処理
       *****************************************************************
        2002-PRINT-SEC                SECTION.
+      *
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) start
+      *    通し番号初期値設定
+           MOVE    1            TO  WRK-RENNUM
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) end
       *
            OPEN     INPUT       MF100-FILE
       *    一時ファイル読込
@@ -1873,6 +1900,13 @@
              END-PERFORM
            END-PERFORM
       *=== 特記事項追加 by Yoshikawa(2009/05/14) end
+      *
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) start
+           IF  SYS-2005-RENNUMHENKBN  =  "1"
+               MOVE    WRK-RENNUM              TO  WRK-Z7
+               MOVE    WRK-Z7                  TO  HC06-RENNUM
+           END-IF
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) end
       *
            .
        310-HC101-HEAD-HEN-EXT.
@@ -2229,6 +2263,13 @@
            END-PERFORM
       *=== 特記事項追加 by Yoshikawa(2009/05/14) end
       *
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) start
+           IF  SYS-2005-RENNUMHENKBN  =  "1"
+               MOVE    WRK-RENNUM              TO  WRK-Z7
+               MOVE    WRK-Z7                  TO  HCN06-RENNUM
+           END-IF
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) end
+      *
            .
        310N-HC101-HEAD-HEN-EXT.
            EXIT.
@@ -2422,9 +2463,13 @@
            MOVE    MF100-RECEKA       TO  RECE031-RECEKA
            MOVE    MF100-TEISYUTUSAKI TO  RECE031-TEISYUTUSAKI
            MOVE    MF100-RECESYUBETU  TO  RECE031-RECESYUBETU
-           MOVE    MF100-HKNJANUM-KEY TO  RECE031-HKNJANUM
+      *=== 保険者番号の項目変更 by Yoshikawa(2015/05/14) start
+      *     MOVE    MF100-HKNJANUM-KEY TO  RECE031-HKNJANUM
+           MOVE    MF100-HKNJANUM     TO  RECE031-HKNJANUM
+      *=== 保険者番号の項目変更 by Yoshikawa(2015/05/14) end
            MOVE    MF100-HOJOKBN-KEY  TO  RECE031-HOJOKBN
            MOVE    MF100-TEKSTYMD     TO  RECE031-TEKSTYMD
+           
       *
            START   RECE031-FILE
                KEY IS    >=   RECE031-KEY
@@ -3337,6 +3382,9 @@
        390-PRINT-OUT-SEC                SECTION.
       *
            ADD     1                    TO  WRK-PAGE
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) start
+                                            WRK-RENNUM
+      *=== 通し番号を印字 by Yoshikawa(2015/05/14) end
       *
            INITIALIZE                  ORCSPRTAREA
            MOVE    "INS"               TO  SPRT-MODE
