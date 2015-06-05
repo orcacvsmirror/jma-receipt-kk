@@ -60,6 +60,7 @@
       *                                  ２０文字を超える場合、項目「備考」へ
       *                                  記録するよう修正
       *  01.00.15    吉川    15/01/07    平成２７年１月改正対応
+      *  01.00.16    吉川    15/06/05    点数はレセプトの総点数を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -980,12 +981,19 @@
            MOVE    MF100-KOHFTNJANUM         TO  MF100-FTNJANUM
            COMPUTE IDY     =       IDZ     +   1
            MOVE    RECE02-JNISSU      (IDY)  TO  MF100-JNISSU
-           MOVE    RECE02-TOTALTEN    (IDY)  TO  MF100-TOTALTEN
+      *=== 点数はレセプトの総点数を記載 by Yoshikawa(2015/06/05) start
+      *     MOVE    RECE02-TOTALTEN    (IDY)  TO  MF100-TOTALTEN
+      *=== 点数はレセプトの総点数を記載 by Yoshikawa(2015/06/05) end
            MOVE    RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE    RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
            MOVE    RECE02-YKZFTN      (1)    TO  MF100-YKZFTN
            MOVE    RECE02-KOHFTNJANUM(IDZ)(5:3)    
                                              TO  WRK-KOBETUCITYNUM
+      *=== 点数はレセプトの総点数を記載 by Yoshikawa(2015/06/05) start
+      *    請求管理から特記事項参照
+           PERFORM 900-SEIKYU-READ-SEC
+           MOVE    RECE10-TOTALTEN(1)        TO  MF100-TOTALTEN
+      *=== 点数はレセプトの総点数を記載 by Yoshikawa(2015/06/05) end
       *
       *    収納情報より請求金額、自己負担月額を集計
            MOVE    MF100-KOHNUM    TO  WRK-KOHNUM
@@ -1153,8 +1161,10 @@
       *       WHEN  "6"  MOVE  "「24」"     TO  MF100-BIKO
       *     END-EVALUATE
            IF  RECE02-FLG (4)  =  "1"
-      *      請求管理から特記事項参照
-             PERFORM  900-SEIKYU-READ-SEC
+      *=== 点数はレセプトの総点数を記載 by Yoshikawa(2015/06/05) start
+      **      請求管理から特記事項参照
+      *       PERFORM  900-SEIKYU-READ-SEC
+      *=== 点数はレセプトの総点数を記載 by Yoshikawa(2015/06/05) end
       *
              PERFORM  VARYING  IDX1  FROM  1  BY  1
                       UNTIL    IDX1  >  5
