@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku,Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者   日付        内容
+      *  01.00.01    門間     15/06/08    件数欄の桁数変更
+      ************************************************************
        01  SC03.
       *印刷日付
            03  SC03-PRTYM             PIC  X(16).
@@ -40,32 +44,53 @@
       *負担者番号
                05  SC03-FTNJANUM      PIC  X(08).
       *件数
-               05  SC03-KENSU         PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-KENSU         PIC  X(03).
+               05  SC03-KENSU         PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
       *点数
                05  SC03-TENSU         PIC  X(09).
       *薬剤一部負担金：件数
-               05  SC03-YKZKENSU      PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-YKZKENSU      PIC  X(03).
+               05  SC03-YKZKENSU      PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
       *薬剤一部負担金：金額
                05  SC03-YKZFTN        PIC  X(09).
       *食事療養：件数
-               05  SC03-SKJKENSU      PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-SKJKENSU      PIC  X(03).
+               05  SC03-SKJKENSU      PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
       *食事療養：金額
                05  SC03-SKJFTN        PIC  X(09).
       *合計
            03  SC03-GOKEI-TBL.
       *合計−件数
-               05  SC03-GKENSU        PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-GKENSU        PIC  X(03).
+               05  SC03-GKENSU        PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
       *合計−点数
                05  SC03-GTENSU        PIC  X(10).
       *合計−薬剤一部負担金：件数
-               05  SC03-GYKZKENSU     PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-GYKZKENSU     PIC  X(03).
+               05  SC03-GYKZKENSU     PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
       *合計−薬剤一部負担金：金額
                05  SC03-GYKZFTN       PIC  X(10).
       *合計−食事療養：件数
-               05  SC03-GSKJKENSU     PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-GSKJKENSU     PIC  X(03).
+               05  SC03-GSKJKENSU     PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
       *合計−食事療養：標準負担額
                05  SC03-GSKJFTN       PIC  X(10).
       *再掲欄
            03  SC03-SAIKEI-TBL   OCCURS  5.
       *再掲欄−件数
-               05  SC03-SAIKEI        PIC  X(03).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) start
+      *         05  SC03-SAIKEI        PIC  X(03).
+               05  SC03-SAIKEI        PIC  X(05).
+      *=== 件数欄の桁数変更 by Monma(2015/06/08) end
