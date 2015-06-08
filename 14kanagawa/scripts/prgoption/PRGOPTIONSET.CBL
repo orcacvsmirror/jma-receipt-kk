@@ -30,6 +30,8 @@
       * Maj/Min/Rev  修正者       日付      内容
       *  04.08.01    吉川         14/11/06  WRK-DATAのバイト数増加
       *  04.08.02    吉川         14/12/03  更新処理は本体に準拠する
+      *  04.08.03    吉川         15/02/10  END-IF漏れ
+      *  04.08.04    内田         15/02/13  グループ診療対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -302,6 +304,7 @@
                OR  (PRGOPTIONWK-KBNCD  =  "*")
       *            データ更新
                    PERFORM  20101-PRGOPTION-UPD-SEC
+               END-IF
            END-IF
       *
            .
@@ -668,6 +671,7 @@
       *
            IF   ( FLG-IN            =     ZERO )
                MOVE  IN-REC               TO  PRGOPTIONWK-REC
+               MOVE  SPA-HOSPNUM          TO  PRGOPTIONWK-HOSPNUM
            END-IF
           .
        900-IN-KENSAKU-EXT.
