@@ -37,6 +37,7 @@
       *  01.00.05    µÈÀî     12/12/25    °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
       *  01.00.06    µÈÀî     14/12/04    ÂÐ¾Ý¸øÈñ¤Ï¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥ó
       *                                   ¤«¤é¼èÆÀ¤¹¤ë¤è¤¦¤Ë¤¹¤ë
+      *  01.00.07    Ìç´Ö     15/06/08    ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -979,22 +980,34 @@
                MOVE    WRK-OUT-INPUT   TO  SC03-FTNJANUM(IDX)
       *
       *        ÎÅÍÜ¤ÎµëÉÕ
-               MOVE    MF100-KENSU     TO  WRK-Z3
-               MOVE    WRK-Z3          TO  SC03-KENSU(IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *         MOVE    MF100-KENSU     TO  WRK-Z3
+      *         MOVE    WRK-Z3          TO  SC03-KENSU(IDX)
+               MOVE    MF100-KENSU     TO  WRK-Z5
+               MOVE    WRK-Z5          TO  SC03-KENSU(IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
       *
                MOVE    MF100-TENSU     TO  WRK-Z9
                MOVE    WRK-Z9          TO  SC03-TENSU(IDX)
       *
       *        ÌôºÞ°ìÉôÉéÃ´¶â
-               MOVE    MF100-YKZKENSU  TO  WRK-Z3
-               MOVE    WRK-Z3          TO  SC03-YKZKENSU(IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *         MOVE    MF100-YKZKENSU  TO  WRK-Z3
+      *         MOVE    WRK-Z3          TO  SC03-YKZKENSU(IDX)
+               MOVE    MF100-YKZKENSU  TO  WRK-Z5
+               MOVE    WRK-Z5          TO  SC03-YKZKENSU(IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
       *
                MOVE    MF100-YKZFTN    TO  WRK-Z9
                MOVE    WRK-Z9          TO  SC03-YKZFTN(IDX)
       *
       *        ¿©»öÎÅÍÜ
-               MOVE    MF100-SKJKENSU  TO  WRK-Z3
-               MOVE    WRK-Z3          TO  SC03-SKJKENSU(IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *         MOVE    MF100-SKJKENSU  TO  WRK-Z3
+      *         MOVE    WRK-Z3          TO  SC03-SKJKENSU(IDX)
+               MOVE    MF100-SKJKENSU  TO  WRK-Z5
+               MOVE    WRK-Z5          TO  SC03-SKJKENSU(IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
       *
                MOVE    MF100-SKJFTN    TO  WRK-Z9
                MOVE    WRK-Z9          TO  SC03-SKJFTN(IDX)
@@ -1019,30 +1032,46 @@
            IF      FLG-PRINT   =   1
       *
       *        ÎÅÍÜ¤ÎµëÉÕ
-               MOVE    SUM-KENSU       TO  WRK-Z3
-               MOVE    WRK-Z3          TO  SC03-GKENSU
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *         MOVE    SUM-KENSU       TO  WRK-Z3
+      *         MOVE    WRK-Z3          TO  SC03-GKENSU
+               MOVE    SUM-KENSU       TO  WRK-Z5
+               MOVE    WRK-Z5          TO  SC03-GKENSU
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
       *
                MOVE    SUM-TENSU       TO  WRK-Z9
                MOVE    WRK-Z9          TO  SC03-GTENSU
       *
       *        ÌôºÞ°ìÉôÉéÃ´¶â
-               MOVE    SUM-YKZKENSU    TO  WRK-Z3
-               MOVE    WRK-Z3          TO  SC03-GYKZKENSU
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *         MOVE    SUM-YKZKENSU    TO  WRK-Z3
+      *         MOVE    WRK-Z3          TO  SC03-GYKZKENSU
+               MOVE    SUM-YKZKENSU    TO  WRK-Z5
+               MOVE    WRK-Z5          TO  SC03-GYKZKENSU
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
       *
                MOVE    SUM-YKZFTN      TO  WRK-Z9
                MOVE    WRK-Z9          TO  SC03-GYKZFTN
       *
       *        ¿©»öÎÅÍÜ
-               MOVE    SUM-SKJKENSU    TO  WRK-Z3
-               MOVE    WRK-Z3          TO  SC03-GSKJKENSU
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *         MOVE    SUM-SKJKENSU    TO  WRK-Z3
+      *         MOVE    WRK-Z3          TO  SC03-GSKJKENSU
+               MOVE    SUM-SKJKENSU    TO  WRK-Z5
+               MOVE    WRK-Z5          TO  SC03-GSKJKENSU
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
       *
                MOVE    SUM-SKJFTN      TO  WRK-Z9
                MOVE    WRK-Z9          TO  SC03-GSKJFTN
       *    ºÆ·Ç
                PERFORM VARYING IDX FROM    1   BY  1
                        UNTIL    IDX  >     5
-                 MOVE  SUM-SAIKEI (IDX)  TO  WRK-Z3
-                 MOVE  WRK-Z3            TO  SC03-SAIKEI (IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) start
+      *           MOVE  SUM-SAIKEI (IDX)  TO  WRK-Z3
+      *           MOVE  WRK-Z3            TO  SC03-SAIKEI (IDX)
+                 MOVE  SUM-SAIKEI (IDX)  TO  WRK-Z5
+                 MOVE  WRK-Z5            TO  SC03-SAIKEI (IDX)
+      *=== ·ï¿ôÍó¤Î·å¿ôÊÑ¹¹ by Monma(2015/06/08) end
                END-PERFORM
            END-IF
       *
