@@ -61,6 +61,7 @@
       *  01.00.20    µÈÀî    13/08/09    Ê»ÍÑ¤·¤¿Á´¹ñ¸øÈñ¤ÎÉéÃ´¼ÔÈÖ¹æ¤È
       *                                  ¼õµë¼ÔÈÖ¹æ¤¬°õ»ú¤µ¤ì¤Ê¤¤¤Î¤ò½¤Àµ
       *  01.00.21    µÈÀî    14/10/28    ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
+      *  01.00.22    ÇëÌî    15/06/09    ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -382,11 +383,29 @@
            03  FILLER              PIC X(10)   VALUE   "£²£³Â¿°ì".
            03  FILLER              PIC X(02)   VALUE   "24".
            03  FILLER              PIC X(10)   VALUE   "£²£´Â¿Äã".
+      *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
+           03  FILLER              PIC X(02)   VALUE   "26".
+           03  FILLER              PIC X(10)   VALUE   "£²£¶¶è¥¢".
+           03  FILLER              PIC X(02)   VALUE   "27".
+           03  FILLER              PIC X(10)   VALUE   "£²£·¶è¥¤".
+           03  FILLER              PIC X(02)   VALUE   "28".
+           03  FILLER              PIC X(10)   VALUE   "£²£¸¶è¥¦".
+           03  FILLER              PIC X(02)   VALUE   "29".
+           03  FILLER              PIC X(10)   VALUE   "£²£¹¶è¥¨".
+           03  FILLER              PIC X(02)   VALUE   "30".
+           03  FILLER              PIC X(10)   VALUE   "£³£°¶è¥ª".
+      *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
-           03  TBL-TOKKI       OCCURS   22.
+      *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
+      *     03  TBL-TOKKI       OCCURS   22.
+           03  TBL-TOKKI       OCCURS   27.
+      *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
                05  TBL-TOKKICD     PIC X(02).
                05  TBL-TOKKINAME   PIC X(10).
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
+      *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
+      * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   27.
+      *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
       *=== ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2010/02/23) end
       *
       *    ¥«¥¦¥ó¥ÈÎÎ°è
