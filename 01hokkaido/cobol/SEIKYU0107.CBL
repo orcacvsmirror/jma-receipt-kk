@@ -110,6 +110,8 @@
       *  01.00.32     吉川     14/03/14    消費税改正対応
       *  01.00.33     吉川     14/05/20    在宅の対象とする診療コード変更
       *  01.00.34     吉川     14/10/02    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.35     吉川     15/06/11    保険番号343のマスタ取得時
+      *                                    適用期間内のデータを取得する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2878,6 +2880,12 @@
            MOVE  SPA-HOSPNUM                 TO  HKN-HOSPNUM
       *---(01.00.08) LINE ADD END   ------------------------------------
            MOVE  "343"                       TO  HKN-HKNNUM
+      *=== key変更 by Yoshikawa(2015/06/11) start
+           MOVE  LNK-PRTKANRI-SRYYM(1:6)     TO  HKN-TEKSTYMD(1:6)
+                                                 HKN-TEKEDYMD(1:6)
+           MOVE  "01"                        TO  HKN-TEKSTYMD(7:2)
+                                                 HKN-TEKEDYMD(7:2)
+      *=== key変更 by Yoshikawa(2015/06/11) end
            MOVE  HKNNUM-REC                  TO  MCPDATA-REC
            MOVE  "DBSELECT"                  TO  MCP-FUNC
       *---(01.00.08) LINE ADD START ------------------------------------
@@ -2886,7 +2894,10 @@
       *                                MCPAREA
       *                                MCPDATA-REC
            MOVE    "tbl_hknnum"       TO  MCP-TABLE
-           MOVE    "key2"             TO  MCP-PATHNAME
+      *=== key変更 by Yoshikawa(2015/06/11) start
+      *     MOVE    "key2"             TO  MCP-PATHNAME
+           MOVE    "key5"             TO  MCP-PATHNAME
+      *=== key変更 by Yoshikawa(2015/06/11) end
            CALL    "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
@@ -2907,7 +2918,10 @@
       *                            MCPAREA
       *                            MCPDATA-REC
            MOVE    "tbl_hknnum"       TO  MCP-TABLE
-           MOVE    "key2"             TO  MCP-PATHNAME
+      *=== key変更 by Yoshikawa(2015/06/11) start
+      *     MOVE    "key2"             TO  MCP-PATHNAME
+           MOVE    "key5"             TO  MCP-PATHNAME
+      *=== key変更 by Yoshikawa(2015/06/11) end
            CALL    "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
@@ -2931,7 +2945,10 @@
       *                        MCPDATA-REC
            MOVE    "DBFETCH"          TO  MCP-FUNC
            MOVE    "tbl_hknnum"       TO  MCP-TABLE
-           MOVE    "key2"             TO  MCP-PATHNAME
+      *=== key変更 by Yoshikawa(2015/06/11) start
+      *     MOVE    "key2"             TO  MCP-PATHNAME
+           MOVE    "key5"             TO  MCP-PATHNAME
+      *=== key変更 by Yoshikawa(2015/06/11) end
            CALL    "ORCDBMAIN"        USING
                                       MCPAREA
                                       MCPDATA-REC
