@@ -384,18 +384,28 @@
            03  FILLER              PIC X(10)   VALUE   "£²£¹¶è¥¨".
            03  FILLER              PIC X(02)   VALUE   "30".
            03  FILLER              PIC X(10)   VALUE   "£³£°¶è¥ª".
+           03  FILLER              PIC X(02)   VALUE   "31".
+           03  FILLER              PIC X(10)   VALUE   "£³£±Â¿¥¢".
+           03  FILLER              PIC X(02)   VALUE   "32".
+           03  FILLER              PIC X(10)   VALUE   "£³£²Â¿¥¤".
+           03  FILLER              PIC X(02)   VALUE   "33".
+           03  FILLER              PIC X(10)   VALUE   "£³£³Â¿¥¦".
+           03  FILLER              PIC X(02)   VALUE   "34".
+           03  FILLER              PIC X(10)   VALUE   "£³£´Â¿¥¨".
+           03  FILLER              PIC X(02)   VALUE   "35".
+           03  FILLER              PIC X(10)   VALUE   "£³£µÂ¿¥ª".
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
       *
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
       *     03  TBL-TOKKI       OCCURS   22.
-           03  TBL-TOKKI       OCCURS   27.
+           03  TBL-TOKKI       OCCURS   32.
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
                05  TBL-TOKKICD     PIC X(02).
                05  TBL-TOKKINAME   PIC X(10).
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   27.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   32.
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
       *=== ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2010/02/23) end
       *
