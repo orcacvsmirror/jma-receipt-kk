@@ -36,9 +36,10 @@
       *  01.00.03       吉川    2009/05/13   食事療養費の算出方法変更
       *  01.00.04       吉川    2009/07/07   浜松市の保険者番号の変更
       *  01.00.05       吉川    2013/01/10   医療機関情報編集対応
-      *  01.00.06       吉川    2014/12/04   対象公費はプログラムオプション
+      *  01.00.06       吉川    2014/10/23   ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.07       吉川    2014/12/04   対象公費はプログラムオプション
       *                                      から取得するようにする
-      *  01.00.07       吉川    2015/07/03   患者負担がない場合は印字しない
+      *  01.00.08       吉川    2015/07/03   患者負担がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -83,8 +84,11 @@
       *             REPLACING  //RECE01PARA//
       *             BY         //RECEERR//.
       *     03      PIC X(04)   VALUE   ".dat".
-           COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-                                    BY         //RECEERR//.
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
+      *                              BY         //RECEERR//.
+           COPY  "CPRECEERR.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
       *
            COPY  "SC2205.INC".
@@ -316,6 +320,11 @@
       *    全角チェックパラメタ
            COPY    "CPORCSKANACHK.INC".
       *
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *    一時ファイル名編集
+           COPY    "CPORCSGETTEMP.INC".
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
+      *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
@@ -354,6 +363,9 @@
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
            INITIALIZE  SPA-AREA
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+           INITIALIZE  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -426,11 +438,25 @@
            END-IF
       *
       *
-           MOVE  "MF101ZZ"        TO  MF100PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
-      *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
-           MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
-      *=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
+      *     MOVE  "MF101ZZ"        TO  MF100PARA-FILE-ID
+      *     MOVE  LNK-PRTKANRI-TERMID(1:16)  TO  MF100PARA-TERMID
+      **=== Ver4.0対応 By Yoshikawa(2007/10/03) start
+      *     MOVE  WRK-PARA-HOSPNUM           TO  MF100PARA-HOSPNUM
+      **=== Ver4.0対応 By Yoshikawa(2007/10/03) end
+           INITIALIZE                     SGETTEMP-AREA
+      *
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
+      *
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
+           CALL  "ORCSGETTEMP"        USING
+                                      SGETTEMP-AREA
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *=== Ver4.0対応 By Yoshikawa(2007/10/03) start
       *     MOVE  "RECEERR"        TO  RECEERR-FILE-ID
