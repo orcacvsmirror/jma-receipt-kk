@@ -39,6 +39,7 @@
       *  01.00.06       吉川    2014/10/23   ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.07       吉川    2014/12/04   対象公費はプログラムオプション
       *                                      から取得するようにする
+      *  01.00.08       吉川    2015/07/03   公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -115,6 +116,10 @@
            03  FLG-TAISYOKOHI  PIC 9(01).
            03  FLG-TAISYO      PIC 9(01).
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2014/12/04) end
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) start
+           03  FLG-SYUNOU      PIC 9(01).
+           03  FLG-HKNCOMBI    PIC 9(01).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -166,6 +171,10 @@
            03  WRK-HKNJANUM          PIC X(05).
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-KOBETUCITYNUM     PIC X(03).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) start
+           03  WRK-KOHID             PIC 9(10).
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) end
+      *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
@@ -280,6 +289,16 @@
       *    患者情報
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
+      *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) start
+      *    収納情報
+       01  SYUNOU-REC.
+           COPY    "CPSYUNOU.INC".
+      *
+      *    保険組合せ
+       01  HKNCOMBI-REC.
+           COPY    "CPHKNCOMBI.INC".
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) end
       *
       *    公費請求書
            COPY    "CPKOHSKY.INC"
@@ -778,11 +797,26 @@
                                           -  RECE02-SHOKUJIFTN(IDY)
       *=== 食事療養費の算出変更 by Yoshikawa(2009/05/13) end
       *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) start
+           MOVE    1                       TO  FLG-ERR
+      *    公費の助成があるかどうか
+           MOVE    RECE02-KOHNUM (IDZ)     TO  WRK-KOHNUM
+           MOVE    RECE02-KOHID  (IDZ)     TO  WRK-KOHID
+           IF      RECE02-NYUGAIKBN    =   "1"
+               MOVE    "key33"             TO  WRK-PATH
+           ELSE
+               MOVE    "key25"             TO  WRK-PATH
+           END-IF
+           PERFORM  920-SYUNOU-SET-SEC
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) end
+      *
       *    個別発行用市町村番号
            MOVE  MF100-KOHFTNJANUM(5:3)     TO  WRK-KOBETUCITYNUM
       *
       *    保険者番号チェック処理
-           MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) start
+      *     MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR    =    ZERO
@@ -1257,6 +1291,174 @@
        800-SKTTMP-READ-EXT.
            EXIT.
       *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) start
+      *****************************************************************
+      *    請求点数集計処理
+      *****************************************************************
+       800-SEIKYU-SEC  SECTION.
+      *
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >     4  OR
+                    SYU-KOH-HKNNUM(IDX)  =  SPACE
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+               IF     IDX                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+           .
+       800-SEIKYU-SEC-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *  収納情報セット
+      *****************************************************************
+       920-SYUNOU-SET-SEC  SECTION.
+      *
+           INITIALIZE  SYUNOU-REC
+           MOVE  SPA-HOSPNUM        TO  SYU-HOSPNUM
+           MOVE  RECE02-NYUGAIKBN   TO  SYU-NYUGAIKBN
+           MOVE  RECE02-PTID        TO  SYU-PTID
+           MOVE  RECE02-SRYYM(1:6)  TO  SYU-SRYYMD(1:6)
+           MOVE  "__"               TO  SYU-SRYYMD(7:2)
+           MOVE  WRK-KOHNUM         TO  SYU-KOH-HKNNUM(1)
+                                        SYU-KOH-HKNNUM(2)
+                                        SYU-KOH-HKNNUM(3)
+                                        SYU-KOH-HKNNUM(4)
+           MOVE  SYUNOU-REC         TO  MCPDATA-REC
+           MOVE  "DBSELECT"         TO  MCP-FUNC
+           MOVE    "tbl_syunou"     TO  MCP-TABLE
+           MOVE    WRK-PATH         TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"      USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             PERFORM  925-SYUNOU-READ-SEC
+      *
+             PERFORM  UNTIL  FLG-SYUNOU  =  1
+               IF  SYU-DENPJTIKBN   NOT = "3"
+                 IF    SYU-HKNCOMBINUM  =  RECE02-HKNCOMBI(1) OR
+                                           RECE02-HKNCOMBI(2) OR
+                                           RECE02-HKNCOMBI(3) OR
+                                           RECE02-HKNCOMBI(4) OR
+                                           RECE02-HKNCOMBI(5) OR
+                                           RECE02-HKNCOMBI(6) OR
+                                           RECE02-HKNCOMBI(7) OR
+                                           RECE02-HKNCOMBI(8) OR
+                                           RECE02-HKNCOMBI(9) OR
+                                           RECE02-HKNCOMBI(10) 
+                   PERFORM  910-HKNCOMBI-READ-SEC
+                   IF  COMB-KOHID(1)    =  WRK-KOHID   OR
+                       COMB-KOHID(2)    =  WRK-KOHID   OR
+                       COMB-KOHID(3)    =  WRK-KOHID   OR
+                       COMB-KOHID(4)    =  WRK-KOHID
+                     PERFORM  800-SEIKYU-SEC
+                   END-IF
+                 END-IF
+               END-IF
+      *
+               PERFORM   925-SYUNOU-READ-SEC
+             END-PERFORM
+           ELSE
+             DISPLAY  "SYUNOU SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"      TO  MCP-FUNC
+           MOVE    "tbl_syunou"       TO  MCP-TABLE
+           MOVE    WRK-PATH           TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"        USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       920-SYUNOU-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    収納読込
+      *****************************************************************
+       925-SYUNOU-READ-SEC  SECTION.
+      *
+           MOVE  "tbl_syunou"   TO  MCP-TABLE
+           MOVE  WRK-PATH       TO  MCP-PATHNAME
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"    USING
+                                MCPAREA
+                                MCPDATA-REC
+                                SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SYUNOU-REC
+             MOVE  ZERO         TO  FLG-SYUNOU
+           ELSE
+             INITIALIZE  SYUNOU-REC
+             MOVE  1  TO  FLG-SYUNOU
+           END-IF
+      *
+           .
+       925-SYUNOU-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険組合せマスター読み込み
+      *****************************************************************
+       910-HKNCOMBI-READ-SEC         SECTION.
+      *
+           INITIALIZE                      HKNCOMBI-REC
+           MOVE    SPA-HOSPNUM            TO  COMB-HOSPNUM
+           MOVE    SYU-PTID               TO  COMB-PTID
+           MOVE    SYU-HKNCOMBINUM        TO  COMB-HKNCOMBINUM
+           MOVE    HKNCOMBI-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"             TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"         TO  MCP-TABLE
+           MOVE    "key"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"              TO  MCP-FUNC
+               MOVE    "tbl_hkncombi"     TO  MCP-TABLE
+               MOVE    "key"              TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"        USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC     TO  HKNCOMBI-REC
+                   MOVE    ZERO            TO  FLG-HKNCOMBI
+               ELSE
+                   INITIALIZE                  HKNCOMBI-REC
+                   MOVE    1               TO  FLG-HKNCOMBI
+               END-IF
+           ELSE
+               INITIALIZE                 HKNCOMBI-REC
+               MOVE    1              TO  FLG-HKNCOMBI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"    TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"     TO  MCP-TABLE
+           MOVE    "key"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"        USING
+                                      MCPAREA
+                                      MCPDATA-REC
+                                      SPA-AREA
+      *
+           .
+       910-HKNCOMBI-READ-EXT.
+           EXIT.
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/07/03) end
       *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
