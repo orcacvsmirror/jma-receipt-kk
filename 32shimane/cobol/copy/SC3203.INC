@@ -15,15 +15,27 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    吉川         15/07/06  医療機関コードのバイト数変更
+      *                                     不要な文字削除
+      ********************************************************************
        01  SC03.
       *診療年月
-              03  SC03-PRTYM	        PIC  X(16).
+              03  SC03-PRTYM            PIC  X(16).
       *市町村番号
-              03  SC03-TOWNNUM	        PIC  X(8).
+              03  SC03-TOWNNUM          PIC  X(8).
       *公費負担者番号
               03  SC03-KOHFTNJANUM      PIC  X(8).
       *医療機関コード
-              03  SC03-HOSPCD           PIC  X(20).
+              03  SC03-HOSPCD.
+                  05 SC03-HOSPCD1       PIC  X(02).
+                  05 SC03-HOSPCD2       PIC  X(02).
+                  05 SC03-HOSPCD3       PIC  X(02).
+                  05 SC03-HOSPCD4       PIC  X(02).
+                  05 SC03-HOSPCD5       PIC  X(02).
+                  05 SC03-HOSPCD6       PIC  X(02).
+                  05 SC03-HOSPCD7       PIC  X(02).
       *点数区分表：１医科
               03  SC03-TENHYOKBN1       PIC  X(2).
       *点数区分表：３歯科
@@ -31,13 +43,13 @@
       *点数区分表：４調剤
               03  SC03-TENHYOKBN3       PIC  X(2).
       *市町村名
-              03  SC03-TOWNNAME	        PIC  X(14).
+              03  SC03-TOWNNAME         PIC  X(14).
       *請求年月日
               03  SC03-SEIYMD           PIC  X(22).
       *住所
               03  SC03-ADRS             PIC  X(100).
       *医療機関名
-              03  SC03-HOSPNAME	        PIC  X(100).
+              03  SC03-HOSPNAME         PIC  X(100).
       *管理者名
               03  SC03-KANRINAME        PIC  X(24).
       *電話番号
