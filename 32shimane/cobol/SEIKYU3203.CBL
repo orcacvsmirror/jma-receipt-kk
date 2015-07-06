@@ -46,6 +46,9 @@
       *  01.00.07    吉川    13/01/11    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.08    吉川    14/05/14    プログラムオプション対応
+      *  01.00.09    吉川    15/07/06    公費の助成がない場合は印字しない
+      *                                  医療機関コードはHOSPCDNではなく
+      *                                  HOSPCDを使用するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -986,6 +989,9 @@
            MOVE  RECE02-YKZFTNINF   (IDY)  TO  MF100-YKZFTNINF
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
       *
+      *=== 公費の助成なしは印字しない by Yoshikawa(21015/07/06) start
+           MOVE     1                      TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(21015/07/06) end
            MOVE     MF100-KOHNUM           TO  WRK-KOHNUM
            MOVE     MF100-KOHID            TO  WRK-KOHID
            IF      RECE02-NYUGAIKBN    =   "1"
@@ -1025,7 +1031,9 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    保険者番号チェック処理
-           MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(21015/07/06) start
+      *     MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(21015/07/06) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR    =    ZERO
@@ -1304,7 +1312,12 @@
            MOVE  WRK-SYSYMDWH  TO  SC03-SEIYMD
       *
       *    医療機関コード
-           MOVE  SYS-1001-HOSPCDN   TO  SC03-HOSPCD
+      *=== 医療機関コードはHOSPCDを使用 by Yoshikawa(2015/07/06) start
+      *     MOVE  SYS-1001-HOSPCDN   TO  SC03-HOSPCD
+           MOVE    SYS-1001-HOSPCD         TO  WRK-MAE-INPUT
+           PERFORM 2009-HENKAN-SEC
+           MOVE    WRK-OUT-INPUT           TO  SC03-HOSPCD
+      *=== 医療機関コードはHOSPCDを使用 by Yoshikawa(2015/07/06) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *    住所
@@ -1797,6 +1810,24 @@
                    MOVE    2       TO      MF100-TYOKI
                END-IF
       *---(01.00.04) LINE ADD START ------------------------------------
+      *
+      *=== 公費の助成なしは印字しない by Yoshikawa(21015/07/06) start
+      *    計算負担金に差がある場合、地方公費の助成があったと判断する
+               IF  FLG-ERR                  =  1    AND
+                   SYU-KOH-HKNNUM(IDX)      =  WRK-KOHNUM
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE     ZERO         TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE     ZERO         TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== 公費の助成なしは印字しない by Yoshikawa(21015/07/06) end
       *
            END-PERFORM
       *
