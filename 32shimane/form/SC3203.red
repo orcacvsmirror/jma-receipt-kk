@@ -86,21 +86,6 @@
           <embed object="text" length="2"/>
         </appinfo>
       </element>
-      <element name="HOSPCD8" occurs="1">
-        <appinfo>
-          <embed object="text" length="2"/>
-        </appinfo>
-      </element>
-      <element name="HOSPCD9" occurs="1">
-        <appinfo>
-          <embed object="text" length="2"/>
-        </appinfo>
-      </element>
-      <element name="HOSPCD10" occurs="1">
-        <appinfo>
-          <embed object="text" length="2"/>
-        </appinfo>
-      </element>
     </element>
     <element name="TENHYOKBN1" occurs="1">
       <appinfo>
@@ -3856,7 +3841,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#4#</dia:string>
+            <dia:string>#3#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -3879,7 +3864,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#HOSPCD.HOSPCD4#</dia:string>
+        <dia:string>#HOSPCD.HOSPCD3#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -3898,7 +3883,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#5#</dia:string>
+            <dia:string>#4#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -3921,7 +3906,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#HOSPCD.HOSPCD5#</dia:string>
+        <dia:string>#HOSPCD.HOSPCD4#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -3940,7 +3925,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#6#</dia:string>
+            <dia:string>#5#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -3963,7 +3948,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#HOSPCD.HOSPCD6#</dia:string>
+        <dia:string>#HOSPCD.HOSPCD5#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -3982,7 +3967,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#7#</dia:string>
+            <dia:string>#6#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -4005,7 +3990,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#HOSPCD.HOSPCD7#</dia:string>
+        <dia:string>#HOSPCD.HOSPCD6#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -4024,7 +4009,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9#</dia:string>
+            <dia:string>#7#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -4047,7 +4032,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#HOSPCD.HOSPCD9#</dia:string>
+        <dia:string>#HOSPCD.HOSPCD7#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
