@@ -90,6 +90,7 @@
       *  01.00.29    吉川    15/03/16    標準負担額欄は福祉に係る金額を記載
       *  01.00.30    吉川    15/06/10    平成２６年１２月以前の診療分は、
       *                                  高額区分の記載は不要
+      *  01.00.31    門間    15/07/07    長期及び長期上位の判別処理を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1125,14 +1126,20 @@
       *
       *    長期
            IF    FLG-TYOKI    =    1  AND
-                 WRK-SEIKYUGK-G    >  10000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) start
+      *           WRK-SEIKYUGK-G    >  10000
+                 WRK-SEIKYUGK-G    >=  10000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) end
                MOVE    10000          TO    WRK-SEIKYUGK-G
                MOVE    1              TO    MF100-TYOKI
            END-IF
       *---(01.00.02) LINE ADD START ------------------------------------
       *    長期上位
            IF    FLG-TYOKI    =    2  AND
-                 WRK-SEIKYUGK-G    >  20000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) start
+      *           WRK-SEIKYUGK-G    >  20000
+                 WRK-SEIKYUGK-G    >=  20000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) end
                MOVE    20000          TO    WRK-SEIKYUGK-G
                MOVE    2              TO    MF100-TYOKI
            END-IF
