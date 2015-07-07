@@ -75,6 +75,7 @@
       *  01.00.20    吉川    2015/01/29  難病＋高額の場合、備考欄に
       *                                  高額区分が印字されないのを修正
       *  01.00.21    吉川    2015/03/16  標準負担額欄は福祉に係る金額を記載
+      *  01.00.22    門間    2015/07/07  長期及び長期上位の判別処理を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1202,14 +1203,20 @@
       *
       *    長期
            IF    FLG-TYOKI    =    1
-             IF  WRK-SEIKYUGK-G    >  10000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) start
+      *       IF  WRK-SEIKYUGK-G    >  10000
+             IF  WRK-SEIKYUGK-G    >=  10000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) end
                MOVE    10000          TO    WRK-SEIKYUGK-G
              END-IF
              MOVE    1                TO    MF100-TYOKI
            END-IF
       *    長期上位
            IF    FLG-TYOKI    =    2 
-             IF  WRK-SEIKYUGK-G    >  20000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) start
+      *       IF  WRK-SEIKYUGK-G    >  20000
+             IF  WRK-SEIKYUGK-G    >=  20000
+      *=== 長期及び長期上位の判別処理を修正 by Monma(2015/07/07) end
                MOVE    20000          TO    WRK-SEIKYUGK-G
              END-IF
              MOVE    2                TO    MF100-TYOKI
