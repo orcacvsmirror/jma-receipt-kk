@@ -46,6 +46,8 @@
       *  01.00.09    吉川    14/03/05    帳票様式の変更に伴う修正
       *  01.00.10    吉川    14/04/11    診療年月に年号を追加
       *  01.00.11    萩野    14/05/15    処方せん発行区分対応（診療行為コード追加）
+      *  01.00.12    吉川    15/07/08    対象公費はプログラムオプション
+      *                                  から取得するようにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -158,10 +160,14 @@
            03  FLG-PRGOPTION         PIC 9(01).
            03  FLG-OK                PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2013/11/07) end
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+           03  FLG-TAISYOKOHI        PIC 9(01).
+           03  FLG-TAISYO            PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX                   PIC 9(04).
+           03  IDX                   PIC 9(05).
            03  IDY                   PIC 9(04).
            03  IDZ                   PIC 9(04).
            03  IDXX                  PIC 9(04).
@@ -271,6 +277,14 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      *    対象公費
+           03  WRK-KOHKBN            PIC X(01).
+           03  WRK-TAISYO-KOHI  OCCURS 100.
+               05  WRK-TAISYO-KBN    PIC X(01).
+               05  WRK-TAISYO-KOHNUM PIC X(03).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-LINE    PIC 9(02).
@@ -296,6 +310,12 @@
            03  TBL-PARA-OCC    OCCURS  100.
                05  TBL-PARA-HKNJANUM    PIC X(08).
                05  TBL-PARA-PTID        PIC 9(10).
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      *    比較用公費番号テーブル領域
+       01  TBL-HIKAKU-KOHI.
+           03  TBL-HKOHNUM              PIC X(03)  OCCURS  4.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
@@ -746,6 +766,22 @@
            END-IF
            DISPLAY "ソート区分="  WRK-SRTKBN
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             UNSTRING   WRK-OPTION(IDX)   DELIMITED  BY  ":"
+                                          INTO   WRK-TAISYO-KBN(IDX)
+                                                 WRK-TAISYO-KOHNUM(IDX)
+             END-UNSTRING
+             DISPLAY "対象公費区分="  WRK-TAISYO-KBN(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -826,8 +862,15 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-              IF  RECE02-KOHNUM (IDZ) =    "161" OR "162" OR "163" OR
-                                           "164" OR "165"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      *       IF  RECE02-KOHNUM (IDZ) = "161" OR "162" OR "163"
+      *                              OR "164" OR "165" 
+             INITIALIZE                            TBL-HIKAKU-KOHI
+             MOVE    RECE02-KOHNUM(IDZ)        TO  TBL-HKOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -879,21 +922,24 @@
       *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
       *
       *    助成種別
-      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
-      *     EVALUATE MF100-KOHNUM
-           EVALUATE RECE02-KOHNUM(IDZ)
-      *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
-             WHEN  "161"
-               MOVE  "1"                     TO   MF100-KOHKBN
-             WHEN  "162"
-               MOVE  "2"                     TO   MF100-KOHKBN
-             WHEN  "163"
-               MOVE  "3"                     TO   MF100-KOHKBN
-             WHEN  "164"
-               MOVE  "4"                     TO   MF100-KOHKBN
-             WHEN  "165"
-               MOVE  "5"                     TO   MF100-KOHKBN
-           END-EVALUATE
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      **=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
+      **     EVALUATE MF100-KOHNUM
+      *     EVALUATE RECE02-KOHNUM(IDZ)
+      **=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) end
+      *       WHEN  "161"
+      *         MOVE  "1"                     TO   MF100-KOHKBN
+      *       WHEN  "162"
+      *         MOVE  "2"                     TO   MF100-KOHKBN
+      *       WHEN  "163"
+      *         MOVE  "3"                     TO   MF100-KOHKBN
+      *       WHEN  "164"
+      *         MOVE  "4"                     TO   MF100-KOHKBN
+      *       WHEN  "165"
+      *         MOVE  "5"                     TO   MF100-KOHKBN
+      *     END-EVALUATE
+           MOVE     WRK-KOHKBN               TO   MF100-KOHKBN
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
       *
       *=== 記載順が反映されない不具合修正 by Yoshikawa(2013/12/05) start
       **=== 記載順をINIファイルで設定 by Yoshikawa(2012/07/06) start
@@ -1451,6 +1497,32 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+             IF  TBL-HKOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+             OR  TBL-HKOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+               MOVE     WRK-TAISYO-KBN(IDXX)
+                                            TO  WRK-KOHKBN
+               MOVE     1                   TO  FLG-TAISYO
+               MOVE     100                 TO  IDXX
+             END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
       *=== 月途中の保険変更でも合算金額を記載 by Hagino(2012/09/21) start
       *****************************************************************
       *    集計ファイル読込
@@ -1513,14 +1585,24 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-             IF  RECE02-KOHNUM (1) = "161" OR "162" OR "163"
-                                  OR "164" OR "165" OR
-                 RECE02-KOHNUM (2) = "161" OR "162" OR "163"
-                                  OR "164" OR "165" OR
-                 RECE02-KOHNUM (3) = "161" OR "162" OR "163"
-                                  OR "164" OR "165" OR
-                 RECE02-KOHNUM (4) = "161" OR "162" OR "163"
-                                  OR "164" OR "165"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
+      *       IF  RECE02-KOHNUM (1) = "161" OR "162" OR "163"
+      *                            OR "164" OR "165" OR
+      *           RECE02-KOHNUM (2) = "161" OR "162" OR "163"
+      *                            OR "164" OR "165" OR
+      *           RECE02-KOHNUM (3) = "161" OR "162" OR "163"
+      *                            OR "164" OR "165" OR
+      *           RECE02-KOHNUM (4) = "161" OR "162" OR "163"
+      *                            OR "164" OR "165"
+               INITIALIZE                            TBL-HIKAKU-KOHI
+               MOVE    RECE02-KOHNUM(1)          TO  TBL-HKOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)          TO  TBL-HKOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)          TO  TBL-HKOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)          TO  TBL-HKOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) end
       *
       *        妊産婦で自己負担額が1500円未満の場合は読み飛ばす
                  IF  RECE02-KOHNUM (1)  =  "165" OR
