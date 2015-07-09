@@ -106,7 +106,6 @@
                05  WRK-SDD         PIC 9(02).
            03  WRK-HENYMDG         PIC X(22).
            03  WRK-HKNNUM          PIC X(03).
-           03  WRK-HKNJANUM        PIC X(08).
            03  WRK-BAITAISYURUI    PIC X(01).
            03  WRK-KENSU-TBL  OCCURS  3.
                05  WRK-KENSU       PIC 9(05)  OCCURS 2.
@@ -531,7 +530,7 @@
              WHEN  "040"
                  MOVE    3           TO  IDX1
              WHEN  OTHER
-                 MOVE    1           TO  IDX1
+                 MOVE    99          TO  IDX1
            END-EVALUATE
       *    
       *    Æþ±¡¡¿³°ÍèÈ½Äê
@@ -542,7 +541,9 @@
            END-IF
       *
       *    ·ï¿ô²Ã»»
-           ADD     1                 TO  WRK-KENSU(IDX1 IDX2)
+           IF  IDX1  NOT  =  99
+               ADD     1             TO  WRK-KENSU(IDX1 IDX2)
+           END-IF
       *
            MOVE    1                 TO  FLG-UPD 
       *
@@ -822,13 +823,8 @@
            MOVE   WRK-HKNNUM               TO  RECE10-HKNNUM-S
                                                RECE10-HKNNUM
       *
-           IF    WRK-HKNJANUM  NOT = "00000000"
-               MOVE    WRK-HKNJANUM  TO  RECE10-XXSTHKNJANUM
-                                              RECE10-XXEDHKNJANUM
-           ELSE
-               MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
-               MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
-           END-IF
+           MOVE    SPACE                   TO  RECE10-XXSTHKNJANUM
+           MOVE    "99999999"              TO  RECE10-XXEDHKNJANUM
       *
            MOVE    RECE10-REC              TO  MCPDATA-REC
            MOVE    "DBSELECT"              TO  MCP-FUNC
