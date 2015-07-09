@@ -18,7 +18,7 @@
     </element>
     <element name="HOSPCD" occurs="1">
       <appinfo>
-        <embed object="text" length="14"/>
+        <embed object="text" length="18"/>
       </appinfo>
     </element>
     <element name="TENHYOKBN" occurs="4">
@@ -494,7 +494,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true" active="true">
+  <dia:layer name="文字" visible="true">
     <dia:object type="Standard - Text" version="1" id="O20">
       <dia:attribute name="obj_pos">
         <dia:point val="7.7171,8.6891"/>
@@ -698,12 +698,12 @@
         <dia:point val="3.515,24.3051"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.515,23.9951;11.39,24.3476"/>
+        <dia:rectangle val="3.515,23.9863;11.0488,24.3652"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#※１ 本送付書は、点数表区分別に作成すること。#</dia:string>
+            <dia:string>#※１ 本送付書は、点数区分別に作成すること。#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -1923,7 +1923,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true">
+  <dia:layer name="差し込み" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O63">
       <dia:attribute name="obj_pos">
         <dia:point val="10.0108,14.4304"/>
