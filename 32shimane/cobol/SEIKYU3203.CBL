@@ -49,6 +49,8 @@
       *  01.00.09    吉川    15/07/06    公費の助成がない場合は印字しない
       *                                  医療機関コードはHOSPCDNではなく
       *                                  HOSPCDを使用するように修正
+      *  01.00.10    吉川    15/07/13    診療年月はパラメタではなく
+      *                                  テーブルの診療年月を参照
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1416,17 +1418,20 @@
                MOVE  WRK-HENYMDG1       TO  SC03-BIRTHDAY(IDX1)
       *
       *    診療年月
-      ****2006/01/17  @@@@-BRAND START
-               MOVE  WRK-SRYYM (2:2)   TO  SC03-SRYYM (IDX1)(1:2)
-               MOVE  WRK-SRYYM (5:2)   TO  SC03-SRYYM (IDX1)(3:2)
-      ****2006/04/10 @@@@-BRAND START
-                IF  WRK-SRYYM(5:1)  =  SPACE
-      *          MOVE "0" TO  SC03-SRYYM (IDX1) (3:)
-                 MOVE "0" TO  SC03-SRYYM (IDX1) (3:1)
-                END-IF
-      ****2006/04/10 @@@@-BRAND END
-                MOVE  WRK-SRYYM(6:1)  TO  SC03-SRYYM (IDX1)(4:)
-       
+      *=== 診療年月の変更 by Yoshikawa(2015/07/13) start
+      *****2006/01/17  @@@@-BRAND START
+      *         MOVE  WRK-SRYYM (2:2)   TO  SC03-SRYYM (IDX1)(1:2)
+      *         MOVE  WRK-SRYYM (5:2)   TO  SC03-SRYYM (IDX1)(3:2)
+      *****2006/04/10 @@@@-BRAND START
+      *          IF  WRK-SRYYM(5:1)  =  SPACE
+      **          MOVE "0" TO  SC03-SRYYM (IDX1) (3:)
+      *           MOVE "0" TO  SC03-SRYYM (IDX1) (3:1)
+      *          END-IF
+      *****2006/04/10 @@@@-BRAND END
+      *          MOVE  WRK-SRYYM(6:1)  TO  SC03-SRYYM (IDX1)(4:)
+               MOVE    MF100-SRYYM(2:4)  TO  SC03-SRYYM (IDX1)
+      *=== 診療年月の変更 by Yoshikawa(2015/07/13) end
+      *
       *    入外区分
       *       MOVE  MF100-NYUGAIKBN  TO  SC03-NYUGAIKBN (IDX1)
                MOVE    MF100-RECESYUBETU (4:1)
