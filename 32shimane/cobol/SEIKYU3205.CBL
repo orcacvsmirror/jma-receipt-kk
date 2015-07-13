@@ -1431,7 +1431,17 @@
       *         IF   WRK-SRYYM (5:1)  = SPACE
       *       MOVE  "0"             TO  SC05-SRYYM (IDX1)(3:1)
       *         END-IF
-               MOVE    MF100-SRYYM(2:4)  TO  SC05-SRYYM (IDX1)
+               MOVE    MF100-SRYYM       TO  WRK-SYMD(1:6)
+               MOVE    "01"              TO  WRK-SYMD(7:2)
+               PERFORM 31012-SEIWA-HEN-SEC
+               MOVE    WRK-HENYMDG1(2:2) TO  SC05-SRYYM (IDX1)(1:2)
+               MOVE    WRK-HENYMDG1(5:2) TO  SC05-SRYYM (IDX1)(3:2)
+               IF  WRK-HENYMDG1(2:1)  =  SPACE
+                   MOVE    "0"           TO  SC05-SRYYM (IDX1)(1:1)
+               END-IF
+               IF  WRK-HENYMDG1(5:1)  =  SPACE
+                   MOVE    "0"           TO  SC05-SRYYM (IDX1)(3:1)
+               END-IF
       *=== 診療年月の変更 by Yoshikawa(2015/07/13) end
       ****2006/04/10 @@@@-BRAND  END
       *         IF  WRK-SRYYM(5:1)  =  SPACE
