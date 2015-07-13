@@ -47,6 +47,8 @@
       *                                  医療機関情報編集対応
       *  01.00.08    吉川    14/05/14    プログラムオプション対応
       *  01.00.09    吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.10    吉川    15/07/13    診療年月はパラメタではなく
+      *                                  テーブルの診療年月を参照
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1421,13 +1423,16 @@
                        INTO       SC05-KIGONUM (IDX1)
                END-STRING
       *    診療年月
-      ****2006/01/07 @@@@-BRAND  START
-               MOVE  WRK-SRYYM (2:2)   TO  SC05-SRYYM (IDX1)(1:2)
-               MOVE  WRK-SRYYM (5:2)   TO  SC05-SRYYM (IDX1)(3:2)
-      ****2006/04/10 @@@@-BRAND  START
-               IF   WRK-SRYYM (5:1)  = SPACE
-	         MOVE  "0"             TO  SC05-SRYYM (IDX1)(3:1)
-               END-IF
+      *=== 診療年月の変更 by Yoshikawa(2015/07/13) start
+      *****2006/01/07 @@@@-BRAND  START
+      *         MOVE  WRK-SRYYM (2:2)   TO  SC05-SRYYM (IDX1)(1:2)
+      *         MOVE  WRK-SRYYM (5:2)   TO  SC05-SRYYM (IDX1)(3:2)
+      *****2006/04/10 @@@@-BRAND  START
+      *         IF   WRK-SRYYM (5:1)  = SPACE
+      *       MOVE  "0"             TO  SC05-SRYYM (IDX1)(3:1)
+      *         END-IF
+               MOVE    MF100-SRYYM(2:4)  TO  SC05-SRYYM (IDX1)
+      *=== 診療年月の変更 by Yoshikawa(2015/07/13) end
       ****2006/04/10 @@@@-BRAND  END
       *         IF  WRK-SRYYM(5:1)  =  SPACE
       *           MOVE  0  TO  SC05-SRYYM (IDX1) (3:)
