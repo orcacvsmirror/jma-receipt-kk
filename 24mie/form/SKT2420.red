@@ -18,7 +18,7 @@
     </element>
     <element name="HOSPCD" occurs="1">
       <appinfo>
-        <embed object="text" length="14"/>
+        <embed object="text" length="20"/>
       </appinfo>
     </element>
     <element name="TENHYOKBN" occurs="4">

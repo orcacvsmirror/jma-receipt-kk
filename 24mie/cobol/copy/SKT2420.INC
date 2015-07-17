@@ -23,7 +23,7 @@
       *    医療機関名
            03  SKT2420-HOSPNAME          PIC  X(100).
       *    医療機関コード
-           03  SKT2420-HOSPCD            PIC  X(14).
+           03  SKT2420-HOSPCD            PIC  X(20).
       *    点数表区分
            03  SKT2420-TENHYOKBN         PIC  X(02)  OCCURS  4.
       *    診療年月
