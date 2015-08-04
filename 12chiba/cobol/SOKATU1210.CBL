@@ -54,6 +54,7 @@
       *                                  プログラムオプション対応
       *  01.00.19    萩野    14/12/04    返戻時、再印刷画面のタイトル修正
       *  01.00.20    吉川    15/02/13    公費再掲欄への長期の記載は不要
+      *  01.00.21    吉川    15/08/04    在総診分は合算する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -993,7 +994,9 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    在宅・在医総
-           MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
       *
       *=== 災害対応 by Yoshikawa(2011/03/24) start
       *    災害対象者は別帳票
@@ -1616,7 +1619,9 @@
            END-IF
       *---(01.00.06) LINE ADD END   ------------------------------------
       *    在宅・在医総
-           MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     MOVE    RECE10-ZAITAKU        TO  SKT1210TMP-ZAITAKU
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
       *
       *    診療科
            MOVE  "99"                    TO  SKT1210TMP-RECEKA
@@ -2184,10 +2189,12 @@
              WHEN  10    MOVE  "○"  TO  SKT1220-KYURATE (3)
            END-EVALUATE
       *    在総診・在医総
-           IF    SKT1210TMP-ZAITAKU  =  "1"
-             MOVE    "在"                TO  SKT1220-ZAI1
-             MOVE    "◯"                TO  SKT1220-ZAI2
-           END-IF
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     IF    SKT1210TMP-ZAITAKU  =  "1"
+      *       MOVE    "在"                TO  SKT1220-ZAI1
+      *       MOVE    "◯"                TO  SKT1220-ZAI2
+      *     END-IF
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
       *
       *---(01.00.05) LINE ADD START ------------------------------------
       *    診療科

@@ -43,6 +43,7 @@
       *                                  PERFORM¢ªGOTO¤Ë½¤Àµ
       *  01.00.09    µÈÀî    2012/08/08  ÅìËÌÃÏÊýÂÀÊ¿ÍÎ²­ÃÏ¿ÌÂÐ±þ¡ÊÂÐ¾Ý¼ÔÊÌ½¸·×¡Ë
       *  01.00.10    µÈÀî    2012/12/21  °åÎÅµ¡´Ø¾ðÊóÊÔ½¸ÂÐ±þ
+      *  01.00.11    µÈÀî    2015/08/04  ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -782,7 +783,9 @@
            MOVE  WRK-HKNJANUM           TO  SKT1215TMP-HKNJANUM
       *
       *    ºßÂð¡¦ºß°åÁí
-           MOVE    RECE10-ZAITAKU       TO  SKT1215TMP-ZAITAKU
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) start
+      *     MOVE    RECE10-ZAITAKU       TO  SKT1215TMP-ZAITAKU
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) end
            
       *    ºÒ³²ÂÐ¾Ý¼Ô¡ÊºÒ£±¡¢ºÒ£²¡¢ÉÔ¾Ü¡¦ºÒ£±¡Ë¤ÏÊÌÄ¢É¼
            EVALUATE  RECE10-ETC-YKZFTN (1)
@@ -1541,11 +1544,14 @@
            MOVE    "SKT1215.red"         TO  SPRT-PRTID
            MOVE    SKT1215               TO  SPRT-PRTDATA
       *=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) start
-           IF  SKT1215TMP-ZAITAKU  =  "1"
-               MOVE  2  TO  WRK-INDEX
-           ELSE
-               MOVE  1  TO  WRK-INDEX
-           END-IF
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) start
+      *     IF  SKT1215TMP-ZAITAKU  =  "1"
+      *         MOVE  2  TO  WRK-INDEX
+      *     ELSE
+      *         MOVE  1  TO  WRK-INDEX
+      *     END-IF
+           MOVE    1                   TO  WRK-INDEX
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) end
            MOVE  WRK-PARA-SYOKBN       TO  WRK-SYOKBN
       *=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
@@ -1648,11 +1654,13 @@
       *    ºßÁí¿Ç¡¦ºß°åÁí
       *=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) start
       *     IF    WRK-INDEX  =  2
-           IF    SKT1215TMP-ZAITAKU  =  "1"
-      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) end
-             MOVE    "ºß"              TO  SKT1225-ZAI1
-             MOVE    "¢þ"              TO  SKT1225-ZAI2
-           END-IF
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) start
+      *     IF    SKT1215TMP-ZAITAKU  =  "1"
+      **=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) end
+      *       MOVE    "ºß"              TO  SKT1225-ZAI1
+      *       MOVE    "¢þ"              TO  SKT1225-ZAI2
+      *     END-IF
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) end
       *
            .
        20031-HEAD-HEN-EXT.
@@ -1877,12 +1885,14 @@
            MOVE    WRK-PAGE            TO  SKT1225-NO
            MOVE    "SKT1225.red"         TO  SPRT-PRTID
            MOVE    SKT1225               TO  SPRT-PRTDATA
-      *=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) start
-           IF  SKT1215TMP-ZAITAKU  =  "1"
-               MOVE  2  TO  WRK-INDEX
-           ELSE
-               MOVE  1  TO  WRK-INDEX
-           END-IF
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) start
+      *     IF  SKT1215TMP-ZAITAKU  =  "1"
+      *         MOVE  2  TO  WRK-INDEX
+      *     ELSE
+      *         MOVE  1  TO  WRK-INDEX
+      *     END-IF
+           MOVE    1                   TO  WRK-INDEX
+      *=== ºßÁí¿ÇÊ¬¤Ï¹ç»»¤¹¤ë by Yoshikawa(2015/08/04) end
            MOVE  WRK-PARA-SYOKBN       TO  WRK-SYOKBN
       *=== ºÒ³²ÂÐ±þ by Yoshikawa(2012/08/08) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
