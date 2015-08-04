@@ -44,6 +44,7 @@
       *  01.00.09    吉川    2012/08/08  東北地方太平洋沖地震対応（対象者別集計）
       *  01.00.10    吉川    2012/12/21  医療機関情報編集対応
       *  01.00.11    吉川    2014/10/08  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.12    吉川    2015/08/04  在総診分は合算する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -811,7 +812,9 @@
            MOVE  WRK-HKNJANUM           TO  SKT1215TMP-HKNJANUM
       *
       *    在宅・在医総
-           MOVE    RECE10-ZAITAKU       TO  SKT1215TMP-ZAITAKU
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     MOVE    RECE10-ZAITAKU       TO  SKT1215TMP-ZAITAKU
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
            
       *    災害対象者（災１、災２、不詳・災１）は別帳票
            EVALUATE  RECE10-ETC-YKZFTN (1)
@@ -1570,11 +1573,14 @@
            MOVE    "SKT1215.red"         TO  SPRT-PRTID
            MOVE    SKT1215               TO  SPRT-PRTDATA
       *=== 災害対応 by Yoshikawa(2012/08/08) start
-           IF  SKT1215TMP-ZAITAKU  =  "1"
-               MOVE  2  TO  WRK-INDEX
-           ELSE
-               MOVE  1  TO  WRK-INDEX
-           END-IF
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     IF  SKT1215TMP-ZAITAKU  =  "1"
+      *         MOVE  2  TO  WRK-INDEX
+      *     ELSE
+      *         MOVE  1  TO  WRK-INDEX
+      *     END-IF
+           MOVE    1                   TO  WRK-INDEX
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
            MOVE  WRK-PARA-SYOKBN       TO  WRK-SYOKBN
       *=== 災害対応 by Yoshikawa(2012/08/08) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
@@ -1677,11 +1683,13 @@
       *    在総診・在医総
       *=== 災害対応 by Yoshikawa(2012/08/08) start
       *     IF    WRK-INDEX  =  2
-           IF    SKT1215TMP-ZAITAKU  =  "1"
-      *=== 災害対応 by Yoshikawa(2012/08/08) end
-             MOVE    "在"              TO  SKT1225-ZAI1
-             MOVE    "◯"              TO  SKT1225-ZAI2
-           END-IF
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     IF    SKT1215TMP-ZAITAKU  =  "1"
+      **=== 災害対応 by Yoshikawa(2012/08/08) end
+      *       MOVE    "在"              TO  SKT1225-ZAI1
+      *       MOVE    "◯"              TO  SKT1225-ZAI2
+      *     END-IF
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
       *
            .
        20031-HEAD-HEN-EXT.
@@ -1907,11 +1915,14 @@
            MOVE    "SKT1225.red"         TO  SPRT-PRTID
            MOVE    SKT1225               TO  SPRT-PRTDATA
       *=== 災害対応 by Yoshikawa(2012/08/08) start
-           IF  SKT1215TMP-ZAITAKU  =  "1"
-               MOVE  2  TO  WRK-INDEX
-           ELSE
-               MOVE  1  TO  WRK-INDEX
-           END-IF
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) start
+      *     IF  SKT1215TMP-ZAITAKU  =  "1"
+      *         MOVE  2  TO  WRK-INDEX
+      *     ELSE
+      *         MOVE  1  TO  WRK-INDEX
+      *     END-IF
+           MOVE    1                   TO  WRK-INDEX
+      *=== 在総診分は合算する by Yoshikawa(2015/08/04) end
            MOVE  WRK-PARA-SYOKBN       TO  WRK-SYOKBN
       *=== 災害対応 by Yoshikawa(2012/08/08) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
