@@ -54,6 +54,7 @@
       *  01.00.11    吉川    13/01/11    プラグイン対応
       *                                  医療機関情報編集対応
       *  01.00.12    吉川    13/06/17    プログラムオプション対応
+      *  01.00.13    吉川    15/08/10    長期は上限を超えた時に記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -298,6 +299,10 @@
                05  WRK-FTNMONEY-G    PIC 9(08)V9(01).
                05  WRK-FTNMONEY-G2   PIC 9(08).
                05  WRK-FTNMONEY      PIC 9(08)V9(01).
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+               05  WRK-TYOKIFTNGK    PIC 9(08).
+               05  WRK-TYOKIFTNGK-G  PIC 9(08).
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
       *****
       *
        01  SUM-AREA.
@@ -995,6 +1000,9 @@
       ***** 05/07/04 yamaguchi INS
            INITIALIZE                      WRK-SYUKEI
       *****
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+                                           FLG-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.05) LINE ADD START ------------------------------------
       *         MOVE    PATH-TBL-SYUNOU-KEY33   TO  WRK-PATH
@@ -1007,6 +1015,26 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
            PERFORM   920-SYUNOU-SET-SEC
+      *
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+           IF    FLG-TYOKI    =    1
+               IF    WRK-TYOKIFTNGK-G  >=  10000
+                   MOVE    "1"        TO    MF100-TYOKI
+               END-IF
+               IF  WRK-FTNMONEY-G      >=  10000
+                   MOVE    10000      TO    WRK-FTNMONEY-G
+               END-IF
+           END-IF
+      *
+           IF    FLG-TYOKI    =    2
+               IF    WRK-TYOKIFTNGK-G  >=  20000
+                   MOVE    "2"        TO    MF100-TYOKI
+               END-IF
+               IF  WRK-FTNMONEY-G      >=  20000
+                   MOVE    20000      TO    WRK-FTNMONEY-G
+               END-IF
+           END-IF
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
       *
       ***** 05/07/04 yamaguchi INS
       *    一部負担金
@@ -1812,17 +1840,28 @@
       ***** 05/06/28 yamaguchi INS
            MOVE    ZERO                TO  WRK-FTNMONEY
       *****
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+                                           WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
       *
            PERFORM  VARYING  IDX  FROM  1  BY  1
                     UNTIL    IDX  >     4  OR
                     SYU-KOH-HKNNUM(IDX) =  SPACE
       *
              IF   SYU-KOH-HKNNUM(IDX)   =  "972"
-               MOVE     "1"              TO  MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+      *         MOVE     "1"              TO  MF100-TYOKI
+               MOVE    1                     TO  FLG-TYOKI
+               MOVE    SYU-KOH-COMPFTN(IDX)  TO  WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
              END-IF
       *---(01.00.03) LINE ADD START ------------------------------------
              IF   SYU-KOH-HKNNUM(IDX)   =  "974"
-               MOVE     "2"              TO  MF100-TYOKI
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+      *         MOVE     "2"              TO  MF100-TYOKI
+               MOVE    2                     TO  FLG-TYOKI
+               MOVE    SYU-KOH-COMPFTN(IDX)  TO  WRK-TYOKIFTNGK
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
              END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
@@ -1864,6 +1903,9 @@
       ***** 05/06/28 yamaguchi INS
            ADD     WRK-FTNMONEY            TO  WRK-FTNMONEY-G
       *****
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
+           ADD     WRK-TYOKIFTNGK          TO  WRK-TYOKIFTNGK-G
+      *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) end
       *
            .
        800-SEIKYU-SEC-EXT.
