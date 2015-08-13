@@ -33,6 +33,7 @@
       *  01.00.03    吉川    2011/02/17  open-cobol1.0対応
       *  01.00.04    吉川    2011/10/07  Lucid4.6で出力されないのを修正
       *  01.00.05    吉川    2014/10/23  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.06    吉川    2015/08/13  CSVレイアウト変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -757,12 +758,20 @@
       *
       *    ６．資格証番号
            MOVE    MF101-KOHJKYSNUM(3:)    TO  WRK-DATA
-           MOVE    7                       TO  WRK-NAGASA
+      *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) start
+      *     MOVE    7                       TO  WRK-NAGASA
+           MOVE    9                       TO  WRK-NAGASA
+      *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    ７．枝番
-           MOVE    MF101-KOHJKYSNUM(1:2)   TO  WRK-DATA
-           MOVE    2                       TO  WRK-NAGASA
+      *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) start
+      **    ７．枝番
+      *     MOVE    MF101-KOHJKYSNUM(1:2)   TO  WRK-DATA
+      *     MOVE    2                       TO  WRK-NAGASA
+      *    ７．Null
+           MOVE    SPACE                   TO  WRK-DATA
+           MOVE    1                       TO  WRK-NAGASA
+      *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) end
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ８．保険者番号
