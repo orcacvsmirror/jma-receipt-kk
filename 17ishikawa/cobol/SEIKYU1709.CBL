@@ -757,9 +757,10 @@
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    ６．資格証番号
-           MOVE    MF101-KOHJKYSNUM(3:)    TO  WRK-DATA
       *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) start
+      *     MOVE    MF101-KOHJKYSNUM(3:)    TO  WRK-DATA
       *     MOVE    7                       TO  WRK-NAGASA
+           MOVE    MF101-KOHJKYSNUM        TO  WRK-DATA
            MOVE    9                       TO  WRK-NAGASA
       *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) end
            PERFORM 5004-MOJI-HENSYU-SEC
@@ -768,7 +769,7 @@
       **    ７．枝番
       *     MOVE    MF101-KOHJKYSNUM(1:2)   TO  WRK-DATA
       *     MOVE    2                       TO  WRK-NAGASA
-      *    ７．Null
+      *    ７．予備（Null）
            MOVE    SPACE                   TO  WRK-DATA
            MOVE    1                       TO  WRK-NAGASA
       *=== CSVレイアウト変更 by Yoshikawa(2015/08/13) end
