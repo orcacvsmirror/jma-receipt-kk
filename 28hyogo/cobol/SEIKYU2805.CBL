@@ -56,6 +56,8 @@
       *  01.00.12    吉川    13/06/17    プログラムオプション対応
       *  01.00.13    吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.14    吉川    15/08/10    長期は上限を超えた時に記載する
+      *  01.00.15    吉川    15/09/09    公費の助成が発生しない且つ
+      *                                  点数が0点の場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1051,6 +1053,9 @@
                MOVE    "key25"        TO  WRK-PATH
       *---(01.00.05) LINE ADD END   ------------------------------------
            END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) start
+           MOVE    1                  TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) end
            PERFORM   920-SYUNOU-SET-SEC
       *
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2015/08/10) start
@@ -1089,10 +1094,15 @@
            END-EVALUATE
       *
       *    保険者番号チェック処理
-           MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) start
+      *     MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF       FLG-ERR               =   ZERO
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) start
+           OR       MF100-TOTALTEN    NOT =   ZERO
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) end
                WRITE    MF100-REC 
                ADD      1                 TO    CNT-MF100
            ELSE
@@ -1935,6 +1945,22 @@
                  END-IF
              END-IF
       *****
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+             IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+               IF     IDX                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/09) end
            END-PERFORM
       *
       ***** 05/06/28 yamaguchi INS
