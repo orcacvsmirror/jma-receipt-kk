@@ -1604,7 +1604,7 @@
       *
       *=== 長期上位の場合、備考欄に長２と記載 by monma (2015/09/11) start
              IF    MF100-TYOKI      =   2
-               MOVE    "長２"     TO  SC07-BIKO1(IDX)
+               MOVE    "長２"     TO  SC09-BIKO1(IDX)
              END-IF
       *=== 長期上位の場合、備考欄に長２と記載 by monma (2015/09/11) end
       *
