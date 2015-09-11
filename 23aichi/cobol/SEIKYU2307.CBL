@@ -85,6 +85,7 @@
       *  01.00.29    吉川    15/06/08    他市町村変更時、一方の請求点数が
       *                                  ゼロの場合、備考欄の市町村名は
       *                                  記載しないように修正
+      *  01.00.30    門間    15/09/11    長期上位の場合、備考欄に長２と記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1187,7 +1188,10 @@
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) start
       *         MOVE    1              TO    MF100-TYOKI
                IF    WRK-TYOKIFTNGK-G  >=  20000
-                   MOVE    1              TO    MF100-TYOKI
+      *=== 長期上位の場合、備考欄に長２と記載 by monma (2015/09/11) start
+      *             MOVE    1              TO    MF100-TYOKI
+                   MOVE    2              TO    MF100-TYOKI
+      *=== 長期上位の場合、備考欄に長２と記載 by monma (2015/09/11) end
                END-IF
       *=== 長期は上限を超えた時に記載 by hagino(2014/06/16) end
                IF    WRK-SEIKYUGK-G2   >=  20000
@@ -1573,6 +1577,12 @@
              IF    MF100-TYOKI      =   1
                MOVE    "長"       TO  SC07-BIKO1(IDX)
              END-IF
+      *
+      *=== 長期上位の場合、備考欄に長２と記載 by monma (2015/09/11) start
+             IF    MF100-TYOKI      =   2
+               MOVE    "長２"     TO  SC07-BIKO1(IDX)
+             END-IF
+      *=== 長期上位の場合、備考欄に長２と記載 by monma (2015/09/11) end
       *
       *=== 備考欄の記載修正 by hagino(2015/01/28) start
       *       IF    MF100-JIRITU     =   1
