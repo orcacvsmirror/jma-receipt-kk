@@ -57,6 +57,7 @@
       *  02.05.14    萩野    15/03/10    平成２７年１月改正対応
       *  02.05.15    吉川    15/05/12    保険変更時、それぞれの点数と日数を
       *                                  印字するように修正
+      *  02.05.16    吉川    15/09/14    公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1112,6 +1113,9 @@
                MOVE    "key25"        TO  WRK-PATH
       *---(02.05.05) LINE ADD END   ------------------------------------
            END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) start
+           MOVE    1                  TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) end
            DISPLAY  "収納読み込み開始"
            PERFORM  920-SYUNOU-SET-SEC
            IF       IDZ           =     1
@@ -1174,7 +1178,9 @@
            PERFORM  2001-OCR-SET-SEC
       *
       *    保険者番号チェック処理
-           MOVE    ZERO        TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) start
+      *     MOVE    ZERO        TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF      FLG-ERR     =   1
@@ -3079,6 +3085,22 @@
                END-IF
       *---(02.05.05) LINE ADD END   ------------------------------------
       *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+               IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                         > SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) end
            END-PERFORM
       *
            IF  RECE02-FTNMONEY(1)       >  ZERO
