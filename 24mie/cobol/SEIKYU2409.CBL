@@ -33,6 +33,7 @@
       * 01.00.03     吉川    2015/07/08  対象公費はプログラムオプション
       *                                  から取得するようにする
       *                                  入院日数が2桁の場合0になる不具合を修正
+      * 01.00.04     萩野    2015/09/11  半角カナ出力の不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -133,6 +134,9 @@
            03  IDX2                  PIC 9(04).
            03  IDX3                  PIC 9(04).
            03  IDW                   PIC 9(04).
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) start
+           03  IDX-L                 PIC 9(02).
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -1022,10 +1026,18 @@
       *=== 患者カナ氏名の不具合修正 by Yoshikawa(2014/02/05) end
              MOVE    MF100-NAME(1:40)        TO  WRK-MAE-INPUT
              PERFORM 2009-HANKANA-HENKAN-SEC
-             MOVE    WRK-OUT-INPUT           TO  WRK-DATA
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) start
+      *       MOVE    WRK-OUT-INPUT           TO  WRK-DATA
+             COMPUTE  IDX-L  =  40  -  IDX-L
+             MOVE    WRK-OUT-INPUT(1:IDX-L)  TO  WRK-DATA
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) end
+      *
       *      EUC半角カナは2バイトだが1ケタ扱い
       *      部分参照における制御文字の誤参照を防ぐ為、長さは39バイトとする
-             MOVE    39                      TO  WRK-NAGASA
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) start
+      *       MOVE    39                      TO  WRK-NAGASA
+             MOVE    40                      TO  WRK-NAGASA
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) end
              PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ９．性別
@@ -2307,6 +2319,9 @@
       *****************************************************************
        2009-HANKANA-HENKAN-SEC                 SECTION.
       *
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) start
+           INITIALIZE  IDX-L
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) end
            MOVE    1                   TO  IDX3
            PERFORM VARYING  IDX2  FROM  1  BY  2
                    UNTIL    IDX2  >  40
@@ -2512,6 +2527,9 @@
                WHEN  "　"
                  MOVE  " "  TO  WRK-OUT-INPUT(IDX3:1)
                  ADD   1    TO  IDX3
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) start
+                 ADD   1    TO  IDX-L
+      *=== 半角カナ出力の不具合修正 by hagino(2015/09/11) end
                WHEN  "ガ"
                  MOVE  "ｶﾞ" TO  WRK-OUT-INPUT(IDX3:4)
                  ADD   4    TO  IDX3
