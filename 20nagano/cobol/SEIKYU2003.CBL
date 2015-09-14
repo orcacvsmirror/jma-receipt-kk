@@ -58,6 +58,7 @@
       *  02.05.15    ÇëÌî    15/03/10    Ê¿À®£²£·Ç¯£±·î²þÀµÂÐ±þ
       *  02.05.16    µÈÀî    15/05/12    ÊÝ¸±ÊÑ¹¹»þ¡¢¤½¤ì¤¾¤ì¤ÎÅÀ¿ô¤ÈÆü¿ô¤ò
       *                                  °õ»ú¤¹¤ë¤è¤¦¤Ë½¤Àµ
+      *  02.05.17    µÈÀî    15/09/14    ¸øÈñ¤Î½õÀ®¤¬¤Ê¤¤¾ì¹ç¤Ï°õ»ú¤·¤Ê¤¤
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1146,6 +1147,9 @@
                MOVE    "key25"        TO  WRK-PATH
       *---(02.05.05) LINE ADD END   ------------------------------------
            END-IF
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2015/09/14) start
+           MOVE    1                  TO  FLG-ERR
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2015/09/14) end
            DISPLAY  "¼ýÇ¼ÆÉ¤ß¹þ¤ß³«»Ï"
            PERFORM  920-SYUNOU-SET-SEC
            IF       IDZ           =     1
@@ -1173,11 +1177,11 @@
                MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
       * '06.01.26. onuki add.
                MOVE    WRK-ETC-SKJ-NISSU(1)
-	                           TO  MF101-E-SHOKUJINISSU(IDX)
+                               TO  MF101-E-SHOKUJINISSU(IDX)
                MOVE    WRK-ETC-SKJ-RYOYOHI(1)
-	                           TO  MF101-E-SHOKUJIRYOYOHI(IDX)
+                               TO  MF101-E-SHOKUJIRYOYOHI(IDX)
                MOVE    WRK-ETC-SKJ-FTN(1)
-	                           TO  MF101-E-SHOKUJIFTN(IDX)
+                               TO  MF101-E-SHOKUJIFTN(IDX)
       *
                IF      WRK-ETC-KOHNUM(2)  NOT  =  SPACE
                  MOVE    WRK-ETC-KOHNUM(2)   TO  WRK-KOHNUM
@@ -1188,11 +1192,11 @@
                  MOVE    WRK-ETC-JKYSNUM   TO  MF101-EKOHJKYSNUM(IDY)
       * '06.01.26. onuki add.
                  MOVE    WRK-ETC-SKJ-NISSU(2)
-	                           TO  MF101-E-SHOKUJINISSU(IDY)
+                               TO  MF101-E-SHOKUJINISSU(IDY)
                  MOVE    WRK-ETC-SKJ-RYOYOHI(2)
-	                           TO  MF101-E-SHOKUJIRYOYOHI(IDY)
+                               TO  MF101-E-SHOKUJIRYOYOHI(IDY)
                  MOVE    WRK-ETC-SKJ-FTN(2)
-	                           TO  MF101-E-SHOKUJIFTN(IDY)
+                               TO  MF101-E-SHOKUJIFTN(IDY)
                END-IF
              END-IF
            END-IF
@@ -1208,7 +1212,9 @@
            PERFORM  2001-OCR-SET-SEC
       *
       *    ÊÝ¸±¼ÔÈÖ¹æ¥Á¥§¥Ã¥¯½èÍý
-           MOVE    ZERO        TO  FLG-ERR
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2015/09/14) start
+      *     MOVE    ZERO        TO  FLG-ERR
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2015/09/14) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF      FLG-ERR     =   1
@@ -2278,42 +2284,42 @@
       *
       *    ÊÝ¸±¼ïÊÌ¶èÊ¬
            EVALUATE  TRUE
-	     WHEN  MF101-RJNHKNNUM = "027"
+             WHEN  MF101-RJNHKNNUM = "027"
       *=== ¸å´ü¹âÎðÊÝ¸±¼ïÊÌ°õ»úÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2009/06/02) start
-           WHEN  MF101-HKNNUM  = "039"  OR  "040"
+             WHEN  MF101-HKNNUM  = "039"  OR  "040"
       *=== ¸å´ü¹âÎðÊÝ¸±¼ïÊÌ°õ»úÉÔ¶ñ¹ç½¤Àµ by Yoshikawa(2009/06/02) end
-	       MOVE  "¡û"  TO  SC04-HKNKBN (3)
-	     WHEN  MF101-HKNNUM = "063" OR "072" OR "073" OR
-	                          "067" OR "074" OR "075"
-	       MOVE  "¡û"  TO  SC04-HKNKBN (4)
-	     WHEN OTHER
-	       MOVE  "¡û"  TO  SC04-HKNKBN (1)
-	   END-EVALUATE
+               MOVE  "¡û"  TO  SC04-HKNKBN (3)
+             WHEN  MF101-HKNNUM = "063" OR "072" OR "073" OR
+                                  "067" OR "074" OR "075"
+               MOVE  "¡û"  TO  SC04-HKNKBN (4)
+             WHEN OTHER
+               MOVE  "¡û"  TO  SC04-HKNKBN (1)
+           END-EVALUATE
       *
       *    Ê»ÍÑ¶èÊ¬
            IF  MF101-EKOHFTNJANUM (2)  NOT =  SPACE
                MOVE  "¡û"          TO  SC04-HEIKBN(3)
-	   ELSE
-	     IF  MF101-EKOHFTNJANUM (1)  NOT =  SPACE
-	         MOVE  "¡û"        TO  SC04-HEIKBN(2)
-	     ELSE
-	         MOVE  "¡û"        TO  SC04-HEIKBN(1)
-	     END-IF
-	   END-IF
+           ELSE
+               IF  MF101-EKOHFTNJANUM (1)  NOT =  SPACE
+                   MOVE  "¡û"        TO  SC04-HEIKBN(2)
+               ELSE
+                   MOVE  "¡û"        TO  SC04-HEIKBN(1)
+               END-IF
+           END-IF
       *
       *
            EVALUATE  MF101-RECESYUBETU(4:1)
-	       WHEN "1"
-	           MOVE    "¢þ"    TO  SC04-HONKZKKBN(1)
-	       WHEN "3"
-		   MOVE    "¢þ"    TO  SC04-HONKZKKBN(2)
-	       WHEN "5"
-		   MOVE    "¢þ"    TO  SC04-HONKZKKBN(3)
-	       WHEN "7"
-                   MOVE    "¢þ"    TO  SC04-KOREIKBN(1)
-	       WHEN "9"
-		   MOVE    "¢þ"    TO  SC04-KOREIKBN(2)
-	   END-EVALUATE
+             WHEN "1"
+               MOVE    "¢þ"    TO  SC04-HONKZKKBN(1)
+             WHEN "3"
+               MOVE    "¢þ"    TO  SC04-HONKZKKBN(2)
+             WHEN "5"
+               MOVE    "¢þ"    TO  SC04-HONKZKKBN(3)
+             WHEN "7"
+               MOVE    "¢þ"    TO  SC04-KOREIKBN(1)
+             WHEN "9"
+               MOVE    "¢þ"    TO  SC04-KOREIKBN(2)
+           END-EVALUATE
       *
            .
        311-HEAD-HEN-EXT.
@@ -2326,63 +2332,63 @@
       *
       *    Ï·¿Í»ÔÄ®Â¼ÈÖ¹æ
            MOVE     MF101-RJNFTNJANUM       TO  WRK-MAE-INPUT
-	   PERFORM  2009-HENKAN-SEC
-	   MOVE     WRK-OUT-INPUT           TO  SC04-RJNFTNJANUM
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT           TO  SC04-RJNFTNJANUM
       *Á´¹ñ¸øÈñ¡ÝÉéÃ´¼ÔÈÖ¹æ
-          DISPLAY "Á´¹ñ¸øÈñ¡ÝÉéÃ´¼ÔÈÖ¹æ=" MF101-EKOHFTNJANUM(2)
-          IF  MF101-EKOHFTNJANUM (1)  NOT =  SPACE
-            MOVE     MF101-EKOHFTNJANUM(1)    TO  WRK-MAE-INPUT
-            PERFORM  2009-HENKAN-SEC
-            MOVE     WRK-OUT-INPUT            TO  SC04-FTNJANUM1
-          END-IF
-          IF  MF101-EKOHFTNJANUM (2)  NOT =  SPACE
-            MOVE     MF101-EKOHFTNJANUM(2)    TO  WRK-MAE-INPUT
-      	    PERFORM  2009-HENKAN-SEC
-      	    MOVE     WRK-OUT-INPUT            TO  SC04-FTNJANUM2
-          END-IF
+           DISPLAY "Á´¹ñ¸øÈñ¡ÝÉéÃ´¼ÔÈÖ¹æ=" MF101-EKOHFTNJANUM(2)
+           IF  MF101-EKOHFTNJANUM (1)  NOT =  SPACE
+             MOVE     MF101-EKOHFTNJANUM(1)    TO  WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             MOVE     WRK-OUT-INPUT            TO  SC04-FTNJANUM1
+           END-IF
+           IF  MF101-EKOHFTNJANUM (2)  NOT =  SPACE
+             MOVE     MF101-EKOHFTNJANUM(2)    TO  WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             MOVE     WRK-OUT-INPUT            TO  SC04-FTNJANUM2
+           END-IF
       *Á´¹ñ¸øÈñ¡Ý¼õµë¼ÔÈÖ¹æ
-          IF  MF101-EKOHJKYSNUM (1)  NOT =  SPACE
-            MOVE     MF101-EKOHJKYSNUM(1)     TO  WRK-MAE-INPUT
-            PERFORM  2009-HENKAN-SEC 
-      	    MOVE     WRK-OUT-INPUT            TO  SC04-JKYSNUM1
-      	  END-IF
-      	  IF  MF101-EKOHJKYSNUM (2)  NOT =  SPACE
-      	    MOVE     MF101-EKOHJKYSNUM(2)     TO  WRK-MAE-INPUT
-      	    PERFORM  2009-HENKAN-SEC
-      	    MOVE     WRK-OUT-INPUT            TO  SC04-JKYSNUM2
-          END-IF
+           IF  MF101-EKOHJKYSNUM (1)  NOT =  SPACE
+             MOVE     MF101-EKOHJKYSNUM(1)     TO  WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC 
+             MOVE     WRK-OUT-INPUT            TO  SC04-JKYSNUM1
+           END-IF
+           IF  MF101-EKOHJKYSNUM (2)  NOT =  SPACE
+             MOVE     MF101-EKOHJKYSNUM(2)     TO  WRK-MAE-INPUT
+             PERFORM  2009-HENKAN-SEC
+             MOVE     WRK-OUT-INPUT            TO  SC04-JKYSNUM2
+           END-IF
       *    OCRÀßÄê
            MOVE  MF101-OCR1      TO  SC04-OCR1
-	   MOVE  MF101-OCR2      TO  SC04-OCR2 
-	   MOVE  MF101-OCR3      TO  SC04-OCR3
+           MOVE  MF101-OCR2      TO  SC04-OCR2 
+           MOVE  MF101-OCR3      TO  SC04-OCR3
       *
       *    ÊÝ¸±¼ÔÈÖ¹æ
            MOVE     MF101-HKNJANUM      TO  WRK-MAE-INPUT
-	   PERFORM  2009-HENKAN-SEC
-	   EVALUATE  MF101-HKNNUM
-	       WHEN  "060"
-	           MOVE  WRK-OUT-INPUT(1:12)  TO  SC04-HKNJANUM(5:12)
+           PERFORM  2009-HENKAN-SEC
+           EVALUATE  MF101-HKNNUM
+               WHEN  "060"
+                   MOVE  WRK-OUT-INPUT(1:12)  TO  SC04-HKNJANUM(5:12)
                WHEN  "001"
-	           MOVE  WRK-OUT-INPUT(1:8)   TO  SC04-HKNJANUM(9:8)
+                   MOVE  WRK-OUT-INPUT(1:8)   TO  SC04-HKNJANUM(9:8)
                WHEN  OTHER
-	           MOVE  WRK-OUT-INPUT        TO  SC04-HKNJANUM
-	   END-EVALUATE
+                   MOVE  WRK-OUT-INPUT        TO  SC04-HKNJANUM
+           END-EVALUATE
       *
       *    µëÉÕ³ä¹ç
            EVALUATE  MF101-KYURATE
-	     WHEN   0
-	       MOVE  "¡û"  TO  SC04-KYURATE10
-	     WHEN  10
-	       MOVE  "¡û"  TO  SC04-KYURATE9
-	     WHEN  20
-	       MOVE  "¡û"  TO  SC04-KYURATE8
-	     WHEN  30
-	       MOVE  "¡û"  TO  SC04-KYURATE7
-	   END-EVALUATE
+             WHEN   0
+               MOVE  "¡û"  TO  SC04-KYURATE10
+             WHEN  10
+               MOVE  "¡û"  TO  SC04-KYURATE9
+             WHEN  20
+               MOVE  "¡û"  TO  SC04-KYURATE8
+             WHEN  30
+               MOVE  "¡û"  TO  SC04-KYURATE7
+           END-EVALUATE
       *
       *    ÈïÊÝ¸±¼Ô¾Úµ­¹æ¡¦ÈÖ¹æ
            MOVE    MF101-KIGO         TO  SC04-KIGO
-	   MOVE    MF101-NUM          TO  SC04-BANGO
+           MOVE    MF101-NUM          TO  SC04-BANGO
       *
       *    ´µ¼ÔÈÖ¹æ
            MOVE    MF101-PTNUM        TO  SC04-PTNUM
@@ -2392,26 +2398,26 @@
       *
       *    À­ÊÌ
            IF    MF101-SEX         =  "1"
-	       MOVE    "¡û"           TO  SC04-SEX(1)
-	   ELSE
-	       MOVE    "¡û"           TO  SC04-SEX(2)
-	   END-IF
+               MOVE    "¡û"           TO  SC04-SEX(1)
+           ELSE
+               MOVE    "¡û"           TO  SC04-SEX(2)
+           END-IF
       *
       *    À¸Ç¯·îÆü
            MOVE    MF101-BIRTHDAY     TO  WRK-SYMD
-	   PERFORM  31012-SEIWA-HEN-SEC
-	   EVALUATE   WRK-HENYMDG(1:4)
-	     WHEN    "ÌÀ¼£"
-	       MOVE  "¡û"  TO  SC04-NENGO (1)
-	     WHEN    "ÂçÀµ"
-	       MOVE  "¡û"  TO  SC04-NENGO (2)
-	     WHEN    "¾¼ÏÂ"
-	       MOVE  "¡û"  TO  SC04-NENGO (3)
-	     WHEN    "Ê¿À®"
-	       MOVE  "¡û"  TO  SC04-NENGO (4)
-	   END-EVALUATE
+           PERFORM  31012-SEIWA-HEN-SEC
+           EVALUATE   WRK-HENYMDG(1:4)
+             WHEN    "ÌÀ¼£"
+               MOVE  "¡û"  TO  SC04-NENGO (1)
+             WHEN    "ÂçÀµ"
+               MOVE  "¡û"  TO  SC04-NENGO (2)
+             WHEN    "¾¼ÏÂ"
+               MOVE  "¡û"  TO  SC04-NENGO (3)
+             WHEN    "Ê¿À®"
+               MOVE  "¡û"  TO  SC04-NENGO (4)
+           END-EVALUATE
 
-	   MOVE  LNK-DAY2-EDTYMD1(2:)  TO  SC04-BIRTHDAY
+           MOVE  LNK-DAY2-EDTYMD1(2:)  TO  SC04-BIRTHDAY
       *
       *    ÆÃµ­»ö¹à
       *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) start
@@ -2423,41 +2429,41 @@
       *   MOVE  "£±£¶Ä¹£²"    TO  SC04-TOKKI
       * END-IF
       *---(02.05.05) LINE ADD END   ------------------------------------
-       PERFORM  VARYING  IDX  FROM  1  BY  1
-                UNTIL    IDX  >  3
-         PERFORM  VARYING  IDY  FROM  1  BY  1
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             PERFORM  VARYING  IDY  FROM  1  BY  1
       *=== H21Ç¯5·îÆÃÄê¼À´µ²þÀµÂÐ±þ by Yoshikawa(2009/06/02) start
       *            UNTIL  IDY  >  18
                   UNTIL  IDY  >  TBL-TOKKI-MAX
       *=== H21Ç¯5·îÆÃÄê¼À´µ²þÀµÂÐ±þ by Yoshikawa(2009/06/02) end
-           IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
-               MOVE  TBL-TOKKINAME(IDY)   TO  SC04-TOKKI(IDX)
+               IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
+                   MOVE  TBL-TOKKINAME(IDY)   TO  SC04-TOKKI(IDX)
       *=== H21Ç¯5·îÆÃÄê¼À´µ²þÀµÂÐ±þ by Yoshikawa(2009/06/02) start
       *         MOVE  19  TO  IDY
-               MOVE  TBL-TOKKI-MAX  TO  IDY
+                   MOVE  TBL-TOKKI-MAX  TO  IDY
       *=== H21Ç¯5·îÆÃÄê¼À´µ²þÀµÂÐ±þ by Yoshikawa(2009/06/02) end
-           END-IF
-         END-PERFORM
-       END-PERFORM
+               END-IF
+             END-PERFORM
+           END-PERFORM
       *=== ÆÃµ­»ö¹à°õ»ú½¤Àµ by Yoshikawa(2008/06/03) end
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(ÊÝ¸±)
            MOVE     MF101-JNISSU     TO  WRK-Z2
-	   MOVE     WRK-Z2           TO  WRK-MAE-INPUT
-	   PERFORM  2009-HENKAN-SEC
-	   MOVE     WRK-OUT-INPUT    TO  SC04-SNISSU1
+           MOVE     WRK-Z2           TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT    TO  SC04-SNISSU1
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(¸øÈñ£±)
            MOVE     MF101-ENISSU(1)  TO  WRK-Z2
-	   MOVE     WRK-Z2           TO  WRK-MAE-INPUT
+           MOVE     WRK-Z2           TO  WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT    TO  SC04-SNISSU2
       *
       *    ¿ÇÎÅ¼ÂÆü¿ô(¸øÈñ£²)
            MOVE     MF101-ENISSU(2)  TO  WRK-Z2
-	   MOVE     WRK-Z2           TO  WRK-MAE-INPUT
-	   PERFORM  2009-HENKAN-SEC
-	   MOVE     WRK-OUT-INPUT    TO  SC04-SNISSU3
+           MOVE     WRK-Z2           TO  WRK-MAE-INPUT
+           PERFORM  2009-HENKAN-SEC
+           MOVE     WRK-OUT-INPUT    TO  SC04-SNISSU3
       *
       *    »ÔÄ¹Â¼¥³¡¼¥É
            MOVE     MF101-KOHFTNJANUM           TO    WRK-MAE-INPUT
@@ -2473,15 +2479,15 @@
       *
       *    ÅÀ¿ô
            MOVE  MF101-TOTALTEN      TO  WRK-Z7
-	   MOVE  WRK-Z7              TO  SC04-STENSU1
+           MOVE  WRK-Z7              TO  SC04-STENSU1
       *
       *    ÅÀ¿ô¡Ê¸øÈñ£±¡Ë
            MOVE  MF101-ETENSU(1)     TO  WRK-Z7
-	   MOVE  WRK-Z7              TO  SC04-STENSU2
+           MOVE  WRK-Z7              TO  SC04-STENSU2
       *
       *    ÅÀ¿ô¡Ê¸øÈñ£²¡Ë
            MOVE  MF101-ETENSU(2)     TO  WRK-Z7
-	   MOVE  WRK-Z7              TO  SC04-STENSU3
+           MOVE  WRK-Z7              TO  SC04-STENSU3
       *
       *    °ìÉôÉéÃ´¶â³Û
            MOVE  MF101-FTNMONEY2     TO  WRK-Z7
@@ -2489,53 +2495,53 @@
       *
       *    °ìÉôÉéÃ´¶â³Û¡Ê¸øÈñ1¡Ë
            MOVE  MF101-EITBFTN(1)    TO  WRK-Z7
-	   MOVE  WRK-Z7              TO  SC04-ITBFTN2
+           MOVE  WRK-Z7              TO  SC04-ITBFTN2
       *
       *    °ìÉôÉéÃ´¶â³Û¡Ê¸øÈñ£²¡Ë
            MOVE  MF101-EITBFTN(2)    TO  WRK-Z7
-	   MOVE  WRK-Z7              TO  SC04-ITBFTN3
+           MOVE  WRK-Z7              TO  SC04-ITBFTN3
       
       *    '06.01.26. onuki 
       *
       *    ¿©»öÆü¿ô
            MOVE  MF101-SHOKUJINISSU  TO  WRK-Z2
-	   MOVE  WRK-Z2              TO  SC04-SNISSU(1)
+           MOVE  WRK-Z2              TO  SC04-SNISSU(1)
       *
       *    ¿©»öÎÅÍÜÈñ
            MOVE  MF101-SHOKUJIRYOYOHI
-	                             TO  WRK-Z9
-	   MOVE  WRK-Z9              TO  SC04-SKINGK(1)
+                                 TO  WRK-Z9
+           MOVE  WRK-Z9              TO  SC04-SKINGK(1)
       *
       *    ¿©»öÉ¸½àÉéÃ´³Û
            MOVE  MF101-SHOKUJIFTN    TO  WRK-Z9
-	   MOVE  WRK-Z9              TO  SC04-SFTNGK(1)
-	   
+           MOVE  WRK-Z9              TO  SC04-SFTNGK(1)
+       
       *
       *    ¿©»öÆü¿ô¡Ê¸øÈñ£±¡Ë
            MOVE  MF101-E-SHOKUJINISSU(1)  TO  WRK-Z2
-	   MOVE  WRK-Z2              TO  SC04-SNISSU(2)
+           MOVE  WRK-Z2              TO  SC04-SNISSU(2)
       *
       *    ¿©»öÎÅÍÜÈñ¡Ê¸øÈñ£±¡Ë
            MOVE  MF101-E-SHOKUJIRYOYOHI(1)
-	                             TO  WRK-Z9
-	   MOVE  WRK-Z9              TO  SC04-SKINGK(2)
+                                 TO  WRK-Z9
+           MOVE  WRK-Z9              TO  SC04-SKINGK(2)
       *
       *    ¿©»öÉ¸½àÉéÃ´³Û¡Ê¸øÈñ£±¡Ë
            MOVE  MF101-E-SHOKUJIFTN(1)   TO  WRK-Z9
-	   MOVE  WRK-Z9              TO  SC04-SFTNGK(2)
-	   
+           MOVE  WRK-Z9              TO  SC04-SFTNGK(2)
+       
       *    ¿©»öÆü¿ô¡Ê¸øÈñ£²¡Ë
            MOVE  MF101-E-SHOKUJINISSU(2)  TO  WRK-Z2
-	   MOVE  WRK-Z2              TO  SC04-SNISSU(3)
+           MOVE  WRK-Z2              TO  SC04-SNISSU(3)
       *
       *    ¿©»öÎÅÍÜÈñ¡Ê¸øÈñ£²¡Ë
            MOVE  MF101-E-SHOKUJIRYOYOHI(2)
-	                             TO  WRK-Z9
-	   MOVE  WRK-Z9              TO  SC04-SKINGK(3)
+                                 TO  WRK-Z9
+       MOVE  WRK-Z9              TO  SC04-SKINGK(3)
       *
       *    ¿©»öÉ¸½àÉéÃ´³Û¡Ê¸øÈñ£²¡Ë
            MOVE  MF101-E-SHOKUJIFTN(2)    TO  WRK-Z9
-	   MOVE  WRK-Z9              TO  SC04-SFTNGK(3)
+           MOVE  WRK-Z9              TO  SC04-SFTNGK(3)
       *
       *    ½ýÉÂÌ¾ÊÔ½¸½èÍý
            PERFORM 3201-BYOMEI-HEN-SEC
@@ -2549,42 +2555,42 @@
        331-PRINT-OUT-SEC          SECTION.
       *
       *
-          INITIALIZE              ORCSPRTAREA
-	  MOVE  "INS"                TO  SPRT-MODE
-	  MOVE  LNK-PRTKANRI-RENNUM  TO  SPRT-RENNUM
-	  MOVE  LNK-PRTKANRI-TBL-KEY TO  SPRT-TBL-KEY
-	  MOVE  LNK-PRTKANRI-TBL-GROUP
-	                             TO  SPRT-TBL-GROUP
-	  MOVE  LNK-PRTKANRI-SRYYM   TO  SPRT-SRYYM
-	  MOVE  LNK-PRTKANRI-SKYYMD  TO  SPRT-SKYYMD
-	  MOVE  LNK-PRTKANRI-SHELLID TO  SPRT-SHELLID
-	  MOVE  LNK-PRTKANRI-SHORI-RENNUM
-	                             TO  SPRT-SHORI-RENNUM
-	  MOVE  LNK-PRTKANRI-PRIORITY
-	                             TO  SPRT-PRIORITY
-          MOVE  "SC2004.red"         TO  SPRT-PRTID
-	  MOVE  "Ê£¼Ì¼°¥ì¥»¥×¥È"     TO  SPRT-TITLE
-	  MOVE  SC04                 TO  SPRT-PRTDATA
-	  MOVE  LNK-PRTKANRI-TERMID  TO  SPRT-TERMID
-	  MOVE  LNK-PRTKANRI-OPID    TO  SPRT-OPID
-	  MOVE  LNK-PRTKANRI-PRTNM   TO  SPRT-PRTNM
-	  CALL  "ORCSPRT"            USING
-	                             ORCSPRTAREA
+           INITIALIZE              ORCSPRTAREA
+           MOVE  "INS"                TO  SPRT-MODE
+           MOVE  LNK-PRTKANRI-RENNUM  TO  SPRT-RENNUM
+           MOVE  LNK-PRTKANRI-TBL-KEY TO  SPRT-TBL-KEY
+           MOVE  LNK-PRTKANRI-TBL-GROUP
+                                      TO  SPRT-TBL-GROUP
+           MOVE  LNK-PRTKANRI-SRYYM   TO  SPRT-SRYYM
+           MOVE  LNK-PRTKANRI-SKYYMD  TO  SPRT-SKYYMD
+           MOVE  LNK-PRTKANRI-SHELLID TO  SPRT-SHELLID
+           MOVE  LNK-PRTKANRI-SHORI-RENNUM
+                                      TO  SPRT-SHORI-RENNUM
+           MOVE  LNK-PRTKANRI-PRIORITY
+                                      TO  SPRT-PRIORITY
+               MOVE  "SC2004.red"         TO  SPRT-PRTID
+           MOVE  "Ê£¼Ì¼°¥ì¥»¥×¥È"     TO  SPRT-TITLE
+           MOVE  SC04                 TO  SPRT-PRTDATA
+           MOVE  LNK-PRTKANRI-TERMID  TO  SPRT-TERMID
+           MOVE  LNK-PRTKANRI-OPID    TO  SPRT-OPID
+           MOVE  LNK-PRTKANRI-PRTNM   TO  SPRT-PRTNM
+           CALL  "ORCSPRT"            USING
+                                      ORCSPRTAREA
       *---(02.05.05) LINE ADD START ------------------------------------
-                                     SPA-AREA
+                                      SPA-AREA
       *---(02.05.05) LINE ADD END   ------------------------------------
-	  IF    SPRT-RETURN          =  ZERO
-	     CONTINUE
-	  ELSE
-	     MOVE  "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
-	                             TO  WRK-RECEERR
-             PERFORM  500-ERR-HENSYU-SEC
-          END-IF
+           IF    SPRT-RETURN          =  ZERO
+              CONTINUE
+           ELSE
+              MOVE  "°õºþ£Ä£Â¤Ë¹¹¿·¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿"
+                                      TO  WRK-RECEERR
+                  PERFORM  500-ERR-HENSYU-SEC
+           END-IF
       *
            .
        331-PRINT-OUT-EXT.
            EXIT.
-	 
+     
       ****06/01/11 @@@@-BRAND  END
       *****************************************************************
       *    ¥¨¥é¡¼½ÐÎÏ½èÍý
@@ -3096,11 +3102,11 @@
       * ¼çÊÝ¸±¤Î¿©»öÎÅÍÜÈñ¾ðÊó¤«¤é¿©»öÎÅÍÜÈñ¡¢É¸½àÉéÃ´³Û¤ò¼èÆÀ
       * ¢¨Á´¹ñ¸øÈñÊ¬¤¬¤¢¤ë¾ì¹ç¤Ë¸Â¤ê¼èÆÀ¤·¤Æ¤¤¤ë¤¿¤á¡¢¼çÊÝ¸±¤ÇÂåÍÑ
                  ADD  SYU-SYUSKJ-NISSU
-		                    TO  WRK-ETC-SKJ-NISSU(IDY)
+                            TO  WRK-ETC-SKJ-NISSU(IDY)
                  ADD  SYU-SYUSKJ-RYOYOHI
-		                    TO  WRK-ETC-SKJ-RYOYOHI(IDY)
+                            TO  WRK-ETC-SKJ-RYOYOHI(IDY)
                  ADD  SYU-SYUSKJ-FTN
-		                    TO  WRK-ETC-SKJ-FTN(IDY)
+                            TO  WRK-ETC-SKJ-FTN(IDY)
                END-IF
       *
                IF  SYU-KOH-HKNNUM(IDX) = "972"
@@ -3113,6 +3119,22 @@
                END-IF
       *---(02.05.05) LINE ADD END   ------------------------------------
       *
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2015/09/14) start
+      *    ·×»»ÉéÃ´¶â¤Ëº¹¤¬Í­¤ë¾ì¹ç¡¢ÃÏÊý¸øÈñ¤Î½õÀ®¤¬¤¢¤Ã¤¿¤ÈÈ½Äê¤¹¤ë
+               IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                         > SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2015/09/14) end
            END-PERFORM
       *
            IF  RECE02-FTNMONEY(1)       >  ZERO

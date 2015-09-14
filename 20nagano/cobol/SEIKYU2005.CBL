@@ -51,6 +51,7 @@
       *  01.00.12    吉川    2014/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.13    吉川    2015/05/12    保険変更時、それぞれの点数と日数を
       *                                    印字するように修正
+      *  01.00.14    吉川    2015/09/14    公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -819,6 +820,9 @@
            ELSE
                MOVE    "key25"        TO  WRK-PATH
            END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) start
+           MOVE    1                  TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) end
            PERFORM  920-SYUNOU-SET-SEC
            IF       IDZ           =     1
            AND      RECE02-KOHNUM(IDZ + 1)  =  SPACE
@@ -875,7 +879,9 @@
            MOVE  WRK-FTNMONEY-G            TO  MF101-FTNMONEY
       *
       *    保険者番号チェック処理
-           MOVE    ZERO        TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) start
+      *     MOVE    ZERO        TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF      FLG-ERR     =   1
@@ -2005,6 +2011,22 @@
                  MOVE    2     TO      MF101-TYOKI
                END-IF
       *
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) start
+      *    計算負担金に差が有る場合、地方公費の助成があったと判定する
+               IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                         > SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE  ZERO          TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2015/09/14) end
            END-PERFORM
       *
            IF  RECE02-FTNMONEY(1)       >  ZERO
