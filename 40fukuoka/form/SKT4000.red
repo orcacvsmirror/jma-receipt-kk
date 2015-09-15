@@ -180,7 +180,7 @@
       </element>
       <element name="N-SGTENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="G-SGKENSU" occurs="1">
@@ -190,7 +190,7 @@
       </element>
       <element name="G-SGTENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="KOH-GKENSU" occurs="1">

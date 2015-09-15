@@ -19,6 +19,7 @@
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2011/02/09  特別療養費国保対応
       *  01.00.02    吉川    2014/11/10  標榜科名欄の文字数と行数追加
+      *  01.00.03    萩野    2015/09/14  総合計欄の点数の桁数を修正
       ********************************************************************
         01  SKT4000.
             02  SKT4000-SRYM    PIC X(6).
@@ -62,8 +63,14 @@
               03  SKT4000-G-GTENSU    PIC X(9).
               03  SKT4000-G-AVG   PIC X(9).
               03  SKT4000-N-SGKENSU   PIC X(5).
-              03  SKT4000-N-SGTENSU   PIC X(9).
+      *=== 総合計欄の点数の桁数を修正 by hagino(2015/09/14) start
+      *        03  SKT4000-N-SGTENSU   PIC X(9).
+              03  SKT4000-N-SGTENSU   PIC X(10).
+      *=== 総合計欄の点数の桁数を修正 by hagino(2015/09/14) end
               03  SKT4000-G-SGKENSU   PIC X(5).
-              03  SKT4000-G-SGTENSU   PIC X(9).
+      *=== 総合計欄の点数の桁数を修正 by hagino(2015/09/14) start
+      *        03  SKT4000-G-SGTENSU   PIC X(9).
+              03  SKT4000-G-SGTENSU   PIC X(10).
+      *=== 総合計欄の点数の桁数を修正 by hagino(2015/09/14) end
               03  SKT4000-KOH-GKENSU  PIC X(5).
               03  SKT4000-KOH-GTENSU  PIC X(9).

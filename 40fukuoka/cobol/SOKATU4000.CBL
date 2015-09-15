@@ -77,6 +77,8 @@
       *  01.00.35    吉川    14/11/11    標榜科名欄の文字数と行数追加
       *                                  乳障親分の帳票には「返戻」と
       *                                  表示しないように修正
+      *  01.00.36    萩野    15/09/14    総合計欄の点数を１０００万の位まで
+      *                                  印字するよう修正。
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2121,8 +2123,12 @@
              MOVE    WRK-Z5                  TO  SKT4000-N-SGKENSU
              COMPUTE   WRK-N-SGTENSU (IDX5)  =  WRK-N-GTENSU (IDX5)
                                              +  WRK-KOU-STENSU(IDX5 1)
-             MOVE    WRK-N-SGTENSU (IDX5)    TO  WRK-Z9
-             MOVE    WRK-Z9                  TO  SKT4000-N-SGTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/09/14) start
+      *       MOVE    WRK-N-SGTENSU (IDX5)    TO  WRK-Z9
+      *       MOVE    WRK-Z9                  TO  SKT4000-N-SGTENSU
+             MOVE    WRK-N-SGTENSU (IDX5)    TO  WRK-Z10
+             MOVE    WRK-Z10                 TO  SKT4000-N-SGTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/09/14) end
              COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-SGTENSU (IDX5)
                                            /  WRK-N-SGKENSU (IDX5)
              MOVE    WRK-KEISAN-S        TO   WRK-Z9-S
@@ -2139,8 +2145,12 @@
              MOVE    WRK-Z5                  TO  SKT4000-G-SGKENSU
              COMPUTE   WRK-G-SGTENSU (IDX5)  =  WRK-G-GTENSU (IDX5)
                                              +  WRK-KOU-STENSU(IDX5 2)
-             MOVE    WRK-G-SGTENSU (IDX5)    TO  WRK-Z9
-             MOVE    WRK-Z9                  TO  SKT4000-G-SGTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/09/14) start
+      *       MOVE    WRK-G-SGTENSU (IDX5)    TO  WRK-Z9
+      *       MOVE    WRK-Z9                  TO  SKT4000-G-SGTENSU
+             MOVE    WRK-G-SGTENSU (IDX5)    TO  WRK-Z10
+             MOVE    WRK-Z10                 TO  SKT4000-G-SGTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/09/14) end
              COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-SGTENSU (IDX5)
                                            /  WRK-G-SGKENSU (IDX5)
              MOVE    WRK-KEISAN-S        TO  WRK-Z9-S
