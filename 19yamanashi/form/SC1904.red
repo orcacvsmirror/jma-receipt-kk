@@ -2601,7 +2601,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true">
+  <dia:layer name="文字" visible="true" active="true">
     <dia:object type="Standard - Text" version="1" id="O115">
       <dia:attribute name="obj_pos">
         <dia:point val="2.0607,1.85879"/>
@@ -2777,12 +2777,12 @@
         <dia:point val="9.50362,2.69085"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.50362,2.40835;10.1436,2.73085"/>
+        <dia:rectangle val="9.49556,2.40029;10.1436,2.74698"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#４１#</dia:string>
+            <dia:string>#１９#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -3154,7 +3154,7 @@
         <dia:point val="11.4038,8.89885"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.4038,8.67885;11.6538,10.1814"/>
+        <dia:rectangle val="11.4038,8.67885;11.6538,10.1813"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -10546,7 +10546,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差込" visible="true" active="true">
+  <dia:layer name="差込" visible="true">
     <dia:object type="Embed - Text" version="1" id="O353">
       <dia:attribute name="obj_pos">
         <dia:point val="6.02754,2.38236"/>
