@@ -51,6 +51,7 @@
       *  01.00.12    吉川    2015/05/12    保険変更時、それぞれの点数と日数を
       *                                    印字するように修正
       *  01.00.13    吉川    2015/09/14    患者負担がない場合は印字しない
+      *  01.00.14    吉川    2015/10/01    食事は保険分を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -672,7 +673,10 @@
            MOVE  RECE02-JNISSU(IDY)      TO  MF101-JNISSU
            MOVE  RECE02-FTNMONEY(IDY)    TO  MF101-FTNMONEY2
            MOVE  RECE02-TOTALTEN(IDY)    TO  MF101-TOTALTEN
-           MOVE  RECE02-SHOKUJIINF(IDY)  TO  MF101-SHOKUJIINF
+      *=== 食事は保険分を印字する by Yoshikawa(2015/10/01) start
+      *     MOVE  RECE02-SHOKUJIINF(IDY)  TO  MF101-SHOKUJIINF
+           MOVE  RECE02-SHOKUJIINF(1)    TO  MF101-SHOKUJIINF
+      *=== 食事は保険分を印字する by Yoshikawa(2015/10/01) end
       *=== 保険変更時の点数等の修正 by Yoshikawa(2015/05/12) end
       *=== 福祉使用分のみデータを取得 by hagino(2014/02/13) end
       *=== 保険のデータは請求管理から取得 by Yoshikawa(2011/03/07) end
