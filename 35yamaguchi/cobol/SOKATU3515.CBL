@@ -1217,8 +1217,11 @@
            INSPECT SKT3515-HOSPNAME    REPLACING ALL "  " BY "　"
       *=== 医療機関情報編集対応 by Yoshikawa(2013/02/06) end
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME
-                                       TO  SKT3515-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/10/08) start
+      *     MOVE    SYS-1001-KAISETUNAME
+      *                                 TO  SKT3515-KAISETUNAME
+           MOVE    WRK-KAISETUNAME     TO  SKT3515-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/10/08) end
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT3515-TEL
       *    医療機関コード
