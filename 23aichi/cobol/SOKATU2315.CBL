@@ -41,6 +41,8 @@
       *                                  特別療養費を印字する
       *  01.00.10    吉川    2014/10/23  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.11    吉川    2015/02/16  ５４難病を公費再掲欄に集計する
+      *  01.00.12    門間    2015/10/13  在宅は合算して印字する
+      *                                  医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -195,6 +197,9 @@
                05  WRK-HOSPADRS1   PIC X(50).
                05  WRK-HOSPADRS2   PIC X(50).
            03  WRK-HOSPTEL         PIC X(15).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) end
       *
        01  WRK-2007-AREA.
            03  WRK-2007-TBL        OCCURS  100.
@@ -297,6 +302,11 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) end
       *
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/03/29) start
       *    レセプト・総括印刷情報（広域連合）
@@ -502,6 +512,10 @@
            END-IF 
       *
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -644,17 +658,27 @@
            MOVE    LOW-VALUE           TO  KEY-AREA
            MOVE    1                   TO  WRK-INDEX
       *
-      *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
-           EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
-               WHEN    "1"             ALSO    "1"
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "1"
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
-               WHEN    "1"             ALSO    "2"
-                   MOVE    "key66"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "2"
-                   MOVE    "key65"         TO  WRK-MCP-PATHNAME
-           END-EVALUATE  
+      *=== 在宅は合算して印字 by Monma (2015/10/13) start
+      **    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "1"
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE
+      *
+           EVALUATE    WRK-SYOKBN
+               WHEN    "1"
+                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"
+                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
+            END-EVALUATE  
+      *=== 在宅は合算して印字 by Monma (2015/10/13) end
+      *
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -665,29 +689,31 @@
            MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
            PERFORM 900-CLOSE-SEC
       *
-      *    入院外集計（在総診または在医総を算定したレセ）
-      *    特別療養費の場合は在総診はなし
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
-                                       OR      FLG-ERR      =  1
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
+      *=== 在宅は合算して印字 by Monma (2015/10/13) start
+      **    入院外集計（在総診または在医総を算定したレセ）
+      **    特別療養費の場合は在総診はなし
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+      *                                 OR      FLG-ERR      =  1
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      *=== 在宅は合算して印字 by Monma (2015/10/13) end
       *     
            MOVE    1                   TO  FLG-END
       *
@@ -1097,8 +1123,11 @@
            INSPECT SKT2315-HOSPNAME    REPLACING ALL "  " BY "　"
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME
-                                       TO  SKT2315-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) start
+      *     MOVE    SYS-1001-KAISETUNAME
+      *                                 TO  SKT2315-KAISETUNAME
+           MOVE     WRK-KAISETUNAME    TO  SKT2315-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) end
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT2315-TEL
       *    医療機関コード
@@ -1125,11 +1154,13 @@
       *         END-STRING
       *     END-IF
       *
-      *    在総診・在医総
-           IF    WRK-INDEX  =  2
-             MOVE    "在"              TO  SKT2315-ZAI1
-             MOVE    "◯"              TO  SKT2315-ZAI2
-           END-IF
+      *=== 在宅は合算して印字 by Monma (2015/10/13) start
+      **    在総診・在医総
+      *     IF    WRK-INDEX  =  2
+      *       MOVE    "在"              TO  SKT2315-ZAI1
+      *       MOVE    "◯"              TO  SKT2315-ZAI2
+      *     END-IF
+      *=== 在宅は合算して印字 by Monma (2015/10/13) end
       *=== 特別療養費を印字 by Yoshikawa(2013/11/05) start
       *    特別療養費
            IF  WRK-PARA-SYOKBN1  =  "2"
@@ -1612,6 +1643,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) end
                 END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -1685,6 +1720,35 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(17) TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-KEY10-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/10/13) end
       *
       *****************************************************************
       *    システム管理マスタ読込
