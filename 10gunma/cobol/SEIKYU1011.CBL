@@ -42,6 +42,8 @@
       *  01.00.06     µ»¿Ó     12/12/21    ∞ÂŒ≈µ°¥ÿæ Û ‘Ω∏¬–±˛
       *  01.00.07     µ»¿Ó     14/10/06    ver4.8.0¬–±˛° ∞Ïª˛•«•£•Ï•Ø•»•Í —ππ°À
       *  01.00.08     µ»¿Ó     15/08/13    ¡¥πÒ∏¯»Ò ªÕ—ª˛§Œµ≠∫‹ ˝À° —ππ
+      *  01.00.09     «ÎÃÓ     15/10/08    ∞ÂŒ≈»Ò¿¡µ·≥€ÕÛ§œ£±£∞±ﬂÃ§À˛§œ
+      *                                    ªÕºŒ∏ﬁ∆˛§∑§∆µ≠∫‹§π§Î
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -698,10 +700,16 @@
       *=== ¡¥πÒ∏¯»Ò ªÕ—ª˛§Œµ≠∫‹ —ππ by Yoshikawa(2015/08/13) start
       *    ¡¥πÒ∏¯»Ò§¨§¢§ÎæÏπÁ°¢∆√ºÏ§ µ≠∫‹§Úπ‘§¶
            PERFORM 900-SEIKYU-READ-SEC
-           IF  RECE10-KOHNUM(1)(1:1)  NOT =  "0"
-           OR  RECE10-KOHNUM(2)(1:1)  NOT =  "0"
-           OR  RECE10-KOHNUM(3)(1:1)  NOT =  "0"
-           OR  RECE10-KOHNUM(4)(1:1)  NOT =  "0"
+      *=== ∞ÂŒ≈»Ò¿¡µ·≥€ÕÛ§Œµ≠∫‹Ω§¿µ by hagino(2015/10/08) start
+      *     IF  RECE10-KOHNUM(1)(1:1)  NOT =  "0"
+      *     OR  RECE10-KOHNUM(2)(1:1)  NOT =  "0"
+      *     OR  RECE10-KOHNUM(3)(1:1)  NOT =  "0"
+      *     OR  RECE10-KOHNUM(4)(1:1)  NOT =  "0"
+           IF  RECE10-KOHNUM(1)(1:1)  =  "0"
+           OR  RECE10-KOHNUM(2)(1:1)  =  "0"
+           OR  RECE10-KOHNUM(3)(1:1)  =  "0"
+           OR  RECE10-KOHNUM(4)(1:1)  =  "0"
+      *=== ∞ÂŒ≈»Ò¿¡µ·≥€ÕÛ§Œµ≠∫‹Ω§¿µ by hagino(2015/10/08) end
       *
                DISPLAY "PTNUM = " MF100-PTNUM
       *        º˝«ºæ Û§´§ÈΩ∏∑◊
@@ -724,6 +732,12 @@
                      MOVE    WRK-TOKU-FTN(IDX2)  TO  MF100-FTNMONEY
                      COMPUTE WRK-COMPTENSU  =  WRK-TOKU-SYUFTN(IDX2)
                                             -  WRK-TOKU-FTN(IDX2)
+      *=== ∞ÂŒ≈»Ò¿¡µ·≥€ÕÛ§Œµ≠∫‹Ω§¿µ by hagino(2015/10/08) start
+      *              £±£∞±ﬂÃ§À˛ªÕºŒ∏ﬁ∆˛
+                     COMPUTE WRK-TMPTENSU  =  WRK-COMPTENSU  /  10 
+                     COMPUTE WRK-COMPTENSU  ROUNDED =  WRK-TMPTENSU 
+                     COMPUTE WRK-COMPTENSU  =  WRK-COMPTENSU  *  10
+      *=== ∞ÂŒ≈»Ò¿¡µ·≥€ÕÛ§Œµ≠∫‹Ω§¿µ by hagino(2015/10/08) end
                      MOVE    WRK-COMPTENSU       TO  MF100-IRYOHI
                      DISPLAY "∞ÂŒ≈»Ò¿¡µ·≥€ = " WRK-COMPTENSU
                      WRITE  MF100-REC
