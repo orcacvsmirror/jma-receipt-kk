@@ -52,6 +52,7 @@
       *  01.00.16    吉川    14/05/21  前期高齢者２割対応
       *  01.00.17    吉川    14/08/06  返戻時、再印刷画面のタイトル修正
       *  01.00.18    吉川    14/10/03  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.19    門間    15/11/12  医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -281,6 +282,9 @@
                05  WRK-HOSPADRS2   PIC X(50).
            03  WRK-HOSPTEL         PIC X(15).
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) end
       *
       *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
        01  WRK-2010-AREA.
@@ -341,6 +345,10 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) end
       *
       *=== シス管「2010」地方公費記載対応 by Yoshikawa(2012/02/13) start
       *    地方公費保険番号付加情報
@@ -633,6 +641,10 @@
       *
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -1379,7 +1391,10 @@
            MOVE    WRK-HOSPTEL               TO   SKT0410-TEL
       *---(01.00.03) LINE ADD END   ------------------------------------
       *    開設者名
-           MOVE     SYS-1001-KAISETUNAME     TO   SKT0410-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) start
+      *     MOVE     SYS-1001-KAISETUNAME     TO   SKT0410-KAISETUNAME
+           MOVE    WRK-KAISETUNAME           TO  SKT0410-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) end
       *    医療機関コード
            MOVE     SYS-1001-HOSPCD          TO   WRK-MAE-INPUT
            PERFORM  2009-HENKAN-SEC
@@ -2200,6 +2215,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -2268,6 +2287,36 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2015/11/12) end
+      *
       *=== プログラムオプション対応 by Yoshikawa(2013/10/03) start
       *****************************************************************
       *    プログラムオプション情報読込
