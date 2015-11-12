@@ -1878,7 +1878,7 @@
            MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
            MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
            MOVE    SYS-1903-REC        TO  MCPDATA-REC
-           PERFORM 910-SYSKANRI-INV-SEC
+           PERFORM 910-SYSKANRI-KEY10-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1903-REC
                MOVE    SYS-1903-KAISETUNAME
