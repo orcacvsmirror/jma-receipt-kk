@@ -74,6 +74,9 @@
       *  01.00.29    吉川    14/10/08    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.30    吉川    15/05/12   請求払い金額欄は主保険上限額を
       *                                 考慮するように修正
+      *  01.00.31    吉川    15/11/16   月途中で保険を変更した場合の
+      *                                 請求払い金額欄の修正
+      *                                 医療機関編集情報への開設者名追加対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -215,6 +218,9 @@
            03  FLG-PRGOPTION       PIC 9(01).
            03  FLG-OK              PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) start
+           03  FLG-HKNCOMBI        PIC 9(01).
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -355,6 +361,9 @@
            03  WRK-KOUKI-6             PIC 9(10).
            03  WRK-KOUKI-9             PIC 9(10).
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) start
+           03  WRK-KOHID             PIC 9(10).
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) end
       *
       *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
            03  WRK-OPTION-TBL.
@@ -374,6 +383,9 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
       *****
       *
       *    文字変換
@@ -450,10 +462,15 @@
        01  HKNNUM-REC.
            COPY    "CPHKNNUM.INC".
       *
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) start
+      *    保険組合せ
+       01  HKNCOMBI-REC.
+           COPY    "CPHKNCOMBI.INC".
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) end
+      *
       *    収納情報
        01  SYUNOU-REC.
            COPY  "CPSYUNOU.INC".
-      *
       *
       *    システム管理マスタ
            COPY    "CPSYSKANRI.INC".
@@ -474,6 +491,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
       *
       *=== シス管「2007」対応 by Yoshikawa(2008/10/08) start
       *    公費番号まとめ情報
@@ -842,6 +864,10 @@
       *
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -1425,6 +1451,9 @@
            ADD     RECE10-TOTALTEN(IDX3 + 1)   TO SKT1100TMP-TENSU
       *
            MOVE    RECE10-KOHNUM(IDX3)     TO  WRK-KOHNUM
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) start
+           MOVE    RECE10-KOHID(IDX3)      TO  WRK-KOHID
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) end
            MOVE    ZERO                    TO  WRK-SEIKYUGK-G
            MOVE    ZERO                    TO  WRK-KEISAN1
                                                WRK-KEISAN2
@@ -1888,7 +1917,10 @@
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
       *    開設者氏名
-           MOVE    SYS-1001-KAISETUNAME    TO  SKT00-KAISETUNAME1
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+      *     MOVE    SYS-1001-KAISETUNAME    TO  SKT00-KAISETUNAME1
+           MOVE    WRK-KAISETUNAME         TO  SKT00-KAISETUNAME1
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
       *
       *    医療機関CD
            MOVE    SYS-1001-HOSPCDN        TO  SKT00-HOSPCDN
@@ -3159,7 +3191,27 @@
                PERFORM  UNTIL  FLG-SYUNOU  =  1
       *
                  IF  SYU-DENPJTIKBN   NOT = "3"
-                     PERFORM  800-SEIKYU-SEC
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) start
+      *               PERFORM  800-SEIKYU-SEC
+                   IF    SYU-HKNCOMBINUM  =  RECE10-HKNCOMBI(1) OR
+                                             RECE10-HKNCOMBI(2) OR
+                                             RECE10-HKNCOMBI(3) OR
+                                             RECE10-HKNCOMBI(4) OR
+                                             RECE10-HKNCOMBI(5) OR
+                                             RECE10-HKNCOMBI(6) OR
+                                             RECE10-HKNCOMBI(7) OR
+                                             RECE10-HKNCOMBI(8) OR
+                                             RECE10-HKNCOMBI(9) OR
+                                             RECE10-HKNCOMBI(10) 
+                     PERFORM  930-HKNCOMBI-READ-SEC
+                     IF  COMB-KOHID (1)  =  WRK-KOHID   OR
+                         COMB-KOHID (2)  =  WRK-KOHID   OR
+                         COMB-KOHID (3)  =  WRK-KOHID   OR
+                         COMB-KOHID (4)  =  WRK-KOHID
+                       PERFORM  800-SEIKYU-SEC
+                     END-IF
+                   END-IF
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) end
                  END-IF
       *
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -3218,6 +3270,57 @@
            .
        925-SYUNOU-READ-EXT.
            EXIT.
+      *
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) start
+      *****************************************************************
+      *    保険組合せマスター読み込み
+      *****************************************************************
+       930-HKNCOMBI-READ-SEC         SECTION.
+      *
+           INITIALIZE                         HKNCOMBI-REC
+           MOVE    SPA-HOSPNUM            TO  COMB-HOSPNUM
+           MOVE    SYU-PTID               TO  COMB-PTID
+           MOVE    SYU-HKNCOMBINUM        TO  COMB-HKNCOMBINUM
+           MOVE    HKNCOMBI-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"             TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"         TO  MCP-TABLE
+           MOVE    "key"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"          TO  MCP-FUNC
+               MOVE    "tbl_hkncombi"     TO  MCP-TABLE
+               MOVE    "key"              TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"        USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC    TO  HKNCOMBI-REC
+                   MOVE    ZERO           TO  FLG-HKNCOMBI
+               ELSE
+                   INITIALIZE                 HKNCOMBI-REC
+                   MOVE    1              TO  FLG-HKNCOMBI
+               END-IF
+           ELSE
+               INITIALIZE                     HKNCOMBI-REC
+               MOVE    1                  TO  FLG-HKNCOMBI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"        TO  MCP-FUNC
+            MOVE    "tbl_hkncombi"        TO  MCP-TABLE
+            MOVE    "key"                 TO  MCP-PATHNAME
+            CALL    "ORCDBMAIN"           USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+      *
+           .
+       930-HKNCOMBI-READ-EXT.
+           EXIT.
+      *=== 月途中の保険変更対応 by Yoshikawa(2015/11/16) end
       *
       *****************************************************************
       *   保険情報セット
@@ -3494,6 +3597,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -3562,6 +3669,35 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.05) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 900-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
+      *
       *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
       *****************************************************************
       *    プログラムオプション情報読込
