@@ -1498,7 +1498,7 @@
            MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
            MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-EDYUKYMD(1:6)
            MOVE    "01"                TO  SYS-1903-EDYUKYMD(7:2)
-           MOVE    SYS-1902-REC        TO  MCPDATA-REC
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
            PERFORM 800-SYSKANRI-READ-SEC
            IF      FLG-SYSKANRI        =   ZERO
                MOVE    MCPDATA-REC     TO  SYS-1903-REC
