@@ -20,6 +20,7 @@
       *  01.00.01    吉川    2011/02/09  特別療養費国保対応
       *  01.00.02    吉川    2014/11/10  標榜科名欄の文字数と行数追加
       *  01.00.03    萩野    2015/09/14  総合計欄の点数の桁数を修正
+      *  01.00.04    萩野    2015/11/13  点数欄の点数の桁数を修正
       ********************************************************************
         01  SKT4000.
             02  SKT4000-SRYM    PIC X(6).
@@ -39,28 +40,61 @@
               03  SKT4000-KO-HKNJANUM PIC X(16).
               03  SKT4000-NYUGAIKBN       OCCURS  2 TIMES.
                 04  SKT4000-KKH-KENSU   PIC X(5).
-                04  SKT4000-KKH-TENSU   PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *          04  SKT4000-KKH-TENSU   PIC X(9).
+                04  SKT4000-KKH-TENSU   PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
                 04  SKT4000-TAK-KENSU   PIC X(5).
-                04  SKT4000-TAK-TENSU   PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *          04  SKT4000-TAK-TENSU   PIC X(9).
+                04  SKT4000-TAK-TENSU   PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
                 04  SKT4000-RJN-KENSU   PIC X(5).
-                04  SKT4000-RJN-TENSU   PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *          04  SKT4000-RJN-TENSU   PIC X(9).
+                04  SKT4000-RJN-TENSU   PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
                 04  SKT4000-KO-KENSU    PIC X(5).
-                04  SKT4000-KO-TENSU    PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *          04  SKT4000-KO-TENSU    PIC X(9).
+                04  SKT4000-KO-TENSU    PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
             02  SKT4000-SSEIKYU         OCCURS  2 TIMES.
               03  SKT4000-KKH-SKENSU  PIC X(5).
-              03  SKT4000-KKH-STENSU  PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-KKH-STENSU  PIC X(9).
+              03  SKT4000-KKH-STENSU  PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
               03  SKT4000-TAK-SKENSU  PIC X(5).
-              03  SKT4000-TAK-STENSU  PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-TAK-STENSU  PIC X(9).
+              03  SKT4000-TAK-STENSU  PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
               03  SKT4000-RJN-SKENSU  PIC X(5).
-              03  SKT4000-RJN-STENSU  PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-RJN-STENSU  PIC X(9).
+              03  SKT4000-RJN-STENSU  PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
               03  SKT4000-KO-SKENSU   PIC X(5).
-              03  SKT4000-KO-STENSU   PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-KO-STENSU   PIC X(9).
+              03  SKT4000-KO-STENSU   PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
+      *
+      *
+      *
             02  SKT4000-SUM.
               03  SKT4000-N-GKENSU    PIC X(5).
-              03  SKT4000-N-GTENSU    PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-N-GTENSU    PIC X(9).
+              03  SKT4000-N-GTENSU    PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
               03  SKT4000-N-AVG   PIC X(9).
               03  SKT4000-G-GKENSU    PIC X(5).
-              03  SKT4000-G-GTENSU    PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-G-GTENSU    PIC X(9).
+              03  SKT4000-G-GTENSU    PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end
               03  SKT4000-G-AVG   PIC X(9).
               03  SKT4000-N-SGKENSU   PIC X(5).
       *=== 総合計欄の点数の桁数を修正 by hagino(2015/09/14) start
@@ -73,4 +107,7 @@
               03  SKT4000-G-SGTENSU   PIC X(10).
       *=== 総合計欄の点数の桁数を修正 by hagino(2015/09/14) end
               03  SKT4000-KOH-GKENSU  PIC X(5).
-              03  SKT4000-KOH-GTENSU  PIC X(9).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) start
+      *        03  SKT4000-KOH-GTENSU  PIC X(9).
+              03  SKT4000-KOH-GTENSU  PIC X(10).
+      *=== 点数欄の点数の桁数を修正 by hagino(2015/11/13) end

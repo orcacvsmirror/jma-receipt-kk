@@ -65,7 +65,7 @@
         </element>
         <element name="KKH-TENSU" occurs="1">
           <appinfo>
-            <embed object="text" length="9"/>
+            <embed object="text" length="10"/>
           </appinfo>
         </element>
         <element name="TAK-KENSU" occurs="1">
@@ -75,7 +75,7 @@
         </element>
         <element name="TAK-TENSU" occurs="1">
           <appinfo>
-            <embed object="text" length="9"/>
+            <embed object="text" length="10"/>
           </appinfo>
         </element>
         <element name="RJN-KENSU" occurs="1">
@@ -85,7 +85,7 @@
         </element>
         <element name="RJN-TENSU" occurs="1">
           <appinfo>
-            <embed object="text" length="9"/>
+            <embed object="text" length="10"/>
           </appinfo>
         </element>
         <element name="KO-KENSU" occurs="1">
@@ -95,7 +95,7 @@
         </element>
         <element name="KO-TENSU" occurs="1">
           <appinfo>
-            <embed object="text" length="9"/>
+            <embed object="text" length="10"/>
           </appinfo>
         </element>
       </element>
@@ -108,7 +108,7 @@
       </element>
       <element name="KKH-STENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="TAK-SKENSU" occurs="1">
@@ -118,7 +118,7 @@
       </element>
       <element name="TAK-STENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="RJN-SKENSU" occurs="1">
@@ -128,7 +128,7 @@
       </element>
       <element name="RJN-STENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="KO-SKENSU" occurs="1">
@@ -138,7 +138,7 @@
       </element>
       <element name="KO-STENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
     </element>
@@ -150,7 +150,7 @@
       </element>
       <element name="N-GTENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="N-AVG" occurs="1">
@@ -165,7 +165,7 @@
       </element>
       <element name="G-GTENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
       <element name="G-AVG" occurs="1">
@@ -200,7 +200,7 @@
       </element>
       <element name="KOH-GTENSU" occurs="1">
         <appinfo>
-          <embed object="text" length="9"/>
+          <embed object="text" length="10"/>
         </appinfo>
       </element>
     </element>
