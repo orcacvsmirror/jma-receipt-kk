@@ -1164,16 +1164,19 @@
            END-IF
       *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
       *
-      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
-      *    返戻年月
-           MOVE  RECE02-HENREIYM           TO  MF101-HENREIYM
-      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
-      *
            IF     FLG-ERR         =     1
              DISPLAY "助成対象外="  RECE02-PTNUM
            ELSE
-             WRITE  MF101-REC
-             ADD  1  TO  CNT-MF101
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
+             IF  RECE02-HENREIYM    =   "000000"
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
+               WRITE  MF101-REC
+               ADD  1  TO  CNT-MF101
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
+             ELSE
+               DISPLAY "返戻は対象外="  RECE02-HENREIYM
+             END-IF
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
            END-IF
       *
       *
@@ -1470,17 +1473,9 @@
            PERFORM 310-HEAD-HEN-SEC
       *
            PERFORM  UNTIL  FLG-PRINT  =  1
-           
-      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
-             IF  MF101-HENREIYM    =   "000000"
-      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
       *
       *    ＣＳＶ<データレコード>処理
              PERFORM  330-CSV-HEN-SEC
-      *
-      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
-             END-IF
-      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
       *
            END-PERFORM
       *
