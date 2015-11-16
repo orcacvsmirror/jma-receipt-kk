@@ -37,6 +37,8 @@
       *  01.00.04    吉川    13/11/14    プログラムオプション対応
       *  01.00.05    吉川    14/10/03    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.06    吉川    15/01/19    平成２７年１月改正対応
+      *  01.00.07    萩野    15/11/13    返戻分を含めないよう修正
+      *                                  END-STRING漏れ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1162,6 +1164,11 @@
            END-IF
       *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
       *
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
+      *    返戻年月
+           MOVE  RECE02-HENREIYM           TO  MF101-HENREIYM
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
+      *
            IF     FLG-ERR         =     1
              DISPLAY "助成対象外="  RECE02-PTNUM
            ELSE
@@ -1464,8 +1471,16 @@
       *
            PERFORM  UNTIL  FLG-PRINT  =  1
            
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
+             IF  MF101-HENREIYM    =   "000000"
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
+      *
       *    ＣＳＶ<データレコード>処理
              PERFORM  330-CSV-HEN-SEC
+      *
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) start
+             END-IF
+      *=== 返戻分を含めないよう修正 by hagino(2015/11/13) end
       *
            END-PERFORM
       *
@@ -1585,6 +1600,9 @@
            STRING  "0"                       DELIMITED BY SIZE
                    MF101-RECESYUBETU (4:1)   DELIMITED BY SIZE
                    INTO  WRK-DATA
+      *=== END-STRING漏れ by hagino(2015/11/13) start
+           END-STRING
+      *=== END-STRING漏れ by hagino(2015/11/13) end
       *     MOVE    MF101-RECESYUBETU (4:1)   TO  WRK-NUM9
            MOVE    2                         TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
