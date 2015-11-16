@@ -33,6 +33,7 @@
       *  01.00.02    吉川    08/09/10    SPA-AREA初期化
       *  01.00.03    吉川    13/01/09    医療機関情報編集対応
       *  01.00.04    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.05    吉川    15/11/16    患者負担がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -612,6 +613,9 @@
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF    FLG-ERR               =   ZERO
+      *=== 患者負担がない場合は印字しない by Yoshikawa(2015/09/14) start
+           AND   RECE02-FTNMONEY(IDZ + 1)  NOT =  ZERO
+      *=== 患者負担がない場合は印字しない by Yoshikawa(2015/09/14) end
                IF      FLG-MF100  =  1
                    WRITE   MF100-REC
                    ADD     1                   TO  CNT-MF100
