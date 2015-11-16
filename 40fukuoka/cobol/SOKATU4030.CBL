@@ -35,6 +35,7 @@
       *  01.00.06    吉川     14/05/27    特別療養費の前期２割は
       *                                   70歳一般・低所得に集計
       *  01.00.07    吉川     14/10/27    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.08    萩野     15/11/13    医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -242,6 +243,9 @@
                05  WRK-HOSPADRS1   PIC X(50).
                05  WRK-HOSPADRS2   PIC X(50).
            03  WRK-HOSPTEL         PIC X(15).
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -291,6 +295,11 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
       *
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
@@ -512,6 +521,10 @@
            END-IF
       *
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -930,7 +943,11 @@
            INSPECT SKT4060-HOSPNAME      REPLACING ALL "  " BY "　"
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME  TO  SKT4060-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *     MOVE    SYS-1001-KAISETUNAME  TO  SKT4060-KAISETUNAME
+           MOVE    WRK-KAISETUNAME       TO  SKT4060-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
+      *
       *    電話番号
            MOVE    WRK-HOSPTEL           TO  SKT4060-TEL
       *    保険者番号
@@ -1478,6 +1495,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -1545,6 +1566,36 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
+      *
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
       *****************************************************************
       *    プログラムオプション情報読込
