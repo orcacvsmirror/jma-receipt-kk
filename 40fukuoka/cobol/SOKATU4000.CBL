@@ -80,6 +80,8 @@
       *                                  表示しないように修正
       *  01.00.37    萩野    15/09/14    総合計欄の点数を１０００万の位まで
       *                                  印字するよう修正。
+      *  01.00.38    萩野    15/11/13    点数欄の記載を一千万の位まで印字するよう修正
+      *                                  医療機関編集情報への開設者名追加対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -464,6 +466,9 @@
                05  WRK-HOSPADRS2   PIC X(50).
            03  WRK-HOSPTEL         PIC X(15).
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -535,6 +540,11 @@
       *
       *    医療機関情報−所在地、連絡先 
            COPY    "CPSK1002.INC".
+      *
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
       *
       *---(01.00.09) LINE ADD START ------------------------------------
       *    医療機関編集情報
@@ -825,6 +835,10 @@
       *
       *---(01.00.09) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -1286,8 +1300,12 @@
       *    明細
                    MOVE    WRK-KOH-GKENSU(IDX5 3)   TO  WRK-Z5
                    MOVE    WRK-Z5               TO  SKT4000-KOH-GKENSU
-                   MOVE    WRK-KOH-GTENSU(IDX5 3)   TO  WRK-Z9
-                   MOVE    WRK-Z9               TO  SKT4000-KOH-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *             MOVE    WRK-KOH-GTENSU(IDX5 3)   TO  WRK-Z9
+      *             MOVE    WRK-Z9               TO  SKT4000-KOH-GTENSU
+                   MOVE    WRK-KOH-GTENSU(IDX5 3)   TO  WRK-Z10
+                   MOVE    WRK-Z10              TO  SKT4000-KOH-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
       *    帳票印刷処理
                    PERFORM 340-PRINT-OUT-SEC
                  END-IF
@@ -1914,7 +1932,11 @@
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/22) end
       *---(01.00.09) LINE ADD END   ------------------------------------
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME  TO  SKT4000-KANRINAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *     MOVE    SYS-1001-KAISETUNAME  TO  SKT4000-KANRINAME
+           MOVE    WRK-KAISETUNAME       TO  SKT4000-KANRINAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
+      *
       *---(01.00.09) LINE ADD START ------------------------------------
       *    電話番号
       *     MOVE    SYS-1002-TEL          TO  SKT4000-TEL
@@ -1968,20 +1990,32 @@
                  MOVE  SKT4000TMP-KENSU (IDX2 1)  TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT4000-KKH-KENSU(IDX1 IDX2)
       *    国保：点数
-                 MOVE  SKT4000TMP-TENSU (IDX2 1)  TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4000-KKH-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *           MOVE  SKT4000TMP-TENSU (IDX2 1)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4000-KKH-TENSU(IDX1 IDX2)
+                 MOVE  SKT4000TMP-TENSU (IDX2 1)  TO  WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT4000-KKH-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
       *    退職家族：件数
                  MOVE  SKT4000TMP-KENSU (IDX2 3)  TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT4000-TAK-KENSU(IDX1 IDX2)
       *    退職家族：点数
-                 MOVE  SKT4000TMP-TENSU (IDX2 3)  TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4000-TAK-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *           MOVE  SKT4000TMP-TENSU (IDX2 3)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4000-TAK-TENSU(IDX1 IDX2)
+                 MOVE  SKT4000TMP-TENSU (IDX2 3)  TO  WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT4000-TAK-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
       *    老人：件数
                  MOVE  SKT4000TMP-KENSU (IDX2 4)  TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT4000-RJN-KENSU(IDX1 IDX2)
       *    老人：点数
-                 MOVE  SKT4000TMP-TENSU (IDX2 4)  TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4000-RJN-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *           MOVE  SKT4000TMP-TENSU (IDX2 4)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4000-RJN-TENSU(IDX1 IDX2)
+                 MOVE  SKT4000TMP-TENSU (IDX2 4)  TO  WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT4000-RJN-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
       *---(01.00.10) LINE ADD START ------------------------------------
       **    食事：件数
       *           MOVE  SKT4000TMP-KENSU (IDX2 5)  TO  WRK-Z5
@@ -2015,8 +2049,12 @@
                  MOVE  SKT4005TMP-KENSU (IDX2)  TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT4000-KO-KENSU(IDX1 IDX2)
       *    国保：点数
-                 MOVE  SKT4005TMP-TENSU (IDX2)  TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4000-KO-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *           MOVE  SKT4005TMP-TENSU (IDX2)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4000-KO-TENSU(IDX1 IDX2)
+                 MOVE  SKT4005TMP-TENSU (IDX2)  TO  WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT4000-KO-TENSU(IDX1 IDX2)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
                END-PERFORM
       *    一時ファイル読込
                PERFORM  901-TMP-READ-SEC
@@ -2067,20 +2105,36 @@
       *
                MOVE  WRK-KKH-SKENSU (IDX5 IDX1)   TO  WRK-Z5
                MOVE  WRK-Z5          TO  SKT4000-KKH-SKENSU (IDX1)
-               MOVE  WRK-KKH-STENSU (IDX5 IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-KKH-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *         MOVE  WRK-KKH-STENSU (IDX5 IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-KKH-STENSU (IDX1)
+               MOVE  WRK-KKH-STENSU (IDX5 IDX1)   TO  WRK-Z10
+               MOVE  WRK-Z10         TO  SKT4000-KKH-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
                MOVE  WRK-TAK-SKENSU (IDX5 IDX1)   TO  WRK-Z5
                MOVE  WRK-Z5          TO  SKT4000-TAK-SKENSU (IDX1)
-               MOVE  WRK-TAK-STENSU (IDX5 IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-TAK-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *         MOVE  WRK-TAK-STENSU (IDX5 IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-TAK-STENSU (IDX1)
+               MOVE  WRK-TAK-STENSU (IDX5 IDX1)   TO  WRK-Z10
+               MOVE  WRK-Z10         TO  SKT4000-TAK-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
                MOVE  WRK-RJN-SKENSU (IDX5 IDX1)   TO  WRK-Z5
                MOVE  WRK-Z5          TO  SKT4000-RJN-SKENSU (IDX1)
-               MOVE  WRK-RJN-STENSU (IDX5 IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-RJN-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *         MOVE  WRK-RJN-STENSU (IDX5 IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-RJN-STENSU (IDX1)
+               MOVE  WRK-RJN-STENSU (IDX5 IDX1)   TO  WRK-Z10
+               MOVE  WRK-Z10         TO  SKT4000-RJN-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
                MOVE  WRK-KOU-SKENSU (IDX5 IDX1)   TO  WRK-Z5
                MOVE  WRK-Z5          TO  SKT4000-KO-SKENSU (IDX1)
-               MOVE  WRK-KOU-STENSU (IDX5 IDX1)   TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4000-KO-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *         MOVE  WRK-KOU-STENSU (IDX5 IDX1)   TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4000-KO-STENSU (IDX1)
+               MOVE  WRK-KOU-STENSU (IDX5 IDX1)   TO  WRK-Z10
+               MOVE  WRK-Z10         TO  SKT4000-KO-STENSU (IDX1)
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) end
              END-PERFORM
            END-IF
@@ -2156,8 +2210,12 @@
       *
              MOVE    WRK-N-GKENSU(IDX5)  TO  WRK-Z5
              MOVE    WRK-Z5              TO  SKT4000-N-GKENSU
-             MOVE    WRK-N-GTENSU(IDX5)  TO  WRK-Z9
-             MOVE    WRK-Z9              TO  SKT4000-N-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *       MOVE    WRK-N-GTENSU(IDX5)  TO  WRK-Z9
+      *       MOVE    WRK-Z9              TO  SKT4000-N-GTENSU
+             MOVE    WRK-N-GTENSU(IDX5)  TO  WRK-Z10
+             MOVE    WRK-Z10             TO  SKT4000-N-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
              COMPUTE   WRK-N-SGKENSU (IDX5)  =  WRK-N-GKENSU (IDX5)
                                              +  WRK-KOU-SKENSU(IDX5 1)
              MOVE    WRK-N-SGKENSU (IDX5)    TO  WRK-Z5
@@ -2178,8 +2236,12 @@
       *    外来合計
              MOVE    WRK-G-GKENSU (IDX5)     TO  WRK-Z5
              MOVE    WRK-Z5                  TO  SKT4000-G-GKENSU
-             MOVE    WRK-G-GTENSU (IDX5)     TO  WRK-Z9
-             MOVE    WRK-Z9                  TO  SKT4000-G-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *       MOVE    WRK-G-GTENSU (IDX5)     TO  WRK-Z9
+      *       MOVE    WRK-Z9                  TO  SKT4000-G-GTENSU
+             MOVE    WRK-G-GTENSU (IDX5)     TO  WRK-Z10
+             MOVE    WRK-Z10                 TO  SKT4000-G-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
              COMPUTE   WRK-G-SGKENSU (IDX5)  =  WRK-G-GKENSU (IDX5)
                                              +  WRK-KOU-SKENSU(IDX5 2)
              MOVE    WRK-G-SGKENSU (IDX5)    TO  WRK-Z5
@@ -2201,8 +2263,12 @@
       *    諸公費合計
              MOVE    WRK-KOH-GKENSU(IDX5 3)  TO  WRK-Z5
              MOVE    WRK-Z5                  TO  SKT4000-KOH-GKENSU
-             MOVE    WRK-KOH-GTENSU(IDX5 3)  TO  WRK-Z9
-             MOVE    WRK-Z9                  TO  SKT4000-KOH-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) start
+      *       MOVE    WRK-KOH-GTENSU(IDX5 3)  TO  WRK-Z9
+      *       MOVE    WRK-Z9                  TO  SKT4000-KOH-GTENSU
+             MOVE    WRK-KOH-GTENSU(IDX5 3)  TO  WRK-Z10
+             MOVE    WRK-Z10                 TO  SKT4000-KOH-GTENSU
+      *=== 点数欄の印字桁数の修正 by hagino(2015/11/13) end
       *
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/14) start
            END-IF
@@ -3409,6 +3475,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -3476,6 +3546,36 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-INV-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
+      *
       *---(01.00.09) LINE ADD END   ------------------------------------
       *****************************************************************
       *    ＤＢ　オープン処理
