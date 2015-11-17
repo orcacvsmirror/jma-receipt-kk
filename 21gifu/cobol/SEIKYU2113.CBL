@@ -34,6 +34,8 @@
       *  01.00.04    萩野    15/01/15    平成２７年１月改正対応（長期欄の難病対応）
       *                                  前期高齢者欄にて負担割合３割の場合
       *                                  「１」と印字するように修正
+      *  01.00.05    吉川    15/11/17    受給者番号のハイフンを除去する
+      *                                  カナ氏名は半角カナにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -118,6 +120,9 @@
            03  IDY                   PIC 9(04).
            03  IDZ                   PIC 9(04).
            03  IDW                   PIC 9(04).
+      *=== 受給者番号はハイフンを除去 by Yoshikawa(2015/11/17) start
+           03  IDW2                  PIC 9(04).
+      *=== 受給者番号はハイフンを除去 by Yoshikawa(2015/11/17) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -170,6 +175,9 @@
            03  WRK-AMARI             PIC 9(02).
            03  WRK-CALC              PIC 9(05).
            03  WRK-HOSPSYOGO         PIC 9(08).
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) start
+           03  WRK-KANANAME          PIC X(100).
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -190,6 +198,9 @@
                05  WRK-DATA          PIC X(200).
                05  WRK-NUM           PIC 9999999999.
                05  WRK-NAGASA        PIC 9(04).
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) start
+               05  WRK-NAGASA-SPACE  PIC 9(04).
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) end
                05  WRK-ST            PIC 9(02).
                05  WRK-SYOSUU        PIC 9(01).
                05  WRK-END           PIC 9(01).
@@ -223,7 +234,11 @@
                    07  SUM-KOHTENSU  PIC 9(08).
                05  SUM-ITBFTN        PIC 9(06).
                05  SUM-SRYYM         PIC X(04).
-               05  SUM-KANANAME      PIC X(21).
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) start
+      *         05  SUM-KANANAME      PIC X(21).
+               05  SUM-KANANAME      PIC X(100).
+               05  SUM-NAGASA        PIC 9(02).
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) end
        
       *    集計領域
        01  SUM-AREA.
@@ -981,7 +996,12 @@
       *      連番（ＣＳＶに使わない）
              MOVE  IDX1                      TO  SUM-RENNUM(IDX1)
       *      受給者番号
-             MOVE  MF100-KOHJKYSNUM          TO  SUM-JKYSNUM(IDX1)(2:)
+      *=== 受給者番号はハイフンを除去 by Yoshikawa(2015/11/17) start
+      *       MOVE  MF100-KOHJKYSNUM          TO  SUM-JKYSNUM(IDX1)(2:)
+             MOVE  MF100-KOHJKYSNUM          TO  WRK-MAE-INPUT
+             PERFORM 30012-HYPHEN-ERASE-SEC
+             MOVE  WRK-OUT-INPUT             TO  SUM-JKYSNUM(IDX1)(2:)
+      *=== 受給者番号はハイフンを除去 by Yoshikawa(2015/11/17) end
       *      入外区分
              MOVE  MF100-NYUGAIKBN           TO  SUM-NYUGAIKBN(IDX1)
       *      社国退後区分
@@ -1055,8 +1075,20 @@
              MOVE    MF100-NAME              TO  WRK-MAE-INPUT
       *      性と名の間のスペース除去
              PERFORM 30011-SPACE-ERASE-SEC
-      *       PERFORM  2008-HENKAN-SEC
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) start
+      *       MOVE    WRK-OUT-INPUT           TO  SUM-KANANAME(IDX1)
+             MOVE    WRK-OUT-INPUT           TO  WRK-KANANAME
+             INITIALIZE                          WRK-MAE-INPUT
+                                                 WRK-OUT-INPUT
+             MOVE    WRK-KANANAME(1:42)      TO  WRK-MAE-INPUT
+             PERFORM 2008-HENKAN-SEC
              MOVE    WRK-OUT-INPUT           TO  SUM-KANANAME(IDX1)
+             COMPUTE WRK-NAGASA-SPACE = ( ( IDX3 - IDX4 ) - 1 ) / 2 
+             IF  WRK-NAGASA-SPACE  >   21
+                 MOVE    21                  TO  WRK-NAGASA-SPACE
+             END-IF
+             MOVE    WRK-NAGASA-SPACE        TO  SUM-NAGASA(IDX1)
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) end
       *      合計・小計加算
              EVALUATE  MF100-KYURATE
                WHEN  30
@@ -1108,6 +1140,36 @@
        30011-SPACE-ERASE-EXT.
            EXIT.
       *
+      *=== 受給者番号はハイフンを除去 by Yoshikawa(2015/11/17) start
+      *****************************************************************
+      *    ハイフン除去処理
+      *****************************************************************
+       30012-HYPHEN-ERASE-SEC      SECTION.
+      *
+           INITIALIZE                             WRK-OUT-INPUT
+      *
+           MOVE    1                          TO  IDW2
+      *
+           IF  WRK-MAE-INPUT  =  SPACE
+               CONTINUE
+           ELSE
+             PERFORM  VARYING  IDW  FROM  1  BY  1
+                      UNTIL    IDW  >     15
+      *        N番目にハイフンがある場合、ハイフンを消して詰める
+               IF  WRK-MAE-INPUT(IDW:1)  =  "-"
+                 CONTINUE
+               ELSE
+                 MOVE  WRK-MAE-INPUT(IDW:1)   TO  WRK-OUT-INPUT(IDW2:1)
+                 ADD    1                     TO  IDW2
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       30011-HYPHEN-ERASE-EXT.
+           EXIT.
+      *=== 受給者番号はハイフンを除去 by Yoshikawa(2015/11/17) end
+      *
       *****************************************************************
       *    ＣＳＶ編集<バッチ表>処理
       *****************************************************************
@@ -1131,6 +1193,9 @@
                    SYS-1001-TENHYOKBN      DELIMITED  BY  SIZE
                    SYS-1001-HOSPCD         DELIMITED  BY  SIZE
                    INTO                    WRK-DATA
+      *=== END-STRING漏れ対応 by Yoshikawa(2015/11/17) start
+           END-STRING
+      *=== END-STRING漏れ対応 by Yoshikawa(2015/11/17) end
            MOVE    10                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1229,6 +1294,9 @@
                    SYS-1001-TENHYOKBN      DELIMITED  BY  SIZE
                    SYS-1001-HOSPCD         DELIMITED  BY  SIZE
                    INTO                    WRK-DATA
+      *=== END-STRING漏れ対応 by Yoshikawa(2015/11/17) start
+           END-STRING
+      *=== END-STRING漏れ対応 by Yoshikawa(2015/11/17) end
            MOVE    10                      TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
@@ -1510,7 +1578,10 @@
       *
       *    １９．カナ氏名
              MOVE    SUM-KANANAME(IDX2)      TO  WRK-DATA
-             MOVE    21                      TO  WRK-NAGASA
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) start
+      *       MOVE    21                      TO  WRK-NAGASA
+             COMPUTE WRK-NAGASA  =  21  +  SUM-NAGASA(IDX2)
+      *=== カナ氏名は半角カナ by Yoshikawa(2015/11/17) end
              PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    改行コード編集
@@ -2459,11 +2530,11 @@
       *****************************************************************
        2008-HENKAN-SEC                 SECTION.
       *
-           MOVE  1  TO  IDX3
-           PERFORM VARYING  IDX4  FROM  1  BY  2
-                   UNTIL    IDX4  >   50
-                   OR       WRK-MAE-INPUT(IDX4:1)  =  SPACE
-             EVALUATE   WRK-MAE-INPUT(IDX4:2)
+           MOVE  1          TO  IDX3
+           MOVE  ZERO       TO  IDX4
+           PERFORM VARYING  IDX2  FROM  1  BY  2
+                   UNTIL    IDX2  >   42
+             EVALUATE   WRK-MAE-INPUT(IDX2:2)
                WHEN  "ア"
                  MOVE  "ｱ"  TO  WRK-OUT-INPUT(IDX3:2)
                  ADD   2    TO  IDX3
@@ -2662,6 +2733,11 @@
                WHEN  "　"
                  MOVE  " "  TO  WRK-OUT-INPUT(IDX3:1)
                  ADD   1    TO  IDX3
+                 IF  WRK-MAE-INPUT(IDX2 - 2:2)   NOT  =   SPACE
+                   IF  WRK-MAE-INPUT(IDX2 + 2:2)   NOT  =   SPACE
+                       ADD   1    TO  IDX4
+                   END-IF
+                 END-IF
                WHEN  "ガ"
                  MOVE  "ｶﾞ" TO  WRK-OUT-INPUT(IDX3:4)
                  ADD   4    TO  IDX3
