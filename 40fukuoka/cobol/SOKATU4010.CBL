@@ -2085,7 +2085,7 @@
       *    開設者名
       *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) start
       *     MOVE    SYS-1001-KAISETUNAME  TO  SKT4040-KAISETUNAME
-           MOVE    WRK-KAISETUNAME       TO  SKT4020-KAISETUNAME
+           MOVE    WRK-KAISETUNAME       TO  SKT4040-KAISETUNAME
       *=== 医療機関編集情報へ開設者名追加 by hagino(2015/11/13) end
       *
       *---(01.00.08) LINE ADD START ------------------------------------
