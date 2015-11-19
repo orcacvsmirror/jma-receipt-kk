@@ -2295,10 +2295,21 @@
       *     MOVE  SYS-1001-HOSPNAME      TO  SC04-HOSPNAME
       *    住所
            MOVE    WRK-HOSPADRS         TO  SC04-ADRS
+      *=== 医療機関情報編集対応 by Yoshikawa(2015/11/16) start
+           INSPECT SC04-ADRS            REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2015/11/16) end
       *
       *    医療機関名
            MOVE    WRK-HOSPNAME         TO  SC04-HOSPNAME
+      *=== 医療機関情報編集対応 by Yoshikawa(2015/11/16) start
+           INSPECT SC04-HOSPNAME        REPLACING ALL "  " BY "　"
+      *=== 医療機関情報編集対応 by Yoshikawa(2015/11/16) end
       *---(02.05.05) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) start
+      *    開設者名
+           MOVE  WRK-KAISETUNAME        TO  SC04-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/11/16) end
       *
       *    保険種別区分
            EVALUATE  TRUE
