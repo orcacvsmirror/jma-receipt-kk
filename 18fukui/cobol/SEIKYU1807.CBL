@@ -39,6 +39,10 @@
       *  01.00.05       萩野    2014/07/09   受給資格者番号の先頭の値が
       *                                      「０」になる不具合を修正
       *  01.00.06       吉川    2014/10/09   ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.07       吉川    2015/11/26   患者負担が食事のみのデータは
+      *                                      印字対象とするように修正
+      *                                      難病の経過措置の場合、食事負担は
+      *                                      １／２とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -789,7 +793,7 @@
               OR   RECE10-ETC-KOHNUM (3)  =  "974"
               OR   RECE10-ETC-KOHNUM (4)  =  "974"
                 MOVE   1                   TO    MF110-CHOKIKBN
-           ELSE
+              ELSE
                 MOVE   ZERO                TO    MF110-CHOKIKBN
               END-IF
       *
@@ -818,8 +822,22 @@
                   MOVE   RECE10-SHOKUJIRYOYOHI (IDY) TO
                                        MF110-RECESHOKUJIRYOYOHI(IDY - 1)
       *
-                  MOVE   RECE10-SHOKUJIFTN (IDY)     TO
+      *=== 難病経過措置の食事負担は１／２ by Yoshikawa(2015/11/26) start
+      *            MOVE   RECE10-SHOKUJIFTN (IDY)     TO
+      *                                   MF110-RECESHOKUJIFTN(IDY - 1)
+                  MOVE    RECE10-KOHNUM (IDX)    TO  WRK-KOHNUM
+                  MOVE    RECE10-KOHID  (IDX)    TO  WRK-KOHID
+                  PERFORM 820-PTKOHINF-SET-SEC
+      *           難病の経過措置か
+                  IF  RECE10-KOHNUM (IDX)  =  "054"
+                  AND PTKOH-FTNJANUM(5:3)  =  "501"
+                      COMPUTE MF110-RECESHOKUJIFTN(IDY - 1) = 
+                              RECE10-SHOKUJIFTN(IDY)  /  2
+                  ELSE
+                      MOVE   RECE10-SHOKUJIFTN (IDY) TO
                                          MF110-RECESHOKUJIFTN(IDY - 1)
+                  END-IF
+      *=== 難病経過措置の食事負担は１／２ by Yoshikawa(2015/11/26) end
       *
                   IF   RECE10-KOHNUM (IDX + 1)   =   SPACE
                     MOVE   4                   TO    IDX
@@ -852,7 +870,18 @@
            PERFORM   800-SYUNOU-SET-SEC
            MOVE   WRK-KOHFTN          TO   MF110-ITBFTN
       *
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+      *    請求管理の「請求額情報（食事）−患者負担」を使用する
+           IF  MF110-NYUGAIKBN  =  "1"
+               MOVE    RECE10-SKYSKJ-ICHIBUFTN
+                                      TO  MF110-SKY-SHOKUJIFTN
+           END-IF
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
+      *
            IF  MF110-ITBFTN  NOT =  ZERO
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+           OR  MF110-SKY-SHOKUJIFTN  NOT =  ZERO
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
              WRITE  MF110-REC
              ADD    1                 TO   CNT-MF110
            END-IF
@@ -1187,7 +1216,10 @@
       * 
       *    一部負担金 
       *    食事医療費負担額を加算
-           ADD     MF110-SHOKUJIFTN        TO  MF110-ITBFTN
+      *=== 難病経過措置の食事負担は１／２ by Yoshikawa(2015/11/26) start
+      *     ADD     MF110-SHOKUJIFTN        TO  MF110-ITBFTN
+           ADD     MF110-SKY-SHOKUJIFTN    TO  MF110-ITBFTN
+      *=== 難病経過措置の食事負担は１／２ by Yoshikawa(2015/11/26) end
            MOVE    MF110-ITBFTN            TO  WRK-NUM
            MOVE    8                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
@@ -2266,7 +2298,9 @@
                SYU-KOH3HKNNUM   =   "191"  OR
                SYU-KOH4HKNNUM   =   "191"
               MOVE  "191"               TO  WRK-KOHNUM
-               PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) start
+      *         PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) end
            END-IF
       *
            IF  SYU-KOH1HKNNUM   =   "193"  OR
@@ -2274,7 +2308,9 @@
                SYU-KOH3HKNNUM   =   "193"  OR
                SYU-KOH4HKNNUM   =   "193"
                MOVE  "193"              TO  WRK-KOHNUM
-               PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) start
+      *         PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) end
            END-IF
       *
            IF  SYU-KOH1HKNNUM   =  "194"  OR
@@ -2282,7 +2318,9 @@
                SYU-KOH3HKNNUM   =  "194"  OR
                SYU-KOH4HKNNUM   =  "194"
                MOVE  "194"             TO  WRK-KOHNUM
-               PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) start
+      *         PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) end
            END-IF
       *
            IF  SYU-KOH1HKNNUM   =  "196"  OR
@@ -2290,7 +2328,9 @@
                SYU-KOH3HKNNUM   =  "196"  OR
                SYU-KOH4HKNNUM   =  "196"
                MOVE  "196"             TO  WRK-KOHNUM
-               PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) start
+      *         PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) end
            END-IF
       *
            IF  SYU-KOH1HKNNUM   =  "198"  OR
@@ -2298,7 +2338,9 @@
                SYU-KOH3HKNNUM   =  "198"  OR
                SYU-KOH4HKNNUM   =  "198"
                MOVE  "198"             TO  WRK-KOHNUM
-               PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) start
+      *         PERFORM  820-PTKOHINF-SET-SEC
+      *=== 不要行削除 by Yoshikawa(2015/11/26) end
            END-IF
       *
            EVALUATE TRUE
@@ -2331,7 +2373,10 @@
              INITIALIZE  PTKOHINF-REC
              MOVE  SPA-HOSPNUM         TO  PTKOH-HOSPNUM
              MOVE  RECE02-PTID         TO  PTKOH-PTID
-             MOVE  MF110-KOHID         TO  PTKOH-KOHID
+      *=== 難病経過措置の食事負担は１／２ by Yoshikawa(2015/11/26) start
+      *       MOVE  MF110-KOHID         TO  PTKOH-KOHID
+             MOVE  WRK-KOHID           TO  PTKOH-KOHID
+      *=== 難病経過措置の食事負担は１／２ by Yoshikawa(2015/11/26) end
              MOVE  WRK-KOHNUM          TO  PTKOH-KOHNUM
              MOVE  PTKOHINF-REC        TO  MCPDATA-REC
              MOVE  "DBSELECT"          TO  MCP-FUNC
