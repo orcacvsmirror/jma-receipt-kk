@@ -44,6 +44,8 @@
       *                                      帳票に反映されないのを修正
       *  01.00.08       吉川    2013/01/09   医療機関情報編集対応
       *  01.00.09       吉川    2014/10/09   ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.10       吉川    2015/11/26   患者負担が食事のみのデータは
+      *                                      印字対象とするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -123,6 +125,9 @@
            03  FLG-ERR        PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+           03  FLG-RECE10     PIC 9(01).
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -306,6 +311,11 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+      *    請求管理
+           COPY    "CPRCF010.INC".
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
       *
       *    保険組合せ
        01  HKNCOMBI-REC.
@@ -769,10 +779,18 @@
            MOVE  WRK-KOHFTN  TO  MF100-ITBFTN
            MOVE  WRK-YKZFTN  TO  MF100-YKZFTN
       *
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+      *    請求管理テーブル読み込み
+           PERFORM 900-SEIKYU-START-SEC
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
+      *
       *=== 負担金がない場合印字対象外 by Yoshikawa(2008/02/26) start
       *     WRITE  MF100-REC
       *     ADD  1  TO  CNT-MF100
            IF   MF100-ITBFTN  NOT =  ZERO
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+           OR   RECE10-SKYSKJ-ICHIBUFTN  NOT =  ZERO
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
               WRITE  MF100-REC
               ADD    1       TO  CNT-MF100
            END-IF
@@ -1565,6 +1583,53 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) start
+      *****************************************************************
+      *    請求管理　読み込み 
+      *****************************************************************
+       900-SEIKYU-START-SEC            SECTION.
+      *
+           INITIALIZE                  RECE10-REC
+           MOVE    RECE02-KEY          TO  RECE10-KEY
+           MOVE    RECE10-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"       TO  MCP-FUNC
+               MOVE    "tbl_seikyu"    TO  MCP-TABLE
+               MOVE    "key"           TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"     USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+               IF      MCP-RC          =   ZERO
+                   MOVE    ZERO        TO  FLG-RECE10
+                   MOVE    MCPDATA-REC TO  RECE10-REC
+               ELSE
+                   MOVE    1           TO  FLG-RECE10
+               END-IF  
+           ELSE
+               MOVE   1                TO  FLG-RECE10
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-START-EXT.
+           EXIT.
+      *=== 食事負担のみは印字対象 by Yoshikawa(2015/11/26) end
       *
       *****************************************************************
       *    患者マスタ読込
