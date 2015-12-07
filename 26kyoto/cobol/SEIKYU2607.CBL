@@ -43,6 +43,8 @@
       *                                  医療機関情報編集対応
       *  01.00.08    吉川    13/08/08    プログラムオプション対応
       *  01.00.09    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.10    吉川    15/12/07    全国公費との分点は1件でカウント
+      *                                  医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -286,6 +288,9 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) end
       *
       *=== 対象公費をINIファイルから取得 by Yoshikawa(2010/08/13) start
       *    パラメータファイル名
@@ -347,6 +352,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -595,6 +605,10 @@
       *
       *---(01.00.01) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -1022,34 +1036,39 @@
       *    元データ一時退避
                MOVE    MF100-REC           TO  MF101-REC
       *    公費併用点数、患者負担額を設定
-               MOVE   WRK-KOHTENSU-G       TO  MF100-TOTALTEN
+      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) start
+      *         MOVE   WRK-KOHTENSU-G       TO  MF100-TOTALTEN
+      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) end
                MOVE   WRK-ETCKOHFTN-G2     TO  MF100-ETCKOHFTN
       *
       *    全国公費の点数と地方公費の点数が同じ場合はレコードを分けない
-               IF      WRK-KOHTENSU-G      =   MF101-TOTALTEN
-                   MOVE    1               TO  MF100-IPANCD
-               ELSE
-      *
-                   MOVE    ZERO            TO  MF100-IPANCD
-                                               MF100-FTNMONEY
-                   IF  FLG-ERR    =    ZERO
-                       WRITE   MF100-REC
-                       ADD     1   TO  CNT-MF100
-                   ELSE
-                       DISPLAY "助成対象外患者番号="  RECE02-PTNUM
-                               "公費番号="            MF100-KOHNUM
-                               "診療年月="            MF100-SRYYM
-                   END-IF
-      *    退避していた地方公費の元データを再設定
-                   INITIALIZE      MF100-REC
-                   MOVE    MF101-REC       TO  MF100-REC
-                   MOVE    1               TO  MF100-IPANCD
-                   MOVE    ZERO            TO  MF100-KEKKAKUFLG
-                                               MF100-SEISHINFLG
-      *    地方公費の点数から全国公費の分点数を差し引く
-                   COMPUTE MF100-TOTALTEN  =   MF100-TOTALTEN
-                                           -   WRK-KOHTENSU-G
-               END-IF
+      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) start
+      *         IF      WRK-KOHTENSU-G      =   MF101-TOTALTEN
+      *             MOVE    1               TO  MF100-IPANCD
+      *         ELSE
+      **
+      *             MOVE    ZERO            TO  MF100-IPANCD
+      *                                         MF100-FTNMONEY
+      *             IF  FLG-ERR    =    ZERO
+      *                 WRITE   MF100-REC
+      *                 ADD     1   TO  CNT-MF100
+      *             ELSE
+      *                 DISPLAY "助成対象外患者番号="  RECE02-PTNUM
+      *                         "公費番号="            MF100-KOHNUM
+      *                         "診療年月="            MF100-SRYYM
+      *             END-IF
+      **    退避していた地方公費の元データを再設定
+      *             INITIALIZE      MF100-REC
+      *             MOVE    MF101-REC       TO  MF100-REC
+      *             MOVE    1               TO  MF100-IPANCD
+      *             MOVE    ZERO            TO  MF100-KEKKAKUFLG
+      *                                         MF100-SEISHINFLG
+      **    地方公費の点数から全国公費の分点数を差し引く
+      *             COMPUTE MF100-TOTALTEN  =   MF100-TOTALTEN
+      *                                     -   WRK-KOHTENSU-G
+      *         END-IF
+               MOVE    1                   TO  MF100-IPANCD
+      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) end
            ELSE
                MOVE    1                   TO  MF100-IPANCD
            END-IF
@@ -1211,7 +1230,10 @@
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME     TO  SC07-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) start
+      *     MOVE    SYS-1001-KAISETUNAME     TO  SC07-KAISETUNAME
+           MOVE    WRK-KAISETUNAME          TO  SC07-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) end
       *---(01.00.01) LINE ADD START ------------------------------------
       *    電話番号
       *     MOVE    SYS-1002-TEL             TO  SC07-TEL
@@ -1932,6 +1954,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -2000,6 +2026,35 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/07) end
+      *
       *=== プログラムオプション対応 by Yoshikawa(2013/07/08) start
       *****************************************************************
       *    プログラムオプション情報読込
