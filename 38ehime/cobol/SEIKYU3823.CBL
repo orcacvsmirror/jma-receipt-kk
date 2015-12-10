@@ -75,6 +75,8 @@
       *  01.00.25    吉川    14/10/27  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.26    吉川    15/01/07  平成２７年１月改正対応
       *  01.00.27    吉川    15/06/05  点数はレセプトの総点数を記載する
+      *  01.00.28    吉川    15/12/10  ３歳児視覚聴覚精密健康診査対応
+      *                                医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -214,6 +216,9 @@
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) start
            03  IDX4           PIC 9(04).
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2011/07/13) end
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) start
+           03  IDX5           PIC 9(04).
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
       *
@@ -320,6 +325,9 @@
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) start
            03  WRK-KEISAN            PIC 9(09).
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) end
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) start
+           03  WRK-3SAITENSU         PIC 9(09).
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -346,6 +354,9 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) end
       *
       *=== 平成２１年５月特定疾患改正の対応 by Uchida(2009/05/29) start
            03  WRK-TOKUTEI           PIC 9(01).
@@ -431,6 +442,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -717,6 +733,10 @@
       *
       *---(01.00.04) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -1296,6 +1316,27 @@
              END-IF
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
       *
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) start
+      *      ３歳児健診の場合、福祉点数と３歳児健診の点数を備考欄に記載
+             PERFORM  VARYING  IDX5  FROM  1  BY  1
+                      UNTIL    IDX5  >  4
+                 IF  RECE02-KOHNUM(IDX5)  =  "394"
+                     MOVE    RECE02-TOTALTEN(IDX5 + 1)    TO  WRK-Z7
+                     MOVE    RECE02-TOTALTEN(IDY)         TO  WRK-Z7-9
+                     STRING  "福祉対象点数"        DELIMITED  BY  SIZE
+                             WRK-Z7-9              DELIMITED  BY  SIZE
+                             "点"                  DELIMITED  BY  SIZE
+                             "　　"                DELIMITED  BY  SIZE
+                             "３歳児健診対象点数"  DELIMITED  BY  SIZE
+                             WRK-Z7                DELIMITED  BY  SIZE
+                             "点"                  DELIMITED  BY  SIZE
+                             INTO                  MF100-BIKO4
+                     END-STRING
+                     MOVE    4           TO  IDX5
+                 END-IF
+             END-PERFORM
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
+      *
              WRITE   MF100-REC
              ADD     1                   TO  CNT-MF100
       *
@@ -1568,7 +1609,10 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *    開設者名
-           MOVE  SYS-1001-KAISETUNAME      TO  SC23-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) start
+      *     MOVE  SYS-1001-KAISETUNAME      TO  SC23-KAISETU
+           MOVE  WRK-KAISETUNAME           TO  SC23-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) end
       *
       *    保険区分
            EVALUATE    MF100-KOHNUM
@@ -1889,6 +1933,13 @@
       *    備考３（複数入院期間）
            MOVE  MF100-BIKO3   TO  SC23-BIKO3
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
+      *
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) start
+      *    ３歳児健診 ※備考３に上書き
+           IF  MF100-BIKO4  NOT =  SPACE
+               MOVE  MF100-BIKO4   TO  SC23-BIKO3
+           END-IF
+      *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
       *
            .
        320-BODY-HEN-EXT.
@@ -3221,6 +3272,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -3289,6 +3344,35 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2015/12/10) end
+      *
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
