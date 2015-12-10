@@ -96,7 +96,7 @@
         </appinfo>
       </element>
     </element>
-    <element name="TOKKI" occurs="1">
+    <element name="TOKKI" occurs="3">
       <appinfo>
         <embed object="text" length="8"/>
       </appinfo>
@@ -230,10 +230,10 @@
     <dia:attribute name="grid">
       <dia:composite type="grid">
         <dia:attribute name="width_x">
-          <dia:real val="1"/>
+          <dia:real val="0.10000000000000001"/>
         </dia:attribute>
         <dia:attribute name="width_y">
-          <dia:real val="1"/>
+          <dia:real val="0.10000000000000001"/>
         </dia:attribute>
         <dia:attribute name="visible_x">
           <dia:int val="1"/>
@@ -1732,7 +1732,7 @@
         <dia:point val="7.37022,5.34265"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.36522,5.33765;7.62275,5.57749"/>
+        <dia:rectangle val="7.36522,5.33765;7.62274,5.57749"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="7.37022,5.34265"/>
@@ -2585,7 +2585,7 @@
         <dia:point val="11.4038,8.89885"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.4038,8.67885;11.6538,10.1814"/>
+        <dia:rectangle val="11.4038,8.67885;11.6538,10.1813"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -6340,10 +6340,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O209">
       <dia:attribute name="obj_pos">
-        <dia:point val="9.12981,6.82085"/>
+        <dia:point val="9,6.6375"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.12981,6.51085;10.1798,6.86335"/>
+        <dia:rectangle val="9,6.3275;10.05,6.68"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -6357,7 +6357,7 @@
             <dia:real val="0.4375"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="9.12981,6.82085"/>
+            <dia:point val="9,6.6375"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6371,7 +6371,7 @@
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="embed_id">
-        <dia:string>#TOKKI#</dia:string>
+        <dia:string>#TOKKI[0]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
@@ -6424,10 +6424,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O211">
       <dia:attribute name="obj_pos">
-        <dia:point val="9.33118,7.59022"/>
+        <dia:point val="9.33118,7.86522"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.33118,7.32522;9.93118,7.62772"/>
+        <dia:rectangle val="9.33118,7.60022;9.93118,7.90272"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -6441,7 +6441,7 @@
             <dia:real val="0.375"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="9.33118,7.59022"/>
+            <dia:point val="9.33118,7.86522"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6466,10 +6466,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O212">
       <dia:attribute name="obj_pos">
-        <dia:point val="9.23118,7.76522"/>
+        <dia:point val="9.23118,8.04022"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.23118,7.06022;10.0312,7.86272"/>
+        <dia:rectangle val="9.23118,7.33522;10.0312,8.13772"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -6483,7 +6483,7 @@
             <dia:real val="1"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="9.23118,7.76522"/>
+            <dia:point val="9.23118,8.04022"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -8892,6 +8892,90 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#KOHFTN2#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O270">
+      <dia:attribute name="obj_pos">
+        <dia:point val="9,7.0125"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="9,6.7025;10.05,7.055"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#０２長#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.4375"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="9,7.0125"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#TOKKI[1]#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O271">
+      <dia:attribute name="obj_pos">
+        <dia:point val="9,7.4"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="9,7.09;10.05,7.4425"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#０２長#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.4375"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="9,7.4"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#TOKKI[2]#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
