@@ -56,6 +56,7 @@
       *  01.00.20    吉川      14/05/14    前期高齢者２割対応
       *  01.00.21    吉川      14/08/06    返戻時、再印刷画面のタイトル修正
       *  01.00.22    吉川      14/10/27    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.23    吉川      15/12/10    open-cobol1.1対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -682,6 +683,9 @@
            INITIALIZE  HKNJA-REC
       *
            READ HKNJA-FILE NEXT
+      *=== open-cobol1.1対応 by Yoshikawa(2015/12/10) start
+           END-READ
+      *=== open-cobol1.1対応 by Yoshikawa(2015/12/10) end
       *
            CLOSE HKNJA-FILE
       *
@@ -705,6 +709,9 @@
            INITIALIZE  HKNJA-KOU-REC
       *
            READ HKNJA-KOU-FILE NEXT
+      *=== open-cobol1.1対応 by Yoshikawa(2015/12/10) start
+           END-READ
+      *=== open-cobol1.1対応 by Yoshikawa(2015/12/10) end
       *
            CLOSE HKNJA-KOU-FILE
       *
