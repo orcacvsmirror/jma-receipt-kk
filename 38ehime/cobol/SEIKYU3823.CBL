@@ -325,9 +325,6 @@
       *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) start
            03  WRK-KEISAN            PIC 9(09).
       *=== ½ýÉÂÌ¾µÚ¤Ó´ü´ÖÍó°õ»ú by Yoshikawa(2011/07/13) end
-      *=== £³ºÐ»ù·ò¿ÇÂÐ±þ by Yoshikawa(2015/12/10) start
-           03  WRK-3SAITENSU         PIC 9(09).
-      *=== £³ºÐ»ù·ò¿ÇÂÐ±þ by Yoshikawa(2015/12/10) end
       *
       *---(01.00.04) LINE ADD START ------------------------------------
       *     03  WRK-PATH.

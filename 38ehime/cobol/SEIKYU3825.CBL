@@ -320,7 +320,6 @@
            03  WRK-COMMENT           PIC X(40).
       *=== ¿ÇÎÅÆü¿ô£°¤Î¾ì¹çÍýÍ³¤ò°õ»ú by Yoshikawa(2011/09/22) end
       *=== £³ºÐ»ù·ò¿ÇÂÐ±þ by Yoshikawa(2015/12/10) start
-           03  WRK-3SAITENSU         PIC 9(09).
            03  WRK-BIKO7             PIC X(100).
       *=== £³ºÐ»ù·ò¿ÇÂÐ±þ by Yoshikawa(2015/12/10) end
       *
