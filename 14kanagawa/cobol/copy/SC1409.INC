@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku,Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者   日付        内容
+      *  01.00.01    萩野     15/12/10    特記事項要素数追加
+      ********************************************************************
        01  SC09.
       *印刷日付
            03  SC09-PRTYM              PIC  X(16).
@@ -55,7 +59,11 @@
            03  SC09-NENGO-TBL OCCURS 4.
                05  SC09-NENGO          PIC  X(02).
       *特記事項
-           03  SC09-TOKKI              PIC  X(08).
+      *=== 特記事項要素数追加 by hagino(2015/12/10) start
+      *     03  SC09-TOKKI              PIC  X(08).
+           03  SC09-TOKKI-TBL          OCCURS 3.
+               05  SC09-TOKKI          PIC  X(08).
+      *=== 特記事項要素数追加 by hagino(2015/12/10) end
            03  SC09-ZAISOU             PIC  X(04).
            03  SC09-ZAIMARU            PIC  X(02).
       *医療機関所在地

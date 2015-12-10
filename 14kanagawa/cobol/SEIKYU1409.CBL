@@ -53,6 +53,7 @@
       *                                   から取得するようにする
       *  01.00.16    吉川     15/01/30    平成２７年１月改正対応
       *  01.00.17    萩野     15/12/10    医療機関編集情報への開設者名追加対応
+      *                                   特記事項欄の記載数の追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -383,6 +384,86 @@
        01  CONS-AREA.
            03  WRK-CONS-SRYYM-201501   PIC X(06)  VALUE  "201501".
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
+      *
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) start
+      *    特記事項
+       01  TBL-TOKKI-AREA.
+           03  FILLER          PIC X(02)   VALUE   "01".
+           03  FILLER          PIC X(10)   VALUE   "０１公".
+           03  FILLER          PIC X(02)   VALUE   "02".
+           03  FILLER          PIC X(10)   VALUE   "０２長".
+           03  FILLER          PIC X(02)   VALUE   "03".
+           03  FILLER          PIC X(10)   VALUE   "０３長処".
+           03  FILLER          PIC X(02)   VALUE   "04".
+           03  FILLER          PIC X(10)   VALUE   "０４後保".
+           03  FILLER          PIC X(02)   VALUE   "07".
+           03  FILLER          PIC X(10)   VALUE   "０７老併".
+           03  FILLER          PIC X(02)   VALUE   "08".
+           03  FILLER          PIC X(10)   VALUE   "０８老健".
+           03  FILLER          PIC X(02)   VALUE   "09".
+           03  FILLER          PIC X(10)   VALUE   "０９施".
+           03  FILLER          PIC X(02)   VALUE   "10".
+           03  FILLER          PIC X(10)   VALUE   "１０第三".
+           03  FILLER          PIC X(02)   VALUE   "11".
+           03  FILLER          PIC X(10)   VALUE   "１１薬治".
+           03  FILLER          PIC X(02)   VALUE   "12".
+           03  FILLER          PIC X(10)   VALUE   "１２器治".
+           03  FILLER          PIC X(02)   VALUE   "13".
+           03  FILLER          PIC X(10)   VALUE   "１３先進".
+           03  FILLER          PIC X(02)   VALUE   "14".
+           03  FILLER          PIC X(10)   VALUE   "１４制超".
+           03  FILLER          PIC X(02)   VALUE   "15".
+           03  FILLER          PIC X(10)   VALUE   "１５経過".
+           03  FILLER          PIC X(02)   VALUE   "16".
+           03  FILLER          PIC X(10)   VALUE   "１６長２".
+           03  FILLER          PIC X(02)   VALUE   "17".
+           03  FILLER          PIC X(10)   VALUE   "１７上位".
+           03  FILLER          PIC X(02)   VALUE   "18".
+           03  FILLER          PIC X(10)   VALUE   "１８一般".
+           03  FILLER          PIC X(02)   VALUE   "19".
+           03  FILLER          PIC X(10)   VALUE   "１９低所".
+           03  FILLER          PIC X(02)   VALUE   "20".
+           03  FILLER          PIC X(10)   VALUE   "２０二割".
+           03  FILLER          PIC X(02)   VALUE   "21".
+           03  FILLER          PIC X(10)   VALUE   "２１高半".
+           03  FILLER          PIC X(02)   VALUE   "22".
+           03  FILLER          PIC X(10)   VALUE   "２２多上".
+           03  FILLER          PIC X(02)   VALUE   "23".
+           03  FILLER          PIC X(10)   VALUE   "２３多一".
+           03  FILLER          PIC X(02)   VALUE   "24".
+           03  FILLER          PIC X(10)   VALUE   "２４多低".
+           03  FILLER          PIC X(02)   VALUE   "25".
+           03  FILLER          PIC X(10)   VALUE   "２５出産".
+           03  FILLER          PIC X(02)   VALUE   "26".
+           03  FILLER          PIC X(10)   VALUE   "２６区ア".
+           03  FILLER          PIC X(02)   VALUE   "27".
+           03  FILLER          PIC X(10)   VALUE   "２７区イ".
+           03  FILLER          PIC X(02)   VALUE   "28".
+           03  FILLER          PIC X(10)   VALUE   "２８区ウ".
+           03  FILLER          PIC X(02)   VALUE   "29".
+           03  FILLER          PIC X(10)   VALUE   "２９区エ".
+           03  FILLER          PIC X(02)   VALUE   "30".
+           03  FILLER          PIC X(10)   VALUE   "３０区オ".
+           03  FILLER          PIC X(02)   VALUE   "31".
+           03  FILLER          PIC X(10)   VALUE   "３１多ア".
+           03  FILLER          PIC X(02)   VALUE   "32".
+           03  FILLER          PIC X(10)   VALUE   "３２多イ".
+           03  FILLER          PIC X(02)   VALUE   "33".
+           03  FILLER          PIC X(10)   VALUE   "３３多ウ".
+           03  FILLER          PIC X(02)   VALUE   "34".
+           03  FILLER          PIC X(10)   VALUE   "３４多エ".
+           03  FILLER          PIC X(02)   VALUE   "35".
+           03  FILLER          PIC X(10)   VALUE   "３５多オ".
+           03  FILLER          PIC X(02)   VALUE   "36".
+           03  FILLER          PIC X(10)   VALUE   "３６加治".
+      *
+       01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
+           03  TBL-TOKKI       OCCURS   34.
+               05  TBL-TOKKICD             PIC X(02).
+               05  TBL-TOKKINAME           PIC X(10).
+      *
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) end
       *
       *    DB参照用
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -1075,6 +1156,19 @@
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) start
+           IF       IDZ           =     1
+           AND      RECE02-KOHNUM(IDZ + 1)  =  SPACE
+             PERFORM  900-SEIKYU-READ-SEC
+      *      特記事項
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL    IDX  >     3
+                 IF   RECE10-TOKKI(IDX)  NOT =  SPACE
+                   MOVE  RECE10-TOKKI(IDX)  TO  MF101-TOKKI(IDX)
+                 END-IF
+             END-PERFORM
+           END-IF
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) end
       *
            IF      FLG-ERR     =   ZERO
                WRITE   MF101-REC
@@ -1286,45 +1380,57 @@
            MOVE    LNK-DAY2-EDTYMD1(2:8)   TO  SC09-BIRTHDAY 
       *
       *    特記事項
-           IF      MF101-TYOKI     =  1
-               MOVE    "０２長"    TO  SC09-TOKKI
-           END-IF
-      *---(01.00.03) LINE ADD START ------------------------------------
-           IF      MF101-TYOKI     =  2
-               MOVE    "１６長２"  TO  SC09-TOKKI
-           END-IF
-      *---(01.00.03) LINE ADD END   ------------------------------------
-      *
-      *=== 特記事項に高額療養費を印字する by Yoshikawa(2011/01/25) start
-      *    高額療養費
-      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
-           IF  MF101-SRYYM  >=  WRK-CONS-SRYYM-201501
-             EVALUATE  MF101-ZAITAKU 
-               WHEN  "2"
-                 MOVE    "２６区ア"  TO  SC09-TOKKI
-               WHEN  "3"
-                 MOVE    "２７区イ"  TO  SC09-TOKKI
-               WHEN  "4"
-                 MOVE    "２８区ウ"  TO  SC09-TOKKI
-               WHEN  "5"
-                 MOVE    "２９区エ"  TO  SC09-TOKKI
-               WHEN  "6"
-                 MOVE    "３０区オ"  TO  SC09-TOKKI
-             END-EVALUATE
-           ELSE
-      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
-             EVALUATE  MF101-ZAITAKU 
-               WHEN  "2"
-                 MOVE    "１７上位"  TO  SC09-TOKKI
-               WHEN  "3"
-                 MOVE    "１８一般"  TO  SC09-TOKKI
-               WHEN  "4"
-                 MOVE    "１９低所"  TO  SC09-TOKKI
-             END-EVALUATE
-      *=== 特記事項に高額療養費を印字する by Yoshikawa(2011/01/25) end
-      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
-           END-IF
-      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) start
+      *     IF      MF101-TYOKI     =  1
+      *         MOVE    "０２長"    TO  SC09-TOKKI
+      *     END-IF
+      **---(01.00.03) LINE ADD START ------------------------------------
+      *     IF      MF101-TYOKI     =  2
+      *         MOVE    "１６長２"  TO  SC09-TOKKI
+      *     END-IF
+      **---(01.00.03) LINE ADD END   ------------------------------------
+      **
+      **=== 特記事項に高額療養費を印字する by Yoshikawa(2011/01/25) start
+      **    高額療養費
+      **=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+      *     IF  MF101-SRYYM  >=  WRK-CONS-SRYYM-201501
+      *       EVALUATE  MF101-ZAITAKU 
+      *         WHEN  "2"
+      *           MOVE    "２６区ア"  TO  SC09-TOKKI
+      *         WHEN  "3"
+      *           MOVE    "２７区イ"  TO  SC09-TOKKI
+      *         WHEN  "4"
+      *           MOVE    "２８区ウ"  TO  SC09-TOKKI
+      *         WHEN  "5"
+      *           MOVE    "２９区エ"  TO  SC09-TOKKI
+      *         WHEN  "6"
+      *           MOVE    "３０区オ"  TO  SC09-TOKKI
+      *       END-EVALUATE
+      *     ELSE
+      **=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
+      *       EVALUATE  MF101-ZAITAKU 
+      *         WHEN  "2"
+      *           MOVE    "１７上位"  TO  SC09-TOKKI
+      *         WHEN  "3"
+      *           MOVE    "１８一般"  TO  SC09-TOKKI
+      *         WHEN  "4"
+      *           MOVE    "１９低所"  TO  SC09-TOKKI
+      *       END-EVALUATE
+      **=== 特記事項に高額療養費を印字する by Yoshikawa(2011/01/25) end
+      **=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
+      *     END-IF
+      **=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  3
+             PERFORM  VARYING  IDY  FROM  1  BY  1
+                      UNTIL  IDY  >  TBL-TOKKI-MAX
+               IF  MF101-TOKKI(IDX)  =  TBL-TOKKICD(IDY)
+                   MOVE  TBL-TOKKINAME(IDY)   TO  SC09-TOKKI(IDX)
+                   MOVE  TBL-TOKKI-MAX  TO  IDY
+               END-IF
+             END-PERFORM
+           END-PERFORM
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) end
       *
            IF      MF101-ZAITAKU   =  "1"
                MOVE    "７０"      TO  SC09-ZAISOU
@@ -2634,6 +2740,55 @@
            .
        925-SYUNOU-READ-EXT.
            EXIT.
+      *
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) start
+      *****************************************************************
+      *    請求管理情報読み込み
+      *****************************************************************
+       900-SEIKYU-READ-SEC         SECTION.
+      *
+           INITIALIZE                  RECE10-REC
+           MOVE    RECE02-KEY                  TO  RECE10-KEY
+           MOVE    RECE10-REC                  TO  MCPDATA-REC
+           MOVE    "DBSELECT"                  TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"                 TO  MCP-FUNC
+               MOVE    "tbl_seikyu"            TO  MCP-TABLE
+               MOVE    "key"                   TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"             USING
+                                               MCPAREA
+                                               MCPDATA-REC
+                                               SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-RECE10
+                   MOVE    MCPDATA-REC         TO  RECE10-REC
+               ELSE
+                   MOVE    1                   TO  FLG-RECE10
+                   INITIALIZE                  RECE10-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-RECE10
+               INITIALIZE                  RECE10-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"           TO  MCP-FUNC
+           MOVE    "tbl_seikyu"            TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *=== 特記事項欄の記載数の追加 by hagino(2015/12/10) end
       *
       *****************************************************************
       *    公費の負担者番号取得
