@@ -1436,10 +1436,21 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
+      *=== 印字対象番号の追加（355,455） by Monma(2015/12/07) start
+      *         IF  RECE02-KOHNUM (1)  =  "155" OR "255" OR
+      *             RECE02-KOHNUM (2)  =  "155" OR "255" OR
+      *             RECE02-KOHNUM (3)  =  "155" OR "255" OR
+      *             RECE02-KOHNUM (4)  =  "155" OR "255"
+      *
                IF  RECE02-KOHNUM (1)  =  "155" OR "255" OR
+                                         "355" OR "455" OR
                    RECE02-KOHNUM (2)  =  "155" OR "255" OR
+                                         "355" OR "455" OR
                    RECE02-KOHNUM (3)  =  "155" OR "255" OR
-                   RECE02-KOHNUM (4)  =  "155" OR "255"
+                                         "355" OR "455" OR
+                   RECE02-KOHNUM (4)  =  "155" OR "255" OR
+                                         "355" OR "455"
+      *=== 印字対象番号の追加（355,455） by Monma(2015/12/07) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
