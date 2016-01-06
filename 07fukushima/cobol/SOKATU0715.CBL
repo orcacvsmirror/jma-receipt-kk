@@ -44,6 +44,7 @@
       *                                  医療機関情報編集対応
       *  01.00.09    吉川    2013/12/12  プログラムオプション対応
       *  01.00.10    吉川    2014/10/06  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.11    門間    2016/01/06  医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -284,6 +285,9 @@
                05  WRK-HOSPADRS1   PIC X(50).
                05  WRK-HOSPADRS2   PIC X(50).
            03  WRK-HOSPTEL         PIC X(15).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) end
       *
        01  WRK-2007-AREA.
            03  WRK-2007-TBL        OCCURS  100.
@@ -375,6 +379,11 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) end
       *
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/02/26) start
       *    レセプト・総括印刷情報（広域連合）
@@ -598,6 +607,10 @@
            END-IF 
       *
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -1563,8 +1576,11 @@
            INSPECT SKT0715-HOSPNAME    REPLACING ALL "  " BY "　"
       *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME
-                                       TO  SKT0715-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) start
+      *     MOVE    SYS-1001-KAISETUNAME
+      *                                 TO  SKT0715-KAISETUNAME
+           MOVE    WRK-KAISETUNAME     TO  SKT0715-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) end
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT0715-TEL
       *    医療機関コード
@@ -2327,6 +2343,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) end
                 END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -2400,6 +2420,35 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-KEY10-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/01/06) end
       *
       *=== プログラムオプション対応 by Yoshikawa(2013/12/12) start
       *****************************************************************
