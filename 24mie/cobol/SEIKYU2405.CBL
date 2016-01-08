@@ -37,6 +37,10 @@
       *  01.00.06    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.07    吉川    15/07/08    対象公費はプログラムオプション
       *                                  から取得するようにする
+      *  01.00.08    吉川    16/01/08    伊勢寡婦（267）は4000点未満、
+      *                                  紀宝寡婦（167）と紀宝老人（166）は
+      *                                  2667点未満で集計対象外とする
+      *                                  医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -190,6 +194,9 @@
                05  WRK-HOSPADRS1     PIC X(50).
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) end
       *
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
       *    対象公費
@@ -261,6 +268,11 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -472,6 +484,10 @@
            END-IF
       *
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -851,7 +867,10 @@
       *=== 医療機関情報編集対応 by Yoshikawa(2013/01/10) end
       *
       *    開設者名
-           MOVE     SYS-1001-KAISETUNAME   TO  SC05-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) start
+      *     MOVE     SYS-1001-KAISETUNAME   TO  SC05-KAISETU
+           MOVE     WRK-KAISETUNAME        TO  SC05-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) end
       *
       *    電話番号
            MOVE     WRK-HOSPTEL            TO  SC05-TEL
@@ -1219,6 +1238,28 @@
                   END-IF
                 END-IF
       *
+      *=== 伊勢、紀宝福祉の集計対象点数対応 by Yoshikawa(2016/01/08) start
+      *        紀宝寡婦、紀宝老人で点数が2667点未満の場合は読み飛ばす
+                 IF  RECE02-KOHNUM (1)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (2)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (3)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (4)  =  "166" OR "167"
+                  IF  RECE02-TOTALTEN(1)  <  2667
+                    GO  TO  900-KOHSKY-READ-SEC
+                  END-IF
+                END-IF
+      *
+      *        伊勢寡婦で点数が4000点未満の場合は読み飛ばす
+                 IF  RECE02-KOHNUM (1)  =  "267" OR
+                     RECE02-KOHNUM (2)  =  "267" OR
+                     RECE02-KOHNUM (3)  =  "267" OR
+                     RECE02-KOHNUM (4)  =  "267"
+                  IF  RECE02-TOTALTEN(1)  <  4000
+                    GO  TO  900-KOHSKY-READ-SEC
+                  END-IF
+                END-IF
+      *=== 伊勢、紀宝福祉の集計対象点数対応 by Yoshikawa(2016/01/08) end
+      *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -1493,6 +1534,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -1560,6 +1605,35 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/08) end
+      *
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2015/07/08) start
       *****************************************************************
       *    プログラムオプション情報読込
