@@ -53,6 +53,8 @@
       *                                    印字するように修正
       *  01.00.14    吉川    2015/09/14    患者負担がない場合は印字しない
       *  01.00.15    吉川    2015/10/01    食事は保険分を印字する
+      *  01.00.16    吉川    2016/01/08    データがない場合はファイルを作成しない
+      *                                    処理結果画面の件数の不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -600,7 +602,10 @@
       *
            CLOSE   MF101-FILE
       *
-           IF       CNT-RECE02   >       0
+      *=== データ無しは作成しない by Yoshikawa(2016/01/08) start
+      *     IF       CNT-RECE02   >       0
+           IF       CNT-MF101   >       0
+      *=== データ無しは作成しない by Yoshikawa(2016/01/08) end
       *       ＣＳＶファイル出力
               PERFORM   2002-PRINT-SEC
            END-IF
@@ -762,7 +767,9 @@
                ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
       *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
            END-IF
-           ADD   1   TO   WRK-SOUGOKEIKENSU
+      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) start
+      *     ADD   1   TO   WRK-SOUGOKEIKENSU
+      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) end
       *
       *    個別発行用市町村番号
            MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)    TO  WRK-KOBETUCITYNUM
@@ -892,6 +899,9 @@
            ELSE
              WRITE   MF101-REC
              ADD  1  TO  CNT-MF101
+      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) start
+             ADD   1   TO   WRK-SOUGOKEIKENSU
+      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) end
            END-IF
       *
            .
