@@ -850,11 +850,11 @@
                MOVE    WRK-ETC-JKYSNUM     TO  MF101-EKOHJKYSNUM(IDX)
       *食事
                MOVE    WRK-ETC-SKJ-NISSU(1)
-	                           TO  MF101-E-SHOKUJINISSU(IDX)
+                               TO  MF101-E-SHOKUJINISSU(IDX)
                MOVE    WRK-ETC-SKJ-RYOYOHI(1)
-	                           TO  MF101-E-SHOKUJIRYOYOHI(IDX)
+                               TO  MF101-E-SHOKUJIRYOYOHI(IDX)
                MOVE    WRK-ETC-SKJ-FTN(1)
-	                           TO  MF101-E-SHOKUJIFTN(IDX)
+                               TO  MF101-E-SHOKUJIFTN(IDX)
                IF      WRK-ETC-KOHNUM(2)  NOT  =  SPACE
                  MOVE    WRK-ETC-KOHNUM(2)   TO  WRK-KOHNUM
                  PERFORM 930-PTKOHINF-SET-SEC
@@ -864,11 +864,11 @@
                  MOVE    WRK-ETC-JKYSNUM   TO  MF101-EKOHJKYSNUM(IDY)
       *食事
                  MOVE    WRK-ETC-SKJ-NISSU(2)
-	                           TO  MF101-E-SHOKUJINISSU(IDY)
+                               TO  MF101-E-SHOKUJINISSU(IDY)
                  MOVE    WRK-ETC-SKJ-RYOYOHI(2)
-	                           TO  MF101-E-SHOKUJIRYOYOHI(IDY)
+                               TO  MF101-E-SHOKUJIRYOYOHI(IDY)
                  MOVE    WRK-ETC-SKJ-FTN(2)
-	                           TO  MF101-E-SHOKUJIFTN(IDY)
+                               TO  MF101-E-SHOKUJIFTN(IDY)
                END-IF
              END-IF
            END-IF
