@@ -894,6 +894,10 @@
       *=== 患者負担がない場合は印字しない by Yoshikawa(2015/09/14) start
            OR      MF101-FTNMONEY2  =  ZERO
       *=== 患者負担がない場合は印字しない by Yoshikawa(2015/09/14) end
+      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) start
+             COMPUTE   WRK-GOKEIKENSU(IDX1 IDX-TOWN) =
+                       WRK-GOKEIKENSU(IDX1 IDX-TOWN) -  1
+      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) end
              DISPLAY "助成対象外="  RECE02-PTNUM
              CONTINUE
            ELSE
