@@ -33,6 +33,9 @@
       *                                  件数は1件とカウントする
       *  01.00.03    吉川    15/07/08    対象公費はプログラムオプション
       *                                  から取得するようにする
+      *  01.00.04    吉川    16/01/08    伊勢寡婦（267）は4000点未満、
+      *                                  紀宝寡婦（167）と紀宝老人（166）は
+      *                                  2667点未満で集計対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1163,6 +1166,28 @@
                     GO  TO  900-KOHSKY-READ-SEC
                   END-IF
                 END-IF
+      *
+      *=== 伊勢、紀宝福祉の集計対象点数対応 by Yoshikawa(2016/01/08) start
+      *        紀宝寡婦、紀宝老人で点数が2667点未満の場合は読み飛ばす
+                 IF  RECE02-KOHNUM (1)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (2)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (3)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (4)  =  "166" OR "167"
+                  IF  RECE02-TOTALTEN(1)  <  2667
+                    GO  TO  900-KOHSKY-READ-SEC
+                  END-IF
+                END-IF
+      *
+      *        伊勢寡婦で点数が4000点未満の場合は読み飛ばす
+                 IF  RECE02-KOHNUM (1)  =  "267" OR
+                     RECE02-KOHNUM (2)  =  "267" OR
+                     RECE02-KOHNUM (3)  =  "267" OR
+                     RECE02-KOHNUM (4)  =  "267"
+                  IF  RECE02-TOTALTEN(1)  <  4000
+                    GO  TO  900-KOHSKY-READ-SEC
+                  END-IF
+                END-IF
+      *=== 伊勢、紀宝福祉の集計対象点数対応 by Yoshikawa(2016/01/08) end
       *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC

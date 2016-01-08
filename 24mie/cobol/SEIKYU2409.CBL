@@ -35,6 +35,9 @@
       *                                  から取得するようにする
       *                                  入院日数が2桁の場合0になる不具合を修正
       * 01.00.05     萩野    2015/09/11  半角カナ出力の不具合修正
+      * 01.00.06     吉川    2016/01/08  伊勢寡婦（267）は4000点未満、
+      *                                  紀宝寡婦（167）と紀宝老人（166）は
+      *                                  2667点未満で集計対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1632,6 +1635,28 @@
                     GO  TO  900-KOHSKY-READ-SEC
                   END-IF
                 END-IF
+      *
+      *=== 伊勢、紀宝福祉の集計対象点数対応 by Yoshikawa(2016/01/08) start
+      *        紀宝寡婦、紀宝老人で点数が2667点未満の場合は読み飛ばす
+                 IF  RECE02-KOHNUM (1)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (2)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (3)  =  "166" OR "167"
+                 OR  RECE02-KOHNUM (4)  =  "166" OR "167"
+                  IF  RECE02-TOTALTEN(1)  <  2667
+                    GO  TO  900-KOHSKY-READ-SEC
+                  END-IF
+                END-IF
+      *
+      *        伊勢寡婦で点数が4000点未満の場合は読み飛ばす
+                 IF  RECE02-KOHNUM (1)  =  "267" OR
+                     RECE02-KOHNUM (2)  =  "267" OR
+                     RECE02-KOHNUM (3)  =  "267" OR
+                     RECE02-KOHNUM (4)  =  "267"
+                  IF  RECE02-TOTALTEN(1)  <  4000
+                    GO  TO  900-KOHSKY-READ-SEC
+                  END-IF
+                END-IF
+      *=== 伊勢、紀宝福祉の集計対象点数対応 by Yoshikawa(2016/01/08) end
       *
       *        テスト患者のときは読み飛ばす
                  MOVE    SPACE               TO  PTINF-REC
