@@ -742,32 +742,32 @@
            END-IF
       *=== 負担者番号の三桁未満エラー対応 by Hagino(2012/08/10) end
       *
-      *    CSV総括用件数カウント
-           MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)   TO   WRK-TOWN
-      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
-           COMPUTE  IDX-TOWN  =  WRK-TOWN  +  1
-      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
-      *    診療年月でデータを分ける
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL    IDX1  >     10
-                    OR       WRK-GOKEI-YM (IDX1)  =  ZERO
-               IF  MF101-SRYYM  =  WRK-GOKEI-YM (IDX1)
-      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
-      *             ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
-                   ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
-      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
-                   MOVE  10   TO  IDX1
-               END-IF
-           END-PERFORM
-      *    その診療年月で初データの場合
-           IF  IDX1  <  10
-               MOVE  MF101-SRYYM  TO  WRK-GOKEI-YM (IDX1)
-      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
-      *         ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
-               ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
-      *=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
-           END-IF
       *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) start
+      **    CSV総括用件数カウント
+      *     MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)   TO   WRK-TOWN
+      **=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      *     COMPUTE  IDX-TOWN  =  WRK-TOWN  +  1
+      **=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
+      **    診療年月でデータを分ける
+      *     PERFORM  VARYING  IDX1  FROM  1  BY  1
+      *              UNTIL    IDX1  >     10
+      *              OR       WRK-GOKEI-YM (IDX1)  =  ZERO
+      *         IF  MF101-SRYYM  =  WRK-GOKEI-YM (IDX1)
+      **=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      **             ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+      *             ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+      **=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
+      *             MOVE  10   TO  IDX1
+      *         END-IF
+      *     END-PERFORM
+      **    その診療年月で初データの場合
+      *     IF  IDX1  <  10
+      *         MOVE  MF101-SRYYM  TO  WRK-GOKEI-YM (IDX1)
+      **=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) start
+      **         ADD   1    TO  WRK-GOKEIKENSU(IDX1 WRK-TOWN)
+      *         ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+      **=== 市町村番号000時の不具合修正 by Yoshikawa(2010/09/27) end
+      *     END-IF
       *     ADD   1   TO   WRK-SOUGOKEIKENSU
       *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) end
       *
@@ -894,16 +894,29 @@
       *=== 患者負担がない場合は印字しない by Yoshikawa(2015/09/14) start
            OR      MF101-FTNMONEY2  =  ZERO
       *=== 患者負担がない場合は印字しない by Yoshikawa(2015/09/14) end
-      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) start
-             COMPUTE   WRK-GOKEIKENSU(IDX1 IDX-TOWN) =
-                       WRK-GOKEIKENSU(IDX1 IDX-TOWN) -  1
-      *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) end
              DISPLAY "助成対象外="  RECE02-PTNUM
              CONTINUE
            ELSE
              WRITE   MF101-REC
              ADD  1  TO  CNT-MF101
       *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) start
+      *      CSV総括用件数カウント
+             MOVE  RECE02-KOHFTNJANUM(IDZ)(1:3)   TO   WRK-TOWN
+             COMPUTE  IDX-TOWN  =  WRK-TOWN  +  1
+      *      診療年月でデータを分ける
+             PERFORM  VARYING  IDX1  FROM  1  BY  1
+                      UNTIL    IDX1  >     10
+                      OR       WRK-GOKEI-YM (IDX1)  =  ZERO
+                 IF  MF101-SRYYM  =  WRK-GOKEI-YM (IDX1)
+                     ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+                     MOVE  10   TO  IDX1
+                 END-IF
+             END-PERFORM
+      *      その診療年月で初データの場合
+             IF  IDX1  <  10
+                 MOVE  MF101-SRYYM  TO  WRK-GOKEI-YM (IDX1)
+                 ADD   1    TO  WRK-GOKEIKENSU(IDX1 IDX-TOWN)
+             END-IF
              ADD   1   TO   WRK-SOUGOKEIKENSU
       *=== 処理結果画面の件数修正 by Yoshikawa(2016/01/08) end
            END-IF
