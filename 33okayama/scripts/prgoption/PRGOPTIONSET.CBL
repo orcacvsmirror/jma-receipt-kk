@@ -29,6 +29,9 @@
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  04.08.01    吉川         14/11/06  WRK-DATAのバイト数増加
+      *  04.08.02    吉川         14/12/03  更新処理は本体に準拠する
+      *  04.08.03    吉川         15/02/10  END-IF漏れ
+      *  04.08.04    内田         15/02/13  グループ診療対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -47,8 +50,7 @@
       *
       *    入力：システム管理更新ファイル
        FD  IN-FILE.
-       01  IN-PRG-REC.
-           03  IN-PRG-DATA         PIC  X(150).
+       01  IN-REC                      PIC  X(50200).
       *
        WORKING-STORAGE             SECTION.
       *
@@ -64,23 +66,40 @@
       *
       *    フラグ領域
        01  FLG-AREA.
-           03  FLG-PARA                PIC 9(01).
            03  FLG-IN                  PIC 9(01).
+           03  FLG-PRGOPTION           PIC 9(01).
+           03  FLG-LF                  PIC 9(01).
       *
            03  FLG-SYS                 PIC 9(01).
            03  FLG-CHECK               PIC 9(01).
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX                     PIC 9(04).
-           03  IDY                     PIC 9(04).
-           03  IDX-LIKE                PIC 9(04).
+           03  IDX-PNT1                PIC 9(05).
+           03  IDX-PNT2                PIC 9(05).
+           03  IDX-PNT3                PIC 9(05).
+           03  IDX                     PIC 9(03).
+           03  IDY                     PIC 9(03).
+           03  IDXL                    PIC 9(05).
+           03  IDXP                    PIC 9(05).
+           03  IDXS                    PIC 9(05).
       *
+      *    カウント領域
+       01  CNT-AREA.
+           03  CNT-IN                  PIC 9(06).
+           03  CNT-INS                 PIC 9(06).
+           03  CNT-UPD                 PIC 9(06).
+           03  CNT-DEL                 PIC 9(06).
+           03  CNT-ERR                 PIC 9(06).
+           03  CNT-PLF                 PIC 9(06).
+           03  CNT-MAE                 PIC 9(03).
+           03  CNT-ATO                 PIC 9(03).
       *
        01  SYS-DATE.
            03  SYS-YY                  PIC 9(02).
            03  SYS-MM                  PIC 9(02).
            03  SYS-DD                  PIC 9(02).
+      *
       *    一時領域
        01  WRK-AREA.
            03  WRK-SYMD.
@@ -93,6 +112,20 @@
                05  WRK-SDD2            PIC 9(02).
            03  WRK-LAST-STYUKYMD       PIC X(08).
            03  WRK-LAST-EDYUKYMD       PIC X(08).
+      *
+           03  WRK-IN                  PIC X(01).
+           03  WRK-OPTION              PIC X(60000).
+           03  WRK-OPTION-LEN          PIC 9(08).
+      *----(04.07.01)--ADD-START---
+           03  WRK-OPID                PIC X(16).
+      *----(04.07.01)--ADD-END-----
+      *
+           03  WRK-MAE-NAIYO           PIC X(200).
+           03  WRK-ATO-NAIYO           PIC X(200).
+           03  WRK-MAE-AREA.
+               05  WRK-MAE-OPTION      PIC X(200) OCCURS 200.
+           03  WRK-ATO-AREA.
+               05  WRK-ATO-OPTION      PIC X(200) OCCURS 100.
       *
       *　　主キー更新用項目
            03  WRK-SYSUPD-KEY.
@@ -126,8 +159,11 @@
       *    ファイル定義
       *****************************************************************
       *
-      *    システム管理マスタ
-           COPY    "CPSYSKANRI.INC".
+      *    一時
+       01  PRGOPTIONWK-REC.
+           03  PRGOPTIONWK-SYORIKBN          PIC  X(01).
+           COPY    "CPPRGOPTION.INC"  REPLACING  //PRGOPTION-//
+                                             BY  //PRGOPTIONWK-//.
       *
       *    プログラムオプション
        01  PRGOPTION-REC.
@@ -209,8 +245,6 @@
                MOVE   LNK-FILENAME     TO  WRK-PRGID
                MOVE   "EXPLANATION"    TO  WRK-KBNCD
            END-IF
-           DISPLAY  "PRGID  :  "  WRK-PRGID
-           DISPLAY  "KBNCD  :  "  WRK-KBNCD
       *
            MOVE    LNK-HOSPNUM     TO  SPA-HOSPNUM
       *
@@ -226,6 +260,11 @@
                MOVE    1           TO  FLG-IN
                DISPLAY "*(SYS3004)* IN-FILE OPN STS["
                                        STS-IN "]"
+           END-IF
+      *
+      *    プログラムオプションデータ読込み処理
+           IF      FLG-IN              =   ZERO
+               PERFORM 900-IN-KENSAKU-SEC
            END-IF
       *
            .
@@ -258,7 +297,14 @@
            PERFORM  2001-DATA-CHECK-SEC
            IF  FLG-CHECK  =  0
       *        データ追加
-               PERFORM  201-DATA-INSERT-SEC
+               PERFORM  20101-PRGOPTION-INS-SEC
+           ELSE
+      *        「EXPLANATION」「*」以外は更新しない
+               IF  (PRGOPTIONWK-KBNCD  =  "EXPLANATION")
+               OR  (PRGOPTIONWK-KBNCD  =  "*")
+      *            データ更新
+                   PERFORM  20101-PRGOPTION-UPD-SEC
+               END-IF
            END-IF
       *
            .
@@ -274,8 +320,8 @@
            INITIALIZE                  PRGOPTION-REC
       *
            MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
-           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
-           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTIONWK-PRGID   TO  PRGOPTION-PRGID
+           MOVE    PRGOPTIONWK-KBNCD   TO  PRGOPTION-KBNCD
       *
            MOVE    PRGOPTION-REC       TO  MCPDATA-REC
            MOVE    "DBSELECT"          TO  MCP-FUNC
@@ -302,71 +348,296 @@
            EXIT.
       *
       *****************************************************************
-      *    データ追加メイン  処理
+      *    ＤＢ追加  処理
       *****************************************************************
-       201-DATA-INSERT-SEC               SECTION.
+       20101-PRGOPTION-INS-SEC  SECTION.
       *
-      *    ファイル読み込み
-           PERFORM  900-DATA-READ-SEC
-           MOVE  IN-PRG-DATA    TO  WRK-DATA
+           PERFORM 220-PRGOPTION-EDIT-SEC
       *
-           PERFORM  UNTIL    FLG-IN  =  1
-      *        ファイル読み込み
-               PERFORM  900-DATA-READ-SEC
-               IF  FLG-IN  =  ZERO
-      *            改行文字・データ追加
-      *             STRING  WRK-DATA       DELIMITED  BY  SPACE
-      *                     X"0A"          DELIMITED  BY  SIZE
-      *                     IN-PRG-DATA    DELIMITED  BY  SPACE
-      *                                    INTO   WRK-DATA
-      *             END-STRING
-      * 「STORED-CHAR-LENGTH」は末尾の空白を除いた長さを返す。優秀。
-                   STRING  WRK-DATA
-                           (1:FUNCTION STORED-CHAR-LENGTH(WRK-DATA))
-                                          DELIMITED  BY  SIZE
-                           X"0A"          DELIMITED  BY  SIZE
-                           IN-PRG-DATA
-                           (1:FUNCTION STORED-CHAR-LENGTH(IN-PRG-DATA))
-                                          DELIMITED  BY  SIZE
-                                          INTO   WRK-DATA
-                   END-STRING
-               END-IF
-           END-PERFORM
-      *
-      *    データ登録（追加）
-           PERFORM  2010-DATA-INSERT-SEC
-      *
-           .
-       201-DATA-INSERT-EXT.
-           EXIT.
-      *
-      *****************************************************************
-      *    データ追加  処理
-      *****************************************************************
-       2010-DATA-INSERT-SEC               SECTION.
-      *
-      *    データ追加処理
-           INITIALIZE                  PRGOPTION-REC
-      *
-           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
-           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
-           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
-           MOVE    WRK-DATA            TO  PRGOPTION-OPTION
            MOVE    "1"                 TO  PRGOPTION-ADDKBN
            MOVE    LNK-YMD             TO  PRGOPTION-CREYMD
            MOVE    LNK-HMS             TO  PRGOPTION-UPHMS
-      *
            MOVE    PRGOPTION-REC       TO  MCPDATA-REC
            MOVE    "DBINSERT"          TO  MCP-FUNC
            MOVE    "tbl_prgoption"     TO  MCP-TABLE
            MOVE    "key"               TO  MCP-PATHNAME
            PERFORM 900-ORCDBMAIN-SEC
+      *     IF      MCP-RC          NOT =   ZERO
+      *         MOVE    1               TO  LNK-RC
+      *         MOVE    2               TO  WRK-ERRCD
+      *         PERFORM 2040-ERR-SYORI-SEC
+      *     END-IF
+      *     IF      WRK-ERRCD       =   ZERO
+      *         ADD     1               TO  CNT-INS
+      *     END-IF
            IF      MCP-RC              =   ZERO
                DISPLAY  "DATA INSERT!"
            END-IF
+           .
+       20101-PRGOPTION-INS-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢ更新  処理
+      *****************************************************************
+       20101-PRGOPTION-UPD-SEC  SECTION.
+      *
+      *    説明文は更新データに置き換え
+      *    オプションデータは既存データと比較して置き換え
+           IF     (PRGOPTIONWK-KBNCD   =   "EXPLANATION")
+               PERFORM 220-PRGOPTION-EDIT-SEC
+           ELSE
+               PERFORM 220-PRGOPTION-HENSYU-SEC
+           END-IF
+      *
+           MOVE    "1"                 TO  PRGOPTION-ADDKBN
+           MOVE    LNK-YMD             TO  PRGOPTION-CREYMD
+           MOVE    LNK-HMS             TO  PRGOPTION-UPHMS
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBUPDATE"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           PERFORM 900-ORCDBMAIN-SEC
+      *     IF      MCP-RC          NOT =   ZERO
+      *         MOVE    2               TO  LNK-RC
+      *         MOVE    3               TO  WRK-ERRCD
+      *         PERFORM 2040-ERR-SYORI-SEC
+      *     END-IF
+      *     IF      WRK-ERRCD           =   ZERO
+      *         ADD     1               TO  CNT-UPD
+      *     END-IF
+           IF      MCP-RC              =   ZERO
+               DISPLAY  "DATA UPDATE!"
+           END-IF
+           .
+       20101-PRGOPTION-UPD-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    オプション編集処理
+      *****************************************************************
+       220-PRGOPTION-EDIT-SEC         SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    PRGOPTIONWK-REC(2:) TO  PRGOPTION-REC
+      *
+           MOVE    SPACE               TO  WRK-OPTION
+           MOVE    1                   TO  WRK-OPTION-LEN
+           STRING  PRGOPTION-OPTION    DELIMITED   BY  SIZE
+           INTO    WRK-OPTION
+           WITH    POINTER             WRK-OPTION-LEN
+           END-STRING
+      *
+           COMPUTE WRK-OPTION-LEN      =   WRK-OPTION-LEN  -  1
+      *
+           MOVE    1                   TO  IDX-PNT1
+           MOVE    1                   TO  IDX-PNT2
+           MOVE    SPACE               TO  WRK-OPTION
+      *
+           PERFORM UNTIL ( IDX-PNT1    >   WRK-OPTION-LEN )
+                    OR   ( PRGOPTION-OPTION (IDX-PNT1 : ) 
+                                       =   SPACE )
+      *
+               MOVE    ZERO            TO  FLG-LF
+      *
+               IF    ( IDX-PNT1        <   WRK-OPTION-LEN )
+                   IF    ( PRGOPTION-OPTION (IDX-PNT1 : 2 )
+                                       =   "\n" )
+                       MOVE    1       TO  FLG-LF
+                   END-IF
+               END-IF
+      *
+               IF  ( FLG-LF  =  ZERO )
+                   MOVE    PRGOPTION-OPTION (IDX-PNT1 : 1)
+                                        TO  WRK-OPTION (IDX-PNT2 : 1)
+                   COMPUTE IDX-PNT2 =   IDX-PNT2    +   1
+               ELSE
+                   MOVE    X"0A"        TO  WRK-OPTION (IDX-PNT2 : 1)
+                   COMPUTE IDX-PNT2 =   IDX-PNT2   +   1
+                   COMPUTE IDX-PNT1 =   IDX-PNT1   +   1
+               END-IF
+      *
+                   COMPUTE IDX-PNT1 =   IDX-PNT1   +   1
+      *
+           END-PERFORM
+      *
+           MOVE    WRK-OPTION          TO  PRGOPTION-OPTION
       *
            .
-       2010-DATA-INSERT-EXT.
+       220-PRGOPTION-EDIT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    オプション編集マージ処理
+      *****************************************************************
+       220-PRGOPTION-HENSYU-SEC       SECTION.
+      *
+      *    既存データ
+           MOVE    SPACE               TO  WRK-OPTION
+           MOVE    1                   TO  WRK-OPTION-LEN
+           STRING  PRGOPTION-OPTION    DELIMITED   BY  SIZE
+           INTO    WRK-OPTION
+           WITH    POINTER             WRK-OPTION-LEN
+           END-STRING
+      *
+           COMPUTE WRK-OPTION-LEN      =   WRK-OPTION-LEN  -  1
+      *
+           MOVE    0                   TO  CNT-MAE
+           MOVE    1                   TO  IDX-PNT1
+           MOVE    1                   TO  IDX-PNT2
+           MOVE    SPACE               TO  WRK-MAE-AREA
+      *
+      *
+           PERFORM UNTIL ( IDX-PNT1    >   WRK-OPTION-LEN )
+                   OR    ( PRGOPTION-OPTION(IDX-PNT1:) =   SPACE )
+      *
+               MOVE    SPACE               TO  WRK-MAE-NAIYO
+               UNSTRING    PRGOPTION-OPTION    DELIMITED   BY  X"0A"
+               INTO    WRK-MAE-NAIYO
+               WITH    POINTER IDX-PNT1
+               END-UNSTRING
+
+               PERFORM VARYING IDX-PNT2 FROM 1 BY 1
+                       UNTIL ( IDX-PNT2 >   200 )
+                       OR    ( WRK-MAE-NAIYO(IDX-PNT2:)
+                                                   =   SPACE )
+                   IF      WRK-MAE-NAIYO(IDX-PNT2:1)   =   "="
+                       COMPUTE CNT-MAE     =   CNT-MAE     +   1
+                       MOVE    WRK-MAE-NAIYO
+                                   TO  WRK-MAE-OPTION(CNT-MAE)
+                       MOVE    200 TO  IDX-PNT2
+                   END-IF
+               END-PERFORM
+           END-PERFORM
+      *
+      *    更新データ
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    PRGOPTIONWK-REC(2:) TO  PRGOPTION-REC
+      *
+           MOVE    SPACE               TO  WRK-OPTION
+           MOVE    1                   TO  WRK-OPTION-LEN
+           STRING  PRGOPTION-OPTION    DELIMITED   BY  SIZE
+           INTO    WRK-OPTION
+           WITH    POINTER             WRK-OPTION-LEN
+           END-STRING
+      *
+           COMPUTE WRK-OPTION-LEN      =   WRK-OPTION-LEN  -  1
+      *
+           MOVE    0                   TO  CNT-ATO
+           MOVE    1                   TO  IDX-PNT1
+           MOVE    1                   TO  IDX-PNT2
+           MOVE    SPACE               TO  WRK-ATO-NAIYO
+           MOVE    SPACE               TO  WRK-ATO-AREA
+      *
+           PERFORM UNTIL ( IDX-PNT1    >   WRK-OPTION-LEN )
+                   OR    ( PRGOPTION-OPTION(IDX-PNT1:) =   SPACE )
+      *        行が終わるまで
+               IF    ( PRGOPTION-OPTION(IDX-PNT1:2)    =   "\n" )
+                   COMPUTE CNT-ATO     =   CNT-ATO     +   1
+                   MOVE    WRK-ATO-NAIYO   TO  WRK-ATO-OPTION(CNT-ATO)
+                   MOVE    1               TO  IDX-PNT2
+                   MOVE    SPACE           TO  WRK-ATO-NAIYO
+                   COMPUTE IDX-PNT1    =   IDX-PNT1    +   1
+               ELSE
+                   MOVE    PRGOPTION-OPTION(IDX-PNT1:1)
+                                       TO  WRK-ATO-NAIYO(IDX-PNT2:1)
+                   COMPUTE IDX-PNT2    =   IDX-PNT2   +   1
+               END-IF
+               COMPUTE IDX-PNT1    =   IDX-PNT1   +   1
+           END-PERFORM
+      *    最終行
+           COMPUTE CNT-ATO     =   CNT-ATO     +   1
+           MOVE    WRK-ATO-NAIYO   TO  WRK-ATO-OPTION(CNT-ATO)
+      *
+      *    マージ処理
+           MOVE    1                   TO  IDX-PNT1
+           MOVE    1                   TO  IDX-PNT2
+           MOVE    1                   TO  IDX-PNT3
+           MOVE    SPACE               TO  WRK-OPTION
+           MOVE    SPACE               TO  WRK-MAE-NAIYO
+           MOVE    SPACE               TO  WRK-ATO-NAIYO
+      *
+           PERFORM VARYING IDX FROM 1 BY 1
+                   UNTIL ( IDX >   CNT-ATO )
+               MOVE    WRK-ATO-OPTION(IDX) TO  WRK-ATO-NAIYO
+               MOVE    ZERO            TO  FLG-LF
+               PERFORM VARYING IDX-PNT1 FROM 1 BY 1
+                       UNTIL ( IDX-PNT1 >   200 )
+                       OR    ( WRK-ATO-NAIYO(IDX-PNT1:)    =  SPACE )
+                       OR    ( FLG-LF  =   1 )
+      *            コメントチェック
+                   IF      WRK-ATO-NAIYO(IDX-PNT1:1)   =   "="
+                       PERFORM VARYING IDY FROM 1 BY 1
+                               UNTIL ( IDY >   CNT-MAE )
+                               OR    ( FLG-LF  =   1 )
+                           MOVE    WRK-MAE-OPTION(IDY) TO  WRK-MAE-NAIYO
+      *                    オプションチェック
+                           IF      WRK-ATO-NAIYO(1:1)    =   "#"
+                               COMPUTE IDX-PNT2  =   IDX-PNT1  -   1
+                               IF      WRK-ATO-NAIYO(2:IDX-PNT2)
+                                   =   WRK-MAE-NAIYO(1:IDX-PNT2)
+                                   MOVE    1       TO  FLG-LF
+                       DISPLAY  "FLG-LF  :  "  FLG-LF
+                               END-IF
+                           ELSE
+                               MOVE    ZERO        TO  IDXS
+                                                       IDXL
+                               PERFORM VARYING IDXP    FROM    1   BY  1
+                                       UNTIL ( IDXP    >   200 )
+                                        OR   ( WRK-ATO-NAIYO(IDXP:)
+                                                   =   SPACE )
+                                        OR   ( IDXL    >   ZERO )
+                                   IF    ( IDXS    =   ZERO )
+                                       IF    ( WRK-MAE-NAIYO(IDXP:1)
+                                               NOT =   "#" )
+                                           MOVE    IDXP    TO  IDXS
+                                       END-IF
+                                   ELSE
+                                       IF    ( WRK-MAE-NAIYO(IDXP:1)
+                                                   =   "=" )
+                                         COMPUTE IDXL = IDXP - IDXS + 1
+                                       END-IF
+                                   END-IF
+                               END-PERFORM
+                               IF    ( IDXL    >   ZERO )
+                                   IF      WRK-ATO-NAIYO(1:IDX-PNT1)
+                                       =   WRK-MAE-NAIYO(IDXS:IDXL)
+                                       MOVE    1       TO  FLG-LF
+                       DISPLAY  "FLG-LF  :  "  FLG-LF
+                                   END-IF
+                               END-IF
+                           END-IF
+                       END-PERFORM
+                   END-IF
+               END-PERFORM
+      *
+                       DISPLAY  "FLG-LF  CHECK:  "  FLG-LF
+               IF  ( FLG-LF  =  ZERO )
+                   PERFORM VARYING IDX-PNT1 FROM 1 BY 1
+                           UNTIL ( IDX-PNT1 >   200 )
+                           OR    ( WRK-ATO-NAIYO(IDX-PNT1:)  =   SPACE )
+                       MOVE    WRK-ATO-NAIYO(IDX-PNT1:1)
+                                       TO  WRK-OPTION(IDX-PNT3:1)
+                       COMPUTE IDX-PNT3    =   IDX-PNT3   +   1
+                   END-PERFORM
+                       DISPLAY  "ATO IN"
+               ELSE
+                   PERFORM VARYING IDX-PNT1 FROM 1 BY 1
+                           UNTIL ( IDX-PNT1 >   200 )
+                           OR    ( WRK-MAE-NAIYO(IDX-PNT1:)  =   SPACE )
+                       MOVE    WRK-MAE-NAIYO(IDX-PNT1:1)
+                                       TO  WRK-OPTION(IDX-PNT3:1)
+                       COMPUTE IDX-PNT3    =   IDX-PNT3   +   1
+                   END-PERFORM
+                       DISPLAY  "MAE IN"
+               END-IF
+               MOVE    X"0A"       TO  WRK-OPTION(IDX-PNT3:1)
+               COMPUTE IDX-PNT3    =   IDX-PNT3   +   1
+           END-PERFORM
+      *
+           MOVE    WRK-OPTION          TO  PRGOPTION-OPTION
+           .
+       220-PRGOPTION-HENSYU-EXT.
            EXIT.
       *
       *****************************************************************
@@ -386,19 +657,24 @@
            EXIT.
       *
       *****************************************************************
-      *    プログラムオプション更新ファイル読込み処理
+      *     プログラムオプション読込み処理
       *****************************************************************
-       900-DATA-READ-SEC          SECTION.
+       900-IN-KENSAKU-SEC          SECTION.
       *
-          READ    IN-FILE
-              AT  END
-                  MOVE    1               TO  FLG-IN
-              NOT AT  END
-                  MOVE    ZERO            TO  FLG-IN
-          END-READ
+           READ    IN-FILE
+               AT  END
+                   MOVE    1               TO  FLG-IN
+               NOT AT  END
+                   MOVE    ZERO            TO  FLG-IN
+                   ADD     1               TO  CNT-IN
+           END-READ
       *
+           IF   ( FLG-IN            =     ZERO )
+               MOVE  IN-REC               TO  PRGOPTIONWK-REC
+               MOVE  SPA-HOSPNUM          TO  PRGOPTIONWK-HOSPNUM
+           END-IF
           .
-       900-DATA-READ-EXT.
+       900-IN-KENSAKU-EXT.
           EXIT.
       *
       *****************************************************************
