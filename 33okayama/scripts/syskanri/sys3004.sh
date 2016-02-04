@@ -46,8 +46,13 @@ FILENAME=sys3004.data
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
+#グループ診療対応（HOSPNUMの数だけ実行）
+SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ;" `
+for HOSPNUM in $SYSBASE
+do
 # syskanri 3004 set
-$DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
+  $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
+done
 
 # so del
 rm ${SITEDIR}/${PROGRAMID}.so
