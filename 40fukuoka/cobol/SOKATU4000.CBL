@@ -82,6 +82,9 @@
       *                                  印字するよう修正。
       *  01.00.38    萩野    15/11/13    点数欄の記載を一千万の位まで印字するよう修正
       *                                  医療機関編集情報への開設者名追加対応
+      *  01.00.39    吉川    16/02/08    入院のみの場合でも、外来の
+      *                                  「１件当たり点数」欄に値が
+      *                                  印字されるのを修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2228,6 +2231,9 @@
              MOVE    WRK-N-SGTENSU (IDX5)    TO  WRK-Z10
              MOVE    WRK-Z10                 TO  SKT4000-N-SGTENSU
       *=== 点数欄の印字桁数の修正 by hagino(2015/09/14) end
+      *=== １件あたり点数の不具合修正 by Yoshikawa(2016/02/08) start
+             INITIALIZE                       WRK-KEISAN-S
+      *=== １件あたり点数の不具合修正 by Yoshikawa(2016/02/08) end
              COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-N-SGTENSU (IDX5)
                                            /  WRK-N-SGKENSU (IDX5)
              MOVE    WRK-KEISAN-S        TO   WRK-Z9-S
@@ -2254,6 +2260,9 @@
              MOVE    WRK-G-SGTENSU (IDX5)    TO  WRK-Z10
              MOVE    WRK-Z10                 TO  SKT4000-G-SGTENSU
       *=== 点数欄の印字桁数の修正 by hagino(2015/09/14) end
+      *=== １件あたり点数の不具合修正 by Yoshikawa(2016/02/08) start
+             INITIALIZE                       WRK-KEISAN-S
+      *=== １件あたり点数の不具合修正 by Yoshikawa(2016/02/08) end
              COMPUTE WRK-KEISAN-S ROUNDED  =  WRK-G-SGTENSU (IDX5)
                                            /  WRK-G-SGKENSU (IDX5)
              MOVE    WRK-KEISAN-S        TO  WRK-Z9-S
