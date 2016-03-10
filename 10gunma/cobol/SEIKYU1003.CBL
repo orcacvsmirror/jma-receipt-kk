@@ -92,6 +92,8 @@
       *  01.00.31    吉川    15/06/10    平成２６年１２月以前の診療分は、
       *                                  高額区分の記載は不要
       *  01.00.32    門間    15/07/07    長期及び長期上位の判別処理を修正
+      *  01.00.33    吉川    16/03/10    限度額認定証なしで低所得の場合
+      *                                  請求額を35400円で止めるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1306,9 +1308,20 @@
       *             COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
       *                      ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
       *         END-IF
-               IF  MF100-SEIKYUGK  >  57600
-                   MOVE    57600       TO  MF100-SEIKYUGK
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) start
+      *         IF  MF100-SEIKYUGK  >  57600
+      *             MOVE    57600       TO  MF100-SEIKYUGK
+      *         END-IF
+               IF  MF100-TEISHO  =  ZERO
+                   IF  MF100-SEIKYUGK  >  57600
+                       MOVE    57600       TO  MF100-SEIKYUGK
+                   END-IF
+               ELSE
+                   IF  MF100-SEIKYUGK  >  35400
+                       MOVE    35400       TO  MF100-SEIKYUGK
+                   END-IF
                END-IF
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              END-IF
            END-IF

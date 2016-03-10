@@ -76,6 +76,8 @@
       *                                  高額区分が印字されないのを修正
       *  01.00.21    吉川    2015/03/16  標準負担額欄は福祉に係る金額を記載
       *  01.00.22    門間    2015/07/07  長期及び長期上位の判別処理を修正
+      *  01.00.23    吉川    2016/03/10  限度額認定証なしで低所得の場合
+      *                                  請求額を35400円で止めるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1332,9 +1334,20 @@
       *             COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
       *                      ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
       *         END-IF
-               IF  MF100-SEIKYUGK  >  57600
-                   MOVE    57600       TO  MF100-SEIKYUGK
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) start
+      *         IF  MF100-SEIKYUGK  >  57600
+      *             MOVE    57600       TO  MF100-SEIKYUGK
+      *         END-IF
+               IF  MF100-TEISHO  =  ZERO
+                   IF  MF100-SEIKYUGK  >  57600
+                       MOVE    57600       TO  MF100-SEIKYUGK
+                   END-IF
+               ELSE
+                   IF  MF100-SEIKYUGK  >  35400
+                       MOVE    35400       TO  MF100-SEIKYUGK
+                   END-IF
                END-IF
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              END-IF
            END-IF

@@ -76,6 +76,8 @@
       *                                  平成２７年１月改正対応
       *  01.00.25    吉川    15/03/16    標準負担額欄は福祉に係る金額を記載
       *  01.00.26    萩野    15/10/08    医療機関編集情報への開設者名追加対応
+      *  01.00.27    吉川    16/03/10    限度額認定証なしで低所得の場合
+      *                                  請求額を35400円で止めるように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -178,6 +180,11 @@
       *=== 標準負担額は福祉に係る分を記載 by Yoshikawa(2015/03/16) start
            03  FLG-KOHSKJ     PIC 9(01).
       *=== 標準負担額は福祉に係る分を記載 by Yoshikawa(2015/03/16) end
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) start
+           03  FLG-TSYRRK     PIC 9(01).
+           03  FLG-TNKRRK     PIC 9(01).
+           03  FLG-TEISYO     PIC 9(01).
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -401,6 +408,16 @@
        01  PTKOHFTN-REC.
            COPY    "CPPTKOHFTN.INC".
       *=== 限度額未満は「特」対象外 by Yoshikawa(2010/07/26) end
+      *
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) start
+      *    低所得情報
+       01  TSYRRK-REC.
+           COPY    "CPTSYRRK.INC".
+      *
+      *    低年金情報
+       01  TNKRRK-REC.
+           COPY    "CPTNKRRK.INC".
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -1149,9 +1166,24 @@
       *             COMPUTE  MF100-SEIKYUGK  ROUNDED =  80100 +
       *                      ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
       *         END-IF
-               IF  MF100-SEIKYUGK  >  57600
-                   MOVE    57600       TO  MF100-SEIKYUGK
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) start
+      *         IF  MF100-SEIKYUGK  >  57600
+      *             MOVE    57600       TO  MF100-SEIKYUGK
+      *         END-IF
+      *        低所得・低年金チェック
+               MOVE    ZERO                TO FLG-TEISYO
+               PERFORM 900-TSYRRK-READ-SEC
+               PERFORM 900-TNKRRK-READ-SEC
+               IF  FLG-TEISYO  =  ZERO
+                   IF  MF100-SEIKYUGK  >  57600
+                       MOVE    57600       TO  MF100-SEIKYUGK
+                   END-IF
+               ELSE
+                   IF  MF100-SEIKYUGK  >  35400
+                       MOVE    35400       TO  MF100-SEIKYUGK
+                   END-IF
                END-IF
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
              END-IF
            END-IF
@@ -2712,6 +2744,136 @@
        900-SEIKYU-READ-EXT.
            EXIT.
       *---(01.00.04) LINE ADD END   ------------------------------------
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) start
+      *****************************************************************
+      *    低所得履歴読み込み処理
+      *****************************************************************
+       900-TSYRRK-READ-SEC                SECTION.
+      *
+           INITIALIZE                      TSYRRK-REC
+                                           FLG-TSYRRK
+           MOVE    SPA-HOSPNUM         TO  TSYRRK-HOSPNUM
+           MOVE    RECE02-PTID         TO  TSYRRK-PTID
+           MOVE    TSYRRK-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      FLG-TSYRRK          =   ZERO
+               PERFORM  900-TSYRRK-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-TSYRRK  =  1
+                 IF  RECE02-SRYYM  >=  TSYRRK-NINSTYMD(1:6)  AND
+                     RECE02-SRYYM  <=  TSYRRK-NINEDYMD(1:6)
+                   MOVE    1           TO  FLG-TEISYO
+                   MOVE    1           TO  FLG-TSYRRK
+                 END-IF
+                 PERFORM  900-TSYRRK-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-TSYRRK-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    低所得履歴フェッチ処理
+      *****************************************************************
+       900-TSYRRK-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO            TO  FLG-TSYRRK
+               MOVE    MCPDATA-REC     TO  TSYRRK-REC
+           ELSE
+               MOVE    1               TO  FLG-TSYRRK
+               INITIALIZE                  TSYRRK-REC
+           END-IF
+      *
+           .
+       900-TSYRRK-FETCH-EXT.
+           EXIT.
+      *****************************************************************
+      *    低年金履歴読み込み処理
+      *****************************************************************
+       900-TNKRRK-READ-SEC                SECTION.
+      *
+           INITIALIZE                      TNKRRK-REC
+                                           FLG-TNKRRK
+           MOVE    SPA-HOSPNUM         TO  TNKRRK-HOSPNUM
+           MOVE    RECE02-PTID         TO  TNKRRK-PTID
+           MOVE    TNKRRK-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      FLG-TNKRRK          =   ZERO
+               PERFORM  900-TNKRRK-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-TNKRRK  =  1
+                 IF  RECE02-SRYYM  >=  TNKRRK-STYMD(1:6)  AND
+                     RECE02-SRYYM  <=  TNKRRK-EDYMD(1:6)
+                   MOVE    1           TO  FLG-TEISYO
+                   MOVE    1           TO  FLG-TNKRRK
+                 END-IF
+                 PERFORM  900-TNKRRK-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-TNKRRK-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    低年金履歴フェッチ処理
+      *****************************************************************
+       900-TNKRRK-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO            TO  FLG-TNKRRK
+               MOVE    MCPDATA-REC     TO  TNKRRK-REC
+           ELSE
+               MOVE    1               TO  FLG-TNKRRK
+               INITIALIZE                  TNKRRK-REC
+           END-IF
+      *
+           .
+       900-TNKRRK-FETCH-EXT.
+           EXIT.
+      *=== 限度額認定証なしの低所得対応 by Yoshikawa(2016/03/10) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
