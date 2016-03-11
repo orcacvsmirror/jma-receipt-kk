@@ -56,6 +56,7 @@
       *  01.00.18    吉川    13/10/04    プログラムオプション対応
       *  01.00.19    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.20    門間    16/01/06    医療機関編集情報への開設者名追加対応
+      *  01.00.21    吉川    16/03/11    返戻時、再印刷画面のタイトル修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1903,15 +1904,31 @@
                MOVE   "SKT2520o.red"   TO  SPRT-PRTID
            END-IF
       *---(01.00.05) LINE ADD END   ------------------------------------
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/01) start
-      *     MOVE    "国保請求書(入院外用)"        TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-TOKUBETU
-             WHEN  "1"
-               MOVE  "国保請求書(入院外用)"              TO  SPRT-TITLE
-             WHEN  "2"
-               MOVE  "国保請求書(入院外用) [特別療養費]" TO  SPRT-TITLE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2016/03/11) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/01) start
+      **     MOVE    "国保請求書(入院外用)"        TO  SPRT-TITLE
+      *     EVALUATE  WRK-PARA-TOKUBETU
+      *       WHEN  "1"
+      *         MOVE  "国保請求書(入院外用)"              TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保請求書(入院外用) [特別療養費]" TO  SPRT-TITLE
+      *     END-EVALUATE
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/01) end
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保請求書(入院外用)"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "1"
+               MOVE  "国保請求書(入院外用)［返戻分］" 
+                                       TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保請求書(入院外用)［特別療養費］"
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保請求書(入院外用)［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/01) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2016/03/11) end
            MOVE    SKT2520             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID

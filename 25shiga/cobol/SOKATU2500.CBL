@@ -52,6 +52,7 @@
       *  01.00.14    吉川    2013/10/04    プログラムオプション対応
       *  01.00.15    吉川    2014/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.16    門間    2016/01/06    医療機関編集情報への開設者名追加対応
+      *  01.00.17    吉川    2016/03/11    返戻時、再印刷画面のタイトル修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1704,10 +1705,19 @@
                MOVE   "SKT2500o.red"   TO  SPRT-PRTID
            END-IF
       *---(01.00.04) LINE ADD END   ------------------------------------
-      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
-      *     MOVE    "県内・国保総括票"  TO  SPRT-TITLE
-           MOVE    "国保総括票"        TO  SPRT-TITLE
-      *=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2016/03/11) start
+      **=== 帳票様式の変更 by Yoshikawa(2012/04/20) start
+      **     MOVE    "県内・国保総括票"  TO  SPRT-TITLE
+      *     MOVE    "国保総括票"        TO  SPRT-TITLE
+      **=== 帳票様式の変更 by Yoshikawa(2012/04/20) end
+           EVALUATE  WRK-PARA-SYOKBN
+             WHEN  "1"
+               MOVE  "国保総括票"      TO  SPRT-TITLE
+             WHEN  "2"
+               MOVE  "国保総括票［返戻分］" 
+                                       TO  SPRT-TITLE
+           END-EVALUATE
+      *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2016/03/11) end
            MOVE    SKT2500             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
