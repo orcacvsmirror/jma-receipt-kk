@@ -48,6 +48,7 @@
       *  01.00.09    吉川    13/01/10    プラグイン対応
       *  01.00.10    吉川    13/10/04    プログラムオプション対応
       *  01.00.11    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.12    吉川    16/03/11    長期上位は「長」欄に16を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1424,6 +1425,11 @@
            IF  MF100-TYOKI  =  1
                MOVE    "02"                TO  WRK-DATA
            END-IF
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) start
+           IF  MF100-TYOKI  =  2
+               MOVE    "16"                TO  WRK-DATA
+           END-IF
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) end
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *

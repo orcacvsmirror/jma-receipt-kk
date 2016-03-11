@@ -63,6 +63,7 @@
       *  01.00.15    吉川    13/10/04    プログラムオプション対応
       *  01.00.16    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.17    門間    16/01/06    医療機関編集情報への開設者名追加対応
+      *  01.00.18    吉川    16/03/11    長期上位は「長」欄に16を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1095,7 +1096,10 @@
       *     AND     WRK-TYOKIFTNGK  >=   20000
            AND     WRK-TYOKIFTNGK-G  >=  20000
       *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
-               MOVE    1           TO  MF100-TYOKI
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) start
+      *         MOVE    1           TO  MF100-TYOKI
+               MOVE    2           TO  MF100-TYOKI
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) end
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                MOVE    20000       TO  WRK-KOHFTNGK-G
            END-IF
@@ -1463,6 +1467,12 @@
                IF      MF100-TYOKI     =   1
                    MOVE    "2"        TO SC03-TYOKI(IDX)
                END-IF
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) start
+      *        長期上位
+               IF      MF100-TYOKI     =   2
+                   MOVE    "16"       TO SC03-TYOKI(IDX)
+               END-IF
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) end
       *        
       *        合計加算
                ADD     1                   TO  SUM-KENSU
