@@ -1006,7 +1006,10 @@
       *     AND     WRK-TYOKIFTNGK  >=   20000
            AND     WRK-TYOKIFTNGK-G  >=  20000
       *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
-               MOVE    1           TO  MF100-TYOKI
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) start
+      *         MOVE    1           TO  MF100-TYOKI
+               MOVE    2           TO  MF100-TYOKI
+      *=== 長期上位対応 by Yoshikawa(2016/03/11) end
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
                MOVE    20000       TO  WRK-KOHFTNGK-G
            END-IF
