@@ -1453,8 +1453,11 @@
            INSPECT SKT1325-HOSPNAME    REPLACING ALL "  " BY "　"
       *=== 医療機関情報編集修正 by Yoshikawa(2012/12/21) end
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME
-                                       TO  SKT1325-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/03/08) start
+      *     MOVE    SYS-1001-KAISETUNAME
+      *                                 TO  SKT1325-KAISETUNAME
+           MOVE    WRK-KAISETUNAME     TO  SKT1325-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/03/08) end
       *=== 電話番号を印字する by Yoshikawa(2008/08/13) start
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT1325-TEL

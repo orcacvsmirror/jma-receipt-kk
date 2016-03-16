@@ -1666,7 +1666,10 @@
            MOVE    WRK-HOSPTEL           TO  SKT1320-TEL
       *---(01.00.01) LINE ADD END   ------------------------------------
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME  TO  SKT1320-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/03/08) start
+      *     MOVE    SYS-1001-KAISETUNAME  TO  SKT1320-KAISETUNAME
+           MOVE    WRK-KAISETUNAME       TO  SKT1320-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/03/08) end
       *
       *    給付割合
            MOVE    SKT1310TMP-KYURATE    TO  WRK-Z2
