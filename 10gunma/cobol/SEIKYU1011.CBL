@@ -45,6 +45,7 @@
       *  01.00.09     请填     15/10/08    板闻锐懒滇驰腕は１０边踏塔は
       *                                    煌嘉皋掐して淡很する
       *  01.00.10     嚏粗     15/12/07    磅机滦据戎规の纳裁∈355,455∷
+      *  01.00.11     等李     16/04/07    岂陕は给锐砷么腕に淡很する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -727,6 +728,15 @@
                END-IF
                PERFORM  920-SYUNOU-SET-SEC
       *
+      *=== 岂陕は给锐砷么腕に淡很 by Yoshikawa(2016/04/07) start
+               IF  RECE10-KOHNUM(1)  =  "054"
+               OR  RECE10-KOHNUM(2)  =  "054"
+               OR  RECE10-KOHNUM(3)  =  "054"
+               OR  RECE10-KOHNUM(4)  =  "054"
+                   MOVE    "54"                  TO  MF100-COMBIKBN
+               END-IF
+      *=== 岂陕は给锐砷么腕に淡很 by Yoshikawa(2016/04/07) end
+      *
       *        デ〖タがあるもののみTMPに今き哈み
                PERFORM  VARYING  IDX2  FROM  1  BY  1
                         UNTIL    IDX2  >  3
@@ -748,7 +758,7 @@
                      ADD  1  TO  CNT-MF100
                  END-IF
                END-PERFORM
-              DISPLAY " "
+             DISPLAY " "
       *
            ELSE
       *=== 链柜给锐驶脱箕の淡很恃构 by Yoshikawa(2015/08/13) end
@@ -971,6 +981,11 @@
                MOVE  WRK-HENYMDG1(2:2)       TO  SC11-SRYYY(IDX)
                MOVE  WRK-HENYMDG1(5:2)       TO  SC11-SRYMM(IDX) 
              END-IF
+      *
+      *=== 岂陕は给锐砷么腕に淡很 by Yoshikawa(2016/04/07) start
+      *    给锐
+             MOVE  MF100-COMBIKBN   TO  SC11-KOHI(IDX)
+      *=== 岂陕は给锐砷么腕に淡很 by Yoshikawa(2016/04/07) end
       *
       *    レセプト汤嘿粕哈
              PERFORM  900-TMP-READ-SEC
