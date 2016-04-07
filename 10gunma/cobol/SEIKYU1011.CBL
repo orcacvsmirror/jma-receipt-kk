@@ -45,7 +45,8 @@
       *  01.00.09     萩野     15/10/08    医療費請求額欄は１０円未満は
       *                                    四捨五入して記載する
       *  01.00.10     門間     15/12/07    印字対象番号の追加（355,455）
-      *  01.00.11     吉川     16/04/07    難病は公費負担欄に記載する
+      *  01.00.11     吉川     16/04/07    全国公費を併用している場合は
+      *                                    公費負担欄に法別番号を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -119,6 +120,9 @@
            03  FLG-HKNCOMBI   PIC 9(01).
            03  FLG-HEIYOU     PIC 9(01).
       *=== 全国公費併用時の記載変更 by Yoshikawa(2015/08/13) end
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) start
+           03  FLG-HKNNUM     PIC 9(01).
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -193,6 +197,9 @@
                    07  WRK-TOKU-SYUFTN    PIC 9(09).
                    07  WRK-TOKU-FTN       PIC 9(09).
       *=== 全国公費併用時の記載変更 by Yoshikawa(2015/08/13) end
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) start
+           03  WRK-TAHOKOHI          PIC X(03).
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -297,6 +304,12 @@
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
       *=== 全国公費併用時の記載変更 by Yoshikawa(2015/08/13) end
+      *
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) start
+      *    保険番号
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -728,14 +741,19 @@
                END-IF
                PERFORM  920-SYUNOU-SET-SEC
       *
-      *=== 難病は公費負担欄に記載 by Yoshikawa(2016/04/07) start
-               IF  RECE10-KOHNUM(1)  =  "054"
-               OR  RECE10-KOHNUM(2)  =  "054"
-               OR  RECE10-KOHNUM(3)  =  "054"
-               OR  RECE10-KOHNUM(4)  =  "054"
-                   MOVE    "54"                  TO  MF100-COMBIKBN
-               END-IF
-      *=== 難病は公費負担欄に記載 by Yoshikawa(2016/04/07) end
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) start
+               PERFORM  VARYING  IDX1  FROM  1  BY  1
+                        UNTIL    IDX1  >  4
+                   IF  RECE10-KOHNUM(IDX1)(1:1)  =  "0"
+                       MOVE    RECE10-KOHNUM(IDX1)
+                                                 TO  WRK-TAHOKOHI
+                       MOVE    4                 TO  IDX1
+                   END-IF
+               END-PERFORM
+      *        保険番号テーブルから法別番号取得
+               PERFORM 950-HKNNUM-SET-SEC
+               MOVE    HKN-HBTNUM                TO  MF100-COMBIKBN
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) end
       *
       *        データがあるもののみTMPに書き込み
                PERFORM  VARYING  IDX2  FROM  1  BY  1
@@ -982,10 +1000,10 @@
                MOVE  WRK-HENYMDG1(5:2)       TO  SC11-SRYMM(IDX) 
              END-IF
       *
-      *=== 難病は公費負担欄に記載 by Yoshikawa(2016/04/07) start
-      *    公費
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) start
+      *    公費負担
              MOVE  MF100-COMBIKBN   TO  SC11-KOHI(IDX)
-      *=== 難病は公費負担欄に記載 by Yoshikawa(2016/04/07) end
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) end
       *
       *    レセプト明細読込
              PERFORM  900-TMP-READ-SEC
@@ -1535,6 +1553,73 @@
            .
        900-KOHSKY-CLOSE-EXT.
            EXIT.
+      *
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) start
+      *****************************************************************
+      *   保険番号情報セット
+      *****************************************************************
+       950-HKNNUM-SET-SEC  SECTION.
+      *
+           INITIALIZE  HKNNUM-REC
+           MOVE  SPA-HOSPNUM              TO  HKN-HOSPNUM
+           MOVE  WRK-TAHOKOHI             TO  HKN-HKNNUM
+           MOVE  HKNNUM-REC               TO  MCPDATA-REC
+           MOVE  "DBSELECT"               TO  MCP-FUNC
+           MOVE  "tbl_hknnum"             TO  MCP-TABLE
+           MOVE  "key2"                   TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"              USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  "tbl_hknnum"           TO  MCP-TABLE
+             MOVE  "key2"                 TO  MCP-PATHNAME
+             PERFORM  955-HKNNUM-READ-SEC
+           ELSE
+             DISPLAY  "HKNNUM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"          TO  MCP-FUNC
+           MOVE  "tbl_hknnum"             TO  MCP-TABLE
+           MOVE  "key2"                   TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"              USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+      *
+           .
+       950-HKNNUM-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    保険番号情報読込
+      *****************************************************************
+       955-HKNNUM-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"  TO  MCP-FUNC
+           CALL  "ORCDBMAIN"              USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE    MCPDATA-REC          TO  HKNNUM-REC
+             MOVE    ZERO                 TO  FLG-HKNNUM
+      *
+             IF    HKN-HKNNUM  =  "051"
+               INITIALIZE                     HKN-TANSEIDONAME
+               MOVE    "特定疾患"         TO  HKN-TANSEIDONAME
+             END-IF
+      *
+           ELSE
+             INITIALIZE                       HKNNUM-REC
+             MOVE    1                    TO  FLG-HKNNUM
+           END-IF
+      *
+           .
+       955-HKNNUM-READ-EXT.
+           EXIT.
+      *=== 全国公費の法別番号を記載 by Yoshikawa(2016/04/07) end
       *
       *****************************************************************
       *    患者マスタ読込
