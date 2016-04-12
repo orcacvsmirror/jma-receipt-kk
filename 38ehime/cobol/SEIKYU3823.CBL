@@ -77,6 +77,7 @@
       *  01.00.27    吉川    15/06/05  点数はレセプトの総点数を記載する
       *  01.00.28    吉川    15/12/10  ３歳児視覚聴覚精密健康診査対応
       *                                医療機関編集情報への開設者名追加対応
+      *  01.00.29    吉川    16/04/11  備考欄にコメントを印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -202,6 +203,9 @@
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) start
            03  FLG-RECE10     PIC 9(01).
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+           03  FLG-PTCOM      PIC 9(01).
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -365,6 +369,10 @@
            03  WRK-COMMENTCD         PIC X(09).
            03  WRK-COMMENT           PIC X(40).
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+           03  WRK-SRYCD             PIC X(09).
+           03  WRK-BIKOHCD           PIC X(09).
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -507,6 +515,12 @@
       *    請求管理
            COPY    "CPRCF010.INC".
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/07) end
+      *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+      *    患者コメント
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -926,6 +940,18 @@
              END-IF
            END-PERFORM
       *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+      *    備考のコメント設定
+           MOVE    "BIKOH"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-BIKOHCD
+           ELSE
+             MOVE    WRK-OPTION(1)(1:9)      TO  WRK-BIKOHCD
+           END-IF
+           DISPLAY "備考コメントコード =" WRK-BIKOHCD
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -1333,6 +1359,22 @@
                  END-IF
              END-PERFORM
       *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
+      *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+      *    コメントを取得
+           MOVE  WRK-BIKOHCD             TO  WRK-SRYCD
+           PERFORM 960-SRYACT-KEY7-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+             PERFORM  VARYING  IDX4  FROM  1  BY  1
+                      UNTIL    IDX4  >  5
+               IF  WRK-BIKOHCD  =  SRY-SRYCD(IDX4)
+      *          患者コメント情報読込
+                 PERFORM 950-PTCOM-READ-SEC
+                 MOVE    PTCOM-INPUTCOMENT    TO  MF100-BIKO5
+               END-IF
+             END-PERFORM
+           END-IF
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
              WRITE   MF100-REC
              ADD     1                   TO  CNT-MF100
@@ -1937,6 +1979,13 @@
                MOVE  MF100-BIKO4   TO  SC23-BIKO3
            END-IF
       *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
+      *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+      *    コメント
+           IF  MF100-BIKO5  NOT =  SPACE
+               MOVE  MF100-BIKO5   TO  SC23-BIKO5
+           END-IF
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
            .
        320-BODY-HEN-EXT.
@@ -3130,6 +3179,108 @@
        900-TENSU-READ-EXT.
            EXIT.
       *=== 診療日数０の場合理由を印字 by Yoshikawa(2011/09/22) end
+      *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+      *****************************************************************
+      *    診療情報セット
+      *****************************************************************
+       960-SRYACT-KEY7-SET-SEC  SECTION.
+      *
+             INITIALIZE                      SRYACT-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  WRK-SRYCD             TO  SRY-SRYCD(1)
+                                             SRY-SRYCD(2)
+                                             SRY-SRYCD(3)
+                                             SRY-SRYCD(4)
+                                             SRY-SRYCD(5)
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key7"              TO  MCP-PATHNAME
+               PERFORM  965-SRYACT-READ-SEC
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       960-SRYACT-KEY7-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    患者コメント情報セット
+      *****************************************************************
+       950-PTCOM-READ-SEC  SECTION.
+      *
+             INITIALIZE                      PTCOM-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  PTCOM-HOSPNUM
+             MOVE  SRY-PTID              TO  PTCOM-PTID
+             MOVE  SRY-ZAINUM            TO  PTCOM-ZAINUM
+             MOVE  SRY-SRYCD(IDX4)       TO  PTCOM-SRYCD
+             MOVE  SRY-INPUTNUM(IDX4)    TO  PTCOM-RENNUM
+             MOVE  PTCOM-REC             TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_ptcom"         TO  MCP-TABLE
+               MOVE  "key"               TO  MCP-PATHNAME
+               MOVE  "DBFETCH"           TO  MCP-FUNC
+               CALL  "ORCDBMAIN"         USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF  MCP-RC  =  ZERO
+                 MOVE  MCPDATA-REC       TO  PTCOM-REC
+                 MOVE  ZERO              TO  FLG-PTCOM
+               ELSE
+                 INITIALIZE                  PTCOM-REC
+                 MOVE    1               TO  FLG-PTCOM
+               END-IF
+             ELSE
+               DISPLAY  "PTCOM SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       950-PTCOM-SET-EXT.
+           EXIT.
+      *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
       *=== 傷病名及び期間欄印字 by Yoshikawa(2011/07/13) start
       *****************************************************************
