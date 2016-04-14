@@ -1031,9 +1031,7 @@
            MOVE  RECE02-RJNHKN       TO  MF101-RJNHKN
            MOVE  RECE02-ZAITAKU      TO  MF101-ZAITAKU
       *
-      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
-      *     MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF101-JKYSNUM
-      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+           MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF101-JKYSNUM
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF101-KOHINF
            COMPUTE  IDY  =  IDZ  +  1
            MOVE  RECE02-JNISSU      (IDY)  TO  MF101-JNISSU
