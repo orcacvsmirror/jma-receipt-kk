@@ -39,6 +39,7 @@
       *  01.00.04    吉川    13/01/22    医療機関情報編集対応
       *  01.00.05    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.06    吉川    15/03/11    法人名、役職名を印字する
+      *  01.00.07    萩野    16/04/14  医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -201,6 +202,9 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -252,6 +256,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.01) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -490,6 +499,10 @@
       *
       *---(01.00.01) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -934,15 +947,27 @@
       *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
       *     MOVE  SYS-1001-KAISETUNAME      TO  SC01-KAISETU
            IF  WRK-HOUJIN  =  SPACE  AND  WRK-YAKUSYOKU  =  SPACE
-             MOVE  SYS-1001-KAISETUNAME    TO  SC01-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+      *       MOVE  SYS-1001-KAISETUNAME    TO  SC01-KAISETU
+             MOVE  WRK-KAISETUNAME         TO  SC01-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
            ELSE
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+      *       STRING    WRK-HOUJIN              DELIMITED BY SPACE
+      *                 "　"                    DELIMITED BY SIZE
+      *                 WRK-YAKUSYOKU           DELIMITED BY SPACE
+      *                 "　"                    DELIMITED BY SIZE
+      *                 SYS-1001-KAISETUNAME    DELIMITED BY SPACE
+      *                 INTO                    SC01-KAISETU
+      *       END-STRING
              STRING    WRK-HOUJIN              DELIMITED BY SPACE
                        "　"                    DELIMITED BY SIZE
                        WRK-YAKUSYOKU           DELIMITED BY SPACE
                        "　"                    DELIMITED BY SIZE
-                       SYS-1001-KAISETUNAME    DELIMITED BY SPACE
+                       WRK-KAISETUNAME         DELIMITED BY SPACE
                        INTO                    SC01-KAISETU
              END-STRING
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
            END-IF
       *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) end
       *
@@ -1735,6 +1760,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -1802,6 +1831,36 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by hagino(2016/04/14) end
+      *
       *=== 法人名、役職名を印字 by Yoshikawa(2015/03/11) start
       *****************************************************************
       *    プログラムオプション情報読込
