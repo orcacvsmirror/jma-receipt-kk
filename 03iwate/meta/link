@@ -44,6 +44,8 @@
  - [scripts/prgoption/prgoption.bd , scripts/prgoption/]
  - [scripts/prgoption/Prgoption.rb , scripts/prgoption/]
  - [scripts/prgoption/prgoption.sh , scripts/prgoption/]
+ - [scripts/prgoption/SEIKYU0307.exp , scripts/prgoption/]
+ - [scripts/prgoption/SEIKYU0307-RECESYUTURYOKU.opt , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0310.exp , scripts/prgoption/]
  - [scripts/prgoption/SOKATU0310-YUSEN.opt , scripts/prgoption/]
  - [scripts/syskanri/directory , scripts/syskanri/]

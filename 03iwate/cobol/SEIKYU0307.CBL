@@ -42,6 +42,9 @@
       *  01.00.06     吉川    2011/01/17  帳票様式の変更に伴う修正
       *  01.00.07     吉川    2012/12/19  医療機関情報編集修正
       *  01.00.08     吉川    2014/10/03  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.09     吉川    2016/04/14  レセプト印刷順をPGオプションで
+      *                                   設定できるように修正
+      *                                   医療機関編集情報への開設者名追加対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -138,10 +141,14 @@
            03  FLG-KUGIRI     PIC 9(01).
            03  FLG-BTPARA     PIC 9(01).
            03  FLG-SYORI      PIC 9(01).
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+           03  FLG-PRGOPTION  PIC 9(01).
+           03  FLG-OK         PIC 9(01).
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
@@ -202,6 +209,10 @@
            03  WRK-PRTID             PIC X(20).
            03  WRK-KOHNUM            PIC X(03).
            03  WRK-KOBETUCITYNUM     PIC X(02).
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+           03  WRK-RECESYUTURYOKU    PIC X(02).
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *    文字変換
            03  WRK-MAE-INPUT           PIC X(200).
            03  WRK-OUT-INPUT           PIC X(200).
@@ -217,6 +228,13 @@
       *         05  FILLER            PIC S9(09)  BINARY.
            03  WRK-PATH              PIC  X(50).
       *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -228,6 +246,9 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *
            03  WRK-ETC-TBL.
                05  WRK-ETC-KOHNUM          PIC X(03) OCCURS 2.
@@ -305,6 +326,15 @@
                        09  WRK-BYOMEI2R-TENKIYMD
                                                PIC X(06).
       *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+           03  WRK-2003-TBL OCCURS 200.
+               05  WRK-2003-TEISYUTUSAKI       PIC X(01).
+               05  WRK-2003-NYUGAIKBN          PIC X(01).
+               05  WRK-2003-DSPSEQ             PIC 9(03).
+               05  WRK-2003-SYUBETU-G.
+                   07  WRK-2003-SYUBETU        PIC X(04) OCCURS 10.
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
        01  WRK-BYOMEI-AREA.     
       *    傷病名最大文字数（傷病名欄）
            03  WRK-BYOMEI1-MAX     PIC 9(02)   VALUE   48.
@@ -372,6 +402,11 @@
       *
            COPY    "CPSK2005.INC".
       *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *    レセプト作成指示(印刷順)情報
+           COPY    "CPSK2003.INC".
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *    医療機関情報−所在地、連絡先
            COPY  "CPSK1002.INC".
       *
@@ -385,6 +420,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -422,6 +462,11 @@
        01  BTPARA-REC.
            COPY    "CPBTPARA.INC".
       *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -666,13 +711,51 @@
                MOVE    ZERO             TO  SYS-2005-TENKIHENKBN
            END-IF
       *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *    システム管理マスタよりレセプト出力順を取得
+           MOVE    "2003"          TO  SYS-2003-KANRICD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                   TO  SYS-2003-STYUKYMD(1:6)
+                                       SYS-2003-EDYUKYMD(1:6)
+           MOVE    "01"            TO  SYS-2003-STYUKYMD(7:2)
+                                       SYS-2003-EDYUKYMD(7:2)
+           MOVE  SPA-HOSPNUM       TO  SYS-2003-HOSPNUM
+      *
+           PERFORM 820-SYSKANRI-DBSELECT-SEC
+           MOVE    1               TO      IDX
+           PERFORM  UNTIL  FLG-SYSKANRI3 = 1
+                    OR     IDX    > 200
+             IF  FLG-SYSKANRI3 = ZERO
+                 MOVE SYS-2003-TEISYUTUSAKI  
+                                   TO  WRK-2003-TEISYUTUSAKI(IDX)
+                 MOVE SYS-2003-SYUBETU-G
+                                   TO  WRK-2003-SYUBETU-G(IDX)
+                 MOVE SYS-2003-NYUGAIKBN
+                                   TO  WRK-2003-NYUGAIKBN(IDX)
+                 MOVE SYS-2003-DSPSEQ
+                                   TO  WRK-2003-DSPSEQ(IDX)
+                 ADD  1            TO  IDX 
+             END-IF  
+             PERFORM 820-SYSKANRI-DBFETCH-SEC
+           END-PERFORM
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *---(01.00.02) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
            PERFORM 900-1900-READ-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
       *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
@@ -681,6 +764,69 @@
            .
        100-INIT-EXT.
            EXIT.
+      *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SEIKYU0307"              TO  WRK-PRGID
+      *
+      *    プログラムオプション取得
+      *    レセプト出力順
+           MOVE    "RECESYUTURYOKU"          TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           MOVE    WRK-OPTION(1)(1:2)        TO  WRK-RECESYUTURYOKU
+           DISPLAY "レセプト出力順="  WRK-RECESYUTURYOKU
+      *    
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1  >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
       *
       *****************************************************************
       *    地方公費対象患者用病名ファイル作成
@@ -865,7 +1011,9 @@
       *---(01.00.02) LINE ADD END   ------------------------------------
            MOVE  RECE02-PTNUM        TO  MF101-PTNUM
            MOVE  RECE02-RECEKA       TO  MF101-SRYKA
-           MOVE  RECE02-HKNJANUM-KEY TO  MF101-HKNJANUM-KEY
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *     MOVE  RECE02-HKNJANUM-KEY TO  MF101-HKNJANUM-KEY
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
            MOVE  RECE02-TEKSTYMD     TO  MF101-TEKSTYMD
            MOVE  RECE02-NYUGAIKBN    TO  MF101-NYUGAIKBN
            MOVE  RECE02-SRYYM        TO  MF101-SRYYM
@@ -883,7 +1031,9 @@
            MOVE  RECE02-RJNHKN       TO  MF101-RJNHKN
            MOVE  RECE02-ZAITAKU      TO  MF101-ZAITAKU
       *
-           MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF101-JKYSNUM
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *     MOVE  RECE02-KOHJKYSNUM  (IDZ)  TO  MF101-JKYSNUM
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
            MOVE  RECE02-KOHINF      (IDZ)  TO  MF101-KOHINF
            COMPUTE  IDY  =  IDZ  +  1
            MOVE  RECE02-JNISSU      (IDY)  TO  MF101-JNISSU
@@ -924,6 +1074,59 @@
            MOVE    RECE02-FLG (1)     TO  MF101-FLG (1)
            MOVE    RECE02-FLG (2)     TO  MF101-FLG (2)
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *      出力順設定
+      *      保険者番号順
+           IF    WRK-RECESYUTURYOKU  =  "01" OR "02"
+             EVALUATE  MF101-HKNNUM
+      *      ６桁
+             WHEN "060" 
+             WHEN "068"
+               MOVE  MF101-HKNJANUM(1:6)  TO  MF101-HKNJANUM-KEY(3:6)
+      *      ８桁
+             WHEN OTHER
+               MOVE  MF101-HKNJANUM       TO  MF101-HKNJANUM-KEY
+             END-EVALUATE
+      *      システム管理マスタの出力順を設定 
+             PERFORM  VARYING  IDX   FROM  1  BY  1
+                      UNTIL    IDX   >     200
+               IF    (WRK-2003-TEISYUTUSAKI(IDX) 
+                                              = MF101-TEISYUTUSAKI)
+                 AND (WRK-2003-NYUGAIKBN(IDX) = MF101-NYUGAIKBN)
+                 IF  MF101-RECESYUBETU = WRK-2003-SYUBETU(IDX 1)
+                 OR                      WRK-2003-SYUBETU(IDX 2)
+                 OR                      WRK-2003-SYUBETU(IDX 3)
+                 OR                      WRK-2003-SYUBETU(IDX 4)
+                 OR                      WRK-2003-SYUBETU(IDX 5)
+                 OR                      WRK-2003-SYUBETU(IDX 6)
+                 OR                      WRK-2003-SYUBETU(IDX 7)
+                 OR                      WRK-2003-SYUBETU(IDX 8)
+                 OR                      WRK-2003-SYUBETU(IDX 9)
+                 OR                      WRK-2003-SYUBETU(IDX 10)
+                   MOVE  WRK-2003-DSPSEQ(IDX)
+                                          TO  MF101-DSPSEQ
+                   DISPLAY "出力番号=" MF101-DSPSEQ
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           EVALUATE  WRK-RECESYUTURYOKU
+             WHEN  "01"
+             WHEN  "03"
+      *        カナ氏名順
+               MOVE  MF101-KANANAME     TO  MF101-KANANAME-KEY
+             WHEN  "04"
+      *        患者番号順
+               MOVE  MF101-PTNUM        TO  MF101-PTNUM-KEY
+             WHEN  "05"
+      *        受給者番号順（優先順位の関係で保険者番号KEYにセット）
+               MOVE  MF101-KOHJKYSNUM(1:7)
+                                        TO  MF101-HKNJANUM-KEY
+           END-EVALUATE
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -1268,7 +1471,10 @@
       *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME    TO  SC07-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+      *     MOVE    SYS-1001-KAISETUNAME    TO  SC07-KAISETU
+           MOVE    WRK-KAISETUNAME         TO  SC07-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *
       *    給付割合
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -1602,7 +1808,10 @@
       *=== 医療機関情報編集修正 by Yoshikawa(2012/12/19) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *    開設者名
-           MOVE    SYS-1001-KAISETUNAME    TO  SC08-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+      *     MOVE    SYS-1001-KAISETUNAME    TO  SC08-KAISETU
+           MOVE    WRK-KAISETUNAME         TO  SC08-KAISETU
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *
       *    給付割合
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -1794,7 +2003,10 @@
            MOVE    MF101-SRYKA        TO  RECE031-RECEKA
            MOVE    MF101-TEISYUTUSAKI TO  RECE031-TEISYUTUSAKI
            MOVE    MF101-RECESYUBETU  TO  RECE031-RECESYUBETU
-           MOVE    MF101-HKNJANUM-KEY TO  RECE031-HKNJANUM
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *     MOVE    MF101-HKNJANUM-KEY TO  RECE031-HKNJANUM
+           MOVE    MF101-HKNJANUM     TO  RECE031-HKNJANUM
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
            MOVE    MF101-HOJOKBN-KEY  TO  RECE031-HOJOKBN
            MOVE    MF101-TEKSTYMD     TO  RECE031-TEKSTYMD
       *
@@ -1810,7 +2022,7 @@
            DISPLAY "診療年月1="   MF101-SRYYM
            DISPLAY "入外区分1="   MF101-NYUGAIKBN
            DISPLAY "患者ID1="     MF101-PTID
-           DISPLAY "保険者番号1=" MF101-HKNJANUM-KEY
+           DISPLAY "保険者番号1=" MF101-HKNJANUM
            DISPLAY "レセプト科1=" MF101-SRYKA
            DISPLAY "摘要開始日1=" MF101-TEKSTYMD
            DISPLAY "提出先1="     MF101-TEISYUTUSAKI
@@ -1843,8 +2055,11 @@
                                          NOT =   RECE031-TEISYUTUSAKI )
                OR     ( MF101-RECESYUBETU
                                          NOT =   RECE031-RECESYUBETU  )
-               OR     ( MF101-HKNJANUM-KEY
-                                         NOT =   RECE031-HKNJANUM     )
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *         OR     ( MF101-HKNJANUM-KEY
+      *                                   NOT =   RECE031-HKNJANUM     )
+               OR     ( MF101-HKNJANUM   NOT =   RECE031-HKNJANUM     )
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
                OR     ( MF101-HOJOKBN-KEY
                                          NOT =   RECE031-HOJOKBN      )
                OR     ( MF101-TEKSTYMD   NOT =   RECE031-TEKSTYMD     )
@@ -3050,6 +3265,55 @@
        935-PTKOHINF-READ-EXT.
            EXIT.
       *
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
@@ -3125,6 +3389,70 @@
        800-SYSKANRI-READ-EXT.
            EXIT.
       *      
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) start
+      *****************************************************************
+      *    管理マスタ検索(レセプト出力順情報取得)
+      *****************************************************************
+       820-SYSKANRI-DBSELECT-SEC                 SECTION.
+      *
+           MOVE    SYS-2003-REC           TO  MCPDATA-REC
+           MOVE    "DBSELECT"             TO  MCP-FUNC
+           MOVE    "tbl_syskanri"         TO  MCP-TABLE
+           MOVE    "key2"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+          IF      MCP-RC           =   ZERO
+                PERFORM 820-SYSKANRI-DBFETCH-SEC
+           ELSE
+               MOVE    1           TO    FLG-SYSKANRI3
+               PERFORM 820-SYSKANRI-DBCLOSE-SEC
+           END-IF        
+           .
+       820-SYSKANRI-DBSELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *     管理マスタ検索(レセプト出力順情報取得)
+      *****************************************************************
+       820-SYSKANRI-DBFETCH-SEC                SECTION.
+      *
+           MOVE    "DBFETCH"              TO  MCP-FUNC
+           MOVE    "tbl_syskanri"         TO  MCP-TABLE
+           MOVE    "key2"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           IF      MCP-RC           =   ZERO
+               MOVE    ZERO               TO  FLG-SYSKANRI3
+               MOVE    MCPDATA-REC  TO  SYS-2003-REC
+           ELSE
+               MOVE    1                  TO  FLG-SYSKANRI3
+               PERFORM 820-SYSKANRI-DBCLOSE-SEC
+           END-IF  
+           .
+       820-SYSKANRI-DBFETCH-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ＤＢ　クローズ処理(レセプト出力順情報取得)
+      *****************************************************************
+       820-SYSKANRI-DBCLOSE-SEC                 SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"        TO  MCP-FUNC
+           MOVE    "tbl_syskanri"         TO  MCP-TABLE
+           MOVE    "key2"                 TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+           .
+       820-SYSKANRI-DBCLOSE-EXT.
+           EXIT.
+      *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *
       *****************************************************************
       *    全角変換処理
       *****************************************************************
@@ -3172,6 +3500,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -3239,6 +3571,34 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *****************************************************************
       *    パラメタ読込

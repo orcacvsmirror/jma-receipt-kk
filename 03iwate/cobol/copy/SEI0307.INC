@@ -21,28 +21,35 @@
       ************************************************************
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  04.08.01    吉川         16/04/14  印刷順制御対応
       ************************************************************
       *01  MF101-REC.
            03  MF101-KEY.
       *医療機関ＩＤ
       *         05  MF101-HOSPID          PIC  X(24).
                05  MF101-HOSPNUM         PIC  9(02).
-      *公費−負担者番号
+      *診療年月
+               05  MF101-SRYYM           PIC  X(06).
+      *出力順
+               05  MF101-DSPSEQ          PIC  9(03).
+      *保険者番号        
+               05  MF101-HKNJANUM-KEY    PIC  X(08).
+      *カナ氏名(ソート用)
+               05  MF101-KANANAME-KEY    PIC  X(50).
+      *患者番号(ソート用)
+               05  MF101-PTNUM-KEY       PIC  X(20).
+      *入外区分
+               05  MF101-NYUGAIKBN       PIC  X(01).
+      *公費−受給者番号
                05  MF101-JKYSNUM         PIC  X(08).
       *患者番号
                05  MF101-PTNUM           PIC  X(20).
-      *保険者番号
-               05  MF101-HKNJANUM-KEY    PIC  X(08).
+      *審査支払機関
+               05  MF101-TEISYUTUSAKI    PIC  9(01).
       *適用開始年月日
                05  MF101-TEKSTYMD        PIC  X(08). 
       *診療科
                05  MF101-SRYKA           PIC  X(02).
-      *入外区分
-               05  MF101-NYUGAIKBN       PIC  X(01).
-      *診療年月
-               05  MF101-SRYYM           PIC  X(06).
-      *審査支払機関
-               05  MF101-TEISYUTUSAKI    PIC  9(01).
       *レセプト種別
                05  MF101-RECESYUBETU     PIC  X(04).
       *補助区分（船員保険のときのみ）
