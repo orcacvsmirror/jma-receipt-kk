@@ -1310,7 +1310,7 @@
                IF  WRK-BIKOHCD  =  SRY-SRYCD(IDX4)
       *          患者コメント情報読込
                  PERFORM 950-PTCOM-READ-SEC
-                 MOVE    PTCOM-INPUTCOMENT    TO  WRK-BIKOCOMMENT
+                 MOVE    PTCOM-INPUTCOMENT    TO  MF100-BIKO5
                END-IF
              END-PERFORM
            END-IF
@@ -1993,6 +1993,13 @@
                MOVE    WRK-BIKO3             TO  WRK-BIKO7
            END-IF
       *=== ３歳児健診対応 by Yoshikawa(2015/12/10) end
+      *
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) start
+      *    備考コメント
+           IF  MF100-BIKO5  NOT =  SPACE
+             MOVE  MF100-BIKO5               TO  WRK-BIKOCOMMENT
+           END-IF
+      *=== 備考欄にコメントを印字 by Yoshikawa(2016/04/11) end
       *
       *=== 複数の入院期間を備考に印字 by Yoshikawa(2014/02/04) start
            STRING    WRK-BIKO1               DELIMITED  BY  SPACE
