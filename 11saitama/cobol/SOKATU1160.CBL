@@ -1216,7 +1216,6 @@
                END-IF     
            END-IF                
       *
-           DISPLAY "FLG-UPD = " FLG-UPD
       *    集計の対象にならなかったとき                
            IF      FLG-UPD             =   1
                PERFORM 230-UPD-FILE-HENSYU-SEC
