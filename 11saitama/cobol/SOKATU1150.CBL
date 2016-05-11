@@ -72,6 +72,7 @@
       *                                   一部負担金の記載対応
       *  01.02.19    吉川       14/05/16  前期高齢者２割対応
       *  01.02.20    吉川       14/10/08  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.02.21    吉川       16/05/11  強制終了対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -195,6 +196,9 @@
            03  WRK-PRTFLG          PIC 9(01).
       *
            03  WRK-RECEERR         PIC X(200). 
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) start
+           03  WRK-ERRMSG          PIC X(300). 
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) end
       *
       *---(01.02.06) LINE ADD START ------------------------------------
       *     03  WRK-PATH.
@@ -1245,6 +1249,9 @@
                                            INTO    WRK-RECEERR
                END-STRING                                
                PERFORM 500-ERR-HENSYU-SEC
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) start
+               PERFORM 500-COBABORT-SEC
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) end
            END-IF 
            .
        2001-SYUKEI-EXT.
@@ -1688,6 +1695,25 @@
        500-ERR-HENSYU-EXT.
            EXIT.
       *
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) start
+      *****************************************************************
+      *    エラー時終了処理
+      *****************************************************************
+       500-COBABORT-SEC                SECTION.
+      *
+           MOVE    SPACE               TO  WRK-ERRMSG
+           STRING  "SOKATU1150 "       DELIMITED  BY  SIZE
+                   WRK-RECEERR         DELIMITED  BY  SIZE
+                   LOW-VALUE           DELIMITED  BY  SIZE
+                                       INTO    WRK-ERRMSG
+           END-STRING   
+           CALL    "cobabort"          USING   WRK-ERRMSG
+      *
+           .
+       500-COBABORT-EXT.
+           EXIT.
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) end
+      *
       *****************************************************************
       *    終了　　処理
       *****************************************************************
@@ -1764,7 +1790,10 @@
                                                INTO    WRK-RECEERR
                        END-STRING                                
                        PERFORM 500-ERR-HENSYU-SEC
-                       MOVE    1           TO  FLG-UPDFILE
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) start
+      *                 MOVE    1           TO  FLG-UPDFILE
+                       PERFORM 500-COBABORT-SEC
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) end
                    END-IF
                ELSE
                    STRING "請求管理ＤＢ　読込み更新エラー　"
@@ -1773,7 +1802,10 @@
                                                INTO    WRK-RECEERR
                    END-STRING                                
                    PERFORM 500-ERR-HENSYU-SEC
-                   MOVE    1               TO  FLG-UPDFILE
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) start
+      *             MOVE    1               TO  FLG-UPDFILE
+                   PERFORM 500-COBABORT-SEC
+      *=== 強制終了対応 by Yoshikawa(2016/05/11) end
                END-IF
            END-PERFORM  
       *
