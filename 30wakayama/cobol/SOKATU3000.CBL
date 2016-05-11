@@ -49,6 +49,7 @@
       *  02.00.06      吉川    14/08/06    返戻時、再印刷画面のタイトル修正
       *  02.00.07      吉川    14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *  02.00.08      萩野    16/02/12    医療機関編集情報への開設者名追加対応
+      *  02.00.09      門間    16/05/10    在宅の対象とする診療コード変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -350,6 +351,9 @@
       *    固定項目
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-201404   PIC X(06) VALUE "201404".
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) start
+           03  WRK-CONS-SRYYM-201604   PIC X(06) VALUE "201604".
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) end
       *
       *在総診テーブル
        01  TBL-ZAITAKU-AREA.
@@ -427,6 +431,177 @@
       *
        01  TBL-ZAITAKU2-MAX            PIC 9(02) VALUE   38.
       *=== 在宅コード変更 by Yoshikawa(2014/05/14) end
+      *
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) start
+      *    在総診テーブル（２０１６年４月診療分〜）
+       01  TBL-ZAITAKU3-AREA.
+      *    在がん医総（在支診等）（処方せんあり）
+           03  FILLER          PIC X(09)   VALUE   "114007610".
+      *    在がん医総（在支診等）（処方せんなし）
+           03  FILLER          PIC X(09)   VALUE   "114007710".
+      *    在医総・在医総管（ＤＵＭＭＹ）
+           03  FILLER          PIC X(09)   VALUE   "099140003".
+      *
+      *    在がん医総（機能強化した在支診等）（病床あり）（処方せんあり）
+           03  FILLER          PIC X(09)   VALUE   "114019510".
+      *    在がん医総（機能強化した在支診等）（病床あり）（処方せんなし）
+           03  FILLER          PIC X(09)   VALUE   "114019610".
+      *    在がん医総（機能強化した在支診等）（病床なし）（処方せんあり）
+           03  FILLER          PIC X(09)   VALUE   "114019710".
+      *    在がん医総（機能強化した在支診等）（病床なし）（処方せんなし）
+           03  FILLER          PIC X(09)   VALUE   "114019810".
+      *
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114030710".
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114030810".
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114030910".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114031010".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114031110".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114031210".
+      *    在医総管（機能強化在支診等・病床有・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114031310".
+      *    在医総管（機能強化在支診等・病床有・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114031410".
+      *    在医総管（機能強化在支診等・病床有・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114031510".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114031610".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114031710".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114031810".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114031910".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114032010".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114032110".
+      *    在医総管（機能強化在支診等・病床無・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114032210".
+      *    在医総管（機能強化在支診等・病床無・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114032310".
+      *    在医総管（機能強化在支診等・病床無・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114032410".
+      *    在医総管（在支診等・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114032510".
+      *    在医総管（在支診等・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114032610".
+      *    在医総管（在支診等・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114032710".
+      *    在医総管（在支診等・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114032810".
+      *    在医総管（在支診等・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114032910".
+      *    在医総管（在支診等・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114033010".
+      *    在医総管（在支診等・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114033110".
+      *    在医総管（在支診等・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114033210".
+      *    在医総管（在支診等・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114033310".
+      *    在医総管（在支診等以外・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114033410".
+      *    在医総管（在支診等以外・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114033510".
+      *    在医総管（在支診等以外・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114033610".
+      *    在医総管（在支診等以外・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114033710".
+      *    在医総管（在支診等以外・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114033810".
+      *    在医総管（在支診等以外・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114033910".
+      *    在医総管（在支診等以外・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114034010".
+      *    在医総管（在支診等以外・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114034110".
+      *    在医総管（在支診等以外・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114034210".
+      *
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114035510".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114035610".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114035710".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114035810".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114035910".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114036010".
+      *    施医総管（機能強化在支診等・病床有・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114036110".
+      *    施医総管（機能強化在支診等・病床有・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114036210".
+      *    施医総管（機能強化在支診等・病床有・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114036310".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114036410".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114036510".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114036610".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114036710".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114036810".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114036910".
+      *    施医総管（機能強化在支診等・病床無・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114037010".
+      *    施医総管（機能強化在支診等・病床無・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114037110".
+      *    施医総管（機能強化在支診等・病床無・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114037210".
+      *    施医総管（在支診等・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114037310".
+      *    施医総管（在支診等・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114037410".
+      *    施医総管（在支診等・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114037510".
+      *    施医総管（在支診等・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114037610".
+      *    施医総管（在支診等・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114037710".
+      *    施医総管（在支診等・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114037810".
+      *    施医総管（在支診等・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114037910".
+      *    施医総管（在支診等・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114038010".
+      *    施医総管（在支診等・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114038110".
+      *    施医総管（在支診等以外・難病等月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114038210".
+      *    施医総管（在支診等以外・難病等月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114038310".
+      *    施医総管（在支診等以外・難病等月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114038410".
+      *    施医総管（在支診等以外・月２回以上・１人）
+           03  FILLER          PIC X(09)   VALUE   "114038510".
+      *    施医総管（在支診等以外・月２回以上・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114038610".
+      *    施医総管（在支診等以外・月２回以上・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114038710".
+      *    施医総管（在支診等以外・月１回・１人）
+           03  FILLER          PIC X(09)   VALUE   "114038810".
+      *    施医総管（在支診等以外・月１回・２〜９人）
+           03  FILLER          PIC X(09)   VALUE   "114038910".
+      *    施医総管（在支診等以外・月１回・１０人〜）
+           03  FILLER          PIC X(09)   VALUE   "114039010".
+      *
+       01  TBL-ZAITAKU3-R      REDEFINES   TBL-ZAITAKU3-AREA.
+            03  TBL-ZAITAKU3   PIC X(09)   OCCURS  79.
+      *
+       01  TBL-ZAITAKU3-MAX    PIC 9(02)   VALUE   79.
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) end
       *
       *****************************************************************
       *    ファイルレイアウト
@@ -2468,24 +2643,39 @@
       *           MOVE  "1"   TO  SKT3000TMP-ZAITAKU
       **=== open-cobol1.0対応 by Yoshikawa(2010/12/08) end
       *         END-IF
-               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201404
+      *
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) start
+               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201604
                  PERFORM  VARYING  IDX5  FROM  1  BY  1
-                          UNTIL   (IDX5  >  TBL-ZAITAKU2-MAX)
+                          UNTIL   (IDX5  >  TBL-ZAITAKU3-MAX)
                           OR      (SKT3000TMP-ZAITAKU  =  "1")
-                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU2(IDX5)
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU3(IDX5)
                        MOVE    "1"            TO  SKT3000TMP-ZAITAKU
                    END-IF
                  END-PERFORM
                ELSE
-                 PERFORM  VARYING  IDX5  FROM  1  BY  1
-                          UNTIL   (IDX5  >  TBL-ZAITAKU-MAX)
-                          OR      (SKT3000TMP-ZAITAKU  =  "1")
-                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU(IDX5)
-                       MOVE    "1"            TO  SKT3000TMP-ZAITAKU
-                   END-IF
-                 END-PERFORM
-               END-IF
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) end
+                 IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201404
+                   PERFORM  VARYING  IDX5  FROM  1  BY  1
+                            UNTIL   (IDX5  >  TBL-ZAITAKU2-MAX)
+                            OR      (SKT3000TMP-ZAITAKU  =  "1")
+                     IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU2(IDX5)
+                         MOVE    "1"            TO  SKT3000TMP-ZAITAKU
+                     END-IF
+                   END-PERFORM
+                 ELSE
+                   PERFORM  VARYING  IDX5  FROM  1  BY  1
+                            UNTIL   (IDX5  >  TBL-ZAITAKU-MAX)
+                            OR      (SKT3000TMP-ZAITAKU  =  "1")
+                     IF  SRY-SRYCD(IDX4)  =  TBL-ZAITAKU(IDX5)
+                         MOVE    "1"            TO  SKT3000TMP-ZAITAKU
+                     END-IF
+                   END-PERFORM
+                 END-IF
       *=== 在宅コード変更 by Yoshikawa(2014/05/14) end
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) start
+               END-IF
+      **=== 在宅の対象とする診療コード変更 by Monma(2016/05/10) end
              END-IF
            END-PERFORM
       *
