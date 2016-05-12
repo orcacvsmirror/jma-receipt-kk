@@ -1253,6 +1253,7 @@
       *         MOVE   WRK-KENNAME          TO  SKT1900-HKNJANAME(IDX1)
                STRING WRK-KENNAME "¹­°èÏ¢¹ç"   DELIMITED BY SPACE
                       INTO                     SKT1900-HKNJANAME(IDX1)
+               END-STRING
                MOVE   SPACE                TO  WRK-HKNJANUM
       *---(01.00.09) LINE ADD END ------------------------------------
              ELSE
@@ -1274,6 +1275,7 @@
                MOVE  SKT1900TMP-KYURATE     TO  WRK-Z2
                STRING    "("  WRK-Z2 "³ä"  ")"  DELIMITED BY SIZE
                          INTO                   SKT1900-KYURATE(IDX1) 
+               END-STRING
              END-IF
       *
       *=== Ä¢É¼ÍÍ¼°ÊÑ¹¹ by Yoshikawa(2008/05/27) start
@@ -1695,6 +1697,7 @@
                MOVE  SKT1900TMP-KYURATE     TO  WRK-Z2
                STRING    "("  WRK-Z2 "³ä"  ")"  DELIMITED BY SIZE
                          INTO                   SKT1900-KYURATE(IDX1) 
+               END-STRING
              END-IF
       *
                PERFORM  VARYING  IDX2  FROM  1  BY  1
