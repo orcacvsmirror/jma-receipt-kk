@@ -32,6 +32,8 @@
       *                                  自動で行うように修正
       *  01.00.02    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.03    吉川    15/02/13    平成２７年１月改正対応
+      *  01.00.04    門間    16/05/12    医療機関編集情報への開設者名追加対応
+      *                                  特記事項欄に「37申出」を追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -197,6 +199,9 @@
                05  WRK-HOSPADRS1     PIC X(50).
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
       *
       *    プログラムオプション用
            03  WRK-OPTION-TBL.
@@ -313,17 +318,26 @@
            03  FILLER          PIC X(10)   VALUE   "３５多オ".
            03  FILLER          PIC X(02)   VALUE   "36".
            03  FILLER          PIC X(10)   VALUE   "３６加治".
-      *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) end
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) start
+           03  FILLER          PIC X(02)   VALUE   "37".
+           03  FILLER          PIC X(10)   VALUE   "３７申出".
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) end
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) start
       *     03  TBL-TOKKI       OCCURS   22.
-           03  TBL-TOKKI       OCCURS   34.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) start
+      *     03  TBL-TOKKI       OCCURS   34.
+           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) end
                05  TBL-TOKKICD             PIC X(02).
                05  TBL-TOKKINAME           PIC X(10).
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) start
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) end
       *
       *    DB参照用
@@ -356,6 +370,11 @@
       *
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -1212,7 +1231,10 @@
            INSPECT SC03-HOSPNAME       REPLACING ALL "  " BY "　"
       *
       *    開設者名
-           MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
+      *     MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
+           MOVE  WRK-KAISETUNAME       TO  SC03-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
       *
       *    保険種別区分
            EVALUATE    MF101-RECESYUBETU(2:1)
@@ -1572,7 +1594,10 @@
            INSPECT SC03-HOSPNAME       REPLACING ALL "  " BY "　"
       *
       *    開設者名
-           MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
+      *     MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
+           MOVE  WRK-KAISETUNAME       TO  SC03-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
       *
       *    保険種別区分
            EVALUATE    MF101-RECESYUBETU(2:1)
@@ -2752,6 +2777,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -2819,6 +2848,36 @@
       *
        900-1902-READ-EXT.
            EXIT.
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
+      *
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
