@@ -1291,7 +1291,7 @@
       *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) start
       *     MOVE    SYS-1001-KAISETUNAME
       *                                 TO  SKT1915-KAISETUNAME
-           MOVE    WRK-KAISETUNAME     TO  KT1915-KAISETUNAME
+           MOVE    WRK-KAISETUNAME     TO  SKT1915-KAISETUNAME
       *=== 医療機関編集情報へ開設者名追加 by Monma (2016/05/12) end
       *    電話番号
            MOVE    WRK-HOSPTEL         TO  SKT1915-TEL
