@@ -53,6 +53,7 @@
       *  01.00.15    吉川    14/10/08    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.16    萩野    14/12/05    返戻時、再印刷画面のタイトル修正
       *  01.00.17    門間    16/03/08    医療機関編集情報への開設者名追加対応
+      *  01.00.18    萩野    16/05/12    在宅の対象とする診療コード追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -399,6 +400,171 @@
            03  WRK-CONS-ZAITAKU53      PIC X(09) VALUE "114026310".
            03  WRK-CONS-ZAITAKU54      PIC X(09) VALUE "114026410".
       *=== 在宅コード追加 by hagino(2014/06/06) end
+
+      *=== 在総診コード追加 by hagino(2016/05/12) start
+      *    在総診（２０１６年４月診療分〜）
+      *    在がん医総（在支診等）（処方せんあり）
+           03  WRK-CONS-ZAITAKU55      PIC X(09) VALUE "114007610".
+      *    在がん医総（在支診等）（処方せんなし）
+           03  WRK-CONS-ZAITAKU56      PIC X(09) VALUE "114007710".
+      *    在医総・在医総管（ＤＵＭＭＹ）
+           03  WRK-CONS-ZAITAKU57      PIC X(09) VALUE "099140003".
+      *
+      *    在がん医総（機能強化した在支診等）（病床あり）（処方せんあり）
+           03  WRK-CONS-ZAITAKU58      PIC X(09) VALUE "114019510".
+      *    在がん医総（機能強化した在支診等）（病床あり）（処方せんなし）
+           03  WRK-CONS-ZAITAKU59      PIC X(09) VALUE "114019610".
+      *    在がん医総（機能強化した在支診等）（病床なし）（処方せんあり）
+           03  WRK-CONS-ZAITAKU60      PIC X(09) VALUE "114019710".
+      *    在がん医総（機能強化した在支診等）（病床なし）（処方せんなし）
+           03  WRK-CONS-ZAITAKU61      PIC X(09) VALUE "114019810".
+      *
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU62      PIC X(09) VALUE "114030710".
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU63      PIC X(09) VALUE "114030810".
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU64      PIC X(09) VALUE "114030910".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU65      PIC X(09) VALUE "114031010".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU66      PIC X(09) VALUE "114031110".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU67      PIC X(09) VALUE "114031210".
+      *    在医総管（機能強化在支診等・病床有・月１回・１人）
+           03  WRK-CONS-ZAITAKU68      PIC X(09) VALUE "114031310".
+      *    在医総管（機能強化在支診等・病床有・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU69      PIC X(09) VALUE "114031410".
+      *    在医総管（機能強化在支診等・病床有・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU70      PIC X(09) VALUE "114031510".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU71      PIC X(09) VALUE "114031610".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU72      PIC X(09) VALUE "114031710".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU73      PIC X(09) VALUE "114031810".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU74      PIC X(09) VALUE "114031910".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU75      PIC X(09) VALUE "114032010".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU76      PIC X(09) VALUE "114032110".
+      *    在医総管（機能強化在支診等・病床無・月１回・１人）
+           03  WRK-CONS-ZAITAKU77      PIC X(09) VALUE "114032210".
+      *    在医総管（機能強化在支診等・病床無・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU78      PIC X(09) VALUE "114032310".
+      *    在医総管（機能強化在支診等・病床無・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU79      PIC X(09) VALUE "114032410".
+      *    在医総管（在支診等・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU80      PIC X(09) VALUE "114032510".
+      *    在医総管（在支診等・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU81      PIC X(09) VALUE "114032610".
+      *    在医総管（在支診等・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU82      PIC X(09) VALUE "114032710".
+      *    在医総管（在支診等・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU83      PIC X(09) VALUE "114032810".
+      *    在医総管（在支診等・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU84      PIC X(09) VALUE "114032910".
+      *    在医総管（在支診等・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU85      PIC X(09) VALUE "114033010".
+      *    在医総管（在支診等・月１回・１人）
+           03  WRK-CONS-ZAITAKU86      PIC X(09) VALUE "114033110".
+      *    在医総管（在支診等・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU87      PIC X(09) VALUE "114033210".
+      *    在医総管（在支診等・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU88      PIC X(09) VALUE "114033310".
+      *    在医総管（在支診等以外・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU89      PIC X(09) VALUE "114033410".
+      *    在医総管（在支診等以外・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU90      PIC X(09) VALUE "114033510".
+      *    在医総管（在支診等以外・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU91      PIC X(09) VALUE "114033610".
+      *    在医総管（在支診等以外・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU92      PIC X(09) VALUE "114033710".
+      *    在医総管（在支診等以外・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU93      PIC X(09) VALUE "114033810".
+      *    在医総管（在支診等以外・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU94      PIC X(09) VALUE "114033910".
+      *    在医総管（在支診等以外・月１回・１人）
+           03  WRK-CONS-ZAITAKU95      PIC X(09) VALUE "114034010".
+      *    在医総管（在支診等以外・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU96      PIC X(09) VALUE "114034110".
+      *    在医総管（在支診等以外・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU97      PIC X(09) VALUE "114034210".
+      *
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU98      PIC X(09) VALUE "114035510".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU99      PIC X(09) VALUE "114035610".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU100      PIC X(09) VALUE "114035710".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU101      PIC X(09) VALUE "114035810".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU102      PIC X(09) VALUE "114035910".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU103      PIC X(09) VALUE "114036010".
+      *    施医総管（機能強化在支診等・病床有・月１回・１人）
+           03  WRK-CONS-ZAITAKU104      PIC X(09) VALUE "114036110".
+      *    施医総管（機能強化在支診等・病床有・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU105      PIC X(09) VALUE "114036210".
+      *    施医総管（機能強化在支診等・病床有・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU106      PIC X(09) VALUE "114036310".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU107      PIC X(09) VALUE "114036410".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU108      PIC X(09) VALUE "114036510".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU109      PIC X(09) VALUE "114036610".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU110      PIC X(09) VALUE "114036710".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU111      PIC X(09) VALUE "114036810".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU112      PIC X(09) VALUE "114036910".
+      *    施医総管（機能強化在支診等・病床無・月１回・１人）
+           03  WRK-CONS-ZAITAKU113      PIC X(09) VALUE "114037010".
+      *    施医総管（機能強化在支診等・病床無・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU114      PIC X(09) VALUE "114037110".
+      *    施医総管（機能強化在支診等・病床無・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU115      PIC X(09) VALUE "114037210".
+      *    施医総管（在支診等・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU116      PIC X(09) VALUE "114037310".
+      *    施医総管（在支診等・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU117      PIC X(09) VALUE "114037410".
+      *    施医総管（在支診等・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU118      PIC X(09) VALUE "114037510".
+      *    施医総管（在支診等・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU119      PIC X(09) VALUE "114037610".
+      *    施医総管（在支診等・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU120      PIC X(09) VALUE "114037710".
+      *    施医総管（在支診等・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU121      PIC X(09) VALUE "114037810".
+      *    施医総管（在支診等・月１回・１人）
+           03  WRK-CONS-ZAITAKU122      PIC X(09) VALUE "114037910".
+      *    施医総管（在支診等・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU123      PIC X(09) VALUE "114038010".
+      *    施医総管（在支診等・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU124      PIC X(09) VALUE "114038110".
+      *    施医総管（在支診等以外・難病等月２回以上・１人）
+           03  WRK-CONS-ZAITAKU125      PIC X(09) VALUE "114038210".
+      *    施医総管（在支診等以外・難病等月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU126      PIC X(09) VALUE "114038310".
+      *    施医総管（在支診等以外・難病等月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU127      PIC X(09) VALUE "114038410".
+      *    施医総管（在支診等以外・月２回以上・１人）
+           03  WRK-CONS-ZAITAKU128      PIC X(09) VALUE "114038510".
+      *    施医総管（在支診等以外・月２回以上・２〜９人）
+           03  WRK-CONS-ZAITAKU129      PIC X(09) VALUE "114038610".
+      *    施医総管（在支診等以外・月２回以上・１０人〜）
+           03  WRK-CONS-ZAITAKU130      PIC X(09) VALUE "114038710".
+      *    施医総管（在支診等以外・月１回・１人）
+           03  WRK-CONS-ZAITAKU131      PIC X(09) VALUE "114038810".
+      *    施医総管（在支診等以外・月１回・２〜９人）
+           03  WRK-CONS-ZAITAKU132      PIC X(09) VALUE "114038910".
+      *    施医総管（在支診等以外・月１回・１０人〜）
+           03  WRK-CONS-ZAITAKU133      PIC X(09) VALUE "114039010".
+      *=== 在総診コード追加 by hagino(2016/05/12) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
@@ -2323,6 +2489,88 @@
                                    OR  WRK-CONS-ZAITAKU53
                                    OR  WRK-CONS-ZAITAKU54
       *=== 在宅コード追加 by hagino(2014/06/06) end
+      *=== 在総診コード追加 by hagino(2016/05/12) start
+                                   OR  WRK-CONS-ZAITAKU55
+                                   OR  WRK-CONS-ZAITAKU56
+                                   OR  WRK-CONS-ZAITAKU57
+                                   OR  WRK-CONS-ZAITAKU58
+                                   OR  WRK-CONS-ZAITAKU59
+                                   OR  WRK-CONS-ZAITAKU60
+                                   OR  WRK-CONS-ZAITAKU61
+                                   OR  WRK-CONS-ZAITAKU62
+                                   OR  WRK-CONS-ZAITAKU63
+                                   OR  WRK-CONS-ZAITAKU64
+                                   OR  WRK-CONS-ZAITAKU65
+                                   OR  WRK-CONS-ZAITAKU66
+                                   OR  WRK-CONS-ZAITAKU67
+                                   OR  WRK-CONS-ZAITAKU68
+                                   OR  WRK-CONS-ZAITAKU69
+                                   OR  WRK-CONS-ZAITAKU70
+                                   OR  WRK-CONS-ZAITAKU71
+                                   OR  WRK-CONS-ZAITAKU72
+                                   OR  WRK-CONS-ZAITAKU73
+                                   OR  WRK-CONS-ZAITAKU74
+                                   OR  WRK-CONS-ZAITAKU75
+                                   OR  WRK-CONS-ZAITAKU76
+                                   OR  WRK-CONS-ZAITAKU77
+                                   OR  WRK-CONS-ZAITAKU78
+                                   OR  WRK-CONS-ZAITAKU79
+                                   OR  WRK-CONS-ZAITAKU80
+                                   OR  WRK-CONS-ZAITAKU81
+                                   OR  WRK-CONS-ZAITAKU82
+                                   OR  WRK-CONS-ZAITAKU83
+                                   OR  WRK-CONS-ZAITAKU84
+                                   OR  WRK-CONS-ZAITAKU85
+                                   OR  WRK-CONS-ZAITAKU86
+                                   OR  WRK-CONS-ZAITAKU87
+                                   OR  WRK-CONS-ZAITAKU88
+                                   OR  WRK-CONS-ZAITAKU89
+                                   OR  WRK-CONS-ZAITAKU90
+                                   OR  WRK-CONS-ZAITAKU91
+                                   OR  WRK-CONS-ZAITAKU92
+                                   OR  WRK-CONS-ZAITAKU93
+                                   OR  WRK-CONS-ZAITAKU94
+                                   OR  WRK-CONS-ZAITAKU95
+                                   OR  WRK-CONS-ZAITAKU96
+                                   OR  WRK-CONS-ZAITAKU97
+                                   OR  WRK-CONS-ZAITAKU98
+                                   OR  WRK-CONS-ZAITAKU99
+                                   OR  WRK-CONS-ZAITAKU100
+                                   OR  WRK-CONS-ZAITAKU101
+                                   OR  WRK-CONS-ZAITAKU102
+                                   OR  WRK-CONS-ZAITAKU103
+                                   OR  WRK-CONS-ZAITAKU104
+                                   OR  WRK-CONS-ZAITAKU105
+                                   OR  WRK-CONS-ZAITAKU106
+                                   OR  WRK-CONS-ZAITAKU107
+                                   OR  WRK-CONS-ZAITAKU108
+                                   OR  WRK-CONS-ZAITAKU109
+                                   OR  WRK-CONS-ZAITAKU110
+                                   OR  WRK-CONS-ZAITAKU111
+                                   OR  WRK-CONS-ZAITAKU112
+                                   OR  WRK-CONS-ZAITAKU113
+                                   OR  WRK-CONS-ZAITAKU114
+                                   OR  WRK-CONS-ZAITAKU115
+                                   OR  WRK-CONS-ZAITAKU116
+                                   OR  WRK-CONS-ZAITAKU117
+                                   OR  WRK-CONS-ZAITAKU118
+                                   OR  WRK-CONS-ZAITAKU119
+                                   OR  WRK-CONS-ZAITAKU120
+                                   OR  WRK-CONS-ZAITAKU121
+                                   OR  WRK-CONS-ZAITAKU122
+                                   OR  WRK-CONS-ZAITAKU123
+                                   OR  WRK-CONS-ZAITAKU124
+                                   OR  WRK-CONS-ZAITAKU125
+                                   OR  WRK-CONS-ZAITAKU126
+                                   OR  WRK-CONS-ZAITAKU127
+                                   OR  WRK-CONS-ZAITAKU128
+                                   OR  WRK-CONS-ZAITAKU129
+                                   OR  WRK-CONS-ZAITAKU130
+                                   OR  WRK-CONS-ZAITAKU131
+                                   OR  WRK-CONS-ZAITAKU132
+                                   OR  WRK-CONS-ZAITAKU133
+      *=== 在総診コード追加 by hagino(2016/05/12) end
+      *
       *=== open-cobol1.0対応 by Yoshikawa(2010/12/15) start
       *           MOVE  1  TO  SKT1310TMP-ZAITAKU
                  MOVE  "1"  TO  SKT1310TMP-ZAITAKU

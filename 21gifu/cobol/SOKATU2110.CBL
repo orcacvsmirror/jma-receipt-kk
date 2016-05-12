@@ -53,6 +53,7 @@
       *  01.00.17       吉川     14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.18       萩野     14/11/10    返戻時、再印刷画面のタイトル修正
       *  01.00.19       吉川     15/11/17    医療機関編集情報への開設者名追加対応
+      *  01.00.20       萩野     16/05/12    在宅の対象とする診療コード追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -373,6 +374,167 @@
            03  CONS-ZAITAKU37      PIC X(09) VALUE "114026310".
            03  CONS-ZAITAKU38      PIC X(09) VALUE "114026410".
       *=== 在宅コード追加 by hagino(2014/06/09) end
+      *=== 在総診コード追加 by hagino(2016/05/12) start
+      *    在がん医総（在支診等）（処方せんあり）
+           03  CONS-ZAITAKU39      PIC X(09) VALUE "114007610".
+      *    在がん医総（在支診等）（処方せんなし）
+           03  CONS-ZAITAKU40      PIC X(09) VALUE "114007710".
+      *    在医総・在医総管（ＤＵＭＭＹ）
+           03  CONS-ZAITAKU41      PIC X(09) VALUE "099140003".
+      *    在がん医総（機能強化した在支診等）（病床あり）（処方せんあり）
+           03  CONS-ZAITAKU42      PIC X(09) VALUE "114019510".
+      *    在がん医総（機能強化した在支診等）（病床あり）（処方せんなし）
+           03  CONS-ZAITAKU43      PIC X(09) VALUE "114019610".
+      *    在がん医総（機能強化した在支診等）（病床なし）（処方せんあり）
+           03  CONS-ZAITAKU44      PIC X(09) VALUE "114019710".
+      *    在がん医総（機能強化した在支診等）（病床なし）（処方せんなし）
+           03  CONS-ZAITAKU45      PIC X(09) VALUE "114019810".
+      *
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・１人）
+           03  CONS-ZAITAKU46      PIC X(09) VALUE "114030710".
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU47      PIC X(09) VALUE "114030810".
+      *    在医総管（機能強化在支診等・病床有・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU48      PIC X(09) VALUE "114030910".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・１人）
+           03  CONS-ZAITAKU49      PIC X(09) VALUE "114031010".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・２〜９人）
+           03  CONS-ZAITAKU50      PIC X(09) VALUE "114031110".
+      *    在医総管（機能強化在支診等・病床有・月２回以上・１０人〜）
+           03  CONS-ZAITAKU51      PIC X(09) VALUE "114031210".
+      *    在医総管（機能強化在支診等・病床有・月１回・１人）
+           03  CONS-ZAITAKU52      PIC X(09) VALUE "114031310".
+      *    在医総管（機能強化在支診等・病床有・月１回・２〜９人）
+           03  CONS-ZAITAKU53      PIC X(09) VALUE "114031410".
+      *    在医総管（機能強化在支診等・病床有・月１回・１０人〜）
+           03  CONS-ZAITAKU54      PIC X(09) VALUE "114031510".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・１人）
+           03  CONS-ZAITAKU55      PIC X(09) VALUE "114031610".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU56      PIC X(09) VALUE "114031710".
+      *    在医総管（機能強化在支診等・病床無・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU57      PIC X(09) VALUE "114031810".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・１人）
+           03  CONS-ZAITAKU58      PIC X(09) VALUE "114031910".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・２〜９人）
+           03  CONS-ZAITAKU59      PIC X(09) VALUE "114032010".
+      *    在医総管（機能強化在支診等・病床無・月２回以上・１０人〜）
+           03  CONS-ZAITAKU60      PIC X(09) VALUE "114032110".
+      *    在医総管（機能強化在支診等・病床無・月１回・１人）
+           03  CONS-ZAITAKU61      PIC X(09) VALUE "114032210".
+      *    在医総管（機能強化在支診等・病床無・月１回・２〜９人）
+           03  CONS-ZAITAKU62      PIC X(09) VALUE "114032310".
+      *    在医総管（機能強化在支診等・病床無・月１回・１０人〜）
+           03  CONS-ZAITAKU63      PIC X(09) VALUE "114032410".
+      *    在医総管（在支診等・難病等月２回以上・１人）
+           03  CONS-ZAITAKU64      PIC X(09) VALUE "114032510".
+      *    在医総管（在支診等・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU65      PIC X(09) VALUE "114032610".
+      *    在医総管（在支診等・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU66      PIC X(09) VALUE "114032710".
+      *    在医総管（在支診等・月２回以上・１人）
+           03  CONS-ZAITAKU67      PIC X(09) VALUE "114032810".
+      *    在医総管（在支診等・月２回以上・２〜９人）
+           03  CONS-ZAITAKU68      PIC X(09) VALUE "114032910".
+      *    在医総管（在支診等・月２回以上・１０人〜）
+           03  CONS-ZAITAKU69      PIC X(09) VALUE "114033010".
+      *    在医総管（在支診等・月１回・１人）
+           03  CONS-ZAITAKU70      PIC X(09) VALUE "114033110".
+      *    在医総管（在支診等・月１回・２〜９人）
+           03  CONS-ZAITAKU71      PIC X(09) VALUE "114033210".
+      *    在医総管（在支診等・月１回・１０人〜）
+           03  CONS-ZAITAKU72      PIC X(09) VALUE "114033310".
+      *    在医総管（在支診等以外・難病等月２回以上・１人）
+           03  CONS-ZAITAKU73      PIC X(09) VALUE "114033410".
+      *    在医総管（在支診等以外・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU74      PIC X(09) VALUE "114033510".
+      *    在医総管（在支診等以外・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU75      PIC X(09) VALUE "114033610".
+      *    在医総管（在支診等以外・月２回以上・１人）
+           03  CONS-ZAITAKU76      PIC X(09) VALUE "114033710".
+      *    在医総管（在支診等以外・月２回以上・２〜９人）
+           03  CONS-ZAITAKU77      PIC X(09) VALUE "114033810".
+      *    在医総管（在支診等以外・月２回以上・１０人〜）
+           03  CONS-ZAITAKU78      PIC X(09) VALUE "114033910".
+      *    在医総管（在支診等以外・月１回・１人）
+           03  CONS-ZAITAKU79      PIC X(09) VALUE "114034010".
+      *    在医総管（在支診等以外・月１回・２〜９人）
+           03  CONS-ZAITAKU80      PIC X(09) VALUE "114034110".
+      *    在医総管（在支診等以外・月１回・１０人〜）
+           03  CONS-ZAITAKU81      PIC X(09) VALUE "114034210".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・１人）
+           03  CONS-ZAITAKU82      PIC X(09) VALUE "114035510".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU83      PIC X(09) VALUE "114035610".
+      *    施医総管（機能強化在支診等・病床有・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU84      PIC X(09) VALUE "114035710".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・１人）
+           03  CONS-ZAITAKU85      PIC X(09) VALUE "114035810".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・２〜９人）
+           03  CONS-ZAITAKU86      PIC X(09) VALUE "114035910".
+      *    施医総管（機能強化在支診等・病床有・月２回以上・１０人〜）
+           03  CONS-ZAITAKU87      PIC X(09) VALUE "114036010".
+      *    施医総管（機能強化在支診等・病床有・月１回・１人）
+           03  CONS-ZAITAKU88      PIC X(09) VALUE "114036110".
+      *    施医総管（機能強化在支診等・病床有・月１回・２〜９人）
+           03  CONS-ZAITAKU89      PIC X(09) VALUE "114036210".
+      *    施医総管（機能強化在支診等・病床有・月１回・１０人〜）
+           03  CONS-ZAITAKU90      PIC X(09) VALUE "114036310".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・１人）
+           03  CONS-ZAITAKU91      PIC X(09) VALUE "114036410".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU92      PIC X(09) VALUE "114036510".
+      *    施医総管（機能強化在支診等・病床無・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU93      PIC X(09) VALUE "114036610".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・１人）
+           03  CONS-ZAITAKU94      PIC X(09) VALUE "114036710".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・２〜９人）
+           03  CONS-ZAITAKU95      PIC X(09) VALUE "114036810".
+      *    施医総管（機能強化在支診等・病床無・月２回以上・１０人〜）
+           03  CONS-ZAITAKU96      PIC X(09) VALUE "114036910".
+      *    施医総管（機能強化在支診等・病床無・月１回・１人）
+           03  CONS-ZAITAKU97      PIC X(09) VALUE "114037010".
+      *    施医総管（機能強化在支診等・病床無・月１回・２〜９人）
+           03  CONS-ZAITAKU98      PIC X(09) VALUE "114037110".
+      *    施医総管（機能強化在支診等・病床無・月１回・１０人〜）
+           03  CONS-ZAITAKU99      PIC X(09) VALUE "114037210".
+      *    施医総管（在支診等・難病等月２回以上・１人）
+           03  CONS-ZAITAKU100     PIC X(09) VALUE "114037310".
+      *    施医総管（在支診等・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU101     PIC X(09) VALUE "114037410".
+      *    施医総管（在支診等・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU102     PIC X(09) VALUE "114037510".
+      *    施医総管（在支診等・月２回以上・１人）
+           03  CONS-ZAITAKU103     PIC X(09) VALUE "114037610".
+      *    施医総管（在支診等・月２回以上・２〜９人）
+           03  CONS-ZAITAKU104     PIC X(09) VALUE "114037710".
+      *    施医総管（在支診等・月２回以上・１０人〜）
+           03  CONS-ZAITAKU105     PIC X(09) VALUE "114037810".
+      *    施医総管（在支診等・月１回・１人）
+           03  CONS-ZAITAKU106     PIC X(09) VALUE "114037910".
+      *    施医総管（在支診等・月１回・２〜９人）
+           03  CONS-ZAITAKU107     PIC X(09) VALUE "114038010".
+      *    施医総管（在支診等・月１回・１０人〜）
+           03  CONS-ZAITAKU108     PIC X(09) VALUE "114038110".
+      *    施医総管（在支診等以外・難病等月２回以上・１人）
+           03  CONS-ZAITAKU109     PIC X(09) VALUE "114038210".
+      *    施医総管（在支診等以外・難病等月２回以上・２〜９人）
+           03  CONS-ZAITAKU110     PIC X(09) VALUE "114038310".
+      *    施医総管（在支診等以外・難病等月２回以上・１０人〜）
+           03  CONS-ZAITAKU111     PIC X(09) VALUE "114038410".
+      *    施医総管（在支診等以外・月２回以上・１人）
+           03  CONS-ZAITAKU112     PIC X(09) VALUE "114038510".
+      *    施医総管（在支診等以外・月２回以上・２〜９人）
+           03  CONS-ZAITAKU113     PIC X(09) VALUE "114038610".
+      *    施医総管（在支診等以外・月２回以上・１０人〜）
+           03  CONS-ZAITAKU114     PIC X(09) VALUE "114038710".
+      *    施医総管（在支診等以外・月１回・１人）
+           03  CONS-ZAITAKU115     PIC X(09) VALUE "114038810".
+      *    施医総管（在支診等以外・月１回・２〜９人）
+           03  CONS-ZAITAKU116     PIC X(09) VALUE "114038910".
+      *    施医総管（在支診等以外・月１回・１０人〜）
+           03  CONS-ZAITAKU117     PIC X(09) VALUE "114039010".
+      *=== 在総診コード追加 by hagino(2016/05/12) end
       *
            COPY    "CPSHELLTBL.INC".
       *     
@@ -2616,6 +2778,87 @@
                                        CONS-ZAITAKU37 OR
                                        CONS-ZAITAKU38
       *=== 在宅コード追加 by hagino(2014/06/09) end
+      *=== 在総診コード追加 by hagino(2016/05/12) start
+                                   OR  CONS-ZAITAKU39
+                                   OR  CONS-ZAITAKU40
+                                   OR  CONS-ZAITAKU41
+                                   OR  CONS-ZAITAKU42
+                                   OR  CONS-ZAITAKU43
+                                   OR  CONS-ZAITAKU44
+                                   OR  CONS-ZAITAKU45
+                                   OR  CONS-ZAITAKU46
+                                   OR  CONS-ZAITAKU47
+                                   OR  CONS-ZAITAKU48
+                                   OR  CONS-ZAITAKU49
+                                   OR  CONS-ZAITAKU50
+                                   OR  CONS-ZAITAKU51
+                                   OR  CONS-ZAITAKU52
+                                   OR  CONS-ZAITAKU53
+                                   OR  CONS-ZAITAKU54
+                                   OR  CONS-ZAITAKU55
+                                   OR  CONS-ZAITAKU56
+                                   OR  CONS-ZAITAKU57
+                                   OR  CONS-ZAITAKU58
+                                   OR  CONS-ZAITAKU59
+                                   OR  CONS-ZAITAKU60
+                                   OR  CONS-ZAITAKU61
+                                   OR  CONS-ZAITAKU62
+                                   OR  CONS-ZAITAKU63
+                                   OR  CONS-ZAITAKU64
+                                   OR  CONS-ZAITAKU65
+                                   OR  CONS-ZAITAKU66
+                                   OR  CONS-ZAITAKU67
+                                   OR  CONS-ZAITAKU68
+                                   OR  CONS-ZAITAKU69
+                                   OR  CONS-ZAITAKU70
+                                   OR  CONS-ZAITAKU71
+                                   OR  CONS-ZAITAKU72
+                                   OR  CONS-ZAITAKU73
+                                   OR  CONS-ZAITAKU74
+                                   OR  CONS-ZAITAKU75
+                                   OR  CONS-ZAITAKU76
+                                   OR  CONS-ZAITAKU77
+                                   OR  CONS-ZAITAKU78
+                                   OR  CONS-ZAITAKU79
+                                   OR  CONS-ZAITAKU80
+                                   OR  CONS-ZAITAKU81
+                                   OR  CONS-ZAITAKU82
+                                   OR  CONS-ZAITAKU83
+                                   OR  CONS-ZAITAKU84
+                                   OR  CONS-ZAITAKU85
+                                   OR  CONS-ZAITAKU86
+                                   OR  CONS-ZAITAKU87
+                                   OR  CONS-ZAITAKU88
+                                   OR  CONS-ZAITAKU89
+                                   OR  CONS-ZAITAKU90
+                                   OR  CONS-ZAITAKU91
+                                   OR  CONS-ZAITAKU92
+                                   OR  CONS-ZAITAKU93
+                                   OR  CONS-ZAITAKU94
+                                   OR  CONS-ZAITAKU95
+                                   OR  CONS-ZAITAKU96
+                                   OR  CONS-ZAITAKU97
+                                   OR  CONS-ZAITAKU98
+                                   OR  CONS-ZAITAKU99
+                                   OR  CONS-ZAITAKU100
+                                   OR  CONS-ZAITAKU101
+                                   OR  CONS-ZAITAKU102
+                                   OR  CONS-ZAITAKU103
+                                   OR  CONS-ZAITAKU104
+                                   OR  CONS-ZAITAKU105
+                                   OR  CONS-ZAITAKU106
+                                   OR  CONS-ZAITAKU107
+                                   OR  CONS-ZAITAKU108
+                                   OR  CONS-ZAITAKU109
+                                   OR  CONS-ZAITAKU110
+                                   OR  CONS-ZAITAKU111
+                                   OR  CONS-ZAITAKU112
+                                   OR  CONS-ZAITAKU113
+                                   OR  CONS-ZAITAKU114
+                                   OR  CONS-ZAITAKU115
+                                   OR  CONS-ZAITAKU116
+                                   OR  CONS-ZAITAKU117
+      *=== 在総診コード追加 by hagino(2016/05/12) end
       *
       *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
       *           MOVE  1  TO  SKT2110TMP-ZAITAKU
