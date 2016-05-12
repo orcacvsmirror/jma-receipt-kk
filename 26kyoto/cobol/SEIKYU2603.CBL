@@ -74,6 +74,7 @@
       *                                  止まるように修正
       *  01.00.27    吉川    15/07/07    全国公費との分点は一行にまとめる
       *  01.00.28    吉川    15/12/07    医療機関編集情報への開設者名追加対応
+      *  01.00.29    吉川    16/05/12    全国公費との分点は別行に分ける（元の仕様に戻す）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1138,80 +1139,66 @@
       *    元データ一時退避
                MOVE    MF100-REC           TO  MF101-REC
       *    公費併用点数、患者負担額を設定
-      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) start
-      *         MOVE   WRK-KOHTENSU-G       TO  MF100-TOTALTEN
-      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) end
+      *=== 全国公費の分点は分ける by Yoshikawa(2016/05/12) start
+               MOVE   WRK-KOHTENSU-G       TO  MF100-TOTALTEN
+      *=== 全国公費の分点は分ける by Yoshikawa(2016/05/12) end
                MOVE   WRK-ETCKOHFTN-G2     TO  MF100-ETCKOHFTN
       *
       *    全国公費の点数と地方公費の点数が同じ場合はレコードを分けない
-      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) start
-      *         IF      WRK-KOHTENSU-G      =   MF101-TOTALTEN
-      *             MOVE    1               TO  MF100-IPANCD
-      *         ELSE
-      **
-      *             MOVE    ZERO            TO  MF100-IPANCD
-      **=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) start
-      *             MOVE    ZERO            TO  MF100-FTNMONEY
-      **=== 帳票様式の変更に伴う修正 by Yoshikawa(2009/09/03) end
-      *             IF  FLG-ERR    =    ZERO
-      *                 WRITE   MF100-REC
-      *                 ADD     1   TO  CNT-MF100
-      *             ELSE
-      *                 DISPLAY "助成対象外患者番号="  RECE02-PTNUM
-      *                         "公費番号="            MF100-KOHNUM
-      *                         "診療年月="            MF100-SRYYM
-      *             END-IF
-      **    退避していた地方公費の元データを再設定
-      *             INITIALIZE      MF100-REC
-      *             MOVE    MF101-REC       TO  MF100-REC
-      *             MOVE    1               TO  MF100-IPANCD
-      *             MOVE    ZERO            TO  MF100-KEKKAKUFLG
-      *                                         MF100-SEISHINFLG
-      **    地方公費の点数から全国公費の分点数を差し引く
-      *             COMPUTE MF100-TOTALTEN  =   MF100-TOTALTEN
-      *                                     -   WRK-KOHTENSU-G
-      **---(01.00.06) LINE ADD START ------------------------------------
-      **    前期高齢者軽減特例措置は患者負担額印字
-      *             IF  RECE02-FLG (2)  =  1
-      *               MOVE  MF100-TOTALTEN  TO  MF100-ETCKOHFTN
-      **---(01.00.10) LINE ADD START ------------------------------------
-      **      長期上限考慮
-      *               PERFORM  900-SEIKYU-SET-SEC
-      *               IF  RECE10-ETC-KOHNUM (1)  =  "972"
-      *               OR  RECE10-ETC-KOHNUM (2)  =  "972"
-      *               OR  RECE10-ETC-KOHNUM (3)  =  "972"
-      *               OR  RECE10-ETC-KOHNUM (4)  =  "972"
-      *                 IF  MF100-ETCKOHFTN  >  10000
-      **=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
-      **                     MOVE  "10000"        TO  MF100-ETCKOHFTN
-      *                     MOVE  10000          TO  MF100-ETCKOHFTN
-      **=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
-      *                 END-IF
-      *               END-IF
-      *               IF  RECE10-ETC-KOHNUM (1)  =  "974"
-      *               OR  RECE10-ETC-KOHNUM (2)  =  "974"
-      *               OR  RECE10-ETC-KOHNUM (3)  =  "974"
-      *               OR  RECE10-ETC-KOHNUM (4)  =  "974"
-      *                 IF  MF100-ETCKOHFTN  >  20000
-      **=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
-      **                     MOVE  "20000"        TO  MF100-ETCKOHFTN
-      *                     MOVE  20000          TO  MF100-ETCKOHFTN
-      **=== open-cobol1.0対応 by Yoshikawa(2010/11/24) end
-      *                 END-IF
-      *               END-IF
-      **---(01.00.10) LINE ADD END   ------------------------------------
-      **=== 入院上限額考慮 by Yoshikawa(2015/03/12) start
-      *               IF  RECE02-FTNMONEY(1)  >   ZERO  
-      *               AND RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
-      *                   MOVE    RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
-      *               END-IF
-      **=== 入院上限額考慮 by Yoshikawa(2015/03/12) end
-      *             END-IF
-      *             MOVE    SPACE           TO  MF100-ETCKOHNUM
-      **---(01.00.06) LINE ADD END   ------------------------------------
-      *         END-IF
-      *=== 全国公費の分点時もまとめる by Yoshikawa(2015/07/07) end
-               MOVE    1                   TO  MF100-IPANCD
+      *=== 全国公費の分点は分ける by Yoshikawa(2016/05/12) start
+      *         MOVE    1                   TO  MF100-IPANCD
+               IF      WRK-KOHTENSU-G      =   MF101-TOTALTEN
+                   MOVE    1               TO  MF100-IPANCD
+               ELSE
+      *
+                   MOVE    ZERO            TO  MF100-IPANCD
+                   MOVE    ZERO            TO  MF100-FTNMONEY
+                   IF  FLG-ERR    =    ZERO
+                       WRITE   MF100-REC
+                       ADD     1   TO  CNT-MF100
+                   ELSE
+                       DISPLAY "助成対象外患者番号="  RECE02-PTNUM
+                               "公費番号="            MF100-KOHNUM
+                               "診療年月="            MF100-SRYYM
+                   END-IF
+      *    退避していた地方公費の元データを再設定
+                   INITIALIZE      MF100-REC
+                   MOVE    MF101-REC       TO  MF100-REC
+                   MOVE    1               TO  MF100-IPANCD
+                   MOVE    ZERO            TO  MF100-KEKKAKUFLG
+                                               MF100-SEISHINFLG
+      *    地方公費の点数から全国公費の分点数を差し引く
+                   COMPUTE MF100-TOTALTEN  =   MF100-TOTALTEN
+                                           -   WRK-KOHTENSU-G
+      *    前期高齢者軽減特例措置は患者負担額印字
+                   IF  RECE02-FLG (2)  =  1
+                     MOVE  MF100-TOTALTEN  TO  MF100-ETCKOHFTN
+      *      長期上限考慮
+                     PERFORM  900-SEIKYU-SET-SEC
+                     IF  RECE10-ETC-KOHNUM (1)  =  "972"
+                     OR  RECE10-ETC-KOHNUM (2)  =  "972"
+                     OR  RECE10-ETC-KOHNUM (3)  =  "972"
+                     OR  RECE10-ETC-KOHNUM (4)  =  "972"
+                       IF  MF100-ETCKOHFTN  >  10000
+                           MOVE  10000          TO  MF100-ETCKOHFTN
+                       END-IF
+                     END-IF
+                     IF  RECE10-ETC-KOHNUM (1)  =  "974"
+                     OR  RECE10-ETC-KOHNUM (2)  =  "974"
+                     OR  RECE10-ETC-KOHNUM (3)  =  "974"
+                     OR  RECE10-ETC-KOHNUM (4)  =  "974"
+                       IF  MF100-ETCKOHFTN  >  20000
+                           MOVE  20000          TO  MF100-ETCKOHFTN
+                       END-IF
+                     END-IF
+                     IF  RECE02-FTNMONEY(1)  >   ZERO  
+                     AND RECE02-FTNMONEY(1)  <  MF100-ETCKOHFTN
+                         MOVE    RECE02-FTNMONEY(1)  TO  MF100-ETCKOHFTN
+                     END-IF
+                   END-IF
+                   MOVE    SPACE           TO  MF100-ETCKOHNUM
+               END-IF
+      *=== 全国公費の分点は分ける by Yoshikawa(2016/05/12) end
            ELSE
                MOVE    1                   TO  MF100-IPANCD
            END-IF
