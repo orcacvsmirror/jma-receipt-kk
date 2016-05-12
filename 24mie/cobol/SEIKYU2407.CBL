@@ -53,6 +53,7 @@
       *                                  紀宝寡婦（167）と紀宝老人（166）は
       *                                  2667点未満で集計対象外とする
       *                                  医療機関編集情報への開設者名追加対応
+      *  01.00.15    萩野    16/05/12    処方せん発行区分対応（診療行為コード追加）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -366,6 +367,12 @@
            03  CONS-SYOHOKOFU28      PIC X(09) VALUE "114026110".
            03  CONS-SYOHOKOFU29      PIC X(09) VALUE "114026210".
       *=== 処方せん発行区分対応 by hagino(2014/05/15) end
+      *=== 処方せん発行区分対応 by hagino(2016/05/12) start
+      *    小児かかりつけ診療料（処方せんを交付）（初診時）
+           03  CONS-SYOHOKOFU30      PIC X(09) VALUE "113019710".
+      *    小児かかりつけ診療料（処方せんを交付）（再診時） 
+           03  CONS-SYOHOKOFU31      PIC X(09) VALUE "113019810".
+      *=== 処方せん発行区分対応 by hagino(2016/05/12) end
       *
            COPY  "CPSHELLTBL.INC".
       *
@@ -2069,6 +2076,9 @@
                                 OR  CONS-SYOHOKOFU26 OR CONS-SYOHOKOFU27
                                 OR  CONS-SYOHOKOFU28 OR CONS-SYOHOKOFU29
       *=== 処方せん発行区分対応 by hagino(2014/05/15) end
+      *=== 処方せん発行区分対応 by hagino(2016/05/12) start
+                                OR  CONS-SYOHOKOFU30 OR CONS-SYOHOKOFU31
+      *=== 処方せん発行区分対応 by hagino(2016/05/12) end
                  MOVE  1  TO  FLG-SYOHOKOFU
              END-IF
            END-PERFORM
