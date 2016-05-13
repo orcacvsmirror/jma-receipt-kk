@@ -90,6 +90,8 @@
       *  01.00.32    門間    15/10/13    医療機関編集情報への開設者名追加対応
       *  01.00.33    吉川    16/05/13    月途中に主保険が変更されても
       *                                  １行にまとめて印字する
+      *                                  市町村負担額が空白のパターンでも
+      *                                  全国公費を併用している場合は印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1609,6 +1611,9 @@
       *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) start
            AND (MF100-TOTALTEN  =  MF100-FUKUSITEN)
       *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) end
+      *=== 全国公費は市町村負担額印字 by Yoshikawa(2016/05/13) start
+           AND (MF100-ZENKOHNUM  =  SPACE)
+      *=== 全国公費は市町村負担額印字 by Yoshikawa(2016/05/13) end
              MOVE  ZERO              TO  WRK-KOHFTN
              MOVE  SPACE             TO  SC07-KOHFTN(IDX)
            ELSE
