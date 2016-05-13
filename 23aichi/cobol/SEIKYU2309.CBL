@@ -88,6 +88,8 @@
       *                                  記載しないように修正
       *  01.00.31    門間    15/09/11    長期上位の場合、備考欄に長２と記載
       *  01.00.32    門間    15/10/13    医療機関編集情報への開設者名追加対応
+      *  01.00.33    吉川    16/05/13    月途中に主保険が変更されても
+      *                                  １行にまとめて印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1069,7 +1071,9 @@
       *---(01.00.05) LINE ADD START ------------------------------------
            MOVE  RECE02-PTNUM        TO  MF100-PTNUM
            MOVE  RECE02-RECEKA       TO  MF100-SRYKA
-           MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+      *     MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
            MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
            MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBN
            MOVE  RECE02-SRYYM        TO  MF100-SRYYM
