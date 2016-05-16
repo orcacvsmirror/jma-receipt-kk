@@ -1075,8 +1075,8 @@
            MOVE  RECE02-RECEKA       TO  MF100-SRYKA
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
       *     MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+      *     MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
-           MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
            MOVE  RECE02-NYUGAIKBN    TO  MF100-NYUGAIKBN
            MOVE  RECE02-SRYYM        TO  MF100-SRYYM
            MOVE  1                   TO  MF100-SKBFLG
@@ -1111,10 +1111,20 @@
            MOVE  WRK-CITYHKNJANUM          TO  MF100-CITYHKNJANUM
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) end
       *
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
+      *
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
       *    請求管理から総点数取得
            PERFORM  900-SEIKYU-READ-SEC
-           MOVE    RECE10-TOTALTEN(1)      TO  MF100-TOTALTEN
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+      *     MOVE    RECE10-TOTALTEN(1)      TO  MF100-TOTALTEN
+           ADD     RECE10-TOTALTEN(1)      TO  MF100-TOTALTEN
+           ADD     RECE02-FTNMONEY(IDY)    TO  MF100-FTNMONEY
+           ADD     RECE02-TOTALTEN(IDY)    TO  MF100-FUKUSITEN
+           ADD     RECE02-SHOKUJIFTN(IDY)  TO  MF100-SHOKUJIFTN
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
       *
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
@@ -1258,14 +1268,25 @@
       *       MOVE    WRK-SEIKYUGK-G2  TO    MF100-SEIKYUGK
       *     END-IF
       *=== 一宮市の合計金額記載修正 by Yoshikawa(2012/08/22) end
-           MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+      *     MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
+           ADD     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
       *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) end
       *
            MOVE     MF100-CITYHKNJANUM TO    WRK-KEY-CITYHKNJANUM
       *
            IF     FLG-ERR                 =   ZERO
-             WRITE    MF100-REC 
-             ADD      1                 TO    CNT-MF100
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+      *       WRITE    MF100-REC 
+      *       ADD      1                 TO    CNT-MF100
+             IF      FLG-MF100  =  1
+                     WRITE    MF100-REC
+                     ADD      1        TO    CNT-MF100
+             ELSE
+                     REWRITE  MF100-REC
+             END-IF
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
       *
       *    合計用ファイル書き出し
              INITIALIZE  MF100-REC
@@ -1276,10 +1297,15 @@
              MOVE    WRK-KEY-CITYHKNJANUM  TO  MF100-CITYHKNJANUM
       *    TMPファイル読み込み
              PERFORM  800-SKTTMP-READ-SEC
-             ADD     1                     TO  MF100-GKENSU
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+      *       ADD     1                     TO  MF100-GKENSU
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
       *
              IF      FLG-MF100  =  1
                      WRITE    MF100-REC
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+                     ADD     1             TO  MF100-GKENSU
+      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
              ELSE
                      REWRITE  MF100-REC
              END-IF
