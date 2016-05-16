@@ -50,6 +50,7 @@
       *  01.00.12    吉川    2014/10/03  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.13    吉川    2015/04/01  帳票様式の変更に伴う修正
       *  01.00.14    吉川    2016/04/14  医療機関編集情報への開設者名追加対応
+      *  01.00.15    吉川    2016/05/16  在宅コード変更（平成２８年４月改正）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -297,6 +298,9 @@
       *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
            03  WRK-CONS-SRYYM-201404   PIC X(06)   VALUE   "201404".
       *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) start
+           03  WRK-CONS-SRYYM-201604   PIC X(06)   VALUE   "201604".
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) end
       *
       *=== 在宅コード変更 by Yoshikawa(2014/05/20) start
       **    在宅総合・在宅末期（在医総）
@@ -359,6 +363,110 @@
       *
        01  TBL-ZAIISO-MAX              PIC 9(02) VALUE   16.
       *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
+      *
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) start
+      *    在総診テーブル（２０１６年４月診療分〜）
+       01  TBL-ZAISOSIN2-AREA.
+      *    在がん医総（在支診等）
+           03  FILLER          PIC X(09)   VALUE   "114007610".
+           03  FILLER          PIC X(09)   VALUE   "114007710".
+      *    在がん医総（機能強化した在支診等）
+           03  FILLER          PIC X(09)   VALUE   "114019510".
+           03  FILLER          PIC X(09)   VALUE   "114019610".
+           03  FILLER          PIC X(09)   VALUE   "114019710".
+           03  FILLER          PIC X(09)   VALUE   "114019810".
+      *
+       01  TBL-ZAISOSIN2-R  REDEFINES   TBL-ZAISOSIN2-AREA.
+           03  TBL-ZAISOSIN2            PIC X(09) OCCURS  6.
+      *
+       01  TBL-ZAISOSIN2-MAX            PIC 9(02) VALUE   6.
+      *
+      *    在医総テーブル（２０１６年４月診療分〜）
+       01  TBL-ZAIISO2-AREA.
+      *    在医総管（機能強化在支診等）
+           03  FILLER          PIC X(09)   VALUE   "114030710".
+           03  FILLER          PIC X(09)   VALUE   "114030810".
+           03  FILLER          PIC X(09)   VALUE   "114030910".
+           03  FILLER          PIC X(09)   VALUE   "114031010".
+           03  FILLER          PIC X(09)   VALUE   "114031110".
+           03  FILLER          PIC X(09)   VALUE   "114031210".
+           03  FILLER          PIC X(09)   VALUE   "114031310".
+           03  FILLER          PIC X(09)   VALUE   "114031410".
+           03  FILLER          PIC X(09)   VALUE   "114031510".
+           03  FILLER          PIC X(09)   VALUE   "114031610".
+           03  FILLER          PIC X(09)   VALUE   "114031710".
+           03  FILLER          PIC X(09)   VALUE   "114031810".
+           03  FILLER          PIC X(09)   VALUE   "114031910".
+           03  FILLER          PIC X(09)   VALUE   "114032010".
+           03  FILLER          PIC X(09)   VALUE   "114032110".
+           03  FILLER          PIC X(09)   VALUE   "114032210".
+           03  FILLER          PIC X(09)   VALUE   "114032310".
+           03  FILLER          PIC X(09)   VALUE   "114032410".
+      *    在医総管（在支診等）
+           03  FILLER          PIC X(09)   VALUE   "114032510".
+           03  FILLER          PIC X(09)   VALUE   "114032610".
+           03  FILLER          PIC X(09)   VALUE   "114032710".
+           03  FILLER          PIC X(09)   VALUE   "114032810".
+           03  FILLER          PIC X(09)   VALUE   "114032910".
+           03  FILLER          PIC X(09)   VALUE   "114033010".
+           03  FILLER          PIC X(09)   VALUE   "114033110".
+           03  FILLER          PIC X(09)   VALUE   "114033210".
+           03  FILLER          PIC X(09)   VALUE   "114033310".
+      *    在医総管（在支診等以外）
+           03  FILLER          PIC X(09)   VALUE   "114033410".
+           03  FILLER          PIC X(09)   VALUE   "114033510".
+           03  FILLER          PIC X(09)   VALUE   "114033610".
+           03  FILLER          PIC X(09)   VALUE   "114033710".
+           03  FILLER          PIC X(09)   VALUE   "114033810".
+           03  FILLER          PIC X(09)   VALUE   "114033910".
+           03  FILLER          PIC X(09)   VALUE   "114034010".
+           03  FILLER          PIC X(09)   VALUE   "114034110".
+           03  FILLER          PIC X(09)   VALUE   "114034210".
+      *    施医総管（機能強化在支診等）
+           03  FILLER          PIC X(09)   VALUE   "114035510".
+           03  FILLER          PIC X(09)   VALUE   "114035610".
+           03  FILLER          PIC X(09)   VALUE   "114035710".
+           03  FILLER          PIC X(09)   VALUE   "114035810".
+           03  FILLER          PIC X(09)   VALUE   "114035910".
+           03  FILLER          PIC X(09)   VALUE   "114036010".
+           03  FILLER          PIC X(09)   VALUE   "114036110".
+           03  FILLER          PIC X(09)   VALUE   "114036210".
+           03  FILLER          PIC X(09)   VALUE   "114036310".
+           03  FILLER          PIC X(09)   VALUE   "114036410".
+           03  FILLER          PIC X(09)   VALUE   "114036510".
+           03  FILLER          PIC X(09)   VALUE   "114036610".
+           03  FILLER          PIC X(09)   VALUE   "114036710".
+           03  FILLER          PIC X(09)   VALUE   "114036810".
+           03  FILLER          PIC X(09)   VALUE   "114036910".
+           03  FILLER          PIC X(09)   VALUE   "114037010".
+           03  FILLER          PIC X(09)   VALUE   "114037110".
+           03  FILLER          PIC X(09)   VALUE   "114037210".
+      *    施医総管（在支診等）
+           03  FILLER          PIC X(09)   VALUE   "114037310".
+           03  FILLER          PIC X(09)   VALUE   "114037410".
+           03  FILLER          PIC X(09)   VALUE   "114037510".
+           03  FILLER          PIC X(09)   VALUE   "114037610".
+           03  FILLER          PIC X(09)   VALUE   "114037710".
+           03  FILLER          PIC X(09)   VALUE   "114037810".
+           03  FILLER          PIC X(09)   VALUE   "114037910".
+           03  FILLER          PIC X(09)   VALUE   "114038010".
+           03  FILLER          PIC X(09)   VALUE   "114038110".
+      *    施医総管（在支診等以外）
+           03  FILLER          PIC X(09)   VALUE   "114038210".
+           03  FILLER          PIC X(09)   VALUE   "114038310".
+           03  FILLER          PIC X(09)   VALUE   "114038410".
+           03  FILLER          PIC X(09)   VALUE   "114038510".
+           03  FILLER          PIC X(09)   VALUE   "114038610".
+           03  FILLER          PIC X(09)   VALUE   "114038710".
+           03  FILLER          PIC X(09)   VALUE   "114038810".
+           03  FILLER          PIC X(09)   VALUE   "114038910".
+           03  FILLER          PIC X(09)   VALUE   "114039010".
+      *
+       01  TBL-ZAIISO2-R  REDEFINES   TBL-ZAIISO2-AREA.
+           03  TBL-ZAIISO2              PIC X(09) OCCURS  72.
+      *
+       01  TBL-ZAIISO2-MAX              PIC 9(02) VALUE   72.
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) start
       *
            COPY    "COMMON-SPA".
       *
@@ -2154,12 +2262,13 @@
       **=== 在総診以外は在医総 by Yoshikawa(2008/10/22) end
       *           MOVE  1  TO  FLG-ZAIISO2
       *         END-IF
-               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201404
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) start
+               IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201604
       *          在総診判定
                  PERFORM  VARYING  IDX5  FROM  1  BY  1
-                          UNTIL   (IDX5  >  TBL-ZAISOSIN-MAX)
+                          UNTIL   (IDX5  >  TBL-ZAISOSIN2-MAX)
                           OR      (FLG-ZAISOSIN  =  1)
-                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAISOSIN(IDX5)
+                   IF  SRY-SRYCD(IDX4)  =  TBL-ZAISOSIN2(IDX5)
                        MOVE    1            TO  FLG-ZAISOSIN
                    END-IF
                  END-PERFORM
@@ -2171,22 +2280,39 @@
       *          以下のコメントを外して下さい
       *          在管医総判定
       *           PERFORM  VARYING  IDX5  FROM  1  BY  1
-      *                    UNTIL   (IDX5  >  TBL-ZAIISO-MAX)
+      *                    UNTIL   (IDX5  >  TBL-ZAIISO2-MAX)
       *                    OR      (FLG-ZAIISO  =  1)
-      *             IF  SRY-SRYCD(IDX4)  =  TBL-ZAIISO(IDX5)
+      *             IF  SRY-SRYCD(IDX4)  =  TBL-ZAIISO2(IDX5)
       *                 MOVE    1            TO  FLG-ZAIISO
       *             END-IF
       *           END-PERFORM
-      *          在管医総判定
                ELSE
-                 IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
-                                         CONS-ZAITAKU2
-                   MOVE    1      TO  FLG-ZAISOSIN
-                 ELSE
-                   MOVE    1      TO  FLG-ZAIISO
-                 END-IF
-               END-IF
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) end
+                IF  RECE10-SRYYM  >=  WRK-CONS-SRYYM-201404
+      *           在総診判定
+                  PERFORM  VARYING  IDX5  FROM  1  BY  1
+                           UNTIL   (IDX5  >  TBL-ZAISOSIN-MAX)
+                           OR      (FLG-ZAISOSIN  =  1)
+                    IF  SRY-SRYCD(IDX4)  =  TBL-ZAISOSIN(IDX5)
+                        MOVE    1            TO  FLG-ZAISOSIN
+                    END-IF
+                  END-PERFORM
+      *           現状、在総診以外（特医総など）は全部在医総とする
+                  IF  FLG-ZAISOSIN  =  ZERO
+                      MOVE    1              TO  FLG-ZAIISO
+                  END-IF
+                ELSE
+                  IF  SRY-SRYCD(IDX4)  =  CONS-ZAITAKU1  OR
+                                          CONS-ZAITAKU2
+                    MOVE    1      TO  FLG-ZAISOSIN
+                  ELSE
+                    MOVE    1      TO  FLG-ZAIISO
+                  END-IF
+                END-IF
       *=== 在宅コード変更 by Yoshikawa(2014/05/20) end
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) start
+               END-IF
+      *=== 在宅コード変更 by Yoshikawa(2016/05/16) end
              END-IF
            END-PERFORM
       *
