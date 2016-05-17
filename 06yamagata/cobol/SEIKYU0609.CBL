@@ -496,6 +496,7 @@
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
        01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
+      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) end
       *
       *=== 特記事項印字追加 by Hagino(2012/09/19) end
       *
