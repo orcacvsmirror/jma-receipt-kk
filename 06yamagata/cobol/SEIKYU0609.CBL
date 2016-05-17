@@ -56,6 +56,7 @@
       *  01.00.19    吉川    15/02/10    分点時は公費２欄に日数、点数を記載
       *  01.00.20    吉川    15/03/03    保険点数が印字されないのを修正
       *  01.00.21    萩野    15/10/08    医療機関編集情報への開設者名追加対応
+      *  01.00.22    門間    16/05/17    特記事項欄に「37申出」を追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -474,18 +475,27 @@
            03  FILLER          PIC X(02)   VALUE   "36".
            03  FILLER          PIC X(10)   VALUE   "３６加治".
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) end
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
+           03  FILLER          PIC X(02)   VALUE   "37".
+           03  FILLER          PIC X(10)   VALUE   "３７申出".
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) start
       *     03  TBL-TOKKI       OCCURS   22.
-           03  TBL-TOKKI       OCCURS   34.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
+      *     03  TBL-TOKKI       OCCURS   34.
+           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) end
                05  TBL-TOKKICD             PIC X(02).
                05  TBL-TOKKINAME           PIC X(10).
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) start
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
-      *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) end
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *
       *=== 特記事項印字追加 by Hagino(2012/09/19) end
       *

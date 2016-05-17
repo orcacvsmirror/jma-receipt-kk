@@ -73,6 +73,7 @@
       *  01.00.27    吉川     15/01/30    平成２７年１月改正対応
       *  01.00.28    吉川     15/05/14    負担者番号順追加
       *                                   通し番号を印字
+      *  01.00.29    門間     16/05/17    特記事項欄に「37申出」を追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -636,12 +637,19 @@
            03  FILLER              PIC X(02)   VALUE   "36".
            03  FILLER              PIC X(10)   VALUE   "３６加治".
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
+           03  FILLER              PIC X(02)   VALUE   "37".
+           03  FILLER              PIC X(10)   VALUE   "３７申出".
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
       *     03  TBL-TOKKI       OCCURS   18.
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
       *     03  TBL-TOKKI       OCCURS   22.
-           03  TBL-TOKKI       OCCURS   34.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
+      *     03  TBL-TOKKI       OCCURS   34.
+           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
                05  TBL-TOKKICD     PIC X(02).
@@ -650,7 +658,10 @@
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   18.
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) start
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   34.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
+      * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   34.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   35.
+      *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
       *=== 特記事項印字 by Yoshikawa(2009/05/14) end
