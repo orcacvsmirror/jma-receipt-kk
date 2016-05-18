@@ -316,18 +316,23 @@
            03  CONS-SYOHOKOFU28      PIC X(09) VALUE "114026110".
            03  CONS-SYOHOKOFU29      PIC X(09) VALUE "114026210".
       *=== 処方せん発行区分対応 by hagino(2014/05/15) end
-      *
       *=== 処方せん発行区分対応 by hagino(2016/05/17) start
       *    小児かかりつけ診療料（処方せんを交付）（初診時）
            03  CONS-SYOHOKOFU30      PIC X(09) VALUE "113019710".
       *    小児かかりつけ診療料（処方せんを交付）（再診時） 
            03  CONS-SYOHOKOFU31      PIC X(09) VALUE "113019810".
-      *
       *    処方せん無交付加算（在宅時医学総合管理料）
            03  CONS-SYOHOMUKO1       PIC X(09) VALUE "114034370".
       *    処方せん無交付加算（施設入居時等医学総合管理料）
            03  CONS-SYOHOMUKO2       PIC X(09) VALUE "114039170".
+      *=== 処方せん発行区分対応 by hagino(2016/05/17) end
       *
+      *    コンマ
+           03  WRK-KUGIRI             PIC X(01)   VALUE   ",".
+      *    改行コード
+           03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
+      *
+      *=== 処方せん発行区分対応 by hagino(2016/05/17) start
       *    在総診テーブル（２０１６年４月診療分〜）
        01  TBL-ZAITAKU6-AREA.
       *    在がん医総（在支診等）（処方せんあり）
@@ -497,11 +502,6 @@
       *
        01  TBL-ZAITAKU6-MAX    PIC 9(02)   VALUE   79.
       *=== 処方せん発行区分対応 by hagino(2016/05/17) end
-      *
-      *    コンマ
-           03  WRK-KUGIRI             PIC X(01)   VALUE   ",".
-      *    改行コード
-           03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
       *
            COPY  "CPSHELLTBL.INC".
       *
