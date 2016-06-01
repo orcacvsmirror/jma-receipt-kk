@@ -236,6 +236,7 @@
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
       *     03  IDX                 PIC 9(04).
            03  IDX                 PIC 9(05).
+           03  IDY                 PIC 9(04).
            03  IDXX                PIC 9(04).
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
            03  IDX1                PIC 9(04).
