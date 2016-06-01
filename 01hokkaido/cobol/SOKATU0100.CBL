@@ -105,6 +105,7 @@
       *  01.00.43    吉川   14/10/02    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.44    吉川   15/04/14    請求書の枚数欄は在宅分を加算する
       *  01.00.45    門間   16/05/10    在宅の対象とする診療コード変更
+      *  01.00.46    吉川   16/06/01    対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -224,10 +225,19 @@
            03  FLG-SRYACT          PIC 9(01).
            03  FLG-ZAITAKU         PIC 9(01).
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/07/26) end
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+           03  FLG-PRGOPTION       PIC 9(01).
+           03  FLG-OK              PIC 9(01).
+           03  FLG-TAISYO          PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX                 PIC 9(04).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *     03  IDX                 PIC 9(04).
+           03  IDX                 PIC 9(05).
+           03  IDXX                PIC 9(04).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
@@ -333,6 +343,19 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.10) LINE ADD END   ------------------------------------
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *    プログラムオプション
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+      *
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *    対象公費
+           03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
       *
        01  SORT-AREA.
            03  SORT-KOH-TBL OCCURS 20.
@@ -733,6 +756,12 @@
            COPY    "CPSRYACT.INC".
       *=== 70歳未満でも在宅を記載 by Yoshikawa(2013/07/26) end
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
+      *
       ******************************************************************
       *    サブプロ用　領域
       *****************************************************************
@@ -980,6 +1009,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.10) LINE ADD END   ------------------------------------
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
+      *
            OPEN    OUTPUT  UPD-FILE
       *=== 特別療養費国保対応 by Yoshikawa(2011/02/09) start
       *****2006/05/11 @@@@ START
@@ -1022,6 +1056,73 @@
            .
        100-INIT-EXT.
            EXIT.
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SOKATU0100"              TO  WRK-PRGID
+      *
+      *    プログラムオプション取得
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *    
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
       *
       *****************************************************************
       *    主　　処理
@@ -1469,11 +1570,18 @@
       *       IF  RECE02-KOHNUM (IDZ) = "144" OR "244" OR "344"
       *                              OR "143" OR "243" OR "343"
       *                              OR "544" OR "543"
-             IF  RECE02-KOHNUM (IDZ) = "144" OR "244" OR "344"
-                                    OR "143" OR "243" OR "343"
-                                    OR "544" OR "543" OR "643"
-                                    OR "644" OR "743" OR "744"
-                                    OR "843" OR "844"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *       IF  RECE02-KOHNUM (IDZ) = "144" OR "244" OR "344"
+      *                              OR "143" OR "243" OR "343"
+      *                              OR "544" OR "543" OR "643"
+      *                              OR "644" OR "743" OR "744"
+      *                              OR "843" OR "844"
+             INITIALIZE                            WRK-CHK-KOHNUM-TBL
+             MOVE    RECE02-KOHNUM(IDZ)        TO  WRK-CHK-KOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
       *---(01.00.07) LINE ADD END   ------------------------------------
                PERFORM  20011-SYUKEI-SEC
              END-IF
@@ -2690,6 +2798,31 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
+      *
       *****************************************************************
       *    請求管理読込
       *****************************************************************
@@ -3324,26 +3457,36 @@
       *          OR RECE02-KOHNUM(4) = "144" OR "244" OR "344"
       *                             OR "143" OR "243" OR "343"
       *                             OR "544" OR "543"
-               IF  RECE02-KOHNUM(1) = "144" OR "244" OR "344"
-                                   OR "143" OR "243" OR "343"
-                                   OR "544" OR "543" OR "643"
-                                   OR "644" OR "743" OR "744"
-                                   OR "843" OR "844"
-                OR RECE02-KOHNUM(2) = "144" OR "244" OR "344"
-                                   OR "143" OR "243" OR "343"
-                                   OR "544" OR "543" OR "643"
-                                   OR "644" OR "743" OR "744"
-                                   OR "843" OR "844"
-                OR RECE02-KOHNUM(3) = "144" OR "244" OR "344"
-                                   OR "143" OR "243" OR "343"
-                                   OR "544" OR "543" OR "643"
-                                   OR "644" OR "743" OR "744"
-                                   OR "843" OR "844"
-                OR RECE02-KOHNUM(4) = "144" OR "244" OR "344"
-                                   OR "143" OR "243" OR "343"
-                                   OR "544" OR "543" OR "643"
-                                   OR "644" OR "743" OR "744"
-                                   OR "843" OR "844"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *         IF  RECE02-KOHNUM(1) = "144" OR "244" OR "344"
+      *                             OR "143" OR "243" OR "343"
+      *                             OR "544" OR "543" OR "643"
+      *                             OR "644" OR "743" OR "744"
+      *                             OR "843" OR "844"
+      *          OR RECE02-KOHNUM(2) = "144" OR "244" OR "344"
+      *                             OR "143" OR "243" OR "343"
+      *                             OR "544" OR "543" OR "643"
+      *                             OR "644" OR "743" OR "744"
+      *                             OR "843" OR "844"
+      *          OR RECE02-KOHNUM(3) = "144" OR "244" OR "344"
+      *                             OR "143" OR "243" OR "343"
+      *                             OR "544" OR "543" OR "643"
+      *                             OR "644" OR "743" OR "744"
+      *                             OR "843" OR "844"
+      *          OR RECE02-KOHNUM(4) = "144" OR "244" OR "344"
+      *                             OR "143" OR "243" OR "343"
+      *                             OR "544" OR "543" OR "643"
+      *                             OR "644" OR "743" OR "744"
+      *                             OR "843" OR "844"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *        テスト患者のときは読み飛ばす
                    INITIALIZE                      PTINF-REC
@@ -3833,6 +3976,54 @@
            .
        910-SEIKYU-INV-EXT.
            EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/01) end
       *---(01.00.10) LINE ADD START ------------------------------------
       *****************************************************************
       *    医療機関編集情報読み込み
