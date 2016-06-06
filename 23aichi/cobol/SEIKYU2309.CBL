@@ -1302,12 +1302,17 @@
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
       *       ADD     1                     TO  MF100-GKENSU
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) start
+             ADD     1                     TO  MF100-GKENSU
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) end
       *
              IF      FLG-MF100  =  1
                      WRITE    MF100-REC
-      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
-                     ADD     1             TO  MF100-GKENSU
-      *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) start
+      **=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
+      *               ADD     1             TO  MF100-GKENSU
+      **=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) end
              ELSE
                      REWRITE  MF100-REC
              END-IF
