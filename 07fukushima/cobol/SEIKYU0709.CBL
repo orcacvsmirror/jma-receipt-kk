@@ -595,7 +595,7 @@
       *****************************************************************
        100-OPTION-SELECT-SEC             SECTION.
       *
-           MOVE    "SEIKYU0605"              TO  WRK-PRGID
+           MOVE    "SEIKYU0709"              TO  WRK-PRGID
       *
       *    プログラムオプション取得
       *    対象公費番号
