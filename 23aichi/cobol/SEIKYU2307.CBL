@@ -92,6 +92,7 @@
       *                                  １行にまとめて印字する
       *                                  市町村負担額が空白のパターンでも
       *                                  全国公費を併用している場合は印字
+      *  01.00.34    吉川    16/06/06    請求総件数欄が印字されない不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1280,12 +1281,14 @@
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) start
       *       WRITE    MF100-REC 
       *       ADD      1                 TO    CNT-MF100
-             IF      FLG-MF100  =  1
-                     WRITE    MF100-REC
-                     ADD      1        TO    CNT-MF100
-             ELSE
-                     REWRITE  MF100-REC
-             END-IF
+            IF      FLG-MF100  =  1
+              WRITE    MF100-REC
+              ADD      1        TO    CNT-MF100
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) start
+      *       ELSE
+      *               REWRITE  MF100-REC
+      *       END-IF
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) end
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
       *
       *    合計用ファイル書き出し
@@ -1309,6 +1312,11 @@
              ELSE
                      REWRITE  MF100-REC
              END-IF
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) start
+            ELSE
+                REWRITE  MF100-REC
+            END-IF
+      *=== 請求総件数欄の印字不具合修正 by Yoshikawa(2016/06/06) end
            ELSE
              DISPLAY "助成対象外患者番号="  RECE02-PTNUM
                      "点数="                RECE02-TOTALTEN(1)
