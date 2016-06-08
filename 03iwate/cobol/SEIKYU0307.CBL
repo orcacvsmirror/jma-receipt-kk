@@ -45,6 +45,7 @@
       *  01.00.09     吉川    2016/04/14  レセプト印刷順をPGオプションで
       *                                   設定できるように修正
       *                                   医療機関編集情報への開設者名追加対応
+      *  01.00.10     萩野    2016/06/08  対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -145,6 +146,9 @@
            03  FLG-PRGOPTION  PIC 9(01).
            03  FLG-OK         PIC 9(01).
       *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+           03  FLG-TAISYO     PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -334,6 +338,12 @@
                05  WRK-2003-SYUBETU-G.
                    07  WRK-2003-SYUBETU        PIC X(04) OCCURS 10.
       *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *    対象公費
+           03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
       *
        01  WRK-BYOMEI-AREA.     
       *    傷病名最大文字数（傷病名欄）
@@ -779,7 +789,19 @@
            PERFORM 1001-OPTION-SET-SEC
            MOVE    WRK-OPTION(1)(1:2)        TO  WRK-RECESYUTURYOKU
            DISPLAY "レセプト出力順="  WRK-RECESYUTURYOKU
-      *    
+      *
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -982,8 +1004,15 @@
       *
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
-             IF  RECE02-KOHNUM (IDZ) = "150" OR "110" OR "130"
-                                   OR  "140" OR "120" OR "199"
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *       IF  RECE02-KOHNUM (IDZ) = "150" OR "110" OR "130"
+      *                             OR  "140" OR "120" OR "199"
+             INITIALIZE                            WRK-CHK-KOHNUM-TBL
+             MOVE    RECE02-KOHNUM(IDZ)        TO  WRK-CHK-KOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -2635,6 +2664,31 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
       *****************************************************************
       *    一時ファイル読込
       *****************************************************************
@@ -2724,14 +2778,24 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "150" OR "110" OR "130" OR
-                                         "140" OR "120" OR "199" OR
-                   RECE02-KOHNUM(2)   =  "150" OR "110" OR "130" OR
-                                         "140" OR "120" OR "199" OR
-                   RECE02-KOHNUM(3)   =  "150" OR "110" OR "130" OR
-                                         "140" OR "120" OR "199" OR
-                   RECE02-KOHNUM(4)   =  "150" OR "110" OR "130" OR
-                                         "140" OR "120" OR "199"
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *         IF  RECE02-KOHNUM (1)  =  "150" OR "110" OR "130" OR
+      *                                   "140" OR "120" OR "199" OR
+      *             RECE02-KOHNUM(2)   =  "150" OR "110" OR "130" OR
+      *                                   "140" OR "120" OR "199" OR
+      *             RECE02-KOHNUM(3)   =  "150" OR "110" OR "130" OR
+      *                                   "140" OR "120" OR "199" OR
+      *             RECE02-KOHNUM(4)   =  "150" OR "110" OR "130" OR
+      *                                   "140" OR "120" OR "199"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
