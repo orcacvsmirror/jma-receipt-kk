@@ -34,6 +34,7 @@
       *  01.00.03    吉川    2013/07/09  プログラムオプション対応
       *  01.00.04    吉川    2014/10/06   ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.05    萩野    2015/10/08    医療機関編集情報への開設者名追加対応
+      *  01.00.06    萩野    2016/06/08    対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -124,6 +125,9 @@
            03  FLG-PRGOPTION  PIC 9(01).
            03  FLG-OK         PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+           03  FLG-TAISYO     PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -211,6 +215,12 @@
            03  WRK-PRGID             PIC X(25).
            03  WRK-KBNCD             PIC X(16).
       *=== プログラムオプション対応 by Yoshikawa(2013/07/09) end
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *    対象公費
+           03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
       *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
@@ -225,6 +235,7 @@
       *=== 医療機関編集情報へ開設者名追加 by hagino(2015/10/08) start
            03  WRK-KAISETUNAME       PIC X(80).
       *=== 医療機関編集情報へ開設者名追加 by hagino(2015/10/08) end
+      *
       *
       *    カウント領域
        01  CNT-AREA.
@@ -612,6 +623,18 @@
            MOVE    WRK-OPTION(1)(1:1)        TO  WRK-BAITAISYURUI
            DISPLAY "媒体種類="  WRK-BAITAISYURUI
       *
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -858,6 +881,31 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
       *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
@@ -900,14 +948,27 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "145" OR "146" OR "143" OR
-                                         "245" OR "246" OR "243" OR
-                   RECE02-KOHNUM (2)  =  "145" OR "146" OR "143" OR
-                                         "245" OR "246" OR "243" OR
-                   RECE02-KOHNUM (3)  =  "145" OR "146" OR "143" OR
-                                         "245" OR "246" OR "243" OR
-                   RECE02-KOHNUM (4)  =  "145" OR "146" OR "143" OR
-                                         "245" OR "246" OR "243"
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+      *         IF  RECE02-KOHNUM (1)  =  "145" OR "146" OR "143" OR
+      *                                   "245" OR "246" OR "243" OR
+      *             RECE02-KOHNUM (2)  =  "145" OR "146" OR "143" OR
+      *                                   "245" OR "246" OR "243" OR
+      *             RECE02-KOHNUM (3)  =  "145" OR "146" OR "143" OR
+      *                                   "245" OR "246" OR "243" OR
+      *             RECE02-KOHNUM (4)  =  "145" OR "146" OR "143" OR
+      *                                   "245" OR "246" OR "243"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
+      *
+      *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
