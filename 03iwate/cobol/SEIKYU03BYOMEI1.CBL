@@ -127,6 +127,10 @@
            03  IDX                 PIC 9(03). 
            03  IDY                 PIC 9(03). 
            03  IDZ                 PIC 9(03).
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
+           03  IDXX                PIC 9(04).
+           03  IDX1                PIC 9(04).
+      *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
       *
       *    一時領域
        01  WRK-AREA.
