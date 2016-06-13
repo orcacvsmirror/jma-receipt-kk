@@ -45,6 +45,7 @@
       *  01.00.09    吉川    14/10/23    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.10    吉川    15/11/17    医療機関編集情報への開設者名追加対応
       *  01.00.11    吉川    16/06/07    対象公費はPGオプションから取得する
+      *                                  備考欄に全国公費の情報を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -122,6 +123,12 @@
            03  FLG-OK         PIC 9(01).
            03  FLG-TAISYO     PIC 9(01).
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/07) end
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+           03  FLG-HKNNUM     PIC 9(01).
+           03  FLG-PTKOHFTN   PIC 9(01).
+           03  FLG-PTCOM      PIC 9(01).
+           03  FLG-SRYACT     PIC 9(01).
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -154,6 +161,9 @@
            03  WRK-Z2                PIC ZZ.
            03  WRK-Z4                PIC ZZZZ.
            03  WRK-Z6                PIC ZZ,ZZZ.
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+           03  WRK-Z6-9              PIC ZZ,ZZ9.
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
            03  WRK-Z7                PIC ZZZ,ZZZ.
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
@@ -178,6 +188,10 @@
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
            03  WRK-ITBFTN            PIC 9(08).
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+           03  WRK-SRYCD             PIC X(09).
+           03  WRK-BIKOHCD           PIC X(09).
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -321,6 +335,24 @@
        01  PRGOPTION-REC.
            COPY    "CPPRGOPTION.INC".
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/07) end
+      *
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+      *    患者公費負担
+       01  PTKOHFTN-REC.
+           COPY    "CPPTKOHFTN.INC".
+      *
+      *    保険番号
+       01  HKNNUM-REC.
+           COPY    "CPHKNNUM.INC".
+      *
+      *    患者コメント
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *
+      *    診療行為
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *
       *****************************************************************
       *    サブプロ用　領域
@@ -574,6 +606,16 @@
              DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
            END-PERFORM
       *    
+      *    備考のコメント設定
+           MOVE    "BIKOH"                   TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(1:2)  =  "※"
+             MOVE    SPACE                   TO  WRK-BIKOHCD
+           ELSE
+             MOVE    WRK-OPTION(1)(1:9)      TO  WRK-BIKOHCD
+           END-IF
+           DISPLAY "備考コメントコード =" WRK-BIKOHCD
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -847,7 +889,7 @@
                IF  RECE02-HKNJANUM(3:1) = "3"
                    MOVE    "4"      TO  MF100-HKNKBN-KEY
                ELSE
-                   MOVE    "3"      TO   MF100-HKNKBN-KEY                   
+                   MOVE    "3"      TO   MF100-HKNKBN-KEY
                END-IF
            ELSE
                IF   RECE02-HONKZKKBN   =  "1"
@@ -856,6 +898,77 @@
                    MOVE    "2"      TO    MF100-HKNKBN-KEY
                END-IF
            END-IF
+      *
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+      *    全国公費を所持している場合、
+      *    備考欄に制度名、上限額、他一部累計負担額、他医療機関名印字
+           DISPLAY "MF100-ZENKOHNUM = " MF100-ZENKOHNUM
+           IF  MF100-ZENKOHNUM  NOT =  SPACE
+      *        (1)制度名
+               MOVE    MF100-ZENKOHNUM TO  WRK-KOHNUM
+               PERFORM 930-HKNNUM-READ-SEC
+               STRING  "(1) "              DELIMITED BY SIZE
+                       HKN-TANSEIDONAME    DELIMITED BY SPACE
+                       INTO                MF100-BIKO(1)
+               END-STRING
+      *
+      *        (2)自己負担上限額
+               PERFORM 940-PTKOHFTN-READ-SEC
+               MOVE    PTKOHFTN-GAIJGNGAK  TO  WRK-Z6-9
+               IF  PTKOHFTN-GAIJGNGAK  =  ZERO
+                   STRING  "(2) "          DELIMITED BY SIZE
+                           "上限なし"      DELIMITED BY SIZE
+                           INTO            MF100-BIKO(2)
+                   END-STRING
+               ELSE
+                   STRING  "(2)"           DELIMITED BY SIZE
+                           WRK-Z6-9        DELIMITED BY SIZE
+                           "円"            DELIMITED BY SIZE
+                           INTO            MF100-BIKO(2)
+                   END-STRING
+               END-IF
+      *
+      *        (3)他一部負担累計額及び他医療機関名
+               IF  MF100-ZENKOHNUM  =  "015" OR "016" OR "021"
+                                    OR "038" OR "052" OR "054"
+                   MOVE    PTKOHFTN-NYUJGNGAK  TO  WRK-Z6-9
+                   STRING  "(3)"           DELIMITED BY SIZE
+                           WRK-Z6-9        DELIMITED BY SIZE
+                           "円"            DELIMITED BY SIZE
+                           INTO            MF100-BIKO(3)
+                   END-STRING
+      *            他一部累計負担額がある場合、医療機関（コメント）印字
+                   IF  PTKOHFTN-NYUJGNGAK  NOT =  ZERO
+                       MOVE  WRK-BIKOHCD             TO  WRK-SRYCD
+                       PERFORM 950-SRYACT-READ-SEC
+                       IF  FLG-SRYACT  =  ZERO
+                           PERFORM  VARYING  IDX3  FROM  1  BY  1
+                                    UNTIL    IDX3  >  5
+                             IF  WRK-BIKOHCD  =  SRY-SRYCD(IDX3)
+      *                          患者コメント情報読込
+                                 PERFORM 960-PTCOM-READ-SEC
+                                 STRING  "("         DELIMITED BY SIZE
+                                         PTCOM-INPUTCOMENT
+                                                     DELIMITED BY SPACE
+                                         ")"         DELIMITED BY SIZE
+                                         INTO        MF100-BIKO(4)
+                                 END-STRING
+                             END-IF
+                           END-PERFORM
+                       END-IF
+                   END-IF
+               ELSE
+                   IF  PTKOHFTN-GAIJGNGAK  NOT =  ZERO
+                       MOVE    ZERO                TO  WRK-Z6-9
+                       STRING  "(3)"               DELIMITED BY SIZE
+                               WRK-Z6-9            DELIMITED BY SIZE
+                               "円"                DELIMITED BY SIZE
+                               INTO                MF100-BIKO(3)
+                       END-STRING
+                   END-IF
+               END-IF
+           END-IF
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *
            WRITE   MF100-REC 
            ADD     1                   TO  CNT-MF100
@@ -1046,6 +1159,14 @@
                    MOVE    WRK-HENYMDG(1:16)
                                            TO  SC09-BIKO2(IDX)
                END-IF
+      *
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+      *    備考
+               MOVE    MF100-BIKO(1)       TO  SC09-BIKO(IDX)
+               MOVE    MF100-BIKO(2)       TO  SC09-BIKO2(IDX)
+               MOVE    MF100-BIKO(3)       TO  SC09-BIKO3(IDX)
+               MOVE    MF100-BIKO(4)       TO  SC09-BIKO4(IDX)
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *
       *    合計加算
                IF      MF100-NYUGAIKBN     =   "1"
@@ -1241,12 +1362,18 @@
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
                    SYU-KOH-HKNNUM(IDX) =   SPACE
-               IF  SYU-KOH-HKNNUM(IDX)     =   "010" OR "011"
-               OR                              "020" OR "021"
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+      *         IF  SYU-KOH-HKNNUM(IDX)     =   "010" OR "011"
+      *         OR                              "020" OR "021"
+               IF  SYU-KOH-HKNNUM(IDX)(1:1)  =  "0"
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
                    MOVE    1                   TO  FLG-HEIYOU
       *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
                    ADD     SYU-TOTAL-HKNTEN    TO  WRK-KOHTENSU
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+                   MOVE    SYU-KOH-HKNNUM(IDX) TO  MF100-ZENKOHNUM
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
                END-IF
       *
            END-PERFORM
@@ -1713,6 +1840,224 @@
            .
        910-HKNCOMBI-READ-EXT.
            EXIT.
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) start
+      *****************************************************************
+      *   保険番号情報セット
+      *****************************************************************
+       930-HKNNUM-READ-SEC  SECTION.
+      *
+           INITIALIZE                          HKNNUM-REC
+           MOVE    SPA-HOSPNUM             TO  HKN-HOSPNUM
+           MOVE    WRK-KOHNUM              TO  HKN-HKNNUM
+           MOVE    MF100-SRYYM             TO  HKN-TEKSTYMD(1:6)
+                                               HKN-TEKEDYMD(1:6)
+           MOVE    "99"                    TO  HKN-TEKSTYMD(7:2)
+           MOVE    "00"                    TO  HKN-TEKEDYMD(7:2)
+           MOVE    HKNNUM-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_hknnum"            TO  MCP-TABLE
+           MOVE    "key5"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    "tbl_hknnum"        TO  MCP-TABLE
+               MOVE    "key5"              TO  MCP-PATHNAME
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF  MCP-RC  =  ZERO
+                   MOVE  MCPDATA-REC       TO  HKNNUM-REC
+                   MOVE  ZERO              TO  FLG-HKNNUM
+      *
+                   IF    HKN-HKNNUM  =  "051"
+                     INITIALIZE                HKN-TANSEIDONAME
+                     MOVE    "特定疾患"    TO  HKN-TANSEIDONAME
+                   END-IF
+      *
+               ELSE
+                   INITIALIZE                  HKNNUM-REC
+                   MOVE    1               TO  FLG-HKNNUM
+               END-IF
+           ELSE
+             DISPLAY  "HKNNUM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_hknnum"            TO  MCP-TABLE
+           MOVE    "key5"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       930-HKNNUM-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    患者公費負担情報読込処理
+      *****************************************************************
+       940-PTKOHFTN-READ-SEC         SECTION.
+      *
+           INITIALIZE                          PTKOHFTN-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  PTKOHFTN-HOSPNUM
+           MOVE    MF100-PTID              TO  PTKOHFTN-PTID
+           MOVE    PTKOHFTN-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+               MOVE    "key2"              TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+                   MOVE    ZERO                TO  FLG-PTKOHFTN
+               ELSE
+                   MOVE    1                   TO  FLG-PTKOHFTN
+                   INITIALIZE                  PTKOHFTN-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHFTN
+               INITIALIZE                  PTKOHFTN-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"          TO  MCP-TABLE
+           MOVE    "key2"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       940-PTKOHFTN-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    診療情報セット
+      *****************************************************************
+       950-SRYACT-READ-SEC  SECTION.
+      *
+           INITIALIZE                      SRYACT-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  SRY-HOSPNUM
+           MOVE    RECE02-NYUGAIKBN        TO  SRY-NYUGAIKBN
+           MOVE    RECE02-PTID             TO  SRY-PTID
+           MOVE    RECE02-SRYYM            TO  SRY-SRYYM
+           MOVE    WRK-SRYCD               TO  SRY-SRYCD(1)
+                                               SRY-SRYCD(2)
+                                               SRY-SRYCD(3)
+                                               SRY-SRYCD(4)
+                                               SRY-SRYCD(5)
+           MOVE    SRYACT-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_sryact"            TO  MCP-TABLE
+           MOVE    "key7"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           IF  MCP-RC  =  ZERO
+               MOVE    "tbl_sryact"        TO  MCP-TABLE
+               MOVE    "key7"              TO  MCP-PATHNAME
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF  MCP-RC  =  ZERO
+                   MOVE    MCPDATA-REC     TO  SRYACT-REC
+                   MOVE    ZERO            TO  FLG-SRYACT
+               ELSE
+                   INITIALIZE              SRYACT-REC
+                   MOVE    1               TO  FLG-SRYACT
+               END-IF
+           ELSE
+             DISPLAY  "SRYACT SELECT ERR"
+           END-IF
+      *
+           INITIALIZE                      MCPAREA
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_sryact"            TO  MCP-TABLE
+           MOVE    "key7"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       950-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    患者コメント情報セット
+      *****************************************************************
+       960-PTCOM-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PTCOM-REC
+      *
+           MOVE    SPA-HOSPNUM             TO  PTCOM-HOSPNUM
+           MOVE    SRY-PTID                TO  PTCOM-PTID
+           MOVE    SRY-ZAINUM              TO  PTCOM-ZAINUM
+           MOVE    SRY-SRYCD(IDX3)         TO  PTCOM-SRYCD
+           MOVE    SRY-INPUTNUM(IDX3)      TO  PTCOM-RENNUM
+           MOVE    PTCOM-REC               TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptcom"             TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           IF  MCP-RC  =  ZERO
+               MOVE    "tbl_ptcom"         TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF  MCP-RC  =  ZERO
+                   MOVE    MCPDATA-REC     TO  PTCOM-REC
+                   MOVE    ZERO            TO  FLG-PTCOM
+               ELSE
+                   INITIALIZE              PTCOM-REC
+                   MOVE    1               TO  FLG-PTCOM
+               END-IF
+           ELSE
+               DISPLAY  "PTCOM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptcom"             TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       960-PTCOM-SET-EXT.
+           EXIT.
+      *
+      *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************

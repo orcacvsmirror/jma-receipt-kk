@@ -148,6 +148,20 @@
         </appinfo>
       </element>
     </element>
+    <element name="BIKO-TBL3" occurs="10">
+      <element name="BIKO3" occurs="1">
+        <appinfo>
+          <embed object="text" length="16"/>
+        </appinfo>
+      </element>
+    </element>
+    <element name="BIKO-TBL4" occurs="10">
+      <element name="BIKO4" occurs="1">
+        <appinfo>
+          <embed object="text" length="16"/>
+        </appinfo>
+      </element>
+    </element>
   </dia:dictionarydata>
   <dia:diagramdata>
     <dia:attribute name="background">
@@ -1032,7 +1046,7 @@
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true" active="true">
+  <dia:layer name="文字" visible="true">
     <dia:object type="Standard - Text" version="1" id="O40">
       <dia:attribute name="obj_pos">
         <dia:point val="2,2.5"/>
@@ -3380,7 +3394,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true">
+  <dia:layer name="差し込み" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O111">
       <dia:attribute name="obj_pos">
         <dia:point val="4,3"/>
@@ -6746,10 +6760,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O191">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9557,11.8183"/>
+        <dia:point val="15.9425,11.6308"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9557,11.5983;17.9557,11.8508"/>
+        <dia:rectangle val="15.9425,11.4108;17.9425,11.6633"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -6763,7 +6777,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9557,11.8183"/>
+            <dia:point val="15.9425,11.6308"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6788,15 +6802,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O192">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,12.8594"/>
+        <dia:point val="15.9425,12.6594"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,12.6394;16.7025,12.8919"/>
+        <dia:rectangle val="15.9425,12.4394;17.9425,12.6919"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6805,7 +6819,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,12.8594"/>
+            <dia:point val="15.9425,12.6594"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6830,15 +6844,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O193">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,13.9243"/>
+        <dia:point val="15.9425,13.6993"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,13.7043;16.7025,13.9568"/>
+        <dia:rectangle val="15.9425,13.4793;17.9425,13.7318"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6847,7 +6861,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,13.9243"/>
+            <dia:point val="15.9425,13.6993"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6872,15 +6886,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O194">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,14.9498"/>
+        <dia:point val="15.9425,14.7123"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,14.7298;16.7025,14.9823"/>
+        <dia:rectangle val="15.9425,14.4923;17.9425,14.7448"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6889,7 +6903,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,14.9498"/>
+            <dia:point val="15.9425,14.7123"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6914,15 +6928,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O195">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,15.9753"/>
+        <dia:point val="15.9425,15.7503"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,15.7553;16.7025,16.0078"/>
+        <dia:rectangle val="15.9425,15.5303;17.9425,15.7828"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6931,7 +6945,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,15.9753"/>
+            <dia:point val="15.9425,15.7503"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6956,15 +6970,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O196">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,16.9967"/>
+        <dia:point val="15.9425,16.7842"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,16.7767;16.7025,17.0292"/>
+        <dia:rectangle val="15.9425,16.5642;17.9425,16.8167"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6973,7 +6987,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,16.9967"/>
+            <dia:point val="15.9425,16.7842"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -6998,15 +7012,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O197">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,18.0399"/>
+        <dia:point val="15.9425,17.8149"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,17.8199;16.7025,18.0724"/>
+        <dia:rectangle val="15.9425,17.5949;17.9425,17.8474"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7015,7 +7029,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,18.0399"/>
+            <dia:point val="15.9425,17.8149"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7040,15 +7054,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O198">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,19.03"/>
+        <dia:point val="15.9425,18.855"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,18.81;16.7025,19.0625"/>
+        <dia:rectangle val="15.9425,18.635;17.9425,18.8875"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7057,7 +7071,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,19.03"/>
+            <dia:point val="15.9425,18.855"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7082,15 +7096,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O199">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,20.0732"/>
+        <dia:point val="15.9425,19.8732"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,19.8532;16.7025,20.1057"/>
+        <dia:rectangle val="15.9425,19.6532;17.9425,19.9057"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7099,7 +7113,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,20.0732"/>
+            <dia:point val="15.9425,19.8732"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7124,15 +7138,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O200">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9525,21.1163"/>
+        <dia:point val="15.9425,20.9163"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9525,20.8963;16.7025,21.1488"/>
+        <dia:rectangle val="15.9425,20.6963;17.9425,20.9488"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7141,7 +7155,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9525,21.1163"/>
+            <dia:point val="15.9425,20.9163"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7166,10 +7180,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O201">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9454,12.1916"/>
+        <dia:point val="15.9425,11.8666"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9454,11.9716;17.9454,12.2241"/>
+        <dia:rectangle val="15.9425,11.6466;17.9425,11.8991"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -7183,7 +7197,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9454,12.1916"/>
+            <dia:point val="15.9425,11.8666"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7208,15 +7222,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O202">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,13.2327"/>
+        <dia:point val="15.9425,12.8956"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,13.0127;16.6922,13.2652"/>
+        <dia:rectangle val="15.9425,12.6756;17.9425,12.9281"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7225,7 +7239,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,13.2327"/>
+            <dia:point val="15.9425,12.8956"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7250,15 +7264,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O203">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,14.2976"/>
+        <dia:point val="15.9425,13.9226"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,14.0776;16.6922,14.3301"/>
+        <dia:rectangle val="15.9425,13.7026;17.9425,13.9551"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7267,7 +7281,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,14.2976"/>
+            <dia:point val="15.9425,13.9226"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7292,15 +7306,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O204">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,15.3231"/>
+        <dia:point val="15.9425,14.9543"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,15.1031;16.6922,15.3556"/>
+        <dia:rectangle val="15.9425,14.7343;17.9425,14.9868"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7309,7 +7323,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,15.3231"/>
+            <dia:point val="15.9425,14.9543"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7334,15 +7348,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O205">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,16.3486"/>
+        <dia:point val="15.9425,15.9957"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,16.1286;16.6922,16.3811"/>
+        <dia:rectangle val="15.9425,15.7757;17.9425,16.0282"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7351,7 +7365,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,16.3486"/>
+            <dia:point val="15.9425,15.9957"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7376,15 +7390,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O206">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,17.37"/>
+        <dia:point val="15.9425,17.0302"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,17.15;16.6922,17.4025"/>
+        <dia:rectangle val="15.9425,16.8102;17.9425,17.0627"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7393,7 +7407,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,17.37"/>
+            <dia:point val="15.9425,17.0302"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7418,15 +7432,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O207">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,18.4132"/>
+        <dia:point val="15.9425,18.0584"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,18.1932;16.6922,18.4457"/>
+        <dia:rectangle val="15.9425,17.8384;17.9425,18.0909"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7435,7 +7449,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,18.4132"/>
+            <dia:point val="15.9425,18.0584"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7457,18 +7471,21 @@
       <dia:attribute name="embed_char_type">
         <dia:enum val="0"/>
       </dia:attribute>
+      <dia:connections>
+        <dia:connection handle="0" to="O22" connection="0"/>
+      </dia:connections>
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O208">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,19.4033"/>
+        <dia:point val="15.9425,19.0813"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,19.1833;16.6922,19.4358"/>
+        <dia:rectangle val="15.9425,18.8613;17.9425,19.1138"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7477,7 +7494,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,19.4033"/>
+            <dia:point val="15.9425,19.0813"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7502,15 +7519,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O209">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,20.4465"/>
+        <dia:point val="15.9425,20.1106"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,20.2265;16.6922,20.479"/>
+        <dia:rectangle val="15.9425,19.8906;17.9425,20.1431"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7519,7 +7536,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,20.4465"/>
+            <dia:point val="15.9425,20.1106"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7544,15 +7561,15 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O210">
       <dia:attribute name="obj_pos">
-        <dia:point val="15.9422,21.4896"/>
+        <dia:point val="15.9425,21.1595"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.9422,21.2696;16.6922,21.5221"/>
+        <dia:rectangle val="15.9425,20.9395;17.9425,21.192"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#９９割#</dia:string>
+            <dia:string>#ああああああああ#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7561,7 +7578,7 @@
             <dia:real val="0.3125"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="15.9422,21.4896"/>
+            <dia:point val="15.9425,21.1595"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -8080,6 +8097,846 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#AGEKBN-TBL[1].AGEKBN#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O223">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,12.0969"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,11.8769;17.9425,12.1294"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,12.0969"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[0].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O224">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,12.3344"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,12.1144;17.9425,12.3669"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,12.3344"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[0].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O225">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,13.1319"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,12.9119;17.9425,13.1644"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,13.1319"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[1].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O226">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,13.3681"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,13.1481;17.9425,13.4006"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,13.3681"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[1].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O227">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,14.1747"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,13.9547;17.9425,14.2072"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,14.1747"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[2].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O228">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,14.4122"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,14.1922;17.9425,14.4447"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,14.4122"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[2].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O229">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,15.1964"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,14.9764;17.9425,15.2289"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,15.1964"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[3].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O230">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,15.4384"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,15.2184;17.9425,15.4709"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,15.4384"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[3].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O231">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,16.2411"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,16.0211;17.9425,16.2736"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,16.2411"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[4].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O232">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,16.4865"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,16.2665;17.9425,16.519"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,16.4865"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[4].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O233">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,17.2762"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,17.0562;17.9425,17.3087"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,17.2762"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[5].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O234">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,17.5222"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,17.3022;17.9425,17.5547"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,17.5222"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[5].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O235">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,18.3018"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,18.0818;17.9425,18.3343"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,18.3018"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[6].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O236">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,18.5453"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,18.3253;17.9425,18.5778"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,18.5453"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[6].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O237">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,19.3077"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,19.0877;17.9425,19.3402"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,19.3077"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[7].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O238">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,19.534"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,19.314;17.9425,19.5665"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,19.534"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[7].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O239">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,20.3479"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,20.1279;17.9425,20.3804"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,20.3479"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[8].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O240">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,20.5853"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,20.3653;17.9425,20.6178"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,20.5853"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[8].BIKO4#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O241">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,21.4027"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,21.1827;17.9425,21.4352"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,21.4027"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL3[9].BIKO3#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O242">
+      <dia:attribute name="obj_pos">
+        <dia:point val="15.9425,21.6459"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="15.9425,21.4259;17.9425,21.6784"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#ああああああああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.31256108697056817"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="15.9425,21.6459"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#BIKO-TBL4[9].BIKO4#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
