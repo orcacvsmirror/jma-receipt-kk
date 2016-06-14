@@ -75,6 +75,8 @@
       *  01.00.27    吉川    15/07/07    全国公費との分点は一行にまとめる
       *  01.00.28    吉川    15/12/07    医療機関編集情報への開設者名追加対応
       *  01.00.29    吉川    16/05/12    全国公費との分点は別行に分ける（元の仕様に戻す）
+      *  01.00.30    吉川    16/06/14    全国公費との分点時、自己負担欄は
+      *                                  各々の負担額を記載するように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -285,6 +287,10 @@
            03  WRK-SEIKYUGK-G        PIC 9(08)V9(01).
            03  WRK-SEIKYUGK          PIC 9(08)V9(01).
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) end
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) start
+           03  WRK-SEIKYUGK2-G       PIC 9(08)V9(01).
+           03  WRK-SEIKYUGK3-G       PIC 9(08)V9(01).
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) end
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
            03  WRK-OUT-INPUT         PIC X(200).
@@ -1048,6 +1054,10 @@
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) start
                                          WRK-SEIKYUGK-G
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) end
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) start
+                                         WRK-SEIKYUGK2-G
+                                         WRK-SEIKYUGK3-G
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) end
            MOVE    MF100-KOHNUM    TO    WRK-KOHNUM
            MOVE    MF100-KOHID     TO    WRK-KOHID
            IF      RECE02-NYUGAIKBN    =   "1"
@@ -1153,6 +1163,11 @@
       *
                    MOVE    ZERO            TO  MF100-IPANCD
                    MOVE    ZERO            TO  MF100-FTNMONEY
+      *
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) start
+                   MOVE    WRK-SEIKYUGK2-G TO  MF100-FTNMONEY
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) end
+      *
                    IF  FLG-ERR    =    ZERO
                        WRITE   MF100-REC
                        ADD     1   TO  CNT-MF100
@@ -1167,6 +1182,10 @@
                    MOVE    1               TO  MF100-IPANCD
                    MOVE    ZERO            TO  MF100-KEKKAKUFLG
                                                MF100-SEISHINFLG
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) start
+                   MOVE    WRK-SEIKYUGK3-G TO  MF100-FTNMONEY
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) end
+      *
       *    地方公費の点数から全国公費の分点数を差し引く
                    COMPUTE MF100-TOTALTEN  =   MF100-TOTALTEN
                                            -   WRK-KOHTENSU-G
@@ -1979,6 +1998,17 @@
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) start
            ADD     WRK-SEIKYUGK    TO  WRK-SEIKYUGK-G
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) end
+      *
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) start
+           IF   SYU-KOH-HKNNUM(1)(1:1)  =  "0"
+           OR   SYU-KOH-HKNNUM(2)(1:1)  =  "0"
+           OR   SYU-KOH-HKNNUM(3)(1:1)  =  "0"
+           OR   SYU-KOH-HKNNUM(4)(1:1)  =  "0"
+                ADD     WRK-SEIKYUGK    TO  WRK-SEIKYUGK2-G
+           ELSE
+                ADD     WRK-SEIKYUGK    TO  WRK-SEIKYUGK3-G
+           END-IF
+      *=== 全国公費分点時の負担額修正 by Yoshikawa(2016/06/14) end
       *
            .
        800-SEIKYU-SEC-EXT.
