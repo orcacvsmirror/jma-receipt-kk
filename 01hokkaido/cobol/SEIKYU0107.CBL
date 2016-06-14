@@ -117,6 +117,7 @@
       *  01.00.37     門間     16/05/10    医療機関編集情報への開設者名追加対応
       *                                    在宅の対象とする診療コード変更
       *  01.00.38     吉川     16/06/01    対象公費はPGオプションから取得する
+      *  01.00.39     吉川     16/06/14    更生＋長期の場合「長」に○を印字
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2176,7 +2177,10 @@
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
       *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
       *       END-IF
-             ELSE
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) start
+      *       ELSE
+             END-IF
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) end
       *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
       *
              EVALUATE  MF100-KESE-FLG
@@ -2186,22 +2190,33 @@
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
                MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 3)
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) end
              WHEN  "020"
              WHEN  "021"
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 5)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
                MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 3)
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) end
              WHEN  "015"
              WHEN  "016"
                MOVE  "○"              TO  SC07-KOHKBN(IDX1 6)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) start
                MOVE  "　"              TO  SC07-KOHKBN(IDX1 1)
       *=== 割以外に○がある場合、割に○不要 by Yoshikawa(2009/07/10) end
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) start
+               MOVE  "　"              TO  SC07-KOHKBN(IDX1 3)
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) end
              END-EVALUATE
-      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
-             END-IF
-      *=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) start
+      **=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) start
+      *       END-IF
+      **=== 上限額が低い方に○を印字 by Yoshikawa(2009/12/17) end
+      *=== 更生＋長期の修正 by Yoshikawa(2016/06/14) end
       *
              IF    (MF100-KOHNUM  =  "243"  AND
                     MF100-ETCFTNMONEY   >  0) OR
