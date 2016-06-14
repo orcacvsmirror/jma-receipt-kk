@@ -106,6 +106,7 @@
       *  01.00.44    吉川   15/04/14    請求書の枚数欄は在宅分を加算する
       *  01.00.45    門間   16/05/10    在宅の対象とする診療コード変更
       *  01.00.46    吉川   16/06/01    対象公費はPGオプションから取得する
+      *  01.00.47    吉川   16/06/14    福祉のみの場合でも印刷する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1720,6 +1721,9 @@
              ELSE
                      REWRITE  SKT0100TMP-REC
              END-IF
+      *=== 福祉のみの場合でも印字 by Yoshikawa(2016/06/14) start
+             MOVE    1                          TO  FLG-UPD 
+      *=== 福祉のみの場合でも印字 by Yoshikawa(2016/06/14) end
            ELSE
              DISPLAY "助成対象外患者番号="  RECE02-PTNUM
                      "点数="   RECE02-TOTALTEN(1)
@@ -3502,6 +3506,18 @@
                    AND     PTINF-TSTPTNUMKBN   =   "1"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF
+      *=== 福祉のみの場合でも印字 by Yoshikawa(2016/06/14) start
+                   EVALUATE  WRK-PARA-SYOKBN
+                     WHEN  "1"
+                       IF  RECE02-HENREIYM  NOT =  "000000"
+                           GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                     WHEN  "2"
+                       IF  RECE02-HENREIYM  =  "000000"
+                           GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                   END-EVALUATE
+      *=== 福祉のみの場合でも印字 by Yoshikawa(2016/06/14) end
                    ADD     1                   TO  CNT-RECE02
                ELSE
                  GO  TO  900-KOHSKY-READ-SEC
