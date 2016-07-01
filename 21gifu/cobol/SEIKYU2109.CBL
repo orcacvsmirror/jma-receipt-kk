@@ -46,6 +46,7 @@
       *  01.00.10    吉川    15/11/17    医療機関編集情報への開設者名追加対応
       *  01.00.11    吉川    16/06/07    対象公費はPGオプションから取得する
       *                                  備考欄に全国公費の情報を記載する
+      *  01.00.12    吉川    16/07/01    所得者情報の取得方法修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -192,6 +193,10 @@
            03  WRK-SRYCD             PIC X(09).
            03  WRK-BIKOHCD           PIC X(09).
       *=== 備考欄に全国公費情報記載 by Yoshikawa(2016/06/07) end
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+           03  WRK-GAIJGNGAK         PIC 9(09).
+           03  WRK-NYUJGNGAK         PIC 9(09).
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -914,8 +919,12 @@
       *
       *        (2)自己負担上限額
                PERFORM 940-PTKOHFTN-READ-SEC
-               MOVE    PTKOHFTN-GAIJGNGAK  TO  WRK-Z6-9
-               IF  PTKOHFTN-GAIJGNGAK  =  ZERO
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+      *         MOVE    PTKOHFTN-GAIJGNGAK  TO  WRK-Z6-9
+      *         IF  PTKOHFTN-GAIJGNGAK  =  ZERO
+               MOVE    WRK-GAIJGNGAK       TO  WRK-Z6-9
+               IF  WRK-GAIJGNGAK  =  ZERO
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
                    STRING  "(2) "          DELIMITED BY SIZE
                            "上限なし"      DELIMITED BY SIZE
                            INTO            MF100-BIKO(2)
@@ -931,14 +940,20 @@
       *        (3)他一部負担累計額及び他医療機関名
                IF  MF100-ZENKOHNUM  =  "015" OR "016" OR "021"
                                     OR "038" OR "052" OR "054"
-                   MOVE    PTKOHFTN-NYUJGNGAK  TO  WRK-Z6-9
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+      *             MOVE    PTKOHFTN-NYUJGNGAK  TO  WRK-Z6-9
+                   MOVE    WRK-NYUJGNGAK       TO  WRK-Z6-9
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
                    STRING  "(3)"           DELIMITED BY SIZE
                            WRK-Z6-9        DELIMITED BY SIZE
                            "円"            DELIMITED BY SIZE
                            INTO            MF100-BIKO(3)
                    END-STRING
       *            他一部累計負担額がある場合、医療機関（コメント）印字
-                   IF  PTKOHFTN-NYUJGNGAK  NOT =  ZERO
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+      *             IF  PTKOHFTN-NYUJGNGAK  NOT =  ZERO
+                   IF  WRK-NYUJGNGAK  NOT =  ZERO
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
                        MOVE  WRK-BIKOHCD             TO  WRK-SRYCD
                        PERFORM 950-SRYACT-READ-SEC
                        IF  FLG-SRYACT  =  ZERO
@@ -958,7 +973,10 @@
                        END-IF
                    END-IF
                ELSE
-                   IF  PTKOHFTN-GAIJGNGAK  NOT =  ZERO
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+      *             IF  PTKOHFTN-GAIJGNGAK  NOT =  ZERO
+                   IF  WRK-GAIJGNGAK  NOT =  ZERO
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
                        MOVE    ZERO                TO  WRK-Z6-9
                        STRING  "(3)"               DELIMITED BY SIZE
                                WRK-Z6-9            DELIMITED BY SIZE
@@ -1905,6 +1923,10 @@
        940-PTKOHFTN-READ-SEC         SECTION.
       *
            INITIALIZE                          PTKOHFTN-REC
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+                                               WRK-GAIJGNGAK
+                                               WRK-NYUJGNGAK
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
       *
            MOVE    SPA-HOSPNUM             TO  PTKOHFTN-HOSPNUM
            MOVE    MF100-PTID              TO  PTKOHFTN-PTID
@@ -1917,20 +1939,32 @@
                                            MCPDATA-REC
                                            SPA-AREA
            IF      MCP-RC              =   ZERO
-               MOVE    "DBFETCH"           TO  MCP-FUNC
-               MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
-               MOVE    "key2"              TO  MCP-PATHNAME
-               CALL    "ORCDBMAIN"         USING
-                                           MCPAREA
-                                           MCPDATA-REC
-                                           SPA-AREA
-               IF      MCP-RC              =   ZERO
-                   MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
-                   MOVE    ZERO                TO  FLG-PTKOHFTN
-               ELSE
-                   MOVE    1                   TO  FLG-PTKOHFTN
-                   INITIALIZE                  PTKOHFTN-REC
-               END-IF
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+      *         MOVE    "DBFETCH"           TO  MCP-FUNC
+      *         MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+      *         MOVE    "key2"              TO  MCP-PATHNAME
+      *         CALL    "ORCDBMAIN"         USING
+      *                                     MCPAREA
+      *                                     MCPDATA-REC
+      *                                     SPA-AREA
+      *         IF      MCP-RC              =   ZERO
+      *             MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+      *             MOVE    ZERO                TO  FLG-PTKOHFTN
+      *         ELSE
+      *             MOVE    1                   TO  FLG-PTKOHFTN
+      *             INITIALIZE                  PTKOHFTN-REC
+      *         END-IF
+               PERFORM  940-PTKOHFTN-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-PTKOHFTN  =  1
+                 IF  (PTKOHFTN-TEKSTYMD(1:6) <= RECE02-SRYYM)
+                 AND (PTKOHFTN-TEKEDYMD(1:6) >= RECE02-SRYYM)
+                     MOVE    PTKOHFTN-GAIJGNGAK    TO  WRK-GAIJGNGAK
+                     MOVE    PTKOHFTN-NYUJGNGAK    TO  WRK-NYUJGNGAK
+                 END-IF
+                 PERFORM  940-PTKOHFTN-FETCH-SEC
+               END-PERFORM
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
            ELSE
                MOVE    1                   TO  FLG-PTKOHFTN
                INITIALIZE                  PTKOHFTN-REC
@@ -1947,6 +1981,33 @@
            .
        940-PTKOHFTN-READ-EXT.
            EXIT.
+      *
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) start
+      *****************************************************************
+      *    患者公費負担情報ＦＥＴＣＨ処理
+      *****************************************************************
+       940-PTKOHFTN-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+               MOVE    ZERO                TO  FLG-PTKOHFTN
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHFTN
+               INITIALIZE                  PTKOHFTN-REC
+           END-IF
+      *
+           .
+       940-PTKOHFTN-FETCH-EXT.
+           EXIT.
+      *=== 所得者情報の取得方法修正 by Yoshikawa(2016/07/01) end
+      *
       *****************************************************************
       *    診療情報セット
       *****************************************************************
