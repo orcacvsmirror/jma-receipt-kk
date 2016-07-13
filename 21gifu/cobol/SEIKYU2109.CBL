@@ -47,6 +47,7 @@
       *  01.00.11    吉川    16/06/07    対象公費はPGオプションから取得する
       *                                  備考欄に全国公費の情報を記載する
       *  01.00.12    吉川    16/07/01    所得者情報の取得方法修正
+      *  01.00.13    吉川    16/07/13    一部負担金は垣老以外に係る分も集計
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -876,9 +877,11 @@
            PERFORM  920-SYUNOU-SET-SEC
       *
            MOVE    WRK-KOHTENSU        TO  MF100-KOHTENSU
-      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
-           MOVE    WRK-ITBFTN          TO  MF100-FTNMONEY
-      *=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2016/07/13) start
+      **=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) start
+      *     MOVE    WRK-ITBFTN          TO  MF100-FTNMONEY
+      **=== 一部負担金欄の仕様変更 by Yoshikawa(2013/01/16) end
+      *=== 一部負担金欄の仕様変更 by Yoshikawa(2016/07/13) end
       *
       *    ソートKEY設定
       *=== 70歳以上と未満で帳票を分ける by Yoshikawa(2014/05/12) start
