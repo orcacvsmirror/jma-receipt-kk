@@ -42,6 +42,8 @@
       *  01.00.07     吉川     14/06/12    口座情報の印字位置が
       *                                    １つずつずれているのを修正
       *  01.00.08     吉川     14/10/08    ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.09     門間     16/07/14    医療機関編集情報への開設者名追加対応
+      *                                    対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -142,6 +144,9 @@
            03  FLG-PRGOPTION  PIC 9(01).
            03  FLG-OK         PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2014/05/16) end
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) start
+           03  FLG-TAISYO     PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -241,11 +246,22 @@
                05  WRK-HOSPADRS2     PIC X(50).
            03  WRK-HOSPTEL           PIC X(15).
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+           03  WRK-KAISETUNAME       PIC X(80).
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
       *---(01.00.03) LINE ADD START ------------------------------------
            03  WRK-KOUZA-TBL  OCCURS  5.
                05  WRK-KOUZA-DATA    PIC  X(20).
            03  WRK-SKJFTN            PIC  9(09).
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) start
+      *    プログラムオプション
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *    対象公費
+           03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) end
       *
        01  SYS-AREA.
            03  SYS-YMD.
@@ -311,6 +327,11 @@
       *    医療機関住所編集情報
            COPY    "CPSK1902.INC".
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -546,6 +567,10 @@
       *
       *---(01.00.02) LINE ADD START ------------------------------------
            MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
            MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
            MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
       *    医療機関編集情報
@@ -636,6 +661,21 @@
            DISPLAY "code ="  WRK-KOUZA-DATA(3)
            DISPLAY "口座番号 =" WRK-KOUZA-DATA(4)
            DISPLAY "名義人 =" WRK-KOUZA-DATA(5)
+      *
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) start
+      *
+      *    プログラムオプション取得
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *    
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) end
       *
            .
        100-OPTION-SELECT-EXT.
@@ -809,7 +849,14 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-             IF  RECE02-KOHNUM (IDZ) =   "143"
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) start
+      *       IF  RECE02-KOHNUM (IDZ) =   "143"
+             INITIALIZE                            WRK-CHK-KOHNUM-TBL
+             MOVE    RECE02-KOHNUM(IDZ)        TO  WRK-CHK-KOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -977,7 +1024,10 @@
            MOVE  SYS-1002-TEL          TO  SC04-TEL
       *
       *    管理者名
-           MOVE  SYS-1001-KAISETUNAME  TO  SC04-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+      *     MOVE  SYS-1001-KAISETUNAME  TO  SC04-KAISETUNAME
+           MOVE     WRK-KAISETUNAME    TO  SC04-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
       *
            .
        311-HEAD-HEN-EXT.
@@ -1178,7 +1228,10 @@
       *---(01.00.03) LINE ADD END   ------------------------------------
       *
       *    管理者名
-           MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+      *     MOVE  SYS-1001-KAISETUNAME  TO  SC03-KAISETUNAME
+           MOVE     WRK-KAISETUNAME    TO  SC03-KAISETUNAME
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
       *
            .
        310-HEAD-HEN-EXT.
@@ -1660,6 +1713,31 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) end
+      *
       *****************************************************************
       *    一時ファイル読込
       *****************************************************************
@@ -1736,10 +1814,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "143"  OR
-                   RECE02-KOHNUM (2)  =  "143"  OR
-                   RECE02-KOHNUM (3)  =  "143"  OR
-                   RECE02-KOHNUM (4)  =  "143"
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) start
+      *         IF  RECE02-KOHNUM (1)  =  "143"  OR
+      *             RECE02-KOHNUM (2)  =  "143"  OR
+      *             RECE02-KOHNUM (3)  =  "143"  OR
+      *             RECE02-KOHNUM (4)  =  "143"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Monma(2016/07/14) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -1989,6 +2077,10 @@
                    PERFORM 900-1901-READ-SEC
       *            医療機関住所編集情報
                    PERFORM 900-1902-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
                END-IF
            ELSE
                INITIALIZE                  SYS-1900-REC
@@ -2057,6 +2149,36 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) start
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *=== 医療機関編集情報へ開設者名追加 by Monma(2016/07/14) end
+      *
       *=== プログラムオプション対応 by Yoshikawa(2014/05/16) start
       *****************************************************************
       *    プログラムオプション情報読込
