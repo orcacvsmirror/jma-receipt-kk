@@ -95,6 +95,8 @@
       *  01.00.33    吉川    16/03/10    限度額認定証なしで低所得の場合
       *                                  請求額を35400円で止めるように修正
       *  01.00.34    萩野    16/06/08    対象公費はPGオプションから取得する
+      *  01.00.35    吉川    16/07/13    難病の場合、生活療養費負担額は
+      *                                  標準負担額欄の集計対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -3428,7 +3430,15 @@
       *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
       *=== 標準負担額は福祉に係る分を記載 by Yoshikawa(2015/03/16) start
       *        収納に計算された食事負担額があるのでそれを使用
-               MOVE    SYU-SKJ-FTN(IDX)      TO  WRK-KOH-SKJFTN
+      *=== 難病の場合生活療養費は含まない by Yoshikawa(2016/07/13) start
+      *         MOVE    SYU-SKJ-FTN(IDX)      TO  WRK-KOH-SKJFTN
+               IF  SYU-KOH-HKNNUM(IDX)  =  "054"
+                   COMPUTE WRK-KOH-SKJFTN  =  SYU-SKJ-FTN(IDX)  -
+                                              SYU-SKYMONEY-LIFE-KEI
+               ELSE
+                   MOVE    SYU-SKJ-FTN(IDX)  TO  WRK-KOH-SKJFTN
+               END-IF
+      *=== 難病の場合生活療養費は含まない by Yoshikawa(2016/07/13) end
                MOVE    1                     TO  FLG-KOHSKJ
       *=== 標準負担額は福祉に係る分を記載 by Yoshikawa(2015/03/16) end
              END-IF
