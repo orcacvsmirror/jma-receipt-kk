@@ -80,6 +80,8 @@
       *  01.00.29    吉川    16/03/10    限度額認定証なしで低所得の場合
       *                                  請求額を35400円で止めるように修正
       *  01.00.30    萩野    16/06/08    対象公費はPGオプションから取得する
+      *  01.00.31    吉川    16/07/13    低所得の設定が地方公費のみ対象の場合
+      *                                  低所の限度額とならないのを修正
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -191,6 +193,9 @@
            03  FLG-OK         PIC 9(01).
            03  FLG-TAISYO     PIC 9(01).
       *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+           03  FLG-KOGAKU4    PIC 9(01).
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -985,6 +990,10 @@
       *=== 前期1割＋146の場合は在としない by Yoshikawa(2012/10/18) end
            END-IF
       *
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+           INITIALIZE                         FLG-KOGAKU4
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
       *=== 高額と全国公費は公費優先 by Yoshikawa(2013/07/09) start
       **=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
       *     IF  RECE02-ZAITAKU  =  "2"  OR  "3"  OR  "4"
@@ -998,6 +1007,14 @@
                                 OR  "5"  OR  "6"
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
                MOVE  "98"                TO  MF100-COMBIKBN
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+               IF  RECE02-FTNMONEY (1)  =  24600
+               OR  RECE02-FTNMONEY (1)  =  44400
+               OR  RECE02-FTNMONEY (1)  =  93000
+               OR  RECE02-FTNMONEY (1)  =  140100
+                 MOVE    1               TO  FLG-KOGAKU4
+               END-IF
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
                EVALUATE  RECE02-ZAITAKU
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
       *           WHEN  "2"
@@ -1242,6 +1259,13 @@
       *     END-IF
       *=== 高額限度額未満の不具合修正 by Yoshikawa(2012/08/10) end
       *
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) start
+      *    低所得・低年金チェック
+           MOVE    ZERO                    TO  FLG-TEISYO
+           PERFORM 900-TSYRRK-READ-SEC
+           PERFORM 900-TNKRRK-READ-SEC
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) end
+      *
       *    高額該当者で限度額認定証無しの請求額計算
            IF  FLG-KOGAKU  =  1
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
@@ -1253,7 +1277,10 @@
              OR  MF100-SEIKYUGK  =  44400
              OR  MF100-SEIKYUGK  =  24600
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
-               CONTINUE
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) start
+      *         CONTINUE
+                 MOVE    1                 TO  FLG-KOGAKU4
+      *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
              ELSE
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) start
       *         IF   RECE02-NYUGAIKBN  =  "2"
@@ -1266,10 +1293,12 @@
       *         IF  MF100-SEIKYUGK  >  57600
       *             MOVE    57600       TO  MF100-SEIKYUGK
       *         END-IF
-      *        低所得・低年金チェック
-               MOVE    ZERO                TO FLG-TEISYO
-               PERFORM 900-TSYRRK-READ-SEC
-               PERFORM 900-TNKRRK-READ-SEC
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) start
+      **        低所得・低年金チェック
+      *         MOVE    ZERO                TO FLG-TEISYO
+      *         PERFORM 900-TSYRRK-READ-SEC
+      *         PERFORM 900-TNKRRK-READ-SEC
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) end
                IF  FLG-TEISYO  =  ZERO
                    IF  MF100-SEIKYUGK  >  57600
                        MOVE    57600       TO  MF100-SEIKYUGK
@@ -1284,6 +1313,23 @@
              END-IF
            END-IF
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) start
+      *    低所の設定が「地方公費のみ」になっている場合
+      *    収納の計算は普段通りになっているので限度額を低所にする
+           IF  (RECE02-ZAITAKU = "2" OR "3" OR "4" OR "5" OR "6")
+           AND (FLG-TEISYO  NOT =  ZERO)
+               IF  FLG-KOGAKU4  NOT =  ZERO
+                   IF  MF100-SEIKYUGK  >  24600
+                       MOVE    24600         TO  MF100-SEIKYUGK
+                   END-IF
+               ELSE
+                   IF  MF100-SEIKYUGK  >  35400
+                       MOVE    35400         TO  MF100-SEIKYUGK
+                   END-IF
+               END-IF
+           END-IF
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) end
       *
       *    ソートするためキーをセット
            PERFORM  960-SORTKEY-SEC

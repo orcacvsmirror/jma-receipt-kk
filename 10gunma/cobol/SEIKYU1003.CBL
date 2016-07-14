@@ -97,6 +97,8 @@
       *  01.00.34    萩野    16/06/08    対象公費はPGオプションから取得する
       *  01.00.35    吉川    16/07/13    難病の場合、生活療養費負担額は
       *                                  標準負担額欄の集計対象外とする
+      *                                  低所得の設定が地方公費のみ対象の場合
+      *                                  低所の限度額とならないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1466,6 +1468,23 @@
                MOVE    WRK-KOH-SKJFTN-G      TO  MF100-SHOKUJIFTN
            END-IF
       *=== 標準負担額は福祉に係る分を記載 by Yoshikawa(2015/03/16) end
+      *
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) start
+      *    低所の設定が「地方公費のみ」になっている場合
+      *    収納の計算は普段通りになっているので限度額を低所にする
+           IF  (RECE02-ZAITAKU = "2" OR "3" OR "4" OR "5" OR "6")
+           AND (MF100-TEISHO  NOT =  ZERO)
+               IF  MF100-KOGAKU4  NOT =  ZERO
+                   IF  MF100-SEIKYUGK  >  24600
+                       MOVE    24600         TO  MF100-SEIKYUGK
+                   END-IF
+               ELSE
+                   IF  MF100-SEIKYUGK  >  35400
+                       MOVE    35400         TO  MF100-SEIKYUGK
+                   END-IF
+               END-IF
+           END-IF
+      *=== 低所の限度額修正 by Yoshikawa(2016/07/13) end
       *
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
