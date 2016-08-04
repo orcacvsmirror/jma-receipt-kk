@@ -959,7 +959,19 @@
                MOVE    WRK-OUT-INPUT       TO  SC13-JKYSNUM-TBL(IDX1)
       *
       *    保険者番号
-               MOVE    MF100-HKNJANUM      TO  WRK-MAE-INPUT
+               IF  MF100-TEISYUTUSAKI  =  2
+                   IF  MF100-HKNJANUM(1:2)  =  "67"
+                       MOVE    MF100-HKNJANUM
+                                           TO  WRK-MAE-INPUT
+                   ELSE
+      *                国保は右詰め
+                       MOVE    "  "        TO  WRK-MAE-INPUT(1:2)
+                       MOVE    MF100-HKNJANUM
+                                           TO  WRK-MAE-INPUT(3:)
+                   END-IF
+               ELSE
+                   MOVE    MF100-HKNJANUM  TO  WRK-MAE-INPUT
+               END-IF
                PERFORM 2009-HENKAN-SEC
                MOVE    WRK-OUT-INPUT       TO  SC13-HKNJANUM-TBL(IDX1)
       *
