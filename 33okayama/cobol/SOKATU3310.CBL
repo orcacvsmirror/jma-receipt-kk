@@ -54,6 +54,7 @@
       *  01.00.17    吉川    14/05/13  前期高齢者２割対応
       *  01.00.18    吉川    14/10/24  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.19    門間    16/02/04  医療機関編集情報への開設者名追加対応
+      *  01.00.20    門間    16/08/08  返戻分は1枚にまとめる
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -953,21 +954,23 @@
       *
       *---(01.00.07) LINE ADD START ------------------------------------
       *    返戻分は実際の診療年月を設定
-            IF  WRK-PARA-SYOKBN  =  "2"
-              MOVE    RECE10-SRYYM          TO   SKT3310TMP-SRYYM
+      *=== 返戻分は1枚にまとめる by Monma(2016/08/08) start
+      *      IF  WRK-PARA-SYOKBN  =  "2"
+      *        MOVE    RECE10-SRYYM          TO   SKT3310TMP-SRYYM
       *    当月分・月遅れ分は画面入力された診療年月を設定
-            ELSE
+      *      ELSE
       *---(01.00.08) LINE ADD START ------------------------------------
       *        MOVE    LNK-PRTKANRI-SRYYM    TO   SKT3310TMP-SRYYM
       *    平成２０年３月以前は旧様式
-              IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
-                MOVE  RECE10-SRYYM          TO  SKT3310TMP-SRYYM
-              ELSE
+      *        IF  RECE10-SRYYM  <  WRK-CONS-SRYYM-200804
+      *          MOVE  RECE10-SRYYM          TO  SKT3310TMP-SRYYM
+      *        ELSE
                 MOVE  LNK-PRTKANRI-SRYYM    TO  SKT3310TMP-SRYYM
-              END-IF
+      *        END-IF
       *---(01.00.08) LINE ADD START ------------------------------------
-            END-IF
+      *      END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
+      *=== 返戻分は1枚にまとめる by Monma(2016/08/08) end
       *
       *---(01.00.10) LINE ADD START ------------------------------------
       *    平成21年台風第9号の対象者は別帳票
