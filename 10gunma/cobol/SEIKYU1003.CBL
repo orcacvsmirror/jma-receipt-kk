@@ -99,6 +99,9 @@
       *                                  標準負担額欄の集計対象外とする
       *                                  低所得の設定が地方公費のみ対象の場合
       *                                  低所の限度額とならないのを修正
+      *  01.00.36    吉川    16/08/12    多数と高額の両方に該当する場合
+      *                                  マル多は印字しないように修正
+      *                                  福祉医療費請求額の端数処理修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2166,6 +2169,10 @@
                  WHEN  "4"
                    MOVE    "多・ウ"    TO  SC03-BIKO4(IDX)
                END-EVALUATE
+      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
+               MOVE    SPACE           TO  SC03-TEI (IDX 2)
+                                       TO  SC03-MARU (IDX 2)
+      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
              ELSE
                EVALUATE  MF100-KOGAKU
                  WHEN  "2"
@@ -2609,6 +2616,10 @@
                  WHEN  "4"
                    MOVE    "多・ウ"    TO  SC04-BIKO4(IDX)
                END-EVALUATE
+      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
+               MOVE    SPACE           TO  SC04-TEI (IDX 2)
+                                       TO  SC04-MARU (IDX 2)
+      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
              ELSE
                EVALUATE  MF100-KOGAKU
                  WHEN  "2"
@@ -3429,12 +3440,16 @@
                    SYU-KOH-HKNNUM(IDX) NOT  =  "027"
                MOVE   1                TO    FLG-HEIYOU
       *
-               IF    RECE02-FTNMONEY(1) >  ZERO
-                 MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
-               ELSE
-                 MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
+      *=== 福祉医療費請求額の修正 by Yoshikawa(2016/08/12) start
+      *         IF    RECE02-FTNMONEY(1) >  ZERO
+      *           MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
+      *         ELSE
+      *           MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
+      *                                       TO  WRK-SEIKYUGK
+      *         END-IF
+               MOVE   SYU-KOH-HKNFTNMONEY(IDX)
                                              TO  WRK-SEIKYUGK
-               END-IF
+      *=== 福祉医療費請求額の修正 by Yoshikawa(2016/08/12) end
       *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
       **=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
       *         IF  WRK-SEIKYUGK  =  ZERO
