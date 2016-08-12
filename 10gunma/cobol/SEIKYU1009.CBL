@@ -83,6 +83,7 @@
       *                                  …∏Ω‡…È√¥≥€ÕÛ§ŒΩ∏∑◊¬–æ›≥∞§»§π§Î
       *                                  ƒ„ΩÍ∆¿§Œ¿ﬂƒÍ§¨√œ ˝∏¯»Ò§Œ§ﬂ¬–æ›§ŒæÏπÁ
       *                                  ƒ„ΩÍ§Œ∏¬≈Ÿ≥€§»§ §È§ §§§Œ§ÚΩ§¿µ
+      *  01.00.30    µ»¿Ó    16/08/12     °ª„∞ÂŒ≈»Ò¿¡µ·≥€§Œ√ºøÙΩËÕ˝Ω§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2115,12 +2116,16 @@
                    SYU-KOH-HKNNUM(IDX) NOT  =  "027"
                MOVE   1                TO    FLG-HEIYOU
       *
-               IF    RECE02-FTNMONEY(1) >  ZERO
-                 MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
-               ELSE
-                 MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/08/12) start
+      *         IF    RECE02-FTNMONEY(1) >  ZERO
+      *           MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
+      *         ELSE
+      *           MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
+      *                                       TO  WRK-SEIKYUGK
+      *         END-IF
+               MOVE   SYU-KOH-HKNFTNMONEY(IDX)
                                              TO  WRK-SEIKYUGK
-               END-IF
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/08/12) end
       *=== ¿¡µ·≥€§Œ∑◊ªª ˝À° —ππ by Yoshikawa(2010/10/04) start
       **=== ¿¡µ·≥€∑◊ªª ˝À°§Œ —ππ by Yoshikawa(2010/07/26) start
       *         IF  WRK-SEIKYUGK  =  ZERO
