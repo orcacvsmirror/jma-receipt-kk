@@ -83,6 +83,9 @@
       *                                  標準負担額欄の集計対象外とする
       *                                  低所得の設定が地方公費のみ対象の場合
       *                                  低所の限度額とならないのを修正
+      *  01.00.26    吉川    2016/08/12  多数と高額の両方に該当する場合
+      *                                  備考が「01」で記録されるのを修正
+      *                                  福祉医療費請求額の端数処理修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1871,7 +1874,11 @@
            IF  MF100-TEISHO  =  1
              MOVE  "02"                TO  MF100-BIKO
            END-IF
-           IF   MF100-KOGAKU4  =  1
+      *=== 多数該当の備考欄修正 by Yoshikawa(2016/08/12) start
+      *     IF   MF100-KOGAKU4  =  1
+           IF   (MF100-KOGAKU4  =  1)
+           AND  (MF100-KOGAKU  NOT =  "2" AND "3" AND "4")
+      *=== 多数該当の備考欄修正 by Yoshikawa(2016/08/12) end
       *=== 多数と非課税は「03」 by Yoshikawa(2012/09/12) start
              IF  MF100-TEISHO  =  1
                MOVE  "03"              TO  MF100-BIKO
@@ -3450,12 +3457,16 @@
                     SYU-KOH-HKNNUM(IDX)(1:1) =  "0"
       *
                  MOVE   1                TO    FLG-HEIYOU
-                 IF    RECE02-FTNMONEY(1) >  ZERO
-                   MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
-                 ELSE
-                   MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
+      *=== 福祉医療費請求額の修正 by Yoshikawa(2016/08/12) start
+      *           IF    RECE02-FTNMONEY(1) >  ZERO
+      *             MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
+      *           ELSE
+      *             MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
+      *                                         TO  WRK-SEIKYUGK
+      *           END-IF
+                 MOVE   SYU-KOH-HKNFTNMONEY(IDX)
                                                TO  WRK-SEIKYUGK
-                 END-IF
+      *=== 福祉医療費請求額の修正 by Yoshikawa(2016/08/12) end
       *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
       **=== 請求額計算方法の変更 by Yoshikawa(2010/07/26) start
       *           IF  WRK-SEIKYUGK  =  ZERO
