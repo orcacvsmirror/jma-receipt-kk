@@ -2171,7 +2171,7 @@
                END-EVALUATE
       *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
                MOVE    SPACE           TO  SC03-TEI (IDX 2)
-                                       TO  SC03-MARU (IDX 2)
+                                           SC03-MARU (IDX 2)
       *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
              ELSE
                EVALUATE  MF100-KOGAKU
@@ -2618,7 +2618,7 @@
                END-EVALUATE
       *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
                MOVE    SPACE           TO  SC04-TEI (IDX 2)
-                                       TO  SC04-MARU (IDX 2)
+                                           SC04-MARU (IDX 2)
       *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
              ELSE
                EVALUATE  MF100-KOGAKU
