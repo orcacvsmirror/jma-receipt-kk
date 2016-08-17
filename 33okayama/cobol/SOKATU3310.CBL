@@ -54,7 +54,7 @@
       *  01.00.17    吉川    14/05/13  前期高齢者２割対応
       *  01.00.18    吉川    14/10/24  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.19    門間    16/02/04  医療機関編集情報への開設者名追加対応
-      *  01.00.20    門間    16/08/08  返戻分は1枚にまとめる
+      *  01.00.20    門間    16/08/08  返戻分は直近の診療年月でまとめる
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -294,6 +294,10 @@
       *
            03  WRK-BIKO            PIC 9(09).
            03  WRK-BIKO2           PIC 9(09).
+      *
+      *=== 返戻分は直近の診療年月でまとめる by Monma(2016/08/08) start
+           03  WRK-HEN-SRYYM         PIC  9(06).
+      *=== 返戻分は直近の診療年月でまとめる by Monma(2016/08/08) end
       *
        01  SORT-AREA.
            03  SORT-KOH-TBL OCCURS 20.
@@ -954,7 +958,7 @@
       *
       *---(01.00.07) LINE ADD START ------------------------------------
       *    返戻分は実際の診療年月を設定
-      *=== 返戻分は1枚にまとめる by Monma(2016/08/08) start
+      *=== 返戻分は直近の診療年月でまとめる by Monma(2016/08/08) start
       *      IF  WRK-PARA-SYOKBN  =  "2"
       *        MOVE    RECE10-SRYYM          TO   SKT3310TMP-SRYYM
       *    当月分・月遅れ分は画面入力された診療年月を設定
@@ -970,7 +974,12 @@
       *---(01.00.08) LINE ADD START ------------------------------------
       *      END-IF
       *---(01.00.07) LINE ADD END   ------------------------------------
-      *=== 返戻分は1枚にまとめる by Monma(2016/08/08) end
+      *
+           IF  (      WRK-PARA-SYOKBN  =  "2"
+                 AND  RECE10-SRYYM     >  WRK-HEN-SRYYM  )
+               MOVE    RECE10-SRYYM  TO  WRK-HEN-SRYYM
+           END-IF
+      *=== 返戻分は直近の診療年月でまとめる by Monma(2016/08/08) end
       *
       *---(01.00.10) LINE ADD START ------------------------------------
       *    平成21年台風第9号の対象者は別帳票
@@ -1856,7 +1865,13 @@
       *     MOVE    WRK-SRYYMWH             TO  SKT3310-SRYYM
       *---(01.00.07) LINE ADD START ------------------------------------
       *     MOVE    RECE10-SRYYM        TO  WRK-SYMD (1:6)
-           MOVE    SKT3310TMP-SRYYM    TO  WRK-SYMD (1:6)
+      *=== 返戻分は直近の診療年月でまとめる by Monma(2016/08/08) start
+           IF  WRK-PARA-SYOKBN  =  "2"
+               MOVE    WRK-HEN-SRYYM       TO  WRK-SYMD (1:6)
+           ELSE
+               MOVE    SKT3310TMP-SRYYM    TO  WRK-SYMD (1:6)
+           END-IF
+      *=== 返戻分は直近の診療年月でまとめる by Monma(2016/08/08) end
       *---(01.00.07) LINE ADD END   ------------------------------------
            MOVE    "01"                TO  WRK-SYMD (7:2)
            PERFORM 31012-SEIWA-HEN-SEC
