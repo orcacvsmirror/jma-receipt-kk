@@ -1861,9 +1861,11 @@
              MOVE  "06"                TO  MF100-BIKO
            END-IF
            IF   MF100-KOGAKU4  =  1
-             IF  RECE02-ZAITAKU  =  "2"
-               MOVE  "04"              TO  MF100-BIKO
-             END-IF
+      *=== Â¿¿ô³ºÅö¤ÎÈ÷¹ÍÍó½¤Àµ by Yoshikawa(2016/08/12) start
+      *       IF  RECE02-ZAITAKU  =  "2"
+      *         MOVE  "04"              TO  MF100-BIKO
+      *       END-IF
+      *=== Â¿¿ô³ºÅö¤ÎÈ÷¹ÍÍó½¤Àµ by Yoshikawa(2016/08/12) end
              IF  MF100-TEISHO  =  1
                MOVE  "03"              TO  MF100-BIKO
              END-IF
