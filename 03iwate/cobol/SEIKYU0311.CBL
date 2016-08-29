@@ -27,6 +27,7 @@
       *****************************************************************
       *  プログラム修正履歴
       * Maj/Min/Rev  修正者  日付       内容
+      *  04.08.01    吉川    16/08/29   公費番号120を現物給付に追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -717,12 +718,17 @@
              WHEN  "540"
              WHEN  "220"
              WHEN  "320"
+      *=== 公費番号120は現物給付 by Yoshikawa(2016/08/29) start
+             WHEN  "120"
+      *=== 公費番号120は現物給付 by Yoshikawa(2016/08/29) end
                  MOVE    "1"                   TO  WRK-KBN
       *      償還（県単）
              WHEN  "110"
              WHEN  "130"
              WHEN  "140"
-             WHEN  "120"
+      *=== 公費番号120は現物給付 by Yoshikawa(2016/08/29) start
+      *       WHEN  "120"
+      *=== 公費番号120は現物給付 by Yoshikawa(2016/08/29) end
              WHEN  "150"
                  MOVE    "2"                   TO  WRK-KBN
       *      償還（市単）
@@ -830,7 +836,10 @@
            END-PERFORM
       *
       *    償還払いの公費は助成チェックをしない
-           IF  WRK-KOHNUM  =  "110" OR "120" OR "130" OR "140" OR "150"
+      *=== 公費番号120は現物給付 by Yoshikawa(2016/08/29) start
+      *     IF  WRK-KOHNUM  =  "110" OR "120" OR "130" OR "140" OR "150"
+           IF  WRK-KOHNUM  =  "110" OR "130" OR "140" OR "150"
+      *=== 公費番号120は現物給付 by Yoshikawa(2016/08/29) end
                           OR  "199"
                MOVE    ZERO                    TO  FLG-ERR
            END-IF
