@@ -46,6 +46,8 @@
       *                                   設定できるように修正
       *                                   医療機関編集情報への開設者名追加対応
       *  01.00.10     萩野    2016/06/08  対象公費はPGオプションから取得する
+      *  01.00.11     吉川    2016/08/29  公費の助成がない場合は印字しない
+      *                                   受給者番号順処理修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1075,6 +1077,9 @@
            MOVE    MF101-KOHNUM            TO  WRK-KOHNUM
            MOVE    MF101-KOHID             TO  WRK-KOHID
            MOVE    ZERO                    TO  WRK-FTNMONEY-G
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) start
+           MOVE     1                      TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) end
            INITIALIZE  WRK-ETC-TBL
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -1149,13 +1154,25 @@
                MOVE  MF101-PTNUM        TO  MF101-PTNUM-KEY
              WHEN  "05"
       *        受給者番号順（優先順位の関係で保険者番号KEYにセット）
-               MOVE  MF101-KOHJKYSNUM(1:7)
+      *=== 受給者番号順処理修正 by Yoshikawa(2016/08/29) start
+      *         MOVE  MF101-KOHJKYSNUM(1:7)
+               MOVE  MF101-KOHJKYSNUM
+      *=== 受給者番号順処理修正 by Yoshikawa(2016/08/29) start
                                         TO  MF101-HKNJANUM-KEY
            END-EVALUATE
       *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
       *
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) start
+      *    償還払いの公費は助成チェックをしない
+           IF  WRK-KOHNUM  =  "110" OR "130" OR "140" OR "150" OR "199"
+               MOVE    ZERO                    TO  FLG-ERR
+           END-IF
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) end
+      *
       *    保険者番号チェック処理
-           MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) start
+      *     MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR    =    ZERO
@@ -3038,6 +3055,24 @@
                  MOVE    2                TO    MF101-TYOKI
              END-IF
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) start
+      *    計算負担金に差がある場合、地方公費の助成があったと判断する
+             IF  (FLG-ERR                  =  1)
+             AND (SYU-KOH-HKNNUM(IDX)      =  WRK-KOHNUM)
+               IF     IDX                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE     ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE     ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字しない by Yoshikawa(2016/08/29) end
       *
            END-PERFORM
       *
