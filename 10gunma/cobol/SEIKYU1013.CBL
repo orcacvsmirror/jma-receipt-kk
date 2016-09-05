@@ -86,6 +86,7 @@
       *  01.00.26    µ»¿Ó    2016/08/12  ¬øøÙ§»π‚≥€§ŒŒæ ˝§À≥∫≈ˆ§π§ÎæÏπÁ
       *                                  »˜πÕ§¨°÷01°◊§«µ≠œø§µ§Ï§Î§Œ§ÚΩ§¿µ
       *                                   °ª„∞ÂŒ≈»Ò¿¡µ·≥€§Œ√ºøÙΩËÕ˝Ω§¿µ
+      *  01.00.27    µ»¿Ó    2016/09/05   °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -193,6 +194,10 @@
            03  FLG-OK         PIC 9(01).
            03  FLG-TAISYO     PIC 9(01).
       *=== ¬–æ›∏¯»Ò§ÚPG•™•◊•∑•Á•Û§´§ÈºË∆¿ by hagino(2016/06/08) end
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+           03  FLG-ZENKOHI    PIC 9(01).
+           03  FLG-SYUNOU2    PIC 9(01).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
       *    ≈∫ª˙ŒŒ∞Ë
        01  IDX-AREA.
@@ -249,6 +254,11 @@
                05   WRK-SEIKYUGK-G        PIC 9(08)V9(01).
                05   WRK-SEIKYUGK-G2       PIC 9(08).
                05   WRK-SEIKYUGK          PIC 9(08)V9(01).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+               05   WRK-SEIKYUGK2-G       PIC 9(08)V9(01).
+               05   WRK-SEIKYUGK2-G2      PIC 9(08).
+               05   WRK-SEIKYUGK2         PIC 9(08)V9(01).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
                05   WRK-KOH-SKJFTN        PIC 9(08).
                05   WRK-KOH-SKJFTN-G      PIC 9(08).
@@ -271,6 +281,11 @@
       *===  °ª„¿¡µ·≈¿øÙÕÛ§Œ∑◊ªª ˝À°Ω§¿µ by Yoshikawa(2013/02/26) start
            03  WRK-FUKUSHI                PIC 9(08).
       *===  °ª„¿¡µ·≈¿øÙÕÛ§Œ∑◊ªª ˝À°Ω§¿µ by Yoshikawa(2013/02/26) end
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+           03  WRK-KOHFTNMONEY            PIC 9(08).
+           03  WRK-GAIJGNGAK              PIC 9(08).
+           03  WRK-NYUJGNGAK              PIC 9(08).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
       *=== …È√¥º‘»÷πÊ§Œ∂ı«Ú§œ•º•Ì§«À‰§·§Î by Yoshikawa(2009/10/23) start
       *    …È√¥º‘»÷πÊ•º•ÌÀ‰§· —¥π
@@ -287,6 +302,9 @@
            03  WRK-OUT-INPUT              PIC X(200).
       *
            03  WRK-PATH                   PIC  X(50).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+           03  WRK-PATH2                  PIC  X(50).
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
            03  WRK-FILENAME               PIC  X(40).
       *    •«°º•ø ‘Ω∏
            03  WRK-HENSHU.
@@ -479,6 +497,14 @@
       *    º˝«ºæ Û
        01  SYUNOU-REC.
            COPY    "CPSYUNOU.INC".
+      *
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+      *    º˝«ºæ Û
+       01  SYUNOU2-REC.
+           COPY  "CPSYUNOU.INC"
+                 REPLACING  //SYU//
+                 BY         //SYU2//.
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
       *    ∏¯»Ò¿¡µ·ΩÒ
            COPY    "CPKOHSKY.INC"
@@ -1127,6 +1153,11 @@
                                                FLG-KOHSKJ
                                                WRK-KOH-SKJFTN-G
       *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+                                               FLG-ZENKOHI
+                                               WRK-JGNGAK
+                                               WRK-SEIKYUGK2-G
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
            IF  RECE02-NYUGAIKBN  =  "1"
              MOVE  "key33"                 TO  WRK-PATH
@@ -1207,6 +1238,9 @@
                                         OR "054"
       *===  ø¿Æ£≤£∑«Ø£±∑Ó≤˛¿µ¬–±˛ by Yoshikawa(2015/01/06) end
       *
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+                  MOVE  1                        TO  FLG-ZENKOHI
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
                   MOVE  WRK-H-KOHNUM(IDX1)(2:2)  TO  WRK-TOKURAN
       *
                   IF  WRK-H-KOHNUM(IDX1)  =  "091"
@@ -1345,6 +1379,51 @@
                             ( RECE10-TOTALTEN(1) * 10 - 267000 ) / 100
                END-IF
            END-IF
+      *
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+      *    ¡¥πÒ∏¯»Ò§Úª˝§√§∆§§§ÎæÏπÁ°¢
+      *    ¿¡µ·≥€§¨æÂ∏¬≥€§Úƒ∂§®§∆§§§Î§´§…§¶§´§Œ≥Œ«ß
+           IF  FLG-ZENKOHI  =  1
+      *        æÂ∏¬≥€§ŒºË∆¿
+               PERFORM  930-PTKOHFTN-READ-SEC
+               PERFORM  VARYING  IDX2  FROM  1  BY  1
+                        UNTIL    IDX2  >  4
+                        OR       WRK-KOHINF(IDX2)  =  SPACE
+                   EVALUATE  WRK-KOHINF(IDX2)
+                     WHEN  "015"
+                     WHEN  "016"
+                     WHEN  "021"
+                     WHEN  "038"
+                     WHEN  "052"
+                     WHEN  "054"
+                       COMPUTE  WRK-JGNGAK  =  WRK-GAIJGNGAK
+                                            -  WRK-NYUJGNGAK
+                     WHEN  "024"
+                     WHEN  "051"
+                     WHEN  "079"
+                       MOVE    WRK-GAIJGNGAK   TO  WRK-JGNGAK
+                     WHEN  OTHER
+                       MOVE    ZERO            TO  WRK-JGNGAK
+                   END-EVALUATE
+               END-PERFORM
+      *
+      *        º˝«º§´§È¡¥πÒ∏¯»Ò§Œ…È√¥∂‚≥€§ÚºË∆¿
+               IF  RECE02-NYUGAIKBN  =  "1"
+                   MOVE    "key17"             TO  WRK-PATH2
+               ELSE
+                   MOVE    "key14"             TO  WRK-PATH2
+               END-IF
+               PERFORM  940-SYUNOU2-READ-SEC
+      *
+      *        ∏¯»Ò…È√¥∂‚≥€§¨¡¥πÒ∏¯»Ò§ŒæÂ∏¬≥€§Úƒ∂§®§ø§È£±£∞±ﬂ√±∞Ã
+               DISPLAY "WRK-JGNGAK  =" WRK-JGNGAK
+               DISPLAY "WRK-KOHFTNMONEY  =" WRK-KOHFTNMONEY
+               IF  (WRK-KOHFTNMONEY  >=  WRK-JGNGAK)
+               AND (WRK-JGNGAK  NOT =  ZERO)
+                   MOVE    WRK-SEIKYUGK2-G     TO  MF100-SEIKYUGK
+               END-IF
+           END-IF
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
       *    ª‘ƒÆ¬º»÷πÊ•ª•√•»ΩËÕ˝
            IF  MF100-FTNJANUM(3:1)  NOT =  SPACE
@@ -3396,6 +3475,11 @@
        930-PTKOHFTN-READ-SEC         SECTION.
       *
            INITIALIZE                          PTKOHFTN-REC
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+                                               FLG-PTKOHFTN
+                                               WRK-GAIJGNGAK
+                                               WRK-NYUJGNGAK
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
            MOVE    SPA-HOSPNUM             TO  PTKOHFTN-HOSPNUM
            MOVE    MF100-PTID              TO  PTKOHFTN-PTID
@@ -3408,20 +3492,33 @@
                                            MCPDATA-REC
                                            SPA-AREA
            IF      MCP-RC              =   ZERO
-               MOVE    "DBFETCH"           TO  MCP-FUNC
-               MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
-               MOVE    "key2"              TO  MCP-PATHNAME
-               CALL    "ORCDBMAIN"         USING
-                                           MCPAREA
-                                           MCPDATA-REC
-                                           SPA-AREA
-               IF      MCP-RC              =   ZERO
-                   MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
-                   MOVE    ZERO                TO  FLG-PTKOHFTN
-               ELSE
-                   MOVE    1                   TO  FLG-PTKOHFTN
-                   INITIALIZE                  PTKOHFTN-REC
-               END-IF
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+      *         MOVE    "DBFETCH"           TO  MCP-FUNC
+      *         MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+      *         MOVE    "key2"              TO  MCP-PATHNAME
+      *         CALL    "ORCDBMAIN"         USING
+      *                                     MCPAREA
+      *                                     MCPDATA-REC
+      *                                     SPA-AREA
+      *         IF      MCP-RC              =   ZERO
+      *             MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+      *             MOVE    ZERO                TO  FLG-PTKOHFTN
+      *         ELSE
+      *             MOVE    1                   TO  FLG-PTKOHFTN
+      *             INITIALIZE                  PTKOHFTN-REC
+      *         END-IF
+               PERFORM  930-PTKOHFTN-FETCH-SEC
+               PERFORM  UNTIL  FLG-PTKOHFTN  =  1
+                   IF  (PTKOHFTN-TEKSTYMD(1:6) <= RECE02-SRYYM(1:6))
+                   AND (PTKOHFTN-TEKEDYMD(1:6) >= RECE02-SRYYM(1:6))
+                       MOVE    PTKOHFTN-GAIJGNGAK 
+                                           TO  WRK-GAIJGNGAK
+                       MOVE    PTKOHFTN-NYUJGNGAK    
+                                           TO  WRK-NYUJGNGAK
+                   END-IF
+                   PERFORM  930-PTKOHFTN-FETCH-SEC
+               END-PERFORM
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
            ELSE
                MOVE    1                   TO  FLG-PTKOHFTN
                INITIALIZE                  PTKOHFTN-REC
@@ -3438,8 +3535,116 @@
            .
        930-PTKOHFTN-READ-EXT.
            EXIT.
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+      *****************************************************************
+      *    ¥µº‘∏¯»Ò…È√¥æ Û£∆£≈£‘£√£»ΩËÕ˝
+      *****************************************************************
+       930-PTKOHFTN-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           MOVE    "tbl_ptkohftn"      TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    MCPDATA-REC         TO  PTKOHFTN-REC
+               MOVE    ZERO                TO  FLG-PTKOHFTN
+           ELSE
+               MOVE    1                   TO  FLG-PTKOHFTN
+               INITIALIZE                  PTKOHFTN-REC
+           END-IF
+      *
+           .
+       930-PTKOHFTN-FETCH-EXT.
+           EXIT.
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *=== ∏¬≈Ÿ≥€Ã§À˛§œ°÷∆√°◊¬–æ›≥∞ by Yoshikawa(2010/07/26) end
       *
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+      *****************************************************************
+      *  º˝«ºæ Û∆…§ﬂπ˛§ﬂ
+      *****************************************************************
+       940-SYUNOU2-READ-SEC  SECTION.
+      *
+           INITIALIZE                      SYUNOU2-REC
+                                           FLG-SYUNOU2
+                                           WRK-KOHFTNMONEY
+      *
+           MOVE  SPA-HOSPNUM               TO  SYU2-HOSPNUM
+           MOVE  RECE02-NYUGAIKBN          TO  SYU2-NYUGAIKBN
+           MOVE  RECE02-PTID               TO  SYU2-PTID
+           MOVE  RECE02-SRYYM(1:6)         TO  SYU2-SRYYMD(1:6)
+           MOVE  "__"                      TO  SYU2-SRYYMD(7:2)
+           MOVE  SYUNOU2-REC               TO  MCPDATA-REC
+           MOVE  "DBSELECT"                TO  MCP-FUNC
+           MOVE  "tbl_syunou"              TO  MCP-TABLE
+           MOVE  WRK-PATH2                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"               USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE    "tbl_syunou"          TO  MCP-TABLE
+             MOVE    WRK-PATH2             TO  MCP-PATHNAME
+             PERFORM  945-SYUNOU2-FETCH-SEC
+      *
+             PERFORM  UNTIL  FLG-SYUNOU2  =  1
+      *          ¡¥πÒ∏¯»Ò§Œ ›∏±…È√¥∂‚≥€Ω∏∑◊
+                 PERFORM  VARYING  IDX  FROM  1  BY  1
+                          UNTIL    IDX  >    4 
+                          OR       SYU2-KOH-HKNNUM(IDX)  =  SPACE
+                     IF  SYU2-KOH-HKNNUM(IDX)(1:1) =  "0"
+                         ADD    SYU2-KOH-HKNFTNMONEY(IDX)  TO
+                                                WRK-KOHFTNMONEY
+                     END-IF
+                 END-PERFORM
+      *
+                 MOVE    "tbl_syunou"      TO  MCP-TABLE
+                 MOVE    WRK-PATH2         TO  MCP-PATHNAME
+                 PERFORM   945-SYUNOU2-FETCH-SEC
+             END-PERFORM
+           ELSE
+             DISPLAY  "SYUNOU SELECT ERR" 
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_syunou"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       940-SYUNOU2-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    º˝«º∆…π˛
+      *****************************************************************
+       945-SYUNOU2-FETCH-SEC  SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    MCPDATA-REC         TO  SYUNOU2-REC
+               MOVE    ZERO                TO  FLG-SYUNOU2
+           ELSE
+               INITIALIZE  SYUNOU2-REC
+               MOVE    1                   TO  FLG-SYUNOU2
+           END-IF
+      *
+           .
+       945-SYUNOU2-FETCH-EXT.
+           EXIT.
+      *
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *****************************************************************
       *    ¿¡µ·≈¿øÙΩ∏∑◊ΩËÕ˝
       *****************************************************************
@@ -3466,8 +3671,18 @@
       *             MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
       *                                         TO  WRK-SEIKYUGK
       *           END-IF
-                 MOVE   SYU-KOH-HKNFTNMONEY(IDX)
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+      *           MOVE   SYU-KOH-HKNFTNMONEY(IDX)
+      *                                         TO  WRK-SEIKYUGK
+                 IF    RECE02-FTNMONEY(1) >  ZERO
+                   MOVE   SYU-KOH-COMPFTN(IDX) TO  WRK-SEIKYUGK
+                 ELSE
+                   MOVE   SYU-KOH-COMPFTN-ENTANI(IDX)  
                                                TO  WRK-SEIKYUGK
+                 END-IF
+                 MOVE   SYU-KOH-HKNFTNMONEY(IDX)
+                                               TO  WRK-SEIKYUGK2
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/08/12) end
       *=== ¿¡µ·≥€§Œ∑◊ªª ˝À° —ππ by Yoshikawa(2010/10/04) start
       **=== ¿¡µ·≥€∑◊ªª ˝À°§Œ —ππ by Yoshikawa(2010/07/26) start
@@ -3560,6 +3775,10 @@
                    MOVE  "02"              TO  WRK-TOKURAN
                END-EVALUATE
       *
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+               MOVE  FLG-HEIYOU            TO  FLG-ZENKOHI
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
+      *
       *=== ¿¡µ·≥€∑◊ªª ˝À° —ππ by Yoshikawa(2010/07/26) start
       *        ∆√º¿…ÈÃµ§œ°÷51°◊§«§ﬁ§»§·§Î
                IF  SYU-KOH-HKNNUM(IDX)  =  "091"
@@ -3599,6 +3818,9 @@
            END-IF
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) start
+           ADD    WRK-SEIKYUGK2              TO    WRK-SEIKYUGK2-G
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) start
            ADD    WRK-KOH-SKJFTN             TO    WRK-KOH-SKJFTN-G
       *=== …∏Ω‡…È√¥≥€§œ °ª„§À∑∏§Î ¨§Úµ≠∫‹ by Yoshikawa(2015/03/16) end
