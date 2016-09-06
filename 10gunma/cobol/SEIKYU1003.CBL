@@ -1224,9 +1224,7 @@
              MOVE    ZERO             TO    MF100-TOTALTEN2
            ELSE
       *      感染症及び精神通院以外は福祉点数を上段に記載
-           DISPLAY "MF100-COMBIKBN =" MF100-COMBIKBN
              IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
-           DISPLAY "aaa"
       *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) start
       *    保険＋全国公費のような、地方公費が絡まないことにより
       *    収納から正しく請求額を取得できない場合の請求額の計算
@@ -2144,7 +2142,6 @@
                         TO  SC03-BIRTHDAY (IDX)(11:4)
       *
       *    公費分点数
-           DISPLAY "MF100-TOTALTEN2="  MF100-TOTALTEN2
              IF    MF100-COMBIKBN NOT  =   SPACE
                MOVE  MF100-TOTALTEN2   TO  WRK-Z7
                MOVE  WRK-Z7            TO  SC03-TENSU (IDX 1)
