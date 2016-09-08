@@ -509,7 +509,7 @@
       *****************************************************************
        100-OPTION-SELECT-SEC             SECTION.
       *
-           MOVE    "SEIKYU3901"              TO  WRK-PRGID
+           MOVE    "SEIKYU3923"              TO  WRK-PRGID
       *
       *    プログラムオプション取得
       *    対象公費番号
