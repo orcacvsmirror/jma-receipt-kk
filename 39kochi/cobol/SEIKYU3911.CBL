@@ -61,6 +61,7 @@
       *  01.00.16     吉川    15/05/13    全国公費との分点時、「金額」欄は
       *                                   全国公費併用分の値を記載する
       *  01.00.17     吉川    16/01/13    医療機関編集情報への開設者名追加対応
+      *  01.00.18     吉川    16/09/08    対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -136,10 +137,15 @@
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) start
            03  FLG-HKNNUM     PIC 9(01).
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+           03  FLG-PRGOPTION  PIC 9(01).
+           03  FLG-OK         PIC 9(01).
+           03  FLG-TAISYO     PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
       *
       *    添字領域
        01  IDX-AREA.
-           03  IDX            PIC 9(04).
+           03  IDX            PIC 9(05).
            03  IDXX           PIC 9(04).
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
@@ -231,6 +237,19 @@
            03  WRK-KAISETUNAME       PIC X(80).
       *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/01/13) end
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *    プログラムオプション
+           03  WRK-OPTION-TBL.
+               05  WRK-OPTION        PIC X(100)  OCCURS 100.
+           03  WRK-PRGID             PIC X(25).
+           03  WRK-KBNCD             PIC X(16).
+      *
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *    対象公費
+           03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-RECE02  PIC 9(06).
@@ -311,6 +330,12 @@
        01  HKNNUM-REC.
            COPY    "CPHKNNUM.INC".
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *    プログラムオプション
+       01  PRGOPTION-REC.
+           COPY    "CPPRGOPTION.INC".
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -533,6 +558,11 @@
            PERFORM 900-1900-READ-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
+      *
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -540,6 +570,73 @@
            .
        100-INIT-EXT.
            EXIT.
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *****************************************************************
+      *    プログラムオプション取込み処理
+      *****************************************************************
+       100-OPTION-SELECT-SEC             SECTION.
+      *
+           MOVE    "SEIKYU3911"              TO  WRK-PRGID
+      *
+      *    プログラムオプション取得
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *    
+           .
+       100-OPTION-SELECT-EXT.
+           EXIT.
+      *****************************************************************
+      *    プログラムオプションパラメタセット処理
+      *****************************************************************
+       1001-OPTION-SET-SEC              SECTION.
+      *
+           INITIALIZE                            WRK-OPTION-TBL
+                                                 FLG-OK
+      *    プログラムオプション情報読込
+           PERFORM  900-PRGOPTION-READ-SEC
+      *
+      *    オプション数の初期設定
+           MOVE    1                         TO  IDX1
+           IF  FLG-PRGOPTION  =  ZERO
+             PERFORM  VARYING  IDX  FROM  1  BY  1
+                      UNTIL   (IDX     >   44000 )
+                         OR   (IDX1    >  100)
+                         OR   (FLG-OK  NOT =   ZERO)
+      *
+      *        オプションの1桁目が空白であれば処理終了
+               IF   PRGOPTION-OPTION(IDX:1)  =  SPACE
+               AND  IDY                      =  ZERO
+                   MOVE    1                 TO  FLG-OK
+               END-IF
+      *
+               IF  FLG-OK  =  ZERO
+      *          改行地点か
+                 IF  PRGOPTION-OPTION(IDX:1)  =   X"0A"
+                 OR  IDY  >=  100
+                   ADD    1                  TO  IDX1
+                   MOVE    ZERO              TO  IDY
+                 ELSE
+                   ADD    1                  TO  IDY
+      *            PGオプション内容を１文字ずつセット
+                   MOVE    PRGOPTION-OPTION(IDX:1)
+                                         TO  WRK-OPTION(IDX1)(IDY:1)
+                 END-IF
+               END-IF
+             END-PERFORM
+           END-IF
+      *
+           .
+       1001-OPTION-SET-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
       *
       *****************************************************************
       *    パラメタ編集処理
@@ -666,7 +763,14 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-             IF  RECE02-KOHNUM (IDZ) = "148"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *       IF  RECE02-KOHNUM (IDZ) = "148"
+             INITIALIZE                            WRK-CHK-KOHNUM-TBL
+             MOVE    RECE02-KOHNUM(IDZ)        TO  WRK-CHK-KOHNUM(1)
+      *      対象公費番号チェック処理
+             PERFORM  800-TAISYOKOHI-CHK-SEC
+             IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
                  PERFORM  20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -1509,6 +1613,31 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
+      *
       *****************************************************************
       *    一時ファイル読込
       *****************************************************************
@@ -1579,10 +1708,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "148"  OR
-                   RECE02-KOHNUM (2)  =  "148"  OR
-                   RECE02-KOHNUM (3)  =  "148"  OR
-                   RECE02-KOHNUM (4)  =  "148"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *         IF  RECE02-KOHNUM (1)  =  "148"  OR
+      *             RECE02-KOHNUM (2)  =  "148"  OR
+      *             RECE02-KOHNUM (3)  =  "148"  OR
+      *             RECE02-KOHNUM (4)  =  "148"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -1978,6 +2117,54 @@
            .
        2009-HENKAN-EXT.
            EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
+      *****************************************************************
+      *    プログラムオプション情報読込
+      *****************************************************************
+       900-PRGOPTION-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PRGOPTION-REC
+           MOVE    SPA-HOSPNUM         TO  PRGOPTION-HOSPNUM
+           MOVE    WRK-PRGID           TO  PRGOPTION-PRGID
+           MOVE    WRK-KBNCD           TO  PRGOPTION-KBNCD
+           MOVE    PRGOPTION-REC       TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_prgoption"     TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"          USING
+                                            MCPAREA
+                                            MCPDATA-REC
+                                            SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    MCPDATA-REC         TO  PRGOPTION-REC
+                   MOVE    ZERO                TO  FLG-PRGOPTION
+               ELSE
+                   INITIALIZE                      PRGOPTION-REC
+                   MOVE    1                   TO  FLG-PRGOPTION
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-PRGOPTION
+           END-IF
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_prgoption"     TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"          USING
+                                        MCPAREA
+                                        MCPDATA-REC
+                                        SPA-AREA
+      *
+           .
+       900-PRGOPTION-READ-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
       *---(01.00.02) LINE ADD START ------------------------------------
       *****************************************************************
       *    医療機関編集情報読み込み
