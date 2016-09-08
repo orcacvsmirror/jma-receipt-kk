@@ -37,6 +37,7 @@
       *                                  総点数から公費点数を引いた値を
       *                                  記載するように修正
       *                                  医療機関編集情報への開設者名追加対応
+      *  01.00.05    吉川    16/09/08    高額該当の点数はゼロにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -168,7 +169,9 @@
                05   WRK-TAHOUTEN-G        PIC 9(08).
       *=== 全国公費分点時の点数欄修正 by Yoshikawa(2016/01/13) end
       *
-               05   WRK-TENSU             PIC 9(07).
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) start
+      *         05   WRK-TENSU             PIC 9(07).
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) end
                05   WRK-KOHTENSU          PIC 9(07).
            03  WRK-HKNJANUM               PIC X(05).
            03  WRK-HKNJANAME              PIC X(20).
@@ -176,6 +179,9 @@
            03  WRK-HBTCNT                 PIC 9(03).
            03  WRK-PAGECNT                PIC 9(02).
            03  WRK-AMARI                  PIC 9(02).
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) start
+           03  WRK-TENSU                  PIC 9(07).
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) end
       *
       *    文字変換
            03  WRK-MAE-INPUT              PIC X(200).
@@ -590,9 +596,13 @@
       *
            INITIALIZE       MF100-REC
            INITIALIZE       WRK-KASAN-TBL
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) start
+                            WRK-TENSU
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) end
       *
            MOVE  RECE02-KOHNUM (IDZ)          TO  WRK-KOHNUM
            COMPUTE IDY     =       IDZ     +   1
+      *
       *    143,146,147で前期高齢者で入院の場合集計しない
            IF  (RECE02-KOHNUM (IDZ)  =  "143" OR "146" OR "147")
            AND (RECE02-NYUGAIKBN  =  "1")
@@ -743,6 +753,9 @@
       *
       *=== 全国公費分点時の点数欄修正 by Yoshikawa(2016/01/13) start
            IF  RECE02-TOTALTEN(IDY)  NOT =  WRK-TAHOUTEN-G
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) start
+           AND WRK-TAHOUTEN-G  NOT =  ZERO
+      *=== 高額該当は点数ゼロ by Yoshikawa(2016/09/08) end
       *        総点数と全国公費点数の差額を点数欄に記載
                COMPUTE WRK-TAHOUTEN = RECE02-TOTALTEN(IDY)
                                     - WRK-TAHOUTEN-G
