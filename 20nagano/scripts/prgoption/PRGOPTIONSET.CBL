@@ -32,6 +32,7 @@
       *  04.08.02    吉川         14/12/03  更新処理は本体に準拠する
       *  04.08.03    吉川         15/02/10  END-IF漏れ
       *  04.08.04    内田         15/02/13  グループ診療対応
+      *  04.08.05    門間         16/09/05  マージ処理を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -120,12 +121,12 @@
            03  WRK-OPID                PIC X(16).
       *----(04.07.01)--ADD-END-----
       *
-           03  WRK-MAE-NAIYO           PIC X(200).
-           03  WRK-ATO-NAIYO           PIC X(200).
+           03  WRK-MAE-NAIYO           PIC X(500).
+           03  WRK-ATO-NAIYO           PIC X(500).
            03  WRK-MAE-AREA.
-               05  WRK-MAE-OPTION      PIC X(200) OCCURS 200.
+               05  WRK-MAE-OPTION      PIC X(500) OCCURS 200.
            03  WRK-ATO-AREA.
-               05  WRK-ATO-OPTION      PIC X(200) OCCURS 100.
+               05  WRK-ATO-OPTION      PIC X(500) OCCURS 100.
       *
       *　　主キー更新用項目
            03  WRK-SYSUPD-KEY.
@@ -498,14 +499,14 @@
                END-UNSTRING
 
                PERFORM VARYING IDX-PNT2 FROM 1 BY 1
-                       UNTIL ( IDX-PNT2 >   200 )
+                       UNTIL ( IDX-PNT2 >   500 )
                        OR    ( WRK-MAE-NAIYO(IDX-PNT2:)
                                                    =   SPACE )
                    IF      WRK-MAE-NAIYO(IDX-PNT2:1)   =   "="
                        COMPUTE CNT-MAE     =   CNT-MAE     +   1
                        MOVE    WRK-MAE-NAIYO
                                    TO  WRK-MAE-OPTION(CNT-MAE)
-                       MOVE    200 TO  IDX-PNT2
+                       MOVE    500 TO  IDX-PNT2
                    END-IF
                END-PERFORM
            END-PERFORM
@@ -562,7 +563,7 @@
                MOVE    WRK-ATO-OPTION(IDX) TO  WRK-ATO-NAIYO
                MOVE    ZERO            TO  FLG-LF
                PERFORM VARYING IDX-PNT1 FROM 1 BY 1
-                       UNTIL ( IDX-PNT1 >   200 )
+                       UNTIL ( IDX-PNT1 >   500 )
                        OR    ( WRK-ATO-NAIYO(IDX-PNT1:)    =  SPACE )
                        OR    ( FLG-LF  =   1 )
       *            コメントチェック
@@ -583,7 +584,7 @@
                                MOVE    ZERO        TO  IDXS
                                                        IDXL
                                PERFORM VARYING IDXP    FROM    1   BY  1
-                                       UNTIL ( IDXP    >   200 )
+                                       UNTIL ( IDXP    >   500 )
                                         OR   ( WRK-ATO-NAIYO(IDXP:)
                                                    =   SPACE )
                                         OR   ( IDXL    >   ZERO )
@@ -614,7 +615,7 @@
                        DISPLAY  "FLG-LF  CHECK:  "  FLG-LF
                IF  ( FLG-LF  =  ZERO )
                    PERFORM VARYING IDX-PNT1 FROM 1 BY 1
-                           UNTIL ( IDX-PNT1 >   200 )
+                           UNTIL ( IDX-PNT1 >   500 )
                            OR    ( WRK-ATO-NAIYO(IDX-PNT1:)  =   SPACE )
                        MOVE    WRK-ATO-NAIYO(IDX-PNT1:1)
                                        TO  WRK-OPTION(IDX-PNT3:1)
@@ -623,7 +624,7 @@
                        DISPLAY  "ATO IN"
                ELSE
                    PERFORM VARYING IDX-PNT1 FROM 1 BY 1
-                           UNTIL ( IDX-PNT1 >   200 )
+                           UNTIL ( IDX-PNT1 >   500 )
                            OR    ( WRK-MAE-NAIYO(IDX-PNT1:)  =   SPACE )
                        MOVE    WRK-MAE-NAIYO(IDX-PNT1:1)
                                        TO  WRK-OPTION(IDX-PNT3:1)
