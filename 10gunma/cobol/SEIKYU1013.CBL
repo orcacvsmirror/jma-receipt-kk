@@ -87,6 +87,7 @@
       *                                  備考が「01」で記録されるのを修正
       *                                  福祉医療費請求額の端数処理修正
       *  01.00.27    吉川    2016/09/05  福祉医療費請求額の修正
+      *  01.00.28    萩野    2016/09/09  公費の助成がない場合は印字対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1165,6 +1166,9 @@
              MOVE  "key25"                 TO  WRK-PATH
            END-IF
       *    収納情報取得
+      *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) start
+           MOVE    1                  TO  FLG-ERR
+      *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) end
            PERFORM  920-SYUNOU-SET-SEC
       *
            IF   IDZ  =  1
@@ -1445,7 +1449,9 @@
            MOVE    WRK-TOKURAN        TO  MF100-TOKURAN
       *
       *    保険者番号チェック処理
-           MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) start
+      *     MOVE    ZERO               TO   FLG-ERR
+      *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
       *    経過措置チェック
@@ -3794,6 +3800,22 @@
                  MOVE    1                 TO  FLG-KOGAKU
                END-IF
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
+      *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) start
+             IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
+               IF     IDX                 =  1
+                 IF  SYU-SYUCOMPFTN-ENTANI
+                                       > SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               ELSE
+                 IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                      >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                   MOVE  ZERO          TO  FLG-ERR
+                 END-IF
+               END-IF
+             END-IF
+      *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) end
       *
            END-PERFORM
       *
