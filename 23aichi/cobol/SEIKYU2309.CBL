@@ -93,6 +93,7 @@
       *                                  市町村負担額が空白のパターンでも
       *                                  全国公費を併用している場合は印字
       *  01.00.34    吉川    16/06/06    請求総件数欄が印字されない不具合修正
+      *  01.00.35    吉川    16/09/12    分点時の福祉点数の表示不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1096,11 +1097,13 @@
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) start
       *     MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-TOTALTENINF
       *=== 総点数欄は保険点数を記載 by Yoshikawa(2013/03/11) end
-           MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
-           MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
-      *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) start
-           MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-FUKUSITEN
+      *=== 分点時の福祉点数の修正 by Yoshikawa(2016/09/12) start
+      *     MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
+      *     MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
+      **=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) start
+      *     MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-FUKUSITEN
       *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) end
+      *=== 分点時の福祉点数の修正 by Yoshikawa(2016/09/12) end
       *
       *    市町村番号設定
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
