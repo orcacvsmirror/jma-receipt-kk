@@ -40,6 +40,7 @@
       *  01.00.07    萩野    15/11/13    返戻分を含めないよう修正
       *                                  END-STRING漏れ
       *  01.00.08    門間    16/06/03    対象公費はPGオプションから取得する
+      *  01.00.09    吉川    16/09/12    長期上限を超えたら印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1193,6 +1194,17 @@
              PERFORM  200115-ICHIBUFTN-HENSYU-SEC
            END-IF
       *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
+           IF  (MF101-TYOKI  =  1)
+           AND (WRK-ITBFTN  >=  10000)
+               MOVE    1                   TO  FLG-ERR
+           END-IF
+           IF  (MF101-TYOKI  =  2)
+           AND (WRK-ITBFTN  >=  20000)
+               MOVE    1                   TO  FLG-ERR
+           END-IF
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
       *
            IF     FLG-ERR         =     1
              DISPLAY "助成対象外="  RECE02-PTNUM
@@ -2802,9 +2814,18 @@
                  END-IF
                END-IF
       *
-               IF  SYU-KOH-HKNNUM(IDX) = "972" OR "974"
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
+      *         IF  SYU-KOH-HKNNUM(IDX) = "972" OR "974"
+      *           MOVE    1     TO      MF101-TYOKI
+      *         END-IF
+               IF  SYU-KOH-HKNNUM(IDX) = "972"
                  MOVE    1     TO      MF101-TYOKI
                END-IF
+      *      長期上位
+               IF  SYU-KOH-HKNNUM(IDX) = "974"
+                 MOVE    2     TO      MF101-TYOKI
+               END-IF
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
       *
            END-PERFORM
       *

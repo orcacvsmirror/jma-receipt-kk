@@ -58,6 +58,7 @@
       *  01.00.21    萩野    15/10/08    医療機関編集情報への開設者名追加対応
       *  01.00.22    門間    16/05/17    特記事項欄に「37申出」を追加
       *  01.00.23    門間    16/06/03    対象公費はPGオプションから取得する
+      *  01.00.24    吉川    16/09/12    長期上限を超えたら印字対象外
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1347,6 +1348,17 @@
              END-IF
            END-IF
       *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
+      *
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
+           IF  (MF101-TYOKI      =  1)
+           AND (MF101-FTNMONEY  >=  10000)
+               MOVE    1                   TO  FLG-ERR
+           END-IF
+           IF  (MF101-TYOKI      =  2)
+           AND (MF101-FTNMONEY  >=  20000)
+               MOVE    1                   TO  FLG-ERR
+           END-IF
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
       *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -3425,6 +3437,12 @@
                IF  SYU-KOH-HKNNUM(IDX) = "972"
                  MOVE    1     TO      MF101-TYOKI
                END-IF
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
+      *      長期上位
+               IF  SYU-KOH-HKNNUM(IDX) = "974"
+                 MOVE    2     TO      MF101-TYOKI
+               END-IF
+      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
       *
            END-PERFORM
       *
