@@ -94,6 +94,8 @@
       *                                  全国公費を併用している場合は印字
       *  01.00.34    吉川    16/06/06    請求総件数欄が印字されない不具合修正
       *  01.00.35    吉川    16/09/12    分点時の福祉点数の表示不具合修正
+      *                                  分点時の高額療養費は併用分ではなく
+      *                                  保険総点数で計算をする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1258,6 +1260,18 @@
            END-IF
       *=== 長期の判定不具合修正 by hagino(2014/05/14) end
       *---(01.00.02) LINE ADD END   ------------------------------------
+      *
+      *=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) start
+      *    高額療養費を算定かつ分点時、市町村負担額は総点数に対しての
+      *    高額療養費から保険単独時の窓口負担額を減算した値を求める
+           IF  (MF100-KOGAKU    NOT =  SPACE)
+           AND (MF100-TOTALTEN  NOT =  MF100-FUKUSITEN)
+               COMPUTE WRK-KEISAN = (MF100-TOTALTEN - MF100-FUKUSITEN)
+                                    * RECE02-KYURATE / 10
+               COMPUTE WRK-SEIKYUGK-G2  =  RECE10-FTNMONEY(1)
+                                        -  WRK-KEISAN
+           END-IF
+      *=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) end
       *
       *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) start
       *     MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
