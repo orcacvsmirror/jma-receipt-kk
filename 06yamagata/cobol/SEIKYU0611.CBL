@@ -1196,12 +1196,12 @@
       *=== 公費欄−一部負担金金額置換対応 by Yoshikawa(2013/04/03) end
       *
       *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
-           IF  (MF101-TYOKI  =  1)
-           AND (WRK-ITBFTN  >=  10000)
+           IF  (MF101-TYOKI      =  1)
+           AND (MF101-FTNMONEY  >=  10000)
                MOVE    1                   TO  FLG-ERR
            END-IF
-           IF  (MF101-TYOKI  =  2)
-           AND (WRK-ITBFTN  >=  20000)
+           IF  (MF101-TYOKI      =  2)
+           AND (MF101-FTNMONEY  >=  20000)
                MOVE    1                   TO  FLG-ERR
            END-IF
       *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
