@@ -790,22 +790,21 @@
            PERFORM 920-SYUNOU-SET-SEC
       *
       *    長期の患者に限度額1万円を設定
-           IF  FLG-TYOKI       =   1   AND
       *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
+      *     IF  FLG-TYOKI       =   1   AND
       *         WRK-ITBFTN  >   10000
-               WRK-ITBFTN  >=   10000
-               MOVE    1          TO  FLG-ERR
+           IF  (FLG-TYOKI       =   1)
+           AND (WRK-ITBFTN     >=   10000)
+               IF  WRK-KOHNUM   =  "182"
+                  MOVE    1    TO  FLG-ERR
+               END-IF
       *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
                MOVE    10000   TO  WRK-ITBFTN
            END-IF
       *---(01.00.03) LINE ADD START ------------------------------------
       *    長期上位
            IF  FLG-TYOKI       =   2   AND
-      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) start
-      *         WRK-ITBFTN  >   20000
-               WRK-ITBFTN  >=   20000
-               MOVE    1          TO  FLG-ERR
-      *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
+               WRK-ITBFTN  >   20000
                MOVE    20000   TO  WRK-ITBFTN
            END-IF
       *---(01.00.03) LINE ADD END   ------------------------------------
