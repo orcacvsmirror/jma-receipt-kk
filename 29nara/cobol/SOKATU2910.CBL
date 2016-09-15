@@ -45,8 +45,8 @@
       *  01.00.13    吉川     14/10/24    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.14    吉川     14/12/03    返戻時、再印刷画面のタイトル修正
       *  01.00.15    門間     16/03/08    医療機関編集情報への開設者名追加対応
-      *  01.00.16    萩野     16/09/09    前期高齢者１割もしくは２割のデータのみ
-      *                                   の場合は給付割合欄の８割に○を付けるように修正。
+      *  01.00.16    萩野     16/09/15    「７０歳以上 一般・低所得」欄のみ件数が
+      *                                   ある場合は給付割合欄の８割に○を付けるよう修正。
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -158,10 +158,9 @@
            03  FLG-PRGOPTION       PIC 9(01).
            03  FLG-OK              PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2013/10/11) end
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) start
-           03  FLG-TOKUREI         PIC 9(01).
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) start
            03  FLG-KENSU           PIC 9(01).
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) end
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -1046,12 +1045,6 @@
       *    一部負担金
            ADD     RECE10-FTNMONEY(1)  TO  SKT2910TMP-ITBFTN(IDX1 IDX2)
       *
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) start
-           IF  RECE10-FLG (2)              =   1
-               ADD     1               TO  SKT2910TMP-TOKUREI(IDX1 IDX2)
-           END-IF
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) end
-      *
       *    食事療養
       *    件数
            IF      RECE10-SHOKUJINISSU(1)  >   0
@@ -1260,9 +1253,8 @@
       *    点表区分
            MOVE    "○"        TO  SKT2910-TENHYOKBN
       *
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) start
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) start
            MOVE  ZERO                      TO  FLG-TOKUREI
-           MOVE  ZERO                      TO  FLG-SEIKYU
            PERFORM VARYING IDX1    FROM    1   BY  1
                    UNTIL   IDX1    >       9
                PERFORM VARYING IDX2    FROM    1   BY  1
@@ -1273,20 +1265,16 @@
                            MOVE     1               TO    FLG-KENSU
                        END-IF
                    END-IF
-                   IF  SKT2910TMP-TOKUREI(IDX1 IDX2) >=   1
-                       MOVE     1                   TO    FLG-TOKUREI
-                   END-IF
                END-PERFORM
            END-PERFORM
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) end
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) end
       *
       *    給付割合
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) start
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) start
            IF    FLG-KENSU     =   ZERO
-             AND FLG-TOKUREI   =   ZERO
                MOVE    "◯"        TO  SKT2910-WARIAI(2)
            ELSE
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) end
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) end
                EVALUATE    SKT2910TMP-KYURATE
                    WHEN    8
                        MOVE    "◯"        TO  SKT2910-WARIAI(2)
@@ -1297,9 +1285,9 @@
                    WHEN    OTHER
                        MOVE    "◯"        TO  SKT2910-WARIAI(1)
               END-EVALUATE
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) start
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) start
            END-IF
-      *=== 前期高齢者１割もしくは２割のデータのみの対応 by hagino(2016/09/09) end
+      *=== 給付割合欄の印字対応 by hagino(2016/09/15) end
       *
       *
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/08) start
