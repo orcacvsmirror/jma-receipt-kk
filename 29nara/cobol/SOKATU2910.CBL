@@ -1254,7 +1254,7 @@
            MOVE    "¡û"        TO  SKT2910-TENHYOKBN
       *
       *=== µëÉÕ³ä¹çÍó¤Î°õ»úÂÐ±þ by hagino(2016/09/15) start
-           MOVE  ZERO                      TO  FLG-SEIKYU
+           MOVE  ZERO                      TO  FLG-KENSU
            PERFORM VARYING IDX1    FROM    1   BY  1
                    UNTIL   IDX1    >       9
                PERFORM VARYING IDX2    FROM    1   BY  1
