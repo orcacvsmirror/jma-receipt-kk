@@ -1353,7 +1353,7 @@
       *    182＋長期で10000円を超えたら印字対象外
            IF  (MF101-KOHNUM     = "182")
            AND (MF101-TYOKI      =  1)
-           AND (MF101-FTNMONEY  >=  10000)
+           AND (MF101-FTNMONEY2  >=  10000)
                MOVE    1                   TO  FLG-ERR
            END-IF
       *=== 長期上限を超えたら印字対象外 by Yoshikawa(2016/09/12) end
