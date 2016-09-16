@@ -914,7 +914,7 @@
       *****************************************************************
        100-OPTION-SELECT-SEC             SECTION.
       *
-           MOVE    "SEIKYU2001"              TO  WRK-PRGID
+           MOVE    "SEIKYU2003"              TO  WRK-PRGID
       *
       *    プログラムオプション取得
       *    対象公費番号
