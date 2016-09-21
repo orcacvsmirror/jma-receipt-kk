@@ -86,6 +86,7 @@
       *  01.00.30    等李    16/08/12    省汇板闻锐懒滇驰の眉眶借妄饯赖
       *  01.00.31    等李    16/09/05    省汇板闻锐懒滇驰の饯赖
       *  01.00.32    请填    16/09/09    给锐の锦喇がない眷圭は磅机滦据嘲とする
+      *  01.00.33    等李    16/09/21    尸爬箕の省汇板闻锐懒滇驰饯赖
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2331,6 +2332,9 @@
                  MOVE     SYU-SYUCOMPFTN-ENTANI     TO  WRK-SEIKYUGK
                END-IF
              END-IF
+      *=== 尸爬箕の省汇板闻锐懒滇驰饯赖 by Yoshikawa(2016/09/21) start
+             MOVE     SYU-SYUCOMPFTN         TO  WRK-SEIKYUGK2
+      *=== 尸爬箕の省汇板闻锐懒滇驰饯赖 by Yoshikawa(2016/09/21) end
       *=== 懒滇驰の纷换数恕恃构 by Yoshikawa(2010/10/04) start
            ELSE
              ADD   SYU-TOTAL-HKNTEN     TO  MF100-TOTALTEN2
