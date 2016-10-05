@@ -74,7 +74,10 @@
                05  SKT4120-S-FTNGK         PIC  X(09).
       *
       *    公費請求テーブル
-           03  SKT4120-KOUHI-TBL  OCCURS  5.
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+      *     03  SKT4120-KOUHI-TBL  OCCURS  5.
+           03  SKT4120-KOUHI-TBL  OCCURS  6.
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
       *    法別番号
                05  SKT4120-HBTNUM          PIC  X(02).
       *    公費名
