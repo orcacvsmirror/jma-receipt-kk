@@ -61,6 +61,7 @@
       *  01.00.19    萩野    2014/12/05    返戻時、再印刷画面のタイトル修正
       *  01.00.20    門間    2016/03/08    医療機関編集情報への開設者名追加対応
       *  01.00.21    萩野    2016/05/12    在宅の対象とする診療コード追加
+      *  01.00.22    門間    2016/10/04    帳票様式の変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1097,9 +1098,12 @@
            PERFORM VARYING IDX3    FROM    1   BY  1
                    UNTIL   IDX3    >       4
                    OR      RECE10-KOHNUM(IDX3) =   SPACE
-               ADD     1       TO  SKT1300TMP-KKENSU(IDX1)
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+      *         ADD     1       TO  SKT1300TMP-KKENSU(IDX1)
+               ADD     1       TO  SKT1300TMP-KKENSU(IDX1 IDX2)
+                                   SKT1300TMP-KKENSU(IDX1 4)
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
            END-PERFORM
-      *
       *
            IF      FLG-SKT1300TMP   =          1
                WRITE    SKT1300TMP-REC
@@ -1295,8 +1299,10 @@
                    UNTIL   IDX1    >       2
       *
       *    公費件数
-               MOVE    SKT1300TMP-KKENSU(IDX1)     TO  WRK-Z5
-               MOVE    WRK-Z5      TO  SKT1300-HEIYOKEN(IDX1)
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+      *         MOVE    SKT1300TMP-KKENSU(IDX1)     TO  WRK-Z5
+      *         MOVE    WRK-Z5      TO  SKT1300-HEIYOKEN(IDX1)
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
       *
                PERFORM VARYING IDX2    FROM    1   BY  1
                        UNTIL   IDX2    >       4
@@ -1318,6 +1324,13 @@
                    MOVE    SKT1300TMP-SKINGK(IDX1 IDX2) 
                                                        TO  WRK-Z14
                    MOVE    WRK-Z14     TO  SKT1300-SKINGK(IDX1 IDX2)
+      *
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+                   MOVE    SKT1300TMP-KKENSU(IDX1 IDX2)
+                                                       TO  WRK-Z5
+                   MOVE    WRK-Z5      TO  SKT1300-HEIYOKEN(IDX1 IDX2)
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
+      *
                END-PERFORM
       *---(01.00.04) LINE ADD START ------------------------------------
       *        後期高齢者

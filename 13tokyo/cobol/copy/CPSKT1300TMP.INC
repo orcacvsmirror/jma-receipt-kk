@@ -20,6 +20,7 @@
       *
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
+      *  01.00.01    門間    2016/10/04  帳票様式の変更
       ************************************************************
        01  SKT1300TMP-REC.
            03  SKT1300TMP-KEY.
@@ -27,12 +28,17 @@
                05  SKT1300TMP-NYUGAIKBN            PIC X(01).
                05  SKT1300TMP-ZAITAKU              PIC X(01).
            03  SKT1300TMP-KEN-TBL OCCURS 2.
-               05  SKT1300TMP-KKENSU               PIC 9(05).
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+      *         05  SKT1300TMP-KKENSU               PIC 9(05).
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
                05  SKT1300TMP-HKN-TBL OCCURS 4.
                    07  SKT1300TMP-KENSU            PIC 9(05).
                    07  SKT1300TMP-TENSU            PIC 9(11).
                    07  SKT1300TMP-SKENSU           PIC 9(05).
                    07  SKT1300TMP-SKINGK           PIC 9(11).
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+                   07  SKT1300TMP-KKENSU           PIC 9(05).
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
            03  SKT1300TMP-KOUKI-TBL OCCURS 2.
                05  SKT1300TMP-KO-KENSU             PIC 9(05).
                05  SKT1300TMP-KO-TENSU             PIC 9(11).

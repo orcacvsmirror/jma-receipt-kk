@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2010/08/03  特別療養費国保対応
+      *  01.00.02    門間    2016/10/04  帳票様式の変更
       ********************************************************************
         01  SKT1300.
       *    診療年月
@@ -46,12 +47,17 @@
       *=== 特別療養費国保対応 by Yoshikawa(2009/08/03) end
       *    集計テーブル
             02  SKT1300-SYUKEI-TBL      OCCURS  2 TIMES.
-              03  SKT1300-HEIYOKEN    PIC X(5).
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+      *        03  SKT1300-HEIYOKEN    PIC X(5).
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
               03  SKT1300-HKN-TBL         OCCURS  4 TIMES.
                 04  SKT1300-KENSU   PIC X(5).
                 04  SKT1300-TENSU   PIC X(14).
                 04  SKT1300-SKENSU  PIC X(5).
                 04  SKT1300-SKINGK  PIC X(14).
+      *=== 帳票様式の変更 by Monma(2016/10/04) start
+                04  SKT1300-HEIYOKEN  PIC X(5).
+      *=== 帳票様式の変更 by Monma(2016/10/04) end
       *    後期高齢者集計テーブル
             02  SKT1300-KOUKI-TRL       OCCURS  2 TIMES.
               03  SKT1300-KKENSU  PIC X(5).
