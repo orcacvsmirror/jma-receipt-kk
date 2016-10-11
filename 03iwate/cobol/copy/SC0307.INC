@@ -15,6 +15,10 @@
       * program and contact JMA, 2-28-16 Honkomagome, Bunkyo-ku, Tokyo,
       * 113-8621, Japan.
       ********************************************************************
+      *  コピー句修正履歴
+      * Maj/Min/Rev  修正者   日付        内容
+      *  01.00.01    萩野     16/10/07    特記事項の要素数追加
+      ********************************************************************
         01  SC07.
             03  SC07-SRYYM      PIC X(16).
             03  SC07-HOSPCDN    PIC X(20).
@@ -36,7 +40,11 @@
             03  SC07-BIRTHDAY   PIC X(08).
             03  SC07-SEX        PIC X(02)   OCCURS  2 TIMES.
             03  SC07-GENGO      PIC X(02)   OCCURS  4 TIMES.
-            03  SC07-TOKKI      PIC X(08).
+      *=== 特記事項の要素数追加 by hagino(2016/10/07) start
+      *      03  SC07-TOKKI      PIC X(08).
+            03  SC07-TOKKI-TBL          OCCURS 3.
+                05  SC07-TOKKI    PIC X(08).
+      *=== 特記事項の要素数追加 by hagino(2016/10/07) end
             03  SC07-BYOMEI-TBL.
                 05  SC07-BYOMEI   PIC X(54)   OCCURS  5 TIMES.
                 05  SC07-SRYYMD   PIC X(24)   OCCURS  5 TIMES.

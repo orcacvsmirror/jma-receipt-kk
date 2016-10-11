@@ -22,6 +22,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者       日付      内容
       *  04.08.01    吉川         16/04/14  印刷順制御対応
+      *  04.08.02    萩野         16/10/07  特記事項追加
       ************************************************************
       *01  MF101-REC.
            03  MF101-KEY.
@@ -166,3 +167,7 @@
                05  MF101-ESHOKUJINISSU   PIC  9(02).
                05  MF101-ESHOKUJIRYOYOHI PIC  9(09).
                05  MF101-ESHOKUJIFTN     PIC  9(09).
+      *=== 特記事項追加 by hagino(2016/10/07) start
+           03  MF101-TOKKI-TBL  OCCURS  5.
+               05  MF101-TOKKI           PIC  X(02).
+      *=== 特記事項追加 by hagino(2016/10/07) end
