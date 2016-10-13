@@ -3808,13 +3808,6 @@
                END-IF
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
       *
-      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) start
-      *        更生フラグ
-               IF  SYU-KOH-HKNNUM(IDX)  =  "015"
-                 MOVE    1                 TO  MF100-FLG15
-               END-IF
-      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) end
-      *
       *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) start
              IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
                IF     IDX                 =  1

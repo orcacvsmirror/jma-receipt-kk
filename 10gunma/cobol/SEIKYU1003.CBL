@@ -1386,16 +1386,10 @@
       *        ∏¯»Ò…È√¥∂‚≥€§¨¡¥πÒ∏¯»Ò§ŒæÂ∏¬≥€§Úƒ∂§®§ø§È£±£∞±ﬂ√±∞Ã
                DISPLAY "WRK-JGNGAK  =" WRK-JGNGAK
                DISPLAY "WRK-KOHFTNMONEY  =" WRK-KOHFTNMONEY
-      *--- test
-      *         IF  (WRK-KOHFTNMONEY  >=  WRK-JGNGAK)
-      *         AND (WRK-JGNGAK  NOT =  ZERO)
-      *             MOVE    WRK-SEIKYUGK2-G     TO  MF100-SEIKYUGK
-      *         END-IF
                IF  (WRK-KOHFTNMONEY  >=  WRK-JGNGAK)
                AND (WRK-JGNGAK  NOT =  ZERO)
                    MOVE    WRK-SEIKYUGK2-G     TO  MF100-SEIKYUGK
                END-IF
-      *--- test
            END-IF
       *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
