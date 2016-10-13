@@ -109,6 +109,8 @@
       *                                  »˜πÕÕÛ§À°÷15°◊§Úµ≠∫‹§π§Î
       *                                  π‚≥€•®§«¬øøÙ≥∫≈ˆ§ŒæÏπÁ°¢»˜πÕÕÛ§À
       *                                  •ﬁ•Î¬ø§¨∞ıª˙§µ§Ï§ §§§Œ§ÚΩ§¿µ
+      *                                   ›∏±°‹¡¥πÒ∏¯»Ò°‹ °ª„§» ›∏±°‹ °ª„§Œ
+      *                                  æÏπÁ10±ﬂ√±∞Ã§«µ≠∫‹§µ§Ï§Î§Œ§ÚΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1384,10 +1386,16 @@
       *        ∏¯»Ò…È√¥∂‚≥€§¨¡¥πÒ∏¯»Ò§ŒæÂ∏¬≥€§Úƒ∂§®§ø§È£±£∞±ﬂ√±∞Ã
                DISPLAY "WRK-JGNGAK  =" WRK-JGNGAK
                DISPLAY "WRK-KOHFTNMONEY  =" WRK-KOHFTNMONEY
+      *--- test
+      *         IF  (WRK-KOHFTNMONEY  >=  WRK-JGNGAK)
+      *         AND (WRK-JGNGAK  NOT =  ZERO)
+      *             MOVE    WRK-SEIKYUGK2-G     TO  MF100-SEIKYUGK
+      *         END-IF
                IF  (WRK-KOHFTNMONEY  >=  WRK-JGNGAK)
                AND (WRK-JGNGAK  NOT =  ZERO)
                    MOVE    WRK-SEIKYUGK2-G     TO  MF100-SEIKYUGK
                END-IF
+      *--- test
            END-IF
       *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
       *
@@ -3683,6 +3691,9 @@
                  MOVE     SYU-KOH-COMPFTN(1) TO  WRK-SEIKYUGK
                ELSE
                  MOVE     SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) start
+                                                 WRK-SEIKYUGK2
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) end
                END-IF
                MOVE       1                  TO  MF100-SEIKYU-FLG
              ELSE
@@ -3690,11 +3701,16 @@
                  MOVE     SYU-KOH-COMPFTN-ENTANI(1) TO  WRK-SEIKYUGK
                ELSE
                  MOVE     SYU-SYUCOMPFTN-ENTANI     TO  WRK-SEIKYUGK
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) start
+                                                        WRK-SEIKYUGK2
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) end
                END-IF
              END-IF
-      *===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) start
-             MOVE     SYU-SYUCOMPFTN         TO  WRK-SEIKYUGK2
-      *===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) end
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) start
+      **===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) start
+      *       MOVE     SYU-SYUCOMPFTN         TO  WRK-SEIKYUGK2
+      **===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) end
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) end
            ELSE
              ADD   SYU-TOTAL-HKNTEN     TO  MF100-TOTALTEN2
            END-IF

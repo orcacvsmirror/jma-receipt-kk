@@ -87,6 +87,8 @@
       *  01.00.34    «ÎÃÓ    16/09/09    ∏¯»Ò§ŒΩı¿Æ§¨§ §§æÏπÁ§œ∞ıª˙¬–æ›≥∞§»§π§Î
       *  01.00.35    µ»¿Ó    16/09/21     ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ
       *                                  WRK-SEIKYUGK2§ŒΩÈ¥¸≤Ωœ≥§Ï
+      *  01.00.36    µ»¿Ó    16/10/13     ›∏±°‹¡¥πÒ∏¯»Ò°‹ °ª„§» ›∏±°‹ °ª„§Œ
+      *                                  æÏπÁ10±ﬂ√±∞Ã§«µ≠∫‹§µ§Ï§Î§Œ§ÚΩ§¿µ
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -2244,6 +2246,9 @@
                  MOVE     SYU-KOH-COMPFTN(1) TO  WRK-SEIKYUGK
                ELSE
                  MOVE     SYU-SYUCOMPFTN     TO  WRK-SEIKYUGK
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) start
+                                                 WRK-SEIKYUGK2
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) end
                END-IF
                MOVE       1                  TO  MF100-SEIKYU-FLG
              ELSE
@@ -2251,11 +2256,16 @@
                  MOVE     SYU-KOH-COMPFTN-ENTANI(1) TO  WRK-SEIKYUGK
                ELSE
                  MOVE     SYU-SYUCOMPFTN-ENTANI     TO  WRK-SEIKYUGK
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) start
+                                                        WRK-SEIKYUGK2
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) end
                END-IF
              END-IF
-      *===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) start
-             MOVE     SYU-SYUCOMPFTN         TO  WRK-SEIKYUGK2
-      *===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) end
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) start
+      **===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) start
+      *       MOVE     SYU-SYUCOMPFTN         TO  WRK-SEIKYUGK2
+      **===  ¨≈¿ª˛§Œ °ª„∞ÂŒ≈»Ò¿¡µ·≥€Ω§¿µ by Yoshikawa(2016/09/21) end
+      *=== ±ﬂ√±∞Ã§ŒΩ§¿µ by Yoshikawa(2016/10/13) end
       *=== ¿¡µ·≥€§Œ∑◊ªª ˝À° —ππ by Yoshikawa(2010/10/04) start
            ELSE
              ADD   SYU-TOTAL-HKNTEN     TO  MF100-TOTALTEN2
