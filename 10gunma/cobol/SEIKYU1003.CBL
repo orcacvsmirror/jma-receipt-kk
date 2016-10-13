@@ -107,6 +107,8 @@
       *  01.00.39    吉川    16/09/21    分点時の福祉医療費請求額修正
       *  01.00.40    吉川    16/10/13    更生と長期を併用している場合
       *                                  備考欄に「15」を記載する
+      *                                  高額エで多数該当の場合、備考欄に
+      *                                  マル多が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2263,10 +2265,16 @@
                  WHEN  "4"
                    MOVE    "多・ウ"    TO  SC03-BIKO4(IDX)
                END-EVALUATE
-      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
-               MOVE    SPACE           TO  SC03-TEI (IDX 2)
+      *=== 高額エで多数該当の備考欄修正 by Yoshikawa(2016/10/13) start
+      **=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
+      *         MOVE    SPACE           TO  SC03-TEI (IDX 2)
+      *                                     SC03-MARU (IDX 2)
+      **=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
+               IF  MF100-KOGAKU  =  "2" OR "3" OR "4"
+                   MOVE    SPACE       TO  SC03-TEI (IDX 2)
                                            SC03-MARU (IDX 2)
-      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
+               END-IF
+      *=== 高額エで多数該当の備考欄修正 by Yoshikawa(2016/10/13) end
              ELSE
                EVALUATE  MF100-KOGAKU
                  WHEN  "2"
@@ -2717,10 +2725,16 @@
                  WHEN  "4"
                    MOVE    "多・ウ"    TO  SC04-BIKO4(IDX)
                END-EVALUATE
-      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
-               MOVE    SPACE           TO  SC04-TEI (IDX 2)
+      *=== 高額エで多数該当の備考欄修正 by Yoshikawa(2016/10/13) start
+      **=== 多数該当の印字修正 by Yoshikawa(2016/08/12) start
+      *         MOVE    SPACE           TO  SC04-TEI (IDX 2)
+      *                                     SC04-MARU (IDX 2)
+      **=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
+               IF  MF100-KOGAKU  =  "2" OR "3" OR "4"
+                   MOVE    SPACE       TO  SC04-TEI (IDX 2)
                                            SC04-MARU (IDX 2)
-      *=== 多数該当の印字修正 by Yoshikawa(2016/08/12) end
+               END-IF
+      *=== 高額エで多数該当の備考欄修正 by Yoshikawa(2016/10/13) end
              ELSE
                EVALUATE  MF100-KOGAKU
                  WHEN  "2"
