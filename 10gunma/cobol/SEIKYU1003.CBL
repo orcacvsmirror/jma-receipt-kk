@@ -105,6 +105,8 @@
       *  01.00.37    吉川    16/09/05    福祉医療費請求額の修正
       *  01.00.38    萩野    16/09/09    公費の助成がない場合は印字対象外とする
       *  01.00.39    吉川    16/09/21    分点時の福祉医療費請求額修正
+      *  01.00.40    吉川    16/10/13    更生と長期を併用している場合
+      *                                  備考欄に「15」を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2208,6 +2210,13 @@
                  MOVE    "ＩＩ"        TO  WRK-BIKO2
              END-EVALUATE
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
+      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) start
+      *      更生＋長期
+             IF  (MF100-COMBIKBN  =  "72")
+             AND (MF100-FLG15     =  1)
+                 MOVE    "１５"        TO  WRK-BIKO2
+             END-IF
+      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) end
              IF  MF100-TYOKI  =  2
                IF  WRK-BIKO2  =  SPACE
                  MOVE  "長２"          TO  WRK-BIKO2
@@ -2655,6 +2664,13 @@
                  MOVE    "ＩＩ"        TO  WRK-BIKO2
              END-EVALUATE
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/06) end
+      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) start
+      *      更生＋長期
+             IF  (MF100-COMBIKBN  =  "72")
+             AND (MF100-FLG15     =  1)
+                 MOVE    "１５"        TO  WRK-BIKO2
+             END-IF
+      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) end
              IF  MF100-TYOKI  =  2
                IF  WRK-BIKO2  =  SPACE
                  MOVE  "長２"          TO  WRK-BIKO2
@@ -3620,6 +3636,13 @@
                MOVE    1                       TO  FLG-KOGAKU
              END-IF
       *=== 限度額認定証無しでも高額認定 by Yoshikawa(2012/03/19) end
+      *
+      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) start
+      *      更生フラグ
+             IF  SYU-KOH-HKNNUM(IDX)  =  "015"
+               MOVE    1                       TO  MF100-FLG15
+             END-IF
+      *=== 更生＋長期は備考に記載 by Yoshikawa(2016/10/13) end
       *
       *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) start
              IF   SYU-KOH-HKNNUM(IDX)     =  WRK-KOHNUM
