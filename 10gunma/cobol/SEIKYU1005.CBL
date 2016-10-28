@@ -90,6 +90,7 @@
       *  01.00.36    吉川    16/10/13    保険＋全国公費＋福祉と保険＋福祉の
       *                                  場合10円単位で記載されるのを修正
       *  01.00.37    吉川    16/10/28    点数欄はレセ総点数を印字する
+      *                                  法別11は公費点数欄に印字しない
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -1162,7 +1163,10 @@
              MOVE    ZERO             TO    MF100-TOTALTEN2
            ELSE
       *
-             IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
+      *=== 法別11は公費点数記載対象外 by Yoshikawa(2016/10/28) start
+      *       IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
+             IF  MF100-COMBIKBN  NOT =  "10" AND "21"
+      *=== 法別11は公費点数記載対象外 by Yoshikawa(2016/10/28) end
                IF  MF100-TOTALTEN  =  MF100-TOTALTEN2
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
       *            COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
