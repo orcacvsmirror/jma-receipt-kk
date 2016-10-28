@@ -113,6 +113,8 @@
       *                                  場合10円単位で記載されるのを修正
       *  01.00.41    吉川    16/10/28    点数欄はレセ総点数を印字する
       *                                  法別11は公費点数欄に印字しない
+      *                                  月途中で福祉を併用した場合は
+      *                                  備考欄に「途中福祉」を記載する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2334,6 +2336,20 @@
              END-IF
       *=== 備考の高額区分の記載修正 by Yoshikawa(2015/06/10) end
       *
+      *=== 途中福祉は備考欄に記載 by Yoshikawa(2016/10/28) start
+           IF  MF100-H-TOTALTEN  NOT =  MF100-TOTALTEN
+               IF  SC03-BIKO4(IDX)  NOT =  SPACE
+                   STRING  SC03-BIKO4(IDX)  DELIMITED BY SPACE
+                           "、"             DELIMITED BY SIZE
+                           "途中福祉"       DELIMITED BY SIZE
+                           INTO             SC03-BIKO4(IDX)
+                   END-STRING
+               ELSE
+                   MOVE    "途中福祉"   TO  SC03-BIKO4(IDX)
+               END-IF
+           END-IF
+      *=== 途中福祉は備考欄に記載 by Yoshikawa(2016/10/28) end
+      *
       *    小計
       *    公費分点数
       *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
@@ -2806,6 +2822,19 @@
              END-IF
       *=== 備考の高額区分の記載修正 by Yoshikawa(2015/06/10) end
       *
+      *=== 途中福祉は備考欄に記載 by Yoshikawa(2016/10/28) start
+           IF  MF100-H-TOTALTEN  NOT =  MF100-TOTALTEN
+               IF  SC04-BIKO4(IDX)  NOT =  SPACE
+                   STRING  SC04-BIKO4(IDX)  DELIMITED BY SPACE
+                           "、"             DELIMITED BY SIZE
+                           "途中福祉"       DELIMITED BY SIZE
+                           INTO             SC04-BIKO4(IDX)
+                   END-STRING
+               ELSE
+                   MOVE    "途中福祉"   TO  SC04-BIKO4(IDX)
+               END-IF
+           END-IF
+      *=== 途中福祉は備考欄に記載 by Yoshikawa(2016/10/28) end
       *    小計
       *    公費分点数
       *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
