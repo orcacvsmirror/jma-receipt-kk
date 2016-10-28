@@ -111,6 +111,7 @@
       *                                  マル多が印字されないのを修正
       *                                  保険＋全国公費＋福祉と保険＋福祉の
       *                                  場合10円単位で記載されるのを修正
+      *  01.00.41    吉川    16/10/28    点数欄はレセ総点数を印字する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1046,6 +1047,14 @@
       *    請求管理より、保険使用時情報取得
            PERFORM  900-SEIKYU-SELECT-SEC
            MOVE  RECE10-TOTALTEN(1)        TO  MF100-H-TOTALTEN
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *    全国公費点数
+           IF  RECE10-KOHNUM(1)  NOT =  SPACE
+               MOVE    RECE10-TOTALTEN(2)  TO  MF100-TOTALTEN2
+           ELSE
+               MOVE    ZERO                TO  MF100-TOTALTEN2
+           END-IF
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
       *=== open-cobol1.0対応 by Yoshikawa(2011/03/10) start
       *     MOVE  RECE10-KOHINF             TO  WRK-KOHINF
            PERFORM  VARYING  IDX  FROM  1  BY  1
@@ -1184,6 +1193,7 @@
       *=== 公費の助成なしは印字対象外 by hagino(2016/09/09) end
            PERFORM  920-SYUNOU-SET-SEC
       *
+           DISPLAY "総点数MF100-H-TOTALTEN = " MF100-H-TOTALTEN
            DISPLAY "福祉MF100-TOTALTEN = " MF100-TOTALTEN
            DISPLAY "公費MF100-TOTALTEN2 = " MF100-TOTALTEN2
            DISPLAY "MF100-COMBIKBN =" MF100-COMBIKBN
@@ -1225,14 +1235,26 @@
       *     IF    MF100-H-TOTALTEN     =     MF100-TOTALTEN
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
       *     IF  MF100-H-TOTALTEN       =     MF100-TOTALTEN2
-           IF  MF100-TOTALTEN         =     MF100-TOTALTEN2
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *     IF  MF100-TOTALTEN         =     MF100-TOTALTEN2
+           IF  MF100-H-TOTALTEN       =     MF100-TOTALTEN2
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
            OR  MF100-TOTALTEN2        =     ZERO
       *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) end
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
       *       MOVE  MF100-H-TOTALTEN   TO    MF100-TOTALTEN
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
-             MOVE    ZERO             TO    MF100-TOTALTEN2
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *       MOVE    ZERO             TO    MF100-TOTALTEN2
+             IF  MF100-TOTALTEN2       =    ZERO
+             AND MF100-H-TOTALTEN  NOT =    MF100-TOTALTEN
+      *          総点数≠福祉点数の場合、上段に福祉点数を記載
+                 MOVE  MF100-TOTALTEN   TO  MF100-TOTALTEN2
+             ELSE
+                 MOVE  ZERO             TO  MF100-TOTALTEN2
+             END-IF
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
            ELSE
       *      感染症及び精神通院以外は福祉点数を上段に記載
              IF  MF100-COMBIKBN  NOT =  "10" AND "11" AND "21"
@@ -1244,9 +1266,14 @@
       *            COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
       *                     ( (MF100-H-TOTALTEN  - MF100-TOTALTEN2) *
       *                        MF100-KYURATE  /  10)
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *            COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
+      *                     ( (MF100-TOTALTEN  -  MF100-TOTALTEN2) *
+      *                        MF100-KYURATE  /  10)
                   COMPUTE  WRK-SEIKYUGK-G  =  WRK-SEIKYUGK-G  +
-                           ( (MF100-TOTALTEN  -  MF100-TOTALTEN2) *
+                           ( (MF100-H-TOTALTEN  -  MF100-TOTALTEN2) *
                               MF100-KYURATE  /  10)
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
                END-IF
       *=== 請求額の計算方法変更 by Yoshikawa(2010/10/04) end
@@ -1256,8 +1283,12 @@
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) start
       *         COMPUTE  MF100-TOTALTEN2  =
       *                  MF100-H-TOTALTEN  -  MF100-TOTALTEN2
-               COMPUTE  MF100-TOTALTEN2  =
-                        MF100-TOTALTEN   -  MF100-TOTALTEN2
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *         COMPUTE  MF100-TOTALTEN2  =
+      *                  MF100-TOTALTEN   -  MF100-TOTALTEN2
+               COMPUTE  MF100-TOTALTEN2   =
+                        MF100-H-TOTALTEN  -  MF100-TOTALTEN2
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
       *=== 点数欄は福祉点数を印字する by Yoshikawa(2011/08/16) end
       *=== 上段に記載する条件変更 by Yoshikawa(2010/09/29) end
              END-IF
@@ -1581,6 +1612,7 @@
            END-IF
       *=== 低所の限度額修正 by Yoshikawa(2016/07/13) end
       *
+           DISPLAY " "
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
            ELSE
@@ -2155,13 +2187,19 @@
                         TO  SC03-BIRTHDAY (IDX)(11:4)
       *
       *    公費分点数
-             IF    MF100-COMBIKBN NOT  =   SPACE
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *       IF    MF100-COMBIKBN NOT  =   SPACE
+             IF    MF100-TOTALTEN2  NOT  =   ZERO
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
                MOVE  MF100-TOTALTEN2   TO  WRK-Z7
                MOVE  WRK-Z7            TO  SC03-TENSU (IDX 1)
              END-IF
       *
-      *    福祉点数
-             MOVE  MF100-TOTALTEN      TO  WRK-Z7
+      *    総点数
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *       MOVE  MF100-TOTALTEN      TO  WRK-Z7
+             MOVE  MF100-H-TOTALTEN    TO  WRK-Z7
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
              MOVE  WRK-Z7              TO  SC03-TENSU (IDX 2)
       *
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -2294,12 +2332,18 @@
       *
       *    小計
       *    公費分点数
-             IF  MF100-COMBIKBN  NOT =   SPACE
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *       IF  MF100-COMBIKBN  NOT =   SPACE
+             IF  MF100-TOTALTEN2  NOT =   ZERO
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
                ADD  MF100-TOTALTEN2 TO   SUM-GTENSU(1)
              END-IF
       *
-      *    福祉点数
-             ADD  MF100-TOTALTEN    TO  SUM-GTENSU(2)
+      *    総点数
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *       ADD  MF100-TOTALTEN       TO  SUM-GTENSU(2)
+             ADD  MF100-H-TOTALTEN     TO  SUM-GTENSU(2)
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
       *
       *---(01.00.01) LINE ADD START ------------------------------------
       *    薬剤一部負担金
@@ -2613,13 +2657,19 @@
                         TO  SC04-BIRTHDAY (IDX)(11:4)
       *
       *    公費分点数
-             IF    MF100-COMBIKBN NOT  =   SPACE
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *       IF    MF100-COMBIKBN NOT  =   SPACE
+             IF    MF100-TOTALTEN2  NOT  =   ZERO
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
                MOVE  MF100-TOTALTEN2   TO  WRK-Z7
                MOVE  WRK-Z7            TO  SC04-TENSU (IDX 1)
              END-IF
       *
-      *    福祉点数
-             MOVE  MF100-TOTALTEN      TO  WRK-Z7
+      *    総点数
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *       MOVE  MF100-TOTALTEN      TO  WRK-Z7
+             MOVE  MF100-H-TOTALTEN    TO  WRK-Z7
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
              MOVE  WRK-Z7              TO  SC04-TENSU (IDX 2)
       *
       *    食事日数
@@ -2754,12 +2804,18 @@
       *
       *    小計
       *    公費分点数
-             IF  MF100-COMBIKBN  NOT   =   SPACE
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *       IF  MF100-COMBIKBN  NOT   =   SPACE
+             IF  MF100-TOTALTEN2  NOT   =   ZERO
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
                ADD  MF100-TOTALTEN2    TO   SUM-GTENSU(1)
              END-IF
       *
-      *    福祉点数
-             ADD  MF100-TOTALTEN       TO  SUM-GTENSU(2)
+      *    総点数
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) start
+      *       ADD  MF100-TOTALTEN       TO  SUM-GTENSU(2)
+             ADD  MF100-H-TOTALTEN     TO  SUM-GTENSU(2)
+      *=== 点数欄は総点数を印字する by Yoshikawa(2016/10/28) end
       *
       *    食事日数
              ADD  MF100-SHOKUJINISSU   TO  SUM-GSNISSU
@@ -3705,8 +3761,10 @@
       *       MOVE     SYU-SYUCOMPFTN         TO  WRK-SEIKYUGK2
       **=== 分点時の福祉医療費請求額修正 by Yoshikawa(2016/09/21) end
       *=== 円単位の修正 by Yoshikawa(2016/10/13) end
-           ELSE
-             ADD   SYU-TOTAL-HKNTEN     TO  MF100-TOTALTEN2
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) start
+      *     ELSE
+      *       ADD   SYU-TOTAL-HKNTEN     TO  MF100-TOTALTEN2
+      *=== 点数欄記載の変更 by Yoshikawa(2016/10/28) end
            END-IF
       *
            ADD    WRK-SEIKYUGK               TO    WRK-SEIKYUGK-G
