@@ -48,6 +48,7 @@
       *  01.00.14      吉川     15/11/11    返戻時、再印刷画面のタイトル修正
       *                                     医療機関編集情報への開設者名
       *                                     追加対応
+      *  01.00.15       門間    16/11/15    公費番号まとめ情報の公費番号の追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -177,6 +178,9 @@
            03  IDX                 PIC 9(04).
            03  IDY                 PIC 9(04).
       *=== プログラムオプション対応 by Yoshikawa(2013/11/14) end
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) start
+           03  IDZ                 PIC 9(04).
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) end
       *
       *##  パラメタ領域（地方公費仕様）
        01  WRK-PARA.
@@ -283,7 +287,10 @@
                05  WRK-2007-MEISYO PIC X(44).
                05  WRK-2007-KOH-AREA.
                    07  WRK-2007-KOHNUM
-                                   PIC X(03)   OCCURS  10.
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) start
+      *                             PIC X(03)   OCCURS  10.
+                                   PIC X(03)   OCCURS  30.
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) end
            03  WRK-2007-MAX        PIC 9(03).
       *=== シス管「2007」対応 by Yoshikawa(2008/10/17) end
       *
@@ -632,11 +639,26 @@
       *
                ADD     1                   TO  IDX1
                MOVE    SYS-2007-MEISYO(1) TO  WRK-2007-MEISYO(IDX1)
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) start
+               MOVE    ZERO               TO  IDZ
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) end
                PERFORM VARYING IDX2 FROM    1   BY  1
                        UNTIL   IDX2 >       10
                        OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
-                   MOVE    SYS-2007-KOHNUM (IDX2)
-                                           TO WRK-2007-KOHNUM(IDX1 IDX2)
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) start
+      *             MOVE    SYS-2007-KOHNUM (IDX2)
+      *                                     TO WRK-2007-KOHNUM(IDX1 IDX2)
+                    ADD     1               TO  IDZ
+                    MOVE    SYS-2007-KOHNUM (IDX2)
+                                           TO  WRK-2007-KOHNUM(IDX1 IDZ)
+               END-PERFORM
+               PERFORM VARYING IDX2 FROM    1   BY  1
+                       UNTIL   IDX2 >       20
+                       OR      SYS-2007-KOHNUM1(IDX2)   =   SPACE
+                   ADD     1               TO  IDZ
+                   MOVE    SYS-2007-KOHNUM1(IDX2)
+                                           TO  WRK-2007-KOHNUM(IDX1 IDZ)
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) end
                END-PERFORM
       *
                MOVE    "tbl_syskanri"      TO  MCP-TABLE
@@ -1151,7 +1173,10 @@
                    PERFORM VARYING IDZ2  FROM    1   BY  1
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) start
       *                     UNTIL   IDZ2  >       5
-                           UNTIL   IDZ2  >       10
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) start
+      *                     UNTIL   IDZ2  >       10
+                           UNTIL   IDZ2  >       20
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) end
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) end
                            OR WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
                      IF  RECE10-KOHNUM(IDX3)  
@@ -1162,7 +1187,10 @@
                                    TO  WRK-KOHNAME
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) start
       *                 MOVE  5             TO  IDZ2
-                       MOVE  10            TO  IDZ2
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) start
+      *                 MOVE  10            TO  IDZ2
+                       MOVE  20            TO  IDZ2
+      *=== 公費番号まとめ追加 by Monma(2016/11/15) end
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/30) end
                        MOVE  WRK-2007-MAX  TO  IDZ1
                      END-IF
