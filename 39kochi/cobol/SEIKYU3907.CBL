@@ -67,6 +67,8 @@
       *                                  全国公費併用分の値を記載する
       *  01.00.19    吉川    16/01/13    医療機関編集情報への開設者名追加対応
       *  01.00.20    吉川    16/09/08    対象公費はPGオプションから取得する
+      *  01.00.21    吉川    16/11/15    70歳以上で高額限度額未満は
+      *                                  「高額該当」を印字しないように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -147,6 +149,11 @@
            03  FLG-OK         PIC 9(01).
            03  FLG-TAISYO     PIC 9(01).
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) end
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+           03  FLG-TSYRRK     PIC 9(01).
+           03  FLG-TNKRRK     PIC 9(01).
+           03  FLG-TEISHO     PIC 9(01).
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -215,6 +222,9 @@
            03  WRK-KEISAN2-G              PIC S9(08).
            03  WRK-TAHOUFTN-G             PIC S9(08)V9(01).
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+           03  WRK-GENDOGK                PIC 9(09).
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
       *
            03  WRK-MAE-INPUT              PIC X(200).
            03  WRK-OUT-INPUT              PIC X(200).
@@ -334,6 +344,16 @@
        01  HKNNUM-REC.
            COPY    "CPHKNNUM.INC".
       *=== 全国公費の法別と負担額を記載 by Yoshikawa(2010/02/22) end
+      *
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+      *    低所得情報
+       01  TSYRRK-REC.
+           COPY    "CPTSYRRK.INC".
+      *
+      *    低年金情報
+       01  TNKRRK-REC.
+           COPY    "CPTNKRRK.INC".
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
       *
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/09/08) start
       *    プログラムオプション
@@ -867,11 +887,13 @@
              IF    RECE02-FTNMONEY(1)  <    WRK-SEIKYUGK-G2  OR
                    MF100-HEIYOU           =  ZERO
                MOVE    1                    TO  MF100-HEIYOU
-      *=== 高額療養費現物給付は高額該当 by Yoshikawa(2013/08/05) start
-               IF  MF100-TYOKI  =  ZERO
-                 MOVE    1                  TO  MF100-KOGAKU
-               END-IF
-      *=== 高額療養費現物給付は高額該当 by Yoshikawa(2013/08/05) end
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+      **=== 高額療養費現物給付は高額該当 by Yoshikawa(2013/08/05) start
+      *         IF  MF100-TYOKI  =  ZERO
+      *           MOVE    1                  TO  MF100-KOGAKU
+      *         END-IF
+      **=== 高額療養費現物給付は高額該当 by Yoshikawa(2013/08/05) end
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
                MOVE    RECE02-FTNMONEY(1)   TO
                                        WRK-SEIKYUGK-G2
              END-IF
@@ -897,13 +919,73 @@
       *
       *---(01.00.02) LINE ADD START ------------------------------------
       *    高額療養費
-           IF  RECE02-ZAITAKU  =  "2" OR "3" OR "4"
-             IF  RECE02-FTNMONEY(1)  NOT  =  ZERO
-               MOVE    1                    TO  MF100-HEIYOU
-               MOVE    1                    TO  MF100-KOGAKU
-               MOVE    RECE02-FTNMONEY(1)   TO  WRK-SEIKYUGK-G2
-             END-IF
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+      *     IF  RECE02-ZAITAKU  =  "2" OR "3" OR "4"
+      *       IF  RECE02-FTNMONEY(1)  NOT  =  ZERO
+      *         MOVE    1                    TO  MF100-HEIYOU
+      *         MOVE    1                    TO  MF100-KOGAKU
+      *         MOVE    RECE02-FTNMONEY(1)   TO  WRK-SEIKYUGK-G2
+      *       END-IF
+      *     END-IF
+           IF  RECE02-ZAITAKU  =  "2" OR "3" OR "4" OR "5" OR "6"
+               IF  RECE02-FTNMONEY(1)  NOT =  ZERO
+                   MOVE    1                    TO  MF100-HEIYOU
+                   MOVE    1                    TO  MF100-KOGAKU
+                   MOVE    RECE02-FTNMONEY(1)   TO  WRK-SEIKYUGK-G2
+               END-IF
+           ELSE
+               IF  RECE02-AGE  >=  70
+                   MOVE    ZERO              TO  FLG-TEISHO
+      *            低所得チェック
+                   PERFORM 200113-TEISHO-CHK-SEC
+      *            低年金チェック
+                   IF  FLG-TEISHO  =  ZERO
+                       PERFORM 200114-TEINEN-CHK-SEC
+                   END-IF
+                   
+      *            入院
+                   IF  RECE02-NYUGAIKBN  =  "1"
+      *                現役並み所得者
+                       IF  RECE02-KYURATE  =  30
+                           COMPUTE  WRK-GENDOGK ROUNDED = 80100 +
+                            ( RECE02-TOTALTEN(1) * 10 - 267000 ) / 100
+                       ELSE
+                           EVALUATE  FLG-TEISHO
+      *                    低所得
+                           WHEN  1
+                               MOVE    24600   TO  WRK-GENDOGK
+      *                    低年金
+                           WHEN  2
+                               MOVE    15000   TO  WRK-GENDOGK
+      *                    一般
+                           WHEN  OTHER
+                               MOVE    44400   TO  WRK-GENDOGK
+                           END-EVALUATE
+                       END-IF
+      *            外来
+                   ELSE
+      *                現役並み所得者
+                       IF  RECE02-KYURATE  =  30
+                           MOVE    44400       TO  WRK-GENDOGK
+                       ELSE
+      *                    低所得・低年金
+                           IF  FLG-TEISHO  NOT =  ZERO
+                               MOVE    8000    TO  WRK-GENDOGK
+      *                    一般
+                           ELSE
+                               MOVE    12000   TO  WRK-GENDOGK
+                           END-IF
+                       END-IF
+                   END-IF
+      *
+      *            高額判定
+                   IF  RECE02-FTNMONEY(1)  >=  WRK-GENDOGK
+                       MOVE    1           TO  MF100-HEIYOU
+                       MOVE    1           TO  MF100-KOGAKU
+                   END-IF
+               END-IF
            END-IF
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *---(01.00.06) LINE ADD START ------------------------------------
       *    指定公費
@@ -987,6 +1069,90 @@
        200111-HKNJANUM-CHK-EXT.
            EXIT.
       *
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+      *****************************************************************
+      *    低所得チェック処理
+      *****************************************************************
+       200113-TEISHO-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      TSYRRK-REC
+                                           FLG-TSYRRK
+           MOVE    SPA-HOSPNUM             TO  TSYRRK-HOSPNUM
+           MOVE    RECE02-PTID             TO  TSYRRK-PTID
+           MOVE    TSYRRK-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      FLG-TSYRRK          =   ZERO
+               PERFORM  800-TSYRRK-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-TSYRRK  =  1
+                 IF  RECE02-SRYYM  >=  TSYRRK-NINSTYMD(1:6)  AND
+                     RECE02-SRYYM  <=  TSYRRK-NINEDYMD(1:6)
+                   MOVE  1  TO  FLG-TEISHO
+                   MOVE  1  TO  FLG-TSYRRK
+                 END-IF
+                 PERFORM  800-TSYRRK-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       200113-TEISHO-CHK-EXT.
+           EXIT.
+      *****************************************************************
+      *    低年金チェック処理
+      *****************************************************************
+       200114-TEINEN-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      TNKRRK-REC
+                                           FLG-TNKRRK
+           MOVE    SPA-HOSPNUM             TO  TNKRRK-HOSPNUM
+           MOVE    RECE02-PTID             TO  TNKRRK-PTID
+           MOVE    TNKRRK-REC              TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      FLG-TNKRRK          =   ZERO
+               PERFORM  800-TNKRRK-FETCH-SEC
+      *
+               PERFORM  UNTIL  FLG-TNKRRK  =  1
+                 IF  RECE02-SRYYM  >=  TNKRRK-STYMD(1:6)  AND
+                     RECE02-SRYYM  <=  TNKRRK-EDYMD(1:6)
+                   MOVE  2  TO  FLG-TEISHO
+                   MOVE  1  TO  FLG-TNKRRK
+                 END-IF
+                 PERFORM  800-TNKRRK-FETCH-SEC
+               END-PERFORM
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       200114-TEINEN-CHK-EXT.
+           EXIT.
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
       *****************************************************************
       *    帳票ファイル出力処理
       *****************************************************************
@@ -2163,6 +2329,54 @@
        800-SYSKANRI-READ-EXT.
            EXIT.
       *
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) start
+      *****************************************************************
+      *    低所得マスタ読込
+      *****************************************************************
+       800-TSYRRK-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_tsyrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO                TO  FLG-TSYRRK
+               MOVE    MCPDATA-REC         TO  TSYRRK-REC
+           ELSE
+               MOVE    1                   TO  FLG-TSYRRK
+               INITIALIZE                  TSYRRK-REC
+           END-IF
+      *
+           .
+       800-TSYRRK-FETCH-EXT.
+           EXIT.
+      *****************************************************************
+      *    低年金マスタ読込
+      *****************************************************************
+       800-TNKRRK-FETCH-SEC         SECTION.
+      *
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           MOVE    "tbl_tnkrrk"        TO  MCP-TABLE
+           MOVE    "key3"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC   =   ZERO
+               MOVE    ZERO                TO  FLG-TNKRRK
+               MOVE    MCPDATA-REC         TO  TNKRRK-REC
+           ELSE
+               MOVE    1                   TO  FLG-TNKRRK
+               INITIALIZE                  TNKRRK-REC
+           END-IF
+      *
+           .
+       800-TNKRRK-FETCH-EXT.
+           EXIT.
+      *=== 70歳以上限度額未満の修正 by Yoshikawa(2016/11/15) end
       *****************************************************************
       *    全角変換処理
       *****************************************************************
