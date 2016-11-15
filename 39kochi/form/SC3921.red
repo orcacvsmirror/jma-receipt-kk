@@ -1138,7 +1138,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true">
+  <dia:layer name="文字" visible="true" active="true">
     <dia:object type="Standard - Text" version="1" id="O51">
       <dia:attribute name="obj_pos">
         <dia:point val="2.1,20.9"/>
@@ -1207,15 +1207,15 @@
     </dia:object>
     <dia:object type="Standard - Text" version="1" id="O53">
       <dia:attribute name="obj_pos">
-        <dia:point val="4.75,5"/>
+        <dia:point val="3.75,5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.75,4.47;17.35,5.0725"/>
+        <dia:rectangle val="3.75,4.47;19.35,5.0725"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#市町村単の幼児福祉医療費請求書（全額助成）#</dia:string>
+            <dia:string>#市町村単の幼児及び小学生福祉医療費請求書（全額助成）#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -1224,7 +1224,7 @@
             <dia:real val="0.75"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="4.75,5"/>
+            <dia:point val="3.75,5"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -2168,12 +2168,12 @@
         <dia:point val="1.35,22.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.35,22.2825;4.23,22.645"/>
+        <dia:rectangle val="1.35,22.2734;4.59906,22.6631"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#【受給者の取扱】#</dia:string>
+            <dia:string>#【受給者の取扱い】#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -2494,7 +2494,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true" active="true">
+  <dia:layer name="差し込み" visible="true">
     <dia:object type="Embed - Text" version="1" id="O92">
       <dia:attribute name="obj_pos">
         <dia:point val="14.3,17.7436"/>

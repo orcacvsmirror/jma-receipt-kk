@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 高知・市町村単の幼児福祉医療費請求書
+      *  コンポーネント名  : 高知・市町村単の幼児及び小学生福祉医療費請求書
       *                      (750,760)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -62,6 +62,7 @@
       *                                   全国公費併用分の値を記載する
       *  01.00.17     吉川    16/01/13    医療機関編集情報への開設者名追加対応
       *  01.00.18     吉川    16/09/08    対象公費はPGオプションから取得する
+      *  01.00.19     吉川    16/11/15    帳票名の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -439,7 +440,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU3921"    TO  JOB-PGID
-           MOVE    "市町村単の幼児福祉医療費請求書（全額助成）" 
+      *=== 帳票名の変更 by Yoshikawa(2016/11/15) start
+      *     MOVE    "市町村単の幼児福祉医療費請求書（全額助成）" 
+           MOVE  "市町村単の幼児及び小学生福祉医療費請求書（全額助成）" 
+      *=== 帳票名の変更 by Yoshikawa(2016/11/15) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -1235,7 +1239,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC3921.red"            TO  SPRT-PRTID
-           MOVE    "市町村単の幼児福祉医療費請求書（全額助成）"
+      *=== 帳票名の変更 by Yoshikawa(2016/11/15) start
+      *     MOVE    "市町村単の幼児福祉医療費請求書（全額助成）"
+           MOVE  "市町村単の幼児及び小学生福祉医療費請求書（全額助成）"
+      *=== 帳票名の変更 by Yoshikawa(2016/11/15) end
                                     TO  SPRT-TITLE
            MOVE    SC21             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
