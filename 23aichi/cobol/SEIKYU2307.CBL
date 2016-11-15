@@ -96,6 +96,7 @@
       *  01.00.35    吉川    16/09/12    分点時の福祉点数の表示不具合修正
       *                                  分点時の高額療養費は併用分ではなく
       *                                  保険総点数で計算をする
+      *  01.00.36    吉川    16/11/15    分点かつ高額の判定ミス修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1265,7 +1266,10 @@
       *=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) start
       *    高額療養費を算定かつ分点時、市町村負担額は総点数に対しての
       *    高額療養費から保険単独時の窓口負担額を減算した値を求める
-           IF  (MF100-KOGAKU    NOT =  SPACE)
+      *=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) start
+      *     IF  (MF100-KOGAKU    NOT =  SPACE)
+           IF  (MF100-KOGAKU    NOT =  ZERO)
+      *=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) end
            AND (MF100-TOTALTEN  NOT =  MF100-FUKUSITEN)
                COMPUTE WRK-KEISAN = (MF100-TOTALTEN - MF100-FUKUSITEN)
                                     * RECE02-KYURATE / 10
