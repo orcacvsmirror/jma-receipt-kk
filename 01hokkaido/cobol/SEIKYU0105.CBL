@@ -1183,6 +1183,12 @@
                    AND (RECE02-TOTALTEN(1)  >  290)
                        MOVE    580     TO  MF100-FTNMONEY
                    END-IF
+               WHEN  10
+                   IF  (MF100-FTNMONEY  >  574  AND 
+                        MF100-FTNMONEY  <  580)
+                   AND (RECE02-TOTALTEN(1)  >  580)
+                       MOVE    580     TO  MF100-FTNMONEY
+                   END-IF
                END-EVALUATE
            END-IF
       *=== ∞Ï…Ù…È√¥∂‚§Œ√ºøÙæÚ∑ÔΩ§¿µ by Yoshikawa(2016/11/16) end
