@@ -78,6 +78,8 @@
       *  01.00.25     吉川     16/06/01    対象公費はPGオプションから取得する
       *  01.00.26     吉川     16/08/15    一部負担金が四捨五入で580円に
       *                                    達する場合は580円と記載する
+      *  01.00.27     吉川     16/11/16    一部負担金が四捨五入で580円に
+      *                                    達する場合の一部負担金欄の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1160,11 +1162,30 @@
       *---(01.00.04) LINE ADD END   ------------------------------------
       *
       *=== 一部負担金の端数修正 by Yoshikawa(2016/08/15) start
+      *=== 一部負担金の端数条件修正 by Yoshikawa(2016/11/16) start
+      *     IF  MF100-FTNMONEY  >  574
+      *     AND MF100-FTNMONEY  <  580
+      *         MOVE    580             TO  MF100-FTNMONEY
+      *     END-IF
+      *    保険にかかる点数が580円相当分を超えており、
       *    一部負担金が四捨五入で580円となる場合は580円とする
-           IF  MF100-FTNMONEY  >  574
-           AND MF100-FTNMONEY  <  580
-               MOVE    580             TO  MF100-FTNMONEY
+           IF  MF100-KOHNUM  =  "144"
+               EVALUATE  RECE02-KYURATE
+               WHEN  30
+                   IF  (MF100-FTNMONEY  >  574  AND 
+                        MF100-FTNMONEY  <  580)
+                   AND (RECE02-TOTALTEN(1)  >  193)
+                       MOVE    580     TO  MF100-FTNMONEY
+                   END-IF
+               WHEN  20
+                   IF  (MF100-FTNMONEY  >  574  AND 
+                        MF100-FTNMONEY  <  580)
+                   AND (RECE02-TOTALTEN(1)  >  290)
+                       MOVE    580     TO  MF100-FTNMONEY
+                   END-IF
+               END-EVALUATE
            END-IF
+      *=== 一部負担金の端数条件修正 by Yoshikawa(2016/11/16) end
       *=== 一部負担金の端数修正 by Yoshikawa(2016/08/15) end
       *
       *    件数加算場所を判定
