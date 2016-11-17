@@ -594,8 +594,8 @@
                    MOVE    SYS-2007-KOHNUM (IDY)
                                            TO WRK-2007-KOHNUM(IDX IDZ)
                END-PERFORM
-               PERFORM VARYING IDX2 FROM    1   BY  1
-                       UNTIL   IDX2 >       20
+               PERFORM VARYING IDY FROM    1   BY  1
+                       UNTIL   IDY >       20
                        OR      SYS-2007-KOHNUM1(IDY)   =   SPACE
                    ADD     1               TO  IDZ
                    MOVE    SYS-2007-KOHNUM1(IDY)
