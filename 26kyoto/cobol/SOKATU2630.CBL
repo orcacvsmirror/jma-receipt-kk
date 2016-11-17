@@ -579,6 +579,9 @@
       *
                ADD     1                   TO  IDX1
                MOVE    SYS-2007-MEISYO(1) TO  WRK-2007-MEISYO(IDX1)
+      *=== 公費番号まとめ追加 by hagino(2016/11/08) start
+               MOVE    ZERO                TO  IDZ
+      *=== 公費番号まとめ追加 by hagino(2016/11/08) end
                PERFORM VARYING IDX2 FROM    1   BY  1
                        UNTIL   IDX2 >       10
                        OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
