@@ -1,21 +1,22 @@
 #!/bin/bash
+echo $0 | logger
+echo `pwd`  | logger
 
-if test -z "$JMARECEIPT_ENV" ; then
-    JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+if [ ! -f ${JMARECEIPT_ENV} ]; then
+    echo "${JMARECEIPT_ENV} does not found."
+    exit 1
 fi
-if ! test -f "$JMARECEIPT_ENV" ; then
-    exit 0
-fi
-
 . $JMARECEIPT_ENV
 
 HOSPNUM="01"
-POST=`pwd`
+#--# POST=`pwd`
 
 PREFNAME=sys3004
 PROGRAMID=SYS3004DEL
 
-cd ../scripts/syskanri
+#--# cd ../scripts/syskanri
+pushd ${MCP_TEMPDIR}/syskanri
 
 # compile COBOL programs
 MODULES=${PROGRAMID}.CBL
@@ -23,21 +24,28 @@ for f in $MODULES; do
   if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
     m=`echo $f | sed 's/CBL$/so/'`
     echo -n "Building ${m}..."
-    ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+    #--# ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+    ${COBOL} ${COBOLFLAGS} -o ./${m} \
          -I ${PATCHCOPYDIR} \
          -I ${COPYDIR} \
          -I ${SITESRCDIR}/cobol/copy \
         ${f}
+#**********************************
+#„Åì„Åì„Åß„Ç≥„É≥„Éë„Ç§„É´„Ç®„É©„Éº„ÅÆËÄÉÊÖÆ„Åå„Å™„ÅÑ
+#**********************************
+    if [ $? -ne 0 ]; then
+      echo "${f} compile error" | logger
+    fi
     echo "done"
   fi
 done
 
 #------------------------------------------------------
-#     ÉVÉXä«Åu3004ÅvçÌèú
-#     NOWYMD    åªç›ì˙ït
-#     NOWHMS    åªç›éûä‘
-#     NOWDIR    åªç›ÉfÉBÉåÉNÉgÉä
-#     FILENAME  ÉtÉ@ÉCÉãñº
+#     „Ç∑„ÇπÁÆ°„Äå3004„ÄçÂâäÈô§
+#     NOWYMD    ÁèæÂú®Êó•‰ªò
+#     NOWHMS    ÁèæÂú®ÊôÇÈñì
+#     NOWDIR    ÁèæÂú®„Éá„Ç£„É¨„ÇØ„Éà„É™
+#     FILENAME  „Éï„Ç°„Ç§„É´Âêç
 #------------------------------------------------------
 NOWYMD=$(date +"%Y%m%d")
 NOWHMS=$(date +"%H%M%S")
@@ -46,18 +54,22 @@ FILENAME=sys3004.data
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-#ÉOÉãÅ[Évêfó√ëŒâûÅiHOSPNUMÇÃêîÇæÇØé¿çsÅj
-SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ;" `
+#„Ç∞„É´„Éº„ÉóË®∫ÁôÇÂØæÂøúÔºàHOSPNUM„ÅÆÊï∞„Å†„ÅëÂÆüË°åÔºâ
+#--# SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ;" `
+SYSBASE=`${MONSQL} -dir directory -o CSV2 -c "SELECT hospnum FROM tbl_sysbase;"`
 for HOSPNUM in $SYSBASE
 do
 # syskanri 3004 del
-  $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
+  #--# $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
+  echo "${PROGRAMID} GO !! ${PREFNAME} ${HOSPNUM}" | logger
+  $DBSTUB -dir directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${FILENAME}
 done
 
 #so del
-rm ${SITEDIR}/${PROGRAMID}.so
-rm dbgroup.inc
+#--# rm ${SITEDIR}/${PROGRAMID}.so
+#--# rm dbgroup.inc
 
-cd $POST
+#--# cd $POST
+popd
 
 exit 0

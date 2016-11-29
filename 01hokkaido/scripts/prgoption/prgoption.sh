@@ -1,21 +1,22 @@
 #!/bin/bash
+echo $0 | logger
+echo `pwd`  | logger
 
-if test -z "$JMARECEIPT_ENV" ; then
-    JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+if [ ! -f ${JMARECEIPT_ENV} ]; then
+    echo "${JMARECEIPT_ENV} does not found."
+    exit 1
 fi
-if ! test -f "$JMARECEIPT_ENV" ; then
-    exit 0
-fi
-
 . $JMARECEIPT_ENV
 
 HOSPNUM="01"
-POST=`pwd`
+#--# POST=`pwd`
 
 PREFNAME=prgoption
 PROGRAMID=PRGOPTIONSET
 
-cd ../scripts/prgoption
+#--# cd ../scripts/prgoption
+pushd ${MCP_TEMPDIR}/${PREFNAME}
 
 # compile COBOL programs
 MODULES=${PROGRAMID}.CBL
@@ -23,11 +24,18 @@ for f in $MODULES; do
   if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
     m=`echo $f | sed 's/CBL$/so/'`
     echo -n "Building ${m}..."
-    ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+    #--# ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+    ${COBOL} ${COBOLFLAGS} -o ./${m} \
          -I ${PATCHCOPYDIR} \
          -I ${COPYDIR} \
          -I ${SITESRCDIR}/cobol/copy \
         ${f}
+#**********************************
+#ここでコンパイルエラーの考慮がない
+#**********************************
+    if [ $? -ne 0 ]; then
+      echo "${f} compile error" | logger
+    fi
     echo "done"
   fi
 done
@@ -47,7 +55,8 @@ NOWDIR=$(pwd)
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
 #グループ診療対応（HOSPNUMの数だけ実行）
-SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+#--# SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+SYSBASE=`${MONSQL} -dir directory -o CSV2 -c "SELECT hospnum FROM tbl_sysbase;"`
 for HOSPNUM in $SYSBASE
 do
   FILENAME=(`ls | grep exp$`)
@@ -57,7 +66,9 @@ do
   while test ${SU} -lt ${COUNT}
   do
     KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.exp//'`
-    $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"exp"
+    #--# $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"exp"
+    echo "${PROGRAMID} .exp GO !! ${PREFNAME} ${HOSPNUM}" | logger
+    $DBSTUB -dir directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"exp"
 
     SU=$(expr ${SU} + 1)
   done
@@ -65,7 +76,7 @@ done
 
 #optファイルも同様に行う
 #グループ診療対応（HOSPNUMの数だけ実行）
-SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
+#--# SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ; " `
 for HOSPNUM in $SYSBASE
 do
   FILENAME=(`ls | grep opt$`)
@@ -75,16 +86,19 @@ do
   while test ${SU} -lt ${COUNT}
   do
     KAKUNASHI=`echo ${FILENAME[${SU}]} | sed -e 's/.opt//'`
-    $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"opt"
+    #--# $DBSTUB -dir ${NOWDIR}/directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"opt"
+    echo "${PROGRAMID} .opt GO !! ${PREFNAME} ${HOSPNUM}" | logger
+    $DBSTUB -dir directory -bd $PREFNAME $PROGRAMID -parameter ${HOSPNUM},${NOWYMD},${NOWHMS},${NOWDIR},${KAKUNASHI},"opt"
 
     SU=$(expr ${SU} + 1)
   done
 done
 
 # so del
-rm ${SITEDIR}/${PROGRAMID}.so
-rm dbgroup.inc
+#--# rm ${SITEDIR}/${PROGRAMID}.so
+#--# rm dbgroup.inc
 
-cd $POST
+#--# cd $POST
+popd
 
 exit 0

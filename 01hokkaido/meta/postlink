@@ -2,104 +2,118 @@
 echo $0 | logger
 echo `pwd`  | logger
 
-if test -z "$JMARECEIPT_ENV" ; then
-    JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+JMARECEIPT_ENV="/etc/jma-receipt/jma-receipt.env"
+if [ ! -f ${JMARECEIPT_ENV} ]; then
+    echo "${JMARECEIPT_ENV} does not found."
+    exit 1
 fi
-if ! test -f "$JMARECEIPT_ENV"; then
-    exit 0
-fi
-
 . $JMARECEIPT_ENV
 
 umask 022
 
+#--if ! test -d ${MCP_TEMPDIR}/prgoption ; then
+#--    mkdir -m 775 ${MCP_TEMPDIR}/prgoption
+#--fi
+#--
+#--if ! test -d ${MCP_TEMPDIR}/syskanri ; then
+#--    mkdir -m 775 ${MCP_TEMPDIR}/syskanri
+#--fi
+
 # program option set
-bash ${SITESRCDIR}/scripts/prgoption/prgoption.sh
-rm -r ${SITESRCDIR}/scripts/prgoption
+cp -rp ../scripts/prgoption ${MCP_TEMPDIR}
+#--bash ${SITESRCDIR}/scripts/prgoption/prgoption.sh
+#--rm -r ${SITESRCDIR}/scripts/prgoption
+bash ${MCP_TEMPDIR}/prgoption/prgoption.sh
+rm -r ${MCP_TEMPDIR}/prgoption
 echo -n "prgoption......done" | logger
 
 # syskanri 3004 set
-bash ${SITESRCDIR}/scripts/syskanri/sys3004.sh
-rm -r ${SITESRCDIR}/scripts/syskanri
+cp -rp ../scripts/syskanri ${MCP_TEMPDIR}
+#--bash ${SITESRCDIR}/scripts/syskanri/sys3004.sh
+#--rm -r ${SITESRCDIR}/scripts/syskanri
+bash ${MCP_TEMPDIR}/syskanri/sys3004.sh
+rm -r ${MCP_TEMPDIR}/syskanri
 echo -n "syskanri 3004......done" | logger
 
-PATH=.:${PATH}
-
-# compile COBOL programs
-COBMEM=`module CBL`
-for f in ${COBMEM}; do
-  if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
-    m=`echo $f | sed 's/CBL$/so/'`
-    echo -n "Building ${m}..." | logger
-    ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
-         -I ${PATCHCOPYDIR} \
-         -I ${COPYDIR} \
-         -I ${SITESRCDIR}/cobol/copy \
-        ${SITESRCDIR}/cobol/${f}
-    if [ $? -ne 0 ]; then
-      ./preunlink
-      exit 1
-    fi
-  fi
-done
-
-# copy scripts file
-SCRIPTMEM=`module scripts`
-for f in ${SCRIPTMEM}; do 
-  if test -f "${SITESRCDIR}/${f}"; then
-    echo -n "Copying ${SITESRCDIR}/${f}..." | logger
-    sed -e 's,\@jma-receipt-env\@,/etc/jma-receipt/jma-receipt.env,g' \
-        < "${SITESRCDIR}/${f}" > "${SITEDIR}/${f}"
-	chmod +x "${SITEDIR}/${f}"
-    if [ $? -ne 0 ]; then
-      ./preunlink
-      exit 1
-    fi
-  fi
-done
-echo "done"
-
-# copy lddef file
-LDDEFMEM=`module lddef`
-for f in ${LDDEFMEM}; do 
-  if test -f "${SITESRCDIR}/${f}"; then
-    echo -n "Copying ${SITESRCDIR}/${f}..." | logger
-    $CPP -I"${LDDEFDIR}" -x c "${SITESRCDIR}/${f}" > "${SITEDIR}/${f}"
-    if [ $? -ne 0 ]; then
-      ./preunlink
-      exit 1
-    fi
-  fi
-done
-echo "done"
-
-# copy data files
-for d in data doc form init record screen ; do
-  m=`module ${d}`
-  for f in ${m}; do 
-    if test -f "${SITESRCDIR}/${f}"; then
-      echo -n "Copying ${SITESRCDIR}/${f}..." | logger
-      cp -p "${SITESRCDIR}/${f}" "${SITEDIR}/${d}"
-      if [ $? -ne 0 ]; then
-        ./preunlink
-        exit 1
-      fi
-    fi
-  done
-done
-echo "done"
-
-#modify kentan.inc
-if test -f ./kentan.inc; then
-  PREF=`cat ./kentan.inc`
-  echo -n "Modifying kentan.inc files... ${PREF}" | logger
-  cp ${SYSCONFDIR}/kentan.inc /tmp/kentan.inc.bak
-  sed "/${PREF}/d" /tmp/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
-  rm -rf /tmp/kentan.inc.bak
-  echo -e "\t${PREF};" >> ${SYSCONFDIR}/kentan.inc
-  if [ $? -ne 0 ]; then
-    ./preunlink
-    exit 1
-  fi
-  echo "done"
-fi
+#-- postinst へ移行 ここから
+#--# PATH=.:${PATH}
+#--# 
+#--# # compile COBOL programs
+#--# COBMEM=`module CBL`
+#--# for f in ${COBMEM}; do
+#--#   if test "x`echo -n $f | grep 'CBL$'`" != "x"; then
+#--#     m=`echo $f | sed 's/CBL$/so/'`
+#--#     echo -n "Building ${m}..." | logger
+#--#     ${COBOL} ${COBOLFLAGS} -o ${SITELIBDIR}/${m} \
+#--#          -I ${PATCHCOPYDIR} \
+#--#          -I ${COPYDIR} \
+#--#          -I ${SITESRCDIR}/cobol/copy \
+#--#         ${SITESRCDIR}/cobol/${f}
+#--#     if [ $? -ne 0 ]; then
+#--#       ./preunlink
+#--#       exit 1
+#--#     fi
+#--#   fi
+#--# done
+#--# 
+#--# # copy scripts file
+#--# SCRIPTMEM=`module scripts`
+#--# for f in ${SCRIPTMEM}; do 
+#--#   if test -f "${SITESRCDIR}/${f}"; then
+#--#     echo -n "Copying ${SITESRCDIR}/${f}..." | logger
+#--#     sed -e 's,\@jma-receipt-env\@,/etc/jma-receipt/jma-receipt.env,g' \
+#--#         < "${SITESRCDIR}/${f}" > "${SITEDIR}/${f}"
+#--# 	chmod +x "${SITEDIR}/${f}"
+#--#     if [ $? -ne 0 ]; then
+#--#       ./preunlink
+#--#       exit 1
+#--#     fi
+#--#   fi
+#--# done
+#--# echo "done"
+#--# 
+#--# # copy lddef file
+#--# LDDEFMEM=`module lddef`
+#--# for f in ${LDDEFMEM}; do 
+#--#   if test -f "${SITESRCDIR}/${f}"; then
+#--#     echo -n "Copying ${SITESRCDIR}/${f}..." | logger
+#--#     $CPP -I"${LDDEFDIR}" -x c "${SITESRCDIR}/${f}" > "${SITEDIR}/${f}"
+#--#     if [ $? -ne 0 ]; then
+#--#       ./preunlink
+#--#       exit 1
+#--#     fi
+#--#   fi
+#--# done
+#--# echo "done"
+#--# 
+#--# # copy data files
+#--# for d in data doc form init record screen ; do
+#--#   m=`module ${d}`
+#--#   for f in ${m}; do 
+#--#     if test -f "${SITESRCDIR}/${f}"; then
+#--#       echo -n "Copying ${SITESRCDIR}/${f}..." | logger
+#--#       cp -p "${SITESRCDIR}/${f}" "${SITEDIR}/${d}"
+#--#       if [ $? -ne 0 ]; then
+#--#         ./preunlink
+#--#         exit 1
+#--#       fi
+#--#     fi
+#--#   done
+#--# done
+#--# echo "done"
+#--# 
+#--# #modify kentan.inc
+#--# if test -f ./kentan.inc; then
+#--#   PREF=`cat ./kentan.inc`
+#--#   echo -n "Modifying kentan.inc files... ${PREF}" | logger
+#--#   cp ${SYSCONFDIR}/kentan.inc /tmp/kentan.inc.bak
+#--#   sed "/${PREF}/d" /tmp/kentan.inc.bak > ${SYSCONFDIR}/kentan.inc
+#--#   rm -rf /tmp/kentan.inc.bak
+#--#   echo -e "\t${PREF};" >> ${SYSCONFDIR}/kentan.inc
+#--#   if [ $? -ne 0 ]; then
+#--#     ./preunlink
+#--#     exit 1
+#--#   fi
+#--#   echo "done"
+#--# fi
+#-- postinst へ移行 ここまで
