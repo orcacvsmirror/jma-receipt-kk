@@ -31,7 +31,7 @@ for f in $MODULES; do
          -I ${SITESRCDIR}/cobol/copy \
         ${f}
 #**********************************
-#ここでコンパイルエラーの考慮がない
+#�����ǥ���ѥ��륨�顼�ι�θ���ʤ�
 #**********************************
     if [ $? -ne 0 ]; then
       echo "${f} compile error" | logger
@@ -41,11 +41,11 @@ for f in $MODULES; do
 done
 
 #------------------------------------------------------
-#     シス管「3004」削除
-#     NOWYMD    現在日付
-#     NOWHMS    現在時間
-#     NOWDIR    現在ディレクトリ
-#     FILENAME  ファイル名
+#     �����ɡ�3004�׺��
+#     NOWYMD    ��������
+#     NOWHMS    ���߻���
+#     NOWDIR    ���ߥǥ��쥯�ȥ�
+#     FILENAME  �ե�����̾
 #------------------------------------------------------
 NOWYMD=$(date +"%Y%m%d")
 NOWHMS=$(date +"%H%M%S")
@@ -54,7 +54,7 @@ FILENAME=sys3004.data
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-#グループ診療対応（HOSPNUMの数だけ実行）
+#���롼�׿����б���HOSPNUM�ο������¹ԡ�
 #--# SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ;" `
 SYSBASE=`${MONSQL} -dir directory -o CSV2 -c "SELECT hospnum FROM tbl_sysbase;"`
 for HOSPNUM in $SYSBASE

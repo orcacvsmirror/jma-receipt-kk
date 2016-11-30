@@ -31,7 +31,7 @@ for f in $MODULES; do
          -I ${SITESRCDIR}/cobol/copy \
         ${f}
 #**********************************
-#Ц│⌠Ц│⌠Ц│╖Ц┌ЁЦ┐ЁЦ┐▒Ц┌╓Ц┐╚Ц┌╗Ц┐╘Ц┐╪Ц│╝Х─┐Ф┘╝Ц│▄Ц│╙Ц│└
+#╓Ё╓Ё╓г╔Ё╔С╔я╔╓╔К╔╗╔И║╪╓н╧мн╦╓╛╓й╓╓
 #**********************************
     if [ $? -ne 0 ]; then
       echo "${f} compile error" | logger
@@ -41,11 +41,11 @@ for f in $MODULES; do
 done
 
 #------------------------------------------------------
-#     Ц┌╥Ц┌╧Г╝║Ц─▄3004Ц─█Г≥╩И▄╡
-#     NOWYMD    Г▐╬Е°╗Ф≈╔Д╩≤
-#     NOWHMS    Г▐╬Е°╗Ф≥┌И√⌠
-#     NOWDIR    Г▐╬Е°╗Ц┐┤Ц┌ёЦ┐╛Ц┌╞Ц┐┬Ц┐╙
-#     FILENAME  Ц┐∙Ц┌║Ц┌╓Ц┐╚Е░█
+#     ╔╥╔╧╢и║ж3004║вепо©
+#     NOWYMD    ╦╫╨ъфЭиу
+#     NOWHMS    ╦╫╨ъ╩Ч╢ж
+#     NOWDIR    ╦╫╨ъ╔г╔ё╔Л╔╞╔х╔Й
+#     FILENAME  ╔у╔║╔╓╔Кл╬
 #------------------------------------------------------
 NOWYMD=$(date +"%Y%m%d")
 NOWHMS=$(date +"%H%M%S")
@@ -54,7 +54,7 @@ FILENAME=sys3004.data
 
 ln -s $SYSCONFDIR/dbgroup.inc dbgroup.inc
 
-#Ц┌╟Ц┐╚Ц┐╪Ц┐≈Х╗╨Г≥┌Е╞╬Е©°О╪┬HOSPNUMЦ│╝Ф∙╟Ц│═Ц│▒Е╝÷Х║▄О╪┴
+#╔╟╔К║╪╔в©гнебп╠Ч║йHOSPNUM╓н©Т╓ю╓╠╪б╧т║к
 #--# SYSBASE=`psql -t -c "SELECT hospnum FROM tbl_sysbase ;" `
 SYSBASE=`${MONSQL} -dir directory -o CSV2 -c "SELECT hospnum FROM tbl_sysbase;"`
 for HOSPNUM in $SYSBASE
