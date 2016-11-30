@@ -1997,13 +1997,13 @@
       **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
              WHEN  "1"  ALSO  "1"
-               MOVE  "国保請求書"                TO  SPRT-TITLE
+               MOVE  "国保総括表"                TO  SPRT-TITLE
              WHEN  "2"  ALSO  "1"
-               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］"      TO  SPRT-TITLE
              WHEN  "1"  ALSO  "2"
-               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
              WHEN  "2"  ALSO  "2"
-               MOVE  "国保請求書［返戻分］［特別療養費］" TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］［特別療養費］" TO  SPRT-TITLE
            END-EVALUATE
       *=== 返戻時、再印刷画面のタイトル修正 by Monma(2016/10/04) end
            MOVE    SKT4110             TO  SPRT-PRTDATA
@@ -2253,13 +2253,13 @@
       **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
              WHEN  "1"  ALSO  "1"
-               MOVE  "国保請求書"                TO  SPRT-TITLE
+               MOVE  "国保総括表"                TO  SPRT-TITLE
              WHEN  "2"  ALSO  "1"
-               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］"      TO  SPRT-TITLE
              WHEN  "1"  ALSO  "2"
-               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
              WHEN  "2"  ALSO  "2"
-               MOVE  "国保請求書［返戻分］［特別療養費］" TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］［特別療養費］" TO  SPRT-TITLE
            END-EVALUATE
       *=== 返戻時、再印刷画面のタイトル修正 by Monma(2016/10/04) end
            MOVE    SKT4120             TO  SPRT-PRTDATA
@@ -2442,13 +2442,13 @@
       **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
              WHEN  "1"  ALSO  "1"
-               MOVE  "国保請求書"                TO  SPRT-TITLE
+               MOVE  "国保総括表"                TO  SPRT-TITLE
              WHEN  "2"  ALSO  "1"
-               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］"      TO  SPRT-TITLE
              WHEN  "1"  ALSO  "2"
-               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
              WHEN  "2"  ALSO  "2"
-               MOVE  "国保請求書［返戻分］［特別療養費］" TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］［特別療養費］" TO  SPRT-TITLE
            END-EVALUATE
       *=== 返戻時、再印刷画面のタイトル修正 by Monma(2016/10/04) end
            MOVE    SKT4140             TO  SPRT-PRTDATA
@@ -2701,13 +2701,13 @@
       **=== 特別療養費国保対応 by Yoshikawa(2011/01/12) end
            EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
              WHEN  "1"  ALSO  "1"
-               MOVE  "国保請求書"                TO  SPRT-TITLE
+               MOVE  "国保総括表"                TO  SPRT-TITLE
              WHEN  "2"  ALSO  "1"
-               MOVE  "国保請求書［返戻分］"      TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］"      TO  SPRT-TITLE
              WHEN  "1"  ALSO  "2"
-               MOVE  "国保請求書［特別療養費］"  TO  SPRT-TITLE
+               MOVE  "国保総括表［特別療養費］"  TO  SPRT-TITLE
              WHEN  "2"  ALSO  "2"
-               MOVE  "国保請求書［返戻分］［特別療養費］" TO  SPRT-TITLE
+               MOVE  "国保総括表［返戻分］［特別療養費］" TO  SPRT-TITLE
            END-EVALUATE
       *=== 返戻時、再印刷画面のタイトル修正 by Monma(2016/10/04) end
            MOVE    SKT4150             TO  SPRT-PRTDATA
