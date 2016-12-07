@@ -43,6 +43,7 @@
       *  01.00.09    吉川    13/02/08    医療機関情報編集対応
       *  01.00.10    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.11    萩野    16/03/11    医療機関編集情報への開設者名追加対応
+      *  01.00.12    吉川    16/12/07    公費の助成がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -717,14 +718,16 @@
       *       END-IF
       **=== 342,442は上限を超えたら印字対象外 by Yoshikawa(2009/12/18) end
       *     END-IF
-      *    342,442使用者で一部負担金が21000円以上の場合は対象外とする
-           IF  MF100-KOHNUM  =  "342" OR "442"
-             IF  WRK-CHK-FTNMONEY  >=  21000
-               MOVE    1                  TO    FLG-ERR
-             ELSE
-               MOVE    ZERO               TO    FLG-ERR
-             END-IF
-           END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2016/12/07) start
+      **    342,442使用者で一部負担金が21000円以上の場合は対象外とする
+      *     IF  MF100-KOHNUM  =  "342" OR "442"
+      *       IF  WRK-CHK-FTNMONEY  >=  21000
+      *         MOVE    1                  TO    FLG-ERR
+      *       ELSE
+      *         MOVE    ZERO               TO    FLG-ERR
+      *       END-IF
+      *     END-IF
+      *=== 公費の助成なしは印字対象外 by Yoshikawa(2016/12/07) end
       *
            IF      FLG-ERR            =     ZERO
                ADD    1                   TO    SUM-GKENSU
