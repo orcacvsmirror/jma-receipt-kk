@@ -47,6 +47,7 @@
       *  01.00.10       吉川    2015/11/26   患者負担が食事のみのデータは
       *                                      印字対象とするように修正
       *  01.00.11       門間    2016/11/15   対象公費はPGオプションから取得する
+      *  01.00.12       門間    2016/12/05   帳票が集計されない不具合を修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -817,7 +818,10 @@
       *         IF  RECE02-KOHNUM (IDX) = "191" OR "193" OR "194" OR
       *                                   "196" OR "198"
                INITIALIZE                            WRK-CHK-KOHNUM-TBL
-               MOVE    RECE02-KOHNUM(IDZ)        TO  WRK-CHK-KOHNUM(1)
+      *=== 添字変更 by Monma(2016/12/05) start
+      *         MOVE    RECE02-KOHNUM(IDZ)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(IDX)        TO  WRK-CHK-KOHNUM(1)
+      *=== 添字変更 by Monma(2016/12/05) end
       *        対象公費番号チェック処理
                PERFORM  800-TAISYOKOHI-CHK-SEC
                IF  FLG-TAISYO  =  1
