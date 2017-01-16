@@ -700,10 +700,10 @@
            EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
                WHEN   "2"               ALSO  "1"
                    MOVE    "key37"        TO  WRK-PATH
-                   MOVE    "key61"        TO  WRK-PATH2
+                   MOVE    "key65"        TO  WRK-PATH2
                WHEN   "1"               ALSO  "1"
                    MOVE    "key38"        TO  WRK-PATH
-                   MOVE    "key62"        TO  WRK-PATH2
+                   MOVE    "key66"        TO  WRK-PATH2
                WHEN   "2"               ALSO  "2"
                    MOVE    "key39"        TO  WRK-PATH
                    MOVE    "key65"        TO  WRK-PATH2
@@ -820,24 +820,35 @@
       *
       *---(01.00.05) LINE ADD START ------------------------------------
            PERFORM  900-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
-           MOVE     1       TO        FLG-KOUKI
+      *=== ∆√ ÃŒ≈Õ‹»Ò ¨§œ Ãƒ¢…º by Yoshikawa(2017/01/11) start
+           IF  WRK-PARA-TOKUBETU  =  "1"
+      *=== ∆√ ÃŒ≈Õ‹»Ò ¨§œ Ãƒ¢…º by Yoshikawa(2017/01/11) end
+             MOVE     ZERO    TO        FLG-END
+             MOVE     1       TO        FLG-KOUKI
       *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/11/02) start
-           MOVE     ZERO    TO        FLG-TOKU
+             MOVE     ZERO    TO        FLG-TOKU
       *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/11/02) end
-           MOVE    "039"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-           PERFORM  950-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO        FLG-END
+             MOVE    "039"    TO        WRK-HKNNUM
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOKUHO-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== ∆√ ÃŒ≈Õ‹»Ò ¨§œ Ãƒ¢…º by Yoshikawa(2017/01/11) start
+           ELSE
+             MOVE     1       TO        FLG-KOUKI
+      *=== ∆√ ÃŒ≈Õ‹»Ò ¨§œ Ãƒ¢…º by Yoshikawa(2017/01/11) end
+             MOVE     ZERO    TO        FLG-END
       *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/11/02) start
-           MOVE     1       TO        FLG-TOKU
+             MOVE     1       TO        FLG-TOKU
       *=== ∆√ ÃŒ≈Õ‹»ÒπÒ ›¬–±˛ by Yoshikawa(2010/11/02) end
-           MOVE    "040"    TO        WRK-HKNNUM
-           PERFORM  950-SEIKYU-SELECT-SEC
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
+             MOVE    "040"    TO        WRK-HKNNUM
+             PERFORM  950-SEIKYU-SELECT-SEC
+             PERFORM  2001-KOKUHO-SYUKEI-SEC
+                      UNTIL   FLG-END   =   1
+      *=== ∆√ ÃŒ≈Õ‹»Ò ¨§œ Ãƒ¢…º by Yoshikawa(2017/01/11) start
+             PERFORM  950-SEIKYU-CLOSE-SEC
+           END-IF
+      *=== ∆√ ÃŒ≈Õ‹»Ò ¨§œ Ãƒ¢…º by Yoshikawa(2017/01/11) end
       *---(01.00.05) LINE ADD END   ------------------------------------
       *
            CLOSE   UPD-FILE
