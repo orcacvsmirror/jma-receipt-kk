@@ -43,6 +43,7 @@
       *  01.00.07    吉川    2013/01/10  医療機関情報編集対応
       *  01.00.08    吉川    2014/10/23  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.09    吉川    2015/12/07  医療機関編集情報への開設者名追加対応
+      *  01.00.10    吉川    2017/01/11  特別療養費国保分は別帳票とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -598,25 +599,37 @@
            MOVE    LOW-VALUE           TO  KEY-AREA
            MOVE    1                   TO  WRK-INDEX
       *
-      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
-      *    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
-      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
-      *         WHEN    "1"             ALSO    "1"
-      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
-      *         WHEN    "2"             ALSO    "1"
-      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
-      *         WHEN    "1"             ALSO    "2"
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      **=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) start
+      **    処理区分によってキーを分ける(SYOKBN1=2→特別療養費)
+      **     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      **         WHEN    "1"             ALSO    "1"
+      **             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      **         WHEN    "2"             ALSO    "1"
+      **             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      **         WHEN    "1"             ALSO    "2"
+      **             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      **         WHEN    "2"             ALSO    "2"
+      **             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      **     END-EVALUATE  
+      *     EVALUATE    WRK-SYOKBN
+      *         WHEN    "1"
       *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
-      *         WHEN    "2"             ALSO    "2"
+      *         WHEN    "2"
       *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
       *     END-EVALUATE  
-           EVALUATE    WRK-SYOKBN
-               WHEN    "1"
+      **=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
+           EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+               WHEN    "1"             ALSO    "1"
+                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"             ALSO    "1"
+                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
+               WHEN    "1"             ALSO    "2"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"
+               WHEN    "2"             ALSO    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
-      *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -652,6 +665,29 @@
       *     PERFORM 900-CLOSE-SEC
       *     END-IF
       *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+           IF    ( FLG-ERR             =   ZERO )
+           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+               MOVE    LOW-VALUE           TO  KEY-AREA
+               MOVE    2                   TO  WRK-INDEX
+      *         
+               EVALUATE    WRK-SYOKBN
+                   WHEN    "1"
+                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
+                   WHEN    "2"
+                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
+               END-EVALUATE  
+               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+               PERFORM 900-SEIKYU-SELECT-SEC
+      *
+               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+                                       OR      FLG-ERR      =  1
+      *
+           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+           PERFORM 900-CLOSE-SEC
+           END-IF
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *     
            MOVE    1                   TO  FLG-END
       *
@@ -674,11 +710,11 @@
                PERFORM 2001-KOUKI-SYUKEI-SEC
            END-PERFORM
       *
-      *   印刷処理
-          IF      FLG-UPD        =   1
-          AND     FLG-ERR        =   ZERO
-               PERFORM 2002-PRINT-SEC
-          END-IF
+      *    印刷処理
+           IF      FLG-UPD        =   1
+           AND     FLG-ERR        =   ZERO
+                PERFORM 2002-PRINT-SEC
+           END-IF
            .
        200-HENSYU-EXT.
            EXIT.
@@ -1257,8 +1293,17 @@
       *         MOVE    "040"               TO  RECE10-HKNNUM-S
       *                                         RECE10-HKNNUM
       *     END-IF
-               MOVE    "039"               TO  RECE10-HKNNUM
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      *         MOVE    "039"               TO  RECE10-HKNNUM
+      *         MOVE    "040"               TO  RECE10-HKNNUM-S
+           IF      WRK-PARA-SYOKBN1    =   "1"
+               MOVE    "039"               TO  RECE10-HKNNUM-S
+                                               RECE10-HKNNUM
+           ELSE 
                MOVE    "040"               TO  RECE10-HKNNUM-S
+                                               RECE10-HKNNUM
+           END-IF
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
       *
       *###

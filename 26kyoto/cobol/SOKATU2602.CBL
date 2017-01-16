@@ -53,6 +53,7 @@
       *  01.00.18       吉川     14/09/03  返戻時、再印刷画面のタイトル修正
       *  01.00.19       吉川     14/10/23  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.20       吉川     15/12/07  医療機関編集情報への開設者名追加対応
+      *  01.00.21       吉川     17/01/11  特別療養費国保分は別帳票とする
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -192,7 +193,9 @@
            03  WRK-PARA-PAGE       PIC 9(10).
       ***** 05/11/30 yamaguchi INS
            03  WRK-PARA-SYOKBN     PIC X(01).
-      *****
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+           03  WRK-PARA-TOKUBETU   PIC X(01).
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *
       *=== ver4.8対応 by Yoshikawa(2014/10/23) start
       **=== プラグイン対応 by Yoshikawa(2013/01/10) start
@@ -448,7 +451,9 @@
                                                WRK-PARA-JOBID
                                                WRK-PARA-SHELLID
                                                WRK-PARA-SYOKBN
-      *****
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+                                               WRK-PARA-TOKUBETU
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *---(01.00.08) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.08) LINE ADD END   ------------------------------------
@@ -639,20 +644,32 @@
       *     PERFORM  111-INI-FILE-SEC
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-      ***** 05/11/30 yamaguchi INS
-           EVALUATE    WRK-PARA-SYOKBN 
-               WHEN    "2"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
-                   MOVE    "key37"     TO  WRK-PATH
-      *---(01.00.08) LINE ADD END   ------------------------------------
-               WHEN    "1"
-      *---(01.00.08) LINE ADD START ------------------------------------
-      *             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
-                   MOVE    "key38"     TO  WRK-PATH
-      *---(01.00.08) LINE ADD END   ------------------------------------
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      ****** 05/11/30 yamaguchi INS
+      *     EVALUATE    WRK-PARA-SYOKBN 
+      *         WHEN    "2"
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY37    TO  WRK-PATH
+      *             MOVE    "key37"     TO  WRK-PATH
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *         WHEN    "1"
+      **---(01.00.08) LINE ADD START ------------------------------------
+      **             MOVE    PATH-TBL-SEIKYU-KEY38    TO  WRK-PATH
+      *             MOVE    "key38"     TO  WRK-PATH
+      **---(01.00.08) LINE ADD END   ------------------------------------
+      *     END-EVALUATE
+      ******
+           EVALUATE    WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+               WHEN   "2"               ALSO  "1"
+                   MOVE    "key37"        TO  WRK-PATH
+               WHEN   "1"               ALSO  "1"
+                   MOVE    "key38"        TO  WRK-PATH
+               WHEN   "2"               ALSO  "2"
+                   MOVE    "key39"        TO  WRK-PATH
+               WHEN   "1"               ALSO  "2"
+                   MOVE    "key40"        TO  WRK-PATH
            END-EVALUATE
-      *****
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *  
            PERFORM 900-SEIKYU-SELECT-SEC
       *
@@ -717,29 +734,38 @@
       *
            MOVE     ZERO    TO      FLG-END
            MOVE     ZERO    TO      FLG-UPD
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
-           MOVE     ZERO    TO      FLG-TOKU
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      *     MOVE     ZERO    TO      FLG-TOKU
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+           IF  WRK-PARA-TOKUBETU  =  "1"
+               MOVE    ZERO     TO  FLG-TOKU
+           ELSE
+               MOVE    1        TO  FLG-TOKU
+           END-IF
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *
            PERFORM  2001-KOKUHO-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
-      *    特別療養費国保集計
-           PERFORM  900-SEIKYU-CLOSE-SEC
-           MOVE     ZERO    TO      FLG-END
-           MOVE     1       TO      FLG-TOKU
-           EVALUATE    WRK-PARA-SYOKBN 
-           WHEN    "2"
-               MOVE    "key39"     TO  WRK-PATH
-           WHEN    "1"
-               MOVE    "key40"     TO  WRK-PATH
-           END-EVALUATE
-           PERFORM 900-SEIKYU-SELECT-SEC
-      *
-           PERFORM  2001-KOKUHO-SYUKEI-SEC
-                    UNTIL   FLG-END   =   1
-      *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
+      **    特別療養費国保集計
+      *     PERFORM  900-SEIKYU-CLOSE-SEC
+      *     MOVE     ZERO    TO      FLG-END
+      *     MOVE     1       TO      FLG-TOKU
+      *     EVALUATE    WRK-PARA-SYOKBN 
+      *     WHEN    "2"
+      *         MOVE    "key39"     TO  WRK-PATH
+      *     WHEN    "1"
+      *         MOVE    "key40"     TO  WRK-PATH
+      *     END-EVALUATE
+      *     PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *     PERFORM  2001-KOKUHO-SYUKEI-SEC
+      *              UNTIL   FLG-END   =   1
+      **=== 特別療養費国保対応 by Yoshikawa(2010/11/02) end
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *
            CLOSE   UPD-FILE
            CLOSE   SKT2600TMP-FILE
@@ -1431,14 +1457,30 @@
       *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/09/03) start
       *     MOVE    "国保総括表（府内分）"
       *                                 TO  SPRT-TITLE
-           EVALUATE  WRK-PARA-SYOKBN
-             WHEN  "1"
-               MOVE  "国保総括表（府内分）"   
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      *     EVALUATE  WRK-PARA-SYOKBN
+      *       WHEN  "1"
+      *         MOVE  "国保総括表（府内分）"   
+      *                                 TO  SPRT-TITLE
+      *       WHEN  "2"
+      *         MOVE  "国保総括表（府内分）［返戻分］" 
+      *                                 TO  SPRT-TITLE
+      *     END-EVALUATE
+           EVALUATE  WRK-PARA-SYOKBN  ALSO  WRK-PARA-TOKUBETU
+             WHEN  "1"  ALSO  "1"
+               MOVE  "国保総括表（府内分）" 
                                        TO  SPRT-TITLE
-             WHEN  "2"
+             WHEN  "2"  ALSO  "1"
                MOVE  "国保総括表（府内分）［返戻分］" 
                                        TO  SPRT-TITLE
+             WHEN  "1"  ALSO  "2"
+               MOVE  "国保総括表（府内分）［特別療養費］"  
+                                       TO  SPRT-TITLE
+             WHEN  "2"  ALSO  "2"
+               MOVE  "国保総括表（府内分）［返戻分］［特別療養費］"
+                                       TO  SPRT-TITLE
            END-EVALUATE
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *=== 返戻時、再印刷画面のタイトル修正 by Yoshikawa(2014/09/03) end
            MOVE    SKT2640             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1593,7 +1635,10 @@
            MOVE    SPACE               TO  RECE10-XXSTHKNJANUM
            MOVE    "99999999"          TO  RECE10-XXEDHKNJANUM
       *=== 特別療養費国保対応 by Yoshikawa(2010/11/02) start
-           IF  FLG-TOKU  =  1
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
+      *     IF  FLG-TOKU  =  1
+           IF  WRK-PARA-TOKUBETU  =  "2"
+      *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *=== open-cobol1.0対応 by Yoshikawa(2010/11/24) start
       *       MOVE  "000000"             TO  RECE10-SRYYM
       *       MOVE  "999999"             TO  RECE10-XXSRYYM
