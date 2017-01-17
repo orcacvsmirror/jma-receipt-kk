@@ -20,7 +20,7 @@
       *****************************************************************
       *  ¥·¥¹¥Æ¥àÌ¾        : £Ï£Ò£Ã£Á
       *  ¥µ¥Ö¥·¥¹¥Æ¥àÌ¾    : ÃÏÊý¸øÈñ
-      *  ¥³¥ó¥Ý¡¼¥Í¥ó¥ÈÌ¾  : ²­Æì¡¦¤³¤É¤â°åÎÅÈñ£Ã£Ó£Ö
+      *  ¥³¥ó¥Ý¡¼¥Í¥ó¥ÈÌ¾  : ²­Æì¡¦Ê¡»ã°åÎÅÈñ£Ã£Ó£Ö
       *                      (299)
       *  ´ÉÍý¼Ô            : 
       *  ºîÀ®ÆüÉÕ    ºî¶È¼Ô        µ­½Ò
@@ -31,6 +31,8 @@
       * 01.00.01     µÈÀî    13/12/02    ¡ÖÀÁµáÇ¯·î¡×¤ÏÀÁµáÇ¯·îÆü¤«¤é¼èÆÀ
       * 01.00.02     ÇëÌî    14/07/11    ¹àÌÜ¡Ö¿©»öÎÅÍÜÈñ¡×¤ÏÉ¸½àÉéÃ´³Û¤òµ­Ï¿¤¹¤ë
       * 01.00.03     µÈÀî    14/10/28    ver4.8.0ÂÐ±þ¡Ê°ì»þ¥Ç¥£¥ì¥¯¥È¥êÊÑ¹¹¡Ë
+      * 01.00.04     µÈÀî    17/01/17    »ö¶ÈÈÖ¹æ¤Îµ­ºÜÊÑ¹¹
+      *                                  ¼«¸ÊÉéÃ´»ÙÊ§³Û¡¦»ÔÄ®Â¼ÉéÃ´³Û¤ÎÊÑ¹¹
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -396,7 +398,10 @@
            MOVE    WRK-PARA-SHELLID
                                        TO  JOB-SHELLID
            MOVE    "SEIKYU4713"        TO  JOB-PGID
-           MOVE    "¤³¤É¤â°åÎÅÈñ£Ã£Ó£Ö½èÍý" 
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) start
+      *     MOVE    "¤³¤É¤â°åÎÅÈñ£Ã£Ó£Ö½èÍý" 
+           MOVE    "Ê¡»ã°åÎÅÈñ£Ã£Ó£Ö½èÍý" 
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) end
                                        TO  JOB-SHELLMSG
            CALL    "ORCSJOB"           USING
                                        ORCSJOBKANRIAREA
@@ -598,7 +603,7 @@
       *
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >  4
-             IF  RECE02-KOHNUM (IDZ) = "299"
+             IF  RECE02-KOHNUM (IDZ) = "299" OR "281"
                  PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -699,6 +704,25 @@
                                                MF100-FTNMONEY
              END-IF
            END-IF
+      *
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2017/01/17) start
+           COMPUTE  WRK-SEIKYUGK-G2  ROUNDED = WRK-SEIKYUGK-G
+      *
+      *    ¸½ÊªµëÉÕ¤Î¸øÈñ¤Ï»ÔÄ®Â¼ÉéÃ´³Û
+           IF  WRK-KOHNUM  =  "281"
+               MOVE    WRK-SEIKYUGK-G2     TO  MF100-FTNMONEY
+           END-IF
+      *
+      *    »ö¶ÈÈÖ¹æ
+           EVALUATE  MF100-KOHNUM
+             WHEN  "299"
+      *        ¤³¤É¤â½þ´Ô
+               MOVE    "1"                 TO  MF100-JIGYO
+             WHEN  "281"
+      *        ¤³¤É¤â¸½Êª
+               MOVE    "6"                 TO  MF100-JIGYO
+           END-EVALUATE
+      *=== Ä¢É¼ÍÍ¼°¤ÎÊÑ¹¹ by Yoshikawa(2017/01/17) end
       *
            MOVE    ZERO                    TO  FLG-ERR
       *    ÊÝ¸±¼ÔÈÖ¹æ¥Á¥§¥Ã¥¯½èÍý
@@ -849,9 +873,14 @@
              PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    £·¡¥»ö¶È¶èÊ¬
-             MOVE    1                       TO  WRK-NUM
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) start
+      *       MOVE    1                       TO  WRK-NUM
+      *       MOVE    1                       TO  WRK-NAGASA
+      *       PERFORM 5005-NUM-HENSYU-SEC
+             MOVE    MF100-JIGYO             TO  WRK-DATA
              MOVE    1                       TO  WRK-NAGASA
-             PERFORM 5005-NUM-HENSYU-SEC
+             PERFORM 5004-MOJI-HENSYU-SEC
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) end
       *
       *    £¸¡¥¼õµë¼ÔÈÖ¹æ
              MOVE    MF100-JKYSNUM           TO  WRK-DATA
@@ -924,7 +953,7 @@
              MOVE    10                      TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
       * 
-      *    £±£¶¡¥¼«¸ÊÉéÃ´»ÙÊ§³Û
+      *    £±£¶¡¥¼«¸ÊÉéÃ´»ÙÊ§³Û¡¦»ÔÄ®Â¼ÉéÃ´³Û
              MOVE    MF100-FTNMONEY          TO  WRK-NUM
              MOVE    10                      TO  WRK-NAGASA
              PERFORM 5005-NUM-HENSYU-SEC
@@ -1275,10 +1304,10 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "299"
-               OR  RECE02-KOHNUM (2)  =  "299"
-               OR  RECE02-KOHNUM (3)  =  "299"
-               OR  RECE02-KOHNUM (4)  =  "299"
+               IF  RECE02-KOHNUM (1)  =  "299" OR "281"
+               OR  RECE02-KOHNUM (2)  =  "299" OR "281"
+               OR  RECE02-KOHNUM (3)  =  "299" OR "281"
+               OR  RECE02-KOHNUM (4)  =  "299" OR "281"
       *        ¥Æ¥¹¥È´µ¼Ô¤Î¤È¤­¤ÏÆÉ¤ßÈô¤Ð¤¹
                    PERFORM 800-PTINF-READ-SEC
                    IF      FLG-PTINF           =   ZERO
@@ -1419,25 +1448,40 @@
                    MOVE    2       TO      FLG-TYOKI
                END-IF
       *
-           END-PERFORM
-      *
-           IF  FLG-HEIYOU      =   ZERO
-               IF  RECE02-FTNMONEY(1)  =   ZERO
-                   IF  RECE02-RJNHKNNUM    NOT =   SPACE
-                       MOVE    SYU-KOH-COMPFTN-ENTANI(1)
-                                                   TO  WRK-SEIKYUGK
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) start
+      *        »ÔÄ®Â¼ÉéÃ´³Û
+               IF  SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
+                   IF  IDX  =  1
+                     COMPUTE  WRK-SEIKYUGK  =  
+                              SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
                    ELSE
-                       MOVE    SYU-SYUCOMPFTN-ENTANI
-                                                   TO  WRK-SEIKYUGK
-                   END-IF
-               ELSE
-                   IF  RECE02-RJNHKNNUM    NOT =   SPACE
-                       MOVE    SYU-KOH-COMPFTN(1)  TO  WRK-SEIKYUGK
-                   ELSE
-                       MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
+                     COMPUTE  WRK-SEIKYUGK  =  
+                              SYU-KOH-COMPFTN(IDX - 1)  -
+                              SYU-KOH-COMPFTN(IDX)
                    END-IF
                END-IF
-           END-IF
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) end
+           END-PERFORM
+      *
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) start
+      *     IF  FLG-HEIYOU      =   ZERO
+      *         IF  RECE02-FTNMONEY(1)  =   ZERO
+      *             IF  RECE02-RJNHKNNUM    NOT =   SPACE
+      *                 MOVE    SYU-KOH-COMPFTN-ENTANI(1)
+      *                                             TO  WRK-SEIKYUGK
+      *             ELSE
+      *                 MOVE    SYU-SYUCOMPFTN-ENTANI
+      *                                             TO  WRK-SEIKYUGK
+      *             END-IF
+      *         ELSE
+      *             IF  RECE02-RJNHKNNUM    NOT =   SPACE
+      *                 MOVE    SYU-KOH-COMPFTN(1)  TO  WRK-SEIKYUGK
+      *             ELSE
+      *                 MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
+      *             END-IF
+      *         END-IF
+      *     END-IF
+      *=== À©ÅÙÊÑ¹¹ÂÐ±þ by Yoshikawa(2017/01/17) end
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
       *

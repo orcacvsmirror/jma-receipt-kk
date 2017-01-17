@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 沖縄県・こども医療費自己負担額支払明細書
+      *  コンポーネント名  : 沖縄県・医療費自己負担額支払明細書
       *                      (299)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -31,7 +31,8 @@
       * 01.00.01    吉川    13/12/02    機関区分にマルを印字する
       * 01.00.02    萩野    14/08/13    食事療養費欄は標準負担額を記録するよう修正
       * 01.00.03    吉川    14/10/28    ver4.8.0対応（一時ディレクトリ変更）
-      * 01.00.04    萩野    16/04/14  医療機関編集情報への開設者名追加対応
+      * 01.00.04    萩野    16/04/14    医療機関編集情報への開設者名追加対応
+      * 01.00.05    吉川    17/01/17    帳票様式の変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -135,6 +136,10 @@
            03  WRK-LASTYMD           PIC 9(08).
       *
            03  WRK-KENSU             PIC 9(05).
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+           03  WRK-JIGYO-KENSU       PIC 9(05) OCCURS 3.
+           03  WRK-PAGE              PIC 9(03).
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
            03  WRK-GPAGE             PIC 9(03).
            03  WRK-KEISAN            PIC 9(03).
            03  WRK-AMARI             PIC 9(02).
@@ -177,6 +182,15 @@
            03  CNT-RECE02            PIC 9(06).
            03  CNT-MF100             PIC 9(06).
            03  CNT-PAGE              PIC 9(03).
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *    ＫＥＹ用エリア
+       01  KEY-AREA.
+           03  KEY-NEW.
+               05  KEY-N-JIGYO       PIC X(01).
+           03  KEY-OLD.
+               05  KEY-O-JIGYO       PIC X(01).
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
        01  TABLE-AREA.
            03  TBL-PARA-OCC    OCCURS  100.
@@ -313,6 +327,9 @@
       *=== ver4.8対応 by Yoshikawa(2014/10/28) start
            INITIALIZE  RECEERR
       *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+           INITIALIZE  KEY-AREA
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -345,7 +362,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4711"    TO  JOB-PGID
-           MOVE    "こども医療費自己負担額支払明細書" 
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *     MOVE    "こども医療費自己負担額支払明細書" 
+           MOVE    "医療費自己負担額支払明細書" 
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -548,7 +568,7 @@
       *
            PERFORM VARYING IDZ FROM    1   BY  1
                    UNTIL   IDZ >       4
-             IF  RECE02-KOHNUM (IDZ)  =  "299"
+             IF  RECE02-KOHNUM (IDZ)  =  "299" OR "281"
                  PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -650,6 +670,27 @@
              END-IF
            END-IF
       *
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+           COMPUTE  WRK-SEIKYUGK-G2  ROUNDED = WRK-SEIKYUGK-G
+      *
+      *    現物給付の公費は市町村負担額
+           IF  WRK-KOHNUM  =  "281"
+               MOVE    WRK-SEIKYUGK-G2     TO  MF100-FTNMONEY
+           END-IF
+      *
+      *    事業番号
+           EVALUATE  MF100-KOHNUM
+             WHEN  "299"
+      *        こども償還
+               MOVE    "1"                 TO  MF100-JIGYO
+               MOVE    1                   TO  IDX1
+             WHEN  "281"
+      *        こども現物
+               MOVE    "6"                 TO  MF100-JIGYO
+               MOVE    3                   TO  IDX1
+           END-EVALUATE
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
+      *
            MOVE    ZERO                    TO  FLG-ERR
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
@@ -657,7 +698,10 @@
            IF      FLG-ERR     =   ZERO    
                WRITE    MF100-REC 
                ADD      1                  TO  CNT-MF100
-               ADD      1                  TO  WRK-KENSU
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *         ADD      1                  TO  WRK-KENSU
+               ADD      1                  TO  WRK-JIGYO-KENSU(IDX1)
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
            ELSE
                DISPLAY "助成対象外=" MF100-PTNUM
                        "入外区分="   MF100-NYUGAIKBN
@@ -709,8 +753,10 @@
       *
            MOVE     ZERO        TO       FLG-PRINT
       *
-      *    総枚数計算処理
-           PERFORM  20011-MAISU-SYUKEI-SEC
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      **    総枚数計算処理
+      *     PERFORM  20011-MAISU-SYUKEI-SEC
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
       *    一時ファイル読込
            PERFORM  900-TMP-READ-SEC
@@ -738,6 +784,19 @@
       *
            MOVE  ZERO                  TO  WRK-KEISAN
                                            WRK-AMARI
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+                                           WRK-KENSU
+                                           WRK-GPAGE
+      *
+           EVALUATE  MF100-JIGYO
+             WHEN  "1"
+                 MOVE    WRK-JIGYO-KENSU(1)
+                                       TO  WRK-KENSU
+             WHEN  "6"
+                 MOVE    WRK-JIGYO-KENSU(3)
+                                       TO  WRK-KENSU
+           END-EVALUATE
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
            DIVIDE   WRK-KENSU          BY  10
                     GIVING             WRK-KEISAN
@@ -748,6 +807,7 @@
            END-IF
       *
            DISPLAY "データ件数 ="  WRK-KENSU
+           DISPLAY "現在ページ ="  WRK-PAGE
            DISPLAY "合計ページ ="  WRK-GPAGE
       *
            .
@@ -762,6 +822,9 @@
            INITIALIZE                             SC11
       *
            ADD     1    TO    CNT-PAGE
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+                              WRK-PAGE
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
       *    対象年月
            MOVE    WRK-SRYYMWH               TO   SC11-PRTYM
@@ -789,11 +852,18 @@
       *    電話番号
            MOVE     WRK-HOSPTEL              TO   SC11-TEL
       *
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *    総枚数計算処理
+           PERFORM  20011-MAISU-SYUKEI-SEC
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *    ページ番号
            IF  WRK-GPAGE  >  1
              MOVE    WRK-GPAGE               TO  WRK-Z3
              MOVE    WRK-Z3                  TO  SC11-GPAGE
-             MOVE    CNT-PAGE                TO  WRK-Z3
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *       MOVE    CNT-PAGE                TO  WRK-Z3
+             MOVE    WRK-PAGE                TO  WRK-Z3
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
              MOVE    WRK-Z3                  TO  SC11-PAGE
            END-IF
       *
@@ -811,12 +881,29 @@
       *****************************************************************
        320-BODY-HEN-SEC      SECTION.
       *
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+           MOVE     KEY-NEW                  TO  KEY-OLD
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
+      *
            PERFORM  VARYING  IDX1  FROM  1  BY  1
                     UNTIL    IDX1  >    10
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+                    OR    KEY-NEW    NOT  =   KEY-OLD
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
                     OR    FLG-PRINT       =   1
       *
-      *      事業（1固定）
-             MOVE     "１"                   TO  SC11-JIGYO(IDX1)
+      *      事業
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *       MOVE     "１"                   TO  SC11-JIGYO(IDX1)
+             EVALUATE  MF100-JIGYO
+               WHEN  "1"
+      *          こども償還
+                 MOVE    "１"                TO  SC11-JIGYO(IDX1)
+               WHEN  "6"
+      *          こども現物
+                 MOVE    "６"                TO  SC11-JIGYO(IDX1)
+             END-EVALUATE
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
       *      公費番号１
              IF  MF100-TAHOU(1)  NOT =  SPACE
@@ -941,7 +1028,7 @@
              MOVE    MF100-TOTALTEN          TO  WRK-Z7
              MOVE    WRK-Z7                  TO  SC11-TENSU(IDX1)
       *
-      *      自己負担支払額
+      *      自己負担支払額／市町村負担額
              MOVE    MF100-FTNMONEY          TO  WRK-Z7
              MOVE    WRK-Z7                  TO  SC11-ITBFTN(IDX1)
       *
@@ -954,6 +1041,13 @@
       *
              PERFORM   900-TMP-READ-SEC
            END-PERFORM
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+           IF  KEY-NEW  NOT =  KEY-OLD
+           OR  FLG-PRINT    =  1
+               MOVE    ZERO                  TO  WRK-PAGE
+           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
            .
        320-BODY-HEN-EXT.
@@ -981,7 +1075,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4711.red"         TO  SPRT-PRTID
-           MOVE    "こども医療費自己負担額支払明細書"
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *     MOVE    "こども医療費自己負担額支払明細書"
+           MOVE    "医療費自己負担額支払明細書"
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
                                        TO  SPRT-TITLE
            MOVE    SC11                TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1093,25 +1190,40 @@
                    MOVE    2       TO      FLG-TYOKI
                END-IF
       *
-           END-PERFORM
-      *
-           IF  FLG-HEIYOU      =   ZERO
-               IF  RECE02-FTNMONEY(1)  =   ZERO
-                   IF  RECE02-RJNHKNNUM    NOT =   SPACE
-                       MOVE    SYU-KOH-COMPFTN-ENTANI(1)
-                                                   TO  WRK-SEIKYUGK
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *        市町村負担額
+               IF  SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
+                   IF  IDX  =  1
+                     COMPUTE  WRK-SEIKYUGK  =  
+                              SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
                    ELSE
-                       MOVE    SYU-SYUCOMPFTN-ENTANI
-                                                   TO  WRK-SEIKYUGK
-                   END-IF
-               ELSE
-                   IF  RECE02-RJNHKNNUM    NOT =   SPACE
-                       MOVE    SYU-KOH-COMPFTN(1)  TO  WRK-SEIKYUGK
-                   ELSE
-                       MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
+                     COMPUTE  WRK-SEIKYUGK  =  
+                              SYU-KOH-COMPFTN(IDX - 1)  -
+                              SYU-KOH-COMPFTN(IDX)
                    END-IF
                END-IF
-           END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
+           END-PERFORM
+      *
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+      *     IF  FLG-HEIYOU      =   ZERO
+      *         IF  RECE02-FTNMONEY(1)  =   ZERO
+      *             IF  RECE02-RJNHKNNUM    NOT =   SPACE
+      *                 MOVE    SYU-KOH-COMPFTN-ENTANI(1)
+      *                                             TO  WRK-SEIKYUGK
+      *             ELSE
+      *                 MOVE    SYU-SYUCOMPFTN-ENTANI
+      *                                             TO  WRK-SEIKYUGK
+      *             END-IF
+      *         ELSE
+      *             IF  RECE02-RJNHKNNUM    NOT =   SPACE
+      *                 MOVE    SYU-KOH-COMPFTN(1)  TO  WRK-SEIKYUGK
+      *             ELSE
+      *                 MOVE    SYU-SYUCOMPFTN      TO  WRK-SEIKYUGK
+      *             END-IF
+      *         END-IF
+      *     END-IF
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
       *
@@ -1315,6 +1427,10 @@
            READ  MF100-FILE   NEXT
                AT  END
                    MOVE  1  TO  FLG-PRINT
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) start
+               NOT  AT  END
+                   MOVE    MF100-JIGYO  TO  KEY-N-JIGYO
+      *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
            END-READ
            .
        900-TMP-READ-EXT.
@@ -1362,10 +1478,10 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM (1)  =  "299"
-               OR  RECE02-KOHNUM (2)  =  "299"
-               OR  RECE02-KOHNUM (3)  =  "299"
-               OR  RECE02-KOHNUM (4)  =  "299"
+               IF  RECE02-KOHNUM (1)  =  "299" OR "281"
+               OR  RECE02-KOHNUM (2)  =  "299" OR "281"
+               OR  RECE02-KOHNUM (3)  =  "299" OR "281"
+               OR  RECE02-KOHNUM (4)  =  "299" OR "281"
       *        テスト患者のときは読み飛ばす
                    PERFORM 800-PTINF-READ-SEC
                    IF      FLG-PTINF           =   ZERO
