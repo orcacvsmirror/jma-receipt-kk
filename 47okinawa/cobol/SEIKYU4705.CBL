@@ -46,6 +46,7 @@
       *  01.00.11    吉川    2013/10/09  プログラムオプション対応
       *  01.00.12    吉川    2014/10/28  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.13    萩野    2016/04/14  医療機関編集情報への開設者名追加対応
+      *  01.00.14    吉川    2017/01/17  対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -167,6 +168,9 @@
            03  FLG-PRGOPTION   PIC 9(01).
            03  FLG-OK          PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+           03  FLG-TAISYO      PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -315,6 +319,13 @@
                05  WRK-TAIHI-TENKIYMD PIC X(06) OCCURS 5.
                05  WRK-TAIHI-TEKIYO   PIC X(52) OCCURS 35.
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *    対象公費
+           03  WRK-TAISYO-KOHNUM-TBL.
+               05  WRK-TAISYO-KOHNUM PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
        01  WRK-HENSYU-AREA.
            03  WRK-HENYMDG         PIC X(22).
@@ -647,8 +658,10 @@
       *
            PERFORM 100-DBOPEN-SEC
       *
-      *    地方公費対象患者用病名ファイル作成
-           PERFORM 1001-BYOMEI-HEN-SEC
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      **    地方公費対象患者用病名ファイル作成
+      *     PERFORM 1001-BYOMEI-HEN-SEC
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *    ステップ管理開始処理
            MOVE    "STS"           TO  SJOBKANRI-MODE
@@ -673,6 +686,11 @@
       *    プログラムオプション取込み
            PERFORM 100-OPTION-SELECT-SEC
       *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *    地方公費対象患者用病名ファイル作成
+           PERFORM 1001-BYOMEI-HEN-SEC
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *    システム管理マスタ（医療機関情報）
            PERFORM 120-HOSPINF-GET-SEC
@@ -746,6 +764,18 @@
            END-IF
            DISPLAY "出力順変換="  WRK-STUNUM
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *    対象公費番号
+           MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           PERFORM  VARYING  IDX  FROM  1  BY  1
+                    UNTIL    IDX  >  100
+                    OR       WRK-OPTION(IDX)  =  SPACE
+             MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
+             DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
+           END-PERFORM
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -809,6 +839,9 @@
       * 
            DISPLAY "編集１開始"
            CALL  "SEIKYU47BYOMEI1"    USING  WRK-PARA-LINK
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+                                             WRK-TAISYO-KOHNUM-TBL
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
            DISPLAY "編集２開始"
            CALL  "SEIKYU47BYOMEI2"    USING  WRK-PARA-LINK
            DISPLAY "病名ファイル作成終了"
@@ -1082,7 +1115,14 @@
       *
            PERFORM  VARYING  IDZ  FROM  1  BY  1
                     UNTIL    IDZ  >     4
-             IF  RECE02-KOHNUM(IDZ) = "121"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *         IF  RECE02-KOHNUM (IDZ) = "121"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(IDZ)      TO  WRK-CHK-KOHNUM(1)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
                PERFORM 20011-SYUKEI-SEC
              END-IF
            END-PERFORM
@@ -2493,6 +2533,31 @@
        300-END-EXT.
            EXIT.
       *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
+      *
       *****************************************************************
       *    公費請求書マスタ読込 SELECT
       *****************************************************************
@@ -2536,11 +2601,20 @@
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE02-REC
       *
-               IF  RECE02-KOHNUM(1)  = "121"
-               OR  RECE02-KOHNUM(2)  = "121"
-               OR  RECE02-KOHNUM(3)  = "121"
-               OR  RECE02-KOHNUM(4)  = "121"
-      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *         IF  RECE02-KOHNUM(1) = "121"
+      *         OR  RECE02-KOHNUM(2) = "121"
+      *         OR  RECE02-KOHNUM(3) = "121"
+      *         OR  RECE02-KOHNUM(4) = "121"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *            入院は対象外
                    IF  RECE02-NYUGAIKBN  =  "1"
       *=== スタックオーバーフロー対応 by Yoshikawa(2013/01/22) start
