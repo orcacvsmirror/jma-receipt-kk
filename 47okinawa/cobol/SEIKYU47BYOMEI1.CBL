@@ -33,6 +33,7 @@
       *  01.00.01    吉川         11/07/25  レセプト病名記載順対応
       *                                     補足コメント対応
       *  01.00.02    吉川         14/10/28  ver4.8.0対応（一時ディレクトリ変更）
+      *  01.00.03    吉川         17/01/17  対象公費はPGオプションから取得する
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -89,6 +90,9 @@
            03  FLG-SYSKANRI        PIC 9(01).
            03  FLG-CHK             PIC 9(01).
            03  FLG-PTINF           PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+           03  FLG-TAISYO          PIC 9(01).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -99,6 +103,9 @@
            03  IDX                 PIC 9(03). 
            03  IDY                 PIC 9(03). 
            03  IDZ                 PIC 9(03).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+           03  IDXX                PIC 9(04).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -134,6 +141,11 @@
            03  WRK-MCP-TABLE       PIC X(64).
            03  WRK-MCP-PATHNAME    PIC X(64).
       *=== レセプト病名記載順対応 by Yoshikawa(2011/07/25) end
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+           03  WRK-CHK-KOHNUM-TBL.
+               05  WRK-CHK-KOHNUM    PIC X(03)  OCCURS 4.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *=== レセプト病名記載順対応 by Yoshikawa(2011/07/25) start
       * 01  KEY-AREA                            VALUE   LOW-VALUE.
@@ -230,9 +242,18 @@
            03  WRK-PARA-LINK-JOBID    PIC  9(07).
            03  WRK-PARA-LINK-SHELLID  PIC  X(08).
            03  WRK-PARA-LINK-HOSPNUM  PIC  9(02).
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *    対象公費
+       01  WRK-TAISYO-KOHNUM-TBL.
+           03  WRK-TAISYO-KOHNUM      PIC X(03)  OCCURS 100.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       ****************************************************************
        PROCEDURE           DIVISION
-               USING    WRK-PARA-LINK.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *         USING    WRK-PARA-LINK.
+               USING    WRK-PARA-LINK
+                        WRK-TAISYO-KOHNUM-TBL.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
       *****************************************************************
       *    主処理
@@ -252,6 +273,10 @@
       *****************************************************************
        100-INIT-SEC                SECTION.
       *
+      *----debug
+           DISPLAY "WRK-TAISYO-KOHNUM(1) = " WRK-TAISYO-KOHNUM(1)
+           DISPLAY "WRK-TAISYO-KOHNUM(2) = " WRK-TAISYO-KOHNUM(2)
+      *----debug 
            INITIALIZE                  CNT-AREA
                                        WRK-AREA
       *=== レセプト病名記載順対応 by Yoshikawa(2011/07/25) start
@@ -863,10 +888,20 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC     TO  RECE02-REC
-               IF  RECE02-KOHNUM(1) = "121"
-               OR  RECE02-KOHNUM(2) = "121"
-               OR  RECE02-KOHNUM(3) = "121"
-               OR  RECE02-KOHNUM(4) = "121"
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *         IF  RECE02-KOHNUM(1) = "121"
+      *         OR  RECE02-KOHNUM(2) = "121"
+      *         OR  RECE02-KOHNUM(3) = "121"
+      *         OR  RECE02-KOHNUM(4) = "121"
+               INITIALIZE                          WRK-CHK-KOHNUM-TBL
+               MOVE    RECE02-KOHNUM(1)        TO  WRK-CHK-KOHNUM(1)
+               MOVE    RECE02-KOHNUM(2)        TO  WRK-CHK-KOHNUM(2)
+               MOVE    RECE02-KOHNUM(3)        TO  WRK-CHK-KOHNUM(3)
+               MOVE    RECE02-KOHNUM(4)        TO  WRK-CHK-KOHNUM(4)
+      *        対象公費番号チェック処理
+               PERFORM  800-TAISYOKOHI-CHK-SEC
+               IF  FLG-TAISYO  =  1
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *    テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -949,4 +984,29 @@
            .
        800-PTINF-READ-EXT.
            EXIT.
+      *
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
+      *****************************************************************
+      *    対象公費番号チェック処理
+      *****************************************************************
+       800-TAISYOKOHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE     FLG-TAISYO
+      *
+           PERFORM  VARYING  IDXX  FROM  1  BY  1
+                    UNTIL    IDXX  >  100
+                    OR       WRK-TAISYO-KOHNUM(IDXX)  =  SPACE
+               IF  WRK-CHK-KOHNUM(1)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(2)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(3)  =  WRK-TAISYO-KOHNUM(IDXX)
+               OR  WRK-CHK-KOHNUM(4)  =  WRK-TAISYO-KOHNUM(IDXX)
+                   MOVE     1                 TO  FLG-TAISYO
+                   MOVE     100               TO  IDXX
+               END-IF
+           END-PERFORM
+      *
+           .
+       800-TAISYOKOHI-CHK-EXT.
+           EXIT.
+      *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
       *
