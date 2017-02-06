@@ -46,6 +46,7 @@
       *  01.00.10    吉川    2017/01/11  特別療養費国保分は別帳票とする
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.11    吉川    2017/02/06  在宅分はまとめるように修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -647,16 +648,26 @@
       *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
       *     END-EVALUATE  
       **=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
+      *=== 在宅分はまとめて集計 by Yoshikawa(2017/02/06) start
+      *     EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
+      *         WHEN    "1"             ALSO    "1"
+      *             MOVE    "key62"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "1"
+      *             MOVE    "key61"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "1"             ALSO    "2"
+      *             MOVE    "key66"         TO  WRK-MCP-PATHNAME
+      *         WHEN    "2"             ALSO    "2"
+      *             MOVE    "key65"         TO  WRK-MCP-PATHNAME
+      *     END-EVALUATE  
            EVALUATE    WRK-SYOKBN      ALSO    WRK-PARA-SYOKBN1
                WHEN    "1"             ALSO    "1"
-                   MOVE    "key62"         TO  WRK-MCP-PATHNAME
-               WHEN    "2"             ALSO    "1"
-                   MOVE    "key61"         TO  WRK-MCP-PATHNAME
                WHEN    "1"             ALSO    "2"
                    MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"             ALSO    "1"
                WHEN    "2"             ALSO    "2"
                    MOVE    "key65"         TO  WRK-MCP-PATHNAME
            END-EVALUATE  
+      *=== 在宅分はまとめて集計 by Yoshikawa(2017/02/06) end
       *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
            MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
            PERFORM 900-SEIKYU-SELECT-SEC
@@ -694,27 +705,29 @@
       *     END-IF
       *=== 特別療養費は指定の場所に印字 by Yoshikawa(2008/04/29) end
       *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) start
-           IF    ( FLG-ERR             =   ZERO )
-           AND   ( WRK-PARA-SYOKBN1    =   "1"  )
-               MOVE    LOW-VALUE           TO  KEY-AREA
-               MOVE    2                   TO  WRK-INDEX
-      *         
-               EVALUATE    WRK-SYOKBN
-                   WHEN    "1"
-                       MOVE    "key64"     TO  WRK-MCP-PATHNAME
-                   WHEN    "2"
-                       MOVE    "key63"     TO  WRK-MCP-PATHNAME
-               END-EVALUATE  
-               MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
-               PERFORM 900-SEIKYU-SELECT-SEC
-      *
-               PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
-                                       OR      FLG-ERR      =  1
-      *
-           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
-           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
-           PERFORM 900-CLOSE-SEC
-           END-IF
+      *=== 在宅分はまとめて集計 by Yoshikawa(2017/02/06) start
+      *     IF    ( FLG-ERR             =   ZERO )
+      *     AND   ( WRK-PARA-SYOKBN1    =   "1"  )
+      *         MOVE    LOW-VALUE           TO  KEY-AREA
+      *         MOVE    2                   TO  WRK-INDEX
+      **         
+      *         EVALUATE    WRK-SYOKBN
+      *             WHEN    "1"
+      *                 MOVE    "key64"     TO  WRK-MCP-PATHNAME
+      *             WHEN    "2"
+      *                 MOVE    "key63"     TO  WRK-MCP-PATHNAME
+      *         END-EVALUATE  
+      *         MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+      *         PERFORM 900-SEIKYU-SELECT-SEC
+      **
+      *         PERFORM 200-HENSYU-SEC  UNTIL   FLG-RECE10   =  1
+      *                                 OR      FLG-ERR      =  1
+      **
+      *     MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+      *     MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *     PERFORM 900-CLOSE-SEC
+      *     END-IF
+      *=== 在宅分はまとめて集計 by Yoshikawa(2017/02/06) end
       *=== 特別療養費分は別帳票 by Yoshikawa(2017/01/11) end
       *     
            MOVE    1                   TO  FLG-END
