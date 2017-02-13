@@ -92,6 +92,8 @@
       *                                  WRK-SEIKYUGK2の初期化漏れ
       *  01.00.30    吉川    2016/10/13  保険＋全国公費＋福祉と保険＋福祉の
       *                                  場合10円単位で記載されるのを修正
+      *  01.00.31    門間    2017/02/06  医療機関コード変更時、
+      *                                  医療機関コード別の作成処理対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -223,6 +225,10 @@
            03  WRK-PARA-HOSPNUM           PIC 9(02).
            03  WRK-PARA-PAGE              PIC 9(10).
            03  WRK-PARA-SYORIFLG          PIC X(01).
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) start
+           03  WRK-PARA-STSRYYM           PIC 9(06).
+           03  WRK-PARA-EDSRYYM           PIC 9(06).
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -628,6 +634,10 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-HOSPNUM
                                                WRK-PARA-SYORIFLG
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) start
+                                               WRK-PARA-STSRYYM
+                                               WRK-PARA-EDSRYYM
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
                                                RECEERR
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -690,9 +700,18 @@
            INITIALIZE  SYS-1001-REC
            MOVE  "1001"         TO  SYS-1001-KANRICD
            MOVE  "*"            TO  SYS-1001-KBNCD
-           MOVE  LNK-PRTKANRI-SRYYM(1:6)
-                                TO  SYS-1001-STYUKYMD(1:6)
-                                    SYS-1001-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) start
+      *     MOVE  LNK-PRTKANRI-SRYYM(1:6)
+      *                          TO  SYS-1001-STYUKYMD(1:6)
+      *                              SYS-1001-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
            MOVE  "01"           TO  SYS-1001-STYUKYMD(7:2)
                                    SYS-1001-EDYUKYMD(7:2)
            MOVE  SPA-HOSPNUM    TO  SYS-1001-HOSPNUM
@@ -709,9 +728,18 @@
            INITIALIZE  SYS-1002-REC
            MOVE  "1002"         TO  SYS-1002-KANRICD
            MOVE  "*"            TO  SYS-1002-KBNCD
-           MOVE  LNK-PRTKANRI-SRYYM(1:6)
-                                TO  SYS-1002-STYUKYMD(1:6)
-                                    SYS-1002-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) start
+      *     MOVE  LNK-PRTKANRI-SRYYM(1:6)
+      *                          TO  SYS-1002-STYUKYMD(1:6)
+      *                              SYS-1002-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
            MOVE  "01"           TO  SYS-1002-STYUKYMD(7:2)
                                     SYS-1002-EDYUKYMD(7:2)
            MOVE  SPA-HOSPNUM    TO  SYS-1002-HOSPNUM
@@ -3136,6 +3164,18 @@
                PERFORM  800-TAISYOKOHI-CHK-SEC
                IF  FLG-TAISYO  =  1
       *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) start
+                   IF      WRK-PARA-STSRYYM    =   "999999"
+                       CONTINUE
+                   ELSE
+                       IF  ( RECE02-SRYYM      <   WRK-PARA-STSRYYM )
+                       OR  ( RECE02-SRYYM      >   WRK-PARA-EDSRYYM )
+                           GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                   END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
+      *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
