@@ -541,10 +541,17 @@
       *    システム管理マスタより診療科名を取得
            MOVE    "1005"              TO  SYS-1005-KANRICD
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/15) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                                 TO  SYS-1005-STYUKYMD(1:6)
+      *                                     SYS-1005-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1005-STYUKYMD(1:6)
+                                               SYS-1005-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-STSRYYM    TO  SYS-1005-STYUKYMD(1:6)
+                                               SYS-1005-EDYUKYMD(1:6)
+           END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/15) end
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                       TO  SYS-1005-STYUKYMD(1:6)
-                                           SYS-1005-EDYUKYMD(1:6)
            MOVE    "01"                TO  SYS-1005-STYUKYMD(7:2)
                                            SYS-1005-EDYUKYMD(7:2)
            MOVE    SPA-HOSPNUM         TO  SYS-1005-HOSPNUM
@@ -610,14 +617,14 @@
       *                                     TO WRK-2007-KOHNUM(IDX IDY)
                    ADD     1               TO  IDZ
                    MOVE    SYS-2007-KOHNUM (IDY)
-                                           TO WRK-2007-KOHNUM(IDX1 IDZ)
+                                           TO WRK-2007-KOHNUM(IDX IDZ)
                END-PERFORM
-               PERFORM VARYING IDX2 FROM    1   BY  1
-                       UNTIL   IDX2 >       20
+               PERFORM VARYING IDY FROM    1   BY  1
+                       UNTIL   IDY >       20
                        OR      SYS-2007-KOHNUM1(IDY)   =   SPACE
                    ADD     1               TO  IDZ
                    MOVE    SYS-2007-KOHNUM1(IDY)
-                                           TO  WRK-2007-KOHNUM(IDX1 IDZ)
+                                           TO  WRK-2007-KOHNUM(IDX IDZ)
       *=== 公費番号まとめ追加 by hagino(2017/02/15) end
                END-PERFORM
       *
