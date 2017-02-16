@@ -487,7 +487,7 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/14) end
            MOVE    "01"            TO  SYS-1001-STYUKYMD (7:2)
@@ -522,7 +522,7 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/14) end
            MOVE    "01"            TO  SYS-1002-STYUKYMD (7:2)
@@ -1833,7 +1833,7 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/14) end
            MOVE    "01"            TO  SYS-1900-STYUKYMD (7:2)
@@ -1879,7 +1879,7 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/14) end
            MOVE    "01"            TO  SYS-1901-STYUKYMD (7:2)
@@ -1918,7 +1918,7 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
                                                SYS-1902-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
                                                SYS-1902-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/14) end
@@ -1959,7 +1959,7 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/02/14) end
            MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
