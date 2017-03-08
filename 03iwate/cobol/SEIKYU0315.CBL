@@ -29,6 +29,7 @@
       * Maj/Min/Rev  修正者  日付       内容
       *  04.08.01    門間    17/01/11   医療機関コード変更時、
       *                                 医療機関コード別の作成処理対応
+      *  04.08.02    萩野    17/03/08   医療機関情報の取得の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -488,7 +489,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) end
                                                SYS-1001-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/01/11) end
@@ -516,7 +520,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) end
                                                SYS-1002-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/01/11) end
@@ -2003,7 +2010,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
                                                SYS-1900-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) end
                                                SYS-1900-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
@@ -2049,7 +2059,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
                                                SYS-1901-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) end
                                                SYS-1901-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
@@ -2089,7 +2102,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
                                                SYS-1902-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) end
                                                SYS-1902-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
@@ -2125,7 +2141,10 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by hagino(2017/03/08) end
            END-IF
            MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by Monma(2017/01/11) end
