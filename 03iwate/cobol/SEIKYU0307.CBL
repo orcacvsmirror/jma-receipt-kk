@@ -52,6 +52,7 @@
       *  01.00.13     門間    2017/01/11  医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
       *  01.00.14     萩野    2017/03/08  医療機関情報の取得の修正
+      *                                   受給者番号順１１桁対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1277,7 +1278,10 @@
       *         MOVE  MF101-KOHJKYSNUM(1:7)
                MOVE  MF101-KOHJKYSNUM
       *=== 受給者番号順処理修正 by Yoshikawa(2016/08/29) start
-                                        TO  MF101-HKNJANUM-KEY
+      *=== 受給者番号順１１桁対応 by hagino(2017/03/08) start
+      *                                  TO  MF101-HKNJANUM-KEY
+                                        TO  MF101-KOHJKYSNUM-KEY
+      *=== 受給者番号順１１桁対応 by hagino(2017/03/08) end
            END-EVALUATE
       *=== レセ印字順設定対応 by Yoshikawa(2016/04/14) end
       *
