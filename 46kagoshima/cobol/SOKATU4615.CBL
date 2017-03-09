@@ -43,6 +43,7 @@
       *  01.00.09    門間    2016/12/14  公費番号まとめ情報の公費番号の追加
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.10    門間    2017/03/08  医療機関情報取得時の修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -479,7 +480,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) end
                                                SYS-1001-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2016/12/14) end
@@ -515,7 +519,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) end
                                                SYS-1002-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2016/12/14) end
@@ -1865,7 +1872,10 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) end
            END-IF
            MOVE    "01"            TO  SYS-1900-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by Monma(2016/12/14) end
@@ -1915,7 +1925,10 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) end
            END-IF
            MOVE    "01"            TO  SYS-1901-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by Monma(2016/12/14) end
@@ -1954,7 +1967,10 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) end
            END-IF
            MOVE    "01"            TO  SYS-1902-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by Monma(2016/12/14) end
@@ -1994,7 +2010,10 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報取得時の修正 by Monma(2017/03/08) end
            END-IF
            MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by Monma(2016/12/14) end
