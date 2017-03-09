@@ -2468,8 +2468,8 @@
                    IF      WRK-PARA-STSRYYM    =   "999999"
                        CONTINUE
                    ELSE
-                       IF  ( RECE02-SRYYM      <   WRK-PARA-STSRYYM )
-                       OR  ( RECE02-SRYYM      >   WRK-PARA-EDSRYYM )
+                       IF  ( RECE01-SRYYM      <   WRK-PARA-STSRYYM )
+                       OR  ( RECE01-SRYYM      >   WRK-PARA-EDSRYYM )
                            GO  TO  900-KOHSKY-READ-SEC
                        END-IF
                    END-IF
