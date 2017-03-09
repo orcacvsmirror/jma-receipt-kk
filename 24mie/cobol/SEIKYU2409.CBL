@@ -41,6 +41,7 @@
       * 01.00.07     萩野    2016/05/17  処方せん発行区分対応（診療行為コード追加）
       * 01.00.08     萩野    2017/03/08  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *                                  カナ氏名の記録修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2613,6 +2614,9 @@
            MOVE    1                   TO  IDX3
            PERFORM VARYING  IDX2  FROM  1  BY  2
                    UNTIL    IDX2  >  40
+      *=== カナ氏名の記録修正 by hagino(2017/03/08) start
+                   OR       IDX3   >   39
+      *=== カナ氏名の記録修正 by hagino(2017/03/08) end
              EVALUATE   WRK-MAE-INPUT(IDX2:2)
                WHEN  "ア"
                  MOVE  "ｱ"  TO  WRK-OUT-INPUT(IDX3:2)
@@ -2897,6 +2901,12 @@
                  MOVE  "ｳﾞ" TO  WRK-OUT-INPUT(IDX3:4)
                  ADD   4    TO  IDX3
              END-EVALUATE
+      *=== カナ氏名の記録修正 by hagino(2017/03/08) start
+           IF  ( IDX3   >=  38 )
+           AND ( WRK-MAE-INPUT(IDX2 + 2 :2)   =  "　" )
+                 MOVE  40   TO  IDX3
+           END-IF
+      *=== カナ氏名の記録修正 by hagino(2017/03/08) end
            END-PERFORM
       *
            .
