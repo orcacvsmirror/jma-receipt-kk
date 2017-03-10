@@ -94,6 +94,9 @@
       *                                  場合10円単位で記載されるのを修正
       *  01.00.31    門間    2017/02/06  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.32    吉川    2017/03/10  高額４回目で月途中の市町村変更の場合
+      *                                  福祉医療費請求額はそれぞれの市町村で
+      *                                  案分計算をするように修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -708,7 +711,7 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
@@ -736,7 +739,7 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/02/06) end
@@ -1645,6 +1648,27 @@
                END-IF
            END-IF
       *=== 低所の限度額修正 by Yoshikawa(2016/07/13) end
+      *
+      *=== 多数で市町村変更時の計算変更 by Yoshikawa(2017/03/10) start
+      *    高額4回目で月途中に市町村を変更した場合は案分計算
+      *    （本体で自動で案分計算されるようになったらコメントアウトする）
+           IF  (RECE02-KOHNUM(1)           =  RECE02-KOHNUM(2))
+           AND (RECE02-KOHFTNJANUM(1)  NOT =  RECE02-KOHFTNJANUM(2))
+           AND (WRK-TOKURAN                =  "99")
+      *        44400円で入っているところは、
+      *        FTNMONEY(1)から他市町村分を割り出してそれと差し引く
+               IF  MF100-SEIKYUGK  =  44400
+                   IF  RECE02-FTNMONEY(1)  NOT =  88800
+                       COMPUTE  MF100-SEIKYUGK  =
+                                 44400 - (RECE02-FTNMONEY(1) - 44400)
+                   ELSE
+                       IF  IDZ  =  1
+                           MOVE    ZERO     TO  MF100-SEIKYUGK
+                       END-IF
+                   END-IF
+               END-IF
+           END-IF
+      *=== 多数で市町村変更時の計算変更 by Yoshikawa(2017/03/10) end
       *
            IF  FLG-ERR    =    ZERO
                WRITE  MF100-REC
