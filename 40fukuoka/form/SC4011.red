@@ -1435,16 +1435,16 @@
         <dia:point val="1.86745,10.9692"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="1.86745,10.6592;2.21745,12.7617"/>
+        <dia:rectangle val="1.86745,10.6504;2.22626,12.7793"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#乳
+            <dia:string>#子
 
-幼
+ど
 
-児#</dia:string>
+も#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -1913,12 +1913,12 @@
         <dia:point val="13.2523,7.68115"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.5023,7.41615;14.0023,7.71865"/>
+        <dia:rectangle val="12.5023,7.40859;14.0099,7.73378"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#乳・障・親#</dia:string>
+            <dia:string>#子・障・親#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -2655,12 +2655,12 @@
         <dia:point val="13.2654,14.735"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.5154,14.47;14.0154,14.7725"/>
+        <dia:rectangle val="12.5154,14.4624;14.023,14.7876"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#乳・障・親#</dia:string>
+            <dia:string>#子・障・親#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -3399,12 +3399,12 @@
         <dia:point val="13.2396,21.758"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.4896,21.493;13.9896,21.7955"/>
+        <dia:rectangle val="12.4896,21.4854;13.9972,21.8106"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#乳・障・親#</dia:string>
+            <dia:string>#子・障・親#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -3564,7 +3564,7 @@
         <dia:point val="18.2999,1.31641"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.2999,1.04385;18.4574,1.36904"/>
+        <dia:rectangle val="18.2999,1.05141;18.4499,1.35391"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -3729,12 +3729,12 @@
         <dia:point val="10.5608,2.922"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.0858,2.437;13.0358,2.9895"/>
+        <dia:rectangle val="8.0858,2.42319;13.0496,3.01713"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#乳障親医療費請求書#</dia:string>
+            <dia:string>#子障親医療費請求書#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
