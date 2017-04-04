@@ -87,6 +87,8 @@
       *                                  印字されるのを修正
       *  01.00.40    門間    17/03/14    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.41    萩野    17/04/04    後期高齢者の患者で返戻がある場合に
+      *                                   エラーとなる不具合を修正
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -2704,7 +2706,10 @@
                ELSE
                    IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
                    OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
-                       GO  TO  900-SEIKYU-READ-SEC
+      *=== 返戻がある場合の不具合を修正 by hagino(2017/04/04) start
+      *                 GO  TO  900-SEIKYU-READ-SEC
+                       GO  TO  950-SEIKYU-READ-SEC
+      *=== 返戻がある場合の不具合を修正 by hagino(2017/04/04) end
                    END-IF
                END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/03/14) end
