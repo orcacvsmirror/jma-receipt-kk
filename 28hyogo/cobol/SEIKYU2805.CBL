@@ -1066,6 +1066,10 @@
              MOVE  "400"              TO   MF100-CITYNUM
            END-IF
       *
+      *    長期併用判定
+           MOVE      MF100-KOHNUM     TO   WRK-KOHNUM
+           MOVE      MF100-KOHID      TO   WRK-KOHID
+      *
       *=== 同保険種別への変更はまとめる by Monma(2017/04/13) start
            EVALUATE  MF100-KYURATE
            WHEN 10
@@ -1107,9 +1111,6 @@
            ADD   RECE02-SHOKUJIFTN     (IDY)  TO  MF100-SHOKUJIFTN
       *=== 同保険種別への変更はまとめる by Monma(2017/04/13) end
       *
-      *    長期併用判定
-           MOVE      MF100-KOHNUM     TO   WRK-KOHNUM
-           MOVE      MF100-KOHID      TO   WRK-KOHID
       ***** 05/07/04 yamaguchi INS
            INITIALIZE                      WRK-SYUKEI
       *****
