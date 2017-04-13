@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 沖縄県・医療費自己負担額支払報告兼請求書
-      *                      (299)
+      *                      (299,399,281)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  13/10/09    吉川          新規作成
@@ -33,6 +33,9 @@
       *                                対象公費はPGオプションから取得する
       *                                医療機関コード変更時、
       *                                医療機関コード別の作成処理対応
+      *  01.00.03    吉川    17/04/13  現物給付の制度は円単位で記載
+      *                                母子父子（399）の制度対応
+      *                                医療機関情報の取得の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -401,7 +404,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1001-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/01/17) end
@@ -429,7 +435,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1002-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/01/17) end
@@ -677,6 +686,10 @@
            EVALUATE  RECE02-KOHNUM(IDZ)
       *      こども（自動償還）
              WHEN  "299"    MOVE    1      TO  IDX1
+      *=== 母子対応 by Yoshikawa(2017/04/13) start
+      *      母子父子
+             WHEN  "399"    MOVE    2      TO  IDX1
+      *=== 母子対応 by Yoshikawa(2017/04/13) end
       *      こども（現物給付）
              WHEN  "281"    MOVE    3      TO  IDX1
       *      不正な番号
@@ -816,6 +829,9 @@
       *        金額（自動償還は負担金額。現物給付は市町村請求額）
                EVALUATE  IDX
                WHEN  1
+      *=== 母子対応 by Yoshikawa(2017/04/13) start
+               WHEN  2
+      *=== 母子対応 by Yoshikawa(2017/04/13) end
                    MOVE    SUM-FTNMONEY(IDX)  TO  WRK-Z9
                    MOVE    WRK-Z9             TO  SC09-SEIKYUGK(IDX)
                WHEN  3
@@ -1151,12 +1167,22 @@
       *        市町村負担額
                IF  SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
                    IF  IDX  =  1
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) start
+      *               COMPUTE  WRK-SEIKYUGK  =  
+      *                        SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
                      COMPUTE  WRK-SEIKYUGK  =  
-                              SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
+                              SYU-SYUCOMPFTN-ENTANI  -
+                              SYU-KOH-COMPFTN-ENTANI(1)
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) end
                    ELSE
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) start
+      *               COMPUTE  WRK-SEIKYUGK  =  
+      *                        SYU-KOH-COMPFTN(IDX - 1)  -
+      *                        SYU-KOH-COMPFTN(IDX)
                      COMPUTE  WRK-SEIKYUGK  =  
-                              SYU-KOH-COMPFTN(IDX - 1)  -
-                              SYU-KOH-COMPFTN(IDX)
+                              SYU-KOH-COMPFTN-ENTANI(IDX - 1)  -
+                              SYU-KOH-COMPFTN-ENTANI(IDX)
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) end
                    END-IF
                END-IF
            END-PERFORM
@@ -1385,7 +1411,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
                                                SYS-1900-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1900-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
@@ -1429,7 +1458,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
                                                SYS-1901-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1901-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
@@ -1469,7 +1501,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
                                                SYS-1902-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1902-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
