@@ -59,6 +59,9 @@
       *  01.00.14    吉川    15/02/16    患者負担額の印字桁数増加
       *  01.00.15    吉川    15/11/17    医療機関編集情報への開設者名追加対応
       *  01.00.16    吉川    16/06/07    対象公費はPGオプションから取得する
+      *  01.00.17    門間    17/04/10    医療機関コード変更時、
+      *                                  医療機関コード別の作成処理対応
+      *                                  備考欄の記載追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -144,6 +147,9 @@
            03  FLG-OK         PIC 9(01).
            03  FLG-TAISYO     PIC 9(01).
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/07) end
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+           03  FLG-RECE10     PIC 9(01).
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -169,6 +175,10 @@
       *---(01.00.01) LINE ADD END   ------------------------------------
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYORIFLG   PIC X(01).
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+           03  WRK-PARA-STSRYYM    PIC 9(06).
+           03  WRK-PARA-EDSRYYM    PIC 9(06).
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
       *
       *    一時領域  
        01  WRK-AREA.
@@ -238,6 +248,9 @@
       *    対象公費
            03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/07) end
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+           03  WRK-BIKO              PIC X(16).
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
       *
       *    集計用エリア
        01  SUM-AREA  VALUE   ZERO.
@@ -282,6 +295,9 @@
            03  CONS-SRYYM-201405       PIC X(06)  VALUE  "201405".
            03  CONS-BIRTHDAY-19440402  PIC 9(08)  VALUE  19440402.
       *=== 前期高齢者２割対応 by Yoshikawa(2014/05/12) end
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+           03  CONS-SRYYM-201501       PIC X(06)  VALUE  "201501".
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
       *
       *    DB参照用
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -339,6 +355,11 @@
       *    保険組合せ
        01  HKNCOMBI-REC.
            COPY    "CPHKNCOMBI.INC".
+      *
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+      *    請求管理
+           COPY    "CPRCF010.INC".
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
       *
       *=== 前期高齢＋高額の患者負担額修正 by Yoshikawa(2013/04/11) start
       *    低所得情報
@@ -448,6 +469,10 @@
                                                WRK-PARA-HOSPNUM
       *---(01.00.01) LINE ADD END   ------------------------------------
                                                WRK-PARA-SYORIFLG
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+                                               WRK-PARA-STSRYYM
+                                               WRK-PARA-EDSRYYM
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
       *---(01.00.01) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.00.01) LINE ADD END   ------------------------------------
@@ -527,9 +552,18 @@
            INITIALIZE  SYS-1001-REC
            MOVE    "1001"          TO  SYS-1001-KANRICD
            MOVE    "*"             TO  SYS-1001-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                   TO  SYS-1001-STYUKYMD(1:6)
-                                       SYS-1001-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                             TO  SYS-1001-STYUKYMD(1:6)
+      *                                 SYS-1001-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
            MOVE    "01"            TO  SYS-1001-STYUKYMD(7:2)
                                        SYS-1001-EDYUKYMD(7:2)
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -548,9 +582,18 @@
            INITIALIZE  SYS-1002-REC
            MOVE    "1002"          TO  SYS-1002-KANRICD
            MOVE    "*"             TO  SYS-1002-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                   TO  SYS-1002-STYUKYMD(1:6)
-                                       SYS-1002-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                             TO  SYS-1002-STYUKYMD(1:6)
+      *                                 SYS-1002-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
            MOVE    "01"            TO  SYS-1002-STYUKYMD(7:2)
                                        SYS-1002-EDYUKYMD(7:2)
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -845,6 +888,26 @@
            MOVE  RECE02-SHOKUJIINF  (IDY)  TO  MF100-SHOKUJIINF
            MOVE  RECE02-FTNMONEY    (IDY)  TO  MF100-FTNMONEY
            MOVE  RECE02-YKZFTN      (1)    TO  MF100-YKZFTN
+      *
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+      *    請求管理
+           PERFORM  900-SEIKYU-READ-SEC
+      *    高額療養費チェック
+           IF   RECE02-ZAITAKU  NOT =  SPACE
+           AND  RECE02-ZAITAKU  NOT =  "1"
+             MOVE  RECE02-ZAITAKU          TO  MF100-KOGAKU
+           END-IF
+      *    多数回該当チェック
+           IF  RECE02-FLG(4)      =  1
+               PERFORM  VARYING  IDX  FROM  1  BY  1
+                        UNTIL    IDX  >     5
+                   IF  RECE10-TOKKI(IDX)  =  "31" OR "32" OR "33" OR
+                                             "34" OR "35"
+                       MOVE    RECE10-TOKKI(IDX)      TO  MF100-TOKKI
+                   END-IF
+               END-PERFORM
+           END-IF
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
       *
       *    請求金額集計集計
            MOVE    MF100-KOHNUM            TO  WRK-KOHNUM
@@ -1328,6 +1391,49 @@
                    MOVE    WRK-HENYMDG(1:16)
                                            TO  SC03-BIKO(IDX)
                END-IF
+      *
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+               IF  MF100-KOGAKU  NOT =  ZERO
+                 INITIALIZE  WRK-BIKO
+                 IF  MF100-SRYYM  >=  CONS-SRYYM-201501
+                   EVALUATE  MF100-KOGAKU
+                     WHEN  2
+                       MOVE  "２６区ア"    TO  WRK-BIKO
+                     WHEN  3
+                       MOVE  "２７区イ"    TO  WRK-BIKO
+                     WHEN  4
+                       MOVE  "２８区ウ"    TO  WRK-BIKO
+                     WHEN  5
+                       MOVE  "２９区エ"    TO  WRK-BIKO
+                     WHEN  6
+                       MOVE  "３０区オ"    TO  WRK-BIKO
+                   END-EVALUATE
+                   EVALUATE  MF100-TOKKI
+                     WHEN  "31"
+                       MOVE  "３１多ア"    TO  WRK-BIKO
+                     WHEN  "32"
+                       MOVE  "３２多イ"    TO  WRK-BIKO
+                     WHEN  "33"
+                       MOVE  "３３多ウ"    TO  WRK-BIKO
+                     WHEN  "34"
+                       MOVE  "３４多エ"    TO  WRK-BIKO
+                     WHEN  "35"
+                       MOVE  "３５多オ"    TO  WRK-BIKO
+                   END-EVALUATE
+                 ELSE
+                   EVALUATE  MF100-KOGAKU
+                     WHEN  2
+                       MOVE  "１７・上位"    TO  WRK-BIKO
+                     WHEN  3
+                       MOVE  "１８・一般"    TO  WRK-BIKO
+                     WHEN  4
+                       MOVE  "１９・低所"    TO  WRK-BIKO
+                   END-EVALUATE
+                 END-IF
+                 MOVE    WRK-BIKO        TO  SC03-BIKO2(IDX)
+               END-IF
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
+      *
       *    合計・小計加算
                EVALUATE  MF100-KYURATE
                    WHEN    30
@@ -1874,6 +1980,18 @@
                PERFORM  800-TAISYOKOHI-CHK-SEC
                IF  FLG-TAISYO  =  1
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2016/06/07) end
+      *
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+                   IF      WRK-PARA-STSRYYM    =   "999999"
+                       CONTINUE
+                   ELSE
+                       IF  ( RECE02-SRYYM      <   WRK-PARA-STSRYYM )
+                       OR  ( RECE02-SRYYM      >   WRK-PARA-EDSRYYM )
+                           GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                   END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
+      *
       *    テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -2092,6 +2210,55 @@
            .
        910-HKNCOMBI-READ-EXT.
            EXIT.
+      *=== 備考欄の記載追加 by Monma(2017/04/10) start
+      *****************************************************************
+      *    請求管理情報読み込み
+      *****************************************************************
+       900-SEIKYU-READ-SEC         SECTION.
+      *
+           INITIALIZE                  RECE10-REC
+           MOVE    RECE02-KEY          TO  RECE10-KEY
+           MOVE    RECE10-REC          TO  MCPDATA-REC
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    "DBFETCH"           TO  MCP-FUNC
+               MOVE    "tbl_seikyu"        TO  MCP-TABLE
+               MOVE    "key"               TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"         USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+               IF      MCP-RC              =   ZERO
+                   MOVE    ZERO                TO  FLG-RECE10
+                   MOVE    MCPDATA-REC         TO  RECE10-REC
+               ELSE
+                   MOVE    1                   TO  FLG-RECE10
+                   INITIALIZE                  RECE10-REC
+               END-IF
+           ELSE
+               MOVE    1                   TO  FLG-RECE10
+               INITIALIZE                  RECE10-REC
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"            TO  MCP-FUNC
+           MOVE    "tbl_seikyu"        TO  MCP-TABLE
+           MOVE    "key"               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-SEIKYU-READ-EXT.
+           EXIT.
+      *
+      *=== 備考欄の記載追加 by Monma(2017/04/10) end
       *****************************************************************
       *    月末日算出処理
       *****************************************************************
@@ -2275,10 +2442,21 @@
            MOVE    "1900"                  TO  SYS-1900-KANRICD
            MOVE    "*"                     TO  SYS-1900-KBNCD
            MOVE    SPA-HOSPNUM             TO  SYS-1900-HOSPNUM
-           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-STYUKYMD(1:6)
+      *     MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-EDYUKYMD(1:6)
+      *     MOVE    "01"                    TO  SYS-1900-EDYUKYMD(7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
+                                               SYS-1900-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+                                               SYS-1900-EDYUKYMD(1:6)
+           END-IF
            MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
-           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-EDYUKYMD(1:6)
-           MOVE    "01"                    TO  SYS-1900-EDYUKYMD(7:2)
+                                               SYS-1900-EDYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
            MOVE    SYS-1900-REC            TO  MCPDATA-REC
            PERFORM 800-SYSKANRI-READ-SEC
            IF      FLG-SYSKANRI        =   ZERO
@@ -2312,10 +2490,21 @@
            MOVE    "1901"              TO  SYS-1901-KANRICD
            MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1901-KBNCD
            MOVE    SPA-HOSPNUM         TO  SYS-1901-HOSPNUM
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-EDYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1901-EDYUKYMD(7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+                                               SYS-1901-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+                                               SYS-1901-EDYUKYMD(1:6)
+           END-IF
            MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-EDYUKYMD(1:6)
-           MOVE    "01"                TO  SYS-1901-EDYUKYMD(7:2)
+                                           SYS-1901-EDYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
            MOVE    SYS-1901-REC        TO  MCPDATA-REC
            PERFORM 800-SYSKANRI-READ-SEC
            IF      FLG-SYSKANRI        =   ZERO
@@ -2341,10 +2530,21 @@
            MOVE    "1902"              TO  SYS-1902-KANRICD
            MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1902-KBNCD
            MOVE    SPA-HOSPNUM         TO  SYS-1902-HOSPNUM
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-EDYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1902-EDYUKYMD(7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+                                               SYS-1902-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+                                               SYS-1902-EDYUKYMD(1:6)
+           END-IF
            MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-EDYUKYMD(1:6)
-           MOVE    "01"                TO  SYS-1902-EDYUKYMD(7:2)
+                                           SYS-1902-EDYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
            MOVE    SYS-1902-REC        TO  MCPDATA-REC
            PERFORM 800-SYSKANRI-READ-SEC
            IF      FLG-SYSKANRI        =   ZERO
@@ -2371,8 +2571,16 @@
            MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
            MOVE    "1903"              TO  SYS-1903-KANRICD
            MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
-           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+      *     MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Monma(2017/04/10) end
            MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
            MOVE    SYS-1903-REC        TO  MCPDATA-REC
            PERFORM 800-SYSKANRI-READ-SEC
