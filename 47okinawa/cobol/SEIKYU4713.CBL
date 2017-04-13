@@ -21,7 +21,7 @@
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
       *  コンポーネント名  : 沖縄・福祉医療費ＣＳＶ
-      *                      (299)
+      *                      (299,399,281)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  13/10/09    吉川          新規作成
@@ -34,6 +34,8 @@
       * 01.00.04     吉川    17/01/17    事業番号の記載変更
       *                                  自己負担支払額・市町村負担額の変更
       *                                  対象公費はPGオプションから取得する
+      * 01.00.05     吉川    17/04/13    現物給付の制度は円単位で記載
+      *                                  母子父子（399）の制度対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -822,6 +824,11 @@
              WHEN  "299"
       *        こども償還
                MOVE    "1"                 TO  MF100-JIGYO
+      *=== 母子対応 by Yoshikawa(2017/04/13) start
+             WHEN  "399"
+      *        母子父子償還
+               MOVE    "2"                 TO  MF100-JIGYO
+      *=== 母子対応 by Yoshikawa(2017/04/13) end
              WHEN  "281"
       *        こども現物
                MOVE    "6"                 TO  MF100-JIGYO
@@ -1595,12 +1602,22 @@
       *        市町村負担額
                IF  SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
                    IF  IDX  =  1
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) start
+      *               COMPUTE  WRK-SEIKYUGK  =  
+      *                        SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
                      COMPUTE  WRK-SEIKYUGK  =  
-                              SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
+                              SYU-SYUCOMPFTN-ENTANI  -
+                              SYU-KOH-COMPFTN-ENTANI(1)
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) end
                    ELSE
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) start
+      *               COMPUTE  WRK-SEIKYUGK  =  
+      *                        SYU-KOH-COMPFTN(IDX - 1)  -
+      *                        SYU-KOH-COMPFTN(IDX)
                      COMPUTE  WRK-SEIKYUGK  =  
-                              SYU-KOH-COMPFTN(IDX - 1)  -
-                              SYU-KOH-COMPFTN(IDX)
+                              SYU-KOH-COMPFTN-ENTANI(IDX - 1)  -
+                              SYU-KOH-COMPFTN-ENTANI(IDX)
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) end
                    END-IF
                END-IF
       *=== 制度変更対応 by Yoshikawa(2017/01/17) end
