@@ -670,9 +670,12 @@
            PERFORM 100-DBOPEN-SEC
       *
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
-      **    地方公費対象患者用病名ファイル作成
-      *     PERFORM 1001-BYOMEI-HEN-SEC
+      *    プログラムオプション取込み
+           PERFORM 100-OPTION-SELECT-SEC
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
+      *
+      *    地方公費対象患者用病名ファイル作成
+           PERFORM 1001-BYOMEI-HEN-SEC
       *
       *    ステップ管理開始処理
            MOVE    "STS"           TO  SJOBKANRI-MODE
@@ -695,13 +698,10 @@
       **    INIファイル読み込み
       *     PERFORM  110-INI-FILE-SEC
       *    プログラムオプション取込み
-           PERFORM 100-OPTION-SELECT-SEC
-      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
-      *
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) start
-      *    地方公費対象患者用病名ファイル作成
-           PERFORM 1001-BYOMEI-HEN-SEC
+      *     PERFORM 100-OPTION-SELECT-SEC
       *=== 対象公費をPGオプションから取得 by Yoshikawa(2017/01/17) end
+      *=== プログラムオプション対応 by Yoshikawa(2013/10/09) end
       *
       *    システム管理マスタ（医療機関情報）
            PERFORM 120-HOSPINF-GET-SEC
