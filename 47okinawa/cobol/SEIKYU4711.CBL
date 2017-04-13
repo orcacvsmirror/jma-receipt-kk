@@ -36,6 +36,9 @@
       *                                 対象公費はPGオプションから取得する
       *                                 医療機関コード変更時、
       *                                 医療機関コード別の作成処理対応
+      * 01.00.06    吉川    17/04/13    現物給付の制度は円単位で記載
+      *                                 母子父子（399）の制度対応
+      *                                 医療機関情報の取得の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -459,7 +462,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1001-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/01/17) end
@@ -487,7 +493,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1002-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/01/17) end
@@ -816,6 +825,12 @@
       *        こども償還
                MOVE    "1"                 TO  MF100-JIGYO
                MOVE    1                   TO  IDX1
+      *=== 母子対応 by Yoshikawa(2017/04/13) start
+             WHEN  "399"
+      *        母子父子償還
+               MOVE    "2"                 TO  MF100-JIGYO
+               MOVE    2                   TO  IDX1
+      *=== 母子対応 by Yoshikawa(2017/04/13) end
              WHEN  "281"
       *        こども現物
                MOVE    "6"                 TO  MF100-JIGYO
@@ -924,6 +939,11 @@
              WHEN  "1"
                  MOVE    WRK-JIGYO-KENSU(1)
                                        TO  WRK-KENSU
+      *=== 母子対応 by Yoshikawa(2017/04/13) start
+             WHEN  "2"
+                 MOVE    WRK-JIGYO-KENSU(2)
+                                       TO  WRK-KENSU
+      *=== 母子対応 by Yoshikawa(2017/04/13) end
              WHEN  "6"
                  MOVE    WRK-JIGYO-KENSU(3)
                                        TO  WRK-KENSU
@@ -1031,6 +1051,11 @@
                WHEN  "1"
       *          こども償還
                  MOVE    "１"                TO  SC11-JIGYO(IDX1)
+      *=== 母子対応 by Yoshikawa(2017/04/13) start
+               WHEN  "2"
+      *          母子父子償還
+                 MOVE    "２"                TO  SC11-JIGYO(IDX1)
+      *=== 母子対応 by Yoshikawa(2017/04/13) end
                WHEN  "6"
       *          こども現物
                  MOVE    "６"                TO  SC11-JIGYO(IDX1)
@@ -1351,12 +1376,22 @@
       *        市町村負担額
                IF  SYU-KOH-HKNNUM(IDX)  =  WRK-KOHNUM
                    IF  IDX  =  1
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) start
+      *               COMPUTE  WRK-SEIKYUGK  =  
+      *                        SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
                      COMPUTE  WRK-SEIKYUGK  =  
-                              SYU-SYUCOMPFTN  -  SYU-KOH-COMPFTN(1)
+                              SYU-SYUCOMPFTN-ENTANI  -
+                              SYU-KOH-COMPFTN-ENTANI(1)
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) end
                    ELSE
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) start
+      *               COMPUTE  WRK-SEIKYUGK  =  
+      *                        SYU-KOH-COMPFTN(IDX - 1)  -
+      *                        SYU-KOH-COMPFTN(IDX)
                      COMPUTE  WRK-SEIKYUGK  =  
-                              SYU-KOH-COMPFTN(IDX - 1)  -
-                              SYU-KOH-COMPFTN(IDX)
+                              SYU-KOH-COMPFTN-ENTANI(IDX - 1)  -
+                              SYU-KOH-COMPFTN-ENTANI(IDX)
+      *=== 現物給付は円単位で記載 by Yoshikawa(2017/04/13) end
                    END-IF
                END-IF
       *=== 帳票様式の変更 by Yoshikawa(2017/01/17) end
@@ -1924,7 +1959,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
                                                SYS-1900-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1900-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
@@ -1972,7 +2010,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
                                                SYS-1901-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1901-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
@@ -2012,7 +2053,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
                                                SYS-1902-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1902-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
@@ -2050,7 +2094,10 @@
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
            END-IF
            MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/01/17) end
