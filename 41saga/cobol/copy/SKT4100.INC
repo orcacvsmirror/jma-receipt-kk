@@ -19,6 +19,7 @@
       * Maj/Min/Rev  修正者    日付      内容
       *  01.00.01    吉川      08/12/24  特別療養費国保対応
       *  01.00.02    吉川      09/05/15  帳票様式の変更に伴う修正
+      *  01.00.03    萩野      17/04/14  点数の桁数増加
       *****************************************************************
        01  SKT4100.
       *診療年月
@@ -54,7 +55,10 @@
       *日数
                        09  SKT4100-NISSU   PIC  X(05).
       *点数
-                       09  SKT4100-TENSU   PIC  X(09).
+      *=== 桁数増加 by hagino(2017/04/14) start
+      *                 09  SKT4100-TENSU   PIC  X(09).
+                       09  SKT4100-TENSU   PIC  X(10).
+      *=== 桁数増加 by hagino(2017/04/14) end
       *合計
            03  SKT4100-SUM-TBL  OCCURS  2.
       *入院・外来テーブル
@@ -64,13 +68,19 @@
       *日数
                    07  SKT4100-GNISSU      PIC  X(05).
       *点数
-                   07  SKT4100-GTENSU      PIC  X(09).
+      *=== 桁数増加 by hagino(2017/04/14) start
+      *             07  SKT4100-GTENSU      PIC  X(09).
+                   07  SKT4100-GTENSU      PIC  X(10).
+      *=== 桁数増加 by hagino(2017/04/14) end
       *１件あたり
            03  SKT4100-AVG-TBL  OCCURS  2.
       *入院・外来テーブル
                05  SKT4100-ANYUGAI-TBL  OCCURS  2.
       *点数
-                   07  SKT4100-ATENSU      PIC  X(09).
+      *=== 桁数増加 by hagino(2017/04/14) start
+      *             07  SKT4100-ATENSU      PIC  X(09).
+                   07  SKT4100-ATENSU      PIC  X(10).
+      *=== 桁数増加 by hagino(2017/04/14) end
       *県外・県外総件数
            03  SKT4100-GKENGAI             PIC  X(06).
            03  SKT4100-GKENNAI             PIC  X(06).

@@ -18,6 +18,7 @@
       *  コピー句修正履歴
       * Maj/Min/Rev  修正者  日付        内容
       *  01.00.01    吉川    2011/01/12  特別療養費国保対応
+      *  01.00.02    萩野    2017/04/14  点数の桁数増加
       ********************************************************************
         01  SKT4150.
       *ページ番号
@@ -54,7 +55,10 @@
       *日数
                 05  SKT4150-NISSU                    PIC X(05).
       *点数
-                05  SKT4150-TENSU                    PIC X(09).
+      *=== 桁数増加 by hagino(2017/04/14) start
+      *          05  SKT4150-TENSU                    PIC X(09).
+                05  SKT4150-TENSU                    PIC X(10).
+      *=== 桁数増加 by hagino(2017/04/14) end
       *一部負担金
                 05  SKT4150-ITBFTN                   PIC X(09).
       *
@@ -69,7 +73,10 @@
       *日数
                 05  SKT4150-KNISSU                   PIC X(05).
       *点数
-                05  SKT4150-KTENSU                   PIC X(09).
+      *=== 桁数増加 by hagino(2017/04/14) start
+      *          05  SKT4150-KTENSU                   PIC X(09).
+                05  SKT4150-KTENSU                   PIC X(10).
+      *=== 桁数増加 by hagino(2017/04/14) end
       *一部負担金
                 05  SKT4150-KITBFTN                  PIC X(09).
       *患者負担金
@@ -86,7 +93,10 @@
       *日数
                 05  SKT4150-R-KNISSU                 PIC X(05).
       *点数
-                05  SKT4150-R-KTENSU                 PIC X(09).
+      *=== 桁数増加 by hagino(2017/04/14) start
+      *          05  SKT4150-R-KTENSU                 PIC X(09).
+                05  SKT4150-R-KTENSU                 PIC X(10).
+      *=== 桁数増加 by hagino(2017/04/14) end
       *一部負担
                 05  SKT4150-R-KITBFTN                PIC X(09).
       *控除額
