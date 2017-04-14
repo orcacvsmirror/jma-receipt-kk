@@ -99,6 +99,9 @@
       *  01.00.36    吉川    16/11/15    分点かつ高額の判定ミス修正
       *  01.00.37    萩野    17/01/13    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.38    吉川    17/04/13    保険単独分が高額上限に達した場合
+      *                                  印字対象外とするように修正
+      *                                  医療機関情報の取得の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -229,6 +232,9 @@
       *=== 備考欄の記載修正 by hagino(2015/01/28) start
            03  FLG-HKNNUM          PIC 9(01).
       *=== 備考欄の記載修正 by hagino(2015/01/28) end
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) start
+           03  FLG-SYUNOU2      PIC 9(01).
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -359,6 +365,11 @@
            03  WRK-TANSEIDO               PIC X(06).
            03  WRK-KESE                   PIC 9(07).
       *=== 備考欄の記載修正 by hagino(2015/01/28) end
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) start
+           03  WRK-HKNTANDOKU             PIC 9(04).
+           03  WRK-HKNTANDOKU-KIN         PIC 9(08).
+           03  WRK-PATH2                  PIC X(50).
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) end
       *
            03  WRK-MAE-INPUT              PIC X(200).
            03  WRK-OUT-INPUT              PIC X(200).
@@ -496,6 +507,14 @@
       *    収納情報
        01  SYUNOU-REC.
            COPY  "CPSYUNOU.INC".
+      *
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) start
+      *    収納情報２
+       01  SYUNOU2-REC.
+           COPY  "CPSYUNOU.INC"
+                   REPLACING  //SYU//
+                   BY         //SYU2//.
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) end
       *
       *　　保険者情報
        01  HKNJAINF-REC.
@@ -718,7 +737,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
                                                SYS-1001-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1001-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/01/13) end
@@ -748,7 +770,10 @@
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
                                                SYS-1002-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1002-EDYUKYMD(1:6)
            END-IF
       *=== 医療機関コード変更時作成対応 by hagino(2017/01/13) end
@@ -1322,6 +1347,31 @@
            ADD     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
       *=== 月途中の主保険変更はまとめる by Yoshikawa(2016/05/13) end
       *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) end
+      *
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) start
+      *    保険単独分の高額療養費の上限額達成判定
+           IF  MF100-KOGAKU  NOT =  ZERO
+      *        保険単独の保険組合せ番号を取得
+               PERFORM  950-HKNCOMBI-KEY6-READ-SEC
+      *        収納から保険単独分の計算負担金集計
+               IF  RECE02-NYUGAIKBN  =  "1"
+                   MOVE    "key19"             TO  WRK-PATH2
+               ELSE
+                   MOVE    "key41"             TO  WRK-PATH2
+               END-IF
+               PERFORM  960-SYUNOU2-READ-SEC
+      *
+      *        保険単独が限度額に達した場合は印字対象外
+               IF  WRK-HKNTANDOKU-KIN  =  140100
+               OR  WRK-HKNTANDOKU-KIN  =  93000
+               OR  WRK-HKNTANDOKU-KIN  =  44400
+               OR  WRK-HKNTANDOKU-KIN  =  57600
+               OR  WRK-HKNTANDOKU-KIN  =  35400
+               OR  WRK-HKNTANDOKU-KIN  =  24600
+                    MOVE    1                  TO  FLG-ERR
+               END-IF
+           END-IF
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) end
       *
            MOVE     MF100-CITYHKNJANUM TO    WRK-KEY-CITYHKNJANUM
       *
@@ -3145,6 +3195,155 @@ grpsys         CALL    "ORCDBMAIN"         USING   MCPAREA
            EXIT.
       *=== 備考欄の記載修正 by hagino(2015/01/28) end
       *
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) start
+      *****************************************************************
+      *    保険組合せマスター読み込み（key6）
+      *****************************************************************
+       950-HKNCOMBI-KEY6-READ-SEC         SECTION.
+      *
+           INITIALIZE                      HKNCOMBI-REC
+                                           WRK-HKNTANDOKU
+      *
+           MOVE    SPA-HOSPNUM             TO  COMB-HOSPNUM
+           MOVE    MF100-PTID              TO  COMB-PTID
+           MOVE    LNK-PRTKANRI-SRYYM      TO  COMB-TEKSTYMD
+                                               COMB-TEKEDYMD
+           MOVE    "01"                    TO  COMB-TEKSTYMD(7:2)
+                                               COMB-TEKEDYMD(7:2)
+           MOVE    HKNCOMBI-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"          TO  MCP-TABLE
+           MOVE    "key6"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM  955-HKNCOMBI-KEY6-FETCH-SEC
+               PERFORM  UNTIL  FLG-HKNCOMBI  =  1
+      *            保険単独の組み合わせを探す
+                   IF  COMB-KOHID (1)  =  ZERO
+                   AND COMB-KOHID (2)  =  ZERO
+                   AND COMB-KOHID (3)  =  ZERO
+                   AND COMB-KOHID (4)  =  ZERO
+                       MOVE    COMB-HKNCOMBINUM  TO  WRK-HKNTANDOKU
+                       MOVE    1                 TO  FLG-HKNCOMBI
+                   END-IF
+                   PERFORM  955-HKNCOMBI-KEY6-FETCH-SEC
+               END-PERFORM
+           ELSE
+               INITIALIZE                  HKNCOMBI-REC
+               MOVE    1                   TO  FLG-HKNCOMBI
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_hkncombi"          TO  MCP-TABLE
+           MOVE    "key6"                  TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       950-HKNCOMBI-KEY6-READ-EXT.
+           EXIT.
+      *****************************************************************
+      *    保険組合せマスターFETCH（key6）
+      *****************************************************************
+       955-HKNCOMBI-KEY6-FETCH-SEC         SECTION.
+      *
+           MOVE    "tbl_hkncombi"          TO  MCP-TABLE
+           MOVE    "key6"                  TO  MCP-PATHNAME
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    MCPDATA-REC         TO  HKNCOMBI-REC
+               MOVE    ZERO                TO  FLG-HKNCOMBI
+           ELSE
+               INITIALIZE                      HKNCOMBI-REC
+               MOVE    1                   TO  FLG-HKNCOMBI
+           END-IF
+      *
+           .
+       955-HKNCOMBI-KEY6-FETCH-EXT.
+           EXIT.
+      *****************************************************************
+      *  収納情報読み込み
+      *****************************************************************
+       960-SYUNOU2-READ-SEC  SECTION.
+      *
+           INITIALIZE                      SYUNOU2-REC
+                                           FLG-SYUNOU2
+                                           WRK-HKNTANDOKU-KIN
+      *
+           MOVE  SPA-HOSPNUM               TO  SYU2-HOSPNUM
+           MOVE  RECE02-NYUGAIKBN          TO  SYU2-NYUGAIKBN
+           MOVE  RECE02-PTID               TO  SYU2-PTID
+           MOVE  RECE02-SRYYM(1:6)         TO  SYU2-SRYYMD(1:6)
+           MOVE  "__"                      TO  SYU2-SRYYMD(7:2)
+           MOVE  WRK-HKNTANDOKU            TO  SYU2-HKNCOMBINUM
+           MOVE  SYUNOU2-REC               TO  MCPDATA-REC
+           MOVE  "DBSELECT"                TO  MCP-FUNC
+           MOVE  "tbl_syunou"              TO  MCP-TABLE
+           MOVE  WRK-PATH2                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"               USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+             PERFORM  965-SYUNOU2-FETCH-SEC
+             PERFORM  UNTIL  FLG-SYUNOU2  =  1
+      *          主保険の計算負担金集計
+                 ADD  SYU2-SYUCOMPFTN-ENTANI  TO  WRK-HKNTANDOKU-KIN
+      *
+                 PERFORM  965-SYUNOU2-FETCH-SEC
+             END-PERFORM
+           ELSE
+             DISPLAY  "SYUNOU SELECT ERR" 
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_syunou"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       960-SYUNOU2-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    収納読込
+      *****************************************************************
+       965-SYUNOU2-FETCH-SEC  SECTION.
+      *
+           MOVE    "tbl_syunou"            TO  MCP-TABLE
+           MOVE    WRK-PATH2               TO  MCP-PATHNAME
+           MOVE    "DBFETCH"               TO  MCP-FUNC
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+           IF  MCP-RC  =  ZERO
+               MOVE    MCPDATA-REC         TO  SYUNOU2-REC
+               MOVE    ZERO                TO  FLG-SYUNOU2
+           ELSE
+               INITIALIZE                  SYUNOU2-REC
+               MOVE    1                   TO  FLG-SYUNOU2
+           END-IF
+      *
+           .
+       965-SYUNOU2-FETCH-EXT.
+           EXIT.
+      *
+      *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) end
+      *
       *---(01.00.05) LINE ADD START ------------------------------------
       *****************************************************************
       *    医療機関編集情報読み込み
@@ -3166,7 +3365,10 @@ grpsys         CALL    "ORCDBMAIN"         USING   MCPAREA
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
                                                SYS-1900-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1900-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
@@ -3214,7 +3416,10 @@ grpsys         CALL    "ORCDBMAIN"         USING   MCPAREA
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
                                                SYS-1901-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1901-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
@@ -3254,7 +3459,10 @@ grpsys         CALL    "ORCDBMAIN"         USING   MCPAREA
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
                                                SYS-1902-EDYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
                                                SYS-1902-EDYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
@@ -3293,7 +3501,10 @@ grpsys         CALL    "ORCDBMAIN"         USING   MCPAREA
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
            ELSE
-               MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) start
+      *         MOVE    WRK-PARA-STSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+      *=== 医療機関情報の取得の修正 by Yoshikawa(2017/04/13) end
            END-IF
            MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
       *=== 医療機関コード変更時作成対応 by hagino(2017/01/13) end
