@@ -53,6 +53,9 @@
       *  01.00.15    吉川       14/10/27    ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.16    門間       16/02/15    医療機関編集情報への開設者名追加対応
       *  01.00.17    門間       16/10/04    返戻時、再印刷画面のタイトル修正
+      *  01.00.18    萩野       17/04/14    点数欄の印字桁数増加
+      *                                     医療機関コード変更時、
+      *                                     医療機関コード別の作成処理対応
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -213,6 +216,10 @@
       *=== 特別療養費国保対応 by Yoshikawa(2008/12/24) start
            03  WRK-PARA-TOKUBETU   PIC X(01).
       *=== 特別療養費国保対応 by Yoshikawa(2008/12/24) end
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+           03  WRK-PARA-STSRYYM    PIC 9(06).
+           03  WRK-PARA-EDSRYYM    PIC 9(06).
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
       *
       *=== ver4.8対応 by Yoshikawa(2014/10/27) start
       **=== プラグイン対応 by Yoshikawa(2013/02/07) start
@@ -257,6 +264,10 @@
            03  WRK-HEIKIN-Z             PIC ZZZ,ZZZ.Z.
            03  WRK-HEIKIN2              PIC 9(07).
            03  WRK-HEIKIN-Z2            PIC Z,ZZZ,ZZZ.
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+           03  WRK-HEIKIN3              PIC 9(09).
+           03  WRK-HEIKIN-Z3            PIC ZZ,ZZZ,ZZZ.
+      *=== 印字桁数増加 by hagino(2017/04/14) end
            03  WRK-GKENNAI              PIC 9(06).
            03  WRK-GKENGAI              PIC 9(06).
       *
@@ -483,6 +494,10 @@
       *=== 特別療養費国保対応 by Yoshikawa(2008/12/24) start
                                                WRK-PARA-TOKUBETU
       *=== 特別療養費国保対応 by Yoshikawa(2008/12/24) end
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+                                               WRK-PARA-STSRYYM
+                                               WRK-PARA-EDSRYYM
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
                                                RECEERR
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -565,9 +580,18 @@
       *     MOVE    "99999999"          TO  SYS-1001-STYUKYMD
       *     MOVE    "00000000"          TO  SYS-1001-EDYUKYMD
       ***** 05/05/06 INS
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                       TO  SYS-1001-STYUKYMD(1:6)
-                                           SYS-1001-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                                 TO  SYS-1001-STYUKYMD(1:6)
+      *                                     SYS-1001-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
            MOVE    "01"                TO  SYS-1001-STYUKYMD(7:2)
                                            SYS-1001-EDYUKYMD(7:2)
       *****
@@ -599,9 +623,18 @@
       *     MOVE    "99999999"          TO  SYS-1002-STYUKYMD
       *     MOVE    "00000000"          TO  SYS-1002-EDYUKYMD
       ***** 05/05/06 INS
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                       TO  SYS-1002-STYUKYMD(1:6)
-                                           SYS-1002-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                                 TO  SYS-1002-STYUKYMD(1:6)
+      *                                     SYS-1002-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
            MOVE    "01"                TO  SYS-1002-STYUKYMD(7:2)
                                            SYS-1002-EDYUKYMD(7:2)
       *****
@@ -1583,15 +1616,27 @@
                  MOVE  SKT4100TMP-NISSU (IDX2 IDX3)  TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT4100-GNISSU(IDX2 IDX3)
       *    点数
-                 MOVE  SKT4100TMP-TENSU (IDX2 IDX3)  TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4100-GTENSU(IDX2 IDX3)
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+      *           MOVE  SKT4100TMP-TENSU (IDX2 IDX3)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4100-GTENSU(IDX2 IDX3)
+                 MOVE  SKT4100TMP-TENSU (IDX2 IDX3)  TO  WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT4100-GTENSU(IDX2 IDX3)
+      *=== 印字桁数増加 by hagino(2017/04/14) end
       *    １件当り点数
-                 MOVE     ZERO         TO      WRK-HEIKIN2
-                 COMPUTE  WRK-HEIKIN2  ROUNDED =
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+      *           MOVE     ZERO         TO      WRK-HEIKIN2
+      *           COMPUTE  WRK-HEIKIN2  ROUNDED =
+      *                                  SKT4100TMP-TENSU(IDX2 IDX3)
+      *                               /  SKT4100TMP-KENSU(IDX2 IDX3)
+      *           MOVE     WRK-HEIKIN2         TO  WRK-HEIKIN-Z2
+      *           MOVE     WRK-HEIKIN-Z2   TO  SKT4100-ATENSU(IDX2 IDX3)
+                 MOVE     ZERO         TO      WRK-HEIKIN3
+                 COMPUTE  WRK-HEIKIN3  ROUNDED =
                                         SKT4100TMP-TENSU(IDX2 IDX3)
                                      /  SKT4100TMP-KENSU(IDX2 IDX3)
-                 MOVE     WRK-HEIKIN2         TO  WRK-HEIKIN-Z2
-                 MOVE     WRK-HEIKIN-Z2   TO  SKT4100-ATENSU(IDX2 IDX3)
+                 MOVE     WRK-HEIKIN3         TO  WRK-HEIKIN-Z3
+                 MOVE     WRK-HEIKIN-Z3   TO  SKT4100-ATENSU(IDX2 IDX3)
+      *=== 印字桁数増加 by hagino(2017/04/14) end
                END-PERFORM
              END-PERFORM
              MOVE    SKT4100TMP-KENNAI    TO  WRK-Z6
@@ -1668,8 +1713,12 @@
                  MOVE  SKT4100TMP-NISSU (IDX2 IDX3)  TO  WRK-Z5
                  MOVE  WRK-Z5   TO  SKT4100-NISSU(IDX1 IDX2 IDX3)
       *    点数
-                 MOVE  SKT4100TMP-TENSU (IDX2 IDX3)  TO  WRK-Z9
-                 MOVE  WRK-Z9   TO  SKT4100-TENSU(IDX1 IDX2 IDX3)
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+      *           MOVE  SKT4100TMP-TENSU (IDX2 IDX3)  TO  WRK-Z9
+      *           MOVE  WRK-Z9   TO  SKT4100-TENSU(IDX1 IDX2 IDX3)
+                 MOVE  SKT4100TMP-TENSU (IDX2 IDX3)  TO  WRK-Z10
+                 MOVE  WRK-Z10  TO  SKT4100-TENSU(IDX1 IDX2 IDX3)
+      *=== 印字桁数増加 by hagino(2017/04/14) end
                END-PERFORM
              END-PERFORM
       *    一時ファイル読込
@@ -1694,8 +1743,12 @@
                MOVE  WRK-Z5          TO  SKT4100-GKENSU (IDX1 IDX2)
                MOVE  WRK-GNISSU (IDX1 IDX2)  TO  WRK-Z5
                MOVE  WRK-Z5          TO  SKT4100-GNISSU (IDX1 IDX2)
-               MOVE  WRK-GTENSU (IDX1 IDX2)  TO  WRK-Z9
-               MOVE  WRK-Z9          TO  SKT4100-GTENSU (IDX1 IDX2)
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+      *         MOVE  WRK-GTENSU (IDX1 IDX2)  TO  WRK-Z9
+      *         MOVE  WRK-Z9          TO  SKT4100-GTENSU (IDX1 IDX2)
+               MOVE  WRK-GTENSU (IDX1 IDX2)  TO  WRK-Z10
+               MOVE  WRK-Z10         TO  SKT4100-GTENSU (IDX1 IDX2)
+      *=== 印字桁数増加 by hagino(2017/04/14) end
              END-PERFORM
            END-PERFORM
       *    １件あたり処理
@@ -1703,15 +1756,26 @@
                     UNTIL    IDX1  >     2
              PERFORM  VARYING  IDX2  FROM  1  BY  1
                       UNTIL    IDX2  >     2
-               INITIALIZE WRK-HEIKIN2
-               INITIALIZE WRK-HEIKIN-Z2
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+      *         INITIALIZE WRK-HEIKIN2
+      *         INITIALIZE WRK-HEIKIN-Z2
+               INITIALIZE WRK-HEIKIN3
+               INITIALIZE WRK-HEIKIN-Z3
+      *=== 印字桁数増加 by hagino(2017/04/14) end
                DISPLAY "合計点数="  WRK-GTENSU(IDX1 IDX2)
                DISPLAY "合計件数="  WRK-GKENSU(IDX1 IDX2)
-               COMPUTE  WRK-HEIKIN2  ROUNDED =  WRK-GTENSU(IDX1 IDX2)
+      *=== 印字桁数増加 by hagino(2017/04/14) start
+      *         COMPUTE  WRK-HEIKIN2  ROUNDED =  WRK-GTENSU(IDX1 IDX2)
+      *                                       /  WRK-GKENSU(IDX1 IDX2)
+      *         DISPLAY "平均点数="  WRK-HEIKIN2
+      *         MOVE     WRK-HEIKIN2         TO  WRK-HEIKIN-Z2
+      *         MOVE     WRK-HEIKIN-Z2   TO  SKT4100-ATENSU(IDX1 IDX2)
+               COMPUTE  WRK-HEIKIN3  ROUNDED =  WRK-GTENSU(IDX1 IDX2)
                                              /  WRK-GKENSU(IDX1 IDX2)
-               DISPLAY "平均点数="  WRK-HEIKIN2
-               MOVE     WRK-HEIKIN2         TO  WRK-HEIKIN-Z2
-               MOVE     WRK-HEIKIN-Z2   TO  SKT4100-ATENSU(IDX1 IDX2)
+               DISPLAY "平均点数="  WRK-HEIKIN3
+               MOVE     WRK-HEIKIN3         TO  WRK-HEIKIN-Z3
+               MOVE     WRK-HEIKIN-Z3   TO  SKT4100-ATENSU(IDX1 IDX2)
+      *=== 印字桁数増加 by hagino(2017/04/14) end
              END-PERFORM
            END-PERFORM
       *    県内・県外総件数
@@ -2059,6 +2123,17 @@
                MOVE    ZERO                TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+               IF      WRK-PARA-STSRYYM    =   "999999"
+                   CONTINUE
+               ELSE
+                   IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
+                   OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
+                       GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+               END-IF
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
+      *
       *=== オンライン返戻対応 by Yoshikawa(2010/05/17) start
       *        返戻分でオンライン請求は読み飛ばす
                IF      (WRK-PARA-SYOKBN         =  "2")
@@ -2150,6 +2225,17 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+               IF      WRK-PARA-STSRYYM    =   "999999"
+                   CONTINUE
+               ELSE
+                   IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
+                   OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
+                       GO  TO  950-SEIKYU-READ-SEC
+                   END-IF
+               END-IF
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
       *
       *=== オンライン返戻対応 by Yoshikawa(2010/05/17) start
       *        返戻分でオンライン請求は読み飛ばす
@@ -2553,10 +2639,21 @@
            MOVE    "1900"                  TO  SYS-1900-KANRICD
            MOVE    "*"                     TO  SYS-1900-KBNCD
            MOVE    SPA-HOSPNUM             TO  SYS-1900-HOSPNUM
-           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-STYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-STYUKYMD(1:6)
+      *     MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-EDYUKYMD(1:6)
+      *     MOVE    "01"                    TO  SYS-1900-EDYUKYMD(7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
+                                               SYS-1900-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+                                               SYS-1900-EDYUKYMD(1:6)
+           END-IF
            MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
-           MOVE    LNK-PRTKANRI-SRYYM      TO  SYS-1900-EDYUKYMD(1:6)
-           MOVE    "01"                    TO  SYS-1900-EDYUKYMD(7:2)
+                                               SYS-1900-EDYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
            MOVE    SYS-1900-REC            TO  MCPDATA-REC
            PERFORM 910-SYSKANRI-INV-SEC
            IF      FLG-SYSKANRI        =   ZERO
@@ -2590,10 +2687,21 @@
            MOVE    "1901"              TO  SYS-1901-KANRICD
            MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1901-KBNCD
            MOVE    SPA-HOSPNUM         TO  SYS-1901-HOSPNUM
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-EDYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1901-EDYUKYMD(7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+                                               SYS-1901-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+                                               SYS-1901-EDYUKYMD(1:6)
+           END-IF
            MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-EDYUKYMD(1:6)
-           MOVE    "01"                TO  SYS-1901-EDYUKYMD(7:2)
+                                           SYS-1901-EDYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
            MOVE    SYS-1901-REC        TO  MCPDATA-REC
            PERFORM 910-SYSKANRI-INV-SEC
            IF      FLG-SYSKANRI        =   ZERO
@@ -2619,10 +2727,21 @@
            MOVE    "1902"              TO  SYS-1902-KANRICD
            MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1902-KBNCD
            MOVE    SPA-HOSPNUM         TO  SYS-1902-HOSPNUM
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-EDYUKYMD(1:6)
+      *     MOVE    "01"                TO  SYS-1902-EDYUKYMD(7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+                                               SYS-1902-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+                                               SYS-1902-EDYUKYMD(1:6)
+           END-IF
            MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-EDYUKYMD(1:6)
-           MOVE    "01"                TO  SYS-1902-EDYUKYMD(7:2)
+                                           SYS-1902-EDYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
            MOVE    SYS-1902-REC        TO  MCPDATA-REC
            PERFORM 910-SYSKANRI-INV-SEC
            IF      FLG-SYSKANRI        =   ZERO
@@ -2650,8 +2769,16 @@
            MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
            MOVE    "1903"              TO  SYS-1903-KANRICD
            MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
-           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+      *     MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by hagino(2017/04/14) end
            MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
            MOVE    SYS-1903-REC        TO  MCPDATA-REC
            PERFORM 910-SYSKANRI-INV-SEC
