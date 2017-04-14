@@ -35,7 +35,7 @@
         </element>
         <element name="KTENSU" occurs="1">
           <appinfo>
-            <embed object="text" length="9"/>
+            <embed object="text" length="10"/>
           </appinfo>
         </element>
         <element name="KYKZFTN" occurs="1">
@@ -5070,12 +5070,12 @@
         <dia:point val="7.925,5.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,5.24;7.925,5.5925"/>
+        <dia:rectangle val="6.175,5.23119;7.93381,5.61013"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -5322,12 +5322,12 @@
         <dia:point val="7.925,6.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,6.19;7.925,6.5425"/>
+        <dia:rectangle val="6.175,6.18119;7.93381,6.56013"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -5574,12 +5574,12 @@
         <dia:point val="7.925,7.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,7.24;7.925,7.5925"/>
+        <dia:rectangle val="6.175,7.23119;7.93381,7.61013"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -5826,12 +5826,12 @@
         <dia:point val="7.925,8.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,8.19;7.925,8.5425"/>
+        <dia:rectangle val="6.175,8.18119;7.93381,8.56012"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6078,12 +6078,12 @@
         <dia:point val="7.925,9.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,9.24;7.925,9.5925"/>
+        <dia:rectangle val="6.175,9.23119;7.93381,9.61013"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6330,12 +6330,12 @@
         <dia:point val="7.925,10.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,10.19;7.925,10.5425"/>
+        <dia:rectangle val="6.175,10.1812;7.93381,10.5601"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6582,12 +6582,12 @@
         <dia:point val="7.925,11.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,11.24;7.925,11.5925"/>
+        <dia:rectangle val="6.175,11.2312;7.93381,11.6101"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -6834,12 +6834,12 @@
         <dia:point val="7.925,12.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,12.19;7.925,12.5425"/>
+        <dia:rectangle val="6.175,12.1812;7.93381,12.5601"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7086,12 +7086,12 @@
         <dia:point val="7.925,13.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,13.24;7.925,13.5925"/>
+        <dia:rectangle val="6.175,13.2312;7.93381,13.6101"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7338,12 +7338,12 @@
         <dia:point val="7.925,14.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,14.19;7.925,14.5425"/>
+        <dia:rectangle val="6.175,14.1812;7.93381,14.5601"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7590,12 +7590,12 @@
         <dia:point val="7.925,15.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,15.24;7.925,15.5925"/>
+        <dia:rectangle val="6.175,15.2312;7.93381,15.6101"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -7842,12 +7842,12 @@
         <dia:point val="7.925,16.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,16.19;7.925,16.5425"/>
+        <dia:rectangle val="6.175,16.1812;7.93381,16.5601"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
@@ -8094,12 +8094,12 @@
         <dia:point val="7.925,17.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.35,17.24;7.925,17.5925"/>
+        <dia:rectangle val="6.175,17.2312;7.93381,17.6101"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#9,999,999#</dia:string>
+            <dia:string>#99,999,999#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
