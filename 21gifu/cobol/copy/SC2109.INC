@@ -91,5 +91,5 @@
       *=== 月遅れの場合の備考欄の記載修正 by Monma(2017/04/10) start
       *備考欄５
               03  SC09-BIKO-TBL5 OCCURS 10.
-                  05  SC09-BIKO5        PIC  X(16).
+                  05  SC09-BIKO5        PIC  X(22).
       *=== 月遅れの場合の備考欄の記載修正 by Monma(2017/04/10) end

@@ -1211,7 +1211,8 @@
       *             MOVE    WRK-HENYMDG(1:16)
       *                                     TO  SC09-BIKO2(IDX)
                    MOVE    WRK-HENYMDG(1:16)
-                                           TO  SC09-BIKO5(IDX)
+                                           TO  SC09-BIKO5(IDX)(1:16)
+                   MOVE    "ø«Œ≈ ¨"        TO  SC09-BIKO5(IDX)(17:6)
       *=== ∑Ó√Ÿ§Ï§ŒæÏπÁ§Œ»˜πÕÕÛ§Œµ≠∫‹Ω§¿µ by Monma(2017/04/10) end
                END-IF
       *
