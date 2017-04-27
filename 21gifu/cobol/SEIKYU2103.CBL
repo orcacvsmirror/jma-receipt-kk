@@ -62,6 +62,7 @@
       *  01.00.17    門間    17/04/10    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *                                  備考欄の記載追加
+      *  01.00.18    吉川    17/04/27    備考欄に957の場合を追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -903,6 +904,9 @@
                         UNTIL    IDX  >     5
                    IF  RECE10-TOKKI(IDX)  =  "31" OR "32" OR "33" OR
                                              "34" OR "35"
+      *=== 備考欄の記載追加（957） by Yoshikawa(2017/04/27) start
+                                         OR  "17" OR "18" OR "19"
+      *=== 備考欄の記載追加（957） by Yoshikawa(2017/04/27) end
                        MOVE    RECE10-TOKKI(IDX)      TO  MF100-TOKKI
                    END-IF
                END-PERFORM
@@ -1391,6 +1395,18 @@
                    MOVE    WRK-HENYMDG(1:16)
                                            TO  SC03-BIKO(IDX)
                END-IF
+      *
+      *=== 備考欄の記載追加（957） by Yoshikawa(2017/04/27) start
+      *    特定疾病給付対象療養用
+               EVALUATE  MF100-TOKKI
+                 WHEN  "17"
+                   MOVE  "１７上位"        TO  SC03-BIKO2(IDX)
+                 WHEN  "18"
+                   MOVE  "１８一般"        TO  SC03-BIKO2(IDX)
+                 WHEN  "19"
+                   MOVE  "１９低所"        TO  SC03-BIKO2(IDX)
+               END-EVALUATE
+      *=== 備考欄の記載追加（957） by Yoshikawa(2017/04/27) end
       *
       *=== 備考欄の記載追加 by Monma(2017/04/10) start
                IF  MF100-KOGAKU  NOT =  ZERO
