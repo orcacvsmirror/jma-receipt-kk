@@ -68,6 +68,7 @@
       *  01.00.25    門間     17/03/14    帳票様式の変更
       *                                   医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
+      *  01.00.26    門間     17/05/08    公費番号まとめ情報の公費番号の追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -200,6 +201,9 @@
            03  IDZ1            PIC 9(04).
            03  IDZ2            PIC 9(04).
       *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) start
+           03  IDZ3            PIC 9(04).
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -329,7 +333,10 @@
                05  WRK-2007-MEISYO PIC X(44).
                05  WRK-2007-KOH-AREA.
                    07  WRK-2007-KOHNUM
-                                   PIC X(03)   OCCURS  10.
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) start
+      *                             PIC X(03)   OCCURS  10.
+                                   PIC X(03)   OCCURS  30.
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) end
            03  WRK-2007-MAX        PIC 9(03).
       *=== まとめ公費を集計対象とする by Yoshikawa(2015/05/14) end
       *
@@ -709,11 +716,26 @@
                MOVE    MCPDATA-REC         TO  SYS-2007-REC
       *
                MOVE    SYS-2007-MEISYO(1)  TO  WRK-2007-MEISYO(IDX1)
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) start
+               MOVE    ZERO                TO  IDZ3
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) end
                PERFORM VARYING IDX2 FROM    1   BY  1
                        UNTIL   IDX2 >       10
                        OR      SYS-2007-KOHNUM (IDX2)   =   SPACE
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) start
+      *             MOVE    SYS-2007-KOHNUM (IDX2)
+      *                                     TO WRK-2007-KOHNUM(IDX1 IDX2)
+                   ADD     1             TO  IDZ3
                    MOVE    SYS-2007-KOHNUM (IDX2)
-                                           TO WRK-2007-KOHNUM(IDX1 IDX2)
+                                         TO  WRK-2007-KOHNUM(IDX1 IDZ3)
+               END-PERFORM
+               PERFORM VARYING IDX2 FROM    1   BY  1
+                       UNTIL   IDX2 >       20
+                       OR      SYS-2007-KOHNUM1(IDX2)   =   SPACE
+                   ADD     1             TO  IDZ3
+                   MOVE    SYS-2007-KOHNUM1(IDX2)
+                                         TO  WRK-2007-KOHNUM(IDX1 IDZ3)
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) end
                END-PERFORM
       *
                MOVE    "tbl_syskanri"      TO  MCP-TABLE
@@ -1227,12 +1249,18 @@
              PERFORM VARYING IDZ1    FROM    1   BY  1
                      UNTIL   IDZ1    >       WRK-2007-MAX
                PERFORM VARYING IDZ2  FROM    1   BY  1
-                       UNTIL   IDZ2  >       10
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) start
+      *                 UNTIL   IDZ2  >       10
+                       UNTIL   IDZ2  >       20
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) end
                        OR      WRK-2007-KOHNUM(IDZ1 IDZ2)  =  SPACE
                  IF  WRK-KOHNUM  =  WRK-2007-KOHNUM(IDZ1 IDZ2)
                    MOVE    WRK-2007-KOHNUM(IDZ1 1)
                                                   TO  WRK-HEN-KOHNUM
-                   MOVE    10                     TO  IDZ2
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) start
+      *             MOVE    10                     TO  IDZ2
+                   MOVE    20                     TO  IDZ2
+      *=== 公費番号まとめ追加 by Monma(2017/05/08) end
                    MOVE    WRK-2007-MAX           TO  IDZ1
                  END-IF
                END-PERFORM
