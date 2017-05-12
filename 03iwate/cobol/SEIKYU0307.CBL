@@ -53,6 +53,7 @@
       *                                   医療機関コード別の作成処理対応
       *  01.00.14     萩野    2017/03/08  医療機関情報の取得の修正
       *                                   受給者番号順１１桁対応
+      *  01.00.15     萩野    2017/05/12  開設者名を記載しないようにする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1650,7 +1651,9 @@
       *    開設者名
       *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
       *     MOVE    SYS-1001-KAISETUNAME    TO  SC07-KAISETU
-           MOVE    WRK-KAISETUNAME         TO  SC07-KAISETU
+      *=== 開設者名を記載しない by hagino(2017/05/12) start
+      *     MOVE    WRK-KAISETUNAME         TO  SC07-KAISETU
+      *=== 開設者名を記載しない by hagino(2017/05/12) end
       *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *
       *    給付割合
@@ -1999,7 +2002,9 @@
       *    開設者名
       *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) start
       *     MOVE    SYS-1001-KAISETUNAME    TO  SC08-KAISETU
-           MOVE    WRK-KAISETUNAME         TO  SC08-KAISETU
+      *=== 開設者名を記載しない by hagino(2017/05/12) start
+      *     MOVE    WRK-KAISETUNAME         TO  SC08-KAISETU
+      *=== 開設者名を記載しない by hagino(2017/05/12) end
       *=== 医療機関編集情報へ開設者名追加 by Yoshikawa(2016/04/14) end
       *
       *    給付割合
