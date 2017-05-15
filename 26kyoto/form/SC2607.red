@@ -115,7 +115,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="文字" visible="true" active="true">
+  <dia:layer name="文字" visible="true">
     <dia:object type="Standard - Text" version="1" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="8.775,4.17021"/>
@@ -8200,7 +8200,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="背景" visible="true">
+  <dia:layer name="背景" visible="true" active="true">
     <dia:object type="Standard - Box" version="0" id="O242">
       <dia:attribute name="obj_pos">
         <dia:point val="1.99647,7.70318"/>
@@ -9174,6 +9174,24 @@
       <dia:attribute name="conn_endpoints">
         <dia:point val="17.0619,14.4905"/>
         <dia:point val="19.0071,13.45"/>
+      </dia:attribute>
+      <dia:attribute name="numcp">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="line_width">
+        <dia:real val="0.02"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - Line" version="0" id="O296">
+      <dia:attribute name="obj_pos">
+        <dia:point val="17.05,15.4875"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="17.0366,14.4928;19.0134,15.5009"/>
+      </dia:attribute>
+      <dia:attribute name="conn_endpoints">
+        <dia:point val="17.05,15.4875"/>
+        <dia:point val="19,14.5062"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="0"/>
