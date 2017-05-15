@@ -102,6 +102,8 @@
       *  01.00.38    吉川    17/04/13    保険単独分が高額上限に達した場合
       *                                  印字対象外とするように修正
       *                                  医療機関情報の取得の修正
+      *  01.00.39    吉川    17/05/15    難病＋９５７かつ分点の場合の
+      *                                  市町村負担額の計算修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1324,6 +1326,9 @@
            IF  (MF100-KOGAKU    NOT =  ZERO)
       *=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) end
            AND (MF100-TOTALTEN  NOT =  MF100-FUKUSITEN)
+      *=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) start
+           AND (RECE02-FLG(4)  =  ZERO)
+      *=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) end
                COMPUTE WRK-KEISAN = (MF100-TOTALTEN - MF100-FUKUSITEN)
                                     * RECE02-KYURATE / 10
                COMPUTE WRK-SEIKYUGK-G2  =  RECE10-FTNMONEY(1)
