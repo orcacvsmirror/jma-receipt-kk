@@ -120,6 +120,7 @@
       *  01.00.43    吉川    17/03/10    高額４回目で月途中の市町村変更の場合
       *                                  福祉医療費請求額はそれぞれの市町村で
       *                                  案分計算をするように修正
+      *  01.00.44    門間    17/05/16    備考欄への「途中福祉」の記載修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -246,6 +247,9 @@
            03  FLG-ZENKOHI    PIC 9(01).
            03  FLG-SYUNOU2    PIC 9(01).
       *=== 福祉医療費請求額の修正 by Yoshikawa(2016/09/05) end
+      *=== 備考欄への「途中福祉」の記載修正 by Monma(2017/05/16) start
+           03  FLG-TFUKUSHI   PIC 9(01).
+      *=== 備考欄への「途中福祉」の記載修正 by Monma(2017/05/16) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -1897,6 +1901,7 @@
        200114-TEINEN-CHK-EXT.
            EXIT.
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *
       *=== 難病＋高額の修正 by Yoshikawa(2015/01/29) start
       *****************************************************************
       *    限度額認定証所持チェック処理
@@ -2389,7 +2394,16 @@
       *=== 備考の高額区分の記載修正 by Yoshikawa(2015/06/10) end
       *
       *=== 途中福祉は備考欄に記載 by Yoshikawa(2016/10/28) start
-           IF  MF100-H-TOTALTEN  NOT =  MF100-TOTALTEN
+      *
+      *=== 備考欄への「途中福祉」の記載修正 by Monma(2017/05/16) start
+      *     IF  MF100-H-TOTALTEN  NOT =  MF100-TOTALTEN
+      *
+      *    途中福祉チェック
+           PERFORM 800-TFUKUSHI-CHK-SEC
+      *
+           IF    ( MF100-H-TOTALTEN  NOT =  MF100-TOTALTEN )
+             AND ( FLG-TFUKUSHI          =  1 )
+      *=== 備考欄への「途中福祉」の記載修正 by Monma(2017/05/16) end
                IF  SC03-BIKO4(IDX)  NOT =  SPACE
                    STRING  SC03-BIKO4(IDX)  DELIMITED BY SPACE
                            "、"             DELIMITED BY SIZE
@@ -4117,6 +4131,61 @@
        800-TAISYOKOHI-CHK-EXT.
            EXIT.
       *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) end
+      *
+      *=== 備考欄への「途中福祉」の記載修正 by Monma(2017/05/16) start
+      *****************************************************************
+      *    途中福祉チェック処理
+      *****************************************************************
+       800-TFUKUSHI-CHK-SEC                SECTION.
+      *
+           INITIALIZE                      PTKOHINF-REC
+                                           FLG-TFUKUSHI
+      *
+           MOVE    MF100-HOSPNUM           TO  PTKOH-HOSPNUM
+           MOVE    MF100-PTID              TO  PTKOH-PTID
+           MOVE    MF100-KOHID             TO  PTKOH-KOHID
+           MOVE    PTKOHINF-REC            TO  MCPDATA-REC
+           MOVE    "DBSELECT"              TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           IF      MCP-RC   =   ZERO
+               MOVE    "DBFETCH"             TO  MCP-FUNC
+               MOVE    "tbl_ptkohinf"        TO  MCP-TABLE
+               MOVE    "key"                 TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"           USING
+                                             MCPAREA
+                                             MCPDATA-REC
+                                             SPA-AREA
+      *
+               IF      MCP-RC   =   ZERO
+                   MOVE    MCPDATA-REC         TO  PTKOHINF-REC
+                   IF  ( MF100-SRYYM     =  PTKOH-TEKSTYMD(1:6) )
+                   AND ( PTKOH-TEKSTYMD(7:2)  NOT =  "01" )
+                       MOVE    1                 TO  FLG-TFUKUSHI
+                   END-IF
+               ELSE
+                   INITIALIZE                  PTKOHINF-REC
+               END-IF
+      *
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"         TO  MCP-FUNC
+           MOVE    "tbl_ptkohinf"          TO  MCP-TABLE
+           MOVE    "key"                   TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"             USING
+                                           MCPAREA
+                                           MCPDATA-REC
+                                           SPA-AREA
+      *
+           .
+       800-TFUKUSHI-CHK-EXT.
+           EXIT.
+      *=== 備考欄への「途中福祉」の記載修正 by Monma(2017/05/16) end
       *
       *****************************************************************
       *    一時ファイル読込
