@@ -2028,17 +2028,13 @@
            INITIALIZE                      SYS-1903-REC
            MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
            MOVE    "1903"              TO  SYS-1903-KANRICD
-           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
-      *=== 医療機関コード変更時作成対応 by hagino(2017/06/07) start
-      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
-      *     MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1900-PRTKBN(17) TO  SYS-1903-KBNCD
            IF  WRK-PARA-STSRYYM  =  "999999"
                MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
            ELSE
                MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
            END-IF
            MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
-      *=== 医療機関コード変更時作成対応 by hagino(2017/06/07) end
            MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
            MOVE    SYS-1903-REC        TO  MCPDATA-REC
            PERFORM 910-SYSKANRI-KEY10-SEC
