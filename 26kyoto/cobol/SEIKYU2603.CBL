@@ -80,6 +80,8 @@
       *  01.00.31    吉川    17/01/11    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.32    萩野    17/05/15    医療機関情報の取得の修正
+      *  01.00.33    吉川    17/06/12    公費の助成がない場合は印字しない
+      *                                  （全国公費併用時のみ）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1106,6 +1108,9 @@
                MOVE    "key25"                 TO  WRK-PATH
       *---(01.00.01) LINE ADD END   ------------------------------------
            END-IF
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
+           MOVE     1                      TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
            PERFORM  920-SYUNOU-SET-SEC
       *
            COMPUTE  WRK-ETCKOHFTN-G2  =  WRK-ETCKOHFTN-G1 + 0.5
@@ -1969,6 +1974,9 @@
       *
            MOVE    ZERO    TO    WRK-ETCKOHFTN
                                  WRK-KOHTENSU
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
+                                 FLG-HEIYOU
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -2008,6 +2016,9 @@
                                                TO  WRK-ETCKOHFTN
                    END-IF  
                    MOVE    SYU-TOTAL-HKNTEN    TO  WRK-KOHTENSU
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
+                   MOVE    1                   TO  FLG-HEIYOU
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
                END-IF
       *
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -2025,8 +2036,33 @@
                END-IF
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) end
       *
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
+      *    計算負担金に差がある場合、地方公費の助成があったと判断する
+      *    （全国公費併用時のみ判定）
+               IF  (FLG-ERR                  =  1)
+               AND (SYU-KOH-HKNNUM(IDX)      =  WRK-KOHNUM)
+                 IF     IDX                 =  1
+                   IF  SYU-SYUCOMPFTN-ENTANI
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE     ZERO          TO  FLG-ERR
+                   END-IF
+                 ELSE
+                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
+                     MOVE     ZERO          TO  FLG-ERR
+                   END-IF
+                 END-IF
+               END-IF
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
+      *
            END-PERFORM
       *
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
+      *    全国公費を助成していない場合は助成がなくても記載する
+           IF  FLG-HEIYOU  =  ZERO
+               MOVE     ZERO                   TO  FLG-ERR
+           END-IF
+      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
       *
            ADD     WRK-ETCKOHFTN   TO  WRK-ETCKOHFTN-G1
            ADD     WRK-KOHTENSU    TO  WRK-KOHTENSU-G
