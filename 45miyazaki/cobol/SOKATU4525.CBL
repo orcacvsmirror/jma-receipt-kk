@@ -603,14 +603,14 @@
       *                                     TO WRK-2007-KOHNUM(IDX IDY)
                    ADD     1               TO  IDZ3
                    MOVE    SYS-2007-KOHNUM (IDY)
-                                         TO  WRK-2007-KOHNUM(IDX1 IDZ3)
+                                         TO  WRK-2007-KOHNUM(IDX IDZ3)
                END-PERFORM
                PERFORM VARYING IDX2 FROM    1   BY  1
                        UNTIL   IDX2 >       20
                        OR      SYS-2007-KOHNUM1(IDX2)   =   SPACE
                    ADD     1               TO  IDZ3
                    MOVE    SYS-2007-KOHNUM1(IDX2)
-                                         TO  WRK-2007-KOHNUM(IDX1 IDZ3)
+                                         TO  WRK-2007-KOHNUM(IDX IDZ3)
       *=== 公費番号まとめ追加 by Monma(2017/06/06) end
                END-PERFORM
       *
