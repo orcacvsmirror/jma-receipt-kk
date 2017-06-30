@@ -82,6 +82,8 @@
       *  01.00.32    萩野    17/05/15    医療機関情報の取得の修正
       *  01.00.33    吉川    17/06/12    公費の助成がない場合は印字しない
       *                                  （全国公費併用時のみ）
+      *  01.00.34    吉川    17/06/30    患者負担無しの全国公費を
+      *                                  併用した場合のみ印字対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2019,6 +2021,14 @@
       *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
                    MOVE    1                   TO  FLG-HEIYOU
       *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
+      *
+      *=== 負担無の全国公費は対象外 by Yoshikawa2017/06/30) start
+      *            患者負担無しの全国公費は印字対象外とする
+                   IF  (FLG-ERR                  =  1)
+                   AND (SYU-KOH-COMPFTN-ENTANI(IDX)  NOT =  ZERO)
+                       MOVE     ZERO           TO  FLG-ERR
+                   END-IF
+      *=== 負担無の全国公費は対象外 by Yoshikawa2017/06/30) end
                END-IF
       *
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -2036,24 +2046,26 @@
                END-IF
       *=== 上限額未満は１円単位 by Yoshikawa(2012/06/14) end
       *
-      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
-      *    計算負担金に差がある場合、地方公費の助成があったと判断する
-      *    （全国公費併用時のみ判定）
-               IF  (FLG-ERR                  =  1)
-               AND (SYU-KOH-HKNNUM(IDX)      =  WRK-KOHNUM)
-                 IF     IDX                 =  1
-                   IF  SYU-SYUCOMPFTN-ENTANI
-                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
-                     MOVE     ZERO          TO  FLG-ERR
-                   END-IF
-                 ELSE
-                   IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
-                                        >  SYU-KOH-COMPFTN-ENTANI(IDX)
-                     MOVE     ZERO          TO  FLG-ERR
-                   END-IF
-                 END-IF
-               END-IF
-      *=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
+      *=== 負担無の全国公費は対象外 by Yoshikawa2017/06/30) start
+      **=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) start
+      **    計算負担金に差がある場合、地方公費の助成があったと判断する
+      **    （全国公費併用時のみ判定）
+      *         IF  (FLG-ERR                  =  1)
+      *         AND (SYU-KOH-HKNNUM(IDX)      =  WRK-KOHNUM)
+      *           IF     IDX                 =  1
+      *             IF  SYU-SYUCOMPFTN-ENTANI
+      *                                  >  SYU-KOH-COMPFTN-ENTANI(IDX)
+      *               MOVE     ZERO          TO  FLG-ERR
+      *             END-IF
+      *           ELSE
+      *             IF  SYU-KOH-COMPFTN-ENTANI(IDX - 1)
+      *                                  >  SYU-KOH-COMPFTN-ENTANI(IDX)
+      *               MOVE     ZERO          TO  FLG-ERR
+      *             END-IF
+      *           END-IF
+      *         END-IF
+      **=== 公費の助成なしは印字しない by Yoshikawa(2017/06/12) end
+      *=== 負担無の全国公費は対象外 by Yoshikawa2017/06/30) end
       *
            END-PERFORM
       *
