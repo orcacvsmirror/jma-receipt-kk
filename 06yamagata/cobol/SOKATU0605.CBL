@@ -36,6 +36,8 @@
       *  01.00.06    吉川    2012/12/21  医療機関情報編集対応
       *  01.00.07    吉川    2014/10/03  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.08    萩野    2015/10/08  医療機関編集情報への開設者名追加対応
+      *  01.00.09    吉川    2017/07/14  医療機関コード変更時、
+      *                                  医療機関コード別の作成処理対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -137,6 +139,10 @@
            03  WRK-PARA-PAGE       PIC 9(10).
            03  WRK-PARA-SYOKBN     PIC X(01).
            03  WRK-PARA-SYOKBN1    PIC X(01).
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+           03  WRK-PARA-STSRYYM    PIC 9(06).
+           03  WRK-PARA-EDSRYYM    PIC 9(06).
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -385,6 +391,10 @@
                                                WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/02/26) end
                                                WRK-PARA-SYOKBN
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+                                               WRK-PARA-STSRYYM
+                                               WRK-PARA-EDSRYYM
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
                                                RECEERR
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
@@ -442,9 +452,18 @@
            INITIALIZE                  SYS-1001-REC
            MOVE    "1001"              TO  SYS-1001-KANRICD
            MOVE    "*"                 TO  SYS-1001-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                       TO  SYS-1001-STYUKYMD(1:6)
-                                           SYS-1001-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                                 TO  SYS-1001-STYUKYMD(1:6)
+      *                                     SYS-1001-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
            MOVE    "01"                TO  SYS-1001-STYUKYMD(7:2)
                                            SYS-1001-EDYUKYMD(7:2)
            MOVE    SPA-HOSPNUM         TO  SYS-1001-HOSPNUM
@@ -469,9 +488,18 @@
            INITIALIZE                  SYS-1002-REC
            MOVE    "1002"              TO  SYS-1002-KANRICD
            MOVE    "*"                 TO  SYS-1002-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM(1:6)
-                                       TO  SYS-1002-STYUKYMD(1:6)
-                                           SYS-1002-EDYUKYMD(1:6)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM(1:6)
+      *                                 TO  SYS-1002-STYUKYMD(1:6)
+      *                                     SYS-1002-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           END-IF
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
            MOVE    "01"                TO  SYS-1002-STYUKYMD(7:2)
                                            SYS-1002-EDYUKYMD(7:2)
            MOVE    SPA-HOSPNUM         TO  SYS-1002-HOSPNUM
@@ -1408,6 +1436,17 @@
                MOVE    ZERO            TO  FLG-RECE10
                MOVE    MCPDATA-REC         TO  RECE10-REC
       *
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+               IF      WRK-PARA-STSRYYM    =   "999999"
+                   CONTINUE
+               ELSE
+                   IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
+                   OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
+                       GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+               END-IF
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
+      *
       *=== オンライン返戻対応 by Yoshikawa(2010/07/02) start
       *        返戻分でオンライン請求は読み飛ばす
                IF      (WRK-PARA-SYOKBN         =  "2")
@@ -1502,9 +1541,17 @@
            INITIALIZE                  SYS-1900-REC
            MOVE    "1900"          TO  SYS-1900-KANRICD
            MOVE    "*"             TO  SYS-1900-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM
-                                   TO  SYS-1900-STYUKYMD (1:6)
-           MOVE    "01"            TO  SYS-1900-STYUKYMD (7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM
+      *                             TO  SYS-1900-STYUKYMD (1:6)
+      *     MOVE    "01"            TO  SYS-1900-STYUKYMD (7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"            TO  SYS-1900-STYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
            MOVE    SYS-1900-STYUKYMD
                                    TO  SYS-1900-EDYUKYMD
            MOVE    SPA-HOSPNUM     TO  SYS-1900-HOSPNUM
@@ -1544,9 +1591,17 @@
            MOVE    "1901"          TO  SYS-1901-KANRICD
            MOVE    SYS-1900-PRTKBN(17)
                                    TO  SYS-1901-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM
-                                   TO  SYS-1901-STYUKYMD (1:6)
-           MOVE    "01"            TO  SYS-1901-STYUKYMD (7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM
+      *                             TO  SYS-1901-STYUKYMD (1:6)
+      *     MOVE    "01"            TO  SYS-1901-STYUKYMD (7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"            TO  SYS-1901-STYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
            MOVE    SYS-1901-STYUKYMD
                                    TO  SYS-1901-EDYUKYMD
            MOVE    SPA-HOSPNUM     TO  SYS-1901-HOSPNUM
@@ -1575,9 +1630,17 @@
            MOVE    "1902"          TO  SYS-1902-KANRICD
            MOVE    SYS-1900-PRTKBN(17)
                                    TO  SYS-1902-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM
-                                   TO  SYS-1902-STYUKYMD (1:6)
-           MOVE    "01"            TO  SYS-1902-STYUKYMD (7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM
+      *                             TO  SYS-1902-STYUKYMD (1:6)
+      *     MOVE    "01"            TO  SYS-1902-STYUKYMD (7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"            TO  SYS-1902-STYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
            MOVE    SYS-1902-STYUKYMD
                                    TO  SYS-1902-EDYUKYMD
            MOVE    SPA-HOSPNUM     TO  SYS-1902-HOSPNUM
@@ -1606,8 +1669,16 @@
            MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
            MOVE    "1903"              TO  SYS-1903-KANRICD
            MOVE    SYS-1900-PRTKBN(17) TO  SYS-1903-KBNCD
-           MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
-           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) start
+      *     MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD (1:6)
+      *     MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                TO  SYS-1903-STYUKYMD(7:2)
+      *=== 医療機関コード変更時作成対応 by Yoshikawa(2017/07/14) end
            MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
            MOVE    SYS-1903-REC        TO  MCPDATA-REC
            PERFORM 910-SYSKANRI-KEY10-SEC
