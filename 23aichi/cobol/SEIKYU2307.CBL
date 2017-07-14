@@ -104,6 +104,9 @@
       *                                  医療機関情報の取得の修正
       *  01.00.39    吉川    17/05/15    難病＋９５７かつ分点の場合の
       *                                  市町村負担額の計算修正
+      *  01.00.40    吉川    17/07/14    入院の場合、分点時の高額療養費の
+      *                                  計算方法を元に戻す
+      *                                  不要なDISPLAY文削除
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1318,23 +1321,25 @@
       *=== 長期の判定不具合修正 by hagino(2014/05/15) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *
-      *=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) start
-      *    高額療養費を算定かつ分点時、市町村負担額は総点数に対しての
-      *    高額療養費から保険単独時の窓口負担額を減算した値を求める
-      *=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) start
-      *     IF  (MF100-KOGAKU    NOT =  SPACE)
-           IF  (MF100-KOGAKU    NOT =  ZERO)
-      *=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) end
-           AND (MF100-TOTALTEN  NOT =  MF100-FUKUSITEN)
-      *=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) start
-           AND (RECE02-FLG(4)  =  ZERO)
-      *=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) end
-               COMPUTE WRK-KEISAN = (MF100-TOTALTEN - MF100-FUKUSITEN)
-                                    * RECE02-KYURATE / 10
-               COMPUTE WRK-SEIKYUGK-G2  =  RECE10-FTNMONEY(1)
-                                        -  WRK-KEISAN
-           END-IF
-      *=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) end
+      *=== 入院は分点の高額計算を戻す by Yoshikawa(2017/07/14) start
+      **=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) start
+      **    高額療養費を算定かつ分点時、市町村負担額は総点数に対しての
+      **    高額療養費から保険単独時の窓口負担額を減算した値を求める
+      **=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) start
+      **     IF  (MF100-KOGAKU    NOT =  SPACE)
+      *     IF  (MF100-KOGAKU    NOT =  ZERO)
+      **=== 分点かつ高額の判定ミス修正 by Yoshikawa(2016/11/15) end
+      *     AND (MF100-TOTALTEN  NOT =  MF100-FUKUSITEN)
+      **=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) start
+      *     AND (RECE02-FLG(4)  =  ZERO)
+      **=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) end
+      *         COMPUTE WRK-KEISAN = (MF100-TOTALTEN - MF100-FUKUSITEN)
+      *                              * RECE02-KYURATE / 10
+      *         COMPUTE WRK-SEIKYUGK-G2  =  RECE10-FTNMONEY(1)
+      *                                  -  WRK-KEISAN
+      *     END-IF
+      **=== 分点時の高額療養費計算修正 by Yoshikawa(2016/09/12) end
+      *=== 入院は分点の高額計算を戻す by Yoshikawa(2017/07/14) end
       *
       *=== 一宮市の市町村負担額欄記載修正 by Yoshikawa(2012/05/17) start
       *     MOVE     WRK-SEIKYUGK-G2   TO    MF100-SEIKYUGK
@@ -1644,9 +1649,7 @@
            MOVE  HKNJA-HKNJANAME        TO  SC07-CITYNAME
       *
       *    合計件数・合計ページ数
-           DISPLAY "識別フラグ="  MF100-SKBFLG
            IF    MF100-SKBFLG  =  ZERO
-             DISPLAY "合計件数="      MF100-GKENSU
              MOVE    MF100-GKENSU     TO  WRK-GKENSU
              DIVIDE  MF100-GKENSU     BY  25
                      GIVING               WRK-GPAGE
@@ -2627,7 +2630,6 @@
              NOT AT  END
                ADD   1                   TO  CNT-MF100
                MOVE  MF100-CITYHKNJANUM  TO  KEY-N-CITYNUM
-               DISPLAY "READ-OK" MF100-SKBFLG
            END-READ
            .
        900-MF100-READ-EXT.
@@ -2769,9 +2771,6 @@
                          END-IF
                      END-PERFORM 
                    END-IF
-                   DISPLAY "患者番号=" RECE02-PTNUM
-                           "負担者番号=" RECE02-KOHFTNJANUM(1)
-                           "保険者番号=" RECE02-HKNJANUM
       *
                    IF      FLG-ERR           =   1
                      GO  TO  900-KOHSKY-READ-SEC
