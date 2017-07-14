@@ -5,7 +5,7 @@ PREFNAME=hokkaido
 PROGRAMID=SOKATU0100
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0100"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保総括表作成（北海道）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
