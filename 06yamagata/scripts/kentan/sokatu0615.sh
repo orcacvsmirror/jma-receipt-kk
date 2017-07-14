@@ -5,7 +5,7 @@ PREFNAME=yamagata
 PROGRAMID=SOKATU0615
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0615"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    広域連合・診療報酬請求書（山形）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
