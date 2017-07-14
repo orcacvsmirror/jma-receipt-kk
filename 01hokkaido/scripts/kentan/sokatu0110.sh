@@ -5,7 +5,7 @@ PREFNAME=hokkaido
 PROGRAMID=SOKATU0110
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0110"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    柜瘦ˇ壳闻鼠椒懒滇今∈颂长苹∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
