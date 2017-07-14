@@ -104,6 +104,7 @@
       *                                  医療機関情報の取得の修正
       *  01.00.39    吉川    17/05/15    難病＋９５７かつ分点の場合の
       *                                  市町村負担額の計算修正
+      *  01.00.40    吉川    17/07/14    不要なDISPLAY文削除
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1643,9 +1644,7 @@
            MOVE  HKNJA-HKNJANAME        TO  SC09-CITYNAME
       *
       *    合計件数・合計ページ数
-           DISPLAY "識別フラグ="  MF100-SKBFLG
            IF    MF100-SKBFLG  =  ZERO
-             DISPLAY "合計件数="      MF100-GKENSU
              MOVE    MF100-GKENSU     TO  WRK-GKENSU
              DIVIDE  MF100-GKENSU     BY  25
                      GIVING               WRK-GPAGE
@@ -2758,9 +2757,6 @@
                          END-IF
                      END-PERFORM 
                    END-IF
-                   DISPLAY "患者番号=" RECE02-PTNUM
-                           "負担者番号=" RECE02-KOHFTNJANUM(1)
-                           "保険者番号=" RECE02-HKNJANUM
       *
                    IF      FLG-ERR           =   1
                      GO  TO  900-KOHSKY-READ-SEC
