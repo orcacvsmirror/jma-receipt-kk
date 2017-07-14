@@ -5,7 +5,7 @@ PREFNAME=aichi
 PROGRAMID=SOKATU2315
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2315"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    広域連合・診療報酬請求書（愛知）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
