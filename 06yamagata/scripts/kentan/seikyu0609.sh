@@ -5,7 +5,7 @@ PREFNAME=yamagata
 PROGRAMID=SEIKYU0609
 LOG_FILE="/var/log/jma-receipt/${14}seikyu0609"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    地方公費作成（山形・複写式レセプト）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)

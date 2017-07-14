@@ -5,7 +5,7 @@ PREFNAME=yamagata
 PROGRAMID=SEIKYU0611
 LOG_FILE="/var/log/jma-receipt/${14}seikyu0611"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    孟数给锐侯喇∈怀妨ˇ省汇板闻锐ＣＳＶ∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
