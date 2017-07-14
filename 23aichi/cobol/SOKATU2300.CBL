@@ -52,6 +52,7 @@
       *  01.00.20    萩野     17/01/13    医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
       *  01.00.21    吉川     17/04/13    医療機関情報の取得の修正
+      *  01.00.22    吉川     17/07/14    不要なDISPLAY文削除
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1252,7 +1253,6 @@
                AT  END
                 MOVE  1  TO  FLG-PRINT
              END-READ
-             DISPLAY "リード1" FLG-PRINT
            END-PERFORM
       *
            .
@@ -1377,12 +1377,10 @@
       *
       *公費件数
            MOVE  SUM-GKOHKENSU   TO  WRK-Z11
-           DISPLAY "SUM-GKOHKENSU=" SUM-GKOHKENSU 
            MOVE  WRK-Z11        TO  SKT2300-GKOHKENSU
                                     SKT2300-KOHKENSU
       *福祉件数
            MOVE  SUM-GFUKUKENSU  TO  WRK-Z11
-           DISPLAY "SUM-GFUKUKENSU=" SUM-GFUKUKENSU
            MOVE  WRK-Z11        TO  SKT2300-GFUKUKENSU
                                     SKT2300-FUKUKENSU
            .

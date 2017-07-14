@@ -47,6 +47,7 @@
       *  01.00.14   萩野     2017/01/13  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.15    吉川    2017/04/13  医療機関情報の取得の修正
+      *  01.00.16    吉川    2017/07/14  不要なDISPLAY文削除
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1606,8 +1607,6 @@
       *        キーに県番号を格納
                MOVE    RECE10-HKNJANUM(1:4)  TO  KEY-N-HKNJANUM
                ADD     1                   TO  CNT-RECE10   
-      *         
-               DISPLAY "PTNUM=" RECE10-PTNUM 
       *         
            ELSE
                MOVE    HIGH-VALUE      TO  KEY-NEW

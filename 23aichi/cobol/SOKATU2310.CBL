@@ -65,6 +65,7 @@
       *  01.00.24    萩野     17/01/13    医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
       *  01.00.25    吉川     17/04/13    医療機関情報の取得の修正
+      *  01.00.26    吉川     17/07/14    不要なDISPLAY文削除
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1677,7 +1678,6 @@
       *****************************************************************
        333-PRINT-OUT-SEC                SECTION.
       *
-           DISPLAY  "PRINT"
            INITIALIZE                  ORCSPRTAREA
            MOVE    "INS"               TO  SPRT-MODE
            MOVE    LNK-PRTKANRI-RENNUM TO  SPRT-RENNUM
