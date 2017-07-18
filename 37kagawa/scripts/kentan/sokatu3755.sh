@@ -5,7 +5,7 @@ PREFNAME=kagawa
 PROGRAMID=SOKATU3755
 LOG_FILE="/var/log/jma-receipt/${15}sokatu3755"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    弓拌息圭ˇ壳闻鼠椒懒滇今∈贯李∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
