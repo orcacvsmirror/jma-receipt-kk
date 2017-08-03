@@ -1392,7 +1392,7 @@
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
       ***** 05/06/09 UPD
       *     MOVE    "1"                 TO  SPRT-SITEKBN
-           MOVE    "2"                 TO  SPRT-SITEKBN
+      *     MOVE    "2"                 TO  SPRT-SITEKBN
       *****
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
