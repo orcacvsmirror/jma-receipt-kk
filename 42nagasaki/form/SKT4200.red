@@ -3308,12 +3308,12 @@
         <dia:point val="14.823,12.7738"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.6268,12.4738;17.0192,12.8163"/>
+        <dia:rectangle val="12.7118,12.4652;16.9428,12.8334"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#10万点以上明細書件数(再掲)#</dia:string>
+            <dia:string>#8万点以上明細書件数(再掲)#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Takao明朝" style="0" name="Courier"/>
