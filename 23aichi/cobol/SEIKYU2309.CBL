@@ -105,6 +105,7 @@
       *  01.00.39    µÈÀî    17/05/15    ÆñÉÂ¡Ü£¹£µ£·¤«¤ÄÊ¬ÅÀ¤Î¾ì¹ç¤Î
       *                                  »ÔÄ®Â¼ÉéÃ´³Û¤Î·×»»½¤Àµ
       *  01.00.40    µÈÀî    17/07/14    ÉÔÍ×¤ÊDISPLAYÊ¸ºï½ü
+      *  01.00.41    Ìç´Ö    17/08/02    È÷¹Í¤Î¿ÇÎÅÇ¯·î¤ÏÏÂÎñ¤Çµ­ºÜ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1839,17 +1840,37 @@
       *
              IF    LNK-PRTKANRI-SRYYM  NOT  =  MF100-SRYYM
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) start
-               STRING    MF100-SRYYM(1:4)    DELIMITED BY SIZE
-                         "Ç¯"                DELIMITED BY SIZE
-                         MF100-SRYYM(5:2)    DELIMITED BY SIZE
-                         "·î"                DELIMITED BY SIZE
-                         INTO                WRK-HENYMDG
+      *=== ¿ÇÎÅÇ¯·î¤òÏÂÎñ¤Ø½¤Àµ by Monma(2017/08/02) start
+      *         STRING    MF100-SRYYM(1:4)    DELIMITED BY SIZE
+      *                   "Ç¯"                DELIMITED BY SIZE
+      *                   MF100-SRYYM(5:2)    DELIMITED BY SIZE
+      *                   "·î"                DELIMITED BY SIZE
+      *                   INTO                WRK-HENYMDG
+      *         END-STRING
+      *
+               INITIALIZE                  STS-AREA-DAY
+               INITIALIZE                  LNK-DAY1-AREA
+               MOVE    "11"            TO  LNK-DAY1-IRAI
+               MOVE    MF100-SRYYM     TO  LNK-DAY1-YMD(1:6)
+               MOVE    "01"            TO  LNK-DAY1-YMD(7:2)
+               CALL    "ORCSDAY"       USING  STS-AREA-DAY
+                                              LNK-DAY1-AREA
+      *
+               STRING  LNK-DAY1-GENKIGO    DELIMITED BY SIZE
+                       LNK-DAY1-YMD(3:2)   DELIMITED BY SIZE
+                       "."                 DELIMITED BY SIZE
+                       LNK-DAY1-YMD(5:2)   DELIMITED BY SIZE
+                       INTO  WRK-HENYMDG
                END-STRING
+      *=== ¿ÇÎÅÇ¯·î¤òÏÂÎñ¤Ø½¤Àµ by Monma(2017/08/02) end
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) end
                IF  SC09-BIKO2(IDX)  =  SPACE
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) start
       *           MOVE  MF100-SRYYM      TO  SC09-BIKO2(IDX)
-                 MOVE  WRK-HENYMDG(1:10) TO  SC09-BIKO2(IDX)
+      *=== ¿ÇÎÅÇ¯·î¤òÏÂÎñ¤Ø½¤Àµ by Monma(2017/08/02) start
+      *           MOVE  WRK-HENYMDG(1:10) TO  SC09-BIKO2(IDX)
+                 MOVE  WRK-HENYMDG(1:6)  TO  SC09-BIKO2(IDX)
+      *=== ¿ÇÎÅÇ¯·î¤òÏÂÎñ¤Ø½¤Àµ by Monma(2017/08/02) end
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) end
                ELSE
                  MOVE    SC09-BIKO2(IDX) TO  WRK-BIKO
@@ -1857,7 +1878,10 @@
                            ","          DELIMITED BY SIZE
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) start
       *                     MF100-SRYYM  DELIMITED BY SIZE
-                           WRK-HENYMDG(1:10)
+      *=== ¿ÇÎÅÇ¯·î¤òÏÂÎñ¤Ø½¤Àµ by Monma(2017/08/02) start
+      *                     WRK-HENYMDG(1:10)
+                           WRK-HENYMDG(1:6)
+      *=== ¿ÇÎÅÇ¯·î¤òÏÂÎñ¤Ø½¤Àµ by Monma(2017/08/02) end
                                         DELIMITED BY SIZE
       *=== ¿ÇÎÅÇ¯·î¤Î°õ»ú½¤Àµ by Yoshikawa(2013/07/08) end
                            INTO         SC09-BIKO2(IDX)
