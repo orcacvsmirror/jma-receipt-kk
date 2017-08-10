@@ -84,6 +84,7 @@
       *                                  （全国公費併用時のみ）
       *  01.00.34    吉川    17/06/30    患者負担無しの全国公費を
       *                                  併用した場合のみ印字対象外とする
+      *  01.00.35    萩野    17/08/10    平成２９年８月から高額療養費の限度額を変更。
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1298,8 +1299,12 @@
            AND  RECE02-ZAITAKU    =   SPACE
       *
              IF  RECE02-FLG (2)  =  1
-               IF  MF100-ETCKOHFTN  >  12000
-                 MOVE  12000              TO  MF100-ETCKOHFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) start
+      *         IF  MF100-ETCKOHFTN  >  12000
+      *           MOVE  12000              TO  MF100-ETCKOHFTN
+               IF  MF100-ETCKOHFTN  >  14000
+                 MOVE  14000              TO  MF100-ETCKOHFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) end
                END-IF
       *
       *        低所得・低年金チェック
