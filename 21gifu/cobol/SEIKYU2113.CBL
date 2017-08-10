@@ -39,6 +39,7 @@
       *  01.00.06    吉川    16/06/07    対象公費はPGオプションから取得する
       *  01.00.07    門間    17/04/10    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.08    萩野    17/08/10    平成２９年８月から高額療養費の限度額を変更。
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -924,8 +925,12 @@
                                  END-IF
       *                        一般
                                WHEN  OTHER
-                                 IF  RECE02-FTNMONEY(1)  >=  44400
-                                   MOVE    44400       TO  MF100-ITBFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) start
+      *                           IF  RECE02-FTNMONEY(1)  >=  44400
+      *                             MOVE    44400       TO  MF100-ITBFTN
+                                 IF  RECE02-FTNMONEY(1)  >=  57600
+                                   MOVE    57600       TO  MF100-ITBFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) end
                                  END-IF
                              END-EVALUATE
                            END-IF
@@ -934,8 +939,12 @@
                          ELSE
       *                    現役並み所得者
                            IF  RECE02-KYURATE  =  30
-                             IF  RECE02-FTNMONEY(1)  >=  44400
-                               MOVE    44400           TO  MF100-ITBFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) start
+      *                       IF  RECE02-FTNMONEY(1)  >=  44400
+      *                         MOVE    44400           TO  MF100-ITBFTN
+                             IF  RECE02-FTNMONEY(1)  >=  57600
+                               MOVE    57600           TO  MF100-ITBFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) end
                              END-IF
                            ELSE
       *                      低所得・低年金
@@ -945,8 +954,12 @@
                                END-IF
       *                      一般
                              ELSE
-                               IF  RECE02-FTNMONEY(1)  >=  12000
-                                 MOVE    12000         TO  MF100-ITBFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) start
+      *                         IF  RECE02-FTNMONEY(1)  >=  12000
+      *                           MOVE    12000         TO  MF100-ITBFTN
+                               IF  RECE02-FTNMONEY(1)  >=  14000
+                                 MOVE    14000         TO  MF100-ITBFTN
+      *=== 高額療養費の限度額を変更 by hagino(2017/08/10) end
                                END-IF
                              END-IF
                            END-IF
