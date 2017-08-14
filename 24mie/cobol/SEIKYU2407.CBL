@@ -57,6 +57,8 @@
       *  01.00.16    萩野    17/03/08    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.17    吉川    17/06/14    平成２７年１月改正対応
+      *  01.00.18    吉川    17/08/14    「公費・長一部負担額」欄は
+      *                                  患者負担がない場合はゼロと記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -263,6 +265,9 @@
            03  WRK-Z4           PIC ZZZZ.
            03  WRK-Z5           PIC Z,ZZZ.
            03  WRK-Z6           PIC ZZ,ZZZ.
+      *=== 一部負担がない場合はゼロ記載 by Yoshikawa(2017/08/14) start
+           03  WRK-Z6-9         PIC ZZ,ZZ9.
+      *=== 一部負担がない場合はゼロ記載 by Yoshikawa(2017/08/14) end
            03  WRK-Z7           PIC ZZZ,ZZZ.
            03  WRK-Z9           PIC Z,ZZZ,ZZZ.
            03  WRK-Z12          PIC ZZZ,ZZZ,ZZZ.
@@ -1584,8 +1589,18 @@
              MOVE  WRK-Z7               TO  SC07-ETENSU(IDX1)
       *
       *    公費・長期一部負担額
-             MOVE  MF100-TAHOFTN        TO  WRK-Z6
-             MOVE  WRK-Z6               TO  SC07-EFTNMONEY(IDX1)
+      *=== 一部負担がない場合はゼロ記載 by Yoshikawa(2017/08/14) start
+      *       MOVE  MF100-TAHOFTN        TO  WRK-Z6
+      *       MOVE  WRK-Z6               TO  SC07-EFTNMONEY(IDX1)
+             IF  MF100-TAHO  NOT =  SPACE
+             OR  MF100-TYOKI  =  1
+                 MOVE  MF100-TAHOFTN    TO  WRK-Z6-9
+                 MOVE  WRK-Z6-9         TO  SC07-EFTNMONEY(IDX1)
+             ELSE
+                 MOVE  MF100-TAHOFTN    TO  WRK-Z6
+                 MOVE  WRK-Z6           TO  SC07-EFTNMONEY(IDX1)
+             END-IF
+      *=== 一部負担がない場合はゼロ記載 by Yoshikawa(2017/08/14) end
       *
       *    食事療養費（保険請求分）
              MOVE  MF100-SHOKUJIRYOYOHI
