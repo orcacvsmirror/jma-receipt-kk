@@ -5,7 +5,7 @@ PREFNAME=nagasaki
 PROGRAMID=SOKATU4210
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4210"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保・診療報酬請求書（長崎）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
