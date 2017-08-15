@@ -56,6 +56,7 @@
       *  01.00.18    吉川    16/12/07    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *                                  公費番号まとめ情報の公費番号の追加
+      *  01.00.19    吉川    17/08/15    ginbee対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1533,7 +1534,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -1782,7 +1785,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -2015,7 +2020,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA

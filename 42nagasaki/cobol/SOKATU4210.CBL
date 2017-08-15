@@ -61,6 +61,7 @@
       *  01.00.19    門間    17/08/02    公費番号まとめ情報の公費番号の追加
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *                                  ginbee対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1876,7 +1877,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
+      *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -2115,7 +2118,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
+      *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -2316,7 +2321,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
+      *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -2572,7 +2579,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
+      *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA

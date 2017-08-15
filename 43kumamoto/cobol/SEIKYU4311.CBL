@@ -55,6 +55,7 @@
       *  01.00.15    吉川    16/12/07    対象公費はPGオプションから取得する
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.16    吉川    17/08/15    ginbee対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1157,7 +1158,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.01) LINE ADD START ------------------------------------

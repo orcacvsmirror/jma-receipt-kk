@@ -47,6 +47,7 @@
       *  01.00.10    吉川    14/10/09  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.11    萩野    14/12/05  返戻時、再印刷画面のタイトル修正
       *  01.00.12    門間    16/03/08  医療機関編集情報への開設者名追加対応
+      *  01.01.13    吉川    17/08/15  ginbee対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1252,7 +1253,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== ginbee対応 by Yoshikawa(2017/08/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.02) LINE ADD START ------------------------------------
