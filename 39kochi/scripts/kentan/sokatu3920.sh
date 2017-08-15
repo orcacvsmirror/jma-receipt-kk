@@ -5,7 +5,7 @@ PREFNAME=kochi
 PROGRAMID=SOKATU3920
 LOG_FILE="/var/log/jma-receipt/${15}sokatu3920"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保・診療報酬請求書（高知）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
