@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 山梨・複写式電子レセプト
+      *  コンポーネント名  : 山梨・複写式電子レセプト（ginbee対応）
       *                      (143)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -47,6 +47,7 @@
       *                                  患者負担がない分も集計されるのを修正
       *  01.00.08    吉川    15/09/15    国保分が記録されない事があるのを修正
       *                                  （COMMAND-PARAM桁数を増やす）
+      *  01.00.09    吉川    17/08/10    ginbee用に再作成
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -54,31 +55,12 @@
        INPUT-OUTPUT  SECTION.
        FILE-CONTROL.
       *
-      *    レセプト電算ファイル
-           SELECT  RECEDI-FILE     ASSIGN  RECEDI-PATH
-                                   ORGANIZATION    IS  LINE
-                                                       SEQUENTIAL
-                                   FILE    STATUS  IS  STS-RECEDI.
-      *
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *    社保レセプト電算ファイル
-           SELECT  SYARECED-FILE   ASSIGN  SYARECED-PATH
-                                   ORGANIZATION    IS  LINE
-                                                       SEQUENTIAL
-                                   FILE    STATUS  IS  STS-SYARECED.
-      *    国保レセプト電算ファイル
-           SELECT  KORECED-FILE    ASSIGN  KORECED-PATH
-                                   ORGANIZATION    IS  LINE
-                                                       SEQUENTIAL
-                                   FILE    STATUS  IS  STS-KORECED.
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-      *
       *    請求書用ファイル
-           SELECT  MF101-FILE      ASSIGN    MF101PARA
+           SELECT  MF100-FILE      ASSIGN    MF100PARA
                                    ORGANIZATION    IS  INDEXED
                                    ACCESS  MODE    IS  DYNAMIC
-                                   RECORD  KEY     IS  MF101-KEY
-                                   FILE    STATUS  IS  STS-MF101.
+                                   RECORD  KEY     IS  MF100-KEY
+                                   FILE    STATUS  IS  STS-MF100.
 006900*    エラーファイル
            SELECT  RECEERR-FILE ASSIGN  RECEERR
                                 FILE    STATUS  IS  STS-RECEERR.
@@ -86,23 +68,9 @@
        DATA  DIVISION.
        FILE  SECTION.
       *
-      *    レセプト電算ファイル
-       FD  RECEDI-FILE.
-       01  RECEDI-REC         PIC X(2500).
-      *     
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *    社保レセプト電算ファイル
-       FD  SYARECED-FILE.
-       01  SYARECED-REC         PIC X(2500).
-      *
-      *    国保レセプト電算ファイル
-       FD  KORECED-FILE.
-       01  KORECED-REC          PIC X(2500).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-      *
       *    集計ファイル
-       FD  MF101-FILE.
-       01  MF101-REC.
+       FD  MF100-FILE.
+       01  MF100-REC.
            COPY  "SEI1905.INC".
       *
 006900*    エラーファイル
@@ -115,43 +83,10 @@
       *
            COPY  "CPCOMMONDAT2.INC"
                    REPLACING  //RECE01//
-                   BY         //MF101//.
+                   BY         //MF100//.
       *
       *    エラーファイル 名称領域
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     COPY    "CPERRFL.INC"    REPLACING  //ERRFLPARA//
-      *                              BY         //RECEERR//.
            COPY  "CPRECEERR.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *
-      *    レセプト電算ファイル
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      * 01  RECEDI-PATH.
-      *     03  FILLER                PIC X(09) VALUE "/var/tmp/".
-      *     03  FILE-HOSPNUM          PIC 9(02).
-      *     03  FILLER                PIC X(15) VALUE "RECEDEN-TMP.CSV".
-       01  RECEDI-PATH               PIC X(1024).
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *    社保レセプト電算ファイル
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      * 01  SYARECED-PATH.
-      *     03  FILLER              PIC X(09) VALUE "/var/tmp/".
-      *     03  SYARECED-HOSPNUM    PIC 9(02).
-      *     03  FILLER              PIC X(18) VALUE "SYARECEDEN-TMP.CSV".
-       01  SYARECED-PATH             PIC X(1024).
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *
-      *    国保レセプト電算ファイル
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      * 01  KORECED-PATH.
-      *     03  FILLER              PIC X(09) VALUE "/var/tmp/".
-      *     03  KORECED-HOSPNUM     PIC 9(02).
-      *     03  FILLER              PIC X(17) VALUE "KORECEDEN-TMP.CSV".
-       01  KORECED-PATH              PIC X(1024).
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    対象公費領域
        01  TAISYO-DAT.
@@ -161,40 +96,26 @@
       *
       *    スパ領域
        01  STS-AREA.
-           03  STS-RECEDI            PIC X(02).
-           03  STS-RECEDO            PIC X(02).
-           03  STS-MF101             PIC X(02).
+           03  STS-MF100             PIC X(02).
            03  STS-RECEERR           PIC X(02).
            03  STS-RECE              PIC X(02).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-           03  STS-SYARECED          PIC X(02).
-           03  STS-KORECED           PIC X(02).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    フラグ領域
        01  FLG-AREA.
            03  FLG-PTINF             PIC 9(01).
            03  FLG-END               PIC 9(01).
            03  FLG-ERR               PIC 9(01).
-           03  FLG-MF101             PIC 9(01).
+           03  FLG-MF100             PIC 9(01).
            03  FLG-RECE10            PIC 9(01).
-           03  FLG-RECEDI            PIC 9(01).
            03  FLG-PRINT             PIC 9(01).
-           03  FLG-CSVEND            PIC 9(01).
            03  FLG-SYSKANRI          PIC 9(01).
-           03  FLG-WRITE             PIC 9(01).
            03  FLG-PRGOPTION         PIC 9(01).
            03  FLG-OK                PIC 9(01).
            03  FLG-TAISYOKOHI        PIC 9(01).
            03  FLG-TAISYO            PIC 9(01).
            03  FLG-BTPARA            PIC 9(01).
            03  FLG-SYORI             PIC 9(01).
-           03  FLG-EDIT              PIC 9(01).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-           03  FLG-SYARECED          PIC 9(01).
-           03  FLG-KORECED           PIC 9(01).
-           03  FLG-OUTPUT            PIC 9(01).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+           03  FLG-RECEDEN           PIC 9(01).
       *
       *    添字領域
        01  IDX-AREA.
@@ -216,6 +137,8 @@
            03  WRK-PARA-HOSPNUM      PIC 9(02).
            03  WRK-PARA-PAGE         PIC 9(10).
            03  WRK-PARA-SYORIFLG     PIC X(01).
+           03  WRK-PARA-STSRYYM      PIC 9(06).
+           03  WRK-PARA-EDSRYYM      PIC 9(06).
       *
       *    一時領域
        01  WRK-AREA.
@@ -231,6 +154,9 @@
            03  WRK-Z9                PIC Z,ZZZ,ZZZ.
            03  WRK-SRYYMWH           PIC X(16).
            03  WRK-SEIYMDWH          PIC X(22).
+           03  WRK-HENYMD-R.
+               05  WRK-HENYMD-FIL    PIC 9(01).
+               05  WRK-HENYMD        PIC 9(07).
            03  WRK-HENYMDG           PIC X(22).
            03  WRK-SYMD.
                05  WRK-SYY           PIC 9(04).
@@ -248,38 +174,24 @@
            03  WRK-HKNJANUM          PIC X(05).
            03  WRK-KOBETUCITYNUM     PIC X(03).
            03  WRK-PRTID             PIC X(20).
-           03  WRK-RECENUM           PIC 9(06).
            03  WRK-KOHNUM            PIC X(03).
-           03  WRK-TEISYUTUSAKI      PIC 9(01).
-           03  WRK-CHARCNT           PIC 9(02).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     03  WRK-GTENSU            PIC 9(10).
-      *     03  WRK-GKENSU            PIC 9(06).
-           03  WRK-GOKEI-TBL.
-               05  WRK-GTENSU        PIC 9(10).
-               05  WRK-GKENSU        PIC 9(06).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-           03  WRK-FILEPATH          PIC X(50).
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
            03  WRK-FTNJANUM          PIC X(20).
            03  WRK-JKYSNUM           PIC X(20).
            03  WRK-SIKIBETU          PIC X(02).
            03  WRK-TEKIYO            PIC X(76).
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-           03  WRK-SITEI             PIC X(01).
            03  WRK-SYORI             PIC 9(01).
-           03  WRK-INPUTREC          PIC X(2500).
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
-           03  WRK-PTNUM             PIC X(20).
-           03  WRK-SRYYM             PIC X(06).
-           03  WRK-HKNJANUM-KEY      PIC X(08).
-           03  WRK-RECESYUBETU       PIC X(04).
-      *
-           03  WRK-RE-RECORD.
-               05  WRK-RE-KOUMOKU    PIC X(100) OCCURS 45.
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
+           03  WRK-CNT               PIC 9(02).
+           03  WRK-FTNKBN            PIC X(01).
+      *    マルチボリューム識別情報
+           03  WRK-VOLNUM            PIC 9(02).
+      *    レセプト番号
+           03  WRK-RECENUM           PIC 9(06).
+      *    請求年月（和暦）
+           03  WRK-SEIYM             PIC 9(05).
+      *    右づめ編集用
+           03  WRK-HENKAN            PIC X(20).
+           03  WRK-LENGTH            PIC 9(02).
+           03  WRK-HENSYU            PIC X(20).
       *
       *    文字変換
            03  WRK-MAE-INPUT         PIC X(200).
@@ -307,12 +219,31 @@
            03  WRK-PRGID             PIC X(25).
            03  WRK-KBNCD             PIC X(16).
       *
+      *    医療機関情報
+           03  WRK-HOSPNAME          PIC X(100).
+           03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
+               05  WRK-HOSPNAME1     PIC X(50).
+               05  WRK-HOSPNAME2     PIC X(50).
+           03  WRK-HOSPADRS          PIC X(100).
+           03  WRK-HOSPADRS-R        REDEFINES   WRK-HOSPADRS.
+               05  WRK-HOSPADRS1     PIC X(50).
+               05  WRK-HOSPADRS2     PIC X(50).
+           03  WRK-HOSPTEL           PIC X(15).
+           03  WRK-KAISETUNAME       PIC X(80).
+           
+       01  SUM-AREA                                VALUE   ZERO.
+           03  SUM-TOTALKENSU        PIC 9(06).
+           03  SUM-TOTALTEN          PIC 9(10).
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-RECE02            PIC 9(06).
-           03  CNT-MF101             PIC 9(06).
+           03  CNT-MF100             PIC 9(06).
            03  CNT-PAGE              PIC 9(03).
            03  CNT-OUT               PIC 9(06).
+           03  CNT-RECEDEN           PIC 9(06).
+           03  CNT-SYAHO             PIC 9(06).
+           03  CNT-KOKUHO            PIC 9(06).
       *
        01  TABLE-AREA.
            03  TBL-PARA-OCC    OCCURS  100.
@@ -325,56 +256,6 @@
       *
        01  WRK-CONS-PARA-MAX   PIC 9(03)   VALUE   100.
       *
-      *    レセ電ワークテーブル
-       01  TBL-RECEDATA-AREA.
-           03  TBL-RECEDATA1         PIC X(100).
-           03  TBL-RECEDATA2         PIC X(100).
-           03  TBL-RECEDATA3         PIC X(100).
-           03  TBL-RECEDATA4         PIC X(100).
-           03  TBL-RECEDATA5         PIC X(100).
-           03  TBL-RECEDATA6         PIC X(100).
-           03  TBL-RECEDATA7         PIC X(100).
-           03  TBL-RECEDATA8         PIC X(100).
-           03  TBL-RECEDATA9         PIC X(100).
-           03  TBL-RECEDATA10        PIC X(100).
-           03  TBL-RECEDATA11        PIC X(100).
-           03  TBL-RECEDATA12        PIC X(100).
-           03  TBL-RECEDATA13        PIC X(100).
-           03  TBL-RECEDATA14        PIC X(100).
-           03  TBL-RECEDATA15        PIC X(100).
-           03  TBL-RECEDATA16        PIC X(100).
-           03  TBL-RECEDATA17        PIC X(100).
-           03  TBL-RECEDATA18        PIC X(100).
-           03  TBL-RECEDATA19        PIC X(100).
-           03  TBL-RECEDATA20        PIC X(100).
-           03  TBL-RECEDATA21        PIC X(100).
-           03  TBL-RECEDATA22        PIC X(100).
-           03  TBL-RECEDATA23        PIC X(100).
-           03  TBL-RECEDATA24        PIC X(100).
-           03  TBL-RECEDATA25        PIC X(100).
-           03  TBL-RECEDATA26        PIC X(100).
-           03  TBL-RECEDATA27        PIC X(100).
-           03  TBL-RECEDATA28        PIC X(100).
-           03  TBL-RECEDATA29        PIC X(100).
-           03  TBL-RECEDATA30        PIC X(100).
-           03  TBL-RECEDATA31        PIC X(100).
-           03  TBL-RECEDATA32        PIC X(100).
-           03  TBL-RECEDATA33        PIC X(100).
-           03  TBL-RECEDATA34        PIC X(100).
-           03  TBL-RECEDATA35        PIC X(100).
-           03  TBL-RECEDATA36        PIC X(100).
-           03  TBL-RECEDATA37        PIC X(100).
-           03  TBL-RECEDATA38        PIC X(100).
-           03  TBL-RECEDATA39        PIC X(100).
-           03  TBL-RECEDATA40        PIC X(100).
-           03  TBL-RECEDATA41        PIC X(100).
-           03  TBL-RECEDATA42        PIC X(100).
-           03  TBL-RECEDATA43        PIC X(100).
-           03  TBL-RECEDATA44        PIC X(100).
-           03  TBL-RECEDATA45        PIC X(100).
-       01  TBL-RECEDATA-R         REDEFINES   TBL-RECEDATA-AREA.
-           03  TBL-RECEDATA          PIC X(100)  OCCURS 45.
-      *
       *    DB参照用
            COPY    "COMMON-SPA".
       *  
@@ -385,10 +266,8 @@
            03  WRK-KAIGYO             PIC X(01)   VALUE   X"0D".
       *    改行コード（ＥＵＣ）
            03  WRK-KAIGYO-LF          PIC X(01)   VALUE   X"0A".
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
       *    山梨コメント
            03  WRK-CONS-COMMENT PIC X(16) VALUE  "●山梨県自動還付".
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
       *
       *****************************************************************
       *    ファイルレイアウト　領域
@@ -402,6 +281,18 @@
       *
       *    診療科目情報情報
            COPY    "CPSK1005.INC".
+      *
+      *    医療機関編集情報
+           COPY    "CPSK1900.INC".
+      *
+      *    医療機関名称編集情報
+           COPY    "CPSK1901.INC".
+      *
+      *    医療機関住所編集情報
+           COPY    "CPSK1902.INC".
+      *
+      *    医療機関住所編集情報（２）
+           COPY    "CPSK1903.INC".
       *
       *    ジョブ管理マスタ
        01  JOBKANRI-REC.
@@ -418,6 +309,9 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *    レセプト電算
+           COPY    "CPRECEDEN.INC".
       *
       *    プログラムオプション
        01  PRGOPTION-REC.
@@ -458,18 +352,13 @@
       *    ＣＳＶ管理ＤＢ制御サブ
            COPY    "CPORCSCSVINFO.INC".
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
       *    一時ファイル名編集
            COPY    "CPORCSGETTEMP.INC".
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       ****************************************************************
        LINKAGE  SECTION.
        01  COMMAND-PARAM.
-      *=== COMMAND PARAM桁数を増やす by Yoshikawa(2015/09/15) start
-      *     02  FILLER  PIC X(256).
-           02  FILLER  PIC X(300).
-      *=== COMMAND PARAM桁数を増やす by Yoshikawa(2015/09/15) end
+           02  FILLER  PIC X(256).
       *****************************************************************
       *
        PROCEDURE  DIVISION
@@ -501,12 +390,7 @@
            INITIALIZE  IDX-AREA
            INITIALIZE  SPA-AREA
            INITIALIZE  TAISYO-DAT
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
            INITIALIZE  RECEERR
-           INITIALIZE  RECEDI-PATH
-           INITIALIZE  SYARECED-PATH
-           INITIALIZE  KORECED-PATH
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
            DISPLAY "START"
            PERFORM 100-DBOPEN-SEC
@@ -527,14 +411,12 @@
                                                WRK-PARA-SHELLID
                                                WRK-PARA-HOSPNUM
                                                WRK-PARA-SYORIFLG
+                                               WRK-PARA-STSRYYM
+                                               WRK-PARA-EDSRYYM
                                                RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-                                               RECEDI-PATH
-                                               SYARECED-PATH
-                                               KORECED-PATH
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
            END-UNSTRING
            MOVE    WRK-PARA-HOSPNUM    TO  SPA-HOSPNUM
+           MOVE    ZERO                TO  WRK-VOLNUM
       *
       *    ステップ開始処理
            MOVE    "STS"           TO  SJOBKANRI-MODE
@@ -572,37 +454,30 @@
                    MOVE    LNK-DAY2-EDTYMD3    TO  WRK-SEIYMDWH
            END-IF
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     MOVE    "MF101ZZ"                   TO  MF101PARA-FILE-ID
-      *     MOVE    LNK-PRTKANRI-TERMID(1:16)   TO  MF101PARA-TERMID
-      *     MOVE    WRK-PARA-HOSPNUM            TO  MF101PARA-HOSPNUM
            INITIALIZE                     SGETTEMP-AREA
       *
-           MOVE  WRK-PARA-HOSPNUM     TO  MF101PARA-HOSPNUM
-           MOVE  "MF101ZZ"            TO  MF101PARA-FILE-ID
-           MOVE  LNK-PRTKANRI-TERMID  TO  MF101PARA-TERMID
+           MOVE  WRK-PARA-HOSPNUM     TO  MF100PARA-HOSPNUM
+           MOVE  "MF100ZZ"            TO  MF100PARA-FILE-ID
+           MOVE  LNK-PRTKANRI-TERMID  TO  MF100PARA-TERMID
       *
-           MOVE  MF101PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
+           MOVE  MF100PARA-BASENAME   TO  SGETTEMP-BASENAMES (1)
            MOVE  RECEERR              TO  SGETTEMP-BASENAMES (2)
-           MOVE  RECEDI-PATH          TO  SGETTEMP-BASENAMES (3)
-           MOVE  SYARECED-PATH        TO  SGETTEMP-BASENAMES (4)
-           MOVE  KORECED-PATH         TO  SGETTEMP-BASENAMES (5)
            CALL  "ORCSGETTEMP"        USING
                                       SGETTEMP-AREA
-           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF101PARA-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  MF100PARA-FULLNAME
            MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
-           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEDI-PATH
-           MOVE  SGETTEMP-FULLNAMES (4)  TO  SYARECED-PATH
-           MOVE  SGETTEMP-FULLNAMES (5)  TO  KORECED-PATH
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
       *
       *    医療機関ＩＤ編集
            INITIALIZE  SYS-1001-REC
            MOVE  "1001"         TO  SYS-1001-KANRICD
            MOVE  "*"            TO  SYS-1001-KBNCD
-           MOVE  LNK-PRTKANRI-SRYYM(1:6)
-                                TO  SYS-1001-STYUKYMD(1:6)
-                                    SYS-1001-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1001-STYUKYMD(1:6)
+                                               SYS-1001-EDYUKYMD(1:6)
+           END-IF
            MOVE  "01"           TO  SYS-1001-STYUKYMD(7:2)
                                    SYS-1001-EDYUKYMD(7:2)
            MOVE  SPA-HOSPNUM    TO  SYS-1001-HOSPNUM
@@ -619,9 +494,13 @@
            INITIALIZE  SYS-1002-REC
            MOVE  "1002"         TO  SYS-1002-KANRICD
            MOVE  "*"            TO  SYS-1002-KBNCD
-           MOVE  LNK-PRTKANRI-SRYYM(1:6)
-                                TO  SYS-1002-STYUKYMD(1:6)
-                                    SYS-1002-EDYUKYMD(1:6)
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1002-STYUKYMD(1:6)
+                                               SYS-1002-EDYUKYMD(1:6)
+           END-IF
            MOVE  "01"           TO  SYS-1002-STYUKYMD(7:2)
                                     SYS-1002-EDYUKYMD(7:2)
            MOVE  SPA-HOSPNUM    TO  SYS-1002-HOSPNUM
@@ -634,6 +513,14 @@
              MOVE  1            TO  FLG-END
            END-IF
       *
+           MOVE    SYS-1001-HOSPNAME   TO  WRK-HOSPNAME
+           MOVE    SYS-1001-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           MOVE    SYS-1002-ADRS       TO  WRK-HOSPADRS
+           MOVE    SYS-1002-TEL        TO  WRK-HOSPTEL
+      *    医療機関編集情報
+           PERFORM 900-1900-READ-SEC
+           
       *    パラメタ編集処理
            PERFORM 1001-PARA-HENSYU-SEC
       *
@@ -653,16 +540,6 @@
            MOVE    "SEIKYU1905"              TO  WRK-PRGID
       *
       *    プログラムオプション取得
-      *    レセ電パス指定
-           MOVE    "RECEDENPATH"             TO  WRK-KBNCD
-           PERFORM 1001-OPTION-SET-SEC
-           IF  WRK-OPTION(1)(1:2)  =  "※"
-             MOVE    SPACE                   TO  WRK-FILEPATH
-           ELSE
-             MOVE    WRK-OPTION(1)(1:50)     TO  WRK-FILEPATH
-           END-IF
-           DISPLAY "レセ電パス =" WRK-FILEPATH
-      *
       *    対象公費番号
            MOVE    "TAISYOKOHI"              TO  WRK-KBNCD
            PERFORM 1001-OPTION-SET-SEC
@@ -672,14 +549,6 @@
              MOVE    WRK-OPTION(IDX)(1:3)    TO  TAISYO-KOHNUM(IDX)
              DISPLAY "対象公費番号="  TAISYO-KOHNUM(IDX)
            END-PERFORM
-      *
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *    レセ電指定区分
-           MOVE    "SITEIKBN"                TO  WRK-KBNCD
-           PERFORM 1001-OPTION-SET-SEC
-           MOVE    WRK-OPTION(1)(1:1)        TO  WRK-SITEI
-           DISPLAY "レセ電指定区分 =" WRK-SITEI
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
            .
        100-OPTION-SELECT-EXT.
@@ -801,30 +670,38 @@
       *****************************************************************
        200-MAIN-SEC  SECTION.
       *
-           OPEN     OUTPUT  MF101-FILE
-           CLOSE            MF101-FILE
-           OPEN     I-O     MF101-FILE
+           OPEN     OUTPUT  MF100-FILE
+           CLOSE            MF100-FILE
+           OPEN     I-O     MF100-FILE
       *
            MOVE     ZERO    TO      FLG-END
       *
+      *    集計処理
            PERFORM  2001-SYUKEI-SEC
                     UNTIL   FLG-END   =   1
       *
-           CLOSE   MF101-FILE
+      *    社保分作成
+           IF  CNT-SYAHO  >  0
+               MOVE    1    TO      WRK-SYORI
+      *        複写レセ電作成処理
+               PERFORM  2002-RECEDEN-SEC
       *
-           IF  CNT-MF101  >  0
-      *      レセ電編集処理
-             PERFORM  2002-RECED-READ-SEC
-      
-             CLOSE   MF101-FILE
-                     RECEDI-FILE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-                     SYARECED-FILE
-                     KORECED-FILE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *        ファイル保存情報更新
+               PERFORM 3001-FILE-INFO-INSERT-SEC
            END-IF
-           
-           MOVE    1       TO   FLG-END
+      *
+      *    国保分作成
+           IF  CNT-KOKUHO  >  0
+               MOVE    2    TO      WRK-SYORI
+      *        複写レセ電作成処理
+               PERFORM  2002-RECEDEN-SEC
+      *
+      *        ファイル保存情報更新
+               PERFORM 3001-FILE-INFO-INSERT-SEC
+           END-IF
+      *
+           CLOSE    MF100-FILE
+           MOVE    1        TO      FLG-END
       *
            .
        200-MAIN-EXT.
@@ -860,53 +737,44 @@
        20011-SYUKEI-SEC  SECTION.
       *
       *    TMP-FILE キーセット
-      *
-           INITIALIZE       MF101-REC
-      *
-           MOVE    SPA-HOSPNUM                 TO  MF101-HOSPNUM
-           MOVE    RECE02-PTNUM                TO  MF101-PTNUM
-           MOVE    RECE02-SRYYM                TO  MF101-SRYYM
-           MOVE    RECE02-RECESYUBETU          TO  MF101-RECESYUBETU
-           MOVE    RECE02-TEISYUTUSAKI         TO  MF101-TEISYUTUSAKI
-           MOVE    RECE02-PTID                 TO  MF101-PTID
-           MOVE    RECE02-NAME                 TO  MF101-NAME
-           MOVE    RECE02-KANANAME             TO  MF101-KANANAME
-           MOVE    RECE02-BIRTHDAY             TO  MF101-BIRTHDAY
-           MOVE    RECE02-SEX                  TO  MF101-SEX
-           MOVE    RECE02-AGE                  TO  MF101-AGE
-           MOVE    RECE02-HKN                  TO  MF101-HKN
-           MOVE    RECE02-KOHINF      (IDZ)    TO  MF101-KOHINF
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
-           MOVE    RECE02-HKNJANUM             TO  MF101-HKNJANUM-KEY
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
-      *
-      *    広域連合は審査支払機関を「2」にする（国保と同様）
-           IF  RECE02-HKNNUM  =  "039"
-               MOVE    "2"                     TO  MF101-TEISYUTUSAKI
-           END-IF
+           INITIALIZE       MF100-REC
+           MOVE    RECE02-KEY                  TO  MF100-KEY
+           MOVE    RECE02-PTNUM                TO  MF100-PTNUM
+           MOVE    RECE02-NAME                 TO  MF100-NAME
+           MOVE    RECE02-KANANAME             TO  MF100-KANANAME
+           MOVE    RECE02-BIRTHDAY             TO  MF100-BIRTHDAY
+           MOVE    RECE02-SEX                  TO  MF100-SEX
+           MOVE    RECE02-AGE                  TO  MF100-AGE
+           MOVE    RECE02-HKN                  TO  MF100-HKN
+           MOVE    RECE02-KOHINF      (IDZ)    TO  MF100-KOHINF
       *
       *    請求管理からレセプト情報取得
            PERFORM 900-SEIKYU-READ-SEC
-           MOVE  RECE10-JNISSU(1)              TO  MF101-JNISSU
-           MOVE  RECE10-TOTALTEN(1)            TO  MF101-TOTALTEN
-           MOVE  RECE10-SHOKUJIINF(1)          TO  MF101-SHOKUJIINF
+           MOVE  RECE10-JNISSU(1)              TO  MF100-JNISSU
+           MOVE  RECE10-TOTALTEN(1)            TO  MF100-TOTALTEN
+           MOVE  RECE10-SHOKUJIINF(1)          TO  MF100-SHOKUJIINF
       *
       *    保険者番号チェック処理
-           MOVE    ZERO        TO  FLG-ERR
+           MOVE    ZERO                        TO  FLG-ERR
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
       *    第２公費以降が第１公費と同じ場合、集計対象外
            IF  IDZ  <  4
-               IF  MF101-KOHNUM  =  RECE02-KOHNUM(IDZ + 1)
-                   MOVE    1               TO  FLG-ERR
+               IF  MF100-KOHNUM  =  RECE02-KOHNUM(IDZ + 1)
+                   MOVE    1                   TO  FLG-ERR
                END-IF
            END-IF
       *
       *    患者負担がない場合は印字対象外
            IF  (FLG-ERR    =    ZERO)
            AND (RECE02-FTNMONEY(IDZ + 1)  NOT =  ZERO)
-               WRITE  MF101-REC
-               ADD    1                    TO  CNT-MF101
+               WRITE  MF100-REC
+               ADD    1                    TO  CNT-MF100
+               IF  MF100-TEISYUTUSAKI  =  1
+                   ADD    1                TO  CNT-SYAHO
+               ELSE
+                   ADD    1                TO  CNT-KOKUHO
+               END-IF
            ELSE
                DISPLAY "助成対象外患者番号="  RECE02-PTNUM
            END-IF
@@ -945,487 +813,268 @@
            EXIT.
       *
       *****************************************************************
-      *    レセ電ファイル読み込み処理
+      *    レセ電メイン処理
       *****************************************************************
-       2002-RECED-READ-SEC  SECTION.
+       2002-RECEDEN-SEC                SECTION.
       *
-           INITIALIZE                          RECEDI-REC
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
-      *                                         WRK-RECENUM
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-                                               SYARECED-REC
-                                               KORECED-REC
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+           DISPLAY "2002-RECEDEN-MAKE START"
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) start
-      *     MOVE    SPA-HOSPNUM             TO  FILE-HOSPNUM
-      **=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     MOVE    SPA-HOSPNUM             TO  SYARECED-HOSPNUM
-      *     MOVE    SPA-HOSPNUM             TO  KORECED-HOSPNUM
-      **=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-      *=== ver4.8対応 by Yoshikawa(2014/10/23) end
-      *    
-           OPEN  INPUT  RECEDI-FILE
-                        MF101-FILE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-                        SYARECED-FILE
-                        KORECED-FILE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+           INITIALIZE                  FLG-PRINT
+                                       WRK-RECENUM
+                                       SUM-AREA
       *
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      **    複写元レセ電が存在しない場合はエラー
-      *     IF  STS-RECEDI  =  "35"
-      *         MOVE    SPACE             TO  WRK-RECEERR
-      *         STRING "複写元レセ電が存在しません　" 
-      *                                           DELIMITED  BY  SIZE
-      *                 WRK-FILEPATH              DELIMITED  BY  SPACE
-      *                                   INTO    WRK-RECEERR
-      *         END-STRING                                
-      *         PERFORM 500-ERR-HENSYU-SEC
-      *         MOVE    1                 TO  FLG-END
-      *                                       FLG-RECEDI
-      *     END-IF
-      **
-      *     PERFORM  UNTIL  FLG-RECEDI  =  1
-      *       READ  RECEDI-FILE
-      *         AT END
-      *           INITIALIZE                  RECEDI-REC
-      *           MOVE    1               TO  FLG-RECEDI
-      *         NOT AT END
-      *           DISPLAY "RECEDEN READ =" RECEDI-REC(1:70)
-      **          レセ電編集
-      *           PERFORM 20021-RECED-EDIT-SEC
-      *       END-READ
-      *     END-PERFORM
+           ADD      1              TO  CNT-PAGE
       *
-           IF  WRK-SITEI  =  1
+      *    ファイル位置を先頭に
+           INITIALIZE                  MF100-KEY
+           START    MF100-FILE
+                    KEY     IS    >    MF100-KEY
+                    INVALID       KEY
+                    MOVE    1      TO  FLG-PRINT
+           END-START
       *
-             IF  STS-RECEDI  =  "35"
-                 MOVE    SPACE               TO  WRK-RECEERR
-                 STRING "複写元レセ電が存在しません　" 
-                                                   DELIMITED  BY  SIZE
-                         WRK-FILEPATH              DELIMITED  BY  SPACE
-                                             INTO  WRK-RECEERR
-                 END-STRING                                
-                 PERFORM 500-ERR-HENSYU-SEC
-                 MOVE    1                   TO  FLG-END
-             ELSE
-                 MOVE    1                   TO  WRK-SYORI
-                 MOVE    ZERO                TO  FLG-OUTPUT
-                                                 WRK-GOKEI-TBL
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
-                                                 WRK-RECENUM
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
-                 PERFORM  UNTIL  FLG-RECEDI  =  1
-                   READ  RECEDI-FILE
-                     AT END
-                       INITIALIZE                RECEDI-REC
-                       MOVE    1             TO  FLG-RECEDI
-                     NOT AT END
-                       MOVE    RECEDI-REC    TO  WRK-INPUTREC
-                       DISPLAY "RECEDEN READ =" RECEDI-REC(1:70)
-      *                レセ電編集
-                       PERFORM 20021-RECED-EDIT-SEC
-                   END-READ
-                 END-PERFORM
-                 IF  FLG-OUTPUT  =  1
-      *            ファイル保存情報更新
-                   PERFORM 3001-FILE-INFO-INSERT-SEC 
-                 END-IF
-             END-IF
-      *
-           ELSE
-      *
-      *      複写元社保レセ電存在チェック
-             IF  STS-SYARECED  =  "35"
-                 DISPLAY "社保レセ電なし"
-             ELSE
-      *        社保複写レセ電作成
-               MOVE    1                     TO  WRK-SYORI
-               MOVE    ZERO                  TO  FLG-OUTPUT
-                                                 WRK-GOKEI-TBL
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
-                                                 WRK-RECENUM
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
-               PERFORM  UNTIL  FLG-SYARECED  =  1
-                 READ  SYARECED-FILE
-                   AT END
-                     INITIALIZE                  SYARECED-REC
-                     MOVE    1               TO  FLG-SYARECED
-                   NOT AT END
-                     MOVE    SYARECED-REC    TO  WRK-INPUTREC
-                     DISPLAY "SYAHO RECEDEN READ =" SYARECED-REC(1:70)
-      *              レセ電編集
-                     PERFORM 20021-RECED-EDIT-SEC
-                 END-READ
-               END-PERFORM
-               IF  FLG-OUTPUT  =  1
-      *          ファイル保存情報更新
-                 PERFORM 3001-FILE-INFO-INSERT-SEC 
-               END-IF
-             END-IF
-      *
-      *      複写元国保レセ電存在チェック
-             IF  STS-KORECED  =  "35"
-               IF  STS-SYARECED  =  "35"
-      *          どちらも存在しなかったらエラーメッセージ表示
-                 MOVE    SPACE               TO  WRK-RECEERR
-                 STRING "複写元レセ電が存在しません　" 
-                                             DELIMITED  BY  SIZE
-                         WRK-FILEPATH        DELIMITED  BY  SPACE
-                                             INTO  WRK-RECEERR
-                 END-STRING
-                 PERFORM 500-ERR-HENSYU-SEC
-                 MOVE    1                   TO  FLG-END
-               ELSE
-                 DISPLAY "国保レセ電なし"
-               END-IF
-             ELSE
-      *        国保複写レセ電作成
-               MOVE    2                     TO  WRK-SYORI
-               MOVE    ZERO                  TO  FLG-OUTPUT
-                                                 WRK-GOKEI-TBL
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) start
-                                                 WRK-RECENUM
-      *=== レセプト順序番号修正 by Yoshikawa(2014/11/12) end
-               PERFORM  UNTIL  FLG-KORECED  =  1
-                 READ  KORECED-FILE
-                   AT END
-                     INITIALIZE                  KORECED-REC
-                     MOVE    1               TO  FLG-KORECED
-                   NOT AT END
-                     MOVE    KORECED-REC     TO  WRK-INPUTREC
-                     DISPLAY "KOKUHO RECEDEN READ =" KORECED-REC(1:70)
-      *              レセ電編集
-                     PERFORM 20021-RECED-EDIT-SEC
-                 END-READ
-               END-PERFORM
-               IF  FLG-OUTPUT  =  1
-      *          ファイル保存情報更新
-                 PERFORM 3001-FILE-INFO-INSERT-SEC 
-               END-IF
-             END-IF
+           IF  FLG-PRINT   =     1
+                  GO  TO  2002-RECEDEN-EXT
            END-IF
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+      *    医療機関情報レコード作成
+           PERFORM 300-HENSYU-IR-SEC
+      *
+           PERFORM  UNTIL  FLG-PRINT  =  1
+               IF  WRK-SYORI  =  1
+      *            社保
+                   IF  MF100-TEISYUTUSAKI  =  1
+                       PERFORM 2003-RECEDEN-MAKE-SEC
+                   END-IF
+               ELSE
+      *            国保・後期
+                   IF  MF100-TEISYUTUSAKI  =  2  OR  6
+                       PERFORM 2003-RECEDEN-MAKE-SEC
+                   END-IF
+               END-IF
+      *
+      *        一時ファイル読込
+               PERFORM  900-TMP-READ-SEC
+           END-PERFORM
+      *
+      *    合計レコード編集処理
+           PERFORM 309-HENSYU-GO-SEC
       *
            .
-       2002-RECED-READ-EXT.
+       2002-RECEDEN-EXT.
            EXIT.
       *
       *****************************************************************
-      *    レセ電編集処理
+      *    レセ電作成処理
       *****************************************************************
-       20021-RECED-EDIT-SEC  SECTION.
+       2003-RECEDEN-MAKE-SEC  SECTION.
       *
-           INITIALIZE                          WRK-REC
-                                               WRK-REC-LENGTH
+           DISPLAY "PTNUM="         MF100-PTNUM
+                   " TEISYUTUSAKI=" MF100-TEISYUTUSAKI 
+                   " SRYYM="        MF100-SRYYM 
+                   " RECESYUBETU="  MF100-RECESYUBETU 
       *
-      *    レセ電をワークにセット
-           PERFORM 900-RECED-SET-SEC
-      *
-      *    識別コード判定
-           EVALUATE  TBL-RECEDATA1
-      *
-      *      医療機関情報レコード
-             WHEN  "IR"
-               PERFORM 200211-EDIT-IR-SEC
-               MOVE    1                       TO  FLG-WRITE
-      *
-      *      レセプト共通レコード
-             WHEN  "RE"
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
-      **        TMPKEYセット
-      *         INITIALIZE                      MF101-KEY
-      *         MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
-      *         MOVE    TBL-RECEDATA14          TO  MF101-PTNUM
-      **=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
-      **         MOVE    LNK-PRTKANRI-SRYYM      TO  MF101-SRYYM
-      **        和暦を西暦に変換
-      *         MOVE    "0"                     TO  WRK-SYMD(1:1)
-      *         MOVE    TBL-RECEDATA4(1:5)      TO  WRK-SYMD(2:5)
-      *         MOVE    "01"                    TO  WRK-SYMD(7:2)
-      *         PERFORM 31013-WASEI-HEN-SEC
-      *         MOVE    LNK-DAY1-YMD(1:6)       TO  MF101-SRYYM
-      **=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
-      *         MOVE    WRK-TEISYUTUSAKI        TO  MF101-TEISYUTUSAKI
-      *         MOVE    TBL-RECEDATA3           TO  MF101-RECESYUBETU
-      **
-      **        レセ電の患者データが一時ファイルに存在するか
-      *         PERFORM  900-TMP-READ-SEC
-      *         IF  FLG-MF101  =  ZERO
-      **            編集
-      *             PERFORM 200212-EDIT-RE-SEC
-      *             MOVE    1                   TO  FLG-WRITE
-      *         ELSE
-      **            対象外
-      *             MOVE    ZERO                TO  FLG-WRITE
-      *         END-IF
-      *
-      *        TMP用キー保存の為、まだREレコードは作成しない
-               MOVE    TBL-RECEDATA14          TO  WRK-PTNUM
-      *        和暦を西暦に変換
-               MOVE    "0"                     TO  WRK-SYMD(1:1)
-               MOVE    TBL-RECEDATA4(1:5)      TO  WRK-SYMD(2:5)
-               MOVE    "01"                    TO  WRK-SYMD(7:2)
-               PERFORM 31013-WASEI-HEN-SEC
-               MOVE    LNK-DAY1-YMD(1:6)       TO  WRK-SRYYM
-               MOVE    TBL-RECEDATA3           TO  WRK-RECESYUBETU
-      *
-      *        REレコードごと保存
-               MOVE    TBL-RECEDATA-AREA       TO  WRK-RE-RECORD
-      *
-               MOVE    ZERO                    TO  FLG-WRITE
-      *
-             WHEN  "HO"
-      *        HOレコードから保険者番号が取得できるので、TMPキーが揃う
-      *        これらを元に一時ファイル読込
-               INITIALIZE                      MF101-KEY
-               MOVE    SPA-HOSPNUM             TO  MF101-HOSPNUM
-               MOVE    WRK-PTNUM               TO  MF101-PTNUM
-               MOVE    WRK-SRYYM               TO  MF101-SRYYM
-               MOVE    WRK-TEISYUTUSAKI        TO  MF101-TEISYUTUSAKI
-               MOVE    WRK-RECESYUBETU         TO  MF101-RECESYUBETU
-      *        保険者番号を左詰めに
-               PERFORM  VARYING  IDX2  FROM  1  BY  1
-                        UNTIL    IDX2  >  8
-                   IF  TBL-RECEDATA2(IDX2:1)  NOT =  SPACE
-                       MOVE    TBL-RECEDATA2(IDX2:)
-                                               TO  MF101-HKNJANUM-KEY
-                       MOVE    8               TO  IDX2
-                   END-IF
-               END-PERFORM
-      *
-      *        レセ電の患者データが一時ファイルに存在するか
-               PERFORM  900-TMP-READ-SEC
-               IF  FLG-MF101  =  ZERO
-      *            編集
-                   PERFORM 200212-EDIT-RE-SEC
-                   MOVE    1                   TO  FLG-WRITE
+      *    レセ電テーブル読み込み
+           PERFORM 900-RECEDEN-SELECT-SEC
+           IF      FLG-RECEDEN     =   1
+               IF      MF100-SRYYM    =    LNK-PRTKANRI-SRYYM
+                   STRING
+                       "該当患者のレセ電データが存在しません"
+                                               DELIMITED  BY  SIZE
+                        "　患者番号＝"         DELIMITED  BY  SIZE
+                        RECE10-PTNUM           DELIMITED  BY  SIZE
+                                               INTO  WRK-RECEERR
+                   END-STRING
+                   PERFORM 500-ERR-HENSYU-SEC
+      *             PERFORM 500-COBABORT-SEC
+                   MOVE    1                   TO  FLG-END
                ELSE
-      *            対象外
-                   MOVE    ZERO                TO  FLG-WRITE
+                   DISPLAY "!!!!!! RECEDEN NOT FOUND !!!!!"
                END-IF
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
-      *
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
-             WHEN  "SI"
-             WHEN  "CO"
-      *=== IYレコードによる不具合対応 by Yoshikawa(2014/09/18) start
-             WHEN  "IY"
-      *=== IYレコードによる不具合対応 by Yoshikawa(2014/09/18) end
-      *=== 処置材料対応 by Yoshikawa(2015/01/05) start
-             WHEN  "TO"
-      *=== 処置材料対応 by Yoshikawa(2015/01/05) end
-      *        前の行が傷病名レコード（ない場合は保険か公費レコード）
-      *        の場合山梨コメントを挿入する
-               IF  WRK-SIKIBETU  =  "HO" OR "KO" OR "SY"
-                   PERFORM 200213-EDIT-CO-SEC
-               ELSE
-                   PERFORM 2002111-RECORD-MAKE-SEC
-               END-IF
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
-      *
-      *      合計レコード
-             WHEN  "GO"
-               PERFORM 200218-EDIT-GO-SEC
-               MOVE    1                       TO  FLG-WRITE
-      *
-      *      その他のレコードはそのまま書き込み
-             WHEN  OTHER
-                PERFORM 2002111-RECORD-MAKE-SEC
-      *
-           END-EVALUATE
-      *
-      *    書き込み
-           IF  FLG-WRITE  =  1
-               PERFORM 500-CSVINFO-SEC
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-               MOVE    1                       TO  FLG-OUTPUT
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            END-IF
       *
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
-      *    識別コードを保存
-           MOVE    TBL-RECEDATA1               TO  WRK-SIKIBETU
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
+      *    読んだレセ電のレコードごとに作成
+           PERFORM     UNTIL   FLG-RECEDEN =   1
+      *
+               EVALUATE    RECEDEN-RECEDATA (1:2)
+                 WHEN  "RE"
+      *              レセプト共通レコード<RE>
+                     PERFORM 301-HENSYU-RE-SEC
+      *
+                 WHEN  "SI"
+                 WHEN  "CO"
+                 WHEN  "IY"
+                 WHEN  "TO"
+      *              前の行が傷病名レコード（ない場合は保険か公費レコード）
+      *              の場合山梨コメントを挿入する
+                     IF  WRK-SIKIBETU  =  "HO" OR "KO" OR "SY"
+                         PERFORM 302-HENSYU-CO-SEC
+                     END-IF
+                     PERFORM 303-HENSYU-OTHER-SEC
+      *
+                 WHEN  OTHER
+      *              その他レコード
+                     PERFORM 303-HENSYU-OTHER-SEC
+      *
+               END-EVALUATE
+      *
+      *        識別コード保存
+               MOVE    RECEDEN-RECEDATA(1:2)    TO  WRK-SIKIBETU
+      *
+      *        次のレセ電読み込み
+               PERFORM 900-RECEDEN-READ-SEC
+           END-PERFORM
       *
            .
-       20021-RECED-EDIT-EXT.
+       2003-RECEDEN-MAKE-EXT.
            EXIT.
       *
       *****************************************************************
       *    医療機関情報レコード編集処理
       *****************************************************************
-       200211-EDIT-IR-SEC  SECTION.
+       300-HENSYU-IR-SEC              SECTION.
+      *     
+           INITIALIZE                          WRK-REC
+                                               WRK-REC-LENGTH
       *
-      *    審査支払機関(社保=7、国保=8に変更)
-           IF  TBL-RECEDATA2  =  "1"
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *         MOVE    "7"             TO  RECEDI-REC(4:1)
-               MOVE    "7"             TO  WRK-INPUTREC(4:1)
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-           ELSE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *         MOVE    "8"             TO  RECEDI-REC(4:1)
-               MOVE    "8"             TO  WRK-INPUTREC(4:1)
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-           END-IF
+      *    IR
+           MOVE    "IR,"                   TO  WRK-REC
+           MOVE    3                       TO  WRK-REC-LENGTH
       *
-           PERFORM 2002111-RECORD-MAKE-SEC
+      *    審査支払機関
+           EVALUATE    WRK-SYORI
+               WHEN    1
+                   MOVE    "7"             TO  WRK-DATA
+               WHEN    OTHER
+                   MOVE    "8"             TO  WRK-DATA
+           END-EVALUATE
+           MOVE    1                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
       *
-           MOVE    TBL-RECEDATA2       TO  WRK-TEISYUTUSAKI
+      *    県番号
+           MOVE    SYS-1001-PREFNUM        TO  WRK-DATA
+           MOVE    2                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC    
       *
-           .
-       200211-EDIT-IR-EXT.
-           EXIT.
+      *    点数表区分
+           MOVE    SYS-1001-TENHYOKBN      TO  WRK-DATA
+           MOVE    1                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC    
       *
-      *****************************************************************
-      *    レセプト共通レコード編集処理
-      *****************************************************************
-       200212-EDIT-RE-SEC  SECTION.
+      *    医療機関コード
+           MOVE    SYS-1001-HOSPCD         TO  WRK-DATA
+           MOVE    7                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC    
       *
-      *    レセプト順序番号編集
-           MOVE    "RE,"               TO  WRK-REC
-           MOVE    3                   TO  WRK-REC-LENGTH
-           ADD     1                   TO  WRK-RECENUM
-           MOVE    WRK-RECENUM         TO  WRK-NUM
-           MOVE    6                   TO  WRK-NAGASA
-           PERFORM 5005-NUM-HENSYU-SEC
+      *    （空白）
+           MOVE    SPACE                   TO  WRK-DATA
+           MOVE    1                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC    
       *
-      *    レコード作成
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) start
-      *     STRING  WRK-REC(1:WRK-REC-LENGTH) 
-      *                                     DELIMITED BY SIZE
-      *             TBL-RECEDATA3           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA4           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA5           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA6           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA7           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA8           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA9           DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA10          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA11          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA12          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA13          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA14          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA15          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA16          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA17          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA18          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA19          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA20          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA21          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA22          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA23          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA24          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA25          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA26          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA27          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA28          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA29          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA30          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA31          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA32          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA33          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA34          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA35          DELIMITED BY SPACE
-      *             ","                     DELIMITED BY SPACE
-      *             TBL-RECEDATA36          DELIMITED BY SPACE
-      *             WRK-KAIGYO              DELIMITED BY SIZE
-      *             INTO                    WRK-REC
-      *     END-STRING
-           PERFORM  VARYING  IDR  FROM  3  BY  1
-                    UNTIL    IDR  >  36
-             MOVE    WRK-RE-KOUMOKU(IDR)   TO  WRK-DATA
-             MOVE    100                   TO  WRK-NAGASA
-             IF  IDR  =  36
-                 MOVE    1                 TO  WRK-END
-             END-IF
-             PERFORM 5004-MOJI-HENSYU-SEC
-           END-PERFORM
+      *    医療機関名称
+           MOVE    WRK-HOSPNAME            TO  WRK-DATA
+           MOVE    40                      TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC    
+      *
+      *    請求年月（和暦）
+           MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
+           MOVE    "01"                    TO  WRK-SYMD(7:2)
+           PERFORM 31011-SEIWA-HEN-SEC
+           MOVE    WRK-HENYMD (1:5)        TO  WRK-SEIYM 
+           MOVE    WRK-SEIYM               TO  WRK-DATA
+           MOVE    5                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *
+      *    マルチボリューム（とりあえず00を設定）
+           MOVE    WRK-VOLNUM              TO  WRK-DATA
+           MOVE    2                       TO  WRK-NAGASA
+           PERFORM 5004-MOJI-HENSYU-SEC
+      *
+      *    医療機関電話番号
+           MOVE    WRK-HOSPTEL             TO  WRK-DATA
+           MOVE    15                      TO  WRK-NAGASA
+           MOVE    1                       TO  WRK-END 
+           PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    改行コード編集
-           STRING  WRK-REC(1:WRK-REC-LENGTH) 
-                                           DELIMITED BY SIZE
-                   WRK-KAIGYO              DELIMITED BY SIZE
-                   INTO                    WRK-REC
+           STRING  WRK-REC(1:WRK-REC-LENGTH)  DELIMITED  BY  SIZE
+                   WRK-KAIGYO                 DELIMITED  BY  SIZE
+                   INTO                       WRK-REC
            END-STRING
       *
       *    CSV書き込み
            PERFORM 500-CSVINFO-SEC
       *
-      *    REレコード書き込み後、現在のHOレコードを書き込む
-           INITIALIZE                      WRK-REC
-                                           WRK-REC-LENGTH
-           PERFORM 2002111-RECORD-MAKE-SEC
-      *=== 主保険切替え＋負担無し時の修正 by Yoshikawa(2015/01/15) end
+           .
+       300-HENSYU-IR-EXT.
+           EXIT. 
+      *****************************************************************
+      *    レセプト共通レコード編集処理
+      *****************************************************************
+       301-HENSYU-RE-SEC              SECTION.
+      *     
+           INITIALIZE                          WRK-REC
+                                               WRK-REC-LENGTH
       *
-      *    レセプト件数集計
-           EVALUATE  MF101-RECESYUBETU(3:1)
-             WHEN  "1"
-               ADD    1                TO  WRK-GKENSU
-             WHEN  "2"
-               ADD    2                TO  WRK-GKENSU
-             WHEN  "3"
-               ADD    3                TO  WRK-GKENSU
-             WHEN  "4"
-               ADD    4                TO  WRK-GKENSU
+      *    RE
+           MOVE    "RE,"                   TO  WRK-REC
+           MOVE    3                       TO  WRK-REC-LENGTH
+      *
+      *    レセプト番号の編集
+           ADD     1                       TO  WRK-RECENUM
+           MOVE    WRK-RECENUM             TO  WRK-NUM
+           MOVE    6                       TO  WRK-NAGASA
+           PERFORM 5005-NUM-HENSYU-SEC
+      *
+      *    改行コード編集
+           STRING  WRK-REC(1:WRK-REC-LENGTH) DELIMITED  BY  SIZE
+                   RECEDEN-RECEDATA (5:)     DELIMITED  BY  SIZE
+                   WRK-KAIGYO                DELIMITED  BY  SIZE
+                   INTO        WRK-REC
+           END-STRING
+      *
+      *    CSV書き込み
+           PERFORM 500-CSVINFO-SEC
+      *
+      *    総件数・点数の集計
+           EVALUATE    RECEDEN-RECESYUBETU (3:1)
+               WHEN    "1"
+                   ADD     1               TO  SUM-TOTALKENSU
+               WHEN    "2"
+                   ADD     2               TO  SUM-TOTALKENSU
+               WHEN    "3"
+                   ADD     3               TO  SUM-TOTALKENSU
+               WHEN    "4"
+                   ADD     4               TO  SUM-TOTALKENSU
+               WHEN    "5"
+                   ADD     5               TO  SUM-TOTALKENSU
            END-EVALUATE
       *
-      *    レセプト点数集計
-           ADD    MF101-TOTALTEN       TO  WRK-GTENSU
-      *
+           ADD     RECEDEN-TOTALTEN        TO  SUM-TOTALTEN
+      *  
            .
-       200212-EDIT-RE-EXT.
-           EXIT.
+       301-HENSYU-RE-EXT.
+           EXIT. 
       *
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) start
       *****************************************************************
       *    山梨県自動還付コメント挿入処理
       *****************************************************************
-       200213-EDIT-CO-SEC  SECTION.
+       302-HENSYU-CO-SEC  SECTION.
+      *
+           INITIALIZE                          WRK-REC
+                                               WRK-REC-LENGTH
       *
       *    負担者番号と受給者番号を全角に変換
            INITIALIZE                          WRK-MAE-INPUT
                                                WRK-OUT-INPUT
                                                WRK-TEKIYO
-           MOVE    MF101-KOHFTNJANUM       TO  WRK-MAE-INPUT
+           MOVE    MF100-KOHFTNJANUM       TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  WRK-FTNJANUM
-           MOVE    MF101-KOHJKYSNUM        TO  WRK-MAE-INPUT
+           MOVE    MF100-KOHJKYSNUM        TO  WRK-MAE-INPUT
            PERFORM 2009-HENKAN-SEC
            MOVE    WRK-OUT-INPUT           TO  WRK-JKYSNUM
       *
@@ -1438,9 +1087,21 @@
            MOVE    2                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
-      *    負担区分（現在のレコードから取得）
-           MOVE    TBL-RECEDATA3(1:2)      TO  WRK-DATA
-           MOVE    2                       TO  WRK-NAGASA
+      *    負担区分（現在のレコードの3項目から取得）
+           MOVE    ZERO                    TO  WRK-CNT
+           PERFORM VARYING IDX FROM 1 BY  1
+                   UNTIL   IDX >       2500
+               IF  RECEDEN-RECEDATA (IDX:1)  =  ","
+                   ADD     1               TO  WRK-CNT
+                   IF  WRK-CNT  =  2
+                       MOVE    RECEDEN-RECEDATA(IDX + 1:1)
+                                           TO  WRK-FTNKBN
+                       MOVE    2500        TO  IDX
+                   END-IF
+               END-IF    
+           END-PERFORM   
+           MOVE    WRK-FTNKBN              TO  WRK-DATA
+           MOVE    1                       TO  WRK-NAGASA
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    コメントコード
@@ -1465,41 +1126,66 @@
                    WRK-KAIGYO              DELIMITED BY SIZE
                    INTO                    WRK-REC
            END-STRING
-           IF  FLG-WRITE  =  1
-             PERFORM 500-CSVINFO-SEC
-           END-IF
       *
-      *    山梨コメント挿入後、現在の行を書き込む
-           INITIALIZE                      WRK-REC
-                                           WRK-REC-LENGTH
-           PERFORM 2002111-RECORD-MAKE-SEC
+      *    CSV書き込み
+           PERFORM 500-CSVINFO-SEC
       *
            .
-       200213-EDIT-CO-EXT.
+       302-HENSYU-CO-EXT.
            EXIT.
-      *=== 摘要コメントの自動記載対応 by Yoshikawa(2014/08/13) end
+      *****************************************************************
+      *    レセ電レコード作成処理
+      *****************************************************************
+       303-HENSYU-OTHER-SEC  SECTION.
+      *
+           INITIALIZE                          WRK-REC
+                                               WRK-REC-LENGTH
+      *
+      *    改行コードまで取得
+           PERFORM VARYING IDX1 FROM    2500 BY  -1
+                   UNTIL   IDX1 <       1
+               IF      RECEDEN-RECEDATA (IDX1:1)
+                                       =   WRK-KAIGYO
+                   MOVE    IDX1            TO  WRK-REC-LENGTH
+                   MOVE    1               TO  IDX1
+               END-IF
+           END-PERFORM
+      *
+      *    改行コード編集
+           STRING  RECEDEN-RECEDATA(1:WRK-REC-LENGTH - 1) 
+                                           DELIMITED BY SIZE
+                   WRK-KAIGYO              DELIMITED BY SIZE
+                   INTO                    WRK-REC
+           END-STRING
+      *
+      *    CSV書き込み
+           PERFORM 500-CSVINFO-SEC
+      *
+           .
+       303-HENSYU-OTHER-EXT.
+           EXIT.
       *
       *****************************************************************
       *    合計レコード編集処理
       *****************************************************************
-       200218-EDIT-GO-SEC  SECTION.
+       309-HENSYU-GO-SEC  SECTION.
       *
-           MOVE    "GO,"               TO  WRK-REC
-           MOVE    3                   TO  WRK-REC-LENGTH
+           MOVE    "GO,"                   TO  WRK-REC
+           MOVE    3                       TO  WRK-REC-LENGTH
       *
       *    件数
-           MOVE    WRK-GKENSU          TO  WRK-NUM
-           MOVE    6                   TO  WRK-NAGASA
+           MOVE    SUM-TOTALKENSU          TO  WRK-NUM
+           MOVE    6                       TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
       *    点数
-           MOVE    WRK-GTENSU          TO  WRK-NUM
-           MOVE    10                  TO  WRK-NAGASA
+           MOVE    SUM-TOTALTEN            TO  WRK-NUM
+           MOVE    10                      TO  WRK-NAGASA
            PERFORM 5005-NUM-HENSYU-SEC
       *
-           MOVE    "99"                TO  WRK-DATA
-           MOVE    2                   TO  WRK-NAGASA
-           MOVE    1                   TO  WRK-END
+           MOVE    "99"                    TO  WRK-DATA
+           MOVE    2                       TO  WRK-NAGASA
+           MOVE    1                       TO  WRK-END
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    改行コード編集
@@ -1509,59 +1195,11 @@
                    INTO                    WRK-REC
            END-STRING
       *
-           .
-       200218-EDIT-GO-EXT.
-           EXIT.
-      *
-      *****************************************************************
-      *    レセ電レコード作成処理
-      *****************************************************************
-       2002111-RECORD-MAKE-SEC  SECTION.
-      *
-           INITIALIZE                      IDY
-                                           FLG-CSVEND
-      *
-           MOVE    99                  TO  WRK-CHARCNT
-      *    最後のカンマまで文字数カウント
-           PERFORM  VARYING  IDX1  FROM  1  BY  1
-                    UNTIL   (IDX1  >  2500)
-                    OR      (FLG-CSVEND  =  1)
-      *
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *       IF  RECEDI-REC(IDX1:1)  =  ","
-             IF  WRK-INPUTREC(IDX1:1)  =  ","
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-               MOVE    ZERO            TO  WRK-CHARCNT
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *         INSPECT  RECEDI-REC(IDX1 + 1:)
-               INSPECT  WRK-INPUTREC(IDX1 + 1:)
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-                        TALLYING  WRK-CHARCNT  FOR  ALL  ","
-             END-IF
-      *
-      *      最後のカンマ以降の半角スペースがループを抜ける条件
-             IF  WRK-CHARCNT  =  ZERO
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *         IF  RECEDI-REC(IDX1:1)  =  SPACE
-               IF  WRK-INPUTREC(IDX1:1)  =  SPACE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-                 MOVE    1             TO  FLG-CSVEND
-               END-IF
-             END-IF
-             ADD    1                  TO  IDY
-           END-PERFORM
-      *
-      *    改行コード編集
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     STRING  RECEDI-REC(1:IDY - 1)   DELIMITED BY SIZE
-           STRING  WRK-INPUTREC(1:IDY - 1) DELIMITED BY SIZE
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-                   WRK-KAIGYO              DELIMITED BY SIZE
-                   INTO                    WRK-REC
-           END-STRING
+      *    CSV書き込み
+           PERFORM 500-CSVINFO-SEC
       *
            .
-       2002111-RECORD-MAKE-EXT.
+       309-HENSYU-GO-EXT.
            EXIT.
       *
       *****************************************************************
@@ -1578,10 +1216,7 @@
                                        TO  SCSVINFO-SHELLID
            MOVE    LNK-PRTKANRI-SHORI-RENNUM
                                        TO  SCSVINFO-SHORI-RENNUM
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     MOVE    LNK-PRTKANRI-RENNUM TO  SCSVINFO-RENNUM
            MOVE    WRK-SYORI           TO  SCSVINFO-RENNUM
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
            MOVE    LNK-PRTKANRI-SRYYM  TO  SCSVINFO-SRYYM
            MOVE    LNK-PRTKANRI-SKYYMD TO  SCSVINFO-SKYYMD
            MOVE    WRK-SCSVINFO-SEQ-NO TO  SCSVINFO-SEQ-NO
@@ -1640,6 +1275,31 @@
            EXIT.
       *
       *****************************************************************
+      *    和暦西暦変換編集処理
+      *****************************************************************
+       31011-SEIWA-HEN-SEC          SECTION.
+      *
+           IF      WRK-SYMD            =   SPACE
+               MOVE    ZERO                TO  WRK-SYMD
+           END-IF    
+      *
+           IF      WRK-SYMD            =   ALL "9"  OR   ZERO
+               MOVE    WRK-SYMD            TO  WRK-HENYMDG
+           ELSE
+               INITIALIZE                      STS-AREA-DAY
+               INITIALIZE                      LNK-DAY1-AREA
+               MOVE    "11"                TO  LNK-DAY1-IRAI
+               MOVE    WRK-SYMD            TO  LNK-DAY1-YMD
+               CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                                   LNK-DAY1-AREA
+               MOVE    LNK-DAY1-YMD        TO  WRK-HENYMD-R
+           END-IF
+      *
+           .
+       31011-SEIWA-HEN-EXT.
+           EXIT.
+      *
+      *****************************************************************
       *    西暦日本語変換処理
       *****************************************************************
        31012-SEIWA-HEN-SEC        SECTION.
@@ -1656,7 +1316,6 @@
        31012-SEIWA-HEN-EXT.
            EXIT.
       *
-      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) start
       *****************************************************************
       *    和暦変換処理
       *****************************************************************
@@ -1671,28 +1330,22 @@
            .
        31013-WASEI-HEN-EXT.
            EXIT.
-      *=== 月遅れ時の不具合修正 by Yoshikawa(2015/01/05) end
       *
       *****************************************************************
       *    終了　　処理
       *****************************************************************
        300-END-SEC   SECTION.
       *
-           CLOSE  MF101-FILE
-           MOVE   CNT-MF101  TO  WRK-PARA-PAGE
+           CLOSE  MF100-FILE
+           MOVE   CNT-MF100  TO  WRK-PARA-PAGE
       *
            DISPLAY "*** SEIKYU1905 IN  "  CNT-RECE02
-           DISPLAY "*** SEIKYU1905 OUT "  CNT-MF101
+           DISPLAY "*** SEIKYU1905 OUT "  CNT-MF100
            DISPLAY "*** SEIKYU1905 END ***"
       *
-           IF  CNT-MF101  =  0
+           IF  CNT-MF100  =  0
              DISPLAY "DATA NOT FOUND. PRINT JOB CANCEL!!"
            END-IF
-      *
-      *    ファイル保存情報更新
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     PERFORM 3001-FILE-INFO-INSERT-SEC
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
       *
       *    ステップ終了処理
            MOVE    "STE"           TO  SJOBKANRI-MODE
@@ -1726,41 +1379,28 @@
            MOVE    LNK-PRTKANRI-SHORI-RENNUM
                                    TO  SFILESV-SHORI-RENNUM
                                                         (1)
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     MOVE    LNK-PRTKANRI-RENNUM
            MOVE    WRK-SYORI
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
                                    TO  SFILESV-RENNUM   (1)
            MOVE    LNK-PRTKANRI-SRYYM
                                    TO  SFILESV-SRYYM    (1)
            MOVE    LNK-PRTKANRI-SKYYMD
                                    TO  SFILESV-SKYYMD   (1)
       *
-           IF  WRK-TEISYUTUSAKI  =  1
+           IF  WRK-SYORI  =  1
       *        社保
                MOVE    "JUDOC7.CSV"
                                    TO  SFILESV-TO-DATA  (1)
+               MOVE    "複写式電子レセプト（社保）"   
+                                   TO  SFILESV-TITLE    (1)
            ELSE
       *        国保
                MOVE    "JUDOC8.CSV"
                                    TO  SFILESV-TO-DATA  (1)
-           END-IF
-      *=== 画面表示件数修正 by Yoshikawa(2015/01/15) start
-      *     MOVE    WRK-GKENSU      TO  SFILESV-CNT-ALL  (1)
-           MOVE    WRK-RECENUM     TO  SFILESV-CNT-ALL  (1)
-      *=== 画面表示件数修正 by Yoshikawa(2015/01/15) end
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     MOVE    "複写式電子レセプト"   
-      *                             TO  SFILESV-TITLE    (1)
-           IF  WRK-TEISYUTUSAKI  =  1
-               MOVE    "複写式電子レセプト（社保）"   
-                                   TO  SFILESV-TITLE    (1)
-           ELSE
                MOVE    "複写式電子レセプト（国保）"   
                                    TO  SFILESV-TITLE    (1)
            END-IF
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-           IF      WRK-GKENSU   >   ZERO
+           MOVE    WRK-RECENUM     TO  SFILESV-CNT-ALL  (1)
+           IF      SUM-TOTALKENSU   >   ZERO
                MOVE    "1"         TO  SFILESV-DATA-TYPE(1)
            END-IF 
            MOVE    WRK-RECEERR     TO  SFILESV-ERR-MSG  (1)
@@ -1803,78 +1443,13 @@
       *****************************************************************
        900-TMP-READ-SEC                SECTION.
       *
-           READ    MF101-FILE
-               INVALID    KEY
-                   MOVE    1           TO  FLG-MF101
-               NOT INVALID  KEY
-                   MOVE    ZERO        TO  FLG-MF101
+           READ  MF100-FILE   NEXT
+               AT  END
+                   MOVE    1            TO  FLG-PRINT
            END-READ
            .
        900-TMP-READ-EXT.
            EXIT.
-      *****************************************************************
-      *    レセ電ファイル読み込み処理
-      *****************************************************************
-       900-RECED-SET-SEC  SECTION.
-      *
-           INITIALIZE                          TBL-RECEDATA-AREA
-                                               TBL-RECEDATA-R
-      *
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) start
-      *     UNSTRING   RECEDI-REC       DELIMITED  BY  ","
-           UNSTRING   WRK-INPUTREC     DELIMITED  BY  ","
-      *=== 社保と国保同時出力対応 by Yoshikawa(2014/09/05) end
-                                       INTO    TBL-RECEDATA1
-                                               TBL-RECEDATA2
-                                               TBL-RECEDATA3
-                                               TBL-RECEDATA4
-                                               TBL-RECEDATA5
-                                               TBL-RECEDATA6
-                                               TBL-RECEDATA7
-                                               TBL-RECEDATA8
-                                               TBL-RECEDATA9
-                                               TBL-RECEDATA10
-                                               TBL-RECEDATA11
-                                               TBL-RECEDATA12
-                                               TBL-RECEDATA13
-                                               TBL-RECEDATA14
-                                               TBL-RECEDATA15
-                                               TBL-RECEDATA16
-                                               TBL-RECEDATA17
-                                               TBL-RECEDATA18
-                                               TBL-RECEDATA19
-                                               TBL-RECEDATA20
-                                               TBL-RECEDATA21
-                                               TBL-RECEDATA22
-                                               TBL-RECEDATA23
-                                               TBL-RECEDATA24
-                                               TBL-RECEDATA25
-                                               TBL-RECEDATA26
-                                               TBL-RECEDATA27
-                                               TBL-RECEDATA28
-                                               TBL-RECEDATA29
-                                               TBL-RECEDATA30
-                                               TBL-RECEDATA31
-                                               TBL-RECEDATA32
-                                               TBL-RECEDATA33
-                                               TBL-RECEDATA34
-                                               TBL-RECEDATA35
-                                               TBL-RECEDATA36
-                                               TBL-RECEDATA37
-                                               TBL-RECEDATA38
-                                               TBL-RECEDATA39
-                                               TBL-RECEDATA40
-                                               TBL-RECEDATA41
-                                               TBL-RECEDATA42
-                                               TBL-RECEDATA43
-                                               TBL-RECEDATA44
-                                               TBL-RECEDATA45
-           END-UNSTRING
-      *
-           .
-       900-RECED-SET-EXT.
-           EXIT.
-      *
       *****************************************************************
       *    公費請求書マスタ読込
       *****************************************************************
@@ -1926,6 +1501,15 @@
                PERFORM  800-TAISYOKOHI-CHK-SEC
                IF  FLG-TAISYO  =  1
       *
+                   IF      WRK-PARA-STSRYYM    =   "999999"
+                       CONTINUE
+                   ELSE
+                       IF  ( RECE02-SRYYM      <   WRK-PARA-STSRYYM )
+                       OR  ( RECE02-SRYYM      >   WRK-PARA-EDSRYYM )
+                           GO  TO  900-KOHSKY-READ-SEC
+                       END-IF
+                   END-IF
+      *
       *        テスト患者のときは読み飛ばす
                    MOVE    SPACE               TO  PTINF-REC
                    INITIALIZE                      PTINF-REC
@@ -1938,13 +1522,11 @@
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF   
       *
-      *=== 返戻は集計対象外 by Yoshikawa(2015/01/15) start
       *            返戻分は読み飛ばす
                    IF      RECE02-SRYYM     NOT =  LNK-PRTKANRI-SRYYM
                    AND     RECE02-HENREIYM  NOT =  "000000"
                        GO  TO  900-KOHSKY-READ-SEC
                    END-IF
-      *=== 返戻は集計対象外 by Yoshikawa(2015/01/15) end
       *
       *        個別発行で患者番号指定の場合、対象判定を行う
                    MOVE  ZERO                TO  FLG-ERR
@@ -2084,6 +1666,79 @@
       *
            .
        900-SEIKYU-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    レセ電ＤＢ読込
+      *****************************************************************
+       900-RECEDEN-SELECT-SEC             SECTION.
+      *
+           MOVE    ZERO                TO  FLG-RECEDEN
+      *
+           INITIALIZE                      RECEDEN-REC
+           MOVE    MF100-KEY           TO  RECEDEN-KEY
+           MOVE    "1"                 TO  RECEDEN-RECKBN
+           MOVE    RECEDEN-REC         TO  MCPDATA-REC
+      *
+           MOVE    "DBSELECT"          TO  MCP-FUNC
+           MOVE    "tbl_receden"       TO  MCP-TABLE
+      *    提出レセプト用（key2）
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               PERFORM 900-RECEDEN-READ-SEC
+           ELSE
+               MOVE    1                   TO  FLG-RECEDEN
+               PERFORM 900-RECEDEN-CLOSE-SEC
+           END-IF
+           .
+       900-RECEDEN-SELECT-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    レセ電ＤＢ読込
+      *****************************************************************
+       900-RECEDEN-READ-SEC           SECTION.
+      *
+           MOVE    "DBFETCH"           TO  MCP-FUNC
+           MOVE    "tbl_receden"       TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+           IF      MCP-RC              =   ZERO
+               MOVE    ZERO                TO  FLG-RECEDEN
+               MOVE    MCPDATA-REC         TO  RECEDEN-REC
+      *        
+               ADD     1                   TO  CNT-RECEDEN
+           ELSE
+               MOVE    1                   TO  FLG-RECEDEN
+               PERFORM 900-RECEDEN-CLOSE-SEC
+           END-IF
+      *
+           .
+       900-RECEDEN-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    レセ電ＤＢクローズ
+      *****************************************************************
+       900-RECEDEN-CLOSE-SEC           SECTION.
+      *
+           MOVE    "DBCLOSECURSOR"     TO  MCP-FUNC
+           MOVE    "tbl_receden"       TO  MCP-TABLE
+           MOVE    "key2"              TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       900-RECEDEN-CLOSE-EXT.
            EXIT.
       *
       *****************************************************************
@@ -2295,6 +1950,146 @@
            .
        900-PRGOPTION-READ-EXT.
            EXIT.
+      *****************************************************************
+      *    医療機関編集情報読み込み
+      *****************************************************************
+       900-1900-READ-SEC           SECTION.
+      *
+      *    医療機関編集情報読み込み
+           MOVE    SPACE                   TO  SYS-1900-REC
+           INITIALIZE                          SYS-1900-REC
+           MOVE    "1900"                  TO  SYS-1900-KANRICD
+           MOVE    "*"                     TO  SYS-1900-KBNCD
+           MOVE    SPA-HOSPNUM             TO  SYS-1900-HOSPNUM
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1900-STYUKYMD(1:6)
+                                               SYS-1900-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1900-STYUKYMD(1:6)
+                                               SYS-1900-EDYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                    TO  SYS-1900-STYUKYMD(7:2)
+                                               SYS-1900-EDYUKYMD(7:2)
+           MOVE    SYS-1900-REC            TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-1900-REC
+               IF      SYS-1900-PRTKBN(8) NOT =   SPACE
+      *            医療機関名称編集情報
+                   PERFORM 900-1901-READ-SEC
+      *            医療機関住所編集情報
+                   PERFORM 900-1902-READ-SEC
+      *            医療機関住所編集情報（２）
+                   PERFORM 900-1903-READ-SEC
+               END-IF
+           ELSE
+               INITIALIZE                  SYS-1900-REC
+           END-IF
+           .
+      *
+       900-1900-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関名称編集情報読み込み
+      *****************************************************************
+       900-1901-READ-SEC           SECTION.
+      *
+      *    医療機関名称編集情報読み込み
+           MOVE    SPACE               TO  SYS-1901-REC
+           INITIALIZE                      SYS-1901-REC
+           MOVE    "1901"              TO  SYS-1901-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1901-KBNCD
+           MOVE    SPA-HOSPNUM         TO  SYS-1901-HOSPNUM
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1901-STYUKYMD(1:6)
+                                               SYS-1901-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1901-STYUKYMD(1:6)
+                                               SYS-1901-EDYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                TO  SYS-1901-STYUKYMD(7:2)
+                                           SYS-1901-EDYUKYMD(7:2)
+           MOVE    SYS-1901-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-1901-REC
+               MOVE    SYS-1901-HOSPNAME1  TO  WRK-HOSPNAME1
+               MOVE    SYS-1901-HOSPNAME2  TO  WRK-HOSPNAME2
+           ELSE
+               INITIALIZE                  SYS-1901-REC
+           END-IF
+           .
+      *
+       900-1901-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1902-READ-SEC           SECTION.
+      *
+      *    医療機関住所編集情報読み込み
+           MOVE    SPACE               TO  SYS-1902-REC
+           INITIALIZE                      SYS-1902-REC
+           MOVE    "1902"              TO  SYS-1902-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1902-KBNCD
+           MOVE    SPA-HOSPNUM         TO  SYS-1902-HOSPNUM
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1902-STYUKYMD(1:6)
+                                               SYS-1902-EDYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1902-STYUKYMD(1:6)
+                                               SYS-1902-EDYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                TO  SYS-1902-STYUKYMD(7:2)
+                                           SYS-1902-EDYUKYMD(7:2)
+           MOVE    SYS-1902-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1902-REC
+               MOVE    SYS-1902-ADRS1  TO  WRK-HOSPADRS1
+               MOVE    SYS-1902-ADRS2  TO  WRK-HOSPADRS2
+               MOVE    SYS-1902-TEL    TO  WRK-HOSPTEL
+           ELSE
+               INITIALIZE                  SYS-1902-REC
+           END-IF
+           .
+      *
+       900-1902-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    医療機関住所編集情報読み込み
+      *****************************************************************
+       900-1903-READ-SEC           SECTION.
+      *
+           MOVE    SPACE               TO  SYS-1903-REC
+           INITIALIZE                      SYS-1903-REC
+           MOVE    SPA-HOSPNUM         TO  SYS-1903-HOSPNUM
+           MOVE    "1903"              TO  SYS-1903-KANRICD
+           MOVE    SYS-1900-PRTKBN(8)  TO  SYS-1903-KBNCD
+           IF  WRK-PARA-STSRYYM  =  "999999"
+               MOVE    LNK-PRTKANRI-SRYYM  TO  SYS-1903-STYUKYMD(1:6)
+           ELSE
+               MOVE    WRK-PARA-EDSRYYM    TO  SYS-1903-STYUKYMD(1:6)
+           END-IF
+           MOVE    "01"                TO  SYS-1903-STYUKYMD (7:2)
+           MOVE    SYS-1903-STYUKYMD   TO  SYS-1903-EDYUKYMD
+           MOVE    SYS-1903-REC        TO  MCPDATA-REC
+           PERFORM 800-SYSKANRI-READ-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC     TO  SYS-1903-REC
+               MOVE    SYS-1903-KAISETUNAME
+                                       TO  WRK-KAISETUNAME
+           ELSE
+               INITIALIZE                  SYS-1903-REC
+           END-IF
+           .
+      *
+       900-1903-READ-EXT.
+           EXIT.
+      *
       *****************************************************************
       *    パラメタ読込
       *****************************************************************
