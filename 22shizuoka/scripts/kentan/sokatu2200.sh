@@ -5,7 +5,7 @@ PREFNAME=shizuoka
 PROGRAMID=SOKATU2200
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2200"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    ¹ñÊÝÁí³çÉ½ºîÀ®¡ÊÀÅ²¬¡Ë
 #        $1-${11}
 #              °õºþ£Ä£ÂÍÑÄê¸ÇÄê°ú¿ô(CPORCSRTLNK.INC)
@@ -29,7 +29,7 @@ RENNUM=0
 ##      ÊÖÌáÊ¬
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},2,1,${20},${21},${16} > ${LOG_FILE}-2.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},2,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -37,7 +37,7 @@ RENNUM=0
 ##      Åö·î¡¦·îÃÙ¤ìÊ¬
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},1,1,${20},${21},${16} > ${LOG_FILE}-1.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},1,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -45,7 +45,7 @@ RENNUM=0
 ##      ÊÖÌáÊ¬¡ÊÆÃÊÌÎÅÍÜÈñÊ¬¡Ë
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},2,2,${20},${21},${16} > ${LOG_FILE}-22.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},2,2,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -53,7 +53,7 @@ RENNUM=0
 ##      Åö·î¡¦·îÃÙ¤ìÊ¬¡ÊÆÃÊÌÎÅÍÜÈñÊ¬¡Ë
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},1,2,${20},${21},${16} > ${LOG_FILE}-21.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},1,2,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
