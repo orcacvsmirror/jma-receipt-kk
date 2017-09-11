@@ -5,7 +5,7 @@ PREFNAME=shizuoka
 PROGRAMID=SOKATU2215
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2215"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    弓拌息圭ˇ壳闻鼠椒懒滇今∈琅铂∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)

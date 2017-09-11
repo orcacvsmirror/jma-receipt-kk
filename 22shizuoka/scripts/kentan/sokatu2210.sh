@@ -5,7 +5,7 @@ PREFNAME=shizuoka
 PROGRAMID=SOKATU2210
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2210"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保・診療報酬請求書（静岡）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
