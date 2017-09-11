@@ -73,6 +73,9 @@
       *  01.02.19    吉川       14/05/16  前期高齢者２割対応
       *  01.02.20    吉川       14/10/08  ver4.8.0対応（一時ディレクトリ変更）
       *  01.02.21    吉川       16/05/11  強制終了対応
+      *  01.02.22    門間       17/09/04  医療機関コード変更時、
+      *                                   医療機関コード別の作成処理対応
+      *                                   公費番号まとめ情報の公費番号の追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -184,10 +187,10 @@
       *=== 災害対応 by Yoshikawa(2011/04/01) start
            03  WRK-PARA-GENMENKBN  PIC X(01).
       *=== 災害対応 by Yoshikawa(2011/04/01) end
-      *          
-      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
-           03  WRK-MEISYO          PIC X(44).
-      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
+      *=== 医療機関コード変更時作成対応 by Monma(2017/09/04) start
+           03  WRK-PARA-STSRYYM    PIC 9(06).
+           03  WRK-PARA-EDSRYYM    PIC 9(06).
+      *=== 医療機関コード変更時作成対応 by Monma(2017/09/04) end
       *
       *    一時領域
        01  WRK-AREA.
@@ -220,6 +223,10 @@
            03  WRK-FTNMONEY        PIC 9(10).
            03  WRK-SYOKBN          PIC X(01).
       *
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) start
+           03  WRK-MEISYO          PIC X(44).
+      *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
+      *
       *    カウント領域
        01  CNT-AREA.
            03  CNT-RECE10          PIC 9(06).
@@ -232,7 +239,10 @@
                05  WRK-2007-MEISYO PIC X(44).
                05  WRK-2007-KOH-AREA.
                    07  WRK-2007-KOHNUM
-                                   PIC X(03)   OCCURS  10.
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) start
+      *                             PIC X(03)   OCCURS  10.
+                                   PIC X(03)   OCCURS  30.
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) end
            03  WRK-2007-MAX        PIC 9(03).
       *=== シス管「2007」対応 by Yoshikawa(2008/10/24) end
       *
@@ -434,6 +444,10 @@
       *=== 災害対応 by Yoshikawa(2011/04/01) start
                                                WRK-PARA-GENMENKBN
       *=== 災害対応 by Yoshikawa(2011/04/01) end
+      *=== 医療機関コード変更時作成対応 by Monma(2017/09/04) start
+                                               WRK-PARA-STSRYYM
+                                               WRK-PARA-EDSRYYM
+      *=== 医療機関コード変更時作成対応 by Monma(2017/09/04) end
       *---(01.02.06) LINE ADD START ------------------------------------
                                                RECEERR
       *---(01.02.06) LINE ADD END   ------------------------------------
@@ -550,11 +564,26 @@
                    MOVE    SYS-2007-MEISYO (2) TO  WRK-2007-MEISYO (IDX)
                END-IF
       *=== 表示名称２を使用 by Yoshikawa(2010/02/10) end
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) start
+               MOVE    ZERO                TO  IDZ
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) end
                PERFORM VARYING IDY FROM    1   BY  1
                        UNTIL   IDY >       10
                        OR      SYS-2007-KOHNUM (IDY)   =   SPACE
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) start
+      *             MOVE    SYS-2007-KOHNUM (IDY)
+      *                                     TO WRK-2007-KOHNUM (IDX IDY)
+                   ADD     1               TO  IDZ
                    MOVE    SYS-2007-KOHNUM (IDY)
-                                           TO WRK-2007-KOHNUM (IDX IDY)
+                                           TO  WRK-2007-KOHNUM(IDX IDZ)
+               END-PERFORM
+               PERFORM VARYING IDY FROM    1   BY  1
+                       UNTIL   IDY >       20
+                       OR      SYS-2007-KOHNUM1(IDY)   =   SPACE
+                   ADD     1               TO  IDZ
+                   MOVE    SYS-2007-KOHNUM1(IDY)
+                                           TO  WRK-2007-KOHNUM(IDX IDZ)
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) end
                END-PERFORM
       *
                MOVE    "tbl_syskanri"  TO  WRK-MCP-TABLE
@@ -1556,7 +1585,10 @@
                        PERFORM VARYING IDZ2    FROM    1   BY  1
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
       *                         UNTIL   IDZ2    >       5
-                               UNTIL   IDZ2    >       10
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) start
+      *                         UNTIL   IDZ2    >       10
+                               UNTIL   IDZ2  >       20
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) end
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
                                OR      WRK-2007-KOHNUM (IDZ1 IDZ2)
                                                =   SPACE
@@ -1568,7 +1600,10 @@
                                                TO  WRK-MEISYO
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) start
       *                         MOVE    5       TO  IDZ2
-                               MOVE    10      TO  IDZ2
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) start
+      *                         MOVE    10      TO  IDZ2
+                               MOVE    20      TO  IDZ2
+      *=== 公費番号まとめ追加 by Monma(2017/09/04) end
       *=== 公費番号まとめの編集方法修正 by Yoshikawa(2009/11/18) end
                                MOVE    WRK-2007-MAX
                                                TO  IDZ1
@@ -1923,6 +1958,17 @@
                    GO  TO  900-SEIKYU-READ-SEC
                END-IF
       *=== オンライン返戻対応 by Yoshikawa(2010/08/03) end
+      *
+      *=== 医療機関コード変更時作成対応 by Monma(2017/09/04) start
+               IF      WRK-PARA-STSRYYM    =   "999999"
+                   CONTINUE
+               ELSE
+                   IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
+                   OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
+                       GO  TO  900-SEIKYU-READ-SEC
+                   END-IF
+               END-IF
+      *=== 医療機関コード変更時作成対応 by Monma(2017/09/04) end
       *
       *=== 災害対応 by Yoshikawa(2011/04/01) start
       *        災害対象者判定
