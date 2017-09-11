@@ -41,6 +41,7 @@
       *                                  医療機関編集情報への開設者名追加対応
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.07    萩野    2017/09/08  患者負担がない場合は印字しない
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -885,6 +886,9 @@
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
            IF  FLG-ERR    =    ZERO
+      *=== 患者負担なしは印字対象外 by hagino(2017/09/08) start
+           AND MF100-FTNMONEY  NOT =  ZERO
+      *=== 患者負担なしは印字対象外 by hagino(2017/09/08) end
              IF  FLG-MF100  =  1
                  WRITE    MF100-REC
                  ADD      1                 TO    CNT-MF100
