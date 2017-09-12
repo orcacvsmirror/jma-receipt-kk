@@ -106,6 +106,8 @@
       *                                  市町村負担額の計算修正
       *  01.00.40    吉川    17/07/14    不要なDISPLAY文削除
       *  01.00.41    門間    17/08/02    備考の診療年月は和暦で記載
+      *  01.00.42    吉川    17/09/12    月途中で保険が変わった場合
+      *                                  行を分けて印字し、備考欄に記載
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -249,6 +251,9 @@
            03  IDX3        PIC 9(04).
            03  IDY         PIC 9(04).
            03  IDZ         PIC 9(04).
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
+           03  IDS         PIC 9(04).
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
       *
       *    パラメタ領域
        01  WRK-PARA.
@@ -355,6 +360,9 @@
       *=== 備考欄の記載修正 by hagino(2015/01/16) start
            03  WRK-BIKO3                  PIC X(20).
       *=== 備考欄の記載修正 by hagino(2015/01/16) end
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
+           03  WRK-BIKO4                  PIC X(18).
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
            03  WRK-JTENSU                 PIC ZZZZZZ.
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
            03  WRK-KOHJKYSNUM             PIC X(07).
@@ -392,6 +400,16 @@
            03  WRK-KBNCD           PIC X(16).
       *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
       *
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
+           03  WRK-SAV-PTNUM               PIC X(20).
+           03  WRK-SAV-HKNJANUM            PIC X(08).
+           03  WRK-SAV-TEKSTYMD            PIC X(08).
+           03  WRK-HKNCHG-AREA.
+               05  WRK-HKNCHG-TBL  OCCURS  200.
+                   07  WRK-HKNCHG-PTNUM    PIC X(20).
+                   07  WRK-HKNCHG-TEKSTYMD PIC X(08).
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
+      *
       *    医療機関情報
            03  WRK-HOSPNAME          PIC X(100).
            03  WRK-HOSPNAME-R        REDEFINES   WRK-HOSPNAME.
@@ -409,7 +427,7 @@
       *
       *    市町村名退避エリア
        01  CITY-AREA.
-           03  CITY-TBL  OCCURS  200.
+           03  CITY-TBL  OCCURS  100.
                05  CITY-NUM     PIC  X(02).
                05  CITY-SP1     PIC  X(01).
                05  CITY-HKNJA   PIC  X(05).
@@ -1164,6 +1182,10 @@
       *     MOVE  RECE02-TOTALTENINF (IDY)  TO  MF100-FUKUSITEN
       *=== 分点時、市町村請求額は印字する by Yoshikawa(2014/08/12) end
       *=== 分点時の福祉点数の修正 by Yoshikawa(2016/09/12) end
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
+           MOVE  RECE02-HKNJANUM-KEY TO  MF100-HKNJANUM-KEY
+           MOVE  RECE02-TEKSTYMD     TO  MF100-TEKSTYMD
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
       *
       *    市町村番号設定
       *=== 月途中の市町村変更対応 by Yoshikawa(2014/02/06) start
@@ -1379,6 +1401,28 @@
                END-IF
            END-IF
       *=== 保険単独で高額上限は印字対象外 by Yoshikawa(2017/04/13) end
+      *
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
+      *    １件前の患者と同番号かつ異なる保険者番号の場合、
+      *    月途中の保険変更患者とみなす
+           IF  (MF100-PTNUM         =  WRK-SAV-PTNUM)
+           AND (MF100-HKNJANUM  NOT =  WRK-SAV-HKNJANUM)
+               ADD     1               TO  IDS
+               MOVE    MF100-PTNUM     TO  WRK-HKNCHG-PTNUM(IDS)
+      *        適用開始日が後の方を保険変更日とする
+               IF  MF100-TEKSTYMD  >  WRK-SAV-TEKSTYMD
+                   MOVE    MF100-TEKSTYMD
+                                       TO  WRK-HKNCHG-TEKSTYMD(IDS)
+               ELSE
+                   MOVE    WRK-SAV-TEKSTYMD
+                                       TO  WRK-HKNCHG-TEKSTYMD(IDS)
+               END-IF
+           END-IF
+      *    患者番号と保険者番号保存
+           MOVE    MF100-PTNUM         TO  WRK-SAV-PTNUM
+           MOVE    MF100-HKNJANUM      TO  WRK-SAV-HKNJANUM
+           MOVE    MF100-TEKSTYMD      TO  WRK-SAV-TEKSTYMD
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
       *
            MOVE     MF100-CITYHKNJANUM TO    WRK-KEY-CITYHKNJANUM
       *
@@ -2092,6 +2136,46 @@
       *
              END-IF
       *=== 備考欄の記載修正 by hagino(2015/01/16) end
+      *
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
+             PERFORM  VARYING  IDX3  FROM  1  BY  1
+                      UNTIL    IDX3    >    100
+                      OR       WRK-HKNCHG-PTNUM(IDX3)  =  SPACE
+                IF  MF100-PTNUM  =  WRK-HKNCHG-PTNUM(IDX3)
+                    INITIALIZE                  STS-AREA-DAY
+                                                LNK-DAY1-AREA
+                                                WRK-BIKO4
+                    MOVE    "11"            TO  LNK-DAY1-IRAI
+                    MOVE    WRK-HKNCHG-TEKSTYMD(IDX3)
+                                            TO  LNK-DAY1-YMD
+                    CALL    "ORCSDAY"       USING  STS-AREA-DAY
+                                                   LNK-DAY1-AREA
+      *
+                    STRING  LNK-DAY1-GENKIGO    DELIMITED BY SIZE
+                            LNK-DAY1-YMD(3:2)   DELIMITED BY SIZE
+                            "."                 DELIMITED BY SIZE
+                            LNK-DAY1-YMD(5:2)   DELIMITED BY SIZE
+                            "."                 DELIMITED BY SIZE
+                            LNK-DAY1-YMD(7:2)   DELIMITED BY SIZE
+                            " 保険変更"         DELIMITED BY SIZE
+                            INTO  WRK-BIKO4
+                    END-STRING
+                    MOVE    100             TO  IDX3
+                END-IF
+             END-PERFORM
+      *
+             IF  SC09-BIKO1(IDX)  =  SPACE
+               MOVE  WRK-BIKO4             TO  SC09-BIKO1(IDX)
+             ELSE
+               IF  SC09-BIKO2(IDX)  =  SPACE
+                 MOVE  WRK-BIKO4           TO  SC09-BIKO2(IDX)
+               ELSE
+                 IF  SC09-BIKO3(IDX)  =  SPACE
+                   MOVE  WRK-BIKO4         TO  SC09-BIKO3(IDX)
+                 END-IF
+               END-IF
+             END-IF
+      *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
       *
       *    小計加算
              ADD  1                  TO  WRK-S-KENSU
