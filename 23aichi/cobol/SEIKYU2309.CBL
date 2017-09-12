@@ -405,7 +405,7 @@
            03  WRK-SAV-HKNJANUM            PIC X(08).
            03  WRK-SAV-TEKSTYMD            PIC X(08).
            03  WRK-HKNCHG-AREA.
-               05  WRK-HKNCHG-TBL  OCCURS  200.
+               05  WRK-HKNCHG-TBL  OCCURS  100.
                    07  WRK-HKNCHG-PTNUM    PIC X(20).
                    07  WRK-HKNCHG-TEKSTYMD PIC X(08).
       *=== ÊÝ¸±ÊÑ¹¹»þ¡¢È÷¹Í¤Ëµ­ºÜ by Yoshikawa(2017/09/12) end
@@ -427,7 +427,7 @@
       *
       *    »ÔÄ®Â¼Ì¾ÂàÈò¥¨¥ê¥¢
        01  CITY-AREA.
-           03  CITY-TBL  OCCURS  100.
+           03  CITY-TBL  OCCURS  200.
                05  CITY-NUM     PIC  X(02).
                05  CITY-SP1     PIC  X(01).
                05  CITY-HKNJA   PIC  X(05).

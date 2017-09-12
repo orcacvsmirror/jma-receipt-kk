@@ -408,7 +408,7 @@
            03  WRK-SAV-HKNJANUM            PIC X(08).
            03  WRK-SAV-TEKSTYMD            PIC X(08).
            03  WRK-HKNCHG-AREA.
-               05  WRK-HKNCHG-TBL  OCCURS  200.
+               05  WRK-HKNCHG-TBL  OCCURS  100.
                    07  WRK-HKNCHG-PTNUM    PIC X(20).
                    07  WRK-HKNCHG-TEKSTYMD PIC X(08).
       *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) end
