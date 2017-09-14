@@ -50,6 +50,8 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.15    吉川    2017/04/13  医療機関情報の取得の修正
+      *  01.00.16    吉川    2017/09/14  レセプトを複数の条件で
+      *                                  作成した場合の不具合対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -285,6 +287,10 @@
       *=== プラグイン対応 by Yoshikawa(2013/02/12) start
       *     03  FILE-NAME        PIC X(512).
       *=== プラグイン対応 by Yoshikawa(2013/02/12) end
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) start
+           03 WRK-CREYMD           PIC X(08).
+           03 WRK-CREHMS           PIC X(06).
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) end
       *
            03  WRK-PATH              PIC X(50).
       *
@@ -2341,6 +2347,11 @@
       *    レセプト明細読み込み
            PERFORM  900-RECEPRT-READ-SEC
       *
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) start
+           MOVE    RECE08-CREYMD          TO  WRK-CREYMD
+           MOVE    RECE08-CREHMS          TO  WRK-CREHMS
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) end
+      *
            PERFORM  UNTIL  FLG-RECE08  =  1
       *
              IF    (MF100-HKNJANUM      =  RECE08-HKNJANUM
@@ -2377,6 +2388,14 @@
              END-IF
       *
              PERFORM  900-RECEPRT-FETCH-SEC
+      *
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) start
+      *      作成年月日が異なる同患者レセプトがあったら処理終了
+             IF  (RECE08-CREYMD  NOT =  WRK-CREYMD)
+             OR  (RECE08-CREHMS  NOT =  WRK-CREHMS)
+                 MOVE    1               TO  FLG-RECE08
+             END-IF
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) end
       *
            END-PERFORM
       *
@@ -3378,7 +3397,10 @@
            MOVE  RECE08-REC            TO  MCPDATA-REC
            MOVE  "DBSELECT"            TO  MCP-FUNC
            MOVE  "tbl_receprt"         TO  MCP-TABLE
-           MOVE  "key43"                TO  MCP-PATHNAME
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) start
+      *     MOVE  "key43"               TO  MCP-PATHNAME
+           MOVE  "key53"               TO  MCP-PATHNAME
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) end
            CALL  "ORCDBMAIN"               USING
                                            MCPAREA
                                            MCPDATA-REC
@@ -3400,7 +3422,10 @@
       *
            MOVE  "DBFETCH"         TO  MCP-FUNC
            MOVE  "tbl_receprt"     TO  MCP-TABLE
-           MOVE  "key43"           TO  MCP-PATHNAME
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) start
+      *     MOVE  "key43"           TO  MCP-PATHNAME
+           MOVE  "key53"           TO  MCP-PATHNAME
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) end
            CALL  "ORCDBMAIN"           USING
                                        MCPAREA
                                        MCPDATA-REC
@@ -3423,7 +3448,10 @@
       *
            MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
            MOVE  "tbl_receprt"         TO  MCP-TABLE
-           MOVE  "key43"               TO  MCP-PATHNAME
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) start
+      *     MOVE  "key43"               TO  MCP-PATHNAME
+           MOVE  "key53"               TO  MCP-PATHNAME
+      *=== レセプト表示不具合対応 by Yoshikawa(2017/09/14) end
            CALL  "ORCDBMAIN"               USING
                                            MCPAREA
                                            MCPDATA-REC
