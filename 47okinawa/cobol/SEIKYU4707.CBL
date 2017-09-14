@@ -38,6 +38,7 @@
       *  01.00.08    吉川      15/03/11  法人名、役職名を印字する
       *  01.00.09    萩野      16/04/14  医療機関編集情報への開設者名追加対応
       *  01.00.10    吉川      17/01/17  対象公費はPGオプションから取得する
+      *  01.00.11    吉川      17/09/14  不要なDISPLAY文削除
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -884,8 +885,6 @@
       *     END-IF
       *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) end
       *
-           DISPLAY "集計結果=" MF100-SEIKYUGK
-      *
       *    請求額加算
            ADD  MF100-SEIKYUGK         TO  SUM-SEIKYUGK
       *
@@ -1244,9 +1243,6 @@
            END-IF
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
-           DISPLAY "診療日=" SYU-SRYYMD
-                   "点数="   SYU-TOTAL-HKNTEN
-                   "加算請求額=" WRK-SEIKYUGK
       *
            .
        800-SEIKYU-SEC-EXT.
