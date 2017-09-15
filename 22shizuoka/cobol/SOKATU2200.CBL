@@ -63,6 +63,7 @@
       *  01.00.20    門間    2017/02/14   医療機関編集情報への開設者名追加対応
       *                                   医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
+      *  01.00.21    萩野    2017/09/15   DBエラー不具合修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2551,7 +2552,10 @@
                ELSE
                    IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
                    OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
-                       GO  TO  900-SEIKYU-READ-SEC
+      *=== DBエラー不具合修正 by hagino(2017/09/15) start
+      *                 GO  TO  900-SEIKYU-READ-SEC
+                       GO  TO  950-SEIKYU-READ-SEC
+      *=== DBエラー不具合修正 by hagino(2017/09/15) end
                    END-IF
                END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/02/14) end
