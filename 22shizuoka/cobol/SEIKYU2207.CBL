@@ -868,8 +868,8 @@
       *
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2017/10/04) start
            MOVE    1                       TO  FLG-ERR
-           IF  MF100-KOHHBTNUM  =  "84" OR "85"
-      *        償還払い（84母子、85障害）で患者負担がない場合は対象外
+           IF  MF100-KOHNUM  =  "184" OR "185" OR "285"
+      *        償還払い公費で患者負担がない場合は対象外
                IF  MF100-FTNMONEY  NOT =  ZERO
                    MOVE    ZERO            TO  FLG-ERR
                END-IF
