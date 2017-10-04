@@ -867,16 +867,23 @@
            MOVE  RECE02-KOHNUM(IDZ)        TO  WRK-KOHNUM
       *
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2017/10/04) start
-           MOVE    1                      TO  FLG-ERR
-      *    公費の助成があるかどうか
-           MOVE    RECE02-KOHNUM (IDZ)    TO  WRK-KOHNUM
-           MOVE    RECE02-KOHID (IDZ)     TO  WRK-KOHID
-           IF      RECE02-NYUGAIKBN    =   "1"
-               MOVE    "key33"            TO  WRK-PATH
+           MOVE    1                       TO  FLG-ERR
+           IF  MF100-KOHHBTNUM  =  "84" OR "85"
+      *        償還払い（84母子、85障害）で患者負担がない場合は対象外
+               IF  MF100-FTNMONEY  NOT =  ZERO
+                   MOVE    ZERO            TO  FLG-ERR
+               END-IF
            ELSE
-               MOVE    "key25"            TO  WRK-PATH
+      *        公費の助成がなければ対象外
+               MOVE    RECE02-KOHNUM (IDZ) TO  WRK-KOHNUM
+               MOVE    RECE02-KOHID (IDZ)  TO  WRK-KOHID
+               IF      RECE02-NYUGAIKBN    =   "1"
+                   MOVE    "key33"         TO  WRK-PATH
+               ELSE
+                   MOVE    "key25"         TO  WRK-PATH
+               END-IF
+               PERFORM  920-SYUNOU-SET-SEC
            END-IF
-           PERFORM  920-SYUNOU-SET-SEC
       *=== 公費の助成なしは印字対象外 by Yoshikawa(2017/10/04) end
       *
       *    個別発行用市町村番号
