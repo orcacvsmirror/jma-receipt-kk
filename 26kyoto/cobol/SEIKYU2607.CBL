@@ -48,6 +48,11 @@
       *  01.00.11    吉川    17/01/11    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.12    萩野    17/05/15    医療機関情報の取得の修正
+      *  01.00.13    門間    17/10/05    公費の助成がない場合は印字しない
+      *                                  （全国公費併用時のみ）
+      *                                  患者負担無しの全国公費を
+      *                                  併用した場合のみ印字対象外とする
+      *                                  SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -182,6 +187,9 @@
            03  FLG-PRGOPTION  PIC 9(01).
            03  FLG-OK         PIC 9(01).
       *=== プログラムオプション対応 by Yoshikawa(2013/07/08) end
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) start
+           03  FLG-HEIYOU     PIC 9(01).
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -1049,6 +1057,9 @@
                MOVE    "key25"        TO  WRK-PATH
       *---(01.00.01) LINE ADD END   ------------------------------------
            END-IF
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) start
+           MOVE     1                      TO   FLG-ERR
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) end
            PERFORM  920-SYUNOU-SET-SEC
       *
            COMPUTE  WRK-ETCKOHFTN-G2  =  WRK-ETCKOHFTN-G1 + 0.5
@@ -1341,6 +1352,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -1440,6 +1454,9 @@
       *
            MOVE    ZERO    TO    WRK-ETCKOHFTN
                                  WRK-KOHTENSU
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) start
+                                 FLG-HEIYOU
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) end
       *
            PERFORM VARYING IDX FROM    1   BY  1
                    UNTIL   IDX >       4   OR
@@ -1464,6 +1481,17 @@
                                                TO  WRK-ETCKOHFTN
                    END-IF  
                    MOVE    SYU-TOTAL-HKNTEN    TO  WRK-KOHTENSU
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) start
+                   MOVE    1                   TO  FLG-HEIYOU
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) end
+      *
+      *=== 負担無の全国公費は対象外 by Monma(2017/10/05) start
+      *            患者負担無しの全国公費は印字対象外とする
+                   IF  (FLG-ERR                  =  1)
+                   AND (SYU-KOH-COMPFTN-ENTANI(IDX)  NOT =  ZERO)
+                       MOVE     ZERO           TO  FLG-ERR
+                   END-IF
+      *=== 負担無の全国公費は対象外 by Monma(2017/10/05) end
                END-IF
       *
                IF      SYU-KOH-HKNNUM(IDX)     =   "972"
@@ -1471,6 +1499,12 @@
                END-IF
            END-PERFORM
       *
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) start
+      *    全国公費を助成していない場合は助成がなくても記載する
+           IF  FLG-HEIYOU  =  ZERO
+               MOVE     ZERO                   TO  FLG-ERR
+           END-IF
+      *=== 公費の助成なしは印字しない by Monma(2017/10/05) end
       *
            ADD     WRK-ETCKOHFTN   TO  WRK-ETCKOHFTN-G1
            ADD     WRK-KOHTENSU    TO  WRK-KOHTENSU-G
