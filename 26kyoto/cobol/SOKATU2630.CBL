@@ -57,6 +57,7 @@
       *  01.00.22    吉川    17/01/11    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.23    萩野    17/05/15    医療機関情報の取得の修正
+      *  01.00.24    門間    17/10/05    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1659,6 +1660,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.04) LINE ADD START ------------------------------------

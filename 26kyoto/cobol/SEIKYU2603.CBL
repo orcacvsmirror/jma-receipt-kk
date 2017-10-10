@@ -85,6 +85,7 @@
       *  01.00.34    吉川    17/06/30    患者負担無しの全国公費を
       *                                  併用した場合のみ印字対象外とする
       *  01.00.35    萩野    17/08/10    平成２９年８月から高額療養費の限度額を変更。
+      *  01.00.36    門間    17/10/05    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1879,6 +1880,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.01) LINE ADD START ------------------------------------
