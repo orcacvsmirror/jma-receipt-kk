@@ -44,6 +44,7 @@
       *  01.00.08    萩野    16/04/14    医療機関編集情報への開設者名追加対応
       *  01.00.09    吉川    17/01/17    対象公費はPGオプションから取得する
       *  01.00.10    吉川    17/09/14    不要なDISPLAY文削除
+      *  01.00.11    門間    17/10/05    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1114,6 +1115,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.02) LINE ADD START ------------------------------------

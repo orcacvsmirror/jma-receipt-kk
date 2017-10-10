@@ -52,6 +52,7 @@
       *  01.00.15    吉川    2017/04/13  医療機関情報の取得の修正
       *  01.00.16    吉川    2017/09/14  レセプトを複数の条件で
       *                                  作成した場合の不具合対応
+      *  01.00.17    門間    2017/10/05  SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -2468,6 +2469,9 @@
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
            MOVE    MF100-PTID          TO  SPRT-PTID
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
