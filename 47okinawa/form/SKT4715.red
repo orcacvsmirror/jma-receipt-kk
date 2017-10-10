@@ -56,6 +56,11 @@
         <embed object="text" length="4"/>
       </appinfo>
     </element>
+    <element name="RECEKA" occurs="1">
+      <appinfo>
+        <embed object="text" length="10"/>
+      </appinfo>
+    </element>
     <element name="SEIKYU-TBL" occurs="2">
       <element name="NYUGAI-TBL" occurs="2">
         <element name="KENSU" occurs="1">
@@ -199,10 +204,10 @@
     <dia:attribute name="grid">
       <dia:composite type="grid">
         <dia:attribute name="width_x">
-          <dia:real val="1"/>
+          <dia:real val="0.050000000000000003"/>
         </dia:attribute>
         <dia:attribute name="width_y">
-          <dia:real val="1"/>
+          <dia:real val="0.050000000000000003"/>
         </dia:attribute>
         <dia:attribute name="visible_x">
           <dia:int val="1"/>
@@ -3002,7 +3007,7 @@
         <dia:point val="9.2,3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.2,2.72744;11.3076,3.05262"/>
+        <dia:rectangle val="9.2,2.735;11.3,3.0375"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -7263,10 +7268,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O271">
       <dia:attribute name="obj_pos">
-        <dia:point val="6.425,5.43132"/>
+        <dia:point val="6.425,5.26882"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.425,4.90132;7.025,5.50382"/>
+        <dia:rectangle val="6.425,4.73882;7.025,5.34132"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -7280,7 +7285,7 @@
             <dia:real val="0.75"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="6.425,5.43132"/>
+            <dia:point val="6.425,5.26882"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -7305,10 +7310,10 @@
     </dia:object>
     <dia:object type="Embed - Text" version="1" id="O272">
       <dia:attribute name="obj_pos">
-        <dia:point val="6.25,5.55"/>
+        <dia:point val="6.25,5.3875"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.25,4.67;7.25,5.6725"/>
+        <dia:rectangle val="6.25,4.5075;7.25,5.51"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -7322,7 +7327,7 @@
             <dia:real val="1.25"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="6.25,5.55"/>
+            <dia:point val="6.25,5.3875"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -11751,6 +11756,48 @@
       </dia:attribute>
       <dia:attribute name="embed_id">
         <dia:string>#KOUHI-TBL[5].S-KFTNGK#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="embed_column_size">
+        <dia:int val="0"/>
+      </dia:attribute>
+      <dia:attribute name="embed_char_type">
+        <dia:enum val="0"/>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="Embed - Text" version="1" id="O378">
+      <dia:attribute name="obj_pos">
+        <dia:point val="6.25,6.05"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="6.25,5.75;7.9375,6.0925"/>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#レセ科ああ#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="Takao明朝" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.42333331704139709"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="6.25,6.05"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+      <dia:attribute name="valign">
+        <dia:enum val="3"/>
+      </dia:attribute>
+      <dia:attribute name="embed_id">
+        <dia:string>#RECEKA#</dia:string>
       </dia:attribute>
       <dia:attribute name="embed_column_size">
         <dia:int val="0"/>
