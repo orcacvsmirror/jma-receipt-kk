@@ -48,6 +48,7 @@
       *                                  医療機関コード別の作成処理対応
       *  01.00.11    吉川    2017/02/06  在宅分はまとめるように修正
       *  01.00.12    萩野    2017/05/15  医療機関情報の取得の修正
+      *  01.00.13    門間    2017/10/05  SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1139,7 +1140,10 @@
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
       *     MOVE    "1"                 TO  SPRT-SITEKBN
-      *     
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
+      *
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
