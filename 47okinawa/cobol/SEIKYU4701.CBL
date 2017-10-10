@@ -41,6 +41,8 @@
       *  01.00.06    吉川    15/03/11    法人名、役職名を印字する
       *  01.00.07    萩野    16/04/14    医療機関編集情報への開設者名追加対応
       *  01.00.08    吉川    17/01/17    対象公費はPGオプションから取得する
+      *  01.00.09    吉川    17/09/14    不要なDISPLAY文削除
+      *  01.00.10    門間    17/10/05    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -800,8 +802,6 @@
            MOVE    MF100-KOHNUM    TO  WRK-KOHNUM
            MOVE    MF100-KOHID     TO  WRK-KOHID
            MOVE    ZERO            TO  FLG-TYOKI
-           DISPLAY "請求額集計開始 患者番号=" RECE02-PTNUM
-                   "点数=" MF100-TOTALTEN
       *
            IF      RECE02-NYUGAIKBN    =   "1"
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -855,7 +855,6 @@
       *         MOVE    WRK-SEIKYUGK-G  TO  MF100-SEIKYUGK
       *     END-IF
       *=== １０円未満を四捨五入する by Yoshikawa(2010/10/25) end
-           DISPLAY "集計結果=" MF100-SEIKYUGK
       *
       *
       *    保険者番号チェック処理
@@ -1114,6 +1113,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.01) LINE ADD START ------------------------------------
@@ -1572,9 +1574,6 @@
            END-IF
       *
            ADD     WRK-SEIKYUGK        TO  WRK-SEIKYUGK-G
-           DISPLAY "診療日=" SYU-SRYYMD
-                   "点数="   SYU-TOTAL-HKNTEN
-                   "加算請求額=" WRK-SEIKYUGK
       *
            .
        800-SEIKYU-SEC-EXT.
