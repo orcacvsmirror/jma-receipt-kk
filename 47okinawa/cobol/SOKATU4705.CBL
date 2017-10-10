@@ -41,12 +41,23 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.07    吉川    2017/04/13  医療機関情報の取得の修正
+      *  01.00.08    門間    2017/10/05  診療科別で帳票を分けるように修正
+      *                                  SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
        INPUT-OUTPUT                SECTION.
        FILE-CONTROL.
+      *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    請求書一時ファイル
+           SELECT  SKT4705TMP-FILE ASSIGN    SKT4705TP
+                                   ORGANIZATION    IS  INDEXED
+                                   ACCESS  MODE    IS  DYNAMIC
+                                   RECORD  KEY     IS  SKT4705TMP-KEY
+                                   FILE    STATUS  IS  STS-SKT4705.
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    請求ＤＢ更新用ファイル
            SELECT  UPD-FILE        ASSIGN  RECEUPD
@@ -61,6 +72,11 @@
        DATA                        DIVISION.
        FILE                        SECTION.
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+       FD  SKT4705TMP-FILE.
+           COPY    "CPSKT4705TMP.INC".
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
       *    請求ＤＢ更新用ファイル
        FD  UPD-FILE.
            COPY    "CPRCF010.INC"  REPLACING  //RECE10//
@@ -71,6 +87,13 @@
        01  RECEERR-REC             PIC X(200). 
       *
        WORKING-STORAGE             SECTION.
+      *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    請求書一時ファイル 名称領域
+           COPY    "CPCOMMONDAT2.INC"
+                                   REPLACING  //RECE01PARA//
+                                   BY         //SKT4705TP//.
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    請求ＤＢ更新用ファイル 名称領域 
            COPY    "CPCOMMONDAT2.INC"
@@ -94,6 +117,9 @@
       *
       *    スパ領域
        01  STS-AREA.
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+           03  STS-SKT4705         PIC X(02).
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
            03  STS-RECEERR         PIC X(02).
            03  STS-RECEUPD         PIC X(02).
       *
@@ -114,6 +140,10 @@
            03  FLG-GOKEIPRINT      PIC 9(01).
       *     
            03  FLG-PRTKBN          PIC 9(01).
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+           03  FLG-SKT4705TMP      PIC 9(01).
+           03  FLG-PRINT           PIC 9(01).
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    添字領域
        01  IDX-AREA.
@@ -121,6 +151,9 @@
            03  IDX1                PIC 9(04).
            03  IDX2                PIC 9(04).
            03  IDX3                PIC 9(04).
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+           03  IDX4                PIC 9(04).
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
            03  IDXX                PIC 9(04).
            03  IDXY                PIC 9(04).
       *
@@ -303,6 +336,11 @@
       *    公費番号まとめ情報
            COPY    "CPSK2007.INC".
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    主科設定情報
+           COPY    "CPSK2009.INC".
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
            COPY    "CPRCF010.INC".
       *
       *    ジョブ管理マスタ
@@ -422,19 +460,34 @@
       *=== ver4.8対応 by Yoshikawa(2014/10/28) start
       *    サブプログラムより一時ファイル名編集
            INITIALIZE                      SGETTEMP-AREA
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+           MOVE    "SKT4705"           TO  SKT4705TP-FILE-ID
+           MOVE    LNK-PRTKANRI-TERMID TO  SKT4705TP-TERMID
+           MOVE    WRK-PARA-HOSPNUM    TO  SKT4705TP-HOSPNUM
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *=== ver4.8対応 by Yoshikawa(2014/10/28) end
            MOVE    "RECEUPD"           TO  RECEUPD-FILE-ID
            MOVE    LNK-PRTKANRI-TERMID TO  RECEUPD-TERMID
            MOVE    WRK-PARA-HOSPNUM    TO  RECEUPD-HOSPNUM
       *
-      *=== ver4.8対応 by Yoshikawa(2014/10/28) start
-           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
-           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      **=== ver4.8対応 by Yoshikawa(2014/10/28) start
+      *     MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (1)
+      *     MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (2)
+      *     CALL  "ORCSGETTEMP"           USING
+      *                                   SGETTEMP-AREA
+      *     MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
+      *     MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
+      **=== ver4.8対応 by Yoshikawa(2014/10/28) end
+           MOVE  SKT4705TP-BASENAME      TO  SGETTEMP-BASENAMES (1)
+           MOVE  RECEUPD-BASENAME        TO  SGETTEMP-BASENAMES (2)
+           MOVE  RECEERR                 TO  SGETTEMP-BASENAMES (3)
            CALL  "ORCSGETTEMP"           USING
                                          SGETTEMP-AREA
-           MOVE  SGETTEMP-FULLNAMES (1)  TO  RECEUPD-FULLNAME
-           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEERR
-      *=== ver4.8対応 by Yoshikawa(2014/10/28) end
+           MOVE  SGETTEMP-FULLNAMES (1)  TO  SKT4705TP-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (2)  TO  RECEUPD-FULLNAME
+           MOVE  SGETTEMP-FULLNAMES (3)  TO  RECEERR
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
            MOVE    LNK-PRTKANRI-SRYYM  TO  WRK-SRYYMD (1:6)
            MOVE    "01"                TO  WRK-SRYYMD (7:2)
@@ -600,6 +653,24 @@
       *
            MOVE    IDX                     TO  WRK-2007-MAX
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    主科設定情報
+           INITIALIZE                  SYS-2009-REC
+           MOVE    "2009"              TO  SYS-2009-KANRICD
+           MOVE    "*"                 TO  SYS-2009-KBNCD
+           MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                       TO  SYS-2009-STYUKYMD(1:6)
+                                           SYS-2009-EDYUKYMD(1:6)
+           MOVE    "01"                TO  SYS-2009-STYUKYMD(7:2)
+                                           SYS-2009-EDYUKYMD(7:2)
+           MOVE    SPA-HOSPNUM         TO  SYS-2009-HOSPNUM
+           MOVE    SYS-2009-REC        TO  MCPDATA-REC
+           PERFORM 910-SYSKANRI-KEY10-SEC
+           IF      FLG-SYSKANRI        =   ZERO
+               MOVE    MCPDATA-REC         TO  SYS-2009-REC
+           END-IF
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/06/01) start
       *    レセプト・総括編集情報
       *    区分コード０１のデータ読み込み
@@ -634,6 +705,21 @@
            DISPLAY "WRK-PARA-HKNJANUM      =" WRK-PARA-HKNJANUM
       *=== 広域連合の保険者番号指定対応 by Yoshikawa(2010/06/01) end
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    処理区分によってキーを分ける
+           EVALUATE    WRK-PARA-SYOKBN
+               WHEN    "1"
+                   MOVE    "key66"         TO  WRK-MCP-PATHNAME
+               WHEN    "2"
+                   MOVE    "key65"         TO  WRK-MCP-PATHNAME
+           END-EVALUATE
+      *
+           MOVE    "tbl_seikyu"        TO  WRK-MCP-TABLE
+           PERFORM 900-SEIKYU-SELECT-SEC
+           MOVE    WRK-MCP-TABLE       TO  MCP-TABLE
+           MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
            .
        100-INIT-EXT.
            EXIT.
@@ -645,21 +731,39 @@
       *
            OPEN    OUTPUT  UPD-FILE
       *
-      *    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "2"
-                   MOVE    "2"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
-           EVALUATE    WRK-PARA-SYOKBN
-               WHEN    ZERO
-               WHEN    "1"
-                   MOVE    "1"         TO  WRK-SYOKBN
-                   PERFORM 2001-SYOKBN-SYUKEI-SEC
-           END-EVALUATE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      **    処理区分(0=全体 1=当月・月遅れ 2=返戻分)で分ける
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "2"
+      *             MOVE    "2"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      *     EVALUATE    WRK-PARA-SYOKBN
+      *         WHEN    ZERO
+      *         WHEN    "1"
+      *             MOVE    "1"         TO  WRK-SYOKBN
+      *             PERFORM 2001-SYOKBN-SYUKEI-SEC
+      *     END-EVALUATE
+      **
+      *     CLOSE   UPD-FILE
+      *
+           OPEN    OUTPUT  SKT4705TMP-FILE
+           CLOSE           SKT4705TMP-FILE
+           OPEN    I-O     SKT4705TMP-FILE
+           
+           MOVE    ZERO                TO  FLG-UPD
+      *
+           PERFORM 2001-KOUKI-SYUKEI-SEC
+                   UNTIL   FLG-END  =  1
       *
            CLOSE   UPD-FILE
+           CLOSE   SKT4705TMP-FILE
+      *
+           IF       FLG-UPD   =       1
+                    PERFORM   2002-PRINT-SEC
+           END-IF
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    請求ＤＢ更新
            IF      FLG-UPD        =   1
@@ -742,6 +846,14 @@
            INITIALIZE                       IDX-AREA
                                             FLG-UPD
                                             WRK-HKNJANUM
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+                                            SKT4705TMP-REC
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    診療科
+           MOVE     RECE10-RECEKA        TO   SKT4705TMP-RECEKA
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    入外区分
            EVALUATE    RECE10-NYUGAIKBN
@@ -759,15 +871,28 @@
                    MOVE    2                   TO  IDX3
            END-EVALUATE
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+           PERFORM  800-SKTTMP-READ-SEC
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
            PERFORM 20011-HKN-SYUKEI-SEC
       *
-      *    公費負担分
-           IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
-                   RECE10-KOHNUM (2)   NOT =   SPACE  OR
-                   RECE10-KOHNUM (3)   NOT =   SPACE  OR
-                   RECE10-KOHNUM (4)   NOT =   SPACE
-               PERFORM 20012-KOH-SYUKEI-SEC
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    全科合計（シス管の主科設定で科別としているなら）
+           IF  SYS-2009-SYUKA-KOUIKI  =  1
+             PERFORM  20011-GOKEI-SET-SEC
            END-IF
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      **    公費負担分
+      *     IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
+      *             RECE10-KOHNUM (2)   NOT =   SPACE  OR
+      *             RECE10-KOHNUM (3)   NOT =   SPACE  OR
+      *             RECE10-KOHNUM (4)   NOT =   SPACE
+      *         PERFORM 20012-KOH-SYUKEI-SEC
+      *     END-IF
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    集計の対象にならなかったとき
            IF      FLG-UPD             =   1
@@ -788,6 +913,9 @@
                END-STRING
                PERFORM 500-ERR-HENSYU-SEC
                PERFORM 500-COBABORT-SEC
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+               MOVE    1                   TO  FLG-END
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
            END-IF 
            .
        2001-KOUKI-SYUKEI-EXT.
@@ -803,14 +931,38 @@
                PERFORM  20011-HKN-SYUKEI-EXT
            END-IF
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      **    件数
+      *     ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+      **    小計
+      *     ADD  1                  TO  SUM-SKENSU(IDX1)
+      **    合計
+      *     ADD  1                  TO  SUM-GKENSU
+      *
       *    件数
-           ADD  1                  TO  SUM-KENSU(IDX1 IDX3)
+           ADD  1                  TO  SKT4705TMP-KENSU(IDX1 IDX3)
       *    小計
-           ADD  1                  TO  SUM-SKENSU(IDX1)
+           ADD  1                  TO  SKT4705TMP-SKENSU(IDX1)
       *    合計
-           ADD  1                  TO  SUM-GKENSU
+           ADD  1                  TO  SKT4705TMP-GKENSU
+      *
+      *    公費負担分
+           IF      RECE10-KOHNUM (1)   NOT =   SPACE  OR
+                   RECE10-KOHNUM (2)   NOT =   SPACE  OR
+                   RECE10-KOHNUM (3)   NOT =   SPACE  OR
+                   RECE10-KOHNUM (4)   NOT =   SPACE
+               PERFORM 20012-KOH-SYUKEI-SEC
+           END-IF
+      *
+           IF  FLG-SKT4705TMP  =  1
+               WRITE    SKT4705TMP-REC
+           ELSE
+               REWRITE  SKT4705TMP-REC
+           END-IF
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
            MOVE    1               TO  FLG-UPD 
+      *
            .
        20011-HKN-SYUKEI-EXT.
            EXIT.
@@ -862,17 +1014,31 @@
              END-IF
       *
       *      公費番号格納
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *       PERFORM VARYING   IDX2    FROM    1   BY  1
+      *               UNTIL     IDX2 >          100
+      *         IF  SUM-KOHNUM (IDX2)   =   SPACE
+      *           MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
+      *           MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+      *         END-IF
+      *         IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+      *           PERFORM 200121-KOH-SYUKEI-01-SEC
+      *           MOVE    100             TO  IDX2
+      *         END-IF
+      *       END-PERFORM
+      *
              PERFORM VARYING   IDX2    FROM    1   BY  1
                      UNTIL     IDX2 >          100
-               IF  SUM-KOHNUM (IDX2)   =   SPACE
-                 MOVE  RECE10-KOHNUM(IDZ) TO  SUM-KOHNUM(IDX2)
-                 MOVE  WRK-MEISYO        TO  SUM-KOH-MEISYO(IDX2)
+               IF  SKT4705TMP-KOHNUM(IDX2)   =   SPACE
+                 MOVE  RECE10-KOHNUM(IDZ)  TO  SKT4705TMP-KOHNUM(IDX2)
+                 MOVE  WRK-MEISYO          TO  SKT4705TMP-KOHNAME(IDX2)
                END-IF
-               IF   RECE10-KOHNUM(IDZ) =  SUM-KOHNUM (IDX2)
+               IF   RECE10-KOHNUM(IDZ) =  SKT4705TMP-KOHNUM(IDX2)
                  PERFORM 200121-KOH-SYUKEI-01-SEC
                  MOVE    100             TO  IDX2
                END-IF
              END-PERFORM
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
            END-PERFORM
            .
        20012-KOH-SYUKEI-EXT.
@@ -883,15 +1049,44 @@
       *****************************************************************
        200121-KOH-SYUKEI-01-SEC        SECTION.
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      **    公費再掲欄：件数
+      *     ADD  1                    TO  SUM-KKENSU(IDX2 IDX1)
+      **    公費：合計件数
+      *     ADD  1                    TO  SUM-GKKENSU
+      *
       *    公費再掲欄：件数
-           ADD  1                    TO  SUM-KKENSU(IDX2 IDX1)
+           ADD  1                    TO  SKT4705TMP-KKENSU(IDX2 IDX1)
       *    公費：合計件数
-           ADD  1                    TO  SUM-GKKENSU
+           ADD  1                    TO  SKT4705TMP-GKKENSU
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
            MOVE    1                 TO  FLG-UPD 
            .
        200121-KOH-SYUKEI-01-EXT.
            EXIT.
+      *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *****************************************************************
+      *    全科合計処理
+      *****************************************************************
+       20011-GOKEI-SET-SEC          SECTION.
+      *
+      *TMP-FILE キーセット
+      *
+           INITIALIZE       SKT4705TMP-REC
+      *
+      *    診療科
+           MOVE     "99"            TO   SKT4705TMP-RECEKA
+      *
+           PERFORM  800-SKTTMP-READ-SEC
+      *
+           PERFORM  20011-HKN-SYUKEI-SEC
+      *
+           .
+       20011-GOKEI-SET-EXT.
+           EXIT.
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *****************************************************************
       *    請求ＤＢ更新用ファイル出力処理
@@ -929,12 +1124,30 @@
       *****************************************************************
        2002-PRINT-SEC                SECTION.
       *
-      *    帳票編集<見出し>処理
-           PERFORM 20021-HEAD-HEN-SEC
-      *    帳票編集<明細>処理
-           PERFORM 20023-BODY-HEN-SEC
-      *    帳票印刷処理
-           PERFORM 20024-PRINT-OUT-SEC
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+           OPEN     INPUT       SKT4705TMP-FILE
+      *
+           MOVE     ZERO        TO       FLG-PRINT
+      *
+      *    一時ファイル読込
+           PERFORM  900-TMP-READ-SEC
+      *
+           PERFORM  UNTIL     FLG-PRINT   =  1
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
+      *      帳票編集<見出し>処理
+             PERFORM 20021-HEAD-HEN-SEC
+      *      帳票編集<明細>処理
+             PERFORM 20023-BODY-HEN-SEC
+      *      帳票印刷処理
+             PERFORM 20024-PRINT-OUT-SEC
+      *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *      一時ファイル読込
+             PERFORM  900-TMP-READ-SEC
+      *
+           END-PERFORM
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
            .
        2002-PRINT-EXT.
@@ -973,6 +1186,30 @@
            PERFORM  2009-HENKAN-SEC
            MOVE     WRK-OUT-INPUT      TO  SKT4705-HOSPCD
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *    診療科
+           INITIALIZE                  SYS-1005-REC
+           IF  (SKT4705TMP-RECEKA  NOT =  ZERO)
+           AND (SKT4705TMP-RECEKA  NOT =  "99")
+      *    診療科目情報取得
+             INITIALIZE                  SYS-1005-REC
+             MOVE    "1005"              TO  SYS-1005-KANRICD
+             MOVE    SKT4705TMP-RECEKA   TO  SYS-1005-KBNCD
+             MOVE    LNK-PRTKANRI-SRYYM(1:6)
+                                         TO  SYS-1005-STYUKYMD(1:6)
+                                             SYS-1005-EDYUKYMD(1:6)
+             MOVE    "01"                TO  SYS-1005-STYUKYMD(7:2)
+                                             SYS-1005-EDYUKYMD(7:2)
+             MOVE    SPA-HOSPNUM         TO  SYS-1005-HOSPNUM
+             MOVE    SYS-1005-REC        TO  MCPDATA-REC
+             PERFORM 910-SYSKANRI-KEY10-SEC
+             IF      FLG-SYSKANRI        =   ZERO
+                 MOVE    MCPDATA-REC         TO  SYS-1005-REC
+                 MOVE    SYS-1005-SRYKANAME1 TO  SKT4705-RECEKA
+             END-IF
+           END-IF
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
            .
        20021-HEAD-HEN-EXT.
            EXIT.
@@ -990,17 +1227,33 @@
              ADD     1                   TO  IDZ    
              PERFORM VARYING IDY FROM    1   BY  1
                      UNTIL   IDY >       2
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      **    件数
+      *         MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+      *         MOVE  WRK-Z5              TO  SKT4705-KENSU(IDZ IDY)
+      *       END-PERFORM
+      **    小計
+      *       MOVE    SUM-SKENSU(IDX)     TO  WRK-Z6
+      *       MOVE    WRK-Z6              TO  SKT4705-SKENSU(IDZ)
+      *     END-PERFORM
+      **    合計
+      *     MOVE    SUM-GKENSU            TO  WRK-Z6
+      *     MOVE    WRK-Z6                TO  SKT4705-GKENSU
+      *
       *    件数
-               MOVE  SUM-KENSU(IDX IDY)  TO  WRK-Z5
+               MOVE  SKT4705TMP-KENSU(IDX IDY)
+                                         TO  WRK-Z5
                MOVE  WRK-Z5              TO  SKT4705-KENSU(IDZ IDY)
              END-PERFORM
       *    小計
-             MOVE    SUM-SKENSU(IDX)     TO  WRK-Z6
+             MOVE    SKT4705TMP-SKENSU(IDX)
+                                         TO  WRK-Z6
              MOVE    WRK-Z6              TO  SKT4705-SKENSU(IDZ)
            END-PERFORM
       *    合計
-           MOVE    SUM-GKENSU            TO  WRK-Z6
+           MOVE    SKT4705TMP-GKENSU     TO  WRK-Z6
            MOVE    WRK-Z6                TO  SKT4705-GKENSU
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *
       *    公費負担分編集処理
            MOVE    ZERO                  TO  FLG-KOH-END
@@ -1023,28 +1276,48 @@
            PERFORM VARYING IDY     FROM    1   BY  1
                    UNTIL   IDY     >       7         
                    OR      FLG-KOH-END     =   1
-             IF      SUM-KOHNUM (IDX2)   =   SPACE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *       IF      SUM-KOHNUM (IDX2)   =   SPACE
+      *         MOVE    1                     TO  FLG-KOH-END
+      *       ELSE    
+      *         PERFORM 2002311-HKNNUM-HENSYU-SEC     
+      *         PERFORM VARYING IDZ FROM    1   BY  1
+      *                 UNTIL   IDZ >       2
+      **    公費再掲欄：件数
+      *           MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
+      *           MOVE  WRK-Z5                TO SKT4705-KKENSU(IDY IDZ)
+      *         END-PERFORM
+      **
+      *         ADD     1                     TO  IDX2   
+      *       END-IF
+      *
+             IF      SKT4705TMP-KOHNUM (IDX2)   =   SPACE
                MOVE    1                     TO  FLG-KOH-END
              ELSE    
                PERFORM 2002311-HKNNUM-HENSYU-SEC     
                PERFORM VARYING IDZ FROM    1   BY  1
                        UNTIL   IDZ >       2
       *    公費再掲欄：件数
-                 MOVE  SUM-KKENSU(IDX2 IDZ)  TO WRK-Z5
+                 MOVE  SKT4705TMP-KKENSU(IDX2 IDZ)  TO WRK-Z5
                  MOVE  WRK-Z5                TO SKT4705-KKENSU(IDY IDZ)
                END-PERFORM
       *
                ADD     1                     TO  IDX2   
              END-IF        
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
            END-PERFORM
+      *
       *    2ページ目以降は公費合計を印字しない
            IF  FLG-GOKEIPRINT  =  1
-             MOVE    SUM-GKKENSU           TO  WRK-Z6
+             MOVE    SKT4705TMP-GKKENSU    TO  WRK-Z6
              MOVE    WRK-Z6                TO  SKT4705-GKKENSU
            END-IF
       *
       *    １頁出力しても公費はまだ残っているか
-           IF      SUM-KOHNUM (IDX2)  =   SPACE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *     IF      SUM-KOHNUM (IDX2)  =   SPACE
+           IF      SKT4705TMP-KOHNUM (IDX2)  =   SPACE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
                MOVE    1                     TO  FLG-KOH-END
            ELSE
                MOVE    ZERO                  TO  FLG-GOKEIPRINT
@@ -1065,20 +1338,32 @@
       *
            MOVE    SPACE               TO  WRK-KOHKBN
       *
-           MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *     MOVE    SUM-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+           MOVE    SKT4705TMP-KOHNUM (IDX2)   TO  WRK-KOHNUM9
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
            MOVE    WRK-KOHNUM9         TO  SKT4705-HBTNUM (IDY)
       *
       *    特定疾患のとき 
-           IF      SUM-KOHNUM (IDX2)  =   "051"
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *     IF      SUM-KOHNUM (IDX2)  =   "051"
+           IF      SKT4705TMP-KOHNUM (IDX2)  =   "051"
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
                MOVE    "51"            TO   SKT4705-HBTNUM (IDY)
                MOVE    "特定疾患"      TO   WRK-HKNNAME
            ELSE
       *      公費番号まとめ情報からの集計か
-             IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *       IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+             IF      SKT4705TMP-KOHNAME(IDX2)  =   SPACE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
       *        保険番号読込み  
                INITIALIZE                     HKNNUM-REC
                MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
-               MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *         MOVE  SUM-KOHNUM (IDX2)    TO  HKN-HKNNUM
+               MOVE  SKT4705TMP-KOHNUM (IDX2)  TO  HKN-HKNNUM
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
                MOVE  HKNNUM-REC           TO  MCPDATA-REC
                MOVE  "tbl_hknnum"         TO  MCP-TABLE
                MOVE  "key2"               TO  MCP-PATHNAME
@@ -1112,7 +1397,10 @@
                  MOVE  HKN-HBTNUM         TO  SKT4705-HBTNUM(IDY)
              ELSE
       *          公費番号まとめ情報から公費名へ
-                 MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *          MOVE SUM-KOH-MEISYO(IDX2)    TO  WRK-HKNNAME
+                 MOVE SKT4705TMP-KOHNAME(IDX2)    TO  WRK-HKNNAME
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
              END-IF
            END-IF
       *
@@ -1179,6 +1467,9 @@
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
       *     MOVE    "1"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/10/05) end
       *     
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
@@ -1334,6 +1625,36 @@
        310-SEIKYU-UPD-EXT.
            EXIT.
       *
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+      *****************************************************************
+      *    集計ファイル読込
+      *****************************************************************
+       800-SKTTMP-READ-SEC             SECTION.
+      *
+           READ    SKT4705TMP-FILE
+               INVALID    KEY
+                   MOVE    1           TO  FLG-SKT4705TMP
+               NOT INVALID  KEY
+                   MOVE    ZERO        TO  FLG-SKT4705TMP
+           END-READ
+           .
+       800-SKTTMP-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    一時ファイル読込
+      *****************************************************************
+       900-TMP-READ-SEC                SECTION.
+      *
+           READ  SKT4705TMP-FILE   NEXT
+               AT  END
+                   MOVE  1  TO  FLG-PRINT
+           END-READ
+           .
+       900-TMP-READ-EXT.
+           EXIT.
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
+      *
       *****************************************************************
       *    西暦日本語変換処理
       *****************************************************************
@@ -1403,6 +1724,9 @@
                MOVE    WRK-MCP-PATHNAME    TO  MCP-PATHNAME
                PERFORM 900-SEIKYU-READ-SEC
            ELSE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+               MOVE    1                   TO  FLG-END
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
                MOVE    1                   TO  FLG-RECE10
                MOVE    HIGH-VALUE      TO  KEY-NEW
            END-IF
@@ -1461,6 +1785,9 @@
                DISPLAY "PTNUM=" RECE10-PTNUM 
       *         
            ELSE
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) start
+               MOVE    1               TO  FLG-END
+      *=== 診療科別で帳票を分ける by Monma(2017/10/05) end
                MOVE    HIGH-VALUE      TO  KEY-NEW
                MOVE    1               TO  FLG-RECE10
            END-IF
