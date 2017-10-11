@@ -5,17 +5,19 @@ PREFNAME=aomori
 PROGRAMID=SOKATU0205
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0205"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    広域連合・総括表作成（青森）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
 #        ${12} ジョブＩＤ
 #        ${13} シェルＩＤ
-#        ${15} 医療機関ＩＤ 
+#        ${15} 医療機関番号
 #        ${16} エラーファイル名 
 #        ${18} 対象保険者番号
 #        ${19} 処理対象区分
 #              0:全体  1:当月・月遅れ分  2:返戻分
+#        ${20} - ${21} 医療機関コード別の処理指定時
+#                      該当診療年月の開始、終了
 #-------------------------------------------#
 #
 ##      エラーファイル削除
@@ -28,7 +30,7 @@ RENNUM=0
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,1,${16} > ${LOG_FILE}-2.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,1,${20},${21},${16} > ${LOG_FILE}-2.log 2>&1
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -36,7 +38,7 @@ RENNUM=0
 ##      当月・月遅れ分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${16} > ${LOG_FILE}-1.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16} > ${LOG_FILE}-1.log 2>&1
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -45,7 +47,7 @@ RENNUM=0
 ##      返戻分（特別療養費）
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${16} > ${LOG_FILE}-4.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${20},${21},${16} > ${LOG_FILE}-4.log 2>&1
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -53,7 +55,7 @@ RENNUM=0
 ##      当月・月遅れ分（特別療養費）
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${16} > ${LOG_FILE}-3.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${20},${21},${16} > ${LOG_FILE}-3.log 2>&1
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
