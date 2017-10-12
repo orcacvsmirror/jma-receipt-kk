@@ -59,6 +59,8 @@
       *  01.00.20    萩野       17/04/14    点数欄の印字桁数増加
       *                                     医療機関コード変更時、
       *                                     医療機関コード別の作成処理対応
+      *  01.00.21    萩野       17/10/11    公費再掲欄に印字されない
+      *                                     公費がある不具合を修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1390,9 +1392,11 @@
       *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
       *
       *    公費判別
+      *=== 公費判別をしない by hagino(2017/10/11) start
       **   全国共通公費のみ対象
-            IF    ( RECE10-KOHNUM(IDX3)(1:1)  =  "0" ) OR
-                    ( RECE10-KOHNUM(IDX3)  =  "181" )
+      *      IF    ( RECE10-KOHNUM(IDX3)(1:1)  =  "0" ) OR
+      *              ( RECE10-KOHNUM(IDX3)  =  "181" )
+      *=== 公費判別をしない by hagino(2017/10/11) end
              MOVE    1    TO   SKT4110TMP-PAGE-FLG2
              PERFORM  VARYING  IDX4  FROM  1  BY  1
                       UNTIL    IDX4  >     20
@@ -1450,7 +1454,9 @@
       *    食事療養：標準負担額
              ADD  RECE10-SHOKUJIFTN(IDX3 + 1)  TO
                                SKT4110TMP-S-KFTNGK(CNT-KOH)
-            END-IF
+      *=== 公費判別をしない by hagino(2017/10/11) start
+      *      END-IF
+      *=== 公費判別をしない by hagino(2017/10/11) end
            END-PERFORM
       *
       *
@@ -1539,9 +1545,11 @@
       *--- (2008/11/20) LINE ADD END   MONMA ---------------------------
       *
       *    公費判別
+      *=== 公費判別をしない by hagino(2017/10/11) start
       *    全国共通公費のみ対象
-             IF    ( RECE10-KOHNUM(IDX3)(1:1)  =  "0" ) OR
-                     ( RECE10-KOHNUM(IDX3)  =  "181" )
+      *       IF    ( RECE10-KOHNUM(IDX3)(1:1)  =  "0" ) OR
+      *               ( RECE10-KOHNUM(IDX3)  =  "181" )
+      *=== 公費判別をしない by hagino(2017/10/11) end
       *
                IF  RECE10-ZAITAKU     NOT =   1
                  MOVE    1    TO   SKT4110TMP-PAGE-FLG3
@@ -1563,7 +1571,9 @@
                ELSE
                    PERFORM  2202-ROJINKOH-SYUKEI3-SEC
                END-IF
-             END-IF
+      *=== 公費判別をしない by hagino(2017/10/11) start
+      *       END-IF
+      *=== 公費判別をしない by hagino(2017/10/11) end
            END-PERFORM
       *
            .
