@@ -5,7 +5,7 @@ PREFNAME=saga
 PROGRAMID=SOKATU4115
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4115"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    弓拌息圭ˇ壳闻鼠椒懒滇今∈捍察∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
