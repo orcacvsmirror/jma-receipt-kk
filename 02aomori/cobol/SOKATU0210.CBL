@@ -1625,6 +1625,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by hagino(2017/10/11) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2017/10/11) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.07) LINE ADD START ------------------------------------
@@ -1874,6 +1877,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by hagino(2017/10/11) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2017/10/11) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.07) LINE ADD START ------------------------------------
