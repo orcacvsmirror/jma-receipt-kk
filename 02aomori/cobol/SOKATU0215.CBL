@@ -1487,6 +1487,9 @@
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
       *     MOVE    "1"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2017/10/11) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2017/10/11) end
       *     
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
