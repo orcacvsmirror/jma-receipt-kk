@@ -56,6 +56,7 @@
       *  01.00.18    萩野       17/04/14    点数欄の印字桁数増加
       *                                     医療機関コード変更時、
       *                                     医療機関コード別の作成処理対応
+      *  01.00.19    萩野       17/10/13    SITEKBN変更（動作に変更なし）
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1834,6 +1835,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by hagino(2017/10/11) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2017/10/11) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.02) LINE ADD START ------------------------------------
