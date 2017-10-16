@@ -59,6 +59,8 @@
       *                                     患者の病名を印字するように修正
       *  01.00.10    吉川         14/10/27  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.11    吉川         14/12/10  表示期間によるレセプト記載対応
+      *  01.00.12    吉川         17/10/16  入院で診療行為がない場合
+      *                                     病名が印字されないのを修正
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -125,6 +127,9 @@
            03  FLG-TAISYOKOHI      PIC 9(01).
            03  FLG-TAISYO          PIC 9(01).
       *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) start
+           03  FLG-PTNYUINRRK      PIC 9(01).
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -246,6 +251,12 @@
       *    患者マスタ
        01  PTINF-REC.
            COPY    "CPPTINF.INC".
+      *
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) start
+      *    入院履歴マスタ
+       01  PTNYUINRRK-REC.
+           COPY    "CPPTNYUINRRK.INC".
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) end
       *
       *****************************************************************
       *    サブプロ用領域
@@ -610,7 +621,19 @@
       *
       *    診療科
            MOVE    ZERO                TO  FLG-CHK 
-           IF      SYS-2005-BYOMEIHENKBN1      =   ZERO     
+           IF      SYS-2005-BYOMEIHENKBN1      =   ZERO
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) start
+             IF  RECE02-NYUGAIKBN  =  "1"
+      *            入院履歴読み込み
+                   PERFORM  900-PTNYUINRRK-READ-SEC
+                   IF  PTBYO-SRYKA  =  PTNYUINRRK-NYUINKA
+                       MOVE    1                    TO  FLG-CHK
+                   END-IF
+                   IF      FLG-CHK              =   ZERO
+                       GO  TO  2001-PTBYO-CHK-EXT
+                   END-IF
+             ELSE
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) end
                PERFORM VARYING IDX FROM    1   BY  1
                        UNTIL   IDX >       20
                        OR      RECE02-SRYKA(IDX)   =   SPACE
@@ -622,6 +645,9 @@
                IF      FLG-CHK              =   ZERO
                    GO  TO  2001-PTBYO-CHK-EXT
                END-IF
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) start
+             END-IF
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) end
            END-IF        
       *
       *=== レセプト表示期間対応 by Yoshikawa(2014/12/10) start
@@ -1446,3 +1472,56 @@
            EXIT.
       *
       *=== TAISYOKOHIの患者の病名印字 by Yoshikawa(2013/09/04) end
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) start
+      *****************************************************************
+      *    入院履歴マスタ読込
+      *****************************************************************
+       900-PTNYUINRRK-READ-SEC         SECTION.
+      *
+           INITIALIZE                     PTNYUINRRK-REC
+      *
+           MOVE    RECE02-HOSPNUM         TO  PTNYUINRRK-HOSPNUM
+           MOVE    RECE02-PTID            TO  PTNYUINRRK-PTID
+           MOVE    RECE02-SRYYM(1:6)      TO  PTNYUINRRK-NYUINYMD(1:6)
+                                              PTNYUINRRK-TAIINYMD(1:6)
+           MOVE    "99"                   TO  PTNYUINRRK-NYUINYMD(7:2)
+           MOVE    "01"                   TO  PTNYUINRRK-TAIINYMD(7:2)
+           MOVE    PTNYUINRRK-REC         TO  MCPDATA-REC
+           MOVE    "DBSELECT"             TO  MCP-FUNC
+           MOVE    "tbl_ptnyuinrrk"       TO  MCP-TABLE
+           MOVE    "key11"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+      *
+           IF   MCP-RC       =   ZERO
+               MOVE    "DBFETCH"          TO  MCP-FUNC
+               MOVE    "tbl_ptnyuinrrk"   TO  MCP-TABLE
+               MOVE    "key11"            TO  MCP-PATHNAME
+               CALL    "ORCDBMAIN"        USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+               IF  MCP-RC     =   ZERO
+                   MOVE    ZERO           TO  FLG-PTNYUINRRK
+                   MOVE    MCPDATA-REC    TO  PTNYUINRRK-REC
+               ELSE
+                   MOVE    1              TO  FLG-PTNYUINRRK
+               END-IF
+           ELSE
+              MOVE    1                   TO  FLG-PTNYUINRRK
+           END-IF
+      *
+           MOVE    "DBCLOSECURSOR"        TO  MCP-FUNC
+           MOVE    "tbl_ptnyuinrrk"       TO  MCP-TABLE
+           MOVE    "key11"                TO  MCP-PATHNAME
+           CALL    "ORCDBMAIN"            USING
+                                          MCPAREA
+                                          MCPDATA-REC
+                                          SPA-AREA
+      *
+           .
+       900-PTNYUINRRK-READ-EXT.
+           EXIT.
+      *=== 診療行為登録なしでも病名印字 by Yoshikawa(2017/10/16) end
