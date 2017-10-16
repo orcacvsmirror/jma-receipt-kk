@@ -53,6 +53,9 @@
       *  01.00.20    吉川    2016/10/03  公費番号まとめ情報の公費番号の追加
       *  01.00.21    門間    2017/03/14  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.22    吉川    2017/10/16  まとめ公費は法別番号を印字する
+      *                                  TMPファイルクローズ漏れ対応
+      *                                  SITEKBN変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1586,6 +1589,10 @@
            END-PERFORM
       *=== 中国九州北部豪雨対応 by Uchida(2009/10/16) end
       *
+      *=== TMPファイルクローズ漏れ by Yoshikawa(2017/10/16) start
+           CLOSE   SKT4025TMP-FILE
+      *=== TMPファイルクローズ漏れ by Yoshikawa(2017/10/16) end
+      *
            .
        2002-PRINT-EXT.
            EXIT.
@@ -1927,11 +1934,13 @@
                MOVE    "51"            TO   SKT4025-HBTNUM (IDY)
                MOVE    "特定疾患"      TO   WRK-HKNNAME
            ELSE
-      *      公費番号まとめ情報からの集計か
-      *=== 中国九州北部豪雨対応 by Uchida(2009/10/16) start
-      *       IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
-             IF      SKT4025TMP-KOHNAME(IDX2)  =   SPACE
-      *=== 中国九州北部豪雨対応 by Uchida(2009/10/16) end
+      *=== まとめ公費も法別番号を印字 by Yoshikawa(2017/10/16) start
+      **      公費番号まとめ情報からの集計か
+      **=== 中国九州北部豪雨対応 by Uchida(2009/10/16) start
+      **       IF      SUM-KOH-MEISYO(IDX2)  =   SPACE
+      *       IF      SKT4025TMP-KOHNAME(IDX2)  =   SPACE
+      **=== 中国九州北部豪雨対応 by Uchida(2009/10/16) end
+      *=== まとめ公費も法別番号を印字 by Yoshikawa(2017/10/16) end
       *        保険番号読込み  
                INITIALIZE                     HKNNUM-REC
                MOVE  SPA-HOSPNUM          TO  HKN-HOSPNUM
@@ -1970,7 +1979,9 @@
       *
       *          法別番号
                  MOVE  HKN-HBTNUM         TO  SKT4025-HBTNUM(IDY)
-             END-IF
+      *=== まとめ公費も法別番号を印字 by Yoshikawa(2017/10/16) start
+      *       END-IF
+      *=== まとめ公費も法別番号を印字 by Yoshikawa(2017/10/16) end
            END-IF
            . 
        2002311-HKNNUM-HENSYU-EXT.
@@ -2040,7 +2051,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-      *     MOVE    "1"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2017/10/16) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2017/10/16) end
       *     
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
