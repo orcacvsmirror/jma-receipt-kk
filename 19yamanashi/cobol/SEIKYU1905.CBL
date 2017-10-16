@@ -48,6 +48,7 @@
       *  01.00.08    吉川    15/09/15    国保分が記録されない事があるのを修正
       *                                  （COMMAND-PARAM桁数を増やす）
       *  01.00.09    吉川    17/08/10    ginbee用に再作成
+      *  01.00.10    吉川    17/10/06    請求年月が診療年月になっているのを修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -980,8 +981,11 @@
            PERFORM 5004-MOJI-HENSYU-SEC    
       *
       *    請求年月（和暦）
-           MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
-           MOVE    "01"                    TO  WRK-SYMD(7:2)
+      *=== 請求年月の不具合修正 by Yoshikawa(2017/10/06) start
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
+      *     MOVE    "01"                    TO  WRK-SYMD(7:2)
+           MOVE    LNK-PRTKANRI-SKYYMD     TO  WRK-SYMD
+      *=== 請求年月の不具合修正 by Yoshikawa(2017/10/06) end
            PERFORM 31011-SEIWA-HEN-SEC
            MOVE    WRK-HENYMD (1:5)        TO  WRK-SEIYM 
            MOVE    WRK-SEIYM               TO  WRK-DATA
