@@ -88,7 +88,10 @@
       *  01.00.40    門間    17/03/14    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.41    萩野    17/04/04    後期高齢者の患者で返戻がある場合に
-      *                                   エラーとなる不具合を修正
+      *                                  エラーとなる不具合を修正
+      *  01.00.42    吉川    17/10/16    保険者番号の代表番号まとめは
+      *                                  紙レセ時にのみするように修正
+      *                                  SITEKBN変更
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1528,14 +1531,22 @@
                             SKT4000TMP-HKNJANUM(1:6)
            END-IF
       *
-      *    福岡市・北九州市は代表番号で括る
-           IF    SKT4000TMP-HKNJANUM(1:3)  =  "404"
-             MOVE  "404012"    TO    SKT4000TMP-HKNJANUM
-           END-IF
+      *=== 代表番号まとめは紙レセのみ by Yoshikawa(2017/10/16) start
+      *    レセ電時、政令指定都市は区毎に請求
+           IF   SYS-2005-KKHRECEKBN  =  "0"
+           OR   SYS-2005-KKHRECEKBN  =  SPACE
+      *=== 代表番号まとめは紙レセのみ by Yoshikawa(2017/10/16) end
+      *      福岡市・北九州市は代表番号で括る
+             IF    SKT4000TMP-HKNJANUM(1:3)  =  "404"
+               MOVE  "404012"    TO    SKT4000TMP-HKNJANUM
+             END-IF
       *
-           IF    SKT4000TMP-HKNJANUM(1:3)  =  "405"
-             MOVE  "405019"    TO    SKT4000TMP-HKNJANUM
+             IF    SKT4000TMP-HKNJANUM(1:3)  =  "405"
+               MOVE  "405019"    TO    SKT4000TMP-HKNJANUM
+             END-IF
+      *=== 代表番号まとめは紙レセ時 by Yoshikawa(2017/10/16) start
            END-IF
+      *=== 代表番号まとめは紙レセ時 by Yoshikawa(2017/10/16) end
       *
       *    印字順設定
       *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
@@ -2370,6 +2381,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2017/10/16) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2017/10/16) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.09) LINE ADD START ------------------------------------
