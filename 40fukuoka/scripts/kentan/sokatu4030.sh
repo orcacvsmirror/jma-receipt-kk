@@ -5,7 +5,7 @@ PREFNAME=fukuoka
 PROGRAMID=SOKATU4030
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4030"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    泼侍闻蛙锐壳闻汤嘿今∈省铂∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
