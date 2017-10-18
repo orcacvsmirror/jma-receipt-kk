@@ -5,7 +5,7 @@ PREFNAME=kanagawa
 PROGRAMID=SOKATU1400
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1400"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    柜瘦ˇ壳闻鼠椒另崇山∈坷凄李∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
