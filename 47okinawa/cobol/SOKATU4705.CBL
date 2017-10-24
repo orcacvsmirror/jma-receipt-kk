@@ -1437,6 +1437,10 @@
                                        TO  SPRT-PRIORITY
            MOVE    "SKT4705.red"         TO  SPRT-PRTID
            MOVE    SKT4705               TO  SPRT-PRTDATA
+      *=== ø«Œ≈≤  Ã§«ƒ¢…º§Ú ¨§±§Î by Monma(2017/10/05) start
+           MOVE    1                     TO  WRK-INDEX
+           MOVE    WRK-PARA-SYOKBN       TO  WRK-SYOKBN
+      *=== ø«Œ≈≤  Ã§«ƒ¢…º§Ú ¨§±§Î by Monma(2017/10/05) end
            EVALUATE    WRK-INDEX    ALSO    WRK-SYOKBN
                                             ALSO    WRK-PARA-SYOKBN1
                WHEN    1            ALSO    "1"     
