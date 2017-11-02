@@ -92,6 +92,7 @@
       *  01.00.42    吉川    17/10/16    保険者番号の代表番号まとめは
       *                                  紙レセ時にのみするように修正
       *                                  SITEKBN変更
+      *  01.00.43    吉川    17/11/02    代表番号まとめの仕様を元に戻す
       *****************************************************************
        ENVIRONMENT                 DIVISION.
        CONFIGURATION               SECTION.
@@ -1531,22 +1532,14 @@
                             SKT4000TMP-HKNJANUM(1:6)
            END-IF
       *
-      *=== 代表番号まとめは紙レセのみ by Yoshikawa(2017/10/16) start
-      *    レセ電時、政令指定都市は区毎に請求
-           IF   SYS-2005-KKHRECEKBN  =  "0"
-           OR   SYS-2005-KKHRECEKBN  =  SPACE
-      *=== 代表番号まとめは紙レセのみ by Yoshikawa(2017/10/16) end
-      *      福岡市・北九州市は代表番号で括る
-             IF    SKT4000TMP-HKNJANUM(1:3)  =  "404"
-               MOVE  "404012"    TO    SKT4000TMP-HKNJANUM
-             END-IF
-      *
-             IF    SKT4000TMP-HKNJANUM(1:3)  =  "405"
-               MOVE  "405019"    TO    SKT4000TMP-HKNJANUM
-             END-IF
-      *=== 代表番号まとめは紙レセ時 by Yoshikawa(2017/10/16) start
+      *    福岡市・北九州市は代表番号で括る
+           IF    SKT4000TMP-HKNJANUM(1:3)  =  "404"
+             MOVE  "404012"    TO    SKT4000TMP-HKNJANUM
            END-IF
-      *=== 代表番号まとめは紙レセ時 by Yoshikawa(2017/10/16) end
+      *
+           IF    SKT4000TMP-HKNJANUM(1:3)  =  "405"
+             MOVE  "405019"    TO    SKT4000TMP-HKNJANUM
+           END-IF
       *
       *    印字順設定
       *=== プログラムオプション対応 by Yoshikawa(2013/06/18) start
