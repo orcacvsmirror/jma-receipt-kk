@@ -855,13 +855,9 @@
                PERFORM 5004-MOJI-HENSYU-SEC
       *
       *        ø«Œ≈≤ •≥°º•…
-               IF  SYS-1001-HOSPSBT1  =  1
-                 MOVE  MF100-SRYKA         TO  WRK-NUM
-               ELSE
-                 MOVE  00                  TO  WRK-NUM
-               END-IF
+               MOVE    SPACE               TO  WRK-DATA
                MOVE    2                   TO  WRK-NAGASA
-               PERFORM 5005-NUM-HENSYU-SEC
+               PERFORM 5004-MOJI-HENSYU-SEC
       *
       *        ø«Œ≈«Ø∑Ó
                MOVE    WRK-CSVSRYYM        TO  WRK-NUM
