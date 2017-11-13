@@ -13,3 +13,6 @@ bind	"SEIKYU3209"	"OpenCOBOL";
 bind	"SEIKYU3211"	"OpenCOBOL";
 
 #include "orcadb.inc"
+db "shell" {
+        shell;
+};
