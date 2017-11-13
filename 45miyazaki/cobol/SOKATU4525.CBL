@@ -47,6 +47,7 @@
       *                                  公費番号まとめ情報の公費番号の追加
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.24    門間    17/11/01    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -603,14 +604,14 @@
       *                                     TO WRK-2007-KOHNUM(IDX IDY)
                    ADD     1               TO  IDZ3
                    MOVE    SYS-2007-KOHNUM (IDY)
-                                         TO  WRK-2007-KOHNUM(IDX IDZ3)
+                                         TO  WRK-2007-KOHNUM(IDX1 IDZ3)
                END-PERFORM
                PERFORM VARYING IDX2 FROM    1   BY  1
                        UNTIL   IDX2 >       20
                        OR      SYS-2007-KOHNUM1(IDX2)   =   SPACE
                    ADD     1               TO  IDZ3
                    MOVE    SYS-2007-KOHNUM1(IDX2)
-                                         TO  WRK-2007-KOHNUM(IDX IDZ3)
+                                         TO  WRK-2007-KOHNUM(IDX1 IDZ3)
       *=== 公費番号まとめ追加 by Monma(2017/06/06) end
                END-PERFORM
       *
@@ -1498,6 +1499,9 @@
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
       *     MOVE    "1"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/11/01) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/11/01) end
       *     
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
@@ -1705,6 +1709,9 @@
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
       *     MOVE    "1"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/11/01) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/11/01) end
       *     
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
