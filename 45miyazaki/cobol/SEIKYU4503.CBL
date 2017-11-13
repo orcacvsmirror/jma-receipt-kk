@@ -64,6 +64,7 @@
       *  01.00.22    萩野    15/06/09    特記事項欄の記載修正
       *  01.00.23    門間    17/06/06    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.24    門間    17/11/01    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1825,6 +1826,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2017/11/01) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2017/11/01) end
       *---(01.00.03) LINE ADD START ------------------------------------
            MOVE    MF100-PTID          TO  SPRT-PTID
       *---(01.00.03) LINE ADD END   ------------------------------------
