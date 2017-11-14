@@ -5,7 +5,7 @@ PREFNAME=kagoshima
 PROGRAMID=SOKATU4610
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4610"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    柜瘦ˇ壳闻鼠椒懒滇今∈集基喷∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
