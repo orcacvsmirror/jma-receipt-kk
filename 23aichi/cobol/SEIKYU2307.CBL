@@ -111,6 +111,7 @@
       *  01.00.42    吉川    17/09/12    月途中で保険が変わった場合
       *                                  行を分けて印字し、備考欄に記載
       *  01.00.43    吉川    17/11/15    備考欄の初期化不具合修正
+      *                                  SITEKBN変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2343,6 +2344,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2017/11/15) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2017/11/15) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.05) LINE ADD START ------------------------------------
