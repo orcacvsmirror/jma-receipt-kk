@@ -1500,8 +1500,6 @@
                MOVE  SKT1215TMP-KTENSU(IDX2)    TO  WRK-Z9
                MOVE  WRK-Z9                TO  SKT1215-KTENSU(IDY)
       *    ∏¯»Ò∫∆∑«ÕÛ°ßŒ≈Õ‹§ŒµÎ…’°ß∞Ï…Ù…È√¥∂‚
-               DISPLAY "SKT1215TMP-HKNJANUM =" SKT1215TMP-HKNJANUM
-               DISPLAY "SKT1215TMP-KITBFTN =" SKT1215TMP-KITBFTN(IDX2)
                MOVE  SKT1215TMP-KITBFTN(IDX2)   TO  WRK-Z9
                MOVE  WRK-Z9                TO  SKT1215-KITBFTN(IDY)
       *
@@ -2343,9 +2341,7 @@
       *        •≠°º§À∏©»÷πÊ¿ﬂƒÍ
                MOVE    RECE10-HKNJANUM(1:4) TO  KEY-N-HKNJANUM
                ADD     1                    TO  CNT-RECE10
-      *         
-               DISPLAY "PTNUM=" RECE10-PTNUM 
-      *         
+      *
            ELSE
       *=== ∫“≥≤¬–±˛ by Yoshikawa(2012/08/08) start
                MOVE    1                   TO  FLG-END
