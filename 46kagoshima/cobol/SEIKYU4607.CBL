@@ -1456,9 +1456,11 @@
                    END-IF
       *
                    IF  MF100-KOHNUM1  =  SPACE
-                     MOVE  SYU-KOH-HKNNUM(IDX)  TO  MF100-KOHNUM1
+                     MOVE  SYU-KOH-HKNNUM(IDX)    TO  MF100-KOHNUM1
                    ELSE
-                     MOVE  SYU-KOH-HKNNUM(IDX)  TO  MF100-KOHNUM2
+                     IF  MF100-KOHNUM1  NOT =  SYU-KOH-HKNNUM(IDX)
+                       MOVE  SYU-KOH-HKNNUM(IDX)  TO  MF100-KOHNUM2
+                     END-IF
                    END-IF
                END-IF
       *
