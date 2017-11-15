@@ -108,6 +108,7 @@
       *  01.00.41    門間    17/08/02    備考の診療年月は和暦で記載
       *  01.00.42    吉川    17/09/12    月途中で保険が変わった場合
       *                                  行を分けて印字し、備考欄に記載
+      *  01.00.43    吉川    17/11/15    備考欄の初期化不具合修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2137,6 +2138,9 @@
              END-IF
       *=== 備考欄の記載修正 by hagino(2015/01/16) end
       *
+      *=== 備考欄の初期化不具合修正 by Yoshikawa(2017/11/14) start
+             INITIALIZE                    WRK-BIKO4
+      *=== 備考欄の初期化不具合修正 by Yoshikawa(2017/11/14) end
       *=== 保険変更時、備考に記載 by Yoshikawa(2017/09/12) start
              PERFORM  VARYING  IDX3  FROM  1  BY  1
                       UNTIL    IDX3    >    100
@@ -2144,7 +2148,9 @@
                 IF  MF100-PTNUM  =  WRK-HKNCHG-PTNUM(IDX3)
                     INITIALIZE                  STS-AREA-DAY
                                                 LNK-DAY1-AREA
-                                                WRK-BIKO4
+      *=== 備考欄の初期化不具合修正 by Yoshikawa(2017/11/14) start
+      *                                          WRK-BIKO4
+      *=== 備考欄の初期化不具合修正 by Yoshikawa(2017/11/14) end
                     MOVE    "11"            TO  LNK-DAY1-IRAI
                     MOVE    WRK-HKNCHG-TEKSTYMD(IDX3)
                                             TO  LNK-DAY1-YMD
