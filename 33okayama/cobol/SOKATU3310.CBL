@@ -981,7 +981,6 @@
       *****************************************************************
        2001-KOKUHO-SYUKEI-SEC              SECTION.
       * 
-           DISPLAY "2001"
       *    TMP-FILE キーセット
            INITIALIZE       SKT3310TMP-REC
       *
@@ -1528,7 +1527,6 @@
            IF  FLG-BIKO  =  1
       *      公費名
              MOVE  RECE10-KOHNUM(IDX3)  TO  SKT3310TMP-BKOHNUM(CNT-KOH)
-             DISPLAY  "BKOHNUM1  "  SKT3310TMP-BKOHNUM(CNT-KOH)
       *
       *--- (2008/11/20) LINE ADD START MONMA ---------------------------
       *    公費名称
@@ -3012,8 +3010,6 @@
            DISPLAY "老人併用ソート前３" SKT3310TMP-BKOHNUM(3)
            DISPLAY "老人併用ソート前４" SKT3310TMP-BKOHNUM(4)
            DISPLAY "老人併用ソート前５" SKT3310TMP-BKOHNUM(5)
-         DISPLAY  "A  "  SKT3310TMP-BNYUGAIKBN (1)
-         DISPLAY  "B  "  SKT3310TMP-BNYUGAIKBN (2)
       *
       *    公費が無い場合はソートしない
            IF      IDX-MAX     >   ZERO
@@ -3048,8 +3044,6 @@
            DISPLAY "老人併用ソート後３" SKT3310TMP-BKOHNUM(3)
            DISPLAY "老人併用ソート後４" SKT3310TMP-BKOHNUM(4)
            DISPLAY "老人併用ソート後５" SKT3310TMP-BKOHNUM(5)
-         DISPLAY  "A  "  SKT3310TMP-BNYUGAIKBN (1)
-         DISPLAY  "B  "  SKT3310TMP-BNYUGAIKBN (2)
       *
       *
       *    老人併用公費数(食事療養費分)と最小公費を取得
@@ -3080,8 +3074,6 @@
            DISPLAY "老人併用食事ソート前３" SKT3310TMP-BSKOHNUM(3)
            DISPLAY "老人併用食事ソート前４" SKT3310TMP-BSKOHNUM(4)
            DISPLAY "老人併用食事ソート前５" SKT3310TMP-BSKOHNUM(5)
-         DISPLAY  "A  "  SKT3310TMP-BNYUGAIKBN (1)
-         DISPLAY  "B  "  SKT3310TMP-BNYUGAIKBN (2)
       *
       *    公費が無い場合はソートしない
            IF      IDX-MAX     >   ZERO
@@ -3116,8 +3108,6 @@
            DISPLAY "老人併用食事ソート後３" SKT3310TMP-BSKOHNUM(3)
            DISPLAY "老人併用食事ソート後４" SKT3310TMP-BSKOHNUM(4)
            DISPLAY "老人併用食事ソート後５" SKT3310TMP-BSKOHNUM(5)
-         DISPLAY  "A  "  SKT3310TMP-BNYUGAIKBN (1)
-         DISPLAY  "B  "  SKT3310TMP-BNYUGAIKBN (2)
       *
            .
        KOH-SORT-EXT.

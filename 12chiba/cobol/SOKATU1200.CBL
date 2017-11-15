@@ -844,7 +844,6 @@
                MOVE    2       TO  IDX1
                MOVE    6       TO  IDX3
            END-IF
-           DISPLAY "集計場所---"IDX1
       *
       *---(01.00.05) LINE ADD START ------------------------------------
            IF      FLG-KOUKI       NOT =   "1"
@@ -859,8 +858,6 @@
       *    点数
            ADD     RECE10-TOTALTEN(1)      TO  SKT1200TMP-TENSU(IDX1)
                                                SKT1200TMP-TENSU(IDX3)
-           DISPLAY "\RECE10-TOTALTEN(1)"RECE10-TOTALTEN(1)
-           DISPLAY "SKT1200TMP-TENSU(IDX3)"SKT1200TMP-TENSU(IDX3)
       *
       *    食事療養
            IF      RECE10-SHOKUJINISSU(1)  NOT =   ZERO
@@ -1071,8 +1068,6 @@
       *        点数
                MOVE    SKT1200TMP-TENSU(IDX1)     TO  WRK-Z10
                MOVE    WRK-Z10     TO  SKT1200-TENSU(IDX1)
-               DISPLAY "SKT1200TMP-TENSU"SKT1200TMP-TENSU(IDX1)
-               DISPLAY "SKT1200-TENSU"SKT1200-TENSU(IDX1)
       *
       *        食事件数
                MOVE    SKT1200TMP-SKENSU(IDX1)    TO  WRK-Z6
