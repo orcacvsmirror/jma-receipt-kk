@@ -1704,10 +1704,10 @@
        300-END-SEC                 SECTION.
       *
       *
-           DISPLAY "*** SOKATU2815 IN   "  CNT-RECE10 
+           DISPLAY "*** SOKATU2525 IN   "  CNT-RECE10 
            DISPLAY "***          UPD  "  CNT-UPDFILE 
            DISPLAY "***          PAGE "  CNT-PAGE 
-           DISPLAY "*** SOKATU2815 END ***"
+           DISPLAY "*** SOKATU2525 END ***"
       *     
       *     
       *    ステップ管理終了処理
