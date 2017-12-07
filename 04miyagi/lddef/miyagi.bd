@@ -10,3 +10,6 @@ bind    "SEIKYU0405"    "OpenCOBOL";
 bind	"SOKATU0415"	"OpenCOBOL";
 
 #include "orcadb.inc"
+db "shell" {
+        shell;
+};
