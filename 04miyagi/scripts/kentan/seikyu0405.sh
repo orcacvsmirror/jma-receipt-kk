@@ -14,6 +14,8 @@ RENNUM=0
 #        ${14} 医療機関ＩＤ 
 #        ${15} エラーファイル名 
 #        ${16} 処理区分(０：一括、１：個別)
+#        ${17} - ${18}医療機関コード別の処理指定時
+#              該当診療年月の開始、終了
 #-------------------------------------------#
 #
 ##      エラーファイル削除
@@ -26,7 +28,7 @@ RENNUM=0
         cd  ${ORCA_DIR}
 
             RENNUM=$(expr ${RENNUM} + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${15} > ${LOG_FILE}.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${12},${13},${14},${16},${17},${18},${15} > ${LOG_FILE}.log 2>&1
             if  [ -e ${MCP_TEMPDIR}/${15} ]; then
                 exit
             fi
