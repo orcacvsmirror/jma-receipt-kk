@@ -110,6 +110,8 @@
       *                                  行を分けて印字し、備考欄に記載
       *  01.00.43    吉川    17/11/15    備考欄の初期化不具合修正
       *                                  SITEKBN変更
+      *  01.00.44    吉川    17/12/08    高額かつ限度額未満で分点の場合の
+      *                                  市町村負担額の修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1354,6 +1356,9 @@
       *=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) start
            AND (RECE02-FLG(4)  =  ZERO)
       *=== 957で分点の市町村負担額修正 by Yoshikawa(2017/05/15) end
+      *=== 高額未満かつ分点の場合の修正 by Yoshikawa(2017/12/08) start
+           AND (RECE02-FTNMONEY(1)  NOT =  ZERO)
+      *=== 高額未満かつ分点の場合の修正 by Yoshikawa(2017/12/08) end
                COMPUTE WRK-KEISAN = (MF100-TOTALTEN - MF100-FUKUSITEN)
                                     * RECE02-KYURATE / 10
                COMPUTE WRK-SEIKYUGK-G2  =  RECE10-FTNMONEY(1)
