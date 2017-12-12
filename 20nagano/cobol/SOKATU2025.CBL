@@ -594,14 +594,14 @@
       *                                     TO WRK-2007-KOHNUM(IDX IDY)
                    ADD     1               TO  IDZ
                    MOVE    SYS-2007-KOHNUM (IDY)
-                                           TO WRK-2007-KOHNUM(IDX1 IDZ)
+                                           TO WRK-2007-KOHNUM(IDX IDZ)
                END-PERFORM
                PERFORM VARYING IDY FROM    1   BY  1
                        UNTIL   IDY >       20
                        OR      SYS-2007-KOHNUM1(IDY)   =   SPACE
                    ADD     1               TO  IDZ
                    MOVE    SYS-2007-KOHNUM1(IDY)
-                                           TO  WRK-2007-KOHNUM(IDX1 IDZ)
+                                           TO  WRK-2007-KOHNUM(IDX IDZ)
       *=== 公費番号まとめ追加 by hagino(2017/12/11) end
                END-PERFORM
       *
