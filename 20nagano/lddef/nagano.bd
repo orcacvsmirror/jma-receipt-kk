@@ -17,3 +17,6 @@ bind	"SEIKYU20BYOMEI2"	"OpenCOBOL";
 
 
 #include "orcadb.inc"
+db "shell" {
+        shell;
+};
