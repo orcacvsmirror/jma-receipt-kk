@@ -15,3 +15,6 @@ bind	"SOKATU1315"	"OpenCOBOL";
 bind	"SOKATU1320"	"OpenCOBOL";
 
 #include "orcadb.inc"
+db "shell" {
+        shell;
+};
