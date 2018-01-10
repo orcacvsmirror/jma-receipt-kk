@@ -77,6 +77,7 @@
       *  01.00.30    門間     17/03/14    医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
       *  01.00.31    吉川     17/10/16    SITEKBN変更
+      *  01.00.32    門間     18/01/09    下部の負担者番号等は１枚目に印字
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1746,11 +1747,18 @@
       **           帳票編集<点数>処理
                    PERFORM 330-HC101-TENSU-HEN-SEC
       *
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      **           帳票編集<福岡県仕様>処理
+                   PERFORM 380-HC101-CUSTOM-HEN-SEC
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
+      *
       **           帳票編集<傷病名>処理
                    PERFORM 320-HC101-BYOMEI-HEN-SEC
       *
-      **           帳票編集<福岡県仕様>処理
-                   PERFORM 380-HC101-CUSTOM-HEN-SEC
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      ***           帳票編集<福岡県仕様>処理
+      *             PERFORM 380-HC101-CUSTOM-HEN-SEC
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
                ELSE
       *            帳票編集<ヘッダー部>処理
                    PERFORM 310N-HC101-HEAD-HEN-SEC
@@ -1758,11 +1766,18 @@
       **           帳票編集<点数>処理
                    PERFORM 330N-HC101-TENSU-HEN-SEC
       *
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      **           帳票編集<福岡県仕様>処理
+                   PERFORM 380N-HC101-CUSTOM-HEN-SEC
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
+      *
       **           帳票編集<傷病名>処理
                    PERFORM 320-HC101-BYOMEI-HEN-SEC
       *
-      **           帳票編集<福岡県仕様>処理
-                   PERFORM 380N-HC101-CUSTOM-HEN-SEC
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      ***           帳票編集<福岡県仕様>処理
+      *             PERFORM 380N-HC101-CUSTOM-HEN-SEC
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
                END-IF
       **
       *            帳票印刷処理
@@ -3370,6 +3385,13 @@
            END-IF
            INITIALIZE  WRK-BYOMEI-TAIHI-TBL
            MOVE    ZERO          TO  WRK-LINETEK
+      *
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      *    ２頁以降は空白とする
+           INITIALIZE  HC06-CST-FTNJANUM
+           INITIALIZE  HC06-CST-JKYSNUM
+           INITIALIZE  HC06-CST-KYUFUGAI
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
       *
            .
        34120-PAGE-EXT.
