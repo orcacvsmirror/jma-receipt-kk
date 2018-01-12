@@ -99,7 +99,7 @@
       </element>
       <element name="KOHFTN" occurs="1">
         <appinfo>
-          <embed object="text" length="7"/>
+          <embed object="text" length="9"/>
         </appinfo>
       </element>
     </element>
@@ -1148,7 +1148,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="文字" visible="true" active="true">
+  <dia:layer name="文字" visible="true">
     <dia:object type="Standard - Text" version="1" id="O50">
       <dia:attribute name="obj_pos">
         <dia:point val="19.05,5.225"/>
@@ -4320,7 +4320,7 @@
         <dia:point val="3.78516,1.76804"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="3.78516,1.49548;5.74272,1.82066"/>
+        <dia:rectangle val="3.78516,1.50304;5.73516,1.80554"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -5184,7 +5184,7 @@
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="差し込み" visible="true">
+  <dia:layer name="差し込み" visible="true" active="true">
     <dia:object type="Embed - Text" version="1" id="O172">
       <dia:attribute name="obj_pos">
         <dia:point val="15.8803,1.31363"/>

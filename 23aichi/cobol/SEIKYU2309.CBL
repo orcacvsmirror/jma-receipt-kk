@@ -112,6 +112,7 @@
       *                                  SITEKBNÊÑ¹¹
       *  01.00.44    µÈÀî    17/12/08    ¹â³Û¤«¤Ä¸ÂÅÙ³ÛÌ¤Ëþ¤ÇÊ¬ÅÀ¤Î¾ì¹ç¤Î
       *                                  »ÔÄ®Â¼ÉéÃ´³Û¤Î½¤Àµ
+      *  01.00.45    ÇëÌî    18/01/11    »ÔÄ®Â¼ÉéÃ´³ÛÍó¤Î·å¿ô¤ÎÁý²Ã
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1808,8 +1809,12 @@
              MOVE  SPACE             TO  SC09-KOHFTN(IDX)
            ELSE
              MOVE  MF100-SEIKYUGK    TO  WRK-KOHFTN
-                                         WRK-Z7
-             MOVE  WRK-Z7            TO  SC09-KOHFTN(IDX)
+      *=== ·å¿ôÁý²Ã by hagino(2018/01/11) start
+      *                                   WRK-Z7
+      *       MOVE  WRK-Z7            TO  SC09-KOHFTN(IDX)
+                                         WRK-Z9
+             MOVE  WRK-Z9            TO  SC09-KOHFTN(IDX)
+      *=== ·å¿ôÁý²Ã by hagino(2018/01/11) end
            END-IF
       *=== °ìµÜ»Ô¤Î¹ç·×¶â³Ûµ­ºÜ½¤Àµ by Yoshikawa(2012/08/22) end
       *

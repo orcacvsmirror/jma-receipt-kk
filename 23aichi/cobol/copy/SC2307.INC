@@ -56,7 +56,10 @@
                   05  SC07-KYURATE1     PIC  X(02).
                   05  SC07-KYURATE2     PIC  X(02).
       *»ÔÄ®Â¼ÉéÃ´³Û
-                  05  SC07-KOHFTN       PIC  X(07).
+      *=== ·å¿ôÁý²Ã by hagino(2018/01/11) start
+      *            05  SC07-KOHFTN       PIC  X(07).
+                  05  SC07-KOHFTN       PIC  X(09).
+      *=== ·å¿ôÁý²Ã by hagino(2018/01/11) end
       *¹ç·×¥Æ¡¼¥Ö¥ë
               03  SC07-SUM-TBL.
       *¹ç·×¡§·ï¿ô
