@@ -3380,18 +3380,27 @@
            ADD     1               TO  CNT-PAGE
            IF      MF100-NYUGAIKBN =   "1"
                PERFORM 310-HC101-HEAD-HEN-SEC
+      *
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      *        ２頁以降は空白とする
+               INITIALIZE  HCN06-CST-FTNJANUM
+               INITIALIZE  HCN06-CST-JKYSNUM
+               INITIALIZE  HCN06-CST-KYUFUGAI
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
+      *
            ELSE
                PERFORM 310N-HC101-HEAD-HEN-SEC
+      *
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      *        ２頁以降は空白とする
+               INITIALIZE  HC06-CST-FTNJANUM
+               INITIALIZE  HC06-CST-JKYSNUM
+               INITIALIZE  HC06-CST-KYUFUGAI
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
+      *
            END-IF
            INITIALIZE  WRK-BYOMEI-TAIHI-TBL
            MOVE    ZERO          TO  WRK-LINETEK
-      *
-      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
-      *    ２頁以降は空白とする
-           INITIALIZE  HC06-CST-FTNJANUM
-           INITIALIZE  HC06-CST-JKYSNUM
-           INITIALIZE  HC06-CST-KYUFUGAI
-      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
       *
            .
        34120-PAGE-EXT.
