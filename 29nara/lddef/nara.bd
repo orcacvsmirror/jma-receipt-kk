@@ -8,5 +8,7 @@ bind	"SEIKYU2911"	"OpenCOBOL";
 bind	"SOKATU2910"	"OpenCOBOL";
 bind	"SOKATU2915"	"OpenCOBOL";
 
-
 #include "orcadb.inc"
+db "shell" {
+        shell;
+};
