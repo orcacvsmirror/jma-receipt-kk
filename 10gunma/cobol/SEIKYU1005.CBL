@@ -96,6 +96,8 @@
       *  01.00.39    µ»¿Ó    17/03/10    π‚≥€£¥≤ÛÃ‹§«∑Ó≈”√Ê§Œª‘ƒÆ¬º —ππ§ŒæÏπÁ
       *                                   °ª„∞ÂŒ≈»Ò¿¡µ·≥€§œ§Ω§Ï§æ§Ï§Œª‘ƒÆ¬º§«
       *                                  ∞∆ ¨∑◊ªª§Ú§π§Î§Ë§¶§ÀΩ§¿µ
+      *  01.00.40    µ»¿Ó    18/02/09    æÂ∏¬≥€§ŒºË∆¿ΩËÕ˝§ŒΩ§¿µ
+      *                                  SITEKBN —ππ
       *****************************************************************
       *
        ENVIRONMENT    DIVISION.
@@ -1973,6 +1975,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN —ππ by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN —ππ by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.03) LINE ADD START ------------------------------------
@@ -2149,6 +2154,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN —ππ by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN —ππ by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
@@ -3011,8 +3019,15 @@
                                            TO  WRK-GAIJGNGAK
                        MOVE    PTKOHFTN-NYUJGNGAK    
                                            TO  WRK-NYUJGNGAK
+      *=== æÂ∏¬≥€§ŒºË∆¿ΩËÕ˝§ŒΩ§¿µ by Yoshikawa(2018/02/09) start
+      *             END-IF
+      *             PERFORM  930-PTKOHFTN-FETCH-SEC
+                       MOVE    1           TO  FLG-PTKOHFTN
+                   ELSE
+                       PERFORM  930-PTKOHFTN-FETCH-SEC
                    END-IF
-                   PERFORM  930-PTKOHFTN-FETCH-SEC
+               END-PERFORM
+      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
                END-PERFORM
       *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
            ELSE

@@ -121,6 +121,8 @@
       *                                  福祉医療費請求額はそれぞれの市町村で
       *                                  案分計算をするように修正
       *  01.00.44    門間    17/05/16    備考欄への「途中福祉」の記載修正
+      *  01.00.45    吉川    18/02/09    上限額の取得処理の修正
+      *                                  SITEKBN変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -2506,6 +2508,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -2994,6 +2999,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.04) LINE ADD START ------------------------------------
@@ -3305,6 +3313,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
@@ -3641,6 +3652,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
@@ -4670,8 +4684,13 @@
                                            TO  WRK-GAIJGNGAK
                        MOVE    PTKOHFTN-NYUJGNGAK    
                                            TO  WRK-NYUJGNGAK
+      *=== 上限額の取得処理の修正 by Yoshikawa(2018/02/09) start
+      *             END-IF
+      *             PERFORM  930-PTKOHFTN-FETCH-SEC
+                       MOVE    1           TO  FLG-PTKOHFTN
+                   ELSE
+                       PERFORM  930-PTKOHFTN-FETCH-SEC
                    END-IF
-                   PERFORM  930-PTKOHFTN-FETCH-SEC
                END-PERFORM
       *=== 福祉医療費請求額の修正 by Yoshikawa(2016/09/05) end
            ELSE
