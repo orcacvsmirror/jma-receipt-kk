@@ -61,6 +61,7 @@
       *  01.00.25    門間    17/02/06    一部負担金欄は保険の一部負担金を記載するよう修正
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.26    吉川    18/02/09    SITEKBN変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1784,6 +1785,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -2020,6 +2024,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.06) LINE ADD START ------------------------------------
@@ -2290,6 +2297,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/02/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.06) LINE ADD START ------------------------------------
