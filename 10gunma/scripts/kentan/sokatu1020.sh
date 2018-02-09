@@ -5,7 +5,7 @@ PREFNAME=gunma
 PROGRAMID=SOKATU1020
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1020"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    光ディスク等送付書（群馬）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
@@ -33,7 +33,7 @@ RENNUM=0
 ##      当月・月遅れ分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16} > ${LOG_FILE}-1.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
