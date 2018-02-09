@@ -3026,8 +3026,7 @@
                    ELSE
                        PERFORM  930-PTKOHFTN-FETCH-SEC
                    END-IF
-               END-PERFORM
-      *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
+      *=== æÂ∏¬≥€§ŒºË∆¿ΩËÕ˝§ŒΩ§¿µ by Yoshikawa(2018/02/09) end
                END-PERFORM
       *===  °ª„∞ÂŒ≈»Ò¿¡µ·≥€§ŒΩ§¿µ by Yoshikawa(2016/09/05) end
            ELSE
