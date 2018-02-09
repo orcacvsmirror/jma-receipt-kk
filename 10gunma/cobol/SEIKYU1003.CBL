@@ -4691,6 +4691,7 @@
                    ELSE
                        PERFORM  930-PTKOHFTN-FETCH-SEC
                    END-IF
+      *=== ¾å¸Â³Û¤Î¼èÆÀ½èÍý¤Î½¤Àµ by Yoshikawa(2018/02/09) end
                END-PERFORM
       *=== Ê¡»ã°åÎÅÈñÀÁµá³Û¤Î½¤Àµ by Yoshikawa(2016/09/05) end
            ELSE
