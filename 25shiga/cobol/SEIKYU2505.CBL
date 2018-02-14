@@ -55,6 +55,7 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *                                  SITEKBN変更（動作に変更なし）
+      *  01.00.15    吉川    18/02/14    「長」欄の印字不具合対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1033,12 +1034,20 @@
       *     AND     WRK-TYOKIFTNGK  >=   10000
       *    全国公費＋長期併用時の不具合対応 by Monma(2017/12/04) start
       *     AND     WRK-TYOKIFTNGK-G  >=  10000
-           AND     WRK-KOHFTNGK-G  >=  10000
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) start
+      *     AND     WRK-KOHFTNGK-G  >=  10000
+           AND     WRK-TYOKIFTNGK-G  >=  10000
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) end
       *    全国公費＋長期併用時の不具合対応 by Monma(2017/12/04) end
       *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
                MOVE    1           TO  MF100-TYOKI
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
-               MOVE    10000       TO  WRK-KOHFTNGK-G
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) start
+      *         MOVE    10000       TO  WRK-KOHFTNGK-G
+               IF  WRK-KOHFTNGK-G  >=  10000
+                   MOVE    10000    TO  WRK-KOHFTNGK-G
+               END-IF
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) end
            END-IF
       *    長期上位
            IF      FLG-TYOKI       =   2
@@ -1048,7 +1057,10 @@
       *     AND     WRK-TYOKIFTNGK  >=   20000
       *    全国公費＋長期併用時の不具合対応 by Monma(2017/12/04) start
       *     AND     WRK-TYOKIFTNGK-G  >=  20000
-           AND     WRK-KOHFTNGK-G  >=  20000
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) start
+      *     AND     WRK-KOHFTNGK-G  >=  20000
+           AND     WRK-TYOKIFTNGK-G  >=  20000
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) end
       *    全国公費＋長期併用時の不具合対応 by Monma(2017/12/04) end
       *=== 実日数2日以上の長期不具合対応 by Yoshikawa(2012/03/05) end
       *=== 長期上位対応 by Yoshikawa(2016/03/11) start
@@ -1056,7 +1068,12 @@
                MOVE    2           TO  MF100-TYOKI
       *=== 長期上位対応 by Yoshikawa(2016/03/11) end
       *=== 長期は上限を超えた時に記載 by Yoshikawa(2011/12/09) end
-               MOVE    20000       TO  WRK-KOHFTNGK-G
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) start
+      *         MOVE    20000       TO  WRK-KOHFTNGK-G
+               IF  WRK-KOHFTNGK-G  >=  20000
+                   MOVE    20000    TO  WRK-KOHFTNGK-G
+               END-IF
+      *=== 「長」欄の印字不具合対応 by Yoshikawa(2018/02/14) end
            END-IF
       *
            MOVE    WRK-SYUCOMPFTN  TO  MF100-SYUCOMPFTN
