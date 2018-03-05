@@ -20,7 +20,7 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 熊本・母子医療費請求書
+      *  コンポーネント名  : 熊本・ひとり親家庭等医療費請求書
       *                      (143)
       *  管理者            : 
       *  作成日付    作業者        記述
@@ -50,6 +50,7 @@
       *                                  対象公費はPGオプションから取得する
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.13    門間    18/03/01    帳票タイトルの修正
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -429,7 +430,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4315"    TO  JOB-PGID
-           MOVE    "母子医療費請求書" 
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *     MOVE    "母子医療費請求書" 
+           MOVE    "ひとり親家庭等医療費請求書" 
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -1129,7 +1133,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4315.red"        TO  SPRT-PRTID
-           MOVE    "母子医療費請求書"
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *     MOVE    "母子医療費請求書"
+           MOVE    "ひとり親家庭等医療費請求書"
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
                                     TO  SPRT-TITLE
            MOVE    SC15             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
