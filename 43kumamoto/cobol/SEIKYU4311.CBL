@@ -20,8 +20,8 @@
       *****************************************************************
       *  システム名        : ＯＲＣＡ
       *  サブシステム名    : 地方公費
-      *  コンポーネント名  : 熊本・乳幼児医療費請求書
-      *                      (141,241,341)
+      *  コンポーネント名  : 熊本・子ども医療費請求書
+      *                      (141,241,341,441,541)
       *  管理者            : 
       *  作成日付    作業者        記述
       *  05/12/13    山口          再作成(2.5.0対応)
@@ -56,6 +56,10 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.16    吉川    17/08/15    ginbee対応
+      *  01.00.17    門間    18/03/01    帳票タイトルの修正
+      *                                  患者負担が乳幼児の上限額と同額の
+      *                                  場合は印字対象外とする
+      *                                  SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -426,7 +430,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4311"    TO  JOB-PGID
-           MOVE    "乳幼児医療費請求書" 
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *     MOVE    "乳幼児医療費請求書" 
+           MOVE    "子ども医療費請求書" 
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -895,6 +902,26 @@
            END-IF
       *=== 患者負担と上限額が同額は対象外 by Yoshikawa(2015/03/10) end
       *
+      *=== 患者負担と上限額が同額は対象外 by Monma(2018/03/01) start
+           IF  MF100-KOHNUM  =  "441"
+             IF  ((MF100-TOTALTEN  =  350 OR 351 OR 352)
+                  AND  MF100-KYURATE  =  20) 
+             OR  ((MF100-TOTALTEN  =  267 OR 268)
+                  AND  MF100-KYURATE  =  30)
+                 MOVE    1                TO    FLG-ERR
+             END-IF
+           END-IF
+      *
+           IF  MF100-KOHNUM  =  "541"
+             IF  ((MF100-TOTALTEN  =  600 OR 601 OR 602)
+                  AND  MF100-KYURATE  =  20) 
+             OR  ((MF100-TOTALTEN  =  400 OR 401)
+                  AND  MF100-KYURATE  =  30)
+                 MOVE    1                TO    FLG-ERR
+             END-IF
+           END-IF
+      *=== 患者負担と上限額が同額は対象外 by Monma(2018/03/01) end
+      *
            IF      FLG-ERR            =     ZERO
                ADD    1                   TO    SUM-GKENSU
                ADD    MF100-TOTALTEN      TO    SUM-GTENSU
@@ -1152,7 +1179,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4311.red"         TO  SPRT-PRTID
-           MOVE    "乳幼児医療費請求書"
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *     MOVE    "乳幼児医療費請求書"
+           MOVE    "子ども医療費請求書"
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
                                     TO  SPRT-TITLE
            MOVE    SC11             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
@@ -1161,6 +1191,9 @@
       *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
       *=== ginbee対応 by Yoshikawa(2017/08/15) end
+      *=== SITEKBN変更 by Monma(2018/03/01) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2018/03/01) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.01) LINE ADD START ------------------------------------
