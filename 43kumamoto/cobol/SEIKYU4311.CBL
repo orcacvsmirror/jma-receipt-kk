@@ -55,6 +55,9 @@
       *  01.00.15    吉川    16/12/07    対象公費はPGオプションから取得する
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.16    門間    18/03/01    帳票タイトルの修正
+      *                                  患者負担が乳幼児の上限額と同額の
+      *                                  場合は印字対象外とする
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -425,7 +428,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4311"    TO  JOB-PGID
-           MOVE    "乳幼児医療費請求書" 
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *     MOVE    "乳幼児医療費請求書" 
+           MOVE    "子ども医療費請求書" 
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -894,6 +900,26 @@
            END-IF
       *=== 患者負担と上限額が同額は対象外 by Yoshikawa(2015/03/10) end
       *
+      *=== 患者負担と上限額が同額は対象外 by Monma(2018/03/01) start
+           IF  MF100-KOHNUM  =  "441"
+             IF  ((MF100-TOTALTEN  =  350 OR 351 OR 352)
+                  AND  MF100-KYURATE  =  20) 
+             OR  ((MF100-TOTALTEN  =  267 OR 268)
+                  AND  MF100-KYURATE  =  30)
+                 MOVE    1                TO    FLG-ERR
+             END-IF
+           END-IF
+      *
+           IF  MF100-KOHNUM  =  "541"
+             IF  ((MF100-TOTALTEN  =  600 OR 601 OR 602)
+                  AND  MF100-KYURATE  =  20) 
+             OR  ((MF100-TOTALTEN  =  400 OR 401)
+                  AND  MF100-KYURATE  =  30)
+                 MOVE    1                TO    FLG-ERR
+             END-IF
+           END-IF
+      *=== 患者負担と上限額が同額は対象外 by Monma(2018/03/01) end
+      *
            IF      FLG-ERR            =     ZERO
                ADD    1                   TO    SUM-GKENSU
                ADD    MF100-TOTALTEN      TO    SUM-GTENSU
@@ -1151,7 +1177,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4311.red"         TO  SPRT-PRTID
-           MOVE    "乳幼児医療費請求書"
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *     MOVE    "乳幼児医療費請求書"
+           MOVE    "子ども医療費請求書"
+      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
                                     TO  SPRT-TITLE
            MOVE    SC11             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
