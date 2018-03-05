@@ -13,7 +13,7 @@ RENNUM=0
 #        ${13} シェルＩＤ
 #        ${14} 総括表の種類
 #           0:全体  1:社保　2:国保
-#        ${15} 医療機関ＩＤ 
+#        ${15} 医療機関番号
 #        ${16} エラーファイル名 
 #        ${17} 処理年月 
 #        ${18} 対象保険者番号
@@ -33,7 +33,7 @@ RENNUM=0
 ##      返戻分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,1,${20},${21},${16} > ${LOG_FILE}-2.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -41,7 +41,7 @@ RENNUM=0
 ##      当月・月遅れ分
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16} > ${LOG_FILE}-1.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -49,7 +49,7 @@ RENNUM=0
 ##      返戻分（特別療養費分）
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${20},${21},${16} > ${LOG_FILE}-22.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -57,7 +57,7 @@ RENNUM=0
 ##      当月・月遅れ分（特別療養費分）
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${20},${21},${16} > ${LOG_FILE}-21.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi

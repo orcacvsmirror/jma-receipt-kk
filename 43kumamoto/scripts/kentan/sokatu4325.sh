@@ -5,7 +5,7 @@ PREFNAME=kumamoto
 PROGRAMID=SOKATU4325
 LOG_FILE="/var/log/jma-receipt/${15}sokatu4325"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    ¹ñÊÝ¡¦¿ÇÎÅÊó½·ÀÁµá½ñ¡Ê·§ËÜ¡Ë
 #        $1-${11}
 #              °õºþ£Ä£ÂÍÑÄê¸ÇÄê°ú¿ô(CPORCSRTLNK.INC)
@@ -13,7 +13,7 @@ RENNUM=0
 #        ${13} ¥·¥§¥ë£É£Ä
 #        ${14} Áí³çÉ½¤Î¼ïÎà
 #           0:Á´ÂÎ  1:¼ÒÊÝ  2:¹ñÊÝ  3:¹­°èÏ¢¹ç
-#        ${15} °åÎÅµ¡´Ø£É£Ä 
+#        ${15} °åÎÅµ¡´ØÈÖ¹æ
 #        ${16} ¥¨¥é¡¼¥Õ¥¡¥¤¥ëÌ¾ 
 #        ${17} ½èÍýÇ¯·î 
 #        ${18} ÂÐ¾ÝÊÝ¸±¼ÔÈÖ¹æ
@@ -33,7 +33,7 @@ RENNUM=0
 ##      ÊÖÌáÊ¬
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,1,${20},${21},${16} > ${LOG_FILE}-2.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -41,7 +41,7 @@ RENNUM=0
 ##      Åö·î¡¦·îÃÙ¤ìÊ¬
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16} > ${LOG_FILE}-1.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,1,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -49,7 +49,7 @@ RENNUM=0
 ##      ÊÖÌáÊ¬¡ÊÆÃÊÌÎÅÍÜÈñ¡Ë
         if  [ ${19} -eq '0' ] || [ ${19} -eq '2' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${20},${21},${16} > ${LOG_FILE}-4.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},2,2,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
@@ -57,7 +57,7 @@ RENNUM=0
 ##      Åö·î¡¦·îÃÙ¤ìÊ¬¡ÊÆÃÊÌÎÅÍÜÈñ¡Ë
         if  [ ${19} -eq '0' ] || [ ${19} -eq '1' ]; then
             RENNUM=$(expr $RENNUM + 1) 
-            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${20},${21},${16} > ${LOG_FILE}-3.log 2>&1
+            $DBSTUB -dir $LDDIRECTORY -bd $PREFNAME $PROGRAMID -parameter $1,$2,$3,$RENNUM,$5,$6,$7,$8,$9,${10},${11},${15},${12},${13},${18},1,2,${20},${21},${16}
             if  [ -e ${MCP_TEMPDIR}/${16} ]; then
                 exit
             fi
