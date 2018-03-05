@@ -5,7 +5,7 @@ PREFNAME=ibaraki
 PROGRAMID=SOKATU0820
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0820"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    光ディスク等送付書（茨城）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
