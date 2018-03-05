@@ -48,6 +48,7 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.13    吉川    17/08/15    ginbee対応
+      *  01.00.14    門間    18/03/01    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1126,6 +1127,9 @@
       *=== ginbee対応 by Yoshikawa(2017/08/15) start
       *     MOVE    "2"                 TO  SPRT-SITEKBN
       *=== ginbee対応 by Yoshikawa(2017/08/15) end
+      *=== SITEKBN変更 by Monma(2018/03/01) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2018/03/01) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.01) LINE ADD START ------------------------------------
