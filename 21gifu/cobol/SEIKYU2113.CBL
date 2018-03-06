@@ -40,6 +40,8 @@
       *  01.00.07    門間    17/04/10    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.08    萩野    17/08/10    平成２９年８月から高額療養費の限度額を変更。
+      *  01.00.09    萩野    18/03/05    項目「処理年月」は、診療年月ではなく
+      *                                  請求年月を出力するように変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1388,8 +1390,11 @@
            PERFORM 5004-MOJI-HENSYU-SEC
       *
       *    ７．処理年月
-           MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
-           MOVE    "01"                    TO  WRK-SYMD(7:2)
+      *=== 不具合修正 by hagino(2018/03/05) start
+      *     MOVE    LNK-PRTKANRI-SRYYM      TO  WRK-SYMD(1:6)
+      *     MOVE    "01"                    TO  WRK-SYMD(7:2)
+           MOVE    LNK-PRTKANRI-SKYYMD     TO  WRK-SYMD
+      *=== 不具合修正 by hagino(2018/03/05) end
            PERFORM  31011-SEIWA-HEN-SEC
            MOVE    SPACE                   TO  WRK-GYYMM
            EVALUATE  LNK-DAY1-GENKIGO
