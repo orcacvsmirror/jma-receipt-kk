@@ -5,7 +5,7 @@ PREFNAME=hyogo
 PROGRAMID=SOKATU2815
 LOG_FILE="/var/log/jma-receipt/${15}sokatu2815"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    弓拌息圭ˇ壳闻鼠椒懒滇今∈始杆∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
