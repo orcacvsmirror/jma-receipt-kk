@@ -5,7 +5,7 @@ PREFNAME=ehime
 PROGRAMID=SOKATU3800
 LOG_FILE="/var/log/jma-receipt/${15}sokatu3800"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保総括表作成
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
