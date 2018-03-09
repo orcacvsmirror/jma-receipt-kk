@@ -56,7 +56,7 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.16    吉川    17/08/15    ginbee対応
-      *  01.00.17    門間    18/03/01    帳票タイトルの修正
+      *  01.00.17    門間    18/03/01    帳票様式の変更
       *                                  患者負担が乳幼児の上限額と同額の
       *                                  場合は印字対象外とする
       *                                  SITEKBN変更（動作に変更なし）
@@ -430,10 +430,10 @@
            MOVE    WRK-PARA-SHELLID
                                    TO  JOB-SHELLID
            MOVE    "SEIKYU4311"    TO  JOB-PGID
-      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *=== 帳票様式の変更 by Monma(2018/03/01) start
       *     MOVE    "乳幼児医療費請求書" 
            MOVE    "子ども医療費請求書" 
-      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
+      *=== 帳票様式の変更 by Monma(2018/03/01) end
                                    TO  JOB-SHELLMSG
            CALL    "ORCSJOB"       USING
                                    ORCSJOBKANRIAREA
@@ -998,9 +998,11 @@
       *    点数
              MOVE  SUM-GTENSU            TO  WRK-Z9
              MOVE  WRK-Z9                TO  SC11-GTENSU
+      *=== 帳票様式の変更 by Monma(2018/03/01) start
       *    公費点数
-             MOVE  SUM-GKESETEN          TO  WRK-Z9
-             MOVE  WRK-Z9                TO  SC11-GKESETEN
+      *       MOVE  SUM-GKESETEN          TO  WRK-Z9
+      *       MOVE  WRK-Z9                TO  SC11-GKESETEN
+      *=== 帳票様式の変更 by Monma(2018/03/01) end
            END-IF
       *
       *    医療機関コード
@@ -1099,19 +1101,21 @@
              PERFORM 2009-HENKAN-SEC
              MOVE    WRK-OUT-INPUT         TO  SC11-TENSU(IDX)
       *
-      *    結精区分
-             EVALUATE  MF100-KESEKBN
-             WHEN 1
-               MOVE    "○"                TO  SC11-KESEKBN(IDX 1)
-             WHEN 2
-               MOVE    "○"                TO  SC11-KESEKBN(IDX 2)
-             END-EVALUATE
-      *
-      *    公費負担点数
-             MOVE   MF100-KESETEN          TO  WRK-Z5
-             MOVE     WRK-Z5               TO  WRK-MAE-INPUT
-             PERFORM 2009-HENKAN-SEC
-             MOVE    WRK-OUT-INPUT         TO  SC11-KESETEN(IDX)
+      *=== 帳票様式の変更 by Monma(2018/03/01) start
+      **    結精区分
+      *       EVALUATE  MF100-KESEKBN
+      *       WHEN 1
+      *         MOVE    "○"                TO  SC11-KESEKBN(IDX 1)
+      *       WHEN 2
+      *         MOVE    "○"                TO  SC11-KESEKBN(IDX 2)
+      *       END-EVALUATE
+      **
+      **    公費負担点数
+      *       MOVE   MF100-KESETEN          TO  WRK-Z5
+      *       MOVE     WRK-Z5               TO  WRK-MAE-INPUT
+      *       PERFORM 2009-HENKAN-SEC
+      *       MOVE    WRK-OUT-INPUT         TO  SC11-KESETEN(IDX)
+      *=== 帳票様式の変更 by Monma(2018/03/01) end
       *
       *    診療科目
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -1147,10 +1151,12 @@
             PERFORM 2009-HENKAN-SEC
             MOVE    WRK-OUT-INPUT       TO  SC11-STENSU
       *
-            MOVE    SUM-SKESETEN        TO  WRK-Z5
-            MOVE    WRK-Z5              TO  WRK-MAE-INPUT
-            PERFORM 2009-HENKAN-SEC
-            MOVE    WRK-OUT-INPUT       TO  SC11-SKESETEN
+      *=== 帳票様式の変更 by Monma(2018/03/01) start
+      *      MOVE    SUM-SKESETEN        TO  WRK-Z5
+      *      MOVE    WRK-Z5              TO  WRK-MAE-INPUT
+      *      PERFORM 2009-HENKAN-SEC
+      *      MOVE    WRK-OUT-INPUT       TO  SC11-SKESETEN
+      *=== 帳票様式の変更 by Monma(2018/03/01) end
       *
            .
        320-BODY-HEN-EXT.
@@ -1179,10 +1185,10 @@
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
            MOVE   "SC4311.red"         TO  SPRT-PRTID
-      *=== 帳票タイトルの修正 by Monma(2018/03/01) start
+      *=== 帳票様式の変更 by Monma(2018/03/01) start
       *     MOVE    "乳幼児医療費請求書"
            MOVE    "子ども医療費請求書"
-      *=== 帳票タイトルの修正 by Monma(2018/03/01) end
+      *=== 帳票様式の変更 by Monma(2018/03/01) end
                                     TO  SPRT-TITLE
            MOVE    SC11             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
