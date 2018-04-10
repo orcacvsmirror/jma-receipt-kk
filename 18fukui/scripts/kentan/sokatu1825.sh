@@ -5,7 +5,7 @@ PREFNAME=fukui
 PROGRAMID=SOKATU1825
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1825"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    弓拌息圭ˇ壳闻鼠椒懒滇柒条今∈省版∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
