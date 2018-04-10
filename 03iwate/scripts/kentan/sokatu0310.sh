@@ -5,7 +5,7 @@ PREFNAME=iwate
 PROGRAMID=SOKATU0310
 LOG_FILE="/var/log/jma-receipt/${15}sokatu0310"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保・診療報酬請求書（岩手）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
