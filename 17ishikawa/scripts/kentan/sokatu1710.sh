@@ -5,7 +5,7 @@ PREFNAME=ishikawa
 PROGRAMID=SOKATU1710
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1710"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    柜瘦ˇ壳闻鼠椒懒滇今∈佬李∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)

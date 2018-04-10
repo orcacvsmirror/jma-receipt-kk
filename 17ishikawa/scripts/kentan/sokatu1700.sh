@@ -5,7 +5,7 @@ PREFNAME=ishikawa
 PROGRAMID=SOKATU1700
 LOG_FILE="/var/log/jma-receipt/${15}sokatu1700"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    国保総括表作成（石川）
 #        $1-${11}
 #              印刷ＤＢ用定固定引数(CPORCSRTLNK.INC)
