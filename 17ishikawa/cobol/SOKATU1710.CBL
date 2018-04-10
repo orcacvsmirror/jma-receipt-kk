@@ -51,6 +51,7 @@
       *  01.00.13      萩野     16/11/16    医療機関編集情報への開設者名追加対応
       *  01.00.14      萩野     17/04/17    医療機関コード変更時、
       *                                     医療機関コード別の作成処理対応
+      *  01.00.15      門間     18/04/09    SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1456,6 +1457,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2018/04/09) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2018/04/09) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.02) LINE ADD START ------------------------------------
@@ -1554,6 +1558,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2018/04/09) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2018/04/09) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
