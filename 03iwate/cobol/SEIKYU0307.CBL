@@ -54,6 +54,7 @@
       *  01.00.14     萩野    2017/03/08  医療機関情報の取得の修正
       *                                   受給者番号順１１桁対応
       *  01.00.15     萩野    2017/05/12  開設者名を記載しないようにする
+      *  01.00.16     門間    2018/04/09  SITEKBN変更（動作に変更なし）
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1843,6 +1844,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2018/04/09) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2018/04/09) end
       *---(01.00.01) LINE ADD START ------------------------------------
            MOVE    MF101-PTID          TO  SPRT-PTID
       *---(01.00.01) LINE ADD END   ------------------------------------
@@ -2170,6 +2174,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Monma(2018/04/09) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Monma(2018/04/09) end
       *---(01.00.01) LINE ADD START ------------------------------------
            MOVE    MF101-PTID          TO  SPRT-PTID
       *---(01.00.01) LINE ADD END   ------------------------------------
