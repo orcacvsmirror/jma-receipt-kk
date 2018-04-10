@@ -6,7 +6,7 @@ PREFNAME=wakayama
 PROGRAMID=SEIKYU3003
 LOG_FILE="/var/log/jma-receipt/${14}seikyu3003"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    孟数给锐懒滇今　マル唉
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)

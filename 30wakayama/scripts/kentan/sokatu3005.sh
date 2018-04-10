@@ -5,7 +5,7 @@ PREFNAME=wakayama
 PROGRAMID=SOKATU3005
 LOG_FILE="/var/log/jma-receipt/${15}sokatu3005"
 RENNUM=0
--------------------------------------------#
+#-------------------------------------------#
 #    弓拌息圭ˇ壳闻鼠椒懒滇今∈下参怀∷
 #        $1-${11}
 #              磅湖ＤＢ脱年盖年苞眶(CPORCSRTLNK.INC)
