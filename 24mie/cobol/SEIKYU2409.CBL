@@ -43,6 +43,7 @@
       *                                  医療機関コード別の作成処理対応
       *                                  カナ氏名の記録修正
       * 01.00.09     吉川    2017/06/14  平成２７年１月改正対応
+      * 01.00.10     吉川    2018/04/12  70歳以上の高額限度額を考慮する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1120,6 +1121,15 @@
                MOVE    RECE02-FTNMONEY(1)    TO  MF100-FTNMONEY
              END-IF
            END-IF
+      *
+      *=== 70歳以上の高額療養費印字対応 by Yoshikawa(2018/04/12) start
+           IF  (RECE02-ZAITAKU  =  SPACE)
+           AND (RECE02-AGE     >=  70)
+               IF  RECE02-FTNMONEY(1)  >  ZERO
+                   MOVE    RECE02-FTNMONEY(1)   TO  MF100-FTNMONEY
+               END-IF
+           END-IF
+      *=== 70歳以上の高額療養費印字対応 by Yoshikawa(2018/04/12) end
       *
       *    保険者番号チェック処理
            MOVE    ZERO               TO   FLG-ERR

@@ -52,6 +52,7 @@
       *  01.00.14    等李    17/06/14    士喇２７钳１奉猖赖滦炳
       *  01.00.15    等李    17/08/14    ≈给锐ˇ墓办婶砷么驰∽腕は
       *                                  吹荚砷么がない眷圭はゼロと淡很
+      *  01.00.16    等李    18/04/12    70盒笆惧の光驰嘎刨驰を雇胃する
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1172,6 +1173,15 @@
              END-IF
            END-IF
       *=== 蘑杉屯及の恃构 by Yoshikawa(2014/03/05) end
+      *
+      *=== 70盒笆惧の光驰闻蛙锐磅机滦炳 by Yoshikawa(2018/04/12) start
+           IF  (RECE02-ZAITAKU  =  SPACE)
+           AND (RECE02-AGE     >=  70)
+               IF  RECE02-FTNMONEY(1)  >  ZERO
+                   MOVE    RECE02-FTNMONEY(1)   TO  MF100-FTNMONEY
+               END-IF
+           END-IF
+      *=== 70盒笆惧の光驰闻蛙锐磅机滦炳 by Yoshikawa(2018/04/12) end
       *
       *    瘦副懒滇驰
            COMPUTE   MF100-SEIKYUGK  =  RECE02-TOTALTEN(1)  *  10
