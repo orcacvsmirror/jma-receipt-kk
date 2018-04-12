@@ -43,6 +43,7 @@
       *  01.00.09    萩野    2017/03/08  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *                                  公費番号まとめ情報の公費番号の追加
+      *  01.00.10    吉川    2018/04/12  SITEKBN変更
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -1455,8 +1456,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
-      *     MOVE    "1"                 TO  SPRT-SITEKBN
-      *     
+      *=== SITEKBN変更 by Yoshikawa(2018/04/12) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/04/12) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
