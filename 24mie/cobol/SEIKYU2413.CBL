@@ -38,6 +38,7 @@
       *                                  2667点未満で集計対象外とする
       *  01.00.05    萩野    2017/03/08  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.06    吉川    2018/04/12  SITEKBN変更
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1104,6 +1105,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by Yoshikawa(2018/04/12) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by Yoshikawa(2018/04/12) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA

@@ -60,6 +60,7 @@
       *  01.00.18    等李    17/08/14    ≈给锐ˇ墓办婶砷么驰∽腕は
       *                                  吹荚砷么がない眷圭はゼロと淡很
       *  01.00.19    等李    18/04/12    70盒笆惧の光驰嘎刨驰を雇胃する
+      *                                  SITEKBN恃构
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1673,6 +1674,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN恃构 by Yoshikawa(2018/04/12) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN恃构 by Yoshikawa(2018/04/12) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
                                        SPA-AREA
