@@ -1604,7 +1604,10 @@
                ELSE
                    IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
                    OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
-                       GO  TO  900-SEIKYU-READ-SEC
+      *=== 印刷不具合対応 by hagino(2018/04/18) start
+      *                 GO  TO  900-SEIKYU-READ-SEC
+                       GO  TO  950-SEIKYU-READ-SEC
+      *=== 印刷不具合対応 by hagino(2018/04/18) end
                    END-IF
                END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/03/08) end
