@@ -48,7 +48,7 @@
       *  01.00.13       門間    2017/03/08   医療機関コード変更時、
       *                                      医療機関コード別の作成処理対応
       *  01.00.14       萩野    2018/04/09   SITEKBN変更（動作に変更なし）
-      *                                      印刷不具合対応
+      *                                      記述漏れ修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -692,9 +692,9 @@
              PERFORM  950-SEIKYU-SELECT-SEC
              PERFORM  2001-KOKUHO-SYUKEI-SEC
                       UNTIL   FLG-END   =   1
-      *=== 印刷不具合対応 by hagino(2018/04/18) start
+      *=== 記述漏れ修正 by hagino(2018/04/18) start
              PERFORM  950-SEIKYU-CLOSE-SEC
-      *=== 印刷不具合対応 by hagino(2018/04/18) end
+      *=== 記述漏れ修正 by hagino(2018/04/18) end
       *---(01.00.02) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
            END-IF
@@ -1604,10 +1604,10 @@
                ELSE
                    IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
                    OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
-      *=== 印刷不具合対応 by hagino(2018/04/18) start
+      *=== 記述漏れ修正 by hagino(2018/04/18) start
       *                 GO  TO  900-SEIKYU-READ-SEC
                        GO  TO  950-SEIKYU-READ-SEC
-      *=== 印刷不具合対応 by hagino(2018/04/18) end
+      *=== 記述漏れ修正 by hagino(2018/04/18) end
                    END-IF
                END-IF
       *=== 医療機関コード変更時作成対応 by Monma(2017/03/08) end
