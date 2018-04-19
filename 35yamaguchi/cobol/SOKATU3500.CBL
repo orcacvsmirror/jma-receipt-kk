@@ -45,6 +45,7 @@
       *  01.00.12    萩野     17/02/15    医療機関コード変更時、
       *                                   医療機関コード別の作成処理対応
       *  01.00.13    萩野     18/04/09    SITEKBN変更（動作に変更なし）
+      *                                   記述漏れ修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -656,6 +657,9 @@
              PERFORM  950-SEIKYU-SELECT-SEC
              PERFORM  2001-KOKUHO-SYUKEI-SEC
                       UNTIL   FLG-END   =   1
+      *=== 記述漏れ修正 by hagino(2018/04/19) start
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 記述漏れ修正 by hagino(2018/04/19) end
       *---(01.00.03) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/12/09) start
            END-IF
@@ -1650,6 +1654,17 @@
            IF      MCP-RC              =   ZERO
                MOVE    ZERO            TO  FLG-END
                MOVE    MCPDATA-REC         TO  RECE10-REC
+      *
+      *=== 記述漏れ修正 by hagino(2018/04/19) start
+               IF      WRK-PARA-STSRYYM    =   "999999"
+                   CONTINUE
+               ELSE
+                   IF  ( RECE10-SRYYM      <   WRK-PARA-STSRYYM )
+                   OR  ( RECE10-SRYYM      >   WRK-PARA-EDSRYYM )
+                       GO  TO  950-SEIKYU-READ-SEC
+                   END-IF
+               END-IF
+      *=== 記述漏れ修正 by hagino(2018/04/19) end
       *
       *        テスト患者のときは読み飛ばす
                MOVE    SPACE               TO  PTINF-REC
