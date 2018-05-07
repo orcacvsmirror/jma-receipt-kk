@@ -78,6 +78,7 @@
       *                                   医療機関コード別の作成処理対応
       *  01.00.31    吉川     17/10/16    SITEKBN変更
       *  01.00.32    門間     18/01/09    下部の負担者番号等は１枚目に印字
+      *  01.00.33    門間     18/05/01    特記事項に印字内容追加
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -650,6 +651,13 @@
            03  FILLER              PIC X(02)   VALUE   "37".
            03  FILLER              PIC X(10)   VALUE   "３７申出".
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+           03  FILLER              PIC X(02)   VALUE   "38".
+           03  FILLER              PIC X(10)   VALUE   "３８医併".
+           03  FILLER              PIC X(02)   VALUE   "39".
+           03  FILLER              PIC X(10)   VALUE   "３９医療".
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
+      *
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) start
       *     03  TBL-TOKKI       OCCURS   18.
@@ -657,7 +665,10 @@
       *     03  TBL-TOKKI       OCCURS   22.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
       *     03  TBL-TOKKI       OCCURS   34.
-           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+      *     03  TBL-TOKKI       OCCURS   35.
+           03  TBL-TOKKI       OCCURS   37.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
@@ -669,7 +680,10 @@
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   34.
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   35.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+      * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   35.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   37.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/30) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/05/27) end
@@ -3380,27 +3394,18 @@
            ADD     1               TO  CNT-PAGE
            IF      MF100-NYUGAIKBN =   "1"
                PERFORM 310-HC101-HEAD-HEN-SEC
-      *
-      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
-      *        ２頁以降は空白とする
-               INITIALIZE  HCN06-CST-FTNJANUM
-               INITIALIZE  HCN06-CST-JKYSNUM
-               INITIALIZE  HCN06-CST-KYUFUGAI
-      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
-      *
            ELSE
                PERFORM 310N-HC101-HEAD-HEN-SEC
-      *
-      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
-      *        ２頁以降は空白とする
-               INITIALIZE  HC06-CST-FTNJANUM
-               INITIALIZE  HC06-CST-JKYSNUM
-               INITIALIZE  HC06-CST-KYUFUGAI
-      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
-      *
            END-IF
            INITIALIZE  WRK-BYOMEI-TAIHI-TBL
            MOVE    ZERO          TO  WRK-LINETEK
+      *
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) start
+      *    ２頁以降は空白とする
+           INITIALIZE  HC06-CST-FTNJANUM
+           INITIALIZE  HC06-CST-JKYSNUM
+           INITIALIZE  HC06-CST-KYUFUGAI
+      *=== 下部の負担者番号等は１枚目に印字 by Monma(2018/01/09) end
       *
            .
        34120-PAGE-EXT.

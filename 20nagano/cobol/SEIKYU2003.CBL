@@ -66,6 +66,7 @@
       *  02.05.22    萩野    17/12/11    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *                                  SITEKBN変更（動作に変更なし）
+      *  02.05.23    門間    18/05/01    特記事項に印字内容追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -399,6 +400,10 @@
            03  FILLER          PIC X(02)   VALUE   "24".
            03  FILLER          PIC X(10)   VALUE   "２４多低".
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+           03  FILLER          PIC X(02)   VALUE   "25".
+           03  FILLER          PIC X(10)   VALUE   "２５出産".
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
       *=== 平成２７年１月改正対応 by hagino(2015/03/10) start
            03  FILLER          PIC X(02)   VALUE   "26".
            03  FILLER          PIC X(10)   VALUE   "２６区ア".
@@ -411,13 +416,36 @@
            03  FILLER          PIC X(02)   VALUE   "30".
            03  FILLER          PIC X(10)   VALUE   "３０区オ".
       *=== 平成２７年１月改正対応 by hagino(2015/03/10) end
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+           03  FILLER          PIC X(02)   VALUE   "31".
+           03  FILLER          PIC X(10)   VALUE   "３１多ア".
+           03  FILLER          PIC X(02)   VALUE   "32".
+           03  FILLER          PIC X(10)   VALUE   "３２多イ".
+           03  FILLER          PIC X(02)   VALUE   "33".
+           03  FILLER          PIC X(10)   VALUE   "３３多ウ".
+           03  FILLER          PIC X(02)   VALUE   "34".
+           03  FILLER          PIC X(10)   VALUE   "３４多エ".
+           03  FILLER          PIC X(02)   VALUE   "35".
+           03  FILLER          PIC X(10)   VALUE   "３５多オ".
+           03  FILLER          PIC X(02)   VALUE   "36".
+           03  FILLER          PIC X(10)   VALUE   "３６加治".
+           03  FILLER          PIC X(02)   VALUE   "37".
+           03  FILLER          PIC X(10)   VALUE   "３７申出".
+           03  FILLER          PIC X(02)   VALUE   "38".
+           03  FILLER          PIC X(10)   VALUE   "３８医併".
+           03  FILLER          PIC X(02)   VALUE   "39".
+           03  FILLER          PIC X(10)   VALUE   "３９医療".
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
       *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) start
       *     03  TBL-TOKKI       OCCURS   18.
       *=== 平成２７年１月改正対応 by hagino(2015/03/10) start
       *     03  TBL-TOKKI       OCCURS   22.
-           03  TBL-TOKKI       OCCURS   27.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+      *     03  TBL-TOKKI       OCCURS   27.
+           03  TBL-TOKKI       OCCURS   37.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
       *=== 平成２７年１月改正対応 by hagino(2015/03/10) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
                05  TBL-TOKKICD             PIC X(02).
@@ -426,7 +454,10 @@
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   18.
       *=== 平成２７年１月改正対応 by hagino(2015/03/10) start
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   27.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   27.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   37.
+      *=== 特記事項に印字内容追加 by Monma(2018/05/01) end
       *=== 平成２７年１月改正対応 by hagino(2015/03/10) end
       *=== H21年5月特定疾患改正対応 by Yoshikawa(2009/06/02) end
       *=== 特記事項印字修正 by Yoshikawa(2008/06/03) end
@@ -1275,7 +1306,7 @@
       *=== 生保は集計対象外 by Yoshikawa(2011/03/07) end
              END-PERFORM
       *=== 特記事項印字修正 by Yoshikawa(2008/06/03) start
-      *特記事項
+      *      特記事項
              PERFORM  VARYING  IDX  FROM  1  BY  1
                       UNTIL    IDX  >     3
                  IF   RECE10-TOKKI(IDX)  NOT =  SPACE
