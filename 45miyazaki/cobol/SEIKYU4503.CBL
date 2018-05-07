@@ -65,6 +65,8 @@
       *  01.00.23    Ìç´Ö    17/06/06    °åÎÅµ¡´Ø¥³¡¼¥ÉÊÑ¹¹»þ¡¢
       *                                  °åÎÅµ¡´Ø¥³¡¼¥ÉÊÌ¤ÎºîÀ®½èÍýÂÐ±þ
       *  01.00.24    Ìç´Ö    17/11/01    SITEKBNÊÑ¹¹¡ÊÆ°ºî¤ËÊÑ¹¹¤Ê¤·¡Ë
+      *  01.00.25    Ìç´Ö    18/05/02    ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã
+      *                                  ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -195,6 +197,10 @@
            03  FLG-PRGOPTION  PIC 9(01).
            03  FLG-OK         PIC 9(01).
       *=== ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ by Yoshikawa(2013/06/18) end
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+           03  FLG-SRYACT     PIC 9(01).
+           03  FLG-PTCOM      PIC 9(01).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -208,6 +214,10 @@
       *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) end
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+           03  IDW1           PIC 9(04).
+           03  IDW2           PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *    ¥Ñ¥é¥á¥¿ÎÎ°è
        01  WRK-PARA.
@@ -335,6 +345,16 @@
       *     03  FILE-NAME        PIC X(512).
       *=== ¥×¥é¥°¥¤¥óÂÐ±þ by Yoshikawa(2013/02/08) end
       *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+           03  WRK-SRYCD               PIC X(09).
+           03  WRK-INPUTCOMENT         PIC X(80).
+           03  WRK-INPUTCOMENT2        PIC X(14).
+           03  WRK-INPUTCOMENT-KIN-T.
+               05  WRK-INPUTCOMENT-KIN     PIC 9(07).
+           03  WRK-INPUTCOMENT-KIN2-T.
+               05  WRK-INPUTCOMENT-KIN2    PIC X(07).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
+      *
       *    ¥ì¥»¥×¥ÈºîÀ®»Ø¼¨(°õºþ½ç)¾ðÊóÂàÈò¥¨¥ê¥¢
            03  WRK-2003-TBL OCCURS 100.
                05  WRK-2003-TEISYUTUSAKI       PIC X(01).
@@ -411,17 +431,33 @@
            03  FILLER              PIC X(10)   VALUE   "£³£´Â¿¥¨".
            03  FILLER              PIC X(02)   VALUE   "35".
            03  FILLER              PIC X(10)   VALUE   "£³£µÂ¿¥ª".
+      *=== ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã by Monma(2018/05/02) start
+           03  FILLER              PIC X(02)   VALUE   "36".
+           03  FILLER              PIC X(10)   VALUE   "£³£¶²Ã¼£".
+           03  FILLER              PIC X(02)   VALUE   "37".
+           03  FILLER              PIC X(10)   VALUE   "£³£·¿½½Ð".
+           03  FILLER              PIC X(02)   VALUE   "38".
+           03  FILLER              PIC X(10)   VALUE   "£³£¸°åÊ»".
+           03  FILLER              PIC X(02)   VALUE   "39".
+           03  FILLER              PIC X(10)   VALUE   "£³£¹°åÎÅ".
+      *=== ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã by Monma(2018/05/02) end
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
        01  TBL-TOKKI-R             REDEFINES   TBL-TOKKI-AREA.
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
       *     03  TBL-TOKKI       OCCURS   22.
-           03  TBL-TOKKI       OCCURS   32.
+      *=== ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã by Monma(2018/05/02) start
+      *     03  TBL-TOKKI       OCCURS   32.
+           03  TBL-TOKKI       OCCURS   37.
+      *=== ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã by Monma(2018/05/02) end
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
                05  TBL-TOKKICD     PIC X(02).
                05  TBL-TOKKINAME   PIC X(10).
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) start
       * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   22.
-       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   32.
+      *=== ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã by Monma(2018/05/02) start
+      * 01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   32.
+       01  TBL-TOKKI-MAX           PIC 9(02)   VALUE   37.
+      *=== ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã by Monma(2018/05/02) end
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ½¤Àµ by hagino(2015/06/09) end
       *=== ÆÃµ­»ö¹à°õ»ú by Yoshikawa(2010/02/23) end
       *
@@ -449,6 +485,13 @@
       *     COPY    "ORCA-DBPATH".
            COPY    "COMMON-SPA".
       *---(01.00.06) LINE ADD END   ------------------------------------
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *    ¸ÇÄê¹àÌÜ
+       01  WRK-CONS-AREA.
+      *    ¸øÈñ°ìÉôÉéÃ´¶âÃÖ´¹¥³¡¼¥É
+           03  WRK-CONS-KIN-OKIKAE     PIC X(09)   VALUE   "099999921".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *****************************************************************
       *    ¥Õ¥¡¥¤¥ë¥ì¥¤¥¢¥¦¥È¡¡ÎÎ°è
@@ -503,6 +546,16 @@
            COPY    "CPKOHSKY.INC"
                    REPLACING  //KOHSKY//
                    BY         //RECE02//.
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *    ¿ÇÎÅ¹Ô°Ù
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *
+      *    ´µ¼Ô¥³¥á¥ó¥È
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *    ¥Ñ¥é¥á¥¿
        01  BTPARA-REC.
@@ -1307,6 +1360,16 @@
            END-IF
       *=== ¸øÈñ£²¤¬ÊÝ¸±ÅÀ¿ô¤¬Æ±¤¸¤Ç¤â°õ»ú by Yoshikawa(2011/11/21) end
       *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *    ¿ÇÎÅ¹Ô°Ù¾ðÊó¼èÆÀ
+           MOVE    WRK-CONS-KIN-OKIKAE     TO  WRK-SRYCD
+           PERFORM 940-SRYACT-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+      *      ¸øÈñ¡Ý°ìÉôÉéÃ´¶âÃÖ´¹ÊÔ½¸
+             PERFORM  200112-ICHIBUFTN-HENSYU-SEC
+           END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
+      *
       *    ÊÝ¸±¼ÔÈÖ¹æ¥Á¥§¥Ã¥¯½èÍý
       *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»úÂÐ¾Ý³° by Yoshikawa(2009/02/16) start
       *     MOVE    ZERO               TO   FLG-ERR
@@ -1359,6 +1422,110 @@
            .
        200111-HKNJANUM-CHK-EXT.
            EXIT.
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *****************************************************************
+      *    ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÊÔ½¸½èÍý
+      *****************************************************************
+       200112-ICHIBUFTN-HENSYU-SEC                SECTION.
+      *
+           INITIALIZE                             WRK-INPUTCOMENT
+                                                  WRK-INPUTCOMENT2
+                                                  WRK-INPUTCOMENT-KIN
+                                                  WRK-INPUTCOMENT-KIN2
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *
+      *        ´µ¼Ô¥³¥á¥ó¥È¾ðÊóÆÉ¹þ
+               PERFORM  950-PTCOM-READ-SEC
+               MOVE  PTCOM-INPUTCOMENT           TO  WRK-INPUTCOMENT
+      *
+               IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£±ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£²ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£³ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£´ÉéÃ´¶â¡§"
+                 MOVE  WRK-INPUTCOMENT(13:14)    TO  WRK-INPUTCOMENT2
+      *
+      *          ÃÖ´¹¶â³ÛÊÔ½¸
+                 IF  WRK-INPUTCOMENT2  =  "¡¡¡¡¡¡¡¡¡¡¡¡¡¡"  OR  SPACE
+                   CONTINUE
+                 ELSE
+      *            Á´³Ñ¿ô»ú¤òÈ¾³Ñ¤ËÃÖ¤­´¹¤¨¤ë
+                   PERFORM  VARYING  IDW1  FROM  1  BY  2
+                            UNTIL    IDW1  >  14
+                     COMPUTE  IDW2  =  (IDW1  +  1)  /  2
+                     EVALUATE  WRK-INPUTCOMENT2(IDW1:2)
+                       WHEN  "£°"
+                         MOVE  "0"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£±"
+                         MOVE  "1"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£²"
+                         MOVE  "2"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£³"
+                         MOVE  "3"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£´"
+                         MOVE  "4"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£µ"
+                         MOVE  "5"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¶"
+                         MOVE  "6"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£·"
+                         MOVE  "7"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¸"
+                         MOVE  "8"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¹"
+                         MOVE  "9"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  OTHER
+                         MOVE  14   TO  IDW1
+                     END-EVALUATE
+                   END-PERFORM
+      *
+                   IF  WRK-INPUTCOMENT-KIN2-T  NOT =  SPACE
+      *              ±¦µÍ¤á¤Î¿ô»ú¹àÌÜ¤ËÊÑ´¹¤¹¤ë
+                     MOVE    8      TO  IDW2
+                     PERFORM  VARYING  IDW1  FROM  7  BY  -1
+                              UNTIL    IDW1  <  1
+                       IF  WRK-INPUTCOMENT-KIN2-T(IDW1:1)  =  SPACE
+                         CONTINUE
+                       ELSE
+                         COMPUTE  IDW2  =  IDW2  -  1
+                         MOVE  WRK-INPUTCOMENT-KIN2-T(IDW1:1)
+                                    TO  WRK-INPUTCOMENT-KIN-T(IDW2:1)
+                       END-IF
+                     END-PERFORM
+      *
+      *              ½¸·×ÍÑ¥Õ¥¡¥¤¥ë¤Ë³ÊÇ¼
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£±ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN  
+                                    TO  MF100-OKIKAE-FTN(1)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£²ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                    TO  MF100-OKIKAE-FTN(2)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£³ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF100-OKIKAE-FTN(3)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£´ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF100-OKIKAE-FTN(4)
+                     END-IF
+                   END-IF
+      *
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       200112-ICHIBUFTN-HENSYU-EXT.
+           EXIT.
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *=== ÂÐ¾Ý¸øÈñ¤òINI¥Õ¥¡¥¤¥ë¤«¤é¼èÆÀ by Yoshikawa(2010/06/15) start
       *****************************************************************
@@ -1649,8 +1816,17 @@
                MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
       *
       *        °ìÉôÉéÃ´¶â£²(Á´¹ñ¸øÈñ)
-               MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *         MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+               IF  MF100-OKIKAE-FTN(1)  NOT =  ZERO
+                 MOVE  MF100-OKIKAE-FTN(1)   TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC03-FTNMONEY(2)
+               ELSE
+                 MOVE  MF100-T-FTNMONEY      TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC03-FTNMONEY(2)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *        ¼ÂÆü¿ô£²(Á´¹ñ¸øÈñ)
                MOVE    MF100-T-JNISSU      TO  WRK-Z2
@@ -1667,8 +1843,17 @@
                MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
       *
       *        °ìÉôÉéÃ´¶â£³(ÃÏÊý¸øÈñ)
-               MOVE    MF100-FTNMONEY      TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *         MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+               IF  MF100-OKIKAE-FTN(2)  NOT =  ZERO
+                 MOVE  MF100-OKIKAE-FTN(2)   TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC03-FTNMONEY(3)
+               ELSE
+                 MOVE  MF100-FTNMONEY        TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC03-FTNMONEY(3)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *        ¼ÂÆü¿ô£³(ÃÏÊý¸øÈñ)
                MOVE    MF100-JNISSU        TO  WRK-Z2
@@ -1726,8 +1911,17 @@
                  MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
       *
       *          °ìÉôÉéÃ´¶â£²(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
-                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
-                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *           MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+                 IF  MF100-OKIKAE-FTN(1)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(1)   TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(2)
+                 ELSE
+                   MOVE  MF100-FTNMONEY        TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(2)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£²(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
                  MOVE    MF100-JNISSU        TO  WRK-Z2
@@ -1744,8 +1938,17 @@
                  MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
       *
       *          °ìÉôÉéÃ´¶â£³(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
-                 MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
-                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+      *           MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+                 IF  MF100-OKIKAE-FTN(2)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(2)   TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(3)
+                 ELSE
+                   MOVE  MF100-T-FTNMONEY      TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(3)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£³(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
                  MOVE    MF100-T-JNISSU      TO  WRK-Z2
@@ -1764,8 +1967,17 @@
                  MOVE    WRK-Z7              TO  SC03-TOTALTEN(2)
       *
       *          °ìÉôÉéÃ´¶â£²(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
-                 MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
-                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+      *           MOVE    WRK-Z8              TO  SC03-FTNMONEY(2)
+                 IF  MF100-OKIKAE-FTN(2)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(2)   TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(2)
+                 ELSE
+                   MOVE  MF100-T-FTNMONEY      TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(2)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£²(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
                  MOVE    MF100-T-JNISSU      TO  WRK-Z2
@@ -1782,8 +1994,17 @@
                  MOVE    WRK-Z7              TO  SC03-TOTALTEN(3)
       *
       *          °ìÉôÉéÃ´¶â£³(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
-                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
-                 MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *           MOVE    WRK-Z8              TO  SC03-FTNMONEY(3)
+                 IF  MF100-OKIKAE-FTN(1)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(1)   TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(3)
+                 ELSE
+                   MOVE  MF100-FTNMONEY        TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC03-FTNMONEY(3)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£³(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
                  MOVE    MF100-JNISSU        TO  WRK-Z2
@@ -2075,8 +2296,17 @@
                MOVE    WRK-Z7              TO  SC04-TOTALTEN(2)
       *
       *        °ìÉôÉéÃ´¶â£²(Á´¹ñ¸øÈñ)
-               MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *         MOVE    MF100-T-FTNMONEY    TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
+               IF  MF100-OKIKAE-FTN(1)  NOT =  ZERO
+                 MOVE  MF100-OKIKAE-FTN(1)   TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC04-FTNMONEY(2)
+               ELSE
+                 MOVE  MF100-T-FTNMONEY      TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC04-FTNMONEY(2)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *        ¼ÂÆü¿ô£²(Á´¹ñ¸øÈñ)
                MOVE    MF100-T-JNISSU      TO  WRK-Z2
@@ -2111,8 +2341,17 @@
                MOVE    WRK-Z7              TO  SC04-TOTALTEN(3)
       *  
       *        °ìÉôÉéÃ´¶â£³(ÃÏÊý¸øÈñ)
-               MOVE    MF100-FTNMONEY      TO  WRK-Z8
-               MOVE    WRK-Z8              TO  SC04-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *         MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *         MOVE    WRK-Z8              TO  SC04-FTNMONEY(3)
+               IF  MF100-OKIKAE-FTN(2)  NOT =  ZERO
+                 MOVE  MF100-OKIKAE-FTN(2)   TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC04-FTNMONEY(3)
+               ELSE
+                 MOVE  MF100-FTNMONEY        TO  WRK-Z8
+                 MOVE  WRK-Z8                TO  SC04-FTNMONEY(3)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *        ¼ÂÆü¿ô£³(ÃÏÊý¸øÈñ)
                MOVE    MF100-JNISSU        TO  WRK-Z2
@@ -2248,8 +2487,17 @@
                  MOVE    WRK-Z7              TO  SC04-TOTALTEN(2)
       *
       *          °ìÉôÉéÃ´¶â£²(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
-                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
-                 MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *           MOVE    WRK-Z8              TO  SC04-FTNMONEY(2)
+                 IF  MF100-OKIKAE-FTN(1)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(1)   TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC04-FTNMONEY(2)
+                 ELSE
+                   MOVE  MF100-FTNMONEY        TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC04-FTNMONEY(2)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£²(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
                  MOVE    MF100-JNISSU        TO  WRK-Z2
@@ -2282,8 +2530,17 @@
                  MOVE    WRK-Z7                  TO  SC04-TOTALTEN(3)
       *
       *          °ìÉôÉéÃ´¶â£³(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
-                 MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
-                 MOVE    WRK-Z8                  TO  SC04-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
+      *           MOVE    WRK-Z8                  TO  SC04-FTNMONEY(3)
+                 IF  MF100-OKIKAE-FTN(2)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(2)       TO  WRK-Z8
+                   MOVE  WRK-Z8                    TO  SC04-FTNMONEY(3)
+                 ELSE
+                   MOVE  MF100-T-FTNMONEY          TO  WRK-Z8
+                   MOVE  WRK-Z8                    TO  SC04-FTNMONEY(3)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£³(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
                  MOVE    MF100-T-JNISSU          TO  WRK-Z2
@@ -2318,8 +2575,17 @@
                  MOVE    WRK-Z7                  TO  SC04-TOTALTEN(2)
       *
       *          °ìÉôÉéÃ´¶â£²(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
-                 MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
-                 MOVE    WRK-Z8                  TO  SC04-FTNMONEY(2)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-T-FTNMONEY        TO  WRK-Z8
+      *           MOVE    WRK-Z8                  TO  SC04-FTNMONEY(2)
+                 IF  MF100-OKIKAE-FTN(2)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(2)       TO  WRK-Z8
+                   MOVE  WRK-Z8                    TO  SC04-FTNMONEY(2)
+                 ELSE
+                   MOVE  MF100-T-FTNMONEY          TO  WRK-Z8
+                   MOVE  WRK-Z8                    TO  SC04-FTNMONEY(2)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£²(ÃÏÊý¸øÈñ£²¤ÄÌÜ)
                  MOVE    MF100-T-JNISSU          TO  WRK-Z2
@@ -2353,8 +2619,17 @@
                  MOVE    WRK-Z7              TO  SC04-TOTALTEN(3)
       *
       *          °ìÉôÉéÃ´¶â£³(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
-                 MOVE    MF100-FTNMONEY      TO  WRK-Z8
-                 MOVE    WRK-Z8              TO  SC04-FTNMONEY(3)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *           MOVE    MF100-FTNMONEY      TO  WRK-Z8
+      *           MOVE    WRK-Z8              TO  SC04-FTNMONEY(3)
+                 IF  MF100-OKIKAE-FTN(1)  NOT =  ZERO
+                   MOVE  MF100-OKIKAE-FTN(1)   TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC04-FTNMONEY(3)
+                 ELSE
+                   MOVE  MF100-FTNMONEY        TO  WRK-Z8
+                   MOVE  WRK-Z8                TO  SC04-FTNMONEY(3)
+                 END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *          ¼ÂÆü¿ô£³(ÃÏÊý¸øÈñ£±¤ÄÌÜ)
                  MOVE    MF100-JNISSU        TO  WRK-Z2
@@ -3128,6 +3403,129 @@
            .
        935-PTKOHINF-READ-EXT.
            EXIT.
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) start
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       940-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE                      SRYACT-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  WRK-SRYCD             TO  SRY-SRYCD(1)
+                                             SRY-SRYCD(2)
+                                             SRY-SRYCD(3)
+                                             SRY-SRYCD(4)
+                                             SRY-SRYCD(5)
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key7"              TO  MCP-PATHNAME
+               PERFORM  945-SRYACT-READ-SEC
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       940-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊóÆÉ¹þ
+      *****************************************************************
+       945-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       945-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ´µ¼Ô¥³¥á¥ó¥È¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       950-PTCOM-READ-SEC  SECTION.
+      *
+             INITIALIZE                      PTCOM-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  PTCOM-HOSPNUM
+             MOVE  SRY-PTID              TO  PTCOM-PTID
+             MOVE  SRY-ZAINUM            TO  PTCOM-ZAINUM
+             MOVE  SRY-SRYCD(IDX4)       TO  PTCOM-SRYCD
+             MOVE  SRY-INPUTNUM(IDX4)    TO  PTCOM-RENNUM
+             MOVE  PTCOM-REC             TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_ptcom"         TO  MCP-TABLE
+               MOVE  "key"               TO  MCP-PATHNAME
+               MOVE  "DBFETCH"           TO  MCP-FUNC
+               CALL  "ORCDBMAIN"         USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF  MCP-RC  =  ZERO
+                 MOVE  MCPDATA-REC       TO  PTCOM-REC
+                 MOVE  ZERO              TO  FLG-PTCOM
+               ELSE
+                 INITIALIZE                  PTCOM-REC
+                 MOVE    1               TO  FLG-PTCOM
+               END-IF
+             ELSE
+               DISPLAY  "PTCOM SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       950-PTCOM-READ-EXT.
+           EXIT.
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by Monma(2018/05/02) end
       *
       *=== ¥×¥í¥°¥é¥à¥ª¥×¥·¥ç¥óÂÐ±þ by Yoshikawa(2013/06/18) start
       *****************************************************************
