@@ -55,6 +55,7 @@
       *                                   受給者番号順１１桁対応
       *  01.00.15     萩野    2017/05/12  開設者名を記載しないようにする
       *  01.00.16     門間    2018/04/09  SITEKBN変更（動作に変更なし）
+      *  01.00.17     萩野    2018/05/08  特記事項に印字内容追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -490,13 +491,25 @@
            03  FILLER          PIC X(10)   VALUE   "３６加治".
            03  FILLER          PIC X(02)   VALUE   "37".
            03  FILLER          PIC X(10)   VALUE   "３７申出".
+      *=== 特記事項追加 by hagino(2018/05/08) start
+           03  FILLER          PIC X(02)   VALUE   "38".
+           03  FILLER          PIC X(10)   VALUE   "３８医併".
+           03  FILLER          PIC X(02)   VALUE   "39".
+           03  FILLER          PIC X(10)   VALUE   "３９医療".
+      *=== 特記事項追加 by hagino(2018/05/08) end
       *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
-           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) start
+      *     03  TBL-TOKKI       OCCURS   35.
+           03  TBL-TOKKI       OCCURS   37.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) end
                05  TBL-TOKKICD             PIC X(02).
                05  TBL-TOKKINAME           PIC X(10).
       *
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   37.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) end
       *=== 特記事項欄の記載数を追加 by hagino(2016/10/07) end
       *
       *****************************************************************
