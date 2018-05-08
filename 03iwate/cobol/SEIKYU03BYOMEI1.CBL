@@ -50,6 +50,7 @@
       *                                     補足コメント対応
       *  01.00.16    吉川         14/10/03  ver4.8.0対応（一時ディレクトリ変更）
       *  01.00.17    萩野         16/06/08  対象公費はPGオプションから取得する
+      *  01.00.18    萩野         18/05/08  表示期間によるレセプト記載対応
       *****************************************************************
       *
        ENVIRONMENT             DIVISION.
@@ -423,6 +424,24 @@
            END-IF
       *=== レセプト病名記載順対応 by Yoshikawa(2011/06/16) end
       *
+      *=== レセプト表示期間対応 by hagino(2018/05/08) start
+           IF      SYS-200501-TENKIBYOMEI-KBN
+                                    =   SPACE
+               MOVE    ZERO             TO  SYS-200501-TENKIBYOMEI-KBN
+           END-IF
+      *
+           DISPLAY "SYS-2005-BYOMEIHENKBN1    ="
+                                    SYS-2005-BYOMEIHENKBN1
+           DISPLAY "SYS-2005-SYUBYOHENFLG     ="
+                                    SYS-2005-SYUBYOHENFLG
+           DISPLAY "SYS-200501-CHKKBN         ="
+                                    SYS-200501-CHKKBN
+           DISPLAY "SYS-200501-BYOMEI-PRTJYUN ="
+                                    SYS-200501-BYOMEI-PRTJYUN
+           DISPLAY "SYS-200501-TENKIBYOMEI-KBN="
+                                    SYS-200501-TENKIBYOMEI-KBN
+      *=== レセプト表示期間対応 by hagino(2018/05/08) end
+      *
       *=== 対象公費をPGオプションから取得 by hagino(2016/06/08) start
       *    プログラムオプション取込み
            PERFORM 100-OPTION-SELECT-SEC
@@ -633,27 +652,29 @@
                END-IF
            END-IF        
       *
-      *    診療開始日
-           IF      PTBYO-SRYYMD(1:6)    =   RECE02-SRYYM
-               CONTINUE
-           ELSE
-               IF      PTBYO-SRYYMD(1:6)    <   RECE02-SRYYM 
-                   IF      PTBYO-TENKIKBN       =   SPACE
-                       CONTINUE
-                   ELSE
-      **************** IF      PTBYO-TENKIYMD(1:6)  =   RECE02-SRYYM
-                       IF      PTBYO-TENKIYMD(1:6)  >=  RECE02-SRYYM
-                           CONTINUE
-                       ELSE
-                            DISPLAY "診療開始日1 GO TO" 
-                           GO  TO  2001-PTBYO-CHK-EXT
-                       END-IF
-                   END-IF       
-               ELSE
-                   DISPLAY "診療開始日2 GO TO" 
-                   GO  TO  2001-PTBYO-CHK-EXT
-               END-IF
-           END-IF
+      *=== レセプト表示期間対応 by hagino(2018/05/08) start
+      **    診療開始日
+      *     IF      PTBYO-SRYYMD(1:6)    =   RECE02-SRYYM
+      *         CONTINUE
+      *     ELSE
+      *         IF      PTBYO-SRYYMD(1:6)    <   RECE02-SRYYM 
+      *             IF      PTBYO-TENKIKBN       =   SPACE
+      *                 CONTINUE
+      *             ELSE
+      ***************** IF      PTBYO-TENKIYMD(1:6)  =   RECE02-SRYYM
+      *                 IF      PTBYO-TENKIYMD(1:6)  >=  RECE02-SRYYM
+      *                     CONTINUE
+      *                 ELSE
+      *                      DISPLAY "診療開始日1 GO TO" 
+      *                     GO  TO  2001-PTBYO-CHK-EXT
+      *                 END-IF
+      *             END-IF       
+      *         ELSE
+      *             DISPLAY "診療開始日2 GO TO" 
+      *             GO  TO  2001-PTBYO-CHK-EXT
+      *         END-IF
+      *     END-IF
+      *=== レセプト表示期間対応 by hagino(2018/05/08) end
       *
       *    入外区分
            IF      PTBYO-NYUGAIKBN      =   SPACE
@@ -696,32 +717,94 @@
               GO  TO  2001-PTBYO-CHK-EXT
            END-IF
       *
-           IF      PTBYO-REZEMM           >   ZERO
-               INITIALIZE                      STS-AREA-DAY
-               INITIALIZE                      LNK-DAY6-AREA
-               MOVE    "61"                TO  LNK-DAY6-IRAI
-      *********MOVE    RECE02-SRYYM        TO  LNK-DAY6-KIJUN (1:6)
-               MOVE    PTBYO-SRYYMD        TO  LNK-DAY6-KIJUN 
-               MOVE    "2"                 TO  LNK-DAY6-ZOGENPTN
-      *********MOVE    PTBYO-REZEMM        TO  LNK-DAY6-ZOGEN 
-               COMPUTE LNK-DAY6-ZOGEN  =   PTBYO-REZEMM    -   1    
-               CALL    "ORCSDAY"           USING   STS-AREA-DAY
-                                                   LNK-DAY6-AREA
-               MOVE    LNK-DAY6-KEISAN(1:6)
-                                           TO  WRK-YM
-      *********IF      PTBYO-SRYYMD(1:6)       <=  WRK-YM
-               IF      WRK-YM              >=  RECE02-SRYYM
+      *=== レセプト表示期間対応 by hagino(2018/05/08) start
+      *     IF      PTBYO-REZEMM           >   ZERO
+      *         INITIALIZE                      STS-AREA-DAY
+      *         INITIALIZE                      LNK-DAY6-AREA
+      *         MOVE    "61"                TO  LNK-DAY6-IRAI
+      **********MOVE    RECE02-SRYYM        TO  LNK-DAY6-KIJUN (1:6)
+      *         MOVE    PTBYO-SRYYMD        TO  LNK-DAY6-KIJUN 
+      *         MOVE    "2"                 TO  LNK-DAY6-ZOGENPTN
+      **********MOVE    PTBYO-REZEMM        TO  LNK-DAY6-ZOGEN 
+      *         COMPUTE LNK-DAY6-ZOGEN  =   PTBYO-REZEMM    -   1    
+      *         CALL    "ORCSDAY"           USING   STS-AREA-DAY
+      *                                             LNK-DAY6-AREA
+      *         MOVE    LNK-DAY6-KEISAN(1:6)
+      *                                     TO  WRK-YM
+      **********IF      PTBYO-SRYYMD(1:6)       <=  WRK-YM
+      *         IF      WRK-YM              >=  RECE02-SRYYM
+      *    診療開始日
+           IF      PTBYO-SRYYMD(1:6)    =   RECE02-SRYYM
+               CONTINUE
+           ELSE
+               IF      PTBYO-SRYYMD(1:6)    >   RECE02-SRYYM
+                   GO  TO  2001-PTBYO-CHK-EXT
+               ELSE
+      *            転帰日
+                   IF      PTBYO-TENKIKBN       =   SPACE
+                       CONTINUE
+                   ELSE
+                       IF    ( SYS-200501-TENKIBYOMEI-KBN
+                                                   =   "0"  )
+                       OR    ( PTBYO-REZEMM        =   ZERO )
+                           IF      PTBYO-TENKIYMD(1:6) >=  RECE02-SRYYM
+                               CONTINUE
+                           ELSE
+                               GO  TO  2001-PTBYO-CHK-EXT
+                           END-IF
+                       END-IF
+                   END-IF
+               END-IF
+      *
+      *        レセプト表示期間
+               MOVE    ZERO                   TO  WRK-YM
+               IF      PTBYO-REZEMM           >   ZERO
+                   INITIALIZE                      STS-AREA-DAY
+                   INITIALIZE                      LNK-DAY6-AREA
+                   MOVE    "61"                TO  LNK-DAY6-IRAI
+                   MOVE    PTBYO-SRYYMD        TO  LNK-DAY6-KIJUN
+                   MOVE    "2"                 TO  LNK-DAY6-ZOGENPTN
+                   COMPUTE LNK-DAY6-ZOGEN  =   PTBYO-REZEMM    -   1
+                   CALL    "ORCSDAY"           USING   STS-AREA-DAY
+                                                       LNK-DAY6-AREA
+                   MOVE    LNK-DAY6-KEISAN(1:6)
+                                               TO  WRK-YM
+                   IF    ( SYS-200501-TENKIBYOMEI-KBN
+                                               =   "0"   )
+                   OR    ( PTBYO-TENKIKBN      =   SPACE )
+                       IF      WRK-YM              >=  RECE02-SRYYM
+                           CONTINUE
+                       ELSE
+                           GO  TO  2001-PTBYO-CHK-EXT
+                       END-IF
+                   END-IF
+               END-IF
+      *
+      *        レセプト表示期間と転帰日の優先設定による判定
+               IF    ( PTBYO-TENKIKBN      =   SPACE )
+               OR    ( PTBYO-REZEMM        =   ZERO  )
+      *=== レセプト表示期間対応 by hagino(2018/05/08) end
                    CONTINUE
                ELSE
-                   GO  TO  2001-PTBYO-CHK-EXT
+      *=== レセプト表示期間対応 by hagino(2018/05/08) start
+      *             GO  TO  2001-PTBYO-CHK-EXT
+                   IF      SYS-200501-TENKIBYOMEI-KBN
+                                               =   "1"
+                       IF      WRK-YM              >=  RECE02-SRYYM
+                           CONTINUE
+                       ELSE
+                           GO  TO  2001-PTBYO-CHK-EXT
+                       END-IF
+                   END-IF
+      *=== レセプト表示期間対応 by hagino(2018/05/08) end
                END-IF
-           END-IF                    
-      *                               
+           END-IF
+      *
            PERFORM 20011-RECE03-WRITE-SEC
            .
        2001-PTBYO-CHK-EXT.
-           EXIT. 
-      *            
+           EXIT.
+      *
 070100*****************************************************************
 070200*    ;レセプト明細０３編集処理
 070300*****************************************************************
