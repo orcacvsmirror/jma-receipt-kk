@@ -67,6 +67,7 @@
       *                                  医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.20    萩野    18/04/09    SITEKBN変更（動作に変更なし）
+      *  01.00.21    門間    18/05/08    プログラムオプション用紙選択対応
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -262,6 +263,9 @@
            03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
       *=== 対象公費をPGオプションから取得 by hagino(2017/02/15) end
       *
+      *=== プログラムオプション用紙選択対応 by Monma(2018/05/08) start
+           03  WRK-FORM              PIC X(01).
+      *=== プログラムオプション用紙選択対応 by Monma(2018/05/08) end
       *
        01  KEY-AREA  VALUE  ZERO.
            03  KEY-NEW.
@@ -634,7 +638,18 @@
              MOVE    WRK-OPTION(IDX)(1:3)    TO  WRK-TAISYO-KOHNUM(IDX)
              DISPLAY "対象公費番号="  WRK-TAISYO-KOHNUM(IDX)
            END-PERFORM
-      *    
+      *
+      *=== プログラムオプション用紙選択対応 by Monma(2018/05/08) start
+      *    様式設定
+           MOVE    "FORM"                    TO  WRK-KBNCD
+           PERFORM 1001-OPTION-SET-SEC
+           IF  WRK-OPTION(1)(1:1)  =  "1"  OR  "2"
+             MOVE    WRK-OPTION(1)(1:1)        TO  WRK-FORM
+           ELSE
+             MOVE    "1"                       TO  WRK-FORM
+           END-IF
+      *=== プログラムオプション用紙選択対応 by Monma(2018/05/08) end
+      *
            .
        100-OPTION-SELECT-EXT.
            EXIT.
@@ -1386,7 +1401,14 @@
                                        TO  SPRT-SHORI-RENNUM
            MOVE    LNK-PRTKANRI-PRIORITY
                                        TO  SPRT-PRIORITY
-           MOVE   "SC3515.red"         TO  SPRT-PRTID
+      *=== プログラムオプション用紙選択対応 by Monma(2018/05/08) start
+      *     MOVE   "SC3515.red"         TO  SPRT-PRTID
+           IF  ( WRK-FORM  =  "1" )
+             MOVE   "SC3515.red"         TO  SPRT-PRTID
+           ELSE
+             MOVE   "SC3516.red"         TO  SPRT-PRTID
+           END-IF
+      *=== プログラムオプション用紙選択対応 by Monma(2018/05/08) end
            MOVE    "福祉医療費請求書(一般)"        TO  SPRT-TITLE
            MOVE    SC15             TO  SPRT-PRTDATA
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
