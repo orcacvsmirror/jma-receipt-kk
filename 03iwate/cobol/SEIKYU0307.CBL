@@ -56,6 +56,7 @@
       *  01.00.15     ÇëÌî    2017/05/12  ³«Àß¼ÔÌ¾¤òµ­ºÜ¤·¤Ê¤¤¤è¤¦¤Ë¤¹¤ë
       *  01.00.16     Ìç´Ö    2018/04/09  SITEKBNÊÑ¹¹¡ÊÆ°ºî¤ËÊÑ¹¹¤Ê¤·¡Ë
       *  01.00.17     ÇëÌî    2018/05/08  ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã
+      *                       2018/05/09  ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -159,6 +160,10 @@
       *=== ÂÐ¾Ý¸øÈñ¤òPG¥ª¥×¥·¥ç¥ó¤«¤é¼èÆÀ by hagino(2016/06/08) start
            03  FLG-TAISYO     PIC 9(01).
       *=== ÂÐ¾Ý¸øÈñ¤òPG¥ª¥×¥·¥ç¥ó¤«¤é¼èÆÀ by hagino(2016/06/08) end
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+           03  FLG-SRYACT            PIC 9(01).
+           03  FLG-PTCOM             PIC 9(01).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *    Åº»úÎÎ°è
        01  IDX-AREA.
@@ -167,8 +172,15 @@
            03  IDX1           PIC 9(04).
            03  IDX2           PIC 9(04).
            03  IDX3           PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+           03  IDX4           PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
            03  IDY            PIC 9(04).
            03  IDZ            PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+           03  IDW1                  PIC 9(04).
+           03  IDW2                  PIC 9(04).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *    ¥Ñ¥é¥á¥¿ÎÎ°è
        01  WRK-PARA.
@@ -358,6 +370,15 @@
       *    ÂÐ¾Ý¸øÈñ
            03  WRK-TAISYO-KOHNUM     PIC X(03)  OCCURS 100.
       *=== ÂÐ¾Ý¸øÈñ¤òPG¥ª¥×¥·¥ç¥ó¤«¤é¼èÆÀ by hagino(2016/06/08) end
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+           03  WRK-SRYCD             PIC X(09).
+           03  WRK-INPUTCOMENT       PIC X(80).
+           03  WRK-INPUTCOMENT2      PIC X(14).
+           03  WRK-INPUTCOMENT-KIN-T.
+               05  WRK-INPUTCOMENT-KIN     PIC 9(07).
+           03  WRK-INPUTCOMENT-KIN2-T.
+               05  WRK-INPUTCOMENT-KIN2    PIC X(07).
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
        01  WRK-BYOMEI-AREA.     
       *    ½ýÉÂÌ¾ºÇÂçÊ¸»ú¿ô¡Ê½ýÉÂÌ¾Íó¡Ë
@@ -417,6 +438,10 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *    ¸øÈñ°ìÉôÉéÃ´¶âÃÖ´¹¥³¡¼¥É
+           03  WRK-CONS-KIN-OKIKAE     PIC X(09)   VALUE   "099999921".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *=== ÆÃµ­»ö¹àÍó¤Îµ­ºÜ¿ô¤òÄÉ²Ã by hagino(2016/10/07) start
       *    ÆÃµ­»ö¹à
@@ -563,6 +588,16 @@
       *
       *    ÀÁµá´ÉÍý¾ðÊó
            COPY    "CPRCF010.INC".
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *    ¿ÇÎÅ¹Ô°Ù
+       01  SRYACT-REC.
+           COPY    "CPSRYACT.INC".
+      *
+      *    ´µ¼Ô¥³¥á¥ó¥È
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *    ´µ¼Ô¾ðÊó
        01  PTINF-REC.
@@ -1313,6 +1348,16 @@
       *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»ú¤·¤Ê¤¤ by Yoshikawa(2016/08/29) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *    ¿ÇÎÅ¹Ô°Ù¾ðÊó¼èÆÀ
+           MOVE    WRK-CONS-KIN-OKIKAE     TO  WRK-SRYCD
+           PERFORM 940-SRYACT-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+      *      ¸øÈñ¡Ý°ìÉôÉéÃ´¶âÃÖ´¹ÊÔ½¸
+             PERFORM  200112-ICHIBUFTN-HENSYU-SEC
+           END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
+      *
            IF  FLG-ERR    =    ZERO
              WRITE   MF101-REC
              ADD     1   TO  CNT-MF101
@@ -1361,6 +1406,110 @@
            .
        200111-HKNJANUM-CHK-EXT.
            EXIT.
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *****************************************************************
+      *    ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÊÔ½¸½èÍý
+      *****************************************************************
+       200112-ICHIBUFTN-HENSYU-SEC                SECTION.
+      *
+           INITIALIZE                             WRK-INPUTCOMENT
+                                                  WRK-INPUTCOMENT2
+                                                  WRK-INPUTCOMENT-KIN
+                                                  WRK-INPUTCOMENT-KIN2
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *
+      *        ´µ¼Ô¥³¥á¥ó¥È¾ðÊóÆÉ¹þ
+               PERFORM  950-PTCOM-READ-SEC
+               MOVE  PTCOM-INPUTCOMENT           TO  WRK-INPUTCOMENT
+      *
+               IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£±ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£²ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£³ÉéÃ´¶â¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¸ø£´ÉéÃ´¶â¡§"
+                 MOVE  WRK-INPUTCOMENT(13:14)    TO  WRK-INPUTCOMENT2
+      *
+      *          ÃÖ´¹¶â³ÛÊÔ½¸
+                 IF  WRK-INPUTCOMENT2  =  "¡¡¡¡¡¡¡¡¡¡¡¡¡¡"  OR  SPACE
+                   CONTINUE
+                 ELSE
+      *            Á´³Ñ¿ô»ú¤òÈ¾³Ñ¤ËÃÖ¤­´¹¤¨¤ë
+                   PERFORM  VARYING  IDW1  FROM  1  BY  2
+                            UNTIL    IDW1  >  14
+                     COMPUTE  IDW2  =  (IDW1  +  1)  /  2
+                     EVALUATE  WRK-INPUTCOMENT2(IDW1:2)
+                       WHEN  "£°"
+                         MOVE  "0"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£±"
+                         MOVE  "1"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£²"
+                         MOVE  "2"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£³"
+                         MOVE  "3"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£´"
+                         MOVE  "4"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£µ"
+                         MOVE  "5"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¶"
+                         MOVE  "6"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£·"
+                         MOVE  "7"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¸"
+                         MOVE  "8"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¹"
+                         MOVE  "9"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  OTHER
+                         MOVE  14   TO  IDW1
+                     END-EVALUATE
+                   END-PERFORM
+      *
+                   IF  WRK-INPUTCOMENT-KIN2-T  NOT =  SPACE
+      *              ±¦µÍ¤á¤Î¿ô»ú¹àÌÜ¤ËÊÑ´¹¤¹¤ë
+                     MOVE    8      TO  IDW2
+                     PERFORM  VARYING  IDW1  FROM  7  BY  -1
+                              UNTIL    IDW1  <  1
+                       IF  WRK-INPUTCOMENT-KIN2-T(IDW1:1)  =  SPACE
+                         CONTINUE
+                       ELSE
+                         COMPUTE  IDW2  =  IDW2  -  1
+                         MOVE  WRK-INPUTCOMENT-KIN2-T(IDW1:1)
+                                    TO  WRK-INPUTCOMENT-KIN-T(IDW2:1)
+                       END-IF
+                     END-PERFORM
+      *
+      *              ½¸·×ÍÑ¥Õ¥¡¥¤¥ë¤Ë³ÊÇ¼
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£±ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN  
+                                    TO  MF101-OKIKAE-FTN(1)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£²ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                    TO  MF101-OKIKAE-FTN(2)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£³ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF101-OKIKAE-FTN(3)
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¸ø£´ÉéÃ´¶â¡§"
+                       MOVE  WRK-INPUTCOMENT-KIN 
+                                    TO  MF101-OKIKAE-FTN(4)
+                     END-IF
+                   END-IF
+      *
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       200112-ICHIBUFTN-HENSYU-EXT.
+           EXIT.
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *****************************************************************
       *    Á´¹ñ¸øÈñÀßÄê£±
@@ -1482,7 +1631,7 @@
            .
        200122-ETC-KOH-HEN-EXT.
            EXIT.
-      *      
+      *
       *****************************************************************
       *    Ä¢É¼¥Õ¥¡¥¤¥ë½ÐÎÏ½èÍý
       *****************************************************************
@@ -1803,8 +1952,17 @@
                MOVE    WRK-Z2                  TO  SC07-NISSU(IDX + 1)
       *
       *    °ìÉôÉéÃ´¶â
-               MOVE    MF101-EITBFTN(IDX)      TO  WRK-Z7
-               MOVE    WRK-Z7                  TO  SC07-ITBFTN(IDX + 1)
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *         MOVE    MF101-EITBFTN(IDX)      TO  WRK-Z7
+      *         MOVE    WRK-Z7                  TO  SC07-ITBFTN(IDX + 1)
+               IF  MF101-OKIKAE-FTN(IDX)  NOT =  ZERO
+                 MOVE    MF101-OKIKAE-FTN(IDX) TO  WRK-Z7
+                 MOVE    WRK-Z7                TO  SC07-ITBFTN(IDX + 1)
+               ELSE
+                 MOVE    MF101-EITBFTN(IDX)    TO  WRK-Z7
+                 MOVE    WRK-Z7                TO  SC07-ITBFTN(IDX + 1)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *    ¿©»öÆü¿ô
                MOVE    MF101-ESHOKUJINISSU(IDX)    TO  WRK-Z2
@@ -2145,9 +2303,18 @@
                MOVE    WRK-Z2                  TO  SC08-NISSU(IDX + 1)
       *
       *    °ìÉôÉéÃ´¶â
-               MOVE    MF101-EITBFTN(IDX)      TO  WRK-Z7
-               MOVE    WRK-Z7                  TO  SC08-ITBFTN(IDX + 1)
-           
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *         MOVE    MF101-EITBFTN(IDX)      TO  WRK-Z7
+      *         MOVE    WRK-Z7                  TO  SC08-ITBFTN(IDX + 1)
+               IF  MF101-OKIKAE-FTN(IDX)  NOT =  ZERO
+                 MOVE    MF101-OKIKAE-FTN(IDX) TO  WRK-Z7
+                 MOVE    WRK-Z7                TO  SC08-ITBFTN(IDX + 1)
+               ELSE
+                 MOVE    MF101-EITBFTN(IDX)    TO  WRK-Z7
+                 MOVE    WRK-Z7                TO  SC08-ITBFTN(IDX + 1)
+               END-IF
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
+      *
            END-PERFORM 
       *
       *    ½ýÉÂÌ¾ÊÔ½¸½èÍý
@@ -2919,6 +3086,129 @@
            .
        990-RECE031-NEXT-EXT.
            EXIT.
+      *
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       940-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE                      SRYACT-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  WRK-SRYCD             TO  SRY-SRYCD(1)
+                                             SRY-SRYCD(2)
+                                             SRY-SRYCD(3)
+                                             SRY-SRYCD(4)
+                                             SRY-SRYCD(5)
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key7"              TO  MCP-PATHNAME
+               PERFORM  945-SRYACT-READ-SEC
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       940-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ¿ÇÎÅ¾ðÊóÆÉ¹þ
+      *****************************************************************
+       945-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       945-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    ´µ¼Ô¥³¥á¥ó¥È¾ðÊó¥»¥Ã¥È
+      *****************************************************************
+       950-PTCOM-READ-SEC  SECTION.
+      *
+             INITIALIZE                      PTCOM-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  PTCOM-HOSPNUM
+             MOVE  SRY-PTID              TO  PTCOM-PTID
+             MOVE  SRY-ZAINUM            TO  PTCOM-ZAINUM
+             MOVE  SRY-SRYCD(IDX4)       TO  PTCOM-SRYCD
+             MOVE  SRY-INPUTNUM(IDX4)    TO  PTCOM-RENNUM
+             MOVE  PTCOM-REC             TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_ptcom"         TO  MCP-TABLE
+               MOVE  "key"               TO  MCP-PATHNAME
+               MOVE  "DBFETCH"           TO  MCP-FUNC
+               CALL  "ORCDBMAIN"         USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+               IF  MCP-RC  =  ZERO
+                 MOVE  MCPDATA-REC       TO  PTCOM-REC
+                 MOVE  ZERO              TO  FLG-PTCOM
+               ELSE
+                 INITIALIZE                  PTCOM-REC
+                 MOVE    1               TO  FLG-PTCOM
+               END-IF
+             ELSE
+               DISPLAY  "PTCOM SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_ptcom"           TO  MCP-TABLE
+             MOVE  "key"                 TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       950-PTCOM-SET-EXT.
+           EXIT.
+      *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) end
       *
       *****************************************************************
       *    ¸øÈñÀÁµá½ñ¥Þ¥¹¥¿ÆÉ¹þ
