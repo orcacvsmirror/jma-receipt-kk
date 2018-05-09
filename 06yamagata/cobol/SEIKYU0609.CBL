@@ -61,6 +61,8 @@
       *  01.00.24    吉川    16/09/12    長期上限を超えたら印字対象外
       *  01.00.25    吉川    17/07/14    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.26    萩野    18/05/02    SITEKBN変更（動作に変更なし）
+      *                                  特記事項に印字内容追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -497,13 +499,22 @@
            03  FILLER          PIC X(02)   VALUE   "37".
            03  FILLER          PIC X(10)   VALUE   "３７申出".
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
+      *=== 特記事項追加 by hagino(2018/05/08) start
+           03  FILLER          PIC X(02)   VALUE   "38".
+           03  FILLER          PIC X(10)   VALUE   "３８医併".
+           03  FILLER          PIC X(02)   VALUE   "39".
+           03  FILLER          PIC X(10)   VALUE   "３９医療".
+      *=== 特記事項追加 by hagino(2018/05/05) end
       *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) start
       *     03  TBL-TOKKI       OCCURS   22.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
       *     03  TBL-TOKKI       OCCURS   34.
-           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) start
+      *     03  TBL-TOKKI       OCCURS   35.
+           03  TBL-TOKKI       OCCURS   37.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) end
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) end
                05  TBL-TOKKICD             PIC X(02).
@@ -512,7 +523,10 @@
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) start
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   37.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) end
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/17) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/01/19) end
       *
@@ -2491,6 +2505,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by hagino(2018/05/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2018/05/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.05) LINE ADD START ------------------------------------
@@ -2959,6 +2976,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by hagino(2018/05/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2018/05/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.05) LINE ADD START ------------------------------------
