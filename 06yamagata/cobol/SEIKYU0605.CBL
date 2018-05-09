@@ -46,6 +46,7 @@
       *  01.00.10    吉川    16/09/12    長期上限を超えたら印字対象外
       *  01.00.11    吉川    17/07/14    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
+      *  01.00.12    萩野    18/05/08    SITEKBN変更（動作に変更なし）
       ********************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -1198,6 +1199,9 @@
            MOVE    LNK-PRTKANRI-TERMID TO  SPRT-TERMID
            MOVE    LNK-PRTKANRI-OPID   TO  SPRT-OPID
            MOVE    LNK-PRTKANRI-PRTNM  TO  SPRT-PRTNM
+      *=== SITEKBN変更 by hagino(2018/05/08) start
+           MOVE    "2"                 TO  SPRT-SITEKBN
+      *=== SITEKBN変更 by hagino(2018/05/08) end
            CALL    "ORCSPRT"           USING
                                        ORCSPRTAREA
       *---(01.00.03) LINE ADD START ------------------------------------
