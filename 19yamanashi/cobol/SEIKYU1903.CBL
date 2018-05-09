@@ -37,6 +37,7 @@
       *  01.00.05    門間    17/07/11    医療機関コード変更時、
       *                                  医療機関コード別の作成処理対応
       *  01.00.06    吉川    17/10/16    SITEKBN変更
+      *  01.00.07    萩野    18/05/08    特記事項に印字内容追加
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -329,12 +330,22 @@
            03  FILLER          PIC X(02)   VALUE   "37".
            03  FILLER          PIC X(10)   VALUE   "３７申出".
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) end
+      *=== 特記事項追加 by hagino(2018/05/08) start
+           03  FILLER          PIC X(02)   VALUE   "38".
+           03  FILLER          PIC X(10)   VALUE   "３８医併".
+           03  FILLER          PIC X(02)   VALUE   "39".
+           03  FILLER          PIC X(10)   VALUE   "３９医療".
+      *=== 特記事項追加 by hagino(2018/05/08) end
+      *
        01  TBL-TOKKI-R         REDEFINES   TBL-TOKKI-AREA.
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) start
       *     03  TBL-TOKKI       OCCURS   22.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) start
       *     03  TBL-TOKKI       OCCURS   34.
-           03  TBL-TOKKI       OCCURS   35.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) start
+      *     03  TBL-TOKKI       OCCURS   35.
+           03  TBL-TOKKI       OCCURS   37.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) end
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) end
                05  TBL-TOKKICD             PIC X(02).
@@ -343,7 +354,10 @@
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   22.
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) start
       * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   34.
-       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) start
+      * 01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   35.
+       01  TBL-TOKKI-MAX                   PIC 9(02)   VALUE   37.
+      *=== 特記事項に印字内容追加 by hagino(2018/05/08) end
       *=== 特記事項欄に「37申出」を追加 by Monma(2016/05/12) end
       *=== 平成２７年１月改正対応 by Yoshikawa(2015/02/13) end
       *
