@@ -56,6 +56,7 @@
       *  01.00.23       門間     17/07/11  医療機関コード変更時、
       *                                    医療機関コード別の作成処理対応
       *  01.00.24       吉川     17/10/16  SITEKBN変更
+      *  01.00.25       萩野     18/05/08  記述漏れ修正
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -757,6 +758,9 @@
              PERFORM  950-SEIKYU-SELECT-SEC
              PERFORM  2001-KOKUHO-SYUKEI-SEC
                       UNTIL   FLG-END   =   1
+      *=== 記述漏れ修正 by hagino(2018/05/08) start
+             PERFORM  950-SEIKYU-CLOSE-SEC
+      *=== 記述漏れ修正 by hagino(2018/05/08) end
       *---(01.00.07) LINE ADD END   ------------------------------------
       *=== 特別療養費国保対応 by Yoshikawa(2010/10/01) start
            END-IF
