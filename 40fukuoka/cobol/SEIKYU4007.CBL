@@ -79,6 +79,7 @@
       *  01.00.31    吉川     17/10/16    SITEKBN変更
       *  01.00.32    門間     18/01/09    下部の負担者番号等は１枚目に印字
       *  01.00.33    門間     18/05/01    特記事項に印字内容追加
+      *                       18/05/10    保険欄−一部負担金記載置換対応
       *****************************************************************
       *
        ENVIRONMENT                 DIVISION.
@@ -246,6 +247,9 @@
       *=== 長期の特記事項の印字修正 by hagino(2014/09/12) start
            03  FLG-TYOKI       PIC 9(01).
       *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+           03  FLG-PTCOM      PIC 9(01).
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
       *    カウント領域
        01  CNT-AREA.
@@ -292,6 +296,10 @@
            03  IDY1            PIC 9(03).
            03  IDY2            PIC 9(03).
            03  IDY3            PIC 9(03).
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/02) start
+           03  IDW1            PIC 9(04).
+           03  IDW2            PIC 9(04).
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/02) end
       *
       *
       *    パラメタ領域
@@ -426,6 +434,16 @@
                05  WRK-TYOKIFTNGK   PIC 9(08).
                05  WRK-TYOKIFTNGK-G PIC 9(08).
       *=== 長期の特記事項の印字修正 by hagino(2014/09/12) end
+      *
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+           03  WRK-SRYCD               PIC X(09).
+           03  WRK-INPUTCOMENT         PIC X(80).
+           03  WRK-INPUTCOMENT2        PIC X(14).
+           03  WRK-INPUTCOMENT-KIN-T.
+               05  WRK-INPUTCOMENT-KIN     PIC 9(07).
+           03  WRK-INPUTCOMENT-KIN2-T.
+               05  WRK-INPUTCOMENT-KIN2    PIC X(07).
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
        01  WRK-HENSYU-AREA.
            03  WRK-HENYMDG         PIC X(22).
@@ -571,6 +589,10 @@
       *    急性
            03  WRK-CONS-BYOMEICD-KYUSEI
                                    PIC X(07)   VALUE   "ZZZ4012".   
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *    保険欄一部負担金置換コード
+           03  WRK-CONS-KIN-OKIKAE-HKN  PIC X(09)  VALUE   "099999910".
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
       *=== 特記事項印字 by Yoshikawa(2009/05/14) start
       *   特記事項
@@ -763,6 +785,12 @@
       *
       *    請求管理
            COPY    "CPRCF010.INC".
+      *
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *    患者コメント
+       01  PTCOM-REC.
+           COPY    "CPPTCOM.INC".
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
       *    パラメタ
        01  BTPARA-REC.
@@ -1678,6 +1706,16 @@
                DISPLAY "老人＋障害=" RECE02-PTNUM
            END-IF
       *
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *    診療行為情報取得
+           MOVE    WRK-CONS-KIN-OKIKAE-HKN   TO  WRK-SRYCD
+           PERFORM 940-SRYACT-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+      *      保険欄−一部負担金置換編集
+             PERFORM  200112-HKN-ICHIBUFTN-HENSYU-SEC
+           END-IF
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
+      *
       *    保険者番号チェック処理
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
@@ -1731,6 +1769,122 @@
            .
        200111-HKNJANUM-CHK-EXT.
            EXIT.
+      *
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *****************************************************************
+      *    保険欄−一部負担金金額編集処理
+      *****************************************************************
+       200112-HKN-ICHIBUFTN-HENSYU-SEC             SECTION.
+      *
+           INITIALIZE                             WRK-INPUTCOMENT
+                                                  WRK-INPUTCOMENT2
+                                                  WRK-INPUTCOMENT-KIN
+                                                  WRK-INPUTCOMENT-KIN2
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *
+      *        患者コメント情報読込
+               PERFORM  950-PTCOM-READ-SEC
+               MOVE  PTCOM-INPUTCOMENT           TO  WRK-INPUTCOMENT
+      *
+               IF  WRK-INPUTCOMENT(1:12)  =  "（再掲上）："
+               OR  WRK-INPUTCOMENT(1:12)  =  "（再掲下）："
+               OR  WRK-INPUTCOMENT(1:12)  =  "（再掲３）："
+               OR  WRK-INPUTCOMENT(1:12)  =  "（再掲４）："
+               OR  WRK-INPUTCOMENT(1:12)  =  "保険負担金："
+                 MOVE  WRK-INPUTCOMENT(13:14)    TO  WRK-INPUTCOMENT2
+      *
+      *          置換金額編集
+                 IF  WRK-INPUTCOMENT2  =  "　　　　　　　"  OR  SPACE
+                   CONTINUE
+                 ELSE
+      *            全角数字を半角に置き換える
+                   PERFORM  VARYING  IDW1  FROM  1  BY  2
+                            UNTIL    IDW1  >  14
+                     COMPUTE  IDW2  =  (IDW1  +  1)  /  2
+                     EVALUATE  WRK-INPUTCOMENT2(IDW1:2)
+                       WHEN  "０"
+                         MOVE  "0"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "１"
+                         MOVE  "1"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "２"
+                         MOVE  "2"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "３"
+                         MOVE  "3"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "４"
+                         MOVE  "4"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "５"
+                         MOVE  "5"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "６"
+                         MOVE  "6"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "７"
+                         MOVE  "7"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "８"
+                         MOVE  "8"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "９"
+                         MOVE  "9"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  OTHER
+                         MOVE  14   TO  IDW1
+                     END-EVALUATE
+                   END-PERFORM
+      *
+                   IF  WRK-INPUTCOMENT-KIN2-T  NOT =  SPACE
+      *              右詰めの数字項目に変換する
+                     MOVE    8      TO  IDW2
+                     PERFORM  VARYING  IDW1  FROM  7  BY  -1
+                              UNTIL    IDW1  <  1
+                       IF  WRK-INPUTCOMENT-KIN2-T(IDW1:1)  =  SPACE
+                         CONTINUE
+                       ELSE
+                         COMPUTE  IDW2  =  IDW2  -  1
+                         MOVE  WRK-INPUTCOMENT-KIN2-T(IDW1:1)
+                                    TO  WRK-INPUTCOMENT-KIN-T(IDW2:1)
+                       END-IF
+                     END-PERFORM
+      *
+      *              集計用ファイルに格納
+                     IF  WRK-INPUTCOMENT(1:12)  =  "（再掲上）："
+                       MOVE  ZERO        TO  MF100-OKIKAE-SAIKEI1
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF100-OKIKAE-SAIKEI1
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "（再掲下）："
+                       MOVE  ZERO        TO  MF100-OKIKAE-SAIKEI2
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF100-OKIKAE-SAIKEI2
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "（再掲３）："
+                       MOVE  ZERO        TO  MF100-OKIKAE-SAIKEI3
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF100-OKIKAE-SAIKEI3
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "（再掲４）："
+                       MOVE  ZERO        TO  MF100-OKIKAE-SAIKEI4
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF100-OKIKAE-SAIKEI4
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "保険負担金："
+                       MOVE  ZERO        TO  MF100-OKIKAE-HKN
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF100-OKIKAE-HKN
+                     END-IF
+
+
+                   END-IF
+      *
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       200112-HKN-ICHIBUFTN-HENSYU-EXT.
+           EXIT.
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
       *****************************************************************
       *    主　　処理
@@ -3259,19 +3413,44 @@
       *=== 180,181,191は初診料等を印字 by Yoshikawa(2008/11/21) end
       *
       *        <請求点・一部負担金>
-      *   保険
-          MOVE    MF100-TOTALTEN      TO  WRK-KGK6
-          MOVE    WRK-KGK6            TO  HC06-TOTALTEN(1)
-          IF      MF100-FTNMONEY       >   ZERO
-              MOVE    MF100-FTNMONEY         TO  WRK-KGK7
-              MOVE    WRK-KGK7               TO  HC06-FTNMONEY(1)
-          END-IF
-          IF      MF100-ZAITAKU-SAIKEI   >   ZERO
-              MOVE    "("                    TO  HC06-FTNMONEYSAI(1:1)
-              MOVE   MF100-ZAITAKU-SAIKEI    TO  WRK-KGK7
-              MOVE   WRK-KGK7                TO  HC06-FTNMONEYSAI(3:8)
-              MOVE    ")"                    TO  HC06-FTNMONEYSAI(11:1)
-          END-IF    
+      *    保険
+           MOVE    MF100-TOTALTEN      TO  WRK-KGK6
+           MOVE    WRK-KGK6            TO  HC06-TOTALTEN(1)
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *     IF      MF100-FTNMONEY       >   ZERO
+      *         MOVE    MF100-FTNMONEY         TO  WRK-KGK7
+      *         MOVE    WRK-KGK7               TO  HC06-FTNMONEY(1)
+      *     END-IF
+      *     IF      MF100-ZAITAKU-SAIKEI   >   ZERO
+      *         MOVE    "("                    TO  HC06-FTNMONEYSAI(1:1)
+      *         MOVE   MF100-ZAITAKU-SAIKEI    TO  WRK-KGK7
+      *         MOVE   WRK-KGK7                TO  HC06-FTNMONEYSAI(3:8)
+      *         MOVE    ")"                    TO  HC06-FTNMONEYSAI(11:1)
+      *     END-IF    
+           IF  MF100-OKIKAE-HKN  NOT =  ZERO
+               MOVE    MF100-OKIKAE-HKN      TO  WRK-KGK7
+               MOVE    WRK-KGK7              TO  HC06-FTNMONEY(1)
+           ELSE
+               IF  MF100-FTNMONEY  >  ZERO
+                   MOVE    MF100-FTNMONEY        TO  WRK-KGK7
+                   MOVE    WRK-KGK7              TO  HC06-FTNMONEY(1)
+               END-IF
+           END-IF
+      *
+           IF  MF100-OKIKAE-SAIKEI1  NOT =  ZERO
+               MOVE    "("                   TO  HC06-FTNMONEYSAI(1:1)
+               MOVE   MF100-OKIKAE-SAIKEI1   TO  WRK-KGK7
+               MOVE   WRK-KGK7               TO  HC06-FTNMONEYSAI(3:8)
+               MOVE    ")"                   TO  HC06-FTNMONEYSAI(11:1)
+           ELSE
+               IF  MF100-ZAITAKU-SAIKEI   >   ZERO
+                   MOVE    "("               TO  HC06-FTNMONEYSAI(1:1)
+                   MOVE   MF100-ZAITAKU-SAIKEI   TO  WRK-KGK7
+                   MOVE   WRK-KGK7           TO  HC06-FTNMONEYSAI(3:8)
+                   MOVE    ")"               TO  HC06-FTNMONEYSAI(11:1)
+               END-IF
+           END-IF
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
            .
        330-HC101-TENSU-HEN-EXT.
@@ -3342,10 +3521,21 @@
       *    保険
            MOVE    MF100-TOTALTEN      TO  WRK-KGK6
            MOVE    WRK-KGK6            TO  HCN06-TOTALTEN(1)
-           IF      MF100-FTNMONEY      >   ZERO
-               MOVE    MF100-FTNMONEY  TO  WRK-KGK7
-               MOVE    WRK-KGK7        TO  HCN06-FTNMONEY(1)
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *     IF      MF100-FTNMONEY      >   ZERO
+      *         MOVE    MF100-FTNMONEY  TO  WRK-KGK7
+      *         MOVE    WRK-KGK7        TO  HCN06-FTNMONEY(1)
+      *     END-IF
+           IF  MF100-OKIKAE-HKN  NOT =  ZERO
+               MOVE    MF100-OKIKAE-HKN      TO  WRK-KGK7
+               MOVE    WRK-KGK7              TO  HC06-FTNMONEY(1)
+           ELSE
+               IF  MF100-FTNMONEY  >  ZERO
+                   MOVE    MF100-FTNMONEY        TO  WRK-KGK7
+                   MOVE    WRK-KGK7              TO  HC06-FTNMONEY(1)
+               END-IF
            END-IF
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
       *
       *    食事療養費：日数
            MOVE    MF100-SHOKUJINISSU  TO  WRK-Z2
@@ -4799,6 +4989,130 @@
        900-1902-READ-EXT.
            EXIT.
       *---(01.00.09) LINE ADD END   ------------------------------------
+      *
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) start
+      *****************************************************************
+      *    診療情報セット
+      *****************************************************************
+       940-SRYACT-SET-SEC  SECTION.
+      *
+             INITIALIZE                      SRYACT-REC
+      *
+             MOVE  SPA-HOSPNUM           TO  SRY-HOSPNUM
+             MOVE  RECE02-NYUGAIKBN      TO  SRY-NYUGAIKBN
+             MOVE  RECE02-PTID           TO  SRY-PTID
+             MOVE  RECE02-SRYYM          TO  SRY-SRYYM
+             MOVE  WRK-SRYCD             TO  SRY-SRYCD(1)
+                                             SRY-SRYCD(2)
+                                             SRY-SRYCD(3)
+                                             SRY-SRYCD(4)
+                                             SRY-SRYCD(5)
+             MOVE  SRYACT-REC            TO  MCPDATA-REC
+             MOVE  "DBSELECT"            TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+             IF  MCP-RC  =  ZERO
+               MOVE  "tbl_sryact"        TO  MCP-TABLE
+               MOVE  "key7"              TO  MCP-PATHNAME
+               PERFORM  945-SRYACT-READ-SEC
+             ELSE
+               DISPLAY  "SRYACT SELECT ERR"
+             END-IF
+      *
+             INITIALIZE  MCPAREA
+             MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+             MOVE  "tbl_sryact"          TO  MCP-TABLE
+             MOVE  "key7"                TO  MCP-PATHNAME
+             CALL  "ORCDBMAIN"           USING
+                                         MCPAREA
+                                         MCPDATA-REC
+                                         SPA-AREA
+      *
+           .
+       940-SRYACT-SET-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    診療情報読込
+      *****************************************************************
+       945-SRYACT-READ-SEC  SECTION.
+      *
+           MOVE  "DBFETCH"      TO  MCP-FUNC
+           CALL  "ORCDBMAIN"        USING
+                                    MCPAREA
+                                    MCPDATA-REC
+                                    SPA-AREA
+           IF  MCP-RC  =  ZERO
+             MOVE  MCPDATA-REC  TO  SRYACT-REC
+             MOVE  ZERO         TO  FLG-SRYACT
+           ELSE
+             INITIALIZE   SRYACT-REC
+             MOVE  1  TO  FLG-SRYACT
+           END-IF
+      *
+           .
+       945-SRYACT-READ-EXT.
+           EXIT.
+      *
+      *****************************************************************
+      *    患者コメント情報セット
+      *****************************************************************
+       950-PTCOM-READ-SEC  SECTION.
+      *
+           INITIALIZE                      PTCOM-REC
+      *
+           MOVE  SPA-HOSPNUM           TO  PTCOM-HOSPNUM
+           MOVE  SRY-PTID              TO  PTCOM-PTID
+           MOVE  SRY-ZAINUM            TO  PTCOM-ZAINUM
+           MOVE  SRY-SRYCD(IDX4)       TO  PTCOM-SRYCD
+           MOVE  SRY-INPUTNUM(IDX4)    TO  PTCOM-RENNUM
+           MOVE  PTCOM-REC             TO  MCPDATA-REC
+           MOVE  "DBSELECT"            TO  MCP-FUNC
+           MOVE  "tbl_ptcom"           TO  MCP-TABLE
+           MOVE  "key"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           IF  MCP-RC  =  ZERO
+             MOVE  "tbl_ptcom"         TO  MCP-TABLE
+             MOVE  "key"               TO  MCP-PATHNAME
+             MOVE  "DBFETCH"           TO  MCP-FUNC
+             CALL  "ORCDBMAIN"         USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+             IF  MCP-RC  =  ZERO
+               MOVE  MCPDATA-REC       TO  PTCOM-REC
+               MOVE  ZERO              TO  FLG-PTCOM
+             ELSE
+               INITIALIZE                  PTCOM-REC
+               MOVE    1               TO  FLG-PTCOM
+             END-IF
+           ELSE
+             DISPLAY  "PTCOM SELECT ERR"
+           END-IF
+      *
+           INITIALIZE  MCPAREA
+           MOVE  "DBCLOSECURSOR"       TO  MCP-FUNC
+           MOVE  "tbl_ptcom"           TO  MCP-TABLE
+           MOVE  "key"                 TO  MCP-PATHNAME
+           CALL  "ORCDBMAIN"           USING
+                                       MCPAREA
+                                       MCPDATA-REC
+                                       SPA-AREA
+      *
+           .
+       950-PTCOM-READ-EXT.
+           EXIT.
+      *=== 保険欄−一部負担金記載置換対応 by Monma(2018/05/10) end
+      *
       *=== プログラムオプション対応 by Yoshikawa(2013/09/04) start
       *****************************************************************
       *    プログラムオプション情報読込
