@@ -57,6 +57,7 @@
       *  01.00.16     Ìç´Ö    2018/04/09  SITEKBNÊÑ¹¹¡ÊÆ°ºî¤ËÊÑ¹¹¤Ê¤·¡Ë
       *  01.00.17     ÇëÌî    2018/05/08  ÆÃµ­»ö¹à¤Ë°õ»úÆâÍÆÄÉ²Ã
       *                       2018/05/09  ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ
+      *                       2018/05/10  ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÊÔ½¸
       *****************************************************************
       *
        ENVIRONMENT   DIVISION.
@@ -438,6 +439,10 @@
        01  WRK-CONS-AREA.
            03  WRK-CONS-SRYYM-200804   PIC X(06)   VALUE   "200804".
       *---(01.00.03) LINE ADD END   ------------------------------------
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) start
+      *    ÊÝ¸±Íó°ìÉôÉéÃ´¶âÃÖ´¹¥³¡¼¥É
+           03  WRK-CONS-KIN-OKIKAE-HKN  PIC X(09)  VALUE   "099999910".
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) end
       *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
       *    ¸øÈñ°ìÉôÉéÃ´¶âÃÖ´¹¥³¡¼¥É
            03  WRK-CONS-KIN-OKIKAE     PIC X(09)   VALUE   "099999921".
@@ -1348,6 +1353,16 @@
       *=== ¸øÈñ¤Î½õÀ®¤Ê¤·¤Ï°õ»ú¤·¤Ê¤¤ by Yoshikawa(2016/08/29) end
            PERFORM 200111-HKNJANUM-CHK-SEC
       *
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) start
+      *    ¿ÇÎÅ¹Ô°Ù¾ðÊó¼èÆÀ
+           MOVE    WRK-CONS-KIN-OKIKAE-HKN TO  WRK-SRYCD
+           PERFORM 940-SRYACT-SET-SEC
+           IF  FLG-SRYACT  =  ZERO
+      *      ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶âÃÖ´¹ÊÔ½¸
+             PERFORM  200112-HKN-ICHIBUFTN-HENSYU-SEC
+           END-IF
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) end
+      *
       *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
       *    ¿ÇÎÅ¹Ô°Ù¾ðÊó¼èÆÀ
            MOVE    WRK-CONS-KIN-OKIKAE     TO  WRK-SRYCD
@@ -1406,6 +1421,120 @@
            .
        200111-HKNJANUM-CHK-EXT.
            EXIT.
+      *
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) start
+      *****************************************************************
+      *    ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÊÔ½¸½èÍý
+      *****************************************************************
+       200112-HKN-ICHIBUFTN-HENSYU-SEC             SECTION.
+      *
+           INITIALIZE                             WRK-INPUTCOMENT
+                                                  WRK-INPUTCOMENT2
+                                                  WRK-INPUTCOMENT-KIN
+                                                  WRK-INPUTCOMENT-KIN2
+      *
+           PERFORM  VARYING  IDX4  FROM  1  BY  1
+                    UNTIL    IDX4  >  5
+             IF  ((SRY-SRYCD(IDX4)(1:1)  =  "8")  OR
+                  (SRY-SRYCD(IDX4)(1:3)  =  "008"))
+             AND ( SRY-INPUTNUM(IDX4)  NOT =  ZERO )
+      *
+      *        ´µ¼Ô¥³¥á¥ó¥È¾ðÊóÆÉ¹þ
+               PERFORM  950-PTCOM-READ-SEC
+               MOVE  PTCOM-INPUTCOMENT           TO  WRK-INPUTCOMENT
+      *
+               IF  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç¾å¡Ë¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç²¼¡Ë¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç£³¡Ë¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç£´¡Ë¡§"
+               OR  WRK-INPUTCOMENT(1:12)  =  "ÊÝ¸±ÉéÃ´¶â¡§"
+                 MOVE  WRK-INPUTCOMENT(13:14)    TO  WRK-INPUTCOMENT2
+      *
+      *          ÃÖ´¹¶â³ÛÊÔ½¸
+                 IF  WRK-INPUTCOMENT2  =  "¡¡¡¡¡¡¡¡¡¡¡¡¡¡"  OR  SPACE
+                   CONTINUE
+                 ELSE
+      *            Á´³Ñ¿ô»ú¤òÈ¾³Ñ¤ËÃÖ¤­´¹¤¨¤ë
+                   PERFORM  VARYING  IDW1  FROM  1  BY  2
+                            UNTIL    IDW1  >  14
+                     COMPUTE  IDW2  =  (IDW1  +  1)  /  2
+                     EVALUATE  WRK-INPUTCOMENT2(IDW1:2)
+                       WHEN  "£°"
+                         MOVE  "0"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£±"
+                         MOVE  "1"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£²"
+                         MOVE  "2"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£³"
+                         MOVE  "3"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£´"
+                         MOVE  "4"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£µ"
+                         MOVE  "5"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¶"
+                         MOVE  "6"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£·"
+                         MOVE  "7"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¸"
+                         MOVE  "8"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  "£¹"
+                         MOVE  "9"  TO  WRK-INPUTCOMENT-KIN2-T(IDW2:1)
+                       WHEN  OTHER
+                         MOVE  14   TO  IDW1
+                     END-EVALUATE
+                   END-PERFORM
+      *
+                   IF  WRK-INPUTCOMENT-KIN2-T  NOT =  SPACE
+      *              ±¦µÍ¤á¤Î¿ô»ú¹àÌÜ¤ËÊÑ´¹¤¹¤ë
+                     MOVE    8      TO  IDW2
+                     PERFORM  VARYING  IDW1  FROM  7  BY  -1
+                              UNTIL    IDW1  <  1
+                       IF  WRK-INPUTCOMENT-KIN2-T(IDW1:1)  =  SPACE
+                         CONTINUE
+                       ELSE
+                         COMPUTE  IDW2  =  IDW2  -  1
+                         MOVE  WRK-INPUTCOMENT-KIN2-T(IDW1:1)
+                                    TO  WRK-INPUTCOMENT-KIN-T(IDW2:1)
+                       END-IF
+                     END-PERFORM
+      *
+      *              ½¸·×ÍÑ¥Õ¥¡¥¤¥ë¤Ë³ÊÇ¼
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç¾å¡Ë¡§"
+                       MOVE  ZERO        TO  MF101-OKIKAE-SAIKEI1
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF101-OKIKAE-SAIKEI1
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç²¼¡Ë¡§"
+                       MOVE  ZERO        TO  MF101-OKIKAE-SAIKEI2
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF101-OKIKAE-SAIKEI2
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç£³¡Ë¡§"
+                       MOVE  ZERO        TO  MF101-OKIKAE-SAIKEI3
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF101-OKIKAE-SAIKEI3
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "¡ÊºÆ·Ç£´¡Ë¡§"
+                       MOVE  ZERO        TO  MF101-OKIKAE-SAIKEI4
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF101-OKIKAE-SAIKEI4
+                     END-IF
+                     IF  WRK-INPUTCOMENT(1:12)  =  "ÊÝ¸±ÉéÃ´¶â¡§"
+                       MOVE  ZERO        TO  MF101-OKIKAE-HKN
+                       MOVE  WRK-INPUTCOMENT-KIN
+                                         TO  MF101-OKIKAE-HKN
+                     END-IF
+                   END-IF
+      *
+                 END-IF
+               END-IF
+             END-IF
+           END-PERFORM
+      *
+           .
+       200112-HKN-ICHIBUFTN-HENSYU-EXT.
+           EXIT.
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) end
       *
       *=== ¸øÈñÍó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/09) start
       *****************************************************************
@@ -1913,8 +2042,17 @@
            MOVE    WRK-Z7                   TO  SC07-TENSU(1)
       *
       *    ÉéÃ´¶â³Û
-           MOVE    MF101-FTNMONEY           TO  WRK-Z7
-           MOVE    WRK-Z7                   TO  SC07-ITBFTN(1)
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) start
+      *     MOVE    MF101-FTNMONEY           TO  WRK-Z7
+      *     MOVE    WRK-Z7                   TO  SC07-ITBFTN(1)
+               IF  MF101-OKIKAE-HKN       NOT =  ZERO
+                 MOVE    MF101-OKIKAE-HKN         TO  WRK-Z7
+                 MOVE    WRK-Z7                   TO  SC07-ITBFTN(1)
+               ELSE
+                 MOVE    MF101-FTNMONEY           TO  WRK-Z7
+                 MOVE    WRK-Z7                   TO  SC07-ITBFTN(1)
+               END-IF
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) end
       *
       *    ¿©»öÆü¿ô
            MOVE    MF101-SHOKUJINISSU       TO  WRK-Z2
@@ -2276,8 +2414,17 @@
            MOVE    WRK-Z7                   TO  SC08-TENSU(1)
       *
       *    ÉéÃ´¶â³Û
-           MOVE    MF101-FTNMONEY           TO  WRK-Z7
-           MOVE    WRK-Z7                   TO  SC08-ITBFTN(1)
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) start
+      *     MOVE    MF101-FTNMONEY           TO  WRK-Z7
+      *     MOVE    WRK-Z7                   TO  SC08-ITBFTN(1)
+               IF  MF101-OKIKAE-HKN       NOT =  ZERO
+                 MOVE    MF101-OKIKAE-HKN         TO  WRK-Z7
+                 MOVE    WRK-Z7                   TO  SC08-ITBFTN(1)
+               ELSE
+                 MOVE    MF101-FTNMONEY           TO  WRK-Z7
+                 MOVE    WRK-Z7                   TO  SC08-ITBFTN(1)
+               END-IF
+      *=== ÊÝ¸±Íó¡Ý°ìÉôÉéÃ´¶â¶â³ÛÃÖ´¹ÂÐ±þ by hagino(2018/05/10) end
       *
       *    Á´¹ñ¸øÈñ¥Ç¡¼¥¿ÀßÄê
            PERFORM VARYING IDX FROM    1   BY  1
